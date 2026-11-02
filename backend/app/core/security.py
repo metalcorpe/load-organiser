@@ -30,5 +30,23 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return password_hash.verify(password, hashed_password)
 
 
+def verify_and_update_password(
+    plain_password: str, hashed_password: str
+) -> tuple[bool, str | None]:
+    """Verify, and return a fresh Argon2 hash when the stored one is outdated.
+
+    pwdlib's verify_and_update would rehash the 72-byte-truncated input for
+    legacy bcrypt hashes; the replacement hash must cover the full password.
+    """
+    if not verify_password(plain_password, hashed_password):
+        return False, None
+    current = password_hash.current_hasher
+    if not current.identify(hashed_password) or current.check_needs_rehash(
+        hashed_password
+    ):
+        return True, get_password_hash(plain_password)
+    return True, None
+
+
 def get_password_hash(password: str) -> str:
     return password_hash.hash(password)

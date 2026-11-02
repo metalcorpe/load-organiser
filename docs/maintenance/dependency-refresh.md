@@ -19,6 +19,8 @@ Registry and upstream release checks: 2026-11-02. This is an upgrade of the exis
 
 Compose now selects PostgreSQL 18.6 and a **separate `app-db-data-pg18` volume**, mounted at `/var/lib/postgresql` with `PGDATA=/var/lib/postgresql/18/docker`. Existing PostgreSQL 17 storage is not reused or deleted. Existing deployments need an explicit migration; starting the new service alone does not transfer their data.
 
+The `db` service also mounts the old `app-db-data` volume read-only at `/legacy-pg17`. If that volume holds a cluster (`PG_VERSION` exists) and the PostgreSQL 18 data directory is still empty, the container exits with a message instead of initialising an empty database. The healthcheck never passes, so `prestart` and `backend` do not start. Set `ALLOW_EMPTY_PG18=true` only to deliberately start empty, for example to restore a dump into the new volume. Once the PostgreSQL 18 cluster exists, the guard no longer applies. On fresh installs Compose creates `app-db-data` empty and the guard passes.
+
 Before changing an existing deployment:
 
 1. Identify the actual PostgreSQL 17 volume, databases, roles, extensions, encoding/collation, and application version. Preserve the old configuration and volume.
