@@ -4,13 +4,15 @@ Status: scope proposal for review, not an approved implementation commitment. Sk
 
 Planning update: phased GitHub tracking is authorized. Use the [delivery plan](delivery-plan.md) and its P0 decisions to finalize the first cut before implementation; issue creation does not mark this entire proposal as approved or delivered.
 
+Confirmed decisions: Europe is the initial public discovery geography. The product owner will maintain the initial DZ and opportunity listings and handle corrections. Current work is analysis, planning, documentation, and issue preparation; implementation will be delegated to Claude Code separately.
+
 ## Promise
 
 Find opportunities and people to jump with, keep your personal records, and choose what activity to share.
 
 Proposed social revision: following jumpers, explicitly shared jump cards, audience-scoped venue activity, and optional shared visit intentions. See [social activity](social-activity.md). This extends the earlier discovery/recordkeeping proposal; the exact first-cut bundle still needs agreement and should not expand into a full social platform.
 
-The application must be useful before a user has entered a substantial personal history. Public discovery supplies something to browse; personal records provide continuity after activity. Useful listing coverage and the audience/region still need to be established.
+The application must be useful before a user has entered a substantial personal history. Public discovery supplies something to browse; personal records provide continuity after activity. Europe is the initial discovery region; useful inventory and the narrower audience/discipline still need to be established.
 
 ## Included capabilities
 
@@ -35,6 +37,10 @@ Browsing public information should not require an account. Recordkeeping and pri
 Keep attachments lightweight initially: links to externally hosted media and structured text records. Label manual service dates and experience information with their source. No unlimited media or document hosting is promised.
 
 ## Listing and directory maintenance
+
+Initial maintained public discovery covers Europe. This is a coverage direction, not a promise of complete listings for every European country. Personal accounts, logbooks, gear records, and provisional DZ references are not geographically restricted. The initial country inventory, source list, and review cadence remain planning work; no discipline restriction or interface language has been selected by this decision.
+
+The product owner is the initial maintainer for DZ and opportunity listings and corrections. This assignment does not establish a separate social-abuse moderation policy, response-time guarantee, or available maintenance capacity; those remain to be defined before launch.
 
 Include a minimal maintainer workflow to add/edit/retire sourced listings, review submissions, consolidate duplicates, and record source/last-check time. Community suggestions can start with a simple submission/report route rather than a full public publishing system.
 
@@ -88,4 +94,4 @@ These remain in the [feature catalog](feature-catalog.md). Deferral does not del
 
 ## Unresolved scope choices
 
-The initial geography/discipline, listing sources, personal attachment allowances, exact mandatory log fields, whether calendar export fits the first cut, and hosting choice remain open. FastAPI Cloud/Neon are candidates, not deployed services. This document is the proposed user-facing scope; the [roadmap](roadmap.md) remains the broader opportunity sequence.
+The initial discipline/audience, country inventory within Europe, listing sources and review cadence, social moderation responsibilities, personal attachment allowances, exact mandatory log fields, whether calendar export fits the first cut, and hosting choice remain open. FastAPI Cloud/Neon are candidates, not deployed services. This document is the proposed user-facing scope; the [roadmap](roadmap.md) remains the broader opportunity sequence.

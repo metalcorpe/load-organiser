@@ -2,6 +2,8 @@
 
 Status: feature proposal raised by the product owner. Discovery only; no implementation, participating organizers, accepted listings, or MVP commitment assumed.
 
+Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. Exact country inventory, sources, and review cadence are still to be planned; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
+
 ## Purpose and fit
 
 Help skydivers discover where to jump, learn, and train. The board can provide value through clearly sourced listings and external registration/contact links before venues adopt the full application. It is a potential route for coaches, schools, and organizers to participate in a smaller workflow first.
@@ -73,8 +75,8 @@ Personal profile data can help suggest relevant activities or prepare an applica
 
 - Which initial audience needs this most: local regulars, traveling jumpers, students, or specialist disciplines?
 - Is demand mainly for dated events, nearby coaches, or finding a school?
-- Which regions, disciplines, and languages make a useful initial inventory?
-- Who maintains listings before organizers join, and how much freshness/moderation work is required?
+- Which countries within Europe, disciplines, and languages make a useful initial inventory?
+- How much freshness/moderation work can the product owner maintain, and what review cadence is practical?
 - What evidence is enough to allow organizer control, credential labels, or affiliation labels?
 - Are source-linked listings sufficient, or do users need a response/registration workflow?
 - How should recurring courses, uncertain dates, weather disruption, and cancelled providers be represented?
