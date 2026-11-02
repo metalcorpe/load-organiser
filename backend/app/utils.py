@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-import emails  # type: ignore
+from emails.message import Message
 import jwt
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
@@ -36,8 +36,9 @@ def send_email(
     subject: str = "",
     html_content: str = "",
 ) -> None:
+    assert settings.EMAILS_FROM_EMAIL
     assert settings.emails_enabled, "no provided configuration for email variables"
-    message = emails.Message(
+    message = Message(
         subject=subject,
         html=html_content,
         mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),

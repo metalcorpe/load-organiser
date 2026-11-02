@@ -14,7 +14,7 @@ import {
 } from "react-icons/fi"
 import type { IconType } from "react-icons/lib"
 
-import type { UserPublic } from "@/client"
+import type { UserPublic } from "@/api"
 
 const items = [
   { icon: FiHome, title: "Dashboard", path: "/" },

@@ -5,7 +5,7 @@ import { z } from "zod"
 
 import { Button, Heading, Input, Text, VStack } from "@chakra-ui/react" // Added Input
 
-import { type InstructorPublic, InstructorsService } from "../../client"
+import { type InstructorPublic, InstructorsService } from "../../api"
 import useCustomToast from "../../hooks/useCustomToast"
 import { Checkbox } from "../ui/checkbox"
 import { Field } from "../ui/field"
@@ -75,26 +75,28 @@ const InstructorForm = ({
     try {
       if (type === "create") {
         await InstructorsService.createInstructor({
-          requestBody: {
+          throwOnError: true,
+          body: {
             name: data.name,
             email: data.email,
             tandem_certified: data.tandem_certified,
             aff_certified: data.aff_certified,
             is_active: data.is_active,
           },
-        })
+        }).then(({ data }) => data)
         showSuccessToast("Instructor created successfully.")
       } else if (type === "update" && instructor) {
         await InstructorsService.updateInstructor({
-          id: instructor.id,
-          requestBody: {
+          throwOnError: true,
+          body: {
             name: data.name,
             email: data.email,
             tandem_certified: data.tandem_certified,
             aff_certified: data.aff_certified,
             is_active: data.is_active,
           },
-        })
+          path: { id: instructor.id },
+        }).then(({ data }) => data)
         showSuccessToast("Instructor updated successfully.")
       }
       if (onSuccess) {

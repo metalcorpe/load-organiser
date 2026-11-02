@@ -23,8 +23,8 @@ import {
   FiWind,
 } from "react-icons/fi"
 
-import { WeatherService } from "@/client"
-import type { WeatherReportPublic } from "@/client"
+import { WeatherService } from "@/api"
+import type { WeatherReportPublic } from "@/api"
 
 export const Route = createFileRoute("/_layout/weather")({
   component: WeatherPage,
@@ -37,7 +37,10 @@ function WeatherPage() {
     refetch,
   } = useQuery({
     queryKey: ["weather"],
-    queryFn: () => WeatherService.readWeatherReports({}),
+    queryFn: () =>
+      WeatherService.readWeatherReports({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   const weatherReports = weatherResponse?.data || []

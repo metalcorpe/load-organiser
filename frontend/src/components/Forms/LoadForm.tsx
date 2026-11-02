@@ -14,7 +14,7 @@ import {
   type LoadStatus,
   type LoadUpdate,
   LoadsService,
-} from "../../client"
+} from "../../api"
 import useCustomToast from "../../hooks/useCustomToast"
 import { Field } from "../ui/field"
 
@@ -72,9 +72,9 @@ export function LoadForm({ load, onSuccess, onCancel }: LoadFormProps) {
   const { data: aircraftList } = useQuery<AircraftPublic[], Error>({
     queryKey: ["aircraft"],
     queryFn: () =>
-      AircraftService.readAircraft({}).then((res) =>
-        Array.isArray(res) ? res : [],
-      ),
+      AircraftService.readAircraft({ throwOnError: true })
+        .then(({ data }) => data)
+        .then((res) => (Array.isArray(res) ? res : [])),
   })
 
   useEffect(() => {
@@ -109,12 +109,16 @@ export function LoadForm({ load, onSuccess, onCancel }: LoadFormProps) {
 
       if (load?.id) {
         await LoadsService.updateLoad({
-          id: load.id,
-          requestBody: loadData as LoadUpdate,
-        })
+          throwOnError: true,
+          body: loadData as LoadUpdate,
+          path: { id: load.id },
+        }).then(({ data }) => data)
         showSuccessToast("Load updated successfully")
       } else {
-        await LoadsService.createLoad({ requestBody: loadData as LoadCreate })
+        await LoadsService.createLoad({
+          throwOnError: true,
+          body: loadData as LoadCreate,
+        }).then(({ data }) => data)
         showSuccessToast("Load created successfully")
       }
 
@@ -122,8 +126,9 @@ export function LoadForm({ load, onSuccess, onCancel }: LoadFormProps) {
       onSuccess()
     } catch (error) {
       const err = error as ApiError
-      const errDetail = (err.body as { detail?: string | { msg: string }[] })
-        ?.detail
+      const errDetail = (
+        err.response?.data as { detail?: string | { msg: string }[] }
+      )?.detail
       let message = "Something went wrong"
       if (typeof errDetail === "string") {
         message = errDetail

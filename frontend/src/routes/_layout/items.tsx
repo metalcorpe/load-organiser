@@ -11,7 +11,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { FiSearch } from "react-icons/fi"
 import { z } from "zod"
 
-import { ItemsService } from "@/client"
+import { ItemsService } from "@/api"
 import { ItemActionsMenu } from "@/components/Common/ItemActionsMenu"
 import AddItem from "@/components/Items/AddItem"
 import PendingItems from "@/components/Pending/PendingItems"
@@ -31,7 +31,10 @@ const PER_PAGE = 5
 function getItemsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      ItemsService.readItems({
+        throwOnError: true,
+        query: { skip: (page - 1) * PER_PAGE, limit: PER_PAGE },
+      }).then(({ data }) => data),
     queryKey: ["items", { page }],
   }
 }
@@ -52,7 +55,7 @@ function ItemsTable() {
 
   const setPage = (page: number) =>
     navigate({
-      search: (prev: { [key: string]: string }) => ({ ...prev, page }),
+      search: (prev) => ({ ...prev, page }),
     })
 
   const items = data?.data.slice(0, PER_PAGE) ?? []
