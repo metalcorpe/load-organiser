@@ -2,6 +2,17 @@
 
 A modern full-stack web application built using the FastAPI full-stack template.
 
+## Product Direction
+
+Load Organiser is being explored as a shared skydiving ecosystem for participating
+dropzones and jumpers: local load management, portable logbooks and activity
+records, equipment history, and cross-dropzone booking.
+
+See the [product documentation](docs/product/README.md) for the vision, proposed
+features, competitor research, implementation assessment, and validation roadmap.
+The ecosystem is a discovery proposal; the current application is an early
+load-management prototype.
+
 ## Technology Stack
 
 - **Backend**: FastAPI with Python
