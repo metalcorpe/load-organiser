@@ -1,5 +1,10 @@
 # Full Stack FastAPI Template
 
+> This repository is being developed into Load Organiser. Start with the
+> [product documentation](docs/product/README.md) for the skydiving ecosystem
+> vision, proposed scope, research, and implementation assessment. The template
+> documentation below describes the underlying application foundation.
+
 <a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
 <a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fastapi/full-stack-fastapi-template" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fastapi/full-stack-fastapi-template.svg" alt="Coverage"></a>
 
