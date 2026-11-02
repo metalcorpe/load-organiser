@@ -1,0 +1,58 @@
+# Dropzone directory and jump attribution
+
+Status: documented product direction from discovery. Not implemented. Skydivers must be able to associate jumps with a dropzone before that operator registers or adopts the application.
+
+## Directory presence versus participation
+
+A dropzone needs a stable directory identity to link related records. This does not require an operator account, endorsement, or operational integration. Treat these as distinct capabilities rather than one universal verification status:
+
+| State / capability | Meaning |
+| --- | --- |
+| Listed | Public/source-backed name and location; selectable in personal logs and plans |
+| Claimed | A representative has demonstrated authority to manage permitted venue information |
+| Operationally participating | Authorized staff use selected booking, check-in, or manifest functions |
+
+Provider qualification, listing management authority, operational participation, and verification of individual jumps remain separate. A claimed venue need not adopt every operational feature.
+
+## Personal jump workflow
+
+1. Search by dropzone name, location, or known alias.
+2. Select an existing directory entry and log the actual jump, equipment, notes, and optional attachments.
+3. If missing, suggest a name/location or keep a provisional location so logging can finish immediately. Do not require an operator invitation to complete a personal entry.
+4. Review suggested venues and possible duplicates before publishing a canonical public entry.
+5. Link the personal entry to the stable venue ID when resolved, preserving its original attribution and correction history.
+
+A dropzone reference means “the jumper recorded this activity here.” It does not mean the dropzone confirmed the jump. Private logbooks and media do not become public by appearing under a directory location.
+
+## Connected venue page
+
+A venue page can connect sourced public information, related events, independently identified coaches/schools, forecasts, and the current user's own visit/jump history. Label each relationship's source; listing an activity at a venue does not establish endorsement by that venue.
+
+Public visitor counts, user identities, activity feeds, and jump totals are not automatically authorized by having private linked records. Public aggregate statistics, if later proposed, need an explicit privacy and provenance policy and must not be labeled official operator totals.
+
+The [social proposal](social-activity.md) allows recent shared activity on venue pages only for the publisher's chosen audience. This is not a live people-on-site board: activity date, publication date, and future intentions remain distinct. Following never reveals the full private DZ-linked history.
+
+## Later operator claim
+
+An authorized representative can request management of an existing entry through a defined authority-review process. Reuse the venue identity rather than creating a disconnected duplicate. A directory claim grants scoped management permissions, not unrestricted access to linked personal records.
+
+Historical entries retain their original self-reported/imported/confirmed sources. Claiming the venue does not retroactively verify them. Any later review of a specific jump requires permission and a separate attributable confirmation. Operational workspaces remain isolated from other operators.
+
+## Identity and corrections
+
+Retain aliases, source references, and change history. Distinguish a venue's rename, an operator change, a relocation, and a duplicate directory entry; these are not automatically equivalent. Support closed/historical venues so past jumps remain meaningful.
+
+Duplicate merges must preserve activity references, saved plans, event links, and attribution without losing records or granting new permissions. Do not merge distinct locations solely because their names match. Provide a correction/dispute route for inaccurate location data or competing management claims.
+
+## Acceptance examples
+
+- A user logs a jump at an unclaimed dropzone without the operator registering.
+- A missing venue can remain provisional while the rest of the jump is saved.
+- A later claim retains the same location identity and creates no new access to private logs.
+- Merging duplicate entries preserves every linked jump without increasing a user's jump count.
+- An operator can publish an event after a claim without adopting manifest software or confirming historical jumps.
+- An older jump still identifies the historical venue when it closes or changes operators.
+
+Open details: initial directory sources and reuse permissions, minimum location fields, moderation, authority-review evidence, merge/relocation rules, and any public statistics policy.
+
+Related: [connected product model](product-model.md), [feature catalog](feature-catalog.md), and [discovery board](discovery-board.md).
