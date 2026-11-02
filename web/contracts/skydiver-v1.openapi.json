@@ -1,0 +1,79 @@
+{
+  "components": {
+    "schemas": {
+      "HealthStatus": {
+        "properties": {
+          "checked_at": {
+            "description": "UTC instant the check ran.",
+            "format": "date-time",
+            "title": "Checked At",
+            "type": "string"
+          },
+          "database": {
+            "description": "Whether the API could reach its database.",
+            "enum": [
+              "ok",
+              "unavailable"
+            ],
+            "title": "Database",
+            "type": "string"
+          },
+          "status": {
+            "description": "Overall API availability for beta requests.",
+            "enum": [
+              "ok",
+              "unavailable"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "database",
+          "checked_at"
+        ],
+        "title": "HealthStatus",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Load Organiser skydiver beta API",
+    "version": "1"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/skydiver/v1/health": {
+      "get": {
+        "operationId": "getHealth",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthStatus"
+                }
+              }
+            },
+            "description": "The API is running but cannot reach its database."
+          }
+        },
+        "summary": "Beta API and database availability",
+        "tags": [
+          "skydiver"
+        ]
+      }
+    }
+  }
+}

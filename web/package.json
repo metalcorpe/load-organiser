@@ -1,0 +1,45 @@
+{
+	"name": "load-organiser-web",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"engines": {
+		"node": ">=22.17"
+	},
+	"scripts": {
+		"dev": "vite dev",
+		"build": "npm run types:check && vite build",
+		"preview": "wrangler dev .svelte-kit/cloudflare/_worker.js --port 4173 --ip 127.0.0.1",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "npm run types:check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json --noEmit",
+		"gen": "node -e \"require('node:fs').rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types --strict-vars=false",
+		"contracts:generate": "openapi-ts",
+		"test:unit": "vitest --run",
+		"test:e2e": "npm run build && playwright test",
+		"types:check": "node -e \"require('node:fs').rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types --strict-vars=false --check"
+	},
+	"devDependencies": {
+		"@hey-api/openapi-ts": "0.99.0",
+		"@playwright/test": "1.64.1",
+		"@sveltejs/adapter-cloudflare": "8.0.2",
+		"@sveltejs/kit": "3.1.1",
+		"@sveltejs/vite-plugin-svelte": "7.3.1",
+		"@types/node": "26.6.6",
+		"svelte": "5.57.3",
+		"svelte-check": "4.7.8",
+		"typescript": "6.0.3",
+		"vite": "8.3.5",
+		"vitest": "5.0.5",
+		"wrangler": "4.156.2"
+	},
+	"imports": {
+		"#lib/*": "./src/lib/*"
+	},
+	"allowScripts": {
+		"esbuild@0.28.2": true,
+		"workerd@1.20261102.1": true
+	},
+	"overrides": {
+		"js-yaml": "4.3.2"
+	}
+}

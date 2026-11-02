@@ -1,0 +1,125 @@
+:root {
+	--bg: #f4f5f7;
+	--surface: #ffffff;
+	--surface-soft: #f5f8f8;
+	--fg: #17252b;
+	--muted: #5b6a72;
+	--border: #d9dee2;
+	--accent: #176e65;
+	--accent-fg: #ffffff;
+	--accent-soft: #e4f2ee;
+	--focus: #19a29a;
+	--warn-bg: #fff8e6;
+	--warn-border: #d9c282;
+	--warn-fg: #6b4e0c;
+	--ok-fg: #1d5f37;
+	--ok-bg: #e5f4ea;
+	--bad-fg: #8f2f2c;
+	--bad-bg: #fbeceb;
+	--nav-height: 64px;
+	--radius: 12px;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #10171a;
+		--surface: #172126;
+		--surface-soft: #1b282d;
+		--fg: #e7eef0;
+		--muted: #a2b1b8;
+		--border: #2d3b41;
+		--accent: #5cc4b8;
+		--accent-fg: #0b1f1c;
+		--accent-soft: #1c3531;
+		--focus: #7fdcd1;
+		--warn-bg: #2c2512;
+		--warn-border: #6b5a26;
+		--warn-fg: #f1d68d;
+		--ok-fg: #9fe0b5;
+		--ok-bg: #173022;
+		--bad-fg: #f4aca8;
+		--bad-bg: #3a1b1a;
+	}
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	overflow-wrap: anywhere;
+}
+
+a {
+	color: var(--accent);
+}
+
+:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 3px;
+}
+
+h1 {
+	font-size: 1.6rem;
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+	margin: 0.25rem 0 0.75rem;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.lede {
+	color: var(--muted);
+	margin-top: 0;
+}
+
+.button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	padding: 0.5rem 1rem;
+	border-radius: 9px;
+	border: 1px solid var(--accent);
+	background: var(--accent);
+	color: var(--accent-fg);
+	font: inherit;
+	font-weight: 650;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.button.secondary {
+	background: var(--surface);
+	color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation: none !important;
+		transition: none !important;
+	}
+}
