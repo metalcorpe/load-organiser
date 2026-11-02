@@ -1,16 +1,16 @@
 # Load Organiser product documentation
 
-Status: discovery draft. Documented on 2026-11-02 against repository commit `1f805de`.
+Status: selected beta planning baseline, 2026-11-02. The implementation assessment describes the earlier prototype at `1f805de`; subsequent dependency maintenance is separate.
 
 Load Organiser is intended to become a shared skydiving ecosystem: participating dropzones use the same application, while jumpers carry their identity, logbook, statistics, and recent-activity records between locations and book jumping opportunities.
 
 The repository currently contains an early load-management prototype. The intended ecosystem and most capabilities below are not implemented.
 
-Selected frontend direction: a mobile-friendly SvelteKit/TypeScript website, retaining FastAPI and PostgreSQL. The repository still implements React; see the [transition document](svelte-transition.md). Hosting, rendering, and migration details remain to be verified.
+Selected frontend direction: a mobile-friendly SvelteKit/TypeScript website, retaining FastAPI and PostgreSQL. The repository still implements React; see the [transition document](svelte-transition.md). Architecture and hosting targets are selected in the [architecture decisions](architecture.md); implementation and deployment remain untested.
 
 ## Current discovery scope
 
-The product owner confirmed that no dropzones are ready to participate and selected the skydiver-first audience direction, followed by later dropzone adoption. Demand remains unvalidated; first-beta product decisions are now selected under delegated expert judgment. Work has progressed from discovery documentation to an authorized phased roadmap and GitHub issue breakdown; implementation and partner recruitment have not started. Begin with the scope/UX/technical decisions in the [delivery plan](delivery-plan.md).
+The product owner confirmed that no dropzones are ready to participate and selected the skydiver-first audience direction, followed by later dropzone adoption. Demand remains unvalidated; first-beta product decisions are now selected under delegated expert judgment. Work has progressed from discovery documentation to an authorized phased roadmap and GitHub issue breakdown; implementation and partner recruitment have not started. P0 planning is complete; the first implementation slice is #144 in the [Claude Code handoff](claude-code-handoff.md).
 
 Keep collecting evidence while narrowing the release scope explicitly. Proposed pilot journeys remain future options; no participating operators or paid services are assumed.
 
@@ -24,10 +24,13 @@ For the selected initial beta cut, read the [release brief](release-brief.md): c
 
 Review the [mobile journeys and clickable mockup](mobile-journeys.md) for navigation, private/public choices, recovery and error states. It is a design artifact, not a running product.
 
-For actionable next work, use the [delivery plan and GitHub backlog](delivery-plan.md). It separates six V1 planning/delivery phases from future ecosystem investigations.
+For actionable next work, use the [Claude Code handoff](claude-code-handoff.md), [architecture](architecture.md), [data contracts](data-contracts.md) and [delivery plan and GitHub backlog](delivery-plan.md). It separates six V1 planning/delivery phases from future ecosystem investigations.
 
 | Document | Purpose |
 | --- | --- |
+| [Architecture decisions](architecture.md) | Selected runtime, hosting, session, boundary, quota and recovery design; feasibility gates |
+| [Data contracts](data-contracts.md) | Ownership, dates, history, publication, concurrency and bounded restore invariants |
+| [Claude Code handoff](claude-code-handoff.md) | First implementation dispatch, route inventory, repository inputs and evidence by issue |
 | [Connected product model](product-model.md) | Feature ownership, shared concepts, integration flows, journeys, and reconciled dependencies |
 | [Delivery plan and GitHub backlog](delivery-plan.md) | Phase epics/milestones, scoped issues, dependencies, and the immediate next actions |
 | [First-beta decisions](beta-decisions.md) | Selected scope, prior-history and restore rules, deferred features and planning completion |

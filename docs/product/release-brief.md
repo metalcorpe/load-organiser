@@ -109,6 +109,8 @@ Shared future intentions, standalone coach/school directories, restore merging/c
 
 ## Planning completion and handoff
 
-Scope is settled in [the decision sheet](beta-decisions.md). #141 can close as a planning decision; the reconciled #142 design is accepted through delegated expert product review. Neither closure is user research or device acceptance. #160/#151/#162 retain those release checks.
+Scope is settled in [the decision sheet](beta-decisions.md). #141/#142 are complete as planning decisions under delegated expert product review. Neither closure is user research or device acceptance. #160/#151/#162 retain those release checks.
 
-Next: #143 architecture and the Claude Code handoff. Set rendering/auth/hosting boundaries, date/units representation, baseline calculations, private/shared corrections, restore atomicity, deletion/backup expiry and measured service limits. No application implementation starts in this planning thread.
+P0 architecture is selected in [architecture](architecture.md) and [data contracts](data-contracts.md). The [Claude Code handoff](claude-code-handoff.md) prepares #144; no application implementation starts in this planning thread. Pilot limits are design defaults, not measured capacity. Hosting/email/backup and user/device validation remain release gates.
+
+Account UX follows the selected architecture: new accounts verify email before private writes/sharing, sessions expire after seven days, and restore/deletion/credential changes require fresh password confirmation. Turning off public discoverability withdraws public cards; explain that existing follower-only content may remain accessible to approved followers.

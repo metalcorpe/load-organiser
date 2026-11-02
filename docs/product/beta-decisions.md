@@ -61,10 +61,10 @@ The owner remains the initial maintainer and report reviewer. Start with a curat
 
 - #141: scope decision complete under delegated product judgment.
 - #142: planning walkthrough accepted through the delegated expert review once reconciled to this cut. User/device acceptance remains #160, not a fabricated result of the mockup.
-- #143: next actionable planning task; choose architecture and prepare the Claude Code handoff.
+- #143: architecture planning complete in [architecture](architecture.md) and [data contracts](data-contracts.md); [Claude Code handoff](claude-code-handoff.md) prepares #144. Runtime and host assumptions remain untested.
 - #159: shared future intentions deferred outside V1; remove it as a blocker of #160 and from the P4 milestone/epic.
 - #149/#150: dated opportunities/basic provider identities and private bookmarks/plans; standalone professional directories are later work.
 - #154/#155: selected baseline and bounded restore behavior above.
-- #135/P0 stays open until #143 is complete. Other implementation/release issues stay open.
+- #135/P0 planning is complete. #144 is the next implementation task; implementation/release issues remain open.
 
 Review history: [two-pass findings](product-review.md). The review's risks remain evidence needs even where this sheet selects a direction.

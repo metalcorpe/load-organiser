@@ -1,6 +1,6 @@
 # Stack options for low operating costs
 
-Status: discovery comparison, 2026-11-02. No stack change is selected or implemented. The funding objective is operating-expense coverage plus contingency, without initial personal income. No workload benchmark, deployment compatibility test, or total-cost estimate has been performed.
+Status: historical discovery comparison, 2026-11-02. The subsequent [architecture decision](architecture.md) selects SvelteKit/Cloudflare Workers with FastAPI Cloud/Neon as the target to test; no migration or deployment is implemented. The funding objective is operating-expense coverage plus contingency, without initial personal income. No workload benchmark, deployment compatibility test, or total-cost estimate has been performed.
 
 ## Main distinction
 

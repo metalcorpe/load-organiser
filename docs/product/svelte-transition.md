@@ -4,7 +4,7 @@ Status: selected frontend direction following the product owner's explicit Svelt
 
 ## Recommendation
 
-SvelteKit with TypeScript is the selected frontend direction while keeping FastAPI and PostgreSQL. This is a frontend replacement, not a reason to duplicate business rules in a second backend. The early prototype has substantial unimplemented skydiver-facing scope; migrate the foundation before building those screens. Rendering, styling/component choices, authentication integration, and deployment adapter still require implementation decisions and testing.
+SvelteKit with TypeScript is the selected frontend direction while keeping FastAPI and PostgreSQL. This is a frontend replacement, not a reason to duplicate business rules in a second backend. The early prototype has substantial unimplemented skydiver-facing scope; migrate the foundation before building those screens. The [architecture decisions](architecture.md) now select SSR, scoped CSS/native controls, backend sessions through a same-origin cookie boundary, and the Cloudflare adapter. Those decisions still require implementation and runtime testing.
 
 Do not justify migration with unmeasured hosting or performance savings. Both frontends can use static hosting. Benefits depend on team familiarity, implementation quality, route rendering, and maintenance effort.
 
@@ -13,7 +13,7 @@ Do not justify migration with unmeasured hosting or performance savings. Both fr
 | Existing element | Treatment |
 | --- | --- |
 | FastAPI routes, SQLModel models, PostgreSQL, migrations | Remain backend responsibilities; known defects are not solved by changing frontend |
-| Generated TypeScript API types and Axios client in `frontend/src/client` | Candidate reuse: no React imports found in inspected generated client; browser/server environment and authentication still need testing |
+| Generated TypeScript API types and Axios client in `frontend/src/client` | Regenerate public-safe contract types; use server-only request-local native fetch in the Workers frontend, not the legacy mutable client |
 | Pure TypeScript utilities | Technically portable where framework-independent; do not endorse current optimization rules merely by copying them |
 | React/TSX pages and components | Rewrite as Svelte components; not automatic syntax conversion |
 | Chakra UI and Emotion | Replace with Svelte-compatible components or scoped styles and accessible primitives |
@@ -22,9 +22,11 @@ Do not justify migration with unmeasured hosting or performance savings. Both fr
 | Existing Playwright tests | Preserve meaningful scenarios; update selectors, server/build setup, and framework assumptions |
 | Vite/build, Docker/nginx, deployment configuration | Adapt output paths, route fallback, env handling, build dependencies, and target adapter |
 
-The current frontend is primarily a staff dashboard rather than the proposed social/discovery product. Distinguish a behavior-preserving migration of existing routes from building new V1 features. Decide which operational routes are still supported and isolate/defer them explicitly rather than silently deleting them in a migration.
+The current frontend is primarily a staff dashboard rather than the proposed social/discovery product. Distinguish a behavior-preserving migration of existing routes from building new V1 features. The [handoff route inventory](claude-code-handoff.md) explicitly excludes unsupported operational routes from the beta router, while retaining their code/tables for reference.
 
 ## Rendering and hosting
+
+Selected decision: public SSR, authenticated server loads, static help only, Cloudflare Workers adapter, and no-store for dynamic data. FastAPI Cloud Hobby/Neon Free are the backend/database targets to test. The alternatives below explain the comparison; they do not reopen the selection.
 
 SvelteKit offers routing and selectable rendering/deployment modes. [Static output](https://svelte.dev/docs/kit/adapter-static) can preserve a separate statically hosted frontend and FastAPI API. Client-rendered protected routes can use an appropriate fallback, but [SPA-only rendering](https://svelte.dev/docs/kit/single-page-apps) has discovery/performance trade-offs; don't disable SSR globally without considering public pages.
 
@@ -34,7 +36,7 @@ FastAPI Cloud remains a backend-hosting candidate. Choosing SvelteKit does not e
 
 ## Authentication and data boundaries
 
-The current app reads a bearer token from browser localStorage. That code cannot simply run during server rendering. Decide browser-only protected access versus a reviewed cookie/server arrangement before moving authentication. Do not put user-specific tokens in a shared module/global client when serving multiple users.
+The current app reads a bearer token from browser localStorage. That code cannot simply run during server rendering. Use the selected opaque backend session and same-origin HttpOnly cookie arrangement from architecture A4–A5. Do not put user-specific tokens in a shared module/global client when serving multiple users.
 
 Public pages must not receive private logbook/gear data through server loads, hydration payloads, generated files, or shared caches. Backend permissions continue to protect records. Shared-card visibility, follows, unpublishing, and blocking need the same server-side enforcement regardless of frontend.
 

@@ -1,6 +1,6 @@
 # Delivery plan and GitHub backlog
 
-Status: planning and issue organization authorized by the product owner. Implementation has not started. This plan operationalizes the discovery documents without treating every explored feature as committed V1 scope. Scope/design planning is complete under delegated expert review; architecture #143 is next. Dates and effort estimates remain unassigned.
+Status: planning and issue organization authorized by the product owner. Implementation has not started. This plan operationalizes the discovery documents without treating every explored feature as committed V1 scope. P0 scope/design/architecture planning is complete under delegated expert review; the separate implementation starts with #144. Dates and effort estimates remain unassigned.
 
 Current product boundary: analysis, planning, documentation, and issue preparation only. The separately authorized dependency refresh is prepared in [PR #170](https://github.com/metalcorpe/load-organiser/pull/170); it does not deliver these product features. Implementation will be delegated to Claude Code separately; the implementation issues below are future work, not authorization to begin coding now.
 
@@ -33,7 +33,7 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 | --- | --- |
 | [#141 — Agree V1 boundaries and initial discovery coverage](https://github.com/metalcorpe/load-organiser/issues/141) | Completed scope decision |
 | [#142 — Design mobile discovery, logging, sharing and recovery journeys](https://github.com/metalcorpe/load-organiser/issues/142) | [#141](https://github.com/metalcorpe/load-organiser/issues/141) — completed design preparation |
-| [#143 — Decide rendering, authentication and record boundaries for SvelteKit](https://github.com/metalcorpe/load-organiser/issues/143) | [#141](https://github.com/metalcorpe/load-organiser/issues/141) |
+| [#143 — Decide rendering, authentication and record boundaries for SvelteKit](https://github.com/metalcorpe/load-organiser/issues/143) | Completed architecture decision |
 
 ### P1 — Svelte foundation
 
@@ -91,8 +91,8 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 ## Immediate sequence
 
 1. Completed: [scope #141](https://github.com/metalcorpe/load-organiser/issues/141) and [design preparation #142](https://github.com/metalcorpe/load-organiser/issues/142), using [selected product decisions](beta-decisions.md) and the reconciled walkthrough. This is delegated expert review, not user/device acceptance.
-2. Complete [architecture #143](https://github.com/metalcorpe/load-organiser/issues/143): rendering/auth/hosting, history/correction semantics, bounded restore and cost/recovery limits.
-3. Produce the Claude Code implementation handoff, then delegate the [Svelte foundation #144](https://github.com/metalcorpe/load-organiser/issues/144). Product implementation remains separate from this planning work.
+2. Completed: [architecture #143](https://github.com/metalcorpe/load-organiser/issues/143), recorded in [architecture](architecture.md) and [data contracts](data-contracts.md). Host compatibility/cost assumptions still require real implementation/release checks.
+3. Ready: [Claude Code handoff](claude-code-handoff.md) for [Svelte foundation #144](https://github.com/metalcorpe/load-organiser/issues/144). Actual dispatch and product implementation remain separate from this planning work.
 
 Directory/listing and personal-record work can overlap once their actual dependencies are complete. Social publishing requires personal activity and backend audience enforcement. Hosting exploration need not wait to be researched, but public beta data intake must wait for the release/recovery checks.
 
