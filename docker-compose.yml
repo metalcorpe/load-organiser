@@ -1,7 +1,7 @@
 services:
 
   db:
-    image: postgres:17
+    image: postgres:18.6
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -10,17 +10,34 @@ services:
       start_period: 30s
       timeout: 10s
     volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
+      - app-db-data-pg18:/var/lib/postgresql
+      # The PostgreSQL 17 volume, read-only. Only the guard below reads it; mounting
+      # it also keeps `docker volume prune` from deleting it.
+      - app-db-data:/legacy-pg17:ro
+    # Refuse to initialise an empty PostgreSQL 18 cluster while PostgreSQL 17 data
+    # exists: an unattended `compose up` would otherwise go live on an empty DB.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        if [ -f /legacy-pg17/PG_VERSION ] && [ ! -f "$$PGDATA/PG_VERSION" ] && [ "$${ALLOW_EMPTY_PG18:-}" != "true" ]; then
+          echo "Refusing to start: volume app-db-data holds PostgreSQL $$(cat /legacy-pg17/PG_VERSION) data and the PostgreSQL 18 volume is empty." >&2
+          echo "Migrate first (docs/maintenance/dependency-refresh.md) or set ALLOW_EMPTY_PG18=true to start empty." >&2
+          exit 1
+        fi
+        exec docker-entrypoint.sh "$$@"
+      - docker-entrypoint.sh
+    command: ["postgres"]
     env_file:
       - .env
     environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
+      - PGDATA=/var/lib/postgresql/18/docker
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_DB=${POSTGRES_DB?Variable not set}
 
   adminer:
-    image: adminer
+    image: adminer:6.2.0
     restart: always
     networks:
       - traefik-public
@@ -163,6 +180,9 @@ services:
       # Enable redirection for HTTP and HTTPS
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
 volumes:
+  app-db-data-pg18:
+  # Pre-PostgreSQL 18 data; mounted read-only by the db guard. Created empty on
+  # fresh installs.
   app-db-data:
 
 networks:

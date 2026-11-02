@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-import emails  # type: ignore
+from emails.message import Message
 import jwt
 from jinja2 import Template
 from jwt.exceptions import InvalidTokenError
@@ -36,11 +36,13 @@ def send_email(
     subject: str = "",
     html_content: str = "",
 ) -> None:
-    assert settings.emails_enabled, "no provided configuration for email variables"
-    message = emails.Message(
+    from_email = settings.EMAILS_FROM_EMAIL
+    if not settings.emails_enabled or not from_email:
+        raise RuntimeError("no provided configuration for email variables")
+    message = Message(
         subject=subject,
         html=html_content,
-        mail_from=(settings.EMAILS_FROM_NAME, settings.EMAILS_FROM_EMAIL),
+        mail_from=(settings.EMAILS_FROM_NAME, from_email),
     )
     smtp_options = {"host": settings.SMTP_HOST, "port": settings.SMTP_PORT}
     if settings.SMTP_TLS:

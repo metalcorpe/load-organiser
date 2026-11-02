@@ -9,7 +9,7 @@ import {
   AircraftService,
   type AircraftUpdate,
   type ApiError,
-} from "../../client"
+} from "../../api"
 import { Checkbox } from "../../components/ui/checkbox"
 import { Field } from "../../components/ui/field"
 import useCustomToast from "../../hooks/useCustomToast"
@@ -74,9 +74,10 @@ export function AircraftForm({
         }
 
         await AircraftService.updateAircraft({
-          id: aircraft.id,
-          requestBody: updateData,
-        })
+          throwOnError: true,
+          body: updateData,
+          path: { id: aircraft.id },
+        }).then(({ data }) => data)
 
         showSuccessToast("Aircraft updated successfully!")
       } else {
@@ -88,7 +89,10 @@ export function AircraftForm({
           is_active: data.is_active,
         }
 
-        await AircraftService.createAircraft({ requestBody: createData })
+        await AircraftService.createAircraft({
+          throwOnError: true,
+          body: createData,
+        }).then(({ data }) => data)
 
         showSuccessToast("Aircraft created successfully!")
       }
@@ -98,10 +102,10 @@ export function AircraftForm({
     } catch (error) {
       const apiError = error as ApiError
       const errDetail =
-        apiError.body &&
-        typeof apiError.body === "object" &&
-        "detail" in apiError.body
-          ? (apiError.body.detail as string)
+        apiError.response?.data &&
+        typeof apiError.response?.data === "object" &&
+        "detail" in apiError.response?.data
+          ? (apiError.response?.data.detail as string)
           : undefined
       showErrorToast(errDetail || "Something went wrong")
     }

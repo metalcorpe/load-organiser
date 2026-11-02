@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { z } from "zod"
 
-import { type UserPublic, UsersService } from "@/client"
+import { type UserPublic, UsersService } from "@/api"
 import AddUser from "@/components/Admin/AddUser"
 import { UserActionsMenu } from "@/components/Common/UserActionsMenu"
 import PendingUsers from "@/components/Pending/PendingUsers"
@@ -23,7 +23,10 @@ const PER_PAGE = 5
 function getUsersQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      UsersService.readUsers({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      UsersService.readUsers({
+        throwOnError: true,
+        query: { skip: (page - 1) * PER_PAGE, limit: PER_PAGE },
+      }).then(({ data }) => data),
     queryKey: ["users", { page }],
   }
 }
@@ -46,7 +49,7 @@ function UsersTable() {
 
   const setPage = (page: number) =>
     navigate({
-      search: (prev: { [key: string]: string }) => ({ ...prev, page }),
+      search: (prev) => ({ ...prev, page }),
     })
 
   const users = data?.data.slice(0, PER_PAGE) ?? []

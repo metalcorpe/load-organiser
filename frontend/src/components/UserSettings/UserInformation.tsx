@@ -16,7 +16,7 @@ import {
   type UserPublic,
   type UserUpdateMe,
   UsersService,
-} from "@/client"
+} from "@/api"
 import useAuth from "@/hooks/useAuth"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, handleError } from "@/utils"
@@ -48,7 +48,9 @@ const UserInformation = () => {
 
   const mutation = useMutation({
     mutationFn: (data: UserUpdateMe) =>
-      UsersService.updateUserMe({ requestBody: data }),
+      UsersService.updateUserMe({ throwOnError: true, body: data }).then(
+        ({ data }) => data,
+      ),
     onSuccess: () => {
       showSuccessToast("User updated successfully.")
     },

@@ -28,8 +28,8 @@ import {
   FiUsers,
 } from "react-icons/fi"
 
-import { InstructorsService } from "../../client"
-import type { InstructorPublic } from "../../client"
+import { InstructorsService } from "../../api"
+import type { InstructorPublic } from "../../api"
 import InstructorForm from "../../components/Forms/InstructorForm"
 import {
   DialogBody,
@@ -54,12 +54,18 @@ function InstructorsPage() {
 
   const { data: instructorsResponse, isLoading } = useQuery({
     queryKey: ["instructors"],
-    queryFn: () => InstructorsService.readInstructors({}),
+    queryFn: () =>
+      InstructorsService.readInstructors({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   const deleteInstructorMutation = useMutation({
     mutationFn: (instructorId: string) =>
-      InstructorsService.deleteInstructor({ id: instructorId }),
+      InstructorsService.deleteInstructor({
+        throwOnError: true,
+        path: { id: instructorId },
+      }).then(({ data }) => data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["instructors"] })
       showSuccessToast("Instructor deleted successfully!")
@@ -73,9 +79,10 @@ function InstructorsPage() {
   const toggleInstructorStatusMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
       InstructorsService.updateInstructor({
-        id,
-        requestBody: { is_active: !isActive },
-      }),
+        throwOnError: true,
+        body: { is_active: !isActive },
+        path: { id: id },
+      }).then(({ data }) => data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["instructors"] })
     },

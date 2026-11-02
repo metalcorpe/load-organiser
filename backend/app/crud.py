@@ -4,7 +4,7 @@ from datetime import datetime
 
 from sqlmodel import Session, select, and_
 
-from app.core.security import get_password_hash, verify_password
+from app.core.security import get_password_hash, verify_and_update_password
 from app.models import (
     Item, ItemCreate, User, UserCreate, UserUpdate,
     Aircraft, AircraftCreate, AircraftUpdate,
@@ -49,8 +49,17 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
     db_user = get_user_by_email(session=session, email=email)
     if not db_user:
         return None
-    if not verify_password(password, db_user.hashed_password):
+    verified, updated_hash = verify_and_update_password(
+        password, db_user.hashed_password
+    )
+    if not verified:
         return None
+    if updated_hash:
+        # Migrate legacy bcrypt (and outdated Argon2 parameters) on login.
+        db_user.hashed_password = updated_hash
+        session.add(db_user)
+        session.commit()
+        session.refresh(db_user)
     return db_user
 
 

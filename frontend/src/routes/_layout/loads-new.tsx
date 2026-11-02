@@ -22,8 +22,8 @@ import {
   FiUsers,
 } from "react-icons/fi"
 
-import { LoadsService } from "../../client"
-import type { LoadPublic } from "../../client"
+import { LoadsService } from "../../api"
+import type { LoadPublic } from "../../api"
 import { LoadForm } from "../../components/Forms/LoadForm"
 import { LoadOptimizer } from "../../components/LoadOptimizer/LoadOptimizer"
 import {
@@ -59,11 +59,16 @@ function LoadsPage() {
 
   const { data: loadsResponse, isLoading: isLoadingLoads } = useQuery({
     queryKey: ["loads"],
-    queryFn: () => LoadsService.readLoads({}),
+    queryFn: () =>
+      LoadsService.readLoads({ throwOnError: true }).then(({ data }) => data),
   })
 
   const deleteLoadMutation = useMutation({
-    mutationFn: (loadId: string) => LoadsService.deleteLoad({ id: loadId }),
+    mutationFn: (loadId: string) =>
+      LoadsService.deleteLoad({
+        throwOnError: true,
+        path: { id: loadId },
+      }).then(({ data }) => data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["loads"] })
       showSuccessToast("Load deleted successfully")

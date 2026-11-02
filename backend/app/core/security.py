@@ -1,27 +1,52 @@
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import jwt
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
+from pwdlib.hashers.argon2 import Argon2Hasher
+from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+password_hash = PasswordHash((Argon2Hasher(), BcryptHasher()))
 
 
 ALGORITHM = "HS256"
 
 
 def create_access_token(subject: str | Any, expires_delta: timedelta) -> str:
-    expire = datetime.now(timezone.utc) + expires_delta
+    expire = datetime.now(UTC) + expires_delta
     to_encode = {"exp": expire, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    password: str | bytes = plain_password
+    if hashed_password.startswith(("$2a$", "$2b$", "$2y$")):
+        # Passlib silently truncated bcrypt passwords at 72 bytes. Preserve
+        # verification of existing hashes, including multibyte passwords.
+        password = plain_password.encode("utf-8")[:72]
+    return password_hash.verify(password, hashed_password)
+
+
+def verify_and_update_password(
+    plain_password: str, hashed_password: str
+) -> tuple[bool, str | None]:
+    """Verify, and return a fresh Argon2 hash when the stored one is outdated.
+
+    pwdlib's verify_and_update would rehash the 72-byte-truncated input for
+    legacy bcrypt hashes; the replacement hash must cover the full password.
+    """
+    if not verify_password(plain_password, hashed_password):
+        return False, None
+    current = password_hash.current_hasher
+    if not current.identify(hashed_password) or current.check_needs_rehash(
+        hashed_password
+    ):
+        return True, get_password_hash(plain_password)
+    return True, None
 
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    return password_hash.hash(password)

@@ -14,8 +14,8 @@ import {
 import { useState } from "react"
 import { FaExchangeAlt } from "react-icons/fa"
 
-import { type UserPublic, type UserUpdate, UsersService } from "@/client"
-import type { ApiError } from "@/client/core/ApiError"
+import { type UserPublic, type UserUpdate, UsersService } from "@/api"
+import type { ApiError } from "@/api"
 import useCustomToast from "@/hooks/useCustomToast"
 import { emailPattern, handleError } from "@/utils"
 import { Checkbox } from "../ui/checkbox"
@@ -56,7 +56,11 @@ const EditUser = ({ user }: EditUserProps) => {
 
   const mutation = useMutation({
     mutationFn: (data: UserUpdateForm) =>
-      UsersService.updateUser({ userId: user.id, requestBody: data }),
+      UsersService.updateUser({
+        throwOnError: true,
+        body: data,
+        path: { user_id: user.id },
+      }).then(({ data }) => data),
     onSuccess: () => {
       showSuccessToast("User updated successfully.")
       reset()
