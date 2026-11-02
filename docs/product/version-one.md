@@ -1,18 +1,18 @@
 # Version one — proposed scope
 
-Status: scope proposal for review, not an approved implementation commitment. Skydivers first; no participating dropzones assumed. This proposal combines discovery value with personal recordkeeping, following the product owner's concern that a logbook and gear inventory alone might not justify adoption.
+Status: first-beta scope selected under delegated expert product judgment; see [the decision sheet](beta-decisions.md). No feature implementation is claimed. Skydivers first; no participating dropzones assumed. This proposal combines discovery value with personal recordkeeping, following the product owner's concern that a logbook and gear inventory alone might not justify adoption.
 
-Planning update: phased GitHub tracking is authorized. Use the [delivery plan](delivery-plan.md) and its P0 decisions to finalize the first cut before implementation; issue creation does not mark this entire proposal as approved or delivered.
+Planning update: phased GitHub tracking is authorized. Use the [delivery plan](delivery-plan.md) and selected P0 product decisions for implementation preparation; scope closure does not mark any product behavior delivered.
 
 Confirmed decisions: Europe is the initial public discovery geography. The product owner will maintain the initial DZ and opportunity listings and handle corrections. Current work is analysis, planning, documentation, and issue preparation; implementation will be delegated to Claude Code separately.
 
-The [initial beta release brief](release-brief.md) now supplies concrete recommended fields, social behavior, limits, discovery source candidates and maintenance cadence. It distinguishes confirmed decisions from defaults; this broader document remains the feature context. The product owner also confirmed responsibility for initial post/profile report review.
+The [initial beta release brief](release-brief.md) now supplies concrete selected fields, social behavior, limits, discovery source candidates and maintenance cadence. It distinguishes owner-established direction from expert-selected design defaults; this broader document remains the feature context. The product owner also confirmed responsibility for initial post/profile report review.
 
 ## Promise
 
 Find opportunities and people to jump with, keep your personal records, and choose what activity to share.
 
-Proposed social revision: following jumpers, explicitly shared jump cards, audience-scoped venue activity, and optional shared visit intentions. See [social activity](social-activity.md). This extends the earlier discovery/recordkeeping proposal; the exact first-cut bundle still needs agreement and should not expand into a full social platform.
+Selected social cut: following jumpers, explicitly shared jump cards and audience-scoped venue activity. Visit plans stay private; shared intentions are deferred. See [social activity](social-activity.md). This extends the earlier discovery/recordkeeping proposal; the first-cut boundaries are settled in the decision sheet and should not expand into a full social platform.
 
 The application must be useful before a user has entered a substantial personal history. Public discovery supplies something to browse; personal records provide continuity after activity. Europe is the initial discovery region; useful inventory and the narrower audience/discipline still need to be established.
 
@@ -24,14 +24,14 @@ Frontend selection: SvelteKit with TypeScript, keeping FastAPI/PostgreSQL. This 
 
 | Area | Initial scope | Boundary |
 | --- | --- | --- |
-| Public discovery | Browse/search sourced events, boogies, camps/courses, coaches, and schools; filter by category, place, dates where applicable, and discipline | Provider profiles and dated opportunities remain distinct; no live availability or booking guarantee |
+| Public discovery | Browse/search sourced dated events, boogies, camps/courses and related DZs; filter by category, place, dates where applicable, and discipline | Basic offering-provider identities remain distinct; standalone coach/school directories and live availability/booking guarantees are deferred |
 | Dropzone directory | Find/select a DZ, view sourced location information and related listings; retain closed/historical locations | Operator account not required; no endorsement implied |
 | Personal account | Basic profile, account recovery, private records, saved opportunities, and planned visits | Saving/visiting does not share credentials or private history with providers |
-| Social connections | Follow/request-follow, chronological following feed, selected jump summaries, explicit visit intentions | Private logs/plans by default; audience enforcement, block/report, and moderation required |
-| Jump logbook | Manual add/edit, DZ reference, activity time, discipline, equipment selection, notes, basic totals and recent activity | No automated eligibility decision, issuer verification, or completed-jump assertion from event attendance |
+| Social connections | Follow/request-follow, chronological following feed, selected jump summaries; private visit plans | Private logs/plans by default; audience enforcement, block/report, and moderation required |
+| Jump logbook | Manual add/edit, DZ reference, activity time, discipline, equipment selection, notes, recorded totals, self-declared prior-history baseline and recent activity | No automated eligibility decision, issuer verification, or completed-jump assertion from event attendance |
 | Gear inventory | Separate container/main/reserve/AAD records, manufacturer/model, serial, optional manufacture/acquisition details, user-entered servicing/due dates | Ownership and servicing are self-reported; no verified title or automatic manufacturer applicability claim |
 | Connections | Jump-to-DZ/gear, listing-to-venue/provider, saved opportunity-to-plan, shared card-to-jump/venue | Reuse records; venue views show only deliberately shared activity permitted to the viewer, never inferred presence |
-| Portability and recovery | Versioned personal-record export and tested restore/import of that export; transparent limits | Not a promise to import every third-party format; export must not require payment |
+| Portability and recovery | Versioned personal export and tested empty-record restore with repeat acknowledgement; no merge/conflict UI | Not a promise to import every third-party format; export must not require payment |
 | Sustainability | Optional external contribution link and clear cost/support information | No ads, paid membership, in-app payments, or automatic paid infrastructure assumed |
 
 Browsing public information should not require an account. Recordkeeping and private saving do. A missing DZ can be provisional so the user finishes logging; public directory publication waits for review.
@@ -40,7 +40,7 @@ Keep attachments lightweight initially: links to externally hosted media and str
 
 ## Listing and directory maintenance
 
-Initial maintained public discovery covers Europe. This is a coverage direction, not a promise of complete listings for every European country. Personal accounts, logbooks, gear records, and provisional DZ references are not geographically restricted. The initial country inventory, source list, and review cadence remain planning work; no discipline restriction or interface language has been selected by this decision.
+Initial maintained public discovery covers Europe. This is a coverage direction, not a promise of complete listings for every European country. Personal accounts, logbooks, gear records, and provisional DZ references are not geographically restricted. The actual country inventory still needs release validation. English and no discipline restriction are selected; source policy and the review routine are working defaults, with maintenance capacity unvalidated.
 
 The product owner is the initial maintainer for DZ and opportunity listings and corrections. The product owner also reviews social post/profile reports initially. The release brief proposes the moderation workflow and maintenance cadence; no response-time guarantee or available maintenance capacity has been validated.
 
@@ -64,7 +64,7 @@ Count once. Recorded component uses are not assumed lifetime totals when older h
 
 ### Follow and coordinate
 
-Find a person → follow/request access → view permitted activity → inspect a linked venue/event → optionally share a visit intention. After a jump, preview a summary and explicitly choose whether to publish. No background GPS tracking, automatic live presence, or booking guarantee is involved.
+Find a person → follow/request access → view permitted activity → inspect a linked venue/event → keep any visit plan private. After a jump, preview a summary and explicitly choose whether to publish. No background GPS tracking, automatic live presence, or booking guarantee is involved.
 
 ### Keep records portable
 
@@ -72,6 +72,7 @@ Export personal logs, gear, and relevant references → restore into a clean tes
 
 ## Deferred capabilities
 
+- Shared future intentions, standalone coach/school directories and restore merging/conflict selection.
 - FlySight/GPX/FIT imports, advanced debriefing, and direct device connections.
 - Paper-logbook recognition and broad third-party log migrations.
 - Live forecast integration; external weather-resource links can be used without claiming synchronized conditions.
@@ -94,6 +95,6 @@ These remain in the [feature catalog](feature-catalog.md). Deferral does not del
 - Existing prototype defects are fixed for routes actually used, or broken operational features are excluded from the release and their backend permissions constrained. Merely hiding a menu is insufficient.
 - Browser and persistence checks cover the actual journeys. No deployment or release validation has yet been performed for this proposal.
 
-## Unresolved scope choices
+## Selected scope and remaining evidence
 
-The release brief recommends an active recreational audience without a discipline restriction, an English interface, minimum log fields, no hosted binary attachments, source candidates, and a maintenance cadence; these detailed defaults still need review. Country inventory and the maintenance workload need validation. The product owner is confirmed as initial listing and post/profile report reviewer. Calendar export is proposed as deferred. Hosting remains an architecture decision. FastAPI Cloud/Neon are candidates, not deployed services. This document is the proposed user-facing scope; the [roadmap](roadmap.md) remains the broader opportunity sequence.
+The [decision sheet](beta-decisions.md) resolves audience/language, baseline history, private plans, social cut and bounded restore. Hosting and measured service limits remain #143/#161 decisions. Actual source inventory, reuse review, maintenance capacity, user value and device behavior remain release evidence in #151/#160/#162; they are not falsely marked validated by scope closure.

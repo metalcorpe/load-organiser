@@ -1,12 +1,12 @@
 # Needs and discovery backlog
 
-Status: discovery inventory. No participating dropzones, validated customer requirements, or agreed first-release scope are assumed.
+Status: discovery inventory. No participating dropzones or validated customer requirements are assumed. First-beta scope is selected under delegated expert judgment in [product decisions](beta-decisions.md).
 
 ## Purpose
 
 Collect the problems the ecosystem might solve before deciding which features to build. The product owner's stated direction is established intent; the user needs below are hypotheses to investigate. Competitor offerings provide examples, not confirmation that our intended users need the same functionality.
 
-The working audience direction is individual skydivers first, with dropzone adoption later. Investigate personal logging, equipment, import/debriefing, and planning needs first while continuing to inventory operator needs for the eventual ecosystem. The initial skydiver segment and MVP are not selected. See [adoption strategy](adoption-strategy.md) for participation dependencies.
+The working audience direction is individual skydivers first, with dropzone adoption later. Investigate personal logging, equipment, import/debriefing, and planning needs first while continuing to inventory operator needs for the eventual ecosystem. The first-beta segment/cut is selected; remaining evidence needs below are not a mandate to keep expanding that release. See [adoption strategy](adoption-strategy.md) for participation dependencies.
 
 ## Needs by user
 

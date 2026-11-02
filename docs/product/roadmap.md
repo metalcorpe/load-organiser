@@ -2,6 +2,8 @@
 
 Status: proposal, 2026-11-02. No delivery dates, effort estimates, or commercial commitments have been approved. Stages express dependencies rather than fixed release promises.
 
+Current beta scope is selected in [the decision sheet](beta-decisions.md). Shared future intentions and standalone coach/school directories are deferred; the broader opportunity stages below remain ecosystem context.
+
 ## Execution tracking
 
 The product owner has authorized a phased action breakdown and GitHub issue organization. The [delivery plan](delivery-plan.md) is the actionable sequence for the proposed V1: scope/UX → Svelte foundation → public discovery → personal records → social activity → beta readiness. Its phase numbering supersedes the conceptual stage numbering below for implementation tracking. This document retains the broader discovery/validation context; later integrations remain outside V1 and no code has been implemented by creating issues.

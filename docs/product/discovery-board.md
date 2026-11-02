@@ -4,6 +4,8 @@ Status: feature proposal raised by the product owner. Discovery only; no impleme
 
 Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. The [release brief](release-brief.md) proposes primary-source candidates and a review cadence. Real country inventory, reuse permissions and maintenance capacity remain unvalidated; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
 
+First beta follows [the selected decisions](beta-decisions.md): dated events/boogies/camps/courses and related DZ/basic provider information. Standalone coach/school directories remain later scope; the broader category catalogue below is retained for the ecosystem vision.
+
 ## Purpose and fit
 
 Help skydivers discover where to jump, learn, and train. The board can provide value through clearly sourced listings and external registration/contact links before venues adopt the full application. It is a potential route for coaches, schools, and organizers to participate in a smaller workflow first.

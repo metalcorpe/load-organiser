@@ -10,7 +10,7 @@ Selected frontend direction: a mobile-friendly SvelteKit/TypeScript website, ret
 
 ## Current discovery scope
 
-The product owner confirmed that no dropzones are ready to participate and selected the skydiver-first audience direction, followed by later dropzone adoption. Demand remains unvalidated and detailed first-release decisions remain open. Work has progressed from discovery documentation to an authorized phased roadmap and GitHub issue breakdown; implementation and partner recruitment have not started. Begin with the scope/UX/technical decisions in the [delivery plan](delivery-plan.md).
+The product owner confirmed that no dropzones are ready to participate and selected the skydiver-first audience direction, followed by later dropzone adoption. Demand remains unvalidated; first-beta product decisions are now selected under delegated expert judgment. Work has progressed from discovery documentation to an authorized phased roadmap and GitHub issue breakdown; implementation and partner recruitment have not started. Begin with the scope/UX/technical decisions in the [delivery plan](delivery-plan.md).
 
 Keep collecting evidence while narrowing the release scope explicitly. Proposed pilot journeys remain future options; no participating operators or paid services are assumed.
 
@@ -20,7 +20,7 @@ Confirmed discovery coverage is Europe first, with initial DZ/opportunity listin
 
 Start with the [connected product model](product-model.md) to understand how features fit together, which records they share, and where their responsibilities differ. Feature-detail documents expand that model; the roadmap remains conditional.
 
-For the proposed initial beta cut, read the [release brief](release-brief.md): concrete fields, social rules, attachment limits, European source candidates, owner responsibilities, and maintenance/release gates. Detailed defaults remain recommendations for review.
+For the selected initial beta cut, read the [release brief](release-brief.md): concrete fields, social rules, attachment limits, European source candidates, owner responsibilities, and maintenance/release gates. The [decision sheet](beta-decisions.md) settles product scope; measured operating limits and release evidence remain outstanding.
 
 Review the [mobile journeys and clickable mockup](mobile-journeys.md) for navigation, private/public choices, recovery and error states. It is a design artifact, not a running product.
 
@@ -30,10 +30,11 @@ For actionable next work, use the [delivery plan and GitHub backlog](delivery-pl
 | --- | --- |
 | [Connected product model](product-model.md) | Feature ownership, shared concepts, integration flows, journeys, and reconciled dependencies |
 | [Delivery plan and GitHub backlog](delivery-plan.md) | Phase epics/milestones, scoped issues, dependencies, and the immediate next actions |
+| [First-beta decisions](beta-decisions.md) | Selected scope, prior-history and restore rules, deferred features and planning completion |
 | [Two-pass product review](product-review.md) | Value/adoption risks, corrected journey friction and unresolved product decisions |
 | [Mobile journeys and walkthrough](mobile-journeys.md) | Seven phone journeys, clickable design mockup, error/accessibility matrix and review tasks |
 | [Initial beta release brief](release-brief.md) | Concrete recommended first cut, confirmed decisions, source policy and planning handoff |
-| [Proposed first version](version-one.md) | Discovery plus personal jump/gear records, explicit exclusions, and release conditions; awaiting scope agreement |
+| [Proposed first version](version-one.md) | Discovery plus personal jump/gear records, explicit exclusions, and release conditions; current selection in the decision sheet |
 | [Vision and user journeys](vision.md) | Product direction, users, shared records, and local control |
 | [Skydiver-first adoption](adoption-strategy.md) | Independent user value, participation dependencies, and the later path to dropzones |
 | [Sustainability and community support](sustainability.md) | Free-core proposal, voluntary support, sponsorship, advertising trade-offs, and operating costs |

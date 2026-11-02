@@ -4,6 +4,8 @@ Status: proposed product direction prompted by the owner's request for following
 
 The [release brief](release-brief.md) now defines a concrete recommended beta bundle and correction/audience rules. The product owner confirmed initial review of post/profile reports. The broader alternatives and future ideas below remain discovery context.
 
+Current first beta follows [the selected decisions](beta-decisions.md): profiles/follows, selected completed-jump cards, feed and authorized venue activity. Visit plans remain private. References to shared future intentions below describe later discovery scope, not beta requirements.
+
 ## Product job and loop
 
 Help a jumper answer: what are people I know doing, where have they been jumping, and could we plan something together?
@@ -21,7 +23,7 @@ This could give logging a social benefit and discovery a personal connection wit
 | Following feed | Chronological cards the viewer is permitted to read | No algorithmic ranking, fabricated activity, or inferred jump completion |
 | Share a jump | After logging, preview fields, choose audience/timing, and publish | Logging/imports stay private by default; no automatic bulk publication |
 | DZ-page activity | Relevant shared cards visible to the viewer, with activity and publication dates | Recent shared activity, not a live manifest or official visitor/jump totals |
-| Visit intentions | Explicitly share a destination/event/date with an audience | Saved plans stay private; intention is not presence, registration, or acceptance |
+| Visit intentions — later | Deferred to #159; beta plans remain private | Not a first-beta publishing flow |
 | Essential controls | Audience edits, unpublish, block/report, and moderation | Release dependencies rather than later polish |
 
 Comments, reactions, participant tagging, group/direct chat, global feeds, and livestreaming are extensions, not assumed first-cut scope.

@@ -1,6 +1,6 @@
 # Skydiver-first adoption strategy
 
-Status: working direction proposed by the product owner; discovery continues. No MVP, launch plan, or participating dropzones are assumed.
+Status: broader adoption strategy and hypotheses. The first-beta cut is now selected in [product decisions](beta-decisions.md); no launch validation or participating dropzones are assumed.
 
 The [connected product model](product-model.md) maps all feature IDs to shared records, user journeys, and participation dependencies.
 
@@ -42,7 +42,7 @@ These are retention hypotheses, not measured behavior. Discovery should establis
 - Device users seeking import and debrief workflows.
 - Students/progressing jumpers seeking goals and organized feedback.
 
-The segment is not selected. Device analysis, training progression, and travel preparation may require different product emphasis; record these differences before narrowing scope.
+The first-beta segment is active recreational skydivers; the other segments remain discovery opportunities. Device analysis, training progression, and travel preparation may require different product emphasis; record these differences before narrowing scope.
 
 ## Later path to dropzone adoption
 

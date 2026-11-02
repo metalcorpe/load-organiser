@@ -1,7 +1,6 @@
 # Initial beta release brief
 
-Status: concrete working proposal for P0 issue [#141](https://github.com/metalcorpe/load-organiser/issues/141). Preparing this specification is authorized; the detailed defaults below are recommendations, not claims of user validation, delivered features, or explicit owner approval of every field. No application code is changed by this brief.
-
+Status: selected working first-beta baseline under delegated expert product judgment. See [product decisions](beta-decisions.md) for the scope calls and their rationale. This is an implementation specification for later Claude Code work, not delivered behavior or validated demand.
 ## Confirmed direction and responsibilities
 
 - Individual skydivers first, with dropzone adoption later. No participating DZ is required.
@@ -11,11 +10,11 @@ Status: concrete working proposal for P0 issue [#141](https://github.com/metalco
 - Initial objective is expense coverage plus contingency, without personal income. A funding provider, paid hosting, or recurring subsidy is not selected.
 - Product work remains analysis, documentation, and implementation handoff preparation. The separately authorized dependency refresh is [PR #170](https://github.com/metalcorpe/load-organiser/pull/170); it does not implement the proposed product.
 
-See the [two-pass product review](product-review.md) for remaining value/adoption risks and proposed sequencing/history decisions. Its scope recommendations are not silently adopted as owner decisions.
+The [two-pass product review](product-review.md) records the risks that prompted the [selected decisions](beta-decisions.md). Those decisions now resolve the scope recommendations; real user value and maintenance capacity still require evidence.
 
 ## Audience and first-use value
 
-Recommended first audience: active recreational skydivers who want to find European opportunities, keep personal records across venues, and follow a few people they know. No discipline-specific restriction. Students can browse and record personal activity, but formal training progression/sign-offs are deferred. English is the proposed initial interface language; retain original names, languages, prerequisites, and source links instead of presenting machine translations as official information.
+Selected first audience: active recreational skydivers who want to find European opportunities, keep personal records across venues, and follow a few people they know. No discipline-specific restriction. Students can browse and record personal activity, but formal training progression/sign-offs are deferred. English is the initial interface language; retain original names, languages, prerequisites, and source links instead of presenting machine translations as official information.
 
 A visitor should find a useful real listing before creating an account or entering historical jumps. Empty discovery results show the actual coverage and a suggestion route. An empty following feed offers people search and separately labeled discovery links, without fabricated posts or automatic contact uploads.
 
@@ -23,13 +22,13 @@ A visitor should find a useful real listing before creating an account or enteri
 
 | Capability | First cut | Limit |
 | --- | --- | --- |
-| Discovery | List/search real DZs, events/boogies, camps/courses, coaches, and schools; filter by country/place, category, discipline, and applicable dates | No map, calendar view, distance calculation, live inventory, ranking, or native registration needed for beta |
-| Provider and venue detail | Identity, source, last check, location, related offerings, original contact/registration link | A provider and a physical venue remain separate; directory presence does not imply partnership |
+| Discovery | List/search real DZs and dated events/boogies/camps/courses; filter by country/place, category, discipline, and applicable dates | No map, calendar view, distance calculation, live inventory, ranking, or native registration needed for beta |
+| Provider and venue detail | Basic offering-provider identity, source, last check, venue location, related dated offerings and original contact/registration link | Provider and venue remain separate; standalone coach/school directories are deferred |
 | Accounts and saves | Account/recovery, private saved opportunities and simple destination/event/date plans | A save/plan is not registration, payment, check-in, or a reservation |
-| Personal logbook | Manual completed jumps, edits/deletion, DZ/gear references, recorded totals and recent activity | Separate from manifest loads; no jump is created from a plan or social post |
+| Personal logbook | Manual completed jumps, edits/deletion, DZ/gear references, recorded totals, optional self-declared prior-history baseline and recent activity | Separate from manifest loads; no jump is created from a plan or social post |
 | Private gear | Container/harness, main, reserve, AAD; identifiers, acquisition details and manually entered service dates | Self-declared inventory/history; no verified title, transfers, applicability engine, or service certification |
-| Social | Minimal discoverable profiles, approved follows, selected shared jump summaries, chronological following feed, authorized DZ activity, explicit shared visit intentions | No comments, reactions, messaging, tagging, global feed, or live presence |
-| Portability | Versioned structured export and duplicate-safe restore of the app's own personal-record export | No third-party/device import promise; export remains available without payment |
+| Social | Minimal discoverable profiles, approved follows, selected shared jump summaries, chronological following feed, authorized DZ activity | No comments, reactions, messaging, tagging, global feed, or live presence |
+| Portability | Versioned structured export and own-export restore into empty records, with duplicate-safe repeat acknowledgement | No third-party/device import promise; export remains available without payment |
 | Maintenance | Source-backed listing review, correction/report queue, profile/post moderation, duplicate resolution | Owner-operated during beta; no provider publishing portal or promised response time |
 
 ## Minimum personal data and entry rules
@@ -48,7 +47,7 @@ A visitor should find a useful real listing before creating an account or enteri
 | Notes and external links | Optional and private; never copied wholesale into a shared card |
 | Provenance | Manual/self-reported, creation/update times and relevant correction/restore identifiers recorded by the service |
 
-Date-only entries stay date-only in the product; timestamp representation and time-zone rules are settled in #143. Different jumps on the same day are valid. Warn about likely duplicates rather than merging on date/DZ alone. Counts derive from distinct personal entries, not jump numbers, publications, event saves, or operator totals. Label totals as recorded in this app; no invented pre-app history or automatic currency acceptance.
+Date-only entries stay date-only in the product; timestamp representation and time-zone rules are settled in #143. Different jumps on the same day are valid. Warn about likely duplicates rather than merging on date/DZ alone. Detailed counts derive from distinct personal entries, not jump numbers, publications, event saves or operator totals. An optional self-declared prior-history baseline uses a cutoff to avoid double-counting; show it separately from detailed records. The [baseline rules](beta-decisions.md) define the combined reported total. It never creates historical entries or automatic currency acceptance.
 
 ### Gear entry
 
@@ -58,18 +57,18 @@ A user explicitly selects owned versus borrowed/rented when relevant. Keep acqui
 
 ### Attachments and provisional limits
 
-Recommended beta limits: no hosted photos, videos, receipts, credential documents, or flight files. Allow up to five external HTTP(S) media/reference URLs per private jump, each at most 2,048 characters; do not fetch previews or remote metadata automatically. Public publication selects links explicitly, warns that the destination is external, and creates no automatic embed.
+Selected beta limits: no hosted photos, videos, receipts, credential documents, or flight files. Allow up to five external HTTP(S) media/reference URLs per private jump, each at most 2,048 characters; do not fetch previews or remote metadata automatically. Public publication selects links explicitly, warns that the destination is external, and creates no automatic embed.
 
-Proposed text limits: private jump notes 2,000 characters, gear notes 1,000, profile bio 280, shared caption 280. These are design limits, not measured hosting capacity. Record counts, rate limits, batch restore sizes, and database/storage quotas must be measured and set in #143/#161 before beta data intake; do not claim unlimited storage. Quotas must not prevent export of records already held.
+Working text limits: private jump notes 2,000 characters, gear notes 1,000, profile bio 280, shared caption 280. These are design limits, not measured hosting capacity. Record counts, rate limits, batch restore sizes, and database/storage quotas must be measured and set in #143/#161 before beta data intake; do not claim unlimited storage. Quotas must not prevent export of records already held.
 
 ## Social audience and correction rules
 
 - Profiles have a stable handle and display name, with optional bio/discipline. Do not publish real names, home DZ, account email, experience totals, or private records automatically. Profile discovery requires explicit opt-in; a non-discoverable user can still use personal records.
-- Follow requests need acceptance. Proposed follower audience means the current approved-follower set, including people approved later, can read existing follower-shared summaries/intentions; disclose that when choosing the audience. Follows are not credentials or access to the logbook. Users can manually share an opted-in profile URL/handle outside the service without contact imports or platform-sent invitations.
+- Follow requests need acceptance. Follower audience means the current approved-follower set, including people approved later, can read existing follower-shared jump summaries; disclose that when choosing the audience. Follows are not credentials or access to the logbook. Users can manually share an opted-in profile URL/handle outside the service without contact imports or platform-sent invitations.
 - Logging stays private. Publishing requires a separate preview and audience choice: approved followers or public. Publishing later is a manual action; scheduled publishing is deferred.
 - A jump card shares activity date, selected type/summary and optional canonical venue/caption/link. No serials, service/acquisition information, private notes, full activity history, or unreviewed provisional venue is included.
 - Feed order uses publication time and displays the activity date separately. Venue views query the same authorized posts; they do not count private jumpers or infer who is present now.
-- Saved visits remain private until separately shared as an intention. Show destination/event, planned date and audience. Editing/cancelling an intention changes the same record; it never confirms presence or registration.
+- Bookmarks and dated visit plans remain private. Shared future intentions are deferred; no plan appears in feeds, profiles or public venue activity.
 - Edits confined to unshared private fields leave the selected summary unchanged. Editing fields actually included in the published summary withdraws that card before the relevant source change is committed; deletion also withdraws it. Republish only from a new preview. No new private field is copied automatically. Unpublishing does not remove the private jump or alter its count.
 - Blocking removes both-direction follows and denies authenticated access to the other user's profile/activity across feed, venue, search and direct API routes. Already public content cannot be made secret from someone browsing anonymously or using another account; explain this limitation when selecting a public audience.
 - Unpublish, audience narrowing, follow removal, and account deletion must revoke future service access across all views/caches. A service cannot retract screenshots, copied data, or external media. Keep private pages out of shared/public caches.
@@ -95,7 +94,7 @@ For each candidate record, the maintainer records country, venue/provider identi
 
 ## Maintenance cadence and release gate
 
-Recommended operating routine, to be checked against the owner's actual workload:
+Working operating routine, to be checked against the owner's actual workload:
 
 1. Weekly: review corrections/reports, check opportunities starting within the next 30 days, and apply confirmed cancellations/postponements.
 2. Every 60 days: review continuing coach/school/DZ profiles. After 90 days without a successful check, label the information as needing recheck and exclude stale continuing offers from default opportunity results. Historical venues remain usable in private logs.
@@ -106,16 +105,10 @@ Before public beta, the owner completes a real manual review cycle and a sample 
 
 ## Explicit exclusions
 
-Native/PWA/offline sync, push/email activity alerts, calendar exports, automated weather forecasts, FlySight/GPX/FIT/paper imports, USPA retrieval and verified progression, ownership transfers and theft matching, provider self-service, in-app bookings/payments/refunds, live tracking, DZ check-in/manifest, hosted media and advanced social features remain outside this beta. A voluntary support link is optional and does not gate records/export or establish a paid-service commitment.
+Shared future intentions, standalone coach/school directories, restore merging/conflict selection, native/PWA/offline sync, push/email activity alerts, calendar exports, automated weather forecasts, FlySight/GPX/FIT/paper imports, USPA retrieval and verified progression, ownership transfers and theft matching, provider self-service, in-app bookings/payments/refunds, live tracking, DZ check-in/manifest, hosted media and advanced social features remain outside this beta. A voluntary support link is optional and does not gate records/export or establish a paid-service commitment.
 
 ## Planning completion and handoff
 
-This brief supplies recommended field rules, limits, source policy, social behavior and maintenance cadence. #141 remains open while these defaults are reviewed; confirmed decisions are distinguished above. Preparing UX/architecture drafts against this baseline is useful, but no feature implementation is authorized by this document.
+Scope is settled in [the decision sheet](beta-decisions.md). #141 can close as a planning decision; the reconciled #142 design is accepted through delegated expert product review. Neither closure is user research or device acceptance. #160/#151/#162 retain those release checks.
 
-Next planning outputs:
-
-- #142: [drafted mobile journeys and clickable walkthrough](mobile-journeys.md), covering phone-sized discovery/save/login-return, manual log/gear, follow/share/intention, reporting/blocking, and export/recovery walkthroughs, including empty/error/privacy states.
-- #143: rendering/hosting adapter options, server-enforced identity/audiences, date/units policy, provenance/corrections/deletion, export/restore contract and measured service limits. Record options/trade-offs before selecting hosting.
-- Claude Code handoff: each accepted task identifies inputs, expected behavior, exclusions, dependencies and validation. Keep unresolved product assumptions visible and prohibit invented inventory, credentials, partnerships, payment accounts, or uncontrolled paid infrastructure.
-
-Acceptance evidence for the future release must cover both a successful connected journey and forbidden cross-user access. Documentation checks establish consistency and working links; they do not establish product behavior, user acceptance, or a validated maintenance workload.
+Next: #143 architecture and the Claude Code handoff. Set rendering/auth/hosting boundaries, date/units representation, baseline calculations, private/shared corrections, restore atomicity, deletion/backup expiry and measured service limits. No application implementation starts in this planning thread.

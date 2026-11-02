@@ -1,10 +1,10 @@
 # Delivery plan and GitHub backlog
 
-Status: planning and issue organization authorized by the product owner. Implementation has not started. This plan operationalizes the discovery documents without treating every explored feature as committed V1 scope. Scope decisions come first; dates and effort estimates remain unassigned.
+Status: planning and issue organization authorized by the product owner. Implementation has not started. This plan operationalizes the discovery documents without treating every explored feature as committed V1 scope. Scope/design planning is complete under delegated expert review; architecture #143 is next. Dates and effort estimates remain unassigned.
 
 Current product boundary: analysis, planning, documentation, and issue preparation only. The separately authorized dependency refresh is prepared in [PR #170](https://github.com/metalcorpe/load-organiser/pull/170); it does not deliver these product features. Implementation will be delegated to Claude Code separately; the implementation issues below are future work, not authorization to begin coding now.
 
-P0 decisions recorded: public discovery starts in Europe, and the product owner will maintain initial DZ/opportunity listings and corrections. Personal records can reference DZs worldwide. The product owner also confirmed responsibility for post/profile reports. The [release brief](release-brief.md) supplies recommended scope, fields, limits, source candidates and cadence for #141 review; actual inventory and maintenance capacity are not validated.
+P0 decisions recorded: public discovery starts in Europe, and the product owner will maintain initial DZ/opportunity listings and corrections. Personal records can reference DZs worldwide. The product owner also confirmed responsibility for post/profile reports. The [release brief](release-brief.md) and [decision sheet](beta-decisions.md) settle scope, fields, history/restore boundaries, source policy and operating defaults; actual inventory and maintenance capacity are not validated.
 
 ## Tracking
 
@@ -12,7 +12,7 @@ P0 decisions recorded: public discovery starts in Europe, and the product owner 
 - [GitHub Project](https://github.com/users/metalcorpe/projects/4) (owner-private; repository issues remain public)
 - [Milestones](https://github.com/metalcorpe/load-organiser/milestones)
 
-Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status** (Todo / In Progress / Done). Readiness is the planning snapshot, not a substitute for the issue dependency graph. No tasks are marked implemented or done. Unblocking/readiness updates are manual until an explicit automation is configured.
+Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status** (Todo / In Progress / Done). Readiness is the planning snapshot, not a substitute for the issue dependency graph. The scope/design planning tasks #141/#142 are complete; no product implementation or release task is marked delivered. Unblocking/readiness updates are manual until an explicit automation is configured.
 
 ## Phase outcomes
 
@@ -21,8 +21,8 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 | P0 — Scope and UX | [#135](https://github.com/metalcorpe/load-organiser/issues/135) | [P0 — Scope and UX](https://github.com/metalcorpe/load-organiser/milestone/1) | A bounded release brief, phone-sized walkthrough, and rendering/auth/data decisions are recorded. |
 | P1 — Svelte foundation | [#136](https://github.com/metalcorpe/load-organiser/issues/136) | [P1 — Svelte foundation](https://github.com/metalcorpe/load-organiser/milestone/2) | A tested mobile shell and account journey run against an isolated backend; supported routes and legacy exposure are explicit. |
 | P2 — Public discovery | [#137](https://github.com/metalcorpe/load-organiser/issues/137) | [P2 — Public discovery](https://github.com/metalcorpe/load-organiser/milestone/3) | A guest can find a real opportunity, inspect its source, and follow an external contact/registration link; missing DZs and stale listings have a usable workflow. |
-| P3 — Personal records | [#138](https://github.com/metalcorpe/load-organiser/issues/138) | [P3 — Personal records](https://github.com/metalcorpe/load-organiser/milestone/4) | A user can log a jump at an unregistered DZ with actual equipment, see accurate personal totals, and restore a record export without duplication. |
-| P4 — Social activity | [#139](https://github.com/metalcorpe/load-organiser/issues/139) | [P4 — Social activity](https://github.com/metalcorpe/load-organiser/milestone/5) | Two users can follow, share selected activity, and coordinate an intention; private logs and inferred location never leak through feeds, venue pages, or direct API reads. |
+| P3 — Personal records | [#138](https://github.com/metalcorpe/load-organiser/issues/138) | [P3 — Personal records](https://github.com/metalcorpe/load-organiser/milestone/4) | A user can log a jump at an unregistered DZ with actual equipment, see accurate personal totals, and restore an own export into empty records with safe repeat acknowledgement. |
+| P4 — Social activity | [#139](https://github.com/metalcorpe/load-organiser/issues/139) | [P4 — Social activity](https://github.com/metalcorpe/load-organiser/milestone/5) | Two users can follow and share selected completed activity; private logs and inferred location never leak through feeds, venue pages, or direct API reads. |
 | P5 — Beta readiness | [#140](https://github.com/metalcorpe/load-organiser/issues/140) | [P5 — Beta readiness](https://github.com/metalcorpe/load-organiser/milestone/6) | Browser/access-control/restore checks pass, hosting limits and costs are understood, maintenance responsibilities are named, and a small beta has a feedback/rollback route. |
 
 ## Scoped tasks
@@ -31,8 +31,8 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 
 | Task | Depends on |
 | --- | --- |
-| [#141 — Agree V1 boundaries and initial discovery coverage](https://github.com/metalcorpe/load-organiser/issues/141) | None — initial next action |
-| [#142 — Design mobile discovery, logging, sharing and recovery journeys](https://github.com/metalcorpe/load-organiser/issues/142) | [#141](https://github.com/metalcorpe/load-organiser/issues/141) |
+| [#141 — Agree V1 boundaries and initial discovery coverage](https://github.com/metalcorpe/load-organiser/issues/141) | Completed scope decision |
+| [#142 — Design mobile discovery, logging, sharing and recovery journeys](https://github.com/metalcorpe/load-organiser/issues/142) | [#141](https://github.com/metalcorpe/load-organiser/issues/141) — completed design preparation |
 | [#143 — Decide rendering, authentication and record boundaries for SvelteKit](https://github.com/metalcorpe/load-organiser/issues/143) | [#141](https://github.com/metalcorpe/load-organiser/issues/141) |
 
 ### P1 — Svelte foundation
@@ -69,17 +69,18 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 | [#156 — Implement public profile summaries and approved follows](https://github.com/metalcorpe/load-organiser/issues/156) | [#141](https://github.com/metalcorpe/load-organiser/issues/141), [#146](https://github.com/metalcorpe/load-organiser/issues/146), [#153](https://github.com/metalcorpe/load-organiser/issues/153) |
 | [#157 — Publish selected jump summaries with audience and unpublish controls](https://github.com/metalcorpe/load-organiser/issues/157) | [#156](https://github.com/metalcorpe/load-organiser/issues/156), [#153](https://github.com/metalcorpe/load-organiser/issues/153) |
 | [#158 — Build authorized chronological feed and recent DZ activity](https://github.com/metalcorpe/load-organiser/issues/158) | [#157](https://github.com/metalcorpe/load-organiser/issues/157), [#150](https://github.com/metalcorpe/load-organiser/issues/150) |
-| [#159 — Connect saved visits to explicitly shared future intentions](https://github.com/metalcorpe/load-organiser/issues/159) | [#156](https://github.com/metalcorpe/load-organiser/issues/156), [#157](https://github.com/metalcorpe/load-organiser/issues/157), [#150](https://github.com/metalcorpe/load-organiser/issues/150) |
 
 ### P5 — Beta readiness
 
 | Task | Depends on |
 | --- | --- |
-| [#160 — Verify complete beta journeys on mobile and enforce privacy boundaries](https://github.com/metalcorpe/load-organiser/issues/160) | [#155](https://github.com/metalcorpe/load-organiser/issues/155), [#158](https://github.com/metalcorpe/load-organiser/issues/158), [#159](https://github.com/metalcorpe/load-organiser/issues/159), [#151](https://github.com/metalcorpe/load-organiser/issues/151) |
+| [#160 — Verify complete beta journeys on mobile and enforce privacy boundaries](https://github.com/metalcorpe/load-organiser/issues/160) | [#155](https://github.com/metalcorpe/load-organiser/issues/155), [#158](https://github.com/metalcorpe/load-organiser/issues/158), [#151](https://github.com/metalcorpe/load-organiser/issues/151) |
 | [#161 — Validate bounded hosting, migrations and backup/restore before beta](https://github.com/metalcorpe/load-organiser/issues/161) | [#160](https://github.com/metalcorpe/load-organiser/issues/160), [#143](https://github.com/metalcorpe/load-organiser/issues/143) |
 | [#162 — Prepare community-supported beta content, moderation and feedback](https://github.com/metalcorpe/load-organiser/issues/162) | [#161](https://github.com/metalcorpe/load-organiser/issues/161), [#160](https://github.com/metalcorpe/load-organiser/issues/160) |
 
 ## Future investigations — not V1
+
+- [#159 — Shared future visit intentions](https://github.com/metalcorpe/load-organiser/issues/159) — deferred implementation extension, no beta milestone/blocker
 
 - [#163 — Device imports, debriefing, forecasts and offline capabilities](https://github.com/metalcorpe/load-organiser/issues/163)
 - [#164 — USPA/Aspire credentials, training and verified gear-service workflows](https://github.com/metalcorpe/load-organiser/issues/164)
@@ -89,9 +90,9 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 
 ## Immediate sequence
 
-1. Resolve [#141](https://github.com/metalcorpe/load-organiser/issues/141): first-release boundaries and useful real discovery coverage.
-2. Review the drafted [mobile journeys and mockup](mobile-journeys.md), then accept/update the [mobile walkthrough #142](https://github.com/metalcorpe/load-organiser/issues/142) and [rendering/auth/data decisions #143](https://github.com/metalcorpe/load-organiser/issues/143).
-3. Start the [Svelte foundation #144](https://github.com/metalcorpe/load-organiser/issues/144) after those decisions.
+1. Completed: [scope #141](https://github.com/metalcorpe/load-organiser/issues/141) and [design preparation #142](https://github.com/metalcorpe/load-organiser/issues/142), using [selected product decisions](beta-decisions.md) and the reconciled walkthrough. This is delegated expert review, not user/device acceptance.
+2. Complete [architecture #143](https://github.com/metalcorpe/load-organiser/issues/143): rendering/auth/hosting, history/correction semantics, bounded restore and cost/recovery limits.
+3. Produce the Claude Code implementation handoff, then delegate the [Svelte foundation #144](https://github.com/metalcorpe/load-organiser/issues/144). Product implementation remains separate from this planning work.
 
 Directory/listing and personal-record work can overlap once their actual dependencies are complete. Social publishing requires personal activity and backend audience enforcement. Hosting exploration need not wait to be researched, but public beta data intake must wait for the release/recovery checks.
 

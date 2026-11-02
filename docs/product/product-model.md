@@ -2,6 +2,8 @@
 
 Status: reconciled discovery proposal. Individual skydivers are the initial audience; no dropzones are ready to participate. This connects the feature inventory without selecting an MVP or authorizing implementation. It is a product responsibility model, not a database schema or a commitment to microservices.
 
+First-beta selection: [product decisions](beta-decisions.md) take precedence over this broader ecosystem model. Plans remain private; shared intentions and standalone professional directories are later work. The baseline does not create historical activity, and own-export restore does not merge into existing records.
+
 ## One connected experience
 
 Discover an opportunity → prepare → arrange participation → jump or train → record → review and progress → discover the next opportunity.

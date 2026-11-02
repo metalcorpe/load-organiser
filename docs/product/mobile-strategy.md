@@ -20,7 +20,7 @@ The [mobile journey walkthrough](mobile-journeys.md) now gives a concrete propos
 - Open shared venue/event/activity links directly and preserve the intended destination after login.
 - Log a jump with sensible defaults, recent DZ/gear selection, minimal typing, and clear save state.
 - Review a share card and its audience; make logging privately as easy as sharing.
-- Save opportunities and explicitly share a visit intention.
+- Save opportunities and keep dated visit plans private; shared intentions are deferred.
 - Access personal records and gear details without exposing serials or documents on public profiles.
 - Return from an external registration page without losing a personal draft.
 

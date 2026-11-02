@@ -1,10 +1,10 @@
 # Mobile journeys and review walkthrough
 
-Status: planning/design draft for [#142](https://github.com/metalcorpe/load-organiser/issues/142), based on the [release brief](release-brief.md). Scope defaults are still under review in #141. No Svelte screens, API behavior, persistence, accessibility compliance, or real-device behavior are implemented or validated by this walkthrough.
+Status: selected planning/design baseline for [#142](https://github.com/metalcorpe/load-organiser/issues/142), based on the [release brief](release-brief.md). Scope is settled by [delegated product decisions](beta-decisions.md). No Svelte screens, API behavior, persistence, accessibility compliance, or real-device behavior are implemented or validated by this walkthrough.
 
 The [clickable phone mockup](mockups/mobile-walkthrough.html) is a standalone design artifact. All people, venues, dates and activity in it are explicitly illustrative. Buttons demonstrate screen transitions; they do not authenticate, store records, send reports, register attendees, or connect to services. Open the file in a browser to review it; it has no external dependencies or network calls.
 
-The [two-pass product review](product-review.md) records scope/value risks and the corrections now reflected here. The mockup remains an illustration; its Previous/Next controls are review navigation, not the application flow.
+The [two-pass product review](product-review.md) records scope/value risks and corrections; the decision sheet resolves the remaining product choices. The mockup remains an illustration; its Previous/Next controls are review navigation, not the application flow.
 
 ## Navigation and screen inventory
 
@@ -23,7 +23,7 @@ Recommended compact phone navigation: **Discover · Activity · Add jump · Reco
 | Save result | Confirmed private entry and totals; View jump, Log another, optional Share summary | Owner only |
 | Share preview/post detail | Exact selected fields, explicit audience, canonical location choice, publish/unpublish | Owner preview; audience governs published summary |
 | Activity/profile/follow requests | Chronological permitted cards, activity/publication dates, follow approval, block/report | Viewer-scoped; public profile only if opted in |
-| Saved visit/intention | Private destination/event/date plan, separate share preview and cancel controls | Owner plan; explicit intention has chosen audience |
+| Saved opportunities/visits | Separate private bookmark and destination/event/date plan; edit/cancel controls | Owner only; shared future intentions deferred |
 | Reports/maintainer review | User report confirmation; owner queue and actions on allowed content | Reporter and scoped maintainer views |
 | Export/restore/account recovery | Personal record export, import review/results, expired-session recovery | Owner only; identity rechecked as needed |
 
@@ -37,7 +37,7 @@ Desktop can use a wider list/detail layout with the same permissions and labels.
 4. **After sign-in.** Verify the account, re-read listing state and complete an idempotent save. Show “Saved privately — you are not registered.” If login took long enough for cancellation/expiry, show current status before proceeding. A repeated save is one saved item. It creates a bookmark, not a dated visit plan; Plan a visit is a separate optional action.
 5. **External registration.** Open the clearly labeled external destination. Returning shows the saved record and current source status; the service does not mark registration as successful. Missing/broken source links offer Report a correction.
 
-A guest who chooses the external link directly can leave without signing in. Expired/postponed/cancelled opportunities retain a readable detail and source, but never appear as confirmed upcoming availability. A school/coach profile has ongoing contact information, not an invented event date.
+A guest who chooses the external link directly can leave without signing in. Expired/postponed/cancelled opportunities retain a readable detail and source, but never appear as confirmed upcoming availability. Schools/coaches may be identified as offering providers, but standalone ongoing professional directories are deferred.
 
 ## J2 — Log a jump anywhere, with optional gear
 
@@ -45,7 +45,7 @@ A guest who chooses the external link directly can leave without signing in. Exp
 2. **Pick a DZ.** Search stable listed venues. If missing, use a private provisional name/country and return to the form immediately. Public suggestion/review is a separate action. Location resolution never blocks the private log.
 3. **Choose equipment actually used, optionally.** Select existing components, describe borrowed/rented gear, or leave unknown. Never preselect the current rig as if it were used. If the user chooses Add component, open a short optional branch and preserve the active jump draft when returning. Cancel returns without requiring gear.
 4. **Optional component entry.** Require type and a readable label; serial/manufacturer/model/dates stay optional and private. Unknown serial is allowed. Show a confirmed/uncertain/failed save accurately and avoid duplicate creation. Manufacture/service dates retain their precision. The same component form is reachable independently from Records → Gear.
-5. **Save privately.** Label the action Save private jump. Show a server-confirmed entry and recorded total; sharing later adds no jump. Result actions are View jump, Log another and optional Share summary. Normal private logging ends here without a social step.
+5. **Save privately.** Label the action Save private jump. Show a server-confirmed entry and recorded total; sharing later adds no jump. Result actions are View jump, Log another and optional Share summary. Normal private logging ends here without a social step. Records offers an optional self-declared prior-jump count/cutoff setting; it does not block logging. Show detailed recorded entries separately from the reported total under the [baseline rules](beta-decisions.md).
 
 A likely duplicate receives a warning and an explicit choice to view the earlier entry or save a distinct jump. Two real jumps on the same day are valid. A timed-out request is “Save not confirmed,” not definitely failed: retry/reconcile must resolve the original submission identity before creating another entry. Technical details belong in #143, not product-facing copy.
 
@@ -71,12 +71,14 @@ If another viewer opens an unavailable card, show a generic unavailable state wi
 
 No public counts of followers, private visitors or jumps are needed. Profile self-description and social activity never imply recognized qualifications, currency acceptance, or a verified completed jump.
 
-## J5 — Plan privately, then optionally share an intention
+## J5 — Save and plan a visit privately
 
-1. **Saved opportunity or DZ → Plan a visit.** Store a private event/destination/date or date range. Make clear that this is a personal plan, not a booking or physical presence. If event dates changed, show that difference and let the user review their own plan.
-2. **Keep private or Share intention.** Sharing uses a separate preview, explicit audience and visible “Planned” label. Never infer an intention from a saved listing, search, weather query or private jump.
-3. **View/update/cancel.** A shared intention remains linked to its private plan and original opportunity/venue. Changing its shared date/location/audience first withdraws the existing summary; a new preview is required before publishing the revision. Cancelling a plan withdraws its shared intention. An organizer cancellation is source information, not automatic proof that the user changed plans.
-4. **After visiting.** Offer a separate Add jump action. It opens an unsubmitted form with a location suggestion that the jumper checks; the plan does not create or pre-confirm a completed jump. Past intentions no longer imply a future visit or current presence.
+1. **Save an opportunity.** A private bookmark has no attendance meaning and does not require choosing a date.
+2. **Plan a visit separately.** From a saved opportunity or DZ, choose a date/range for a private plan. If source dates changed, show the difference and let the user review their own plan.
+3. **Edit/cancel.** Update the private plan; no feed/profile/venue audience receives it. There is no Share intention control in this beta. Organizer cancellation updates source information, not proof that the user changed plans.
+4. **After visiting.** A separate Add jump action can suggest a location that the jumper checks. The plan never creates or pre-confirms a completed jump. Past plans never imply current presence.
+
+Shared future intentions are deferred to #159, outside the beta dependency graph.
 
 ## J6 — Report/correct and review as maintainer
 
@@ -90,8 +92,8 @@ No public counts of followers, private visitors or jumps are needed. Profile sel
 
 1. **Profile → Your data → Export.** Show included personal records/references and privacy implications. Produce an authenticated, owner-scoped download; never a public URL. Show In progress, Ready, or Failed without pretending an empty file is a successful backup.
 2. **Restore → Select file.** Explain that the beta supports this app's structured export, not FlySight/GPX/FIT or unrelated logbooks. Check format/version/limits and file content before writes. Unsupported or invalid input shows a useful explanation without applying partial silent changes.
-3. **Review changes.** Summarize new, unchanged and conflicting records and references. Do not require the user to interpret internal identifiers. Repeated restore must not duplicate entries or totals. Conflicts offer retain current versus reviewed replacement under the #143 contract, never silent overwrite.
-4. **Confirm and result.** Show actual applied/unchanged/rejected results. Restored posts/intention metadata is private historical material; restoring never republishes posts or restores other people's follow approvals. External canonical venues may be resolved, but no public venue/profile/listing is created automatically from a backup.
+3. **Review counts and eligibility.** Restore is supported into empty personal records only. Show records/baseline/reference counts before writes. An exact repeat of a completed restore shows Already restored without reapplying; it never overwrites later edits or refills deletions. A different archive into nonempty records is rejected before mutation, with existing records still readable/exportable. Do not suggest deleting existing records as a workaround. General merge/conflict selection is deferred.
+4. **Confirm and result.** Show actual restored counts or the already-restored receipt. Personal records and baseline remain owner-scoped; restoring never republishes posts or restores other people's follow approvals. External canonical venues may be resolved, but no public venue/profile/listing is created automatically from a backup.
 5. **Session expiry.** Hide private content and request sign-in. Returning to the same authenticated account can resume a safe workflow; switching accounts discards the prior account's in-memory private state. Do not automatically restore into a newly signed-in different account.
 6. **Account recovery.** Generic acknowledgement must not reveal whether an email exists. A reset link may be invalid/expired/used; offer request-new-link and return-to-sign-in. Password reset is not a completed restore and does not guarantee recovery of an export never downloaded.
 
@@ -118,17 +120,17 @@ These are design requirements. Screen-reader operation, actual tap targets, zoom
 
 ## Walkthrough review and implementation handoff
 
-Review artifact produced: seven journey specifications, screen inventory, clickable phone mockup and error/privacy matrix. An owner/user walkthrough and device acceptance are **not yet recorded**. #142 stays open; #141 remains a scope dependency. Drafting was explicitly authorized while those defaults remain reviewable.
+Review artifact produced: seven reconciled journey specifications, screen inventory, clickable phone mockup and error/privacy matrix. Delegated expert product review accepts this planning baseline. #141/#142 can close for scope/design preparation; representative-user walkthrough and device acceptance remain **not performed** and are release evidence in #160. This is not a fabricated owner task test or application acceptance.
 
 Suggested review tasks:
 
 - Find an event as a guest, save it after login and explain why you are not registered.
 - Record two jumps at a missing DZ using unknown gear; explain which data stays private and what the total counts.
 - Publish only one selected summary to approved followers, then remove access and inspect its direct link/DZ view.
-- Approve a follow and share/cancel a future intention without creating a jump.
+- Approve a follow and save/edit/cancel a private visit plan without publishing an intention or creating a jump.
 - Report a source correction and shared-content problem; explain what the maintainer can see.
 - Export, review a repeated restore, and recover an expired session without creating duplicates or switching private account context.
 
 For each task, record completion/hesitation, misunderstanding, inaccessible interaction and an explicit keep/change decision. No task timing, usability success rate, retention benefit or owner sign-off is fabricated.
 
-Handoff to #143 must settle: safe route/return rules; authentication and account-switch behavior; date/units representation; idempotent saves and uncertain results; audiences and shared-card/intention withdrawal; deletion/backup expiry; canonical/provisional reference resolution; export/restore conflicts and atomicity; moderation permissions; and measured limits/hosting behavior. API paths, database schema and Svelte components are intentionally not designed as implementation code here.
+Handoff to #143 must settle: safe route/return rules; authentication and account-switch behavior; date/units representation; idempotent saves and uncertain results; audiences and shared-card withdrawal; deletion/backup expiry; canonical/provisional reference resolution; empty-record restore, exact-repeat acknowledgement and atomicity; moderation permissions; and measured limits/hosting behavior. API paths, database schema and Svelte components are intentionally not designed as implementation code here.

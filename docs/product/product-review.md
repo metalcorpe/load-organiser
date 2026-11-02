@@ -2,6 +2,8 @@
 
 Status: review of the [release brief](release-brief.md), [mobile journeys](mobile-journeys.md), [mockup](mockups/mobile-walkthrough.html) and adoption assumptions. Two analytical passes by the same reviewer, not two independent reviewers or user research. Findings are judgments grounded in those artifacts; no measured demand, usability result or competitor superiority is claimed.
 
+Subsequent decision: the owner delegated product calls after this review. The [decision sheet](beta-decisions.md) now selects the working baseline, prior-history bridge, narrower discovery and deferred intentions/restore merging. The tables below preserve the review findings; recommendations marked unaccepted there describe the review at that time, not the current decision status.
+
 ## Verdict
 
 The skydiver-first direction is coherent: discover an opportunity, keep a private plan, log an actual jump at any DZ, and optionally share a selected summary. The proposed relationships support that loop without requiring operator participation.
