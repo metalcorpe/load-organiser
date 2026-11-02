@@ -22,12 +22,15 @@ Start with the [connected product model](product-model.md) to understand how fea
 
 For the proposed initial beta cut, read the [release brief](release-brief.md): concrete fields, social rules, attachment limits, European source candidates, owner responsibilities, and maintenance/release gates. Detailed defaults remain recommendations for review.
 
+Review the [mobile journeys and clickable mockup](mobile-journeys.md) for navigation, private/public choices, recovery and error states. It is a design artifact, not a running product.
+
 For actionable next work, use the [delivery plan and GitHub backlog](delivery-plan.md). It separates six V1 planning/delivery phases from future ecosystem investigations.
 
 | Document | Purpose |
 | --- | --- |
 | [Connected product model](product-model.md) | Feature ownership, shared concepts, integration flows, journeys, and reconciled dependencies |
 | [Delivery plan and GitHub backlog](delivery-plan.md) | Phase epics/milestones, scoped issues, dependencies, and the immediate next actions |
+| [Mobile journeys and walkthrough](mobile-journeys.md) | Seven phone journeys, clickable design mockup, error/accessibility matrix and review tasks |
 | [Initial beta release brief](release-brief.md) | Concrete recommended first cut, confirmed decisions, source policy and planning handoff |
 | [Proposed first version](version-one.md) | Discovery plus personal jump/gear records, explicit exclusions, and release conditions; awaiting scope agreement |
 | [Vision and user journeys](vision.md) | Product direction, users, shared records, and local control |

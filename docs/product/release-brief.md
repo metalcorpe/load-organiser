@@ -112,7 +112,7 @@ This brief supplies recommended field rules, limits, source policy, social behav
 
 Next planning outputs:
 
-- #142: phone-sized discovery/save/login-return, manual log/gear, follow/share/intention, reporting/blocking, and export/recovery walkthroughs, including empty/error/privacy states.
+- #142: [drafted mobile journeys and clickable walkthrough](mobile-journeys.md), covering phone-sized discovery/save/login-return, manual log/gear, follow/share/intention, reporting/blocking, and export/recovery walkthroughs, including empty/error/privacy states.
 - #143: rendering/hosting adapter options, server-enforced identity/audiences, date/units policy, provenance/corrections/deletion, export/restore contract and measured service limits. Record options/trade-offs before selecting hosting.
 - Claude Code handoff: each accepted task identifies inputs, expected behavior, exclusions, dependencies and validation. Keep unresolved product assumptions visible and prohibit invented inventory, credentials, partnerships, payment accounts, or uncontrolled paid infrastructure.
 

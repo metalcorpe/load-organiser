@@ -12,6 +12,8 @@ Installation, service-worker caching, offline drafts, background sync, and push 
 
 This recommendation is intended to limit simultaneous delivery/maintenance work given the expense-coverage goal. It is not a measured comparison of user acquisition, retention, or total development cost. No mobile/PWA implementation or device testing has been performed.
 
+The [mobile journey walkthrough](mobile-journeys.md) now gives a concrete proposed navigation, screen sequences, privacy/error states and a clickable design artifact. Its checks do not establish implementation/device acceptance.
+
 ## Phone-oriented workflows
 
 - Browse following activity, venues, events, and providers using readable cards and filters.

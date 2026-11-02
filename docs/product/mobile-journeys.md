@@ -1,0 +1,133 @@
+# Mobile journeys and review walkthrough
+
+Status: planning/design draft for [#142](https://github.com/metalcorpe/load-organiser/issues/142), based on the [release brief](release-brief.md). Scope defaults are still under review in #141. No Svelte screens, API behavior, persistence, accessibility compliance, or real-device behavior are implemented or validated by this walkthrough.
+
+The [clickable phone mockup](mockups/mobile-walkthrough.html) is a standalone design artifact. All people, venues, dates and activity in it are explicitly illustrative. Buttons demonstrate screen transitions; they do not authenticate, store records, send reports, register attendees, or connect to services. Open the file in a browser to review it; it has no external dependencies or network calls.
+
+## Navigation and screen inventory
+
+Recommended compact phone navigation: **Discover · Activity · Add jump · Records · Profile**. Discover is the guest landing page. Signed-in users keep the same tabs; the application does not switch into the existing staff dashboard after login. Records groups Logbook, Gear, and Saved/planned visits. Profile contains discoverability, follow requests, account/recovery, blocked users, data export/restore, and deletion. Account controls remain separate from the public profile preview.
+
+| Screen | Main content and action | Audience |
+| --- | --- | --- |
+| Discover | Search, country/category/date filters, sourced opportunity list, separate DZ/provider results | Public |
+| Opportunity detail | Source/status/date/time zone/venue/organizer/prerequisites/last check; save and external registration | Public; saves private |
+| DZ/provider detail | Source-backed identity and related listings; venue shows only viewer-authorized shared cards | Public shell; audience-filtered content |
+| Sign in/create account/recover | Preserve allowed return destination, explain the requested action, identify current account | No private content rendered while signed out |
+| Logbook | Recorded totals, dated entries, Add jump; entry detail/edit/delete | Owner only |
+| Add/edit jump | Date, DZ/provisional place, type; optional number, gear and measurements/notes/links | Owner only until a separate summary is published |
+| DZ picker | Existing venue search; private provisional name/country fallback | Selection does not notify an operator |
+| Gear list/detail/edit | Component label/type and private identifiers; archive and recorded use | Owner only |
+| Save result | Confirmed private entry and totals; View jump, Log another, optional Share summary | Owner only |
+| Share preview/post detail | Exact selected fields, explicit audience, canonical location choice, publish/unpublish | Owner preview; audience governs published summary |
+| Activity/profile/follow requests | Chronological permitted cards, activity/publication dates, follow approval, block/report | Viewer-scoped; public profile only if opted in |
+| Saved visit/intention | Private destination/event/date plan, separate share preview and cancel controls | Owner plan; explicit intention has chosen audience |
+| Reports/maintainer review | User report confirmation; owner queue and actions on allowed content | Reporter and scoped maintainer views |
+| Export/restore/account recovery | Personal record export, import review/results, expired-session recovery | Owner only; identity rechecked as needed |
+
+Desktop can use a wider list/detail layout with the same permissions and labels. Search/filter state and return navigation should survive normal in-app transitions. No installation, GPS, contacts access, push permission, map, or calendar view is required.
+
+## J1 — Discover, save, and register externally
+
+1. **Guest opens Discover.** Show real coverage, selected filters, readable results and source/status badges. No signup wall before browsing. An empty result offers Clear filters and Suggest a listing; it does not silently expand to another country or invent activity.
+2. **Open opportunity.** Show provider and venue separately, source link, dates/time zone, last check and missing prerequisites/price/capacity. Primary actions are Save privately and Open organizer registration/contact. Source-backed/organizer-managed labels cannot imply partnership.
+3. **Save requires an account.** Explain “Sign in to save this privately.” Preserve the validated destination, filters and intended save action. Cancel returns to the public detail. Registration/recovery returns to the same safe context; never accept an arbitrary external redirect.
+4. **After sign-in.** Verify the account, re-read listing state and complete an idempotent save. Show “Saved privately — you are not registered.” If login took long enough for cancellation/expiry, show current status before proceeding. A repeated save is one saved item.
+5. **External registration.** Open the clearly labeled external destination. Returning shows the saved record and current source status; the service does not mark registration as successful. Missing/broken source links offer Report a correction.
+
+A guest who chooses the external link directly can leave without signing in. Expired/postponed/cancelled opportunities retain a readable detail and source, but never appear as confirmed upcoming availability. A school/coach profile has ongoing contact information, not an invented event date.
+
+## J2 — Add gear, then log a jump anywhere
+
+1. **Records → Gear → Add component.** Require type and a readable label; serial/manufacturer/model/dates remain optional. Mark identifiers and acquisition/service notes private. Unknown serial is allowed. Use explicit date precision for manufacture/service details rather than inventing a day.
+2. **Save gear.** Show the server-confirmed record. A failed response leaves the form in the current page and labels it unsaved; pressing Save again must not create another component. Returning to the jump form keeps its entered fields within the active tab.
+3. **Add jump.** Show a short form with date, location picker and type/discipline. Date defaults to the user's current local day and remains editable. Other/unspecified is a valid type. Optional fields are progressively disclosed. Jump number and exact exit time are never fabricated.
+4. **Pick a DZ.** Search stable listed venues. If missing, choose “Use a private provisional place,” enter name and country, and return immediately to the form. Public suggestion/review is a separate action. Location resolution must not block the private log.
+5. **Choose gear actually used.** Optional component selection or borrowed/rented/unknown description. Do not preselect a current rig as if it had been used. Show archived components only when editing a historical reference, without silently substituting replacements.
+6. **Save privately.** Keep the action label “Save private jump.” After confirmation, show entry identity, date/DZ and recorded totals. Saving adds one jump; publishing later adds none. Primary result action is View jump, with optional Share summary and Log another.
+
+A likely duplicate receives a warning and an explicit choice to view the earlier entry or save a distinct jump. Two real jumps on the same day are valid. A timed-out request is “Save not confirmed,” not definitely failed: retry/reconcile must resolve the original submission identity before creating another entry. Technical details belong in #143, not product-facing copy.
+
+No durable offline drafts are promised. The current page may retain unsaved input in memory; leaving/reloading/closing it can lose that input and must be explained. Navigating away from a dirty form offers Keep editing or Discard. Sensitive drafts must not appear in URLs or survive logout into another user's view.
+
+## J3 — Share a summary without sharing the logbook
+
+1. **Open a private jump → Share summary.** Render a new preview containing only activity date and chosen type/summary, plus optional canonical venue/caption/external link. Private notes, gear/serials, acquisition/service details and full history are absent, not merely visually collapsed.
+2. **Choose audience.** Require Approved followers or Public; there is no inherited last-used public choice. Offer “Keep private” as an ordinary exit. Public explains that anyone may view/copy it, including someone browsing anonymously despite an account block.
+3. **Publish.** Only explicit confirmation publishes. Show a success result with audience, actual jump date and publication date. A failed response preserves the preview and its private state; recheck publication state before retrying an uncertain request.
+4. **View in feed/venue.** Apply the same audience rules on direct links, profiles and DZ pages. A provisional private venue is omitted from sharing until there is a canonical public reference; allow sharing without a venue.
+5. **Correct or unpublish.** Unpublish removes service access and retains the private jump. Editing/deleting the source warns that its card will be unpublished first; any later publication requires a fresh preview. Audience narrowing cannot leave the old content visible through a stale feed/detail/cache.
+
+If another viewer opens an unavailable card, show a generic unavailable state without revealing whether the cause is blocking, a private audience or deletion. The owner gets useful own-record controls without sharing those explanations with other viewers. No live presence, visitor totals, comments or reactions are introduced.
+
+## J4 — Find a person, approve a follow, and read activity
+
+1. **Activity empty state.** Show “No shared activity yet,” people search and separately identified discovery links. Do not manufacture a community or import address books.
+2. **Person search/profile.** Return opted-in profiles only. A private/non-discoverable person is not enumerated through email, serials, saved destinations or logs. New accounts can skip public discoverability and still use private records.
+3. **Request follow.** Show Requested, Cancel request, or Unfollow as appropriate. The recipient reviews incoming requests from Profile/Activity. A pending request gives no follower access; approval does not publish any old private jump.
+4. **Activity feed.** Show only permitted cards in publication order, with the activity date visible separately. Load more preserves position; no constant real-time polling is required. Show a loading indicator distinct from an empty feed.
+5. **Unfollow/remove follower/block.** Confirm the meaningful access effect. Blocking removes both-direction connections and denies authenticated discovery/profile/post access through every entry point, with the public-content limitation explained to the blocker. Reporting is a separate action and does not notify the reported user of the reporter's identity.
+
+No public counts of followers, private visitors or jumps are needed. Profile self-description and social activity never imply recognized qualifications, currency acceptance, or a verified completed jump.
+
+## J5 — Plan privately, then optionally share an intention
+
+1. **Saved opportunity or DZ → Plan a visit.** Store a private event/destination/date or date range. Make clear that this is a personal plan, not a booking or physical presence. If event dates changed, show that difference and let the user review their own plan.
+2. **Keep private or Share intention.** Sharing uses a separate preview, explicit audience and visible “Planned” label. Never infer an intention from a saved listing, search, weather query or private jump.
+3. **View/update/cancel.** A shared intention remains linked to its private plan and original opportunity/venue. Changing its shared date/location/audience first withdraws the existing summary; a new preview is required before publishing the revision. Cancelling a plan withdraws its shared intention. An organizer cancellation is source information, not automatic proof that the user changed plans.
+4. **After visiting.** Offer a separate Add jump action. It opens an unsubmitted form with a location suggestion that the jumper checks; the plan does not create or pre-confirm a completed jump. Past intentions no longer imply a future visit or current presence.
+
+## J6 — Report/correct and review as maintainer
+
+1. **On a listing, post or profile → Report.** Show the target, reason, optional explanation and send/cancel. Distinguish incorrect event/location information from social abuse. State who reviews the report, without promising an unvalidated response time.
+2. **Submit.** Authenticate for in-app report tracking; guests can use a minimal correction submission route with abuse controls. A report acknowledgement means received, not reviewed/resolved. A failed acknowledgement is not a resolution claim.
+3. **Owner's review queue.** Separate listing corrections from profile/post reports. Show relevant source/target/reason/history, restrict access by role, and allow a reviewer to record a decision. Do not expose unrelated private logs, serials or the reporter's identity on public screens.
+4. **Review action.** Correct/retire/merge a listing with provenance; hide reported shared content or restrict publishing with a recorded reason. A listing merge preserves jump references without exposing them. Notify/display reporter status only in the authorized report view; no email/push promise is implied.
+5. **Capacity unavailable.** Pause new public publishing or submissions as needed and explain the temporary limit. Keep personal records and export usable. A queue does not replace the owner's agreed maintenance routine.
+
+## J7 — Export, restore, and recover access
+
+1. **Profile → Your data → Export.** Show included personal records/references and privacy implications. Produce an authenticated, owner-scoped download; never a public URL. Show In progress, Ready, or Failed without pretending an empty file is a successful backup.
+2. **Restore → Select file.** Explain that the beta supports this app's structured export, not FlySight/GPX/FIT or unrelated logbooks. Check format/version/limits and file content before writes. Unsupported or invalid input shows a useful explanation without applying partial silent changes.
+3. **Review changes.** Summarize new, unchanged and conflicting records and references. Do not require the user to interpret internal identifiers. Repeated restore must not duplicate entries or totals. Conflicts offer retain current versus reviewed replacement under the #143 contract, never silent overwrite.
+4. **Confirm and result.** Show actual applied/unchanged/rejected results. Restored posts/intention metadata is private historical material; restoring never republishes posts or restores other people's follow approvals. External canonical venues may be resolved, but no public venue/profile/listing is created automatically from a backup.
+5. **Session expiry.** Hide private content and request sign-in. Returning to the same authenticated account can resume a safe workflow; switching accounts discards the prior account's in-memory private state. Do not automatically restore into a newly signed-in different account.
+6. **Account recovery.** Generic acknowledgement must not reveal whether an email exists. A reset link may be invalid/expired/used; offer request-new-link and return-to-sign-in. Password reset is not a completed restore and does not guarantee recovery of an export never downloaded.
+
+Recovery and export cannot depend on a contribution, public profile, following anyone, a participating DZ, or provider registration. Account-deletion confirmation explains which owned records/publications will be removed and what backup-retention delay applies after #143 defines it; do not invent a retention duration here.
+
+## Shared state and accessibility contract
+
+| State/interaction | Expected behavior |
+| --- | --- |
+| Loading vs empty | Distinct labels; retain safe prior list context and avoid representing an unfinished request as zero results |
+| Lost connection | Show disconnected/unsaved/unconfirmed appropriately; no automatic success, durable offline-sync promise, or duplicate writes |
+| Session expired | Hide private records; safe return after authentication with explicit account identity checks |
+| Removed/inaccessible content | Generic unavailable view for other users; no cause-specific privacy disclosures |
+| Validation | Persistent labels, required/optional markers, field errors and an error summary; focus the first relevant problem |
+| Saving | Disable repeated submission while pending and show progress; confirmed, uncertain and rejected outcomes are distinct |
+| Touch/keyboard | Proposed 44 CSS-pixel primary target minimum, visible focus, logical tab order, operable filters/menus and no hover-only actions; validate rather than claim conformance |
+| Phone layout | Review at 320/360/390 CSS-pixel widths, larger text/zoom and an open keyboard; actions remain reachable without horizontal form scrolling or covering focused fields |
+| Drawers/dialogs | Announce title/purpose, manage focus, restore it to the trigger, provide a visible close/cancel, and keep destructive confirmation explicit |
+| Status communication | Text/icons as well as color; announce errors and save results without stealing focus during ordinary list refreshes |
+| Safe defaults | No automatic geolocation, contacts access, profile publication, private-note sharing, or current-gear attribution |
+| Browser back/external return | Preserve safe search/list state; warn about leaving unsaved forms; do not expose private form values in return URLs |
+
+These are design requirements. Screen-reader operation, actual tap targets, zoom, keyboard avoidance and mobile browser behavior require later implementation/device checks. The clickable mockup itself is not evidence that the application meets them.
+
+## Walkthrough review and implementation handoff
+
+Review artifact produced: seven journey specifications, screen inventory, clickable phone mockup and error/privacy matrix. An owner/user walkthrough and device acceptance are **not yet recorded**. #142 stays open; #141 remains a scope dependency. Drafting was explicitly authorized while those defaults remain reviewable.
+
+Suggested review tasks:
+
+- Find an event as a guest, save it after login and explain why you are not registered.
+- Record two jumps at a missing DZ using unknown gear; explain which data stays private and what the total counts.
+- Publish only one selected summary to approved followers, then remove access and inspect its direct link/DZ view.
+- Approve a follow and share/cancel a future intention without creating a jump.
+- Report a source correction and shared-content problem; explain what the maintainer can see.
+- Export, review a repeated restore, and recover an expired session without creating duplicates or switching private account context.
+
+For each task, record completion/hesitation, misunderstanding, inaccessible interaction and an explicit keep/change decision. No task timing, usability success rate, retention benefit or owner sign-off is fabricated.
+
+Handoff to #143 must settle: safe route/return rules; authentication and account-switch behavior; date/units representation; idempotent saves and uncertain results; audiences and shared-card/intention withdrawal; deletion/backup expiry; canonical/provisional reference resolution; export/restore conflicts and atomicity; moderation permissions; and measured limits/hosting behavior. API paths, database schema and Svelte components are intentionally not designed as implementation code here.

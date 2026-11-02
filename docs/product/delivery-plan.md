@@ -90,7 +90,7 @@ Project fields: **Phase**, **Readiness** (Next / Blocked / Future), and **Status
 ## Immediate sequence
 
 1. Resolve [#141](https://github.com/metalcorpe/load-organiser/issues/141): first-release boundaries and useful real discovery coverage.
-2. Produce the [mobile walkthrough #142](https://github.com/metalcorpe/load-organiser/issues/142) and [rendering/auth/data decisions #143](https://github.com/metalcorpe/load-organiser/issues/143).
+2. Review the drafted [mobile journeys and mockup](mobile-journeys.md), then accept/update the [mobile walkthrough #142](https://github.com/metalcorpe/load-organiser/issues/142) and [rendering/auth/data decisions #143](https://github.com/metalcorpe/load-organiser/issues/143).
 3. Start the [Svelte foundation #144](https://github.com/metalcorpe/load-organiser/issues/144) after those decisions.
 
 Directory/listing and personal-record work can overlap once their actual dependencies are complete. Social publishing requires personal activity and backend audience enforcement. Hosting exploration need not wait to be researched, but public beta data intake must wait for the release/recovery checks.
