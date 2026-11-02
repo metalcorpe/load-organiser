@@ -30,6 +30,7 @@ For actionable next work, use the [delivery plan and GitHub backlog](delivery-pl
 | --- | --- |
 | [Connected product model](product-model.md) | Feature ownership, shared concepts, integration flows, journeys, and reconciled dependencies |
 | [Delivery plan and GitHub backlog](delivery-plan.md) | Phase epics/milestones, scoped issues, dependencies, and the immediate next actions |
+| [Two-pass product review](product-review.md) | Value/adoption risks, corrected journey friction and unresolved product decisions |
 | [Mobile journeys and walkthrough](mobile-journeys.md) | Seven phone journeys, clickable design mockup, error/accessibility matrix and review tasks |
 | [Initial beta release brief](release-brief.md) | Concrete recommended first cut, confirmed decisions, source policy and planning handoff |
 | [Proposed first version](version-one.md) | Discovery plus personal jump/gear records, explicit exclusions, and release conditions; awaiting scope agreement |

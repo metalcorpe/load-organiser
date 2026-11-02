@@ -48,7 +48,7 @@ Browsing/following does not disclose the follower's own records. Media, membersh
 
 A post references an activity/version and selected fields; it is not another completed jump. Logging updates statistics and equipment usage; publishing does not increment those counts. Source labels remain meaningful, and social reactions never verify credentials or ownership.
 
-An edit to the source should flag a conflicting published summary for update/unpublication without accidentally adding private fields. Deleting/unpublishing a card does not erase a separate professional sign-off or operational record. Define correction, retention, and revocation behavior before implementation.
+Changes confined to unshared source fields leave the summary unchanged. A change to fields actually included in the published summary withdraws it before the relevant source change is committed; republishing requires a new preview and never copies newly private fields. Deleting/unpublishing a card does not erase a separate professional sign-off or operational record. Define correction, retention, and revocation behavior before implementation.
 
 Later participant-tag invitations need recipient consent before revealing identity/location publicly. Accepting a social tag is not instructor verification. Several participants can link their own entries to a group activity without merging their individual jumps or duplicating any person's count.
 

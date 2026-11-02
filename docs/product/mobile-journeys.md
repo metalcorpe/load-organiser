@@ -4,6 +4,8 @@ Status: planning/design draft for [#142](https://github.com/metalcorpe/load-orga
 
 The [clickable phone mockup](mockups/mobile-walkthrough.html) is a standalone design artifact. All people, venues, dates and activity in it are explicitly illustrative. Buttons demonstrate screen transitions; they do not authenticate, store records, send reports, register attendees, or connect to services. Open the file in a browser to review it; it has no external dependencies or network calls.
 
+The [two-pass product review](product-review.md) records scope/value risks and the corrections now reflected here. The mockup remains an illustration; its Previous/Next controls are review navigation, not the application flow.
+
 ## Navigation and screen inventory
 
 Recommended compact phone navigation: **Discover · Activity · Add jump · Records · Profile**. Discover is the guest landing page. Signed-in users keep the same tabs; the application does not switch into the existing staff dashboard after login. Records groups Logbook, Gear, and Saved/planned visits. Profile contains discoverability, follow requests, account/recovery, blocked users, data export/restore, and deletion. Account controls remain separate from the public profile preview.
@@ -30,21 +32,20 @@ Desktop can use a wider list/detail layout with the same permissions and labels.
 ## J1 — Discover, save, and register externally
 
 1. **Guest opens Discover.** Show real coverage, selected filters, readable results and source/status badges. No signup wall before browsing. An empty result offers Clear filters and Suggest a listing; it does not silently expand to another country or invent activity.
-2. **Open opportunity.** Show provider and venue separately, source link, dates/time zone, last check and missing prerequisites/price/capacity. Primary actions are Save privately and Open organizer registration/contact. Source-backed/organizer-managed labels cannot imply partnership.
+2. **Open opportunity.** Show provider and venue separately, source link, dates/time zone, last check and missing prerequisites/price/capacity. The visually primary action is Open organizer registration/contact; Save privately is also directly available. Source-backed/organizer-managed labels cannot imply partnership.
 3. **Save requires an account.** Explain “Sign in to save this privately.” Preserve the validated destination, filters and intended save action. Cancel returns to the public detail. Registration/recovery returns to the same safe context; never accept an arbitrary external redirect.
-4. **After sign-in.** Verify the account, re-read listing state and complete an idempotent save. Show “Saved privately — you are not registered.” If login took long enough for cancellation/expiry, show current status before proceeding. A repeated save is one saved item.
+4. **After sign-in.** Verify the account, re-read listing state and complete an idempotent save. Show “Saved privately — you are not registered.” If login took long enough for cancellation/expiry, show current status before proceeding. A repeated save is one saved item. It creates a bookmark, not a dated visit plan; Plan a visit is a separate optional action.
 5. **External registration.** Open the clearly labeled external destination. Returning shows the saved record and current source status; the service does not mark registration as successful. Missing/broken source links offer Report a correction.
 
 A guest who chooses the external link directly can leave without signing in. Expired/postponed/cancelled opportunities retain a readable detail and source, but never appear as confirmed upcoming availability. A school/coach profile has ongoing contact information, not an invented event date.
 
-## J2 — Add gear, then log a jump anywhere
+## J2 — Log a jump anywhere, with optional gear
 
-1. **Records → Gear → Add component.** Require type and a readable label; serial/manufacturer/model/dates remain optional. Mark identifiers and acquisition/service notes private. Unknown serial is allowed. Use explicit date precision for manufacture/service details rather than inventing a day.
-2. **Save gear.** Show the server-confirmed record. A failed response leaves the form in the current page and labels it unsaved; pressing Save again must not create another component. Returning to the jump form keeps its entered fields within the active tab.
-3. **Add jump.** Show a short form with date, location picker and type/discipline. Date defaults to the user's current local day and remains editable. Other/unspecified is a valid type. Optional fields are progressively disclosed. Jump number and exact exit time are never fabricated.
-4. **Pick a DZ.** Search stable listed venues. If missing, choose “Use a private provisional place,” enter name and country, and return immediately to the form. Public suggestion/review is a separate action. Location resolution must not block the private log.
-5. **Choose gear actually used.** Optional component selection or borrowed/rented/unknown description. Do not preselect a current rig as if it had been used. Show archived components only when editing a historical reference, without silently substituting replacements.
-6. **Save privately.** Keep the action label “Save private jump.” After confirmation, show entry identity, date/DZ and recorded totals. Saving adds one jump; publishing later adds none. Primary result action is View jump, with optional Share summary and Log another.
+1. **Add jump immediately.** No onboarding questionnaire or gear inventory is required first. Show date, location picker and type/discipline; Other/unspecified is valid. Date defaults to the user's current local day and stays editable. Optional fields are progressively disclosed. Jump number and exact exit time are never fabricated.
+2. **Pick a DZ.** Search stable listed venues. If missing, use a private provisional name/country and return to the form immediately. Public suggestion/review is a separate action. Location resolution never blocks the private log.
+3. **Choose equipment actually used, optionally.** Select existing components, describe borrowed/rented gear, or leave unknown. Never preselect the current rig as if it were used. If the user chooses Add component, open a short optional branch and preserve the active jump draft when returning. Cancel returns without requiring gear.
+4. **Optional component entry.** Require type and a readable label; serial/manufacturer/model/dates stay optional and private. Unknown serial is allowed. Show a confirmed/uncertain/failed save accurately and avoid duplicate creation. Manufacture/service dates retain their precision. The same component form is reachable independently from Records → Gear.
+5. **Save privately.** Label the action Save private jump. Show a server-confirmed entry and recorded total; sharing later adds no jump. Result actions are View jump, Log another and optional Share summary. Normal private logging ends here without a social step.
 
 A likely duplicate receives a warning and an explicit choice to view the earlier entry or save a distinct jump. Two real jumps on the same day are valid. A timed-out request is “Save not confirmed,” not definitely failed: retry/reconcile must resolve the original submission identity before creating another entry. Technical details belong in #143, not product-facing copy.
 
@@ -56,7 +57,7 @@ No durable offline drafts are promised. The current page may retain unsaved inpu
 2. **Choose audience.** Require Approved followers or Public; there is no inherited last-used public choice. Offer “Keep private” as an ordinary exit. Public explains that anyone may view/copy it, including someone browsing anonymously despite an account block.
 3. **Publish.** Only explicit confirmation publishes. Show a success result with audience, actual jump date and publication date. A failed response preserves the preview and its private state; recheck publication state before retrying an uncertain request.
 4. **View in feed/venue.** Apply the same audience rules on direct links, profiles and DZ pages. A provisional private venue is omitted from sharing until there is a canonical public reference; allow sharing without a venue.
-5. **Correct or unpublish.** Unpublish removes service access and retains the private jump. Editing/deleting the source warns that its card will be unpublished first; any later publication requires a fresh preview. Audience narrowing cannot leave the old content visible through a stale feed/detail/cache.
+5. **Correct or unpublish.** Unpublish removes service access and retains the private jump. Editing only unshared private notes or equipment leaves the summary unchanged. Editing fields actually shared in the card warns that it will be withdrawn before that source change is committed; deletion also withdraws it. Any later publication requires a fresh preview. Audience narrowing cannot leave the old content visible through a stale feed/detail/cache.
 
 If another viewer opens an unavailable card, show a generic unavailable state without revealing whether the cause is blocking, a private audience or deletion. The owner gets useful own-record controls without sharing those explanations with other viewers. No live presence, visitor totals, comments or reactions are introduced.
 
@@ -64,7 +65,7 @@ If another viewer opens an unavailable card, show a generic unavailable state wi
 
 1. **Activity empty state.** Show “No shared activity yet,” people search and separately identified discovery links. Do not manufacture a community or import address books.
 2. **Person search/profile.** Return opted-in profiles only. A private/non-discoverable person is not enumerated through email, serials, saved destinations or logs. New accounts can skip public discoverability and still use private records.
-3. **Request follow.** Show Requested, Cancel request, or Unfollow as appropriate. The recipient reviews incoming requests from Profile/Activity. A pending request gives no follower access; approval does not publish any old private jump.
+3. **Request follow.** Show Requested, Cancel request, or Unfollow as appropriate. The recipient reviews incoming requests from Profile/Activity. A pending request gives no follower access; approval does not publish any old private jump. Explain that approval lets the follower see existing follower-shared summaries as well as future ones. A manually shared opted-in profile URL/handle provides a route to an existing friend without platform invitations or address-book access.
 4. **Activity feed.** Show only permitted cards in publication order, with the activity date visible separately. Load more preserves position; no constant real-time polling is required. Show a loading indicator distinct from an empty feed.
 5. **Unfollow/remove follower/block.** Confirm the meaningful access effect. Blocking removes both-direction connections and denies authenticated discovery/profile/post access through every entry point, with the public-content limitation explained to the blocker. Reporting is a separate action and does not notify the reported user of the reporter's identity.
 

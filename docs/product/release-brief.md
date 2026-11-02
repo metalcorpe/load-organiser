@@ -11,6 +11,8 @@ Status: concrete working proposal for P0 issue [#141](https://github.com/metalco
 - Initial objective is expense coverage plus contingency, without personal income. A funding provider, paid hosting, or recurring subsidy is not selected.
 - Product work remains analysis, documentation, and implementation handoff preparation. The separately authorized dependency refresh is [PR #170](https://github.com/metalcorpe/load-organiser/pull/170); it does not implement the proposed product.
 
+See the [two-pass product review](product-review.md) for remaining value/adoption risks and proposed sequencing/history decisions. Its scope recommendations are not silently adopted as owner decisions.
+
 ## Audience and first-use value
 
 Recommended first audience: active recreational skydivers who want to find European opportunities, keep personal records across venues, and follow a few people they know. No discipline-specific restriction. Students can browse and record personal activity, but formal training progression/sign-offs are deferred. English is the proposed initial interface language; retain original names, languages, prerequisites, and source links instead of presenting machine translations as official information.
@@ -63,12 +65,12 @@ Proposed text limits: private jump notes 2,000 characters, gear notes 1,000, pro
 ## Social audience and correction rules
 
 - Profiles have a stable handle and display name, with optional bio/discipline. Do not publish real names, home DZ, account email, experience totals, or private records automatically. Profile discovery requires explicit opt-in; a non-discoverable user can still use personal records.
-- Follow requests need acceptance. Following grants access only to explicitly follower-shared summaries and intentions. Follows are not credentials or access to the logbook.
+- Follow requests need acceptance. Proposed follower audience means the current approved-follower set, including people approved later, can read existing follower-shared summaries/intentions; disclose that when choosing the audience. Follows are not credentials or access to the logbook. Users can manually share an opted-in profile URL/handle outside the service without contact imports or platform-sent invitations.
 - Logging stays private. Publishing requires a separate preview and audience choice: approved followers or public. Publishing later is a manual action; scheduled publishing is deferred.
 - A jump card shares activity date, selected type/summary and optional canonical venue/caption/link. No serials, service/acquisition information, private notes, full activity history, or unreviewed provisional venue is included.
 - Feed order uses publication time and displays the activity date separately. Venue views query the same authorized posts; they do not count private jumpers or infer who is present now.
 - Saved visits remain private until separately shared as an intention. Show destination/event, planned date and audience. Editing/cancelling an intention changes the same record; it never confirms presence or registration.
-- Editing or deleting a jump unpublishes its linked card before the change becomes visible. Republish only from a new preview. Unpublishing does not remove the private jump or alter its count.
+- Edits confined to unshared private fields leave the selected summary unchanged. Editing fields actually included in the published summary withdraws that card before the relevant source change is committed; deletion also withdraws it. Republish only from a new preview. No new private field is copied automatically. Unpublishing does not remove the private jump or alter its count.
 - Blocking removes both-direction follows and denies authenticated access to the other user's profile/activity across feed, venue, search and direct API routes. Already public content cannot be made secret from someone browsing anonymously or using another account; explain this limitation when selecting a public audience.
 - Unpublish, audience narrowing, follow removal, and account deletion must revoke future service access across all views/caches. A service cannot retract screenshots, copied data, or external media. Keep private pages out of shared/public caches.
 - Report profiles/posts from the relevant screen. The owner reviews the reported content and may hide public content or restrict publishing; this role does not grant routine access to private logs/gear. Publication stays disabled if moderation has no available owner.
