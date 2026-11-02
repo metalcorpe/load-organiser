@@ -54,6 +54,12 @@ class StoredSession:
 
 
 @dataclass(frozen=True)
+class ConsumedToken:
+    account_id: uuid.UUID
+    sent_to: str
+
+
+@dataclass(frozen=True)
 class Profile:
     person_id: uuid.UUID
     display_name: str | None
@@ -61,7 +67,14 @@ class Profile:
 
 
 class IdentityStore(Protocol):
-    def find_account_by_email(self, email: str) -> Account | None: ...
+    def find_account_by_email(self, email: str) -> Account | None:
+        """Unique case-insensitive match, else the exact match, else None."""
+        ...
+
+    def email_in_use(self, email: str) -> bool:
+        """Any case-insensitive match, including ambiguous legacy duplicates."""
+        ...
+
     def get_account(self, account_id: uuid.UUID) -> Account | None: ...
     def count_accounts(self) -> int: ...
     def create_account(
@@ -76,7 +89,12 @@ class IdentityStore(Protocol):
         ...
 
     def set_password_hash(self, account_id: uuid.UUID, password_hash: str) -> None: ...
-    def mark_email_verified(self, account_id: uuid.UUID, now: datetime) -> None: ...
+    def mark_email_verified(
+        self, account_id: uuid.UUID, address: str, now: datetime
+    ) -> bool:
+        """Verify `address` only if it is still the account's email."""
+        ...
+
     def active_session_ids(
         self, account_id: uuid.UUID, now: datetime
     ) -> list[uuid.UUID]: ...
@@ -106,6 +124,7 @@ class IdentityStore(Protocol):
         account_id: uuid.UUID,
         purpose: str,
         token_hash: str,
+        sent_to: str,
         now: datetime,
         expires_at: datetime,
     ) -> None: ...
@@ -114,7 +133,7 @@ class IdentityStore(Protocol):
     ) -> None: ...
     def consume_token(
         self, *, token_hash: str, purpose: str, now: datetime
-    ) -> uuid.UUID | None: ...
+    ) -> ConsumedToken | None: ...
     def throttle_count(self, *, bucket: str, key_hash: str, since: datetime) -> int: ...
     def throttle_record(self, *, bucket: str, key_hash: str, now: datetime) -> None: ...
 
@@ -243,10 +262,10 @@ class IdentityService:
             self._hit(store, policy.REGISTER_IP, now, client_ip)
             if not self._config.registration_open:
                 raise CommitThen(RegistrationClosed())
-            existing = store.find_account_by_email(email)
-            if existing is None and store.count_accounts() >= self._config.max_accounts:
+            existing = store.email_in_use(email)
+            if not existing and store.count_accounts() >= self._config.max_accounts:
                 raise CommitThen(RegistrationClosed())
-            if existing is not None:
+            if existing:
                 outbox.add(
                     email,
                     f"{self._config.product_name}: sign-in help",
@@ -282,13 +301,17 @@ class IdentityService:
     def confirm_email(self, *, token: str) -> None:
         now = self._clock()
         with self._stores() as store:
-            account_id = store.consume_token(
+            consumed = store.consume_token(
                 token_hash=policy.hash_secret(token), purpose="verify_email", now=now
             )
-            if account_id is None:
+            if consumed is None:
                 raise InvalidToken()
-            store.lock_account(account_id, now)
-            store.mark_email_verified(account_id, now)
+            store.lock_account(consumed.account_id, now)
+            # A link sent to a previous address does not verify the current one.
+            if not store.mark_email_verified(
+                consumed.account_id, consumed.sent_to, now
+            ):
+                raise InvalidToken()
 
     # -- sessions -----------------------------------------------------------------
 
@@ -400,6 +423,7 @@ class IdentityService:
                 account_id=account.id,
                 purpose="reset_password",
                 token_hash=policy.hash_secret(token),
+                sent_to=account.email,
                 now=now,
                 expires_at=now + policy.ACCOUNT_TOKEN_LIFETIME,
             )
@@ -420,16 +444,22 @@ class IdentityService:
         new_hash = self._hasher.hash(new_password)
         now = self._clock()
         with self._stores() as store:
-            account_id = store.consume_token(
+            consumed = store.consume_token(
                 token_hash=policy.hash_secret(token), purpose="reset_password", now=now
             )
-            account = store.get_account(account_id) if account_id else None
-            if account is None or not account.is_active:
+            account = store.get_account(consumed.account_id) if consumed else None
+            if (
+                consumed is None
+                or account is None
+                or not account.is_active
+                # Issued to an address the account no longer uses.
+                or consumed.sent_to.lower() != account.email.lower()
+            ):
                 raise InvalidToken()
             store.lock_account(account.id, now)
             store.set_password_hash(account.id, new_hash)
-            # The reset link proved control of the inbox.
-            store.mark_email_verified(account.id, now)
+            # The reset link proved control of the inbox it was sent to.
+            store.mark_email_verified(account.id, consumed.sent_to, now)
             store.retire_tokens(
                 account_id=account.id, purpose="reset_password", now=now
             )
@@ -510,6 +540,7 @@ class IdentityService:
             account_id=account.id,
             purpose="verify_email",
             token_hash=policy.hash_secret(token),
+            sent_to=account.email,
             now=now,
             expires_at=now + policy.ACCOUNT_TOKEN_LIFETIME,
         )

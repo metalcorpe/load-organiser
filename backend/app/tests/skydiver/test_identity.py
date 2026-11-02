@@ -600,3 +600,49 @@ def test_ipv6_clients_share_a_slash_64_throttle(harness: Harness) -> None:
     harness.ip = f"{base}::ffff"
     blocked = harness.post("/sessions", {"email": address, "password": GOOD_PASSWORD})
     assert blocked.status_code == 429
+
+
+def test_link_sent_to_previous_address_does_not_verify_new_one(
+    harness: Harness,
+) -> None:
+    address, changed = email(), email()
+    harness.register(address)
+    token = harness.outbox.token_for(address, "/verify-email")
+    harness.post("/password-reset", {"email": address})
+    reset_token = harness.outbox.token_for(address, "/reset-password")
+    with Session(engine) as session:
+        session.execute(
+            text('UPDATE "user" SET email = :n WHERE email = :e'),
+            {"n": changed, "e": address},
+        )
+        session.commit()
+    stale_verify = harness.post("/email-verification/confirm", {"token": token})
+    assert stale_verify.status_code == 400
+    stale_reset = harness.post(
+        "/password-reset/confirm",
+        {"token": reset_token, "new_password": OTHER_PASSWORD},
+    )
+    assert stale_reset.status_code == 400
+    harness.login(changed)
+
+
+def test_registration_treats_ambiguous_legacy_email_as_existing(
+    harness: Harness,
+) -> None:
+    lower = email()
+    with Session(engine) as session:
+        for address in (lower.upper(), lower.title()):
+            session.add(
+                User(
+                    email=address,
+                    hashed_password=AppPasswordHasher().hash(GOOD_PASSWORD),
+                )
+            )
+        session.commit()
+    harness.register(lower)
+    assert "sign-in help" in harness.outbox.messages[-1]["subject"]
+    with Session(engine) as session:
+        count = session.execute(
+            text('SELECT count(*) FROM "user" WHERE lower(email) = :e'), {"e": lower}
+        ).scalar_one()
+    assert count == 2

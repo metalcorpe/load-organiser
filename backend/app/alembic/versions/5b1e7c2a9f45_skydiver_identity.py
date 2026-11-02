@@ -75,6 +75,7 @@ def upgrade() -> None:
         ),
         sa.Column("purpose", sa.String(16), nullable=False),
         sa.Column("token_hash", sa.String(64), nullable=False, unique=True),
+        sa.Column("sent_to", sa.String(255), nullable=False),
         sa.Column("created_at", TZ, nullable=False),
         sa.Column("expires_at", TZ, nullable=False),
         sa.Column("used_at", TZ, nullable=True),

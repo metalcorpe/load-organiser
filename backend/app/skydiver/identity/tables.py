@@ -78,6 +78,8 @@ class SkydiverAccountToken(SQLModel, table=True):
     account_id: uuid.UUID = Field(sa_column=_account_fk())
     purpose: str = Field(max_length=16)
     token_hash: str = Field(sa_column=Column(String(64), nullable=False, unique=True))
+    # The address the link was mailed to; it only verifies that address.
+    sent_to: str = Field(max_length=255)
     created_at: datetime = Field(sa_column=_instant())
     expires_at: datetime = Field(sa_column=_instant())
     used_at: datetime | None = Field(default=None, sa_column=_instant(nullable=True))

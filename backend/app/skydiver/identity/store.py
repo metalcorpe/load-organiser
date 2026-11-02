@@ -13,6 +13,7 @@ from app.models import User
 from app.skydiver.identity.service import (
     Account,
     CommitThen,
+    ConsumedToken,
     IdentityStore,
     Profile,
     StoredSession,
@@ -42,20 +43,24 @@ class SqlIdentityStore:
 
     # accounts -----------------------------------------------------------------
 
-    def find_account_by_email(self, email: str) -> Account | None:
-        # Legacy rows may hold mixed-case emails; compare case-insensitively. If
-        # legacy data has case-only duplicates, use only an exact match, or none.
-        users = (
-            self._s.execute(
-                select(User).where(func.lower(col(User.email)) == email).limit(2)
-            )
+    def _matches(self, email: str) -> list[User]:
+        # Legacy rows may hold mixed-case emails; compare case-insensitively.
+        return list(
+            self._s.execute(select(User).where(func.lower(col(User.email)) == email))
             .scalars()
             .all()
         )
+
+    def find_account_by_email(self, email: str) -> Account | None:
+        users = self._matches(email)
         if len(users) == 1:
             return _account(users[0])
+        # Case-only legacy duplicates: only an exact match, otherwise none.
         exact = [user for user in users if user.email == email]
         return _account(exact[0]) if len(exact) == 1 else None
+
+    def email_in_use(self, email: str) -> bool:
+        return bool(self._matches(email))
 
     def get_account(self, account_id: uuid.UUID) -> Account | None:
         user = self._s.get(User, account_id)
@@ -140,15 +145,20 @@ class SqlIdentityStore:
             .values(hashed_password=password_hash)
         )
 
-    def mark_email_verified(self, account_id: uuid.UUID, now: datetime) -> None:
-        email = self._s.execute(
+    def mark_email_verified(
+        self, account_id: uuid.UUID, address: str, now: datetime
+    ) -> bool:
+        current = self._s.execute(
             select(col(User.email)).where(col(User.id) == account_id)
         ).scalar_one()
+        if current.lower() != address.lower():
+            return False
         self._s.execute(
             update(SkydiverAccountState)
             .where(col(SkydiverAccountState.account_id) == account_id)
-            .values(email_verified_at=now, email_verified_for=email)
+            .values(email_verified_at=now, email_verified_for=current)
         )
+        return True
 
     # sessions -------------------------------------------------------------------
 
@@ -243,6 +253,7 @@ class SqlIdentityStore:
         account_id: uuid.UUID,
         purpose: str,
         token_hash: str,
+        sent_to: str,
         now: datetime,
         expires_at: datetime,
     ) -> None:
@@ -251,6 +262,7 @@ class SqlIdentityStore:
                 account_id=account_id,
                 purpose=purpose,
                 token_hash=token_hash,
+                sent_to=sent_to,
                 created_at=now,
                 expires_at=expires_at,
             )
@@ -270,7 +282,7 @@ class SqlIdentityStore:
 
     def consume_token(
         self, *, token_hash: str, purpose: str, now: datetime
-    ) -> uuid.UUID | None:
+    ) -> ConsumedToken | None:
         # Single statement: concurrent consumers cannot both succeed.
         row = self._s.execute(
             update(SkydiverAccountToken)
@@ -279,9 +291,11 @@ class SqlIdentityStore:
             .where(col(SkydiverAccountToken.used_at).is_(None))
             .where(col(SkydiverAccountToken.expires_at) > now)
             .values(used_at=now)
-            .returning(col(SkydiverAccountToken.account_id))
+            .returning(
+                col(SkydiverAccountToken.account_id), col(SkydiverAccountToken.sent_to)
+            )
         ).first()
-        return row[0] if row else None
+        return ConsumedToken(account_id=row[0], sent_to=row[1]) if row else None
 
     # throttling -----------------------------------------------------------------
 
