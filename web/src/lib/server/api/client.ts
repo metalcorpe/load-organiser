@@ -1,4 +1,4 @@
-import { API_ORIGIN } from '$app/env/private';
+import { API_ORIGIN, API_PROXY_KEY } from '$app/env/private';
 import { createApiTransport, type ApiTransport } from './transport.ts';
 
 /**
@@ -10,6 +10,7 @@ import { createApiTransport, type ApiTransport } from './transport.ts';
 export function createRequestApi(): ApiTransport {
 	return createApiTransport({
 		fetch: (input, init) => fetch(input, init),
-		origin: API_ORIGIN
+		origin: API_ORIGIN,
+		proxyKey: API_PROXY_KEY
 	});
 }

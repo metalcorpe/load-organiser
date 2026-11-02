@@ -1,17 +1,35 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type RequestEvent } from '@sveltejs/kit';
 import { signInPath } from '#lib/safe-return.ts';
+import { createRequestApi } from './api/client.ts';
+import { getViewer, type Viewer } from './identity.ts';
+import { clearSession, readSessionSecret } from './session.ts';
 
-/** Minimal request-local identity for rendering. Real sessions arrive in #145. */
-export interface Viewer {
-	id: string;
+export type { Viewer } from './identity.ts';
+
+export interface ViewerResolution {
+	viewer: Viewer | null;
+	/** A session cookie exists but the API could not confirm it (unreachable/timeout). */
+	unconfirmed: boolean;
 }
 
 /**
- * #144 has no account/session implementation, so every request is anonymous.
- * #145 replaces this with backend session validation; no cookie is trusted here.
+ * Resolves the viewer for this request only, by asking the API to validate the
+ * cookie's opaque secret. A rejected secret clears the cookie; an unreachable
+ * API keeps it (the session may still be valid) but renders as signed out.
  */
-export function resolveViewer(): Viewer | null {
-	return null;
+export async function resolveViewer(
+	event: Pick<RequestEvent, 'cookies'>
+): Promise<ViewerResolution> {
+	const secret = readSessionSecret(event.cookies);
+	if (!secret) return { viewer: null, unconfirmed: false };
+
+	const outcome = await getViewer(createRequestApi(), secret);
+	if (outcome.ok) return { viewer: outcome.value, unconfirmed: false };
+	if (outcome.reason === 'not_authenticated') {
+		clearSession(event.cookies);
+		return { viewer: null, unconfirmed: false };
+	}
+	return { viewer: null, unconfirmed: true };
 }
 
 export function isPrivateRoute(routeId: string | null): boolean {

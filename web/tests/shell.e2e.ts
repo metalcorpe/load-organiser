@@ -141,11 +141,11 @@ test.describe('private routes deny anonymous access', () => {
 		expect(JSON.stringify(body)).not.toContain('Not available yet');
 	});
 
-	test('direct navigation lands on the sign-in explanation', async ({ page }) => {
+	test('direct navigation lands on the sign-in form', async ({ page }) => {
 		await page.goto('/records');
 		await expect(page).toHaveURL('/sign-in?returnTo=%2Frecords');
 		await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
-		await expect(page.getByText('Accounts are not available yet')).toBeVisible();
+		await expect(page.getByText('Sign in to continue to the page you asked for.')).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'Records' })).toHaveCount(0);
 	});
 
