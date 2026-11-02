@@ -26,8 +26,8 @@ import {
   FiXCircle,
 } from "react-icons/fi"
 
-import { AircraftService } from "../../client"
-import type { AircraftPublic } from "../../client"
+import { AircraftService } from "../../api"
+import type { AircraftPublic } from "../../api"
 import { AircraftForm } from "../../components/Forms/AircraftForm"
 import {
   DialogBody,
@@ -49,12 +49,18 @@ function AircraftPage() {
 
   const { data: aircraft, isLoading } = useQuery({
     queryKey: ["aircraft"],
-    queryFn: () => AircraftService.readAircraft({}),
+    queryFn: () =>
+      AircraftService.readAircraft({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   const deleteAircraftMutation = useMutation({
     mutationFn: (aircraftId: string) =>
-      AircraftService.deleteAircraft({ id: aircraftId }),
+      AircraftService.deleteAircraft({
+        throwOnError: true,
+        path: { id: aircraftId },
+      }).then(({ data }) => data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["aircraft"] })
     },
@@ -63,9 +69,10 @@ function AircraftPage() {
   const toggleAircraftStatusMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
       AircraftService.updateAircraft({
-        id,
-        requestBody: { is_active: !isActive },
-      }),
+        throwOnError: true,
+        body: { is_active: !isActive },
+        path: { id: id },
+      }).then(({ data }) => data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["aircraft"] })
     },

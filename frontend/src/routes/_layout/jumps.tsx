@@ -21,7 +21,7 @@ import { createFileRoute } from "@tanstack/react-router"
 import { useState } from "react"
 import { FiEdit, FiPlus, FiSearch, FiTrash2, FiUsers } from "react-icons/fi"
 
-import { type ApiError, type JumpPublic, JumpsService } from "../../client"
+import { type ApiError, type JumpPublic, JumpsService } from "../../api"
 import {
   DialogActionTrigger,
   DialogBody,
@@ -55,7 +55,8 @@ function Jumps() {
     isError,
   } = useQuery({
     queryKey: ["jumps"],
-    queryFn: () => JumpsService.readJumps({}),
+    queryFn: () =>
+      JumpsService.readJumps({ throwOnError: true }).then(({ data }) => data),
   })
 
   const jumps = jumpsResponse?.data || []
@@ -86,17 +87,20 @@ function Jumps() {
 
   const handleDeleteJump = async (jumpId: string) => {
     try {
-      await JumpsService.deleteJump({ id: jumpId })
+      await JumpsService.deleteJump({
+        throwOnError: true,
+        path: { id: jumpId },
+      }).then(({ data }) => data)
       queryClient.invalidateQueries({ queryKey: ["jumps"] })
       showSuccessToast("Jump deleted successfully")
     } catch (error) {
       const apiError = error as ApiError
       const errDetail =
-        apiError.body &&
-        typeof apiError.body === "object" &&
-        apiError.body !== null &&
-        "detail" in apiError.body
-          ? (apiError.body as { detail: string }).detail
+        apiError.response?.data &&
+        typeof apiError.response?.data === "object" &&
+        apiError.response?.data !== null &&
+        "detail" in apiError.response?.data
+          ? (apiError.response?.data as { detail: string }).detail
           : "Something went wrong"
       showErrorToast(errDetail)
     }

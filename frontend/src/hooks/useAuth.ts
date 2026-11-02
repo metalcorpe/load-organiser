@@ -3,13 +3,13 @@ import { useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 
 import {
-  type Body_login_login_access_token as AccessToken,
+  type BodyLoginLoginAccessToken as AccessToken,
   type ApiError,
   LoginService,
   type UserPublic,
   type UserRegister,
   UsersService,
-} from "@/client"
+} from "@/api"
 import { handleError } from "@/utils"
 
 const isLoggedIn = () => {
@@ -22,13 +22,16 @@ const useAuth = () => {
   const queryClient = useQueryClient()
   const { data: user } = useQuery<UserPublic | null, Error>({
     queryKey: ["currentUser"],
-    queryFn: UsersService.readUserMe,
+    queryFn: () =>
+      UsersService.readUserMe({ throwOnError: true }).then(({ data }) => data),
     enabled: isLoggedIn(),
   })
 
   const signUpMutation = useMutation({
     mutationFn: (data: UserRegister) =>
-      UsersService.registerUser({ requestBody: data }),
+      UsersService.registerUser({ throwOnError: true, body: data }).then(
+        ({ data }) => data,
+      ),
 
     onSuccess: () => {
       navigate({ to: "/login" })
@@ -43,8 +46,9 @@ const useAuth = () => {
 
   const login = async (data: AccessToken) => {
     const response = await LoginService.loginAccessToken({
-      formData: data,
-    })
+      throwOnError: true,
+      body: data,
+    }).then(({ data }) => data)
     localStorage.setItem("access_token", response.access_token)
   }
 

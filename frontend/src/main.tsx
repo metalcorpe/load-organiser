@@ -4,21 +4,25 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query"
-import { RouterProvider, createRouter } from "@tanstack/react-router"
-import React, { StrictMode } from "react"
+import { createRouter, RouterProvider } from "@tanstack/react-router"
+import { StrictMode } from "react"
 import ReactDOM from "react-dom/client"
+import { ApiError } from "./api"
+import { client } from "./client/client.gen"
+import { CustomProvider } from "./components/ui/provider"
 import { routeTree } from "./routeTree.gen"
 
-import { ApiError, OpenAPI } from "./client"
-import { CustomProvider } from "./components/ui/provider"
-
-OpenAPI.BASE = import.meta.env.VITE_API_URL
-OpenAPI.TOKEN = async () => {
-  return localStorage.getItem("access_token") || ""
-}
+client.setConfig({
+  baseURL: import.meta.env.VITE_API_URL,
+  auth: () => localStorage.getItem("access_token") || "",
+  throwOnError: true,
+})
 
 const handleApiError = (error: Error) => {
-  if (error instanceof ApiError && [401, 403].includes(error.status)) {
+  if (
+    error instanceof ApiError &&
+    [401, 403].includes(error.response?.status ?? 0)
+  ) {
     localStorage.removeItem("access_token")
     window.location.href = "/login"
   }

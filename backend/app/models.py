@@ -1,8 +1,9 @@
 import uuid
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 
 from pydantic import EmailStr
+from sqlalchemy import DateTime
 from sqlmodel import Field, Relationship, SQLModel
 
 
@@ -117,6 +118,7 @@ class NewPassword(SQLModel):
 
 # Skydiving Load Organizer Models
 
+
 # Enums for jump types and statuses
 class JumpType(str, Enum):
     TANDEM = "tandem"
@@ -135,7 +137,7 @@ class LoadStatus(str, Enum):
 
 class AFFlevel(str, Enum):
     LEVEL_1 = "level_1"
-    LEVEL_2 = "level_2" 
+    LEVEL_2 = "level_2"
     LEVEL_3 = "level_3"
     LEVEL_4 = "level_4"
     LEVEL_5 = "level_5"
@@ -221,7 +223,7 @@ class InstructorsPublic(SQLModel):
 # Load model (aircraft load)
 class LoadBase(SQLModel):
     aircraft_id: uuid.UUID = Field(foreign_key="aircraft.id")
-    scheduled_time: datetime
+    scheduled_time: datetime = Field(sa_type=DateTime(timezone=False))
     altitude: int = Field(ge=3000, le=18000, default=10000)  # feet
     status: LoadStatus = LoadStatus.PLANNING
     notes: str | None = Field(default=None, max_length=500)
@@ -241,7 +243,10 @@ class LoadUpdate(SQLModel):
 
 class Load(LoadBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
+        sa_type=DateTime(timezone=False),
+    )
     aircraft: Aircraft = Relationship(back_populates="loads")
     jumps: list["Jump"] = Relationship(back_populates="load", cascade_delete=True)
 
@@ -287,7 +292,10 @@ class JumpUpdate(SQLModel):
 
 class Jump(JumpBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
+        sa_type=DateTime(timezone=False),
+    )
     load: Load = Relationship(back_populates="jumps")
     instructor: Instructor | None = Relationship(back_populates="jumps")
 
@@ -305,7 +313,7 @@ class JumpsPublic(SQLModel):
 
 # Weather report model
 class WeatherReportBase(SQLModel):
-    date: datetime
+    date: datetime = Field(sa_type=DateTime(timezone=False))
     wind_speed: int = Field(ge=0, le=100)  # mph
     wind_direction: int = Field(ge=0, le=360)  # degrees
     visibility: float = Field(ge=0.0, le=20.0)  # miles
@@ -334,7 +342,10 @@ class WeatherReportUpdate(SQLModel):
 
 class WeatherReport(WeatherReportBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
+        sa_type=DateTime(timezone=False),
+    )
 
 
 class WeatherReportPublic(WeatherReportBase):

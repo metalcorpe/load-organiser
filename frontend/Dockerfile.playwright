@@ -1,12 +1,12 @@
-FROM node:20
+FROM node:26.13.0
 
 WORKDIR /app
 
 COPY package*.json /app/
 
-RUN npm install
+RUN npm ci
 
-RUN npx -y playwright install --with-deps
+RUN npx playwright install --with-deps
 
 COPY ./ /app/
 

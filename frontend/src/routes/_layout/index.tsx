@@ -18,7 +18,7 @@ import {
   InstructorsService,
   LoadsService,
   WeatherService,
-} from "@/client"
+} from "@/api"
 import useAuth from "@/hooks/useAuth"
 
 export const Route = createFileRoute("/_layout/")({
@@ -31,22 +31,32 @@ function Dashboard() {
   // Fetch data for dashboard stats
   const { data: loadsResponse } = useQuery({
     queryKey: ["loads"],
-    queryFn: () => LoadsService.readLoads({}),
+    queryFn: () =>
+      LoadsService.readLoads({ throwOnError: true }).then(({ data }) => data),
   })
 
   const { data: aircraftResponse } = useQuery({
     queryKey: ["aircraft"],
-    queryFn: () => AircraftService.readAircraft({}),
+    queryFn: () =>
+      AircraftService.readAircraft({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   const { data: instructorsResponse } = useQuery({
     queryKey: ["instructors"],
-    queryFn: () => InstructorsService.readInstructors({}),
+    queryFn: () =>
+      InstructorsService.readInstructors({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   const { data: weatherResponse } = useQuery({
     queryKey: ["weather"],
-    queryFn: () => WeatherService.readWeatherReports({}),
+    queryFn: () =>
+      WeatherService.readWeatherReports({ throwOnError: true }).then(
+        ({ data }) => data,
+      ),
   })
 
   // Calculate stats

@@ -1,4 +1,4 @@
-import type { ApiError } from "./client"
+import type { ApiError } from "./api"
 import useCustomToast from "./hooks/useCustomToast"
 
 export const emailPattern = {
@@ -46,7 +46,7 @@ export const confirmPasswordRules = (
 
 export const handleError = (err: ApiError) => {
   const { showErrorToast } = useCustomToast()
-  const errDetail = (err.body as any)?.detail
+  const errDetail = (err.response?.data as any)?.detail
   let errorMessage = errDetail || "Something went wrong."
   if (Array.isArray(errDetail) && errDetail.length > 0) {
     errorMessage = errDetail[0].msg
