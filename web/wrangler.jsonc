@@ -1,0 +1,19 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "load-organiser-web",
+	"compatibility_date": "2026-11-02",
+	"compatibility_flags": ["nodejs_als"],
+	"main": ".svelte-kit/cloudflare/_worker.js",
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	// No public deployment is configured for #144 (hosting proof is #161).
+	"workers_dev": false,
+	"preview_urls": false,
+	// Server-only. Local preview overrides this through `.dev.vars` or `--var`.
+	// A production origin must be https; see src/env.ts.
+	"vars": {
+		"API_ORIGIN": ""
+	}
+}
