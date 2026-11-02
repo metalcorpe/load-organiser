@@ -52,9 +52,9 @@ class SmtpMailer:
     def send(self, *, to: str, subject: str, text: str) -> None:
         from emails.message import Message
 
-        response = Message(
-            subject=subject, text=text, mail_from=self._from
-        ).send(to=to, smtp=self._smtp)
+        response = Message(subject=subject, text=text, mail_from=self._from).send(
+            to=to, smtp=self._smtp
+        )
         if response is None or response.status_code not in (250, 251):
             # Never log the recipient, body or link.
             logger.warning(

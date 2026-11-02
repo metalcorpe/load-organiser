@@ -50,6 +50,7 @@ class StoredSession:
     account_id: uuid.UUID
     expires_at: datetime
     revoked_at: datetime | None
+    credential_marker: str
 
 
 @dataclass(frozen=True)
@@ -84,9 +85,11 @@ class IdentityStore(Protocol):
         *,
         account_id: uuid.UUID,
         secret_hash: str,
+        credential_marker: str,
         now: datetime,
         expires_at: datetime,
     ) -> uuid.UUID: ...
+    def set_session_marker(self, session_id: uuid.UUID, marker: str) -> None: ...
     def find_session(self, secret_hash: str) -> StoredSession | None: ...
     def revoke_sessions(
         self,
@@ -223,6 +226,7 @@ class IdentityService:
         self, *, email: str, password: str, display_name: str | None, client_ip: str
     ) -> None:
         """Neutral: the caller learns nothing about whether the email already exists."""
+        client_ip = policy.client_bucket(client_ip)
         problem = policy.password_problem(password)
         if problem:
             raise PasswordRejected(problem)
@@ -289,6 +293,7 @@ class IdentityService:
     # -- sessions -----------------------------------------------------------------
 
     def login(self, *, email: str, password: str, client_ip: str) -> NewSession:
+        client_ip = policy.client_bucket(client_ip)
         email = policy.normalize_email(email)
         now = self._clock()
         failed = False
@@ -310,10 +315,12 @@ class IdentityService:
                 failed = True
             else:
                 profile = store.lock_account(account.id, now)
+                current_hash = account.password_hash
                 if updated:
                     # #170 compatibility: legacy bcrypt is upgraded to Argon2id.
                     store.set_password_hash(account.id, updated)
-                result = self._open_session(store, account, profile, now)
+                    current_hash = updated
+                result = self._open_session(store, account, profile, now, current_hash)
         if failed or result is None:
             raise InvalidCredentials()
         return result
@@ -333,6 +340,7 @@ class IdentityService:
                 store.revoke_sessions(now=now, reason="logout", ids=[session.id])
 
     def revoke_all(self, *, secret: str, password: str, client_ip: str) -> None:
+        client_ip = policy.client_bucket(client_ip)
         now = self._clock()
         with self._stores() as store:
             account, _, _ = self._authenticated(store, secret, now)
@@ -342,6 +350,7 @@ class IdentityService:
     def change_password(
         self, *, secret: str, current_password: str, new_password: str, client_ip: str
     ) -> None:
+        client_ip = policy.client_bucket(client_ip)
         problem = policy.password_problem(new_password)
         if problem:
             raise PasswordRejected(problem)
@@ -352,6 +361,8 @@ class IdentityService:
             self._confirm_password(store, account, current_password, now, client_ip)
             store.lock_account(account.id, now)
             store.set_password_hash(account.id, new_hash)
+            # The current session survives the change; every other one is revoked.
+            store.set_session_marker(session.id, policy.credential_marker(new_hash))
             store.retire_tokens(
                 account_id=account.id, purpose="reset_password", now=now
             )
@@ -366,6 +377,7 @@ class IdentityService:
 
     def request_password_reset(self, *, email: str, client_ip: str) -> None:
         """Always neutral for the identifier; only the per-IP limit is visible."""
+        client_ip = policy.client_bucket(client_ip)
         self._require_mailer()
         email = policy.normalize_email(email)
         now = self._clock()
@@ -440,14 +452,24 @@ class IdentityService:
         ):
             raise NotAuthenticated()
         account = store.get_account(session.account_id)
-        if account is None or not account.is_active:
+        if (
+            account is None
+            or not account.is_active
+            or session.credential_marker
+            != policy.credential_marker(account.password_hash)
+        ):
             # Suspension takes effect on the next request, without a session sweep.
             raise NotAuthenticated()
         profile = store.profile(account.id, now)
         return account, profile, session
 
     def _open_session(
-        self, store: IdentityStore, account: Account, profile: Profile, now: datetime
+        self,
+        store: IdentityStore,
+        account: Account,
+        profile: Profile,
+        now: datetime,
+        password_hash: str,
     ) -> NewSession:
         over = policy.sessions_over_cap(store.active_session_ids(account.id, now))
         if over:
@@ -457,6 +479,7 @@ class IdentityService:
         store.create_session(
             account_id=account.id,
             secret_hash=policy.hash_secret(secret),
+            credential_marker=policy.credential_marker(password_hash),
             now=now,
             expires_at=expires_at,
         )

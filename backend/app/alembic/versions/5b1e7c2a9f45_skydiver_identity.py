@@ -43,6 +43,7 @@ def upgrade() -> None:
             "account_id", postgresql.UUID(as_uuid=True), _account_fk(), primary_key=True
         ),
         sa.Column("email_verified_at", TZ, nullable=True),
+        sa.Column("email_verified_for", sa.String(255), nullable=True),
         sa.Column("created_at", TZ, nullable=False),
     )
     op.create_table(
@@ -56,6 +57,7 @@ def upgrade() -> None:
             index=True,
         ),
         sa.Column("secret_hash", sa.String(64), nullable=False, unique=True),
+        sa.Column("credential_marker", sa.String(64), nullable=False),
         sa.Column("created_at", TZ, nullable=False),
         sa.Column("expires_at", TZ, nullable=False),
         sa.Column("revoked_at", TZ, nullable=True),

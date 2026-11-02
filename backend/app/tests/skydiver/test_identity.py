@@ -537,3 +537,66 @@ def test_forwarded_client_ip_is_trusted_only_with_proxy_key() -> None:
             },
         )
         assert junk.json() == "testclient"
+
+
+# ------------------------------------------------- review hardening (#145)
+
+
+def test_password_changed_outside_identity_invalidates_sessions(
+    harness: Harness,
+) -> None:
+    """E.g. a legacy /api/v1 password change: sessions follow the stored hash."""
+    address = email()
+    harness.register(address)
+    secret = harness.login(address)
+    with Session(engine) as session:
+        session.execute(
+            text('UPDATE "user" SET hashed_password = :h WHERE email = :e'),
+            {"h": AppPasswordHasher().hash(OTHER_PASSWORD), "e": address},
+        )
+        session.commit()
+    assert harness.get("/session", secret).status_code == 401
+
+
+def test_email_change_outside_identity_lapses_verification(harness: Harness) -> None:
+    address, changed = email(), email()
+    harness.register(address)
+    harness.verify(address)
+    secret = harness.login(address)
+    assert harness.get("/session", secret).json()["email_verified"] is True
+    with Session(engine) as session:
+        session.execute(
+            text('UPDATE "user" SET email = :n WHERE email = :e'),
+            {"n": changed, "e": address},
+        )
+        session.commit()
+    assert harness.get("/session", secret).json()["email_verified"] is False
+
+
+def test_case_only_duplicate_legacy_emails_fail_closed(harness: Harness) -> None:
+    lower = email()
+    upper = lower.upper()
+    with Session(engine) as session:
+        for address in (lower, upper):
+            session.add(
+                User(
+                    email=address,
+                    hashed_password=AppPasswordHasher().hash(GOOD_PASSWORD),
+                )
+            )
+        session.commit()
+    # Exact (normalised) match wins; the mixed-case twin is never chosen by accident.
+    secret = harness.login(lower)
+    assert harness.get("/session", secret).json()["email"] == lower
+
+
+def test_ipv6_clients_share_a_slash_64_throttle(harness: Harness) -> None:
+    address = email()
+    harness.register(address)
+    base = f"2001:db8:{random.randint(0, 0xFFFF):x}:{random.randint(0, 0xFFFF):x}"
+    for host in range(10):
+        harness.ip = f"{base}::{host + 1:x}"
+        harness.post("/sessions", {"email": address, "password": OTHER_PASSWORD})
+    harness.ip = f"{base}::ffff"
+    blocked = harness.post("/sessions", {"email": address, "password": GOOD_PASSWORD})
+    assert blocked.status_code == 429

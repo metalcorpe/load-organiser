@@ -5,6 +5,7 @@ tested without a database.
 """
 
 import hashlib
+import ipaddress
 import secrets
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -63,6 +64,32 @@ def new_secret() -> str:
 def hash_secret(secret: str) -> str:
     """SHA-256 of a high-entropy random secret. Only this digest is stored."""
     return hashlib.sha256(secret.encode("utf-8")).hexdigest()
+
+
+def credential_marker(password_hash: str) -> str:
+    """Fingerprint of the stored password hash a session was created under.
+
+    A password change through *any* code path (including legacy endpoints)
+    changes the hash, so sessions carrying the old marker stop validating.
+    """
+    return hashlib.sha256(password_hash.encode("utf-8")).hexdigest()
+
+
+def client_bucket(address: str) -> str:
+    """Throttle unit for a client address: IPv4 as-is, IPv6 grouped by /64.
+
+    One IPv6 subscriber usually controls a whole /64, so per-address limits on
+    IPv6 would be trivially bypassed by rotating addresses.
+    """
+    try:
+        ip = ipaddress.ip_address(address)
+    except ValueError:
+        return address
+    if isinstance(ip, ipaddress.IPv6Address) and ip.ipv4_mapped is None:
+        return str(ipaddress.IPv6Network(f"{ip}/64", strict=False))
+    if isinstance(ip, ipaddress.IPv6Address) and ip.ipv4_mapped is not None:
+        return str(ip.ipv4_mapped)
+    return str(ip)
 
 
 def throttle_key(*parts: str) -> str:

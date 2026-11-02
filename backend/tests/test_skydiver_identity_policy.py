@@ -55,3 +55,23 @@ def test_throttle_keys_do_not_contain_raw_values() -> None:
     key = policy.throttle_key("login_pair", "203.0.113.9", "jumper@example.com")
     assert "203.0.113.9" not in key and "jumper" not in key
     assert key != policy.throttle_key("login_pair", "203.0.113.9", "other@example.com")
+
+
+@pytest.mark.parametrize(
+    ("address", "bucket"),
+    [
+        ("203.0.113.9", "203.0.113.9"),
+        ("2001:db8:1:2:aaaa::1", "2001:db8:1:2::/64"),
+        ("2001:db8:1:2:ffff::9", "2001:db8:1:2::/64"),
+        ("::ffff:203.0.113.9", "203.0.113.9"),
+        ("unknown", "unknown"),
+    ],
+)
+def test_client_bucket(address: str, bucket: str) -> None:
+    assert policy.client_bucket(address) == bucket
+
+
+def test_credential_marker_changes_with_hash() -> None:
+    assert policy.credential_marker("$argon2id$a") != policy.credential_marker(
+        "$argon2id$b"
+    )

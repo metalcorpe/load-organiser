@@ -43,13 +43,19 @@ class SqlIdentityStore:
     # accounts -----------------------------------------------------------------
 
     def find_account_by_email(self, email: str) -> Account | None:
-        # Legacy rows may hold mixed-case emails; compare case-insensitively.
-        user = (
-            self._s.execute(select(User).where(func.lower(col(User.email)) == email))
+        # Legacy rows may hold mixed-case emails; compare case-insensitively. If
+        # legacy data has case-only duplicates, use only an exact match, or none.
+        users = (
+            self._s.execute(
+                select(User).where(func.lower(col(User.email)) == email).limit(2)
+            )
             .scalars()
-            .first()
+            .all()
         )
-        return _account(user) if user else None
+        if len(users) == 1:
+            return _account(users[0])
+        exact = [user for user in users if user.email == email]
+        return _account(exact[0]) if len(exact) == 1 else None
 
     def get_account(self, account_id: uuid.UUID) -> Account | None:
         user = self._s.get(User, account_id)
@@ -105,10 +111,20 @@ class SqlIdentityStore:
             .scalars()
             .one()
         )
+        email = self._s.execute(
+            select(col(User.email)).where(col(User.id) == account_id)
+        ).scalar_one()
+        # Verification covers the address that was verified, not later changes.
+        verified = (
+            state.email_verified_at
+            if state.email_verified_for is not None
+            and state.email_verified_for.lower() == email.lower()
+            else None
+        )
         return Profile(
             person_id=person.id,
             display_name=person.display_name,
-            email_verified_at=state.email_verified_at,
+            email_verified_at=verified,
         )
 
     def profile(self, account_id: uuid.UUID, now: datetime) -> Profile:
@@ -125,11 +141,13 @@ class SqlIdentityStore:
         )
 
     def mark_email_verified(self, account_id: uuid.UUID, now: datetime) -> None:
+        email = self._s.execute(
+            select(col(User.email)).where(col(User.id) == account_id)
+        ).scalar_one()
         self._s.execute(
             update(SkydiverAccountState)
             .where(col(SkydiverAccountState.account_id) == account_id)
-            .where(col(SkydiverAccountState.email_verified_at).is_(None))
-            .values(email_verified_at=now)
+            .values(email_verified_at=now, email_verified_for=email)
         )
 
     # sessions -------------------------------------------------------------------
@@ -151,18 +169,27 @@ class SqlIdentityStore:
         *,
         account_id: uuid.UUID,
         secret_hash: str,
+        credential_marker: str,
         now: datetime,
         expires_at: datetime,
     ) -> uuid.UUID:
         row = SkydiverSession(
             account_id=account_id,
             secret_hash=secret_hash,
+            credential_marker=credential_marker,
             created_at=now,
             expires_at=expires_at,
         )
         self._s.add(row)
         self._s.flush()
         return row.id
+
+    def set_session_marker(self, session_id: uuid.UUID, marker: str) -> None:
+        self._s.execute(
+            update(SkydiverSession)
+            .where(col(SkydiverSession.id) == session_id)
+            .values(credential_marker=marker)
+        )
 
     def find_session(self, secret_hash: str) -> StoredSession | None:
         s = (
@@ -181,6 +208,7 @@ class SqlIdentityStore:
             account_id=s.account_id,
             expires_at=s.expires_at,
             revoked_at=s.revoked_at,
+            credential_marker=s.credential_marker,
         )
 
     def revoke_sessions(

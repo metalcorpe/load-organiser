@@ -45,6 +45,8 @@ class SkydiverAccountState(SQLModel, table=True):
     email_verified_at: datetime | None = Field(
         default=None, sa_column=_instant(nullable=True)
     )
+    # The address that was verified; verification lapses if the email changes.
+    email_verified_for: str | None = Field(default=None, max_length=255)
     created_at: datetime = Field(sa_column=_instant())
 
 
@@ -54,6 +56,7 @@ class SkydiverSession(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     account_id: uuid.UUID = Field(sa_column=_account_fk())
     secret_hash: str = Field(sa_column=Column(String(64), nullable=False, unique=True))
+    credential_marker: str = Field(sa_column=Column(String(64), nullable=False))
     created_at: datetime = Field(sa_column=_instant())
     expires_at: datetime = Field(sa_column=_instant())
     revoked_at: datetime | None = Field(default=None, sa_column=_instant(nullable=True))

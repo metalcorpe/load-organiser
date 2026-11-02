@@ -100,6 +100,13 @@ class Settings(BaseSettings):
     SKYDIVER_MAIL_OUTBOX_DIR: str | None = None
 
     @model_validator(mode="after")
+    def _proxy_key_outside_local(self) -> Self:
+        # Without it every login shares the web server's address and its limits.
+        if self.ENVIRONMENT != "local" and not self.SKYDIVER_WEB_PROXY_KEY:
+            raise ValueError("SKYDIVER_WEB_PROXY_KEY is required outside local")
+        return self
+
+    @model_validator(mode="after")
     def _outbox_is_local_only(self) -> Self:
         if self.SKYDIVER_MAIL_OUTBOX_DIR and self.ENVIRONMENT != "local":
             raise ValueError(
