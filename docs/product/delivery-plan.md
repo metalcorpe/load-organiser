@@ -2,9 +2,9 @@
 
 Status: planning and issue organization authorized by the product owner. Implementation has not started. This plan operationalizes the discovery documents without treating every explored feature as committed V1 scope. Scope decisions come first; dates and effort estimates remain unassigned.
 
-Current boundary: analysis, planning, documentation, and issue preparation only. Implementation will be delegated to Claude Code separately; the implementation issues below are future work, not authorization to begin coding now.
+Current product boundary: analysis, planning, documentation, and issue preparation only. The separately authorized dependency refresh is prepared in [PR #170](https://github.com/metalcorpe/load-organiser/pull/170); it does not deliver these product features. Implementation will be delegated to Claude Code separately; the implementation issues below are future work, not authorization to begin coding now.
 
-P0 decisions recorded: public discovery starts in Europe, and the product owner will maintain initial DZ/opportunity listings and corrections. Personal records can reference DZs worldwide. Country inventory, source coverage, review cadence, and the remaining release decisions are still open in #141.
+P0 decisions recorded: public discovery starts in Europe, and the product owner will maintain initial DZ/opportunity listings and corrections. Personal records can reference DZs worldwide. The product owner also confirmed responsibility for post/profile reports. The [release brief](release-brief.md) supplies recommended scope, fields, limits, source candidates and cadence for #141 review; actual inventory and maintenance capacity are not validated.
 
 ## Tracking
 

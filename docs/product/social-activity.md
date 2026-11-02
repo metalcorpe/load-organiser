@@ -2,6 +2,8 @@
 
 Status: proposed product direction prompted by the owner's request for following jumpers and seeing activity across locations. Not implemented; no adoption or retention benefit has been measured. This is a proposed V1 revision, not a commitment to a general social network.
 
+The [release brief](release-brief.md) now defines a concrete recommended beta bundle and correction/audience rules. The product owner confirmed initial review of post/profile reports. The broader alternatives and future ideas below remain discovery context.
+
 ## Product job and loop
 
 Help a jumper answer: what are people I know doing, where have they been jumping, and could we plan something together?
@@ -56,7 +58,7 @@ For an empty following feed, show real sourced opportunities and an explicit peo
 
 Use paginated chronological feeds, lightweight cards, external media links, and bounded refresh. Avoid video storage and constant live updates initially. Audience enforcement, reporting, and moderation add real work even on free hosting.
 
-No risk-oriented leaderboards are proposed. Supporter status must not imply competence, buy moderation outcomes, or reveal personal data. Notification scope/frequency, impersonation handling, and moderator responsibility remain open.
+No risk-oriented leaderboards are proposed. Supporter status must not imply competence, buy moderation outcomes, or reveal personal data. The product owner handles initial post/profile reports; the release brief proposes a bounded workflow. Response capacity, impersonation handling and later notification scope/frequency still need validation.
 
 ## Acceptance examples
 

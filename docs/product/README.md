@@ -14,11 +14,13 @@ The product owner confirmed that no dropzones are ready to participate and selec
 
 Keep collecting evidence while narrowing the release scope explicitly. Proposed pilot journeys remain future options; no participating operators or paid services are assumed.
 
-Confirmed discovery coverage is Europe first, with initial DZ/opportunity listing maintenance and corrections handled by the product owner. Personal logging is not geographically restricted. Current work is planning and documentation only; implementation will be delegated to Claude Code separately.
+Confirmed discovery coverage is Europe first, with initial DZ/opportunity listing maintenance and corrections handled by the product owner. Personal logging is not geographically restricted. Current product work is planning and documentation only; implementation will be delegated to Claude Code separately. The separately authorized dependency refresh is tracked in [PR #170](https://github.com/metalcorpe/load-organiser/pull/170), not as delivery of these product features.
 
 ## Reading guide
 
 Start with the [connected product model](product-model.md) to understand how features fit together, which records they share, and where their responsibilities differ. Feature-detail documents expand that model; the roadmap remains conditional.
+
+For the proposed initial beta cut, read the [release brief](release-brief.md): concrete fields, social rules, attachment limits, European source candidates, owner responsibilities, and maintenance/release gates. Detailed defaults remain recommendations for review.
 
 For actionable next work, use the [delivery plan and GitHub backlog](delivery-plan.md). It separates six V1 planning/delivery phases from future ecosystem investigations.
 
@@ -26,6 +28,7 @@ For actionable next work, use the [delivery plan and GitHub backlog](delivery-pl
 | --- | --- |
 | [Connected product model](product-model.md) | Feature ownership, shared concepts, integration flows, journeys, and reconciled dependencies |
 | [Delivery plan and GitHub backlog](delivery-plan.md) | Phase epics/milestones, scoped issues, dependencies, and the immediate next actions |
+| [Initial beta release brief](release-brief.md) | Concrete recommended first cut, confirmed decisions, source policy and planning handoff |
 | [Proposed first version](version-one.md) | Discovery plus personal jump/gear records, explicit exclusions, and release conditions; awaiting scope agreement |
 | [Vision and user journeys](vision.md) | Product direction, users, shared records, and local control |
 | [Skydiver-first adoption](adoption-strategy.md) | Independent user value, participation dependencies, and the later path to dropzones |

@@ -2,7 +2,7 @@
 
 Status: feature proposal raised by the product owner. Discovery only; no implementation, participating organizers, accepted listings, or MVP commitment assumed.
 
-Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. Exact country inventory, sources, and review cadence are still to be planned; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
+Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. The [release brief](release-brief.md) proposes primary-source candidates and a review cadence. Real country inventory, reuse permissions and maintenance capacity remain unvalidated; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
 
 ## Purpose and fit
 

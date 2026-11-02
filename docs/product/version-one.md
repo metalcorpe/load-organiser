@@ -6,6 +6,8 @@ Planning update: phased GitHub tracking is authorized. Use the [delivery plan](d
 
 Confirmed decisions: Europe is the initial public discovery geography. The product owner will maintain the initial DZ and opportunity listings and handle corrections. Current work is analysis, planning, documentation, and issue preparation; implementation will be delegated to Claude Code separately.
 
+The [initial beta release brief](release-brief.md) now supplies concrete recommended fields, social behavior, limits, discovery source candidates and maintenance cadence. It distinguishes confirmed decisions from defaults; this broader document remains the feature context. The product owner also confirmed responsibility for initial post/profile report review.
+
 ## Promise
 
 Find opportunities and people to jump with, keep your personal records, and choose what activity to share.
@@ -40,7 +42,7 @@ Keep attachments lightweight initially: links to externally hosted media and str
 
 Initial maintained public discovery covers Europe. This is a coverage direction, not a promise of complete listings for every European country. Personal accounts, logbooks, gear records, and provisional DZ references are not geographically restricted. The initial country inventory, source list, and review cadence remain planning work; no discipline restriction or interface language has been selected by this decision.
 
-The product owner is the initial maintainer for DZ and opportunity listings and corrections. This assignment does not establish a separate social-abuse moderation policy, response-time guarantee, or available maintenance capacity; those remain to be defined before launch.
+The product owner is the initial maintainer for DZ and opportunity listings and corrections. The product owner also reviews social post/profile reports initially. The release brief proposes the moderation workflow and maintenance cadence; no response-time guarantee or available maintenance capacity has been validated.
 
 Include a minimal maintainer workflow to add/edit/retire sourced listings, review submissions, consolidate duplicates, and record source/last-check time. Community suggestions can start with a simple submission/report route rather than a full public publishing system.
 
@@ -94,4 +96,4 @@ These remain in the [feature catalog](feature-catalog.md). Deferral does not del
 
 ## Unresolved scope choices
 
-The initial discipline/audience, country inventory within Europe, listing sources and review cadence, social moderation responsibilities, personal attachment allowances, exact mandatory log fields, whether calendar export fits the first cut, and hosting choice remain open. FastAPI Cloud/Neon are candidates, not deployed services. This document is the proposed user-facing scope; the [roadmap](roadmap.md) remains the broader opportunity sequence.
+The release brief recommends an active recreational audience without a discipline restriction, an English interface, minimum log fields, no hosted binary attachments, source candidates, and a maintenance cadence; these detailed defaults still need review. Country inventory and the maintenance workload need validation. The product owner is confirmed as initial listing and post/profile report reviewer. Calendar export is proposed as deferred. Hosting remains an architecture decision. FastAPI Cloud/Neon are candidates, not deployed services. This document is the proposed user-facing scope; the [roadmap](roadmap.md) remains the broader opportunity sequence.
