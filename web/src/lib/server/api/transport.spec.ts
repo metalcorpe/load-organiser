@@ -89,4 +89,61 @@ describe('createApiTransport', () => {
 			await createApiTransport({ fetch: big, origin: ORIGIN, maxBodyBytes: 100 }).request('getHealth')
 		).toEqual({ kind: 'invalid_response' });
 	});
+
+	it('rejects a declared oversize body without reading it', async () => {
+		const cancel = vi.fn();
+		const body = new ReadableStream<Uint8Array>({ pull: () => {}, cancel });
+		const fetch = vi.fn<FetchLike>(
+			async () =>
+				new Response(body, {
+					status: 200,
+					headers: { 'content-type': 'application/json', 'content-length': '1000000' }
+				})
+		);
+		expect(
+			await createApiTransport({ fetch, origin: ORIGIN, maxBodyBytes: 100 }).request('getHealth')
+		).toEqual({ kind: 'invalid_response' });
+		expect(cancel).toHaveBeenCalled();
+	});
+
+	it('stops reading an undeclared stream once it exceeds the limit', async () => {
+		let pulls = 0;
+		const cancel = vi.fn();
+		// Endless stream with no content-length: must be cut off, not buffered.
+		const body = new ReadableStream<Uint8Array>({
+			pull(controller) {
+				pulls += 1;
+				controller.enqueue(new Uint8Array(64).fill(0x20));
+			},
+			cancel
+		});
+		const fetch = vi.fn<FetchLike>(
+			async () => new Response(body, { status: 200, headers: { 'content-type': 'application/json' } })
+		);
+		expect(
+			await createApiTransport({ fetch, origin: ORIGIN, maxBodyBytes: 100 }).request('getHealth')
+		).toEqual({ kind: 'invalid_response' });
+		expect(cancel).toHaveBeenCalled();
+		expect(pulls).toBeLessThan(10);
+	});
+
+	it('accepts a multi-chunk body within the limit', async () => {
+		const encoded = new TextEncoder().encode(JSON.stringify({ ok: 'é' }));
+		const body = new ReadableStream<Uint8Array>({
+			start(controller) {
+				// Split inside the multi-byte character to exercise reassembly.
+				controller.enqueue(encoded.slice(0, encoded.length - 3));
+				controller.enqueue(encoded.slice(encoded.length - 3));
+				controller.close();
+			}
+		});
+		const fetch = vi.fn<FetchLike>(
+			async () => new Response(body, { status: 200, headers: { 'content-type': 'application/json' } })
+		);
+		expect(await createApiTransport({ fetch, origin: ORIGIN }).request('getHealth')).toEqual({
+			kind: 'response',
+			status: 200,
+			body: { ok: 'é' }
+		});
+	});
 });

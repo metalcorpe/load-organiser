@@ -31,6 +31,12 @@ describe('fetchHealth', () => {
 		}
 	});
 
+	it('reports a 503 with a non-contract body as an upstream outage', async () => {
+		expect(
+			await fetchHealth(transport({ kind: 'response', status: 503, body: { detail: 'proxy' } }))
+		).toEqual({ kind: 'upstream_error', status: 503 });
+	});
+
 	it('passes through other statuses and transport failures without details', async () => {
 		expect(await fetchHealth(transport({ kind: 'response', status: 500, body: { detail: 'x' } }))).toEqual(
 			{ kind: 'upstream_error', status: 500 }

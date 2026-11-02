@@ -6,7 +6,7 @@ const PLACEHOLDER_ORIGIN = 'https://return.invalid';
  */
 export function safeReturnPath(raw: string | null | undefined): string | null {
 	if (!raw || raw.length > 512) return null;
-	if (!raw.startsWith('/') || raw.startsWith('//') || raw.startsWith('/\\')) return null;
+	if (!raw.startsWith('/') || raw.startsWith('//')) return null;
 	// eslint-disable-next-line no-control-regex
 	if (/[\u0000-\u001f\u007f\\]/.test(raw)) return null;
 

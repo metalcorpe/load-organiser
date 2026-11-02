@@ -74,10 +74,8 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			}
 
 			try {
-				const text = await response.text();
-				if (new TextEncoder().encode(text).byteLength > maxBodyBytes) {
-					return { kind: 'invalid_response' };
-				}
+				const text = await readBounded(response, maxBodyBytes);
+				if (text === null) return { kind: 'invalid_response' };
 				return { kind: 'response', status: response.status, body: JSON.parse(text) };
 			} catch (error) {
 				if (isTimeout(error)) return { kind: 'timeout' };
@@ -85,6 +83,38 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			}
 		}
 	};
+}
+
+/** Reads at most `maxBytes` of the body; returns `null` (and cancels) when it is larger. */
+async function readBounded(response: Response, maxBytes: number): Promise<string | null> {
+	const declared = Number(response.headers.get('content-length'));
+	if (Number.isFinite(declared) && declared > maxBytes) {
+		await response.body?.cancel();
+		return null;
+	}
+	if (!response.body) return '';
+
+	const reader = response.body.getReader();
+	const chunks: Uint8Array[] = [];
+	let total = 0;
+	for (;;) {
+		const { done, value } = await reader.read();
+		if (done) break;
+		total += value.byteLength;
+		if (total > maxBytes) {
+			await reader.cancel();
+			return null;
+		}
+		chunks.push(value);
+	}
+
+	const bytes = new Uint8Array(total);
+	let offset = 0;
+	for (const chunk of chunks) {
+		bytes.set(chunk, offset);
+		offset += chunk.byteLength;
+	}
+	return new TextDecoder().decode(bytes);
 }
 
 function isTimeout(error: unknown): boolean {

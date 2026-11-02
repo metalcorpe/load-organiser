@@ -20,11 +20,16 @@ function withSecurityHeaders(response: Response): Response {
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.viewer = resolveViewer();
 
-	// Deny anonymous private page/endpoint requests before any load runs.
-	// Client-side data requests are redirected by (private)/+layout.server.ts.
-	if (isPrivateRoute(event.route.id) && !event.locals.viewer && !event.isDataRequest) {
+	// Deny anonymous private requests before any load runs. Page server loads run in
+	// parallel with layout loads, so the (private) layout guard alone cannot stop a
+	// page load; this hook is the enforcement point for both HTML and data requests.
+	if (isPrivateRoute(event.route.id) && !event.locals.viewer) {
+		const location = signInPath(event.url);
 		return withSecurityHeaders(
-			new Response(null, { status: 303, headers: { location: signInPath(event.url) } })
+			event.isDataRequest
+				? // SvelteKit's client-navigation redirect payload (asserted by shell.e2e.ts).
+					Response.json({ type: 'redirect', location })
+				: new Response(null, { status: 303, headers: { location } })
 		);
 	}
 

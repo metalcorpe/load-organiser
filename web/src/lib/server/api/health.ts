@@ -29,7 +29,12 @@ export async function fetchHealth(transport: ApiTransport): Promise<HealthOutcom
 	if (result.status !== 200 && result.status !== 503) {
 		return { kind: 'upstream_error', status: result.status };
 	}
-	if (!isHealthStatus(result.body)) return { kind: 'invalid_response' };
+	if (!isHealthStatus(result.body)) {
+		// A 503 from a proxy/error handler is an outage, not a contract violation.
+		return result.status === 503
+			? { kind: 'upstream_error', status: 503 }
+			: { kind: 'invalid_response' };
+	}
 
 	const checkedAt = new Date(result.body.checked_at).toISOString();
 	if (result.status === 200 && result.body.status === 'ok') {

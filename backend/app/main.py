@@ -5,8 +5,11 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.api.main import api_router
 from app.core.config import settings
-from app.core.db import engine
-from app.skydiver.adapters import sql_database_probe
+from app.skydiver.adapters import (
+    cached_probe,
+    create_probe_engine,
+    sql_database_probe,
+)
 from app.skydiver.api import create_router as create_skydiver_router
 
 
@@ -36,4 +39,7 @@ if settings.all_cors_origins:
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 # Skydiver beta namespace (/api/skydiver/v1); legacy isolation is #146.
-app.include_router(create_skydiver_router(database_probe=sql_database_probe(engine)))
+health_probe = cached_probe(
+    sql_database_probe(create_probe_engine(str(settings.SQLALCHEMY_DATABASE_URI)))
+)
+app.include_router(create_skydiver_router(database_probe=health_probe))
