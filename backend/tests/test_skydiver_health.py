@@ -94,7 +94,9 @@ def test_cached_probe_limits_database_calls() -> None:
 
 def test_exported_openapi_contains_only_beta_paths() -> None:
     document = build_openapi()
-    assert list(document["paths"]) == [f"{API_PREFIX}/health"]
+    assert f"{API_PREFIX}/health" in document["paths"]
+    # Only the beta namespace: no legacy /api/v1 operation leaks into the contract.
+    assert all(path.startswith(f"{API_PREFIX}/") for path in document["paths"])
     operation = document["paths"][f"{API_PREFIX}/health"]["get"]
     assert operation["operationId"] == "getHealth"
     assert "security" not in operation

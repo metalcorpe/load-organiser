@@ -1,0 +1,566 @@
+"""Identity use cases (#145). Ports are injected; nothing here imports settings, SQL or HTTP.
+
+Each public method is one unit of work. Mail is sent only after the transaction that
+created its token has committed, so a rolled-back request never emails a live link.
+"""
+
+import logging
+import uuid
+from collections.abc import Callable
+from contextlib import AbstractContextManager
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Protocol
+
+from app.skydiver.identity import policy
+from app.skydiver.identity.policy import ThrottleRule
+
+logger = logging.getLogger(__name__)
+
+# --------------------------------------------------------------------------- ports
+
+
+class PasswordHasher(Protocol):
+    def hash(self, password: str) -> str: ...
+
+    def verify_and_update(
+        self, password: str, stored_hash: str
+    ) -> tuple[bool, str | None]: ...
+
+    def burn(self, password: str) -> None:
+        """Spend comparable time when no account exists (timing parity)."""
+        ...
+
+
+class Mailer(Protocol):
+    def send(self, *, to: str, subject: str, text: str) -> None: ...
+
+
+@dataclass(frozen=True)
+class Account:
+    id: uuid.UUID
+    email: str
+    password_hash: str
+    is_active: bool
+
+
+@dataclass(frozen=True)
+class StoredSession:
+    id: uuid.UUID
+    account_id: uuid.UUID
+    expires_at: datetime
+    revoked_at: datetime | None
+
+
+@dataclass(frozen=True)
+class Profile:
+    person_id: uuid.UUID
+    display_name: str | None
+    email_verified_at: datetime | None
+
+
+class IdentityStore(Protocol):
+    def find_account_by_email(self, email: str) -> Account | None: ...
+    def get_account(self, account_id: uuid.UUID) -> Account | None: ...
+    def count_accounts(self) -> int: ...
+    def create_account(
+        self, *, email: str, password_hash: str, display_name: str | None, now: datetime
+    ) -> Account: ...
+    def profile(self, account_id: uuid.UUID, now: datetime) -> Profile:
+        """Read the person/state rows, creating them for accounts made elsewhere."""
+        ...
+
+    def lock_account(self, account_id: uuid.UUID, now: datetime) -> Profile:
+        """As `profile`, holding the account's row lock until the transaction ends."""
+        ...
+
+    def set_password_hash(self, account_id: uuid.UUID, password_hash: str) -> None: ...
+    def mark_email_verified(self, account_id: uuid.UUID, now: datetime) -> None: ...
+    def active_session_ids(
+        self, account_id: uuid.UUID, now: datetime
+    ) -> list[uuid.UUID]: ...
+    def create_session(
+        self,
+        *,
+        account_id: uuid.UUID,
+        secret_hash: str,
+        now: datetime,
+        expires_at: datetime,
+    ) -> uuid.UUID: ...
+    def find_session(self, secret_hash: str) -> StoredSession | None: ...
+    def revoke_sessions(
+        self,
+        *,
+        now: datetime,
+        reason: str,
+        ids: list[uuid.UUID] | None = None,
+        account_id: uuid.UUID | None = None,
+        keep: uuid.UUID | None = None,
+    ) -> None: ...
+    def create_token(
+        self,
+        *,
+        account_id: uuid.UUID,
+        purpose: str,
+        token_hash: str,
+        now: datetime,
+        expires_at: datetime,
+    ) -> None: ...
+    def retire_tokens(
+        self, *, account_id: uuid.UUID, purpose: str, now: datetime
+    ) -> None: ...
+    def consume_token(
+        self, *, token_hash: str, purpose: str, now: datetime
+    ) -> uuid.UUID | None: ...
+    def throttle_count(self, *, bucket: str, key_hash: str, since: datetime) -> int: ...
+    def throttle_record(self, *, bucket: str, key_hash: str, now: datetime) -> None: ...
+
+
+StoreFactory = Callable[[], AbstractContextManager[IdentityStore]]
+Clock = Callable[[], datetime]
+
+# -------------------------------------------------------------------------- results
+
+
+class IdentityError(Exception):
+    code = "identity_error"
+
+
+class NotAuthenticated(IdentityError):
+    code = "not_authenticated"
+
+
+class InvalidCredentials(IdentityError):
+    code = "invalid_credentials"
+
+
+class ConfirmationFailed(IdentityError):
+    code = "password_confirmation_failed"
+
+
+class RegistrationClosed(IdentityError):
+    code = "registration_closed"
+
+
+class InvalidToken(IdentityError):
+    code = "invalid_or_expired_token"
+
+
+class MailUnavailable(IdentityError):
+    code = "mail_unavailable"
+
+
+class PasswordRejected(IdentityError):
+    def __init__(self, code: str) -> None:
+        super().__init__(code)
+        self.code = code
+
+
+class Throttled(IdentityError):
+    code = "too_many_attempts"
+
+    def __init__(self, retry_after_seconds: int) -> None:
+        super().__init__(self.code)
+        self.retry_after_seconds = retry_after_seconds
+
+
+@dataclass(frozen=True)
+class Viewer:
+    account_id: uuid.UUID
+    person_id: uuid.UUID
+    email: str
+    display_name: str | None
+    email_verified: bool
+    session_expires_at: datetime
+
+
+@dataclass(frozen=True)
+class NewSession:
+    secret: str
+    viewer: Viewer
+
+
+@dataclass(frozen=True)
+class IdentityConfig:
+    web_origin: str
+    registration_open: bool
+    max_accounts: int
+    product_name: str = "Load Organiser"
+
+
+# ------------------------------------------------------------------------ use cases
+
+
+@dataclass
+class _Outbox:
+    """Mail queued during a transaction and sent only after it commits."""
+
+    messages: list[tuple[str, str, str]]
+
+    def add(self, to: str, subject: str, text: str) -> None:
+        self.messages.append((to, subject, text))
+
+
+class IdentityService:
+    def __init__(
+        self,
+        *,
+        stores: StoreFactory,
+        hasher: PasswordHasher,
+        mailer: Mailer | None,
+        clock: Clock,
+        config: IdentityConfig,
+    ) -> None:
+        self._stores = stores
+        self._hasher = hasher
+        self._mailer = mailer
+        self._clock = clock
+        self._config = config
+
+    # -- registration and verification ------------------------------------------
+
+    def register(
+        self, *, email: str, password: str, display_name: str | None, client_ip: str
+    ) -> None:
+        """Neutral: the caller learns nothing about whether the email already exists."""
+        problem = policy.password_problem(password)
+        if problem:
+            raise PasswordRejected(problem)
+        self._require_mailer()
+        email = policy.normalize_email(email)
+        name = (display_name or "").strip() or None
+        now = self._clock()
+        # Hash before branching so both outcomes cost the same Argon2 work.
+        password_hash = self._hasher.hash(password)
+        outbox = _Outbox([])
+
+        with self._stores() as store:
+            self._check(store, policy.REGISTER_IP, now, client_ip)
+            self._hit(store, policy.REGISTER_IP, now, client_ip)
+            if not self._config.registration_open:
+                raise CommitThen(RegistrationClosed())
+            existing = store.find_account_by_email(email)
+            if existing is None and store.count_accounts() >= self._config.max_accounts:
+                raise CommitThen(RegistrationClosed())
+            if existing is not None:
+                outbox.add(
+                    email,
+                    f"{self._config.product_name}: sign-in help",
+                    "Someone tried to create an account with this email address, "
+                    "which already has one.\n\nIf it was you, sign in or reset your "
+                    f"password at {self._config.web_origin}/forgot-password\n\n"
+                    "If it was not you, you can ignore this message.",
+                )
+            else:
+                account = store.create_account(
+                    email=email,
+                    password_hash=password_hash,
+                    display_name=name,
+                    now=now,
+                )
+                outbox.add(*self._verification_mail(store, account, now))
+        self._flush(outbox)
+
+    def resend_verification(self, *, secret: str) -> None:
+        self._require_mailer()
+        now = self._clock()
+        outbox = _Outbox([])
+        with self._stores() as store:
+            account, profile, _ = self._authenticated(store, secret, now)
+            if profile.email_verified_at is not None:
+                return
+            key = str(account.id)
+            self._check(store, policy.VERIFY_RESEND_ACCOUNT, now, key)
+            self._hit(store, policy.VERIFY_RESEND_ACCOUNT, now, key)
+            outbox.add(*self._verification_mail(store, account, now))
+        self._flush(outbox)
+
+    def confirm_email(self, *, token: str) -> None:
+        now = self._clock()
+        with self._stores() as store:
+            account_id = store.consume_token(
+                token_hash=policy.hash_secret(token), purpose="verify_email", now=now
+            )
+            if account_id is None:
+                raise InvalidToken()
+            store.lock_account(account_id, now)
+            store.mark_email_verified(account_id, now)
+
+    # -- sessions -----------------------------------------------------------------
+
+    def login(self, *, email: str, password: str, client_ip: str) -> NewSession:
+        email = policy.normalize_email(email)
+        now = self._clock()
+        failed = False
+        result: NewSession | None = None
+        with self._stores() as store:
+            self._check(store, policy.LOGIN_IP, now, client_ip)
+            self._check(store, policy.LOGIN_PAIR, now, client_ip, email)
+            account = store.find_account_by_email(email)
+            if account is None:
+                self._hasher.burn(password)
+                verified, updated = False, None
+            else:
+                verified, updated = self._hasher.verify_and_update(
+                    password, account.password_hash
+                )
+            if account is None or not verified or not account.is_active:
+                self._hit(store, policy.LOGIN_IP, now, client_ip)
+                self._hit(store, policy.LOGIN_PAIR, now, client_ip, email)
+                failed = True
+            else:
+                profile = store.lock_account(account.id, now)
+                if updated:
+                    # #170 compatibility: legacy bcrypt is upgraded to Argon2id.
+                    store.set_password_hash(account.id, updated)
+                result = self._open_session(store, account, profile, now)
+        if failed or result is None:
+            raise InvalidCredentials()
+        return result
+
+    def current_viewer(self, *, secret: str) -> Viewer:
+        now = self._clock()
+        with self._stores() as store:
+            account, profile, session = self._authenticated(store, secret, now)
+            return self._viewer(account, profile, session.expires_at)
+
+    def logout(self, *, secret: str) -> None:
+        """Idempotent: an unknown or already revoked secret is not an error."""
+        now = self._clock()
+        with self._stores() as store:
+            session = store.find_session(policy.hash_secret(secret))
+            if session is not None and session.revoked_at is None:
+                store.revoke_sessions(now=now, reason="logout", ids=[session.id])
+
+    def revoke_all(self, *, secret: str, password: str, client_ip: str) -> None:
+        now = self._clock()
+        with self._stores() as store:
+            account, _, _ = self._authenticated(store, secret, now)
+            self._confirm_password(store, account, password, now, client_ip)
+            store.revoke_sessions(now=now, reason="revoke_all", account_id=account.id)
+
+    def change_password(
+        self, *, secret: str, current_password: str, new_password: str, client_ip: str
+    ) -> None:
+        problem = policy.password_problem(new_password)
+        if problem:
+            raise PasswordRejected(problem)
+        new_hash = self._hasher.hash(new_password)
+        now = self._clock()
+        with self._stores() as store:
+            account, _, session = self._authenticated(store, secret, now)
+            self._confirm_password(store, account, current_password, now, client_ip)
+            store.lock_account(account.id, now)
+            store.set_password_hash(account.id, new_hash)
+            store.retire_tokens(
+                account_id=account.id, purpose="reset_password", now=now
+            )
+            store.revoke_sessions(
+                now=now,
+                reason="password_changed",
+                account_id=account.id,
+                keep=session.id,
+            )
+
+    # -- recovery -----------------------------------------------------------------
+
+    def request_password_reset(self, *, email: str, client_ip: str) -> None:
+        """Always neutral for the identifier; only the per-IP limit is visible."""
+        self._require_mailer()
+        email = policy.normalize_email(email)
+        now = self._clock()
+        outbox = _Outbox([])
+        with self._stores() as store:
+            self._check(store, policy.RESET_IP, now, client_ip)
+            self._hit(store, policy.RESET_IP, now, client_ip)
+            if self._exceeded(store, policy.RESET_IDENTIFIER, now, email):
+                return
+            self._hit(store, policy.RESET_IDENTIFIER, now, email)
+            account = store.find_account_by_email(email)
+            if account is None or not account.is_active:
+                return
+            store.lock_account(account.id, now)
+            store.retire_tokens(
+                account_id=account.id, purpose="reset_password", now=now
+            )
+            token = policy.new_secret()
+            store.create_token(
+                account_id=account.id,
+                purpose="reset_password",
+                token_hash=policy.hash_secret(token),
+                now=now,
+                expires_at=now + policy.ACCOUNT_TOKEN_LIFETIME,
+            )
+            outbox.add(
+                account.email,
+                f"{self._config.product_name}: reset your password",
+                "Use this link within 30 minutes to choose a new password. It works "
+                f"once.\n\n{self._config.web_origin}/reset-password?token={token}\n\n"
+                "Resetting signs you out on every device. If you did not ask for "
+                "this, ignore this message; your password has not changed.",
+            )
+        self._flush(outbox, neutral=True)
+
+    def reset_password(self, *, token: str, new_password: str) -> None:
+        problem = policy.password_problem(new_password)
+        if problem:
+            raise PasswordRejected(problem)
+        new_hash = self._hasher.hash(new_password)
+        now = self._clock()
+        with self._stores() as store:
+            account_id = store.consume_token(
+                token_hash=policy.hash_secret(token), purpose="reset_password", now=now
+            )
+            account = store.get_account(account_id) if account_id else None
+            if account is None or not account.is_active:
+                raise InvalidToken()
+            store.lock_account(account.id, now)
+            store.set_password_hash(account.id, new_hash)
+            # The reset link proved control of the inbox.
+            store.mark_email_verified(account.id, now)
+            store.retire_tokens(
+                account_id=account.id, purpose="reset_password", now=now
+            )
+            store.revoke_sessions(
+                now=now, reason="password_reset", account_id=account.id
+            )
+
+    # -- helpers ------------------------------------------------------------------
+
+    def _authenticated(
+        self, store: IdentityStore, secret: str, now: datetime
+    ) -> tuple[Account, Profile, StoredSession]:
+        if not secret:
+            raise NotAuthenticated()
+        session = store.find_session(policy.hash_secret(secret))
+        if (
+            session is None
+            or session.revoked_at is not None
+            or session.expires_at <= now
+        ):
+            raise NotAuthenticated()
+        account = store.get_account(session.account_id)
+        if account is None or not account.is_active:
+            # Suspension takes effect on the next request, without a session sweep.
+            raise NotAuthenticated()
+        profile = store.profile(account.id, now)
+        return account, profile, session
+
+    def _open_session(
+        self, store: IdentityStore, account: Account, profile: Profile, now: datetime
+    ) -> NewSession:
+        over = policy.sessions_over_cap(store.active_session_ids(account.id, now))
+        if over:
+            store.revoke_sessions(now=now, reason="session_limit", ids=over)
+        secret = policy.new_secret()
+        expires_at = policy.session_expiry(now)
+        store.create_session(
+            account_id=account.id,
+            secret_hash=policy.hash_secret(secret),
+            now=now,
+            expires_at=expires_at,
+        )
+        return NewSession(
+            secret=secret, viewer=self._viewer(account, profile, expires_at)
+        )
+
+    def _confirm_password(
+        self,
+        store: IdentityStore,
+        account: Account,
+        password: str,
+        now: datetime,
+        client_ip: str,
+    ) -> None:
+        self._check(store, policy.LOGIN_PAIR, now, client_ip, account.email)
+        ok, _ = self._hasher.verify_and_update(password, account.password_hash)
+        if not ok:
+            self._hit(store, policy.LOGIN_PAIR, now, client_ip, account.email)
+            raise CommitThen(ConfirmationFailed())
+
+    def _verification_mail(
+        self, store: IdentityStore, account: Account, now: datetime
+    ) -> tuple[str, str, str]:
+        store.retire_tokens(account_id=account.id, purpose="verify_email", now=now)
+        token = policy.new_secret()
+        store.create_token(
+            account_id=account.id,
+            purpose="verify_email",
+            token_hash=policy.hash_secret(token),
+            now=now,
+            expires_at=now + policy.ACCOUNT_TOKEN_LIFETIME,
+        )
+        return (
+            account.email,
+            f"{self._config.product_name}: confirm your email",
+            "Confirm this email address within 30 minutes to start saving private "
+            f"records:\n\n{self._config.web_origin}/verify-email?token={token}\n\n"
+            "If you did not create an account, ignore this message.",
+        )
+
+    def _viewer(
+        self, account: Account, profile: Profile, expires_at: datetime
+    ) -> Viewer:
+        return Viewer(
+            account_id=account.id,
+            person_id=profile.person_id,
+            email=account.email,
+            display_name=profile.display_name,
+            email_verified=profile.email_verified_at is not None,
+            session_expires_at=expires_at,
+        )
+
+    def _exceeded(
+        self, store: IdentityStore, rule: ThrottleRule, now: datetime, *parts: str
+    ) -> bool:
+        count = store.throttle_count(
+            bucket=rule.bucket,
+            key_hash=policy.throttle_key(rule.bucket, *parts),
+            since=now - rule.window,
+        )
+        return count >= rule.limit
+
+    def _check(
+        self, store: IdentityStore, rule: ThrottleRule, now: datetime, *parts: str
+    ) -> None:
+        if self._exceeded(store, rule, now, *parts):
+            raise Throttled(int(rule.window.total_seconds()))
+
+    def _hit(
+        self, store: IdentityStore, rule: ThrottleRule, now: datetime, *parts: str
+    ) -> None:
+        store.throttle_record(
+            bucket=rule.bucket,
+            key_hash=policy.throttle_key(rule.bucket, *parts),
+            now=now,
+        )
+
+    def _require_mailer(self) -> None:
+        if self._mailer is None:
+            raise MailUnavailable()
+
+    def _flush(self, outbox: _Outbox, *, neutral: bool = False) -> None:
+        """Send queued mail after commit.
+
+        With `neutral`, delivery failures are logged, not raised: a 503 only when an
+        account exists would reveal that it exists.
+        """
+        if self._mailer is None:
+            raise MailUnavailable()
+        for to, subject, text in outbox.messages:
+            try:
+                self._mailer.send(to=to, subject=subject, text=text)
+            except Exception as exc:
+                logger.warning("Identity mail failed: %s", type(exc).__name__)
+                if not neutral:
+                    raise MailUnavailable() from None
+
+
+class CommitThen(Exception):
+    """Raised inside a unit of work whose writes (e.g. throttle hits) must commit
+    before `error` reaches the caller. Store factories commit, then raise `error`.
+    """
+
+    def __init__(self, error: IdentityError) -> None:
+        super().__init__(error.code)
+        self.error = error

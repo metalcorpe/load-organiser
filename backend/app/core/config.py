@@ -90,6 +90,23 @@ class Settings(BaseSettings):
     def emails_enabled(self) -> bool:
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
+    # Skydiver beta identity (#145). Registration is closed unless explicitly opened.
+    SKYDIVER_WEB_ORIGIN: str = "http://localhost:5173"
+    SKYDIVER_REGISTRATION_OPEN: bool = False
+    SKYDIVER_MAX_ACCOUNTS: int = 25
+    # Shared secret proving that the forwarded client IP comes from the web server.
+    SKYDIVER_WEB_PROXY_KEY: str | None = None
+    # Local/test only: write identity mail as JSON files instead of sending it.
+    SKYDIVER_MAIL_OUTBOX_DIR: str | None = None
+
+    @model_validator(mode="after")
+    def _outbox_is_local_only(self) -> Self:
+        if self.SKYDIVER_MAIL_OUTBOX_DIR and self.ENVIRONMENT != "local":
+            raise ValueError(
+                "SKYDIVER_MAIL_OUTBOX_DIR is only allowed when ENVIRONMENT=local"
+            )
+        return self
+
     EMAIL_TEST_USER: EmailStr = "test@example.com"
     FIRST_SUPERUSER: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
