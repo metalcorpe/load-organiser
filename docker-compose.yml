@@ -11,6 +11,23 @@ services:
       timeout: 10s
     volumes:
       - app-db-data-pg18:/var/lib/postgresql
+      # The PostgreSQL 17 volume, read-only. Only the guard below reads it; mounting
+      # it also keeps `docker volume prune` from deleting it.
+      - app-db-data:/legacy-pg17:ro
+    # Refuse to initialise an empty PostgreSQL 18 cluster while PostgreSQL 17 data
+    # exists: an unattended `compose up` would otherwise go live on an empty DB.
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        if [ -f /legacy-pg17/PG_VERSION ] && [ ! -f "$$PGDATA/PG_VERSION" ] && [ "$${ALLOW_EMPTY_PG18:-}" != "true" ]; then
+          echo "Refusing to start: volume app-db-data holds PostgreSQL $$(cat /legacy-pg17/PG_VERSION) data and the PostgreSQL 18 volume is empty." >&2
+          echo "Migrate first (docs/maintenance/dependency-refresh.md) or set ALLOW_EMPTY_PG18=true to start empty." >&2
+          exit 1
+        fi
+        exec docker-entrypoint.sh "$$@"
+      - docker-entrypoint.sh
+    command: ["postgres"]
     env_file:
       - .env
     environment:
@@ -164,6 +181,9 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-frontend-http.middlewares=https-redirect
 volumes:
   app-db-data-pg18:
+  # Pre-PostgreSQL 18 data; mounted read-only by the db guard. Created empty on
+  # fresh installs.
+  app-db-data:
 
 networks:
   traefik-public:

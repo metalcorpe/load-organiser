@@ -1,3 +1,4 @@
+import bcrypt
 from fastapi.encoders import jsonable_encoder
 from sqlmodel import Session
 
@@ -89,3 +90,22 @@ def test_update_user(db: Session) -> None:
     assert user_2
     assert user.email == user_2.email
     assert verify_password(new_password, user_2.hashed_password)
+
+
+def test_authenticate_upgrades_legacy_bcrypt_hash(db: Session) -> None:
+    email = random_email()
+    password = random_lower_string()
+    user = crud.create_user(
+        session=db, user_create=UserCreate(email=email, password=password)
+    )
+    user.hashed_password = bcrypt.hashpw(
+        password.encode("utf-8"), bcrypt.gensalt(rounds=4)
+    ).decode("ascii")
+    db.add(user)
+    db.commit()
+
+    authenticated = crud.authenticate(session=db, email=email, password=password)
+    assert authenticated
+    db.refresh(user)
+    assert user.hashed_password.startswith("$argon2id$")
+    assert verify_password(password, user.hashed_password)

@@ -1,10 +1,21 @@
 import uuid
 from datetime import UTC, datetime
 from enum import Enum
+from typing import Any
 
 from pydantic import EmailStr
 from sqlalchemy import DateTime
 from sqlmodel import Field, Relationship, SQLModel
+
+
+def utc_naive_now() -> datetime:
+    """Current UTC time without tzinfo: created_at columns store naive UTC."""
+    return datetime.now(UTC).replace(tzinfo=None)
+
+
+def naive_utc_created_at() -> Any:
+    """Shared created_at column: naive UTC, set when the row object is created."""
+    return Field(default_factory=utc_naive_now, sa_type=DateTime(timezone=False))
 
 
 # Shared properties
@@ -243,10 +254,7 @@ class LoadUpdate(SQLModel):
 
 class Load(LoadBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
-        sa_type=DateTime(timezone=False),
-    )
+    created_at: datetime = naive_utc_created_at()
     aircraft: Aircraft = Relationship(back_populates="loads")
     jumps: list["Jump"] = Relationship(back_populates="load", cascade_delete=True)
 
@@ -292,10 +300,7 @@ class JumpUpdate(SQLModel):
 
 class Jump(JumpBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
-        sa_type=DateTime(timezone=False),
-    )
+    created_at: datetime = naive_utc_created_at()
     load: Load = Relationship(back_populates="jumps")
     instructor: Instructor | None = Relationship(back_populates="jumps")
 
@@ -342,10 +347,7 @@ class WeatherReportUpdate(SQLModel):
 
 class WeatherReport(WeatherReportBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    created_at: datetime = Field(
-        default_factory=lambda: datetime.now(UTC).replace(tzinfo=None),
-        sa_type=DateTime(timezone=False),
-    )
+    created_at: datetime = naive_utc_created_at()
 
 
 class WeatherReportPublic(WeatherReportBase):
