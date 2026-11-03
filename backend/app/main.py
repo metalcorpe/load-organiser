@@ -28,6 +28,9 @@ from app.skydiver.identity.store import sql_store_factory
 from app.skydiver.opportunities.api import create_router as create_opportunity_router
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.opportunities.store import sql_listing_store_factory
+from app.skydiver.saves.api import create_router as create_saves_router
+from app.skydiver.saves.service import SavesService
+from app.skydiver.saves.store import sql_saves_store_factory
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -78,6 +81,12 @@ opportunity_service = OpportunityService(
     stores=sql_listing_store_factory(engine),
     clock=utc_now,
 )
+saves_service = SavesService(
+    stores=sql_saves_store_factory(engine),
+    clock=utc_now,
+    opportunities=opportunity_service,
+    directory=directory_service,
+)
 
 
 def create_app(*, include_legacy: bool) -> FastAPI:
@@ -111,6 +120,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_opportunity_router(
             service=lambda: opportunity_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_saves_router(
+            service=lambda: saves_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

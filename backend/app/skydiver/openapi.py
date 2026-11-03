@@ -22,6 +22,8 @@ from app.skydiver.opportunities.api import (
     create_router as create_opportunity_router,
 )
 from app.skydiver.opportunities.service import OpportunityService
+from app.skydiver.saves.api import create_router as create_saves_router
+from app.skydiver.saves.service import SavesService
 
 
 def _no_service() -> IdentityService:
@@ -33,6 +35,10 @@ def _no_directory() -> DirectoryService:
 
 
 def _no_opportunities() -> OpportunityService:
+    raise RuntimeError("contract export only")
+
+
+def _no_saves() -> SavesService:
     raise RuntimeError("contract export only")
 
 
@@ -51,6 +57,9 @@ def build_openapi() -> dict[str, Any]:
         create_opportunity_router(
             service=_no_opportunities, access=AccessDependencies(_no_service)
         )
+    )
+    app.include_router(
+        create_saves_router(service=_no_saves, access=AccessDependencies(_no_service))
     )
     return app.openapi()
 

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
+	import { listingMessage } from '#lib/listings.ts';
 	import { countryName } from '#lib/countries.ts';
 	import type { PageProps } from './$types';
 
@@ -63,6 +65,23 @@
 	endorses, operates with or has confirmed anything in Load Organiser, and jumps recorded here are
 	the jumpers' own records.
 </p>
+
+<h2>Upcoming listings here</h2>
+{#if !data.listings.ok}
+	<p class="form-error" role="alert">{listingMessage(data.listings.reason)}</p>
+{:else if data.listings.items.length === 0}
+	<p>No upcoming listings at this dropzone are published here.</p>
+{:else}
+	<ul class="results" aria-label="Upcoming listings">
+		{#each data.listings.items as item (item.id)}
+			<li><ListingItem {item} /></li>
+		{/each}
+	</ul>
+	{#if data.listings.more}<p class="hint">Showing the first 20.</p>{/if}
+{/if}
+{#if data.viewer}
+	<p><a href="/plans?venue={venue.id}">Plan a private visit here</a></p>
+{/if}
 
 <style>
 	dl {
