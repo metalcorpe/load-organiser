@@ -3,6 +3,8 @@
  *
  * - Constructed per request (no module-level client, token or user state).
  * - Only allowlisted operations: a fixed method + path, never a caller-supplied URL.
+ *   A path may contain `{id}`, filled only with a validated UUID; query keys are
+ *   allowlisted per operation.
  * - Never forwards browser headers/cookies and never follows redirects.
  * - Failures are reduced to sanitized kinds; upstream bodies/URLs are not exposed.
  */
@@ -11,7 +13,14 @@ import { API_TIMEOUT_MS } from '#lib/api-timeouts.ts';
 
 export type FetchLike = (input: string, init: RequestInit) => Promise<Response>;
 
-const AUTH = '/api/skydiver/v1/auth';
+const BETA = '/api/skydiver/v1';
+const AUTH = `${BETA}/auth`;
+
+interface Operation {
+	readonly method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+	readonly path: string;
+	readonly query?: readonly string[];
+}
 
 export const OPERATIONS = {
 	getHealth: { method: 'GET', path: '/api/skydiver/v1/health' },
@@ -24,8 +33,25 @@ export const OPERATIONS = {
 	resendVerification: { method: 'POST', path: `${AUTH}/email-verification` },
 	confirmEmail: { method: 'POST', path: `${AUTH}/email-verification/confirm` },
 	requestPasswordReset: { method: 'POST', path: `${AUTH}/password-reset` },
-	resetPassword: { method: 'POST', path: `${AUTH}/password-reset/confirm` }
-} as const;
+	resetPassword: { method: 'POST', path: `${AUTH}/password-reset/confirm` },
+	searchVenues: {
+		method: 'GET',
+		path: `${BETA}/venues`,
+		query: ['q', 'country', 'cursor', 'limit']
+	},
+	getVenue: { method: 'GET', path: `${BETA}/venues/{id}` },
+	listPlaces: { method: 'GET', path: `${BETA}/places` },
+	createPlace: { method: 'POST', path: `${BETA}/places` },
+	updatePlace: { method: 'PATCH', path: `${BETA}/places/{id}` },
+	deletePlace: { method: 'DELETE', path: `${BETA}/places/{id}` }
+} as const satisfies Record<string, Operation>;
+
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** True for a canonical UUID string, the only value a path parameter accepts. */
+export function isUuid(value: unknown): value is string {
+	return typeof value === 'string' && UUID.test(value);
+}
 
 /** Per-call inputs. Only values SvelteKit sets explicitly; never browser headers. */
 export interface RequestOptions {
@@ -35,12 +61,18 @@ export interface RequestOptions {
 	bearer?: string;
 	/** Client address from the platform (`getClientAddress`), for API throttling. */
 	clientIp?: string;
+	/** Path parameter for `{id}` operations; must be a UUID. */
+	id?: string;
+	/** Query values; only the operation's allowlisted keys are accepted. */
+	query?: Record<string, string | undefined>;
 }
 
 export type OperationId = keyof typeof OPERATIONS;
 
 export type TransportFailure =
 	| { kind: 'not_configured' }
+	/** The call itself was invalid (bad path id or query key); nothing was sent. */
+	| { kind: 'invalid_request' }
 	| { kind: 'unreachable' }
 	| { kind: 'timeout' }
 	| { kind: 'upstream_error'; status: number }
@@ -74,7 +106,9 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 	return {
 		async request(operation, call = {}) {
 			if (!options.origin) return { kind: 'not_configured' };
-			const { method, path } = OPERATIONS[operation];
+			const url = buildPath(OPERATIONS[operation], call);
+			if (url === null) return { kind: 'invalid_request' };
+			const { method } = OPERATIONS[operation];
 
 			const headers: Record<string, string> = { accept: 'application/json' };
 			if (call.body !== undefined) headers['content-type'] = 'application/json';
@@ -86,7 +120,7 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 
 			let response: Response;
 			try {
-				response = await options.fetch(`${options.origin}${path}`, {
+				response = await options.fetch(`${options.origin}${url}`, {
 					method,
 					headers,
 					body: call.body === undefined ? undefined : JSON.stringify(call.body),
@@ -130,6 +164,24 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			}
 		}
 	};
+}
+
+function buildPath(operation: Operation, call: RequestOptions): string | null {
+	let path = operation.path;
+	if (path.includes('{id}')) {
+		if (!isUuid(call.id)) return null;
+		path = path.replace('{id}', call.id.toLowerCase());
+	} else if (call.id !== undefined) {
+		return null;
+	}
+	const allowed = new Set(operation.query ?? []);
+	const params = new URLSearchParams();
+	for (const [key, value] of Object.entries(call.query ?? {})) {
+		if (!allowed.has(key)) return null;
+		if (value !== undefined && value !== '') params.set(key, value);
+	}
+	const search = params.toString();
+	return search ? `${path}?${search}` : path;
 }
 
 function parseRetryAfter(raw: string | null): number | undefined {

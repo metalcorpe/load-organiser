@@ -8,6 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from app.api.main import api_router
 from app.core.config import settings
 from app.core.db import engine
+from app.skydiver.access.http import AccessDependencies
 from app.skydiver.adapters import (
     AppPasswordHasher,
     cached_probe,
@@ -15,6 +16,9 @@ from app.skydiver.adapters import (
     sql_database_probe,
 )
 from app.skydiver.api import create_router as create_skydiver_router
+from app.skydiver.directory.api import create_router as create_directory_router
+from app.skydiver.directory.service import DirectoryService
+from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.health import utc_now
 from app.skydiver.identity.api import client_ip_resolver
 from app.skydiver.identity.api import create_router as create_identity_router
@@ -64,6 +68,9 @@ identity_service = IdentityService(
         product_name=settings.PROJECT_NAME,
     ),
 )
+directory_service = DirectoryService(
+    stores=sql_directory_store_factory(engine), clock=utc_now
+)
 
 
 def create_app(*, include_legacy: bool) -> FastAPI:
@@ -86,6 +93,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
         create_identity_router(
             service=lambda: identity_service,
             client_ip=client_ip_resolver(settings.SKYDIVER_WEB_PROXY_KEY),
+        )
+    )
+    application.include_router(
+        create_directory_router(
+            service=lambda: directory_service,
+            access=AccessDependencies(lambda: identity_service),
         )
     )
     if include_legacy:

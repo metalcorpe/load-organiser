@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-const PRIVATE_PATHS = ['/activity', '/jumps/new', '/records', '/profile'];
+const PRIVATE_PATHS = ['/activity', '/jumps/new', '/records', '/profile', '/places'];
 const API_HOST = new URL(process.env.E2E_API_ORIGIN ?? 'http://127.0.0.1:8144').host;
 
 function trackConsoleErrors(page: Page): string[] {

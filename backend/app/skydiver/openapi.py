@@ -12,7 +12,10 @@ from typing import Any
 
 from fastapi import FastAPI
 
+from app.skydiver.access.http import AccessDependencies
 from app.skydiver.api import create_router
+from app.skydiver.directory.api import create_router as create_directory_router
+from app.skydiver.directory.service import DirectoryService
 from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.service import IdentityService
 
@@ -21,11 +24,20 @@ def _no_service() -> IdentityService:
     raise RuntimeError("contract export only")
 
 
+def _no_directory() -> DirectoryService:
+    raise RuntimeError("contract export only")
+
+
 def build_openapi() -> dict[str, Any]:
     app = FastAPI(title="Load Organiser skydiver beta API", version="1")
     app.include_router(create_router(database_probe=lambda: True))
     app.include_router(
         create_identity_router(service=_no_service, client_ip=lambda _: "")
+    )
+    app.include_router(
+        create_directory_router(
+            service=_no_directory, access=AccessDependencies(_no_service)
+        )
     )
     return app.openapi()
 

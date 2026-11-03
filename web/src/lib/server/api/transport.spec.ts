@@ -192,4 +192,35 @@ describe('createApiTransport', () => {
 			retryAfter: 900
 		});
 	});
+
+	it('fills {id} only with a UUID and never contacts the API otherwise', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		const id = '0B3E4F0C-1D2E-4F5A-8B6C-7D8E9F0A1B2C';
+		await api.request('getVenue', { id });
+		expect(fetch.mock.calls[0][0]).toBe(`${ORIGIN}/api/skydiver/v1/venues/${id.toLowerCase()}`);
+
+		for (const bad of [undefined, '', '../health', 'x/../../auth/session', `${id}?q=1`, `${id}#x`]) {
+			expect(await api.request('getVenue', { id: bad })).toEqual({ kind: 'invalid_request' });
+		}
+		// An id on an operation without `{id}` is refused rather than ignored.
+		expect(await api.request('listPlaces', { id })).toEqual({ kind: 'invalid_request' });
+		expect(fetch).toHaveBeenCalledTimes(1);
+	});
+
+	it('sends only allowlisted, encoded query parameters', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		await api.request('searchVenues', {
+			query: { q: 'a&b=c #d', country: 'ES', cursor: undefined, limit: '' }
+		});
+		expect(fetch.mock.calls[0][0]).toBe(
+			`${ORIGIN}/api/skydiver/v1/venues?q=a%26b%3Dc+%23d&country=ES`
+		);
+		expect(await api.request('searchVenues', { query: { owner: 'x' } })).toEqual({
+			kind: 'invalid_request'
+		});
+		expect(await api.request('getHealth', { query: { q: 'x' } })).toEqual({ kind: 'invalid_request' });
+		expect(fetch).toHaveBeenCalledTimes(1);
+	});
 });

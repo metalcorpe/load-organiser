@@ -1,6 +1,6 @@
 # Dropzone directory and jump attribution
 
-Status: documented product direction from discovery. Not implemented. Skydivers must be able to associate jumps with a dropzone before that operator registers or adopts the application.
+Status: documented product direction from discovery. The listing, provisional-place and merge foundation is implemented by #148 (see [Implemented in #148](#implemented-in-148)); claims, operator participation, suggestions/review UI (#151) and jump linking (#153) are not. Skydivers must be able to associate jumps with a dropzone before that operator registers or adopts the application.
 
 ## Directory presence versus participation
 
@@ -54,5 +54,19 @@ Duplicate merges must preserve activity references, saved plans, event links, an
 - An older jump still identifies the historical venue when it closes or changes operators.
 
 Open details: initial directory sources and reuse permissions, minimum location fields, moderation, authority-review evidence, merge/relocation rules, and any public statistics policy.
+
+## Implemented in #148
+
+| Area | Behaviour |
+| --- | --- |
+| Venue identity | Random UUID that never changes. Name, ISO 3166-1 country, optional locality and coordinates, `source_url` + `checked_on` (required unless draft), optional source note |
+| Status | `draft` (reviewer-only, not public) → `listed` ⇄ `closed` (historical, still public and selectable). A public venue cannot return to draft; it is closed instead. `merged` is set only by a merge |
+| Rename / relocation | Same venue; the previous name becomes a searchable `former` alias. Location changes are recorded as `relocated`, separately from renames. Every change is an event with the reviewer's account |
+| Duplicates | Only an explicit reviewer merge. The source becomes `merged` → target; its name and aliases become `merged` aliases of the target. Old IDs keep resolving (the web redirects `/dz/{old}` with 301). Stored private references are not rewritten. Equal names are never merged automatically; a public venue cannot merge into a draft |
+| Search | Name, alias and former names; case-, accent- and punctuation-insensitive; optional country; keyset pages of 20 (max 50). Public results are listed and closed venues only |
+| Provisional places | Owner-only name + country, saved immediately (confirmed email required, like all private writes); optional link to a public venue; at most 200 per person (design default). Never public, never a suggestion, never visible on venue pages |
+| Authority | Maintenance requires the server-granted `reviewer` role (`python -m app.skydiver.access.grant reviewer <email>`). Listings have no operator, claim, endorsement or verification fields, and public venue responses contain no counts or linked private records |
+
+No venue data is shipped. Listings must come from reviewed sources with reuse permission (#151/#162); the beta directory starts empty.
 
 Related: [connected product model](product-model.md), [feature catalog](feature-catalog.md), and [discovery board](discovery-board.md).

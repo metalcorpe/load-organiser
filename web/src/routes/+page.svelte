@@ -22,4 +22,8 @@
 	</p>
 </Notice>
 
+<p>
+	Looking for a dropzone? Browse the <a href="/dz">dropzone directory</a> of source-backed listings.
+</p>
+
 <p>You can check whether the service is reachable on the <a href="/status">service status</a> page.</p>
