@@ -1,0 +1,303 @@
+"""#154 personal history and prior-history baseline over HTTP against PostgreSQL."""
+
+import uuid
+from collections.abc import Iterator
+from datetime import UTC, datetime
+from typing import Any
+
+import httpx2
+import pytest
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+from sqlalchemy import text
+
+from app.core.db import engine
+from app.skydiver.access.http import AccessDependencies
+from app.skydiver.directory.api import create_router as create_directory_router
+from app.skydiver.directory.service import DirectoryService
+from app.skydiver.directory.store import sql_directory_store_factory
+from app.skydiver.gear.api import create_router as create_gear_router
+from app.skydiver.gear.service import GearService
+from app.skydiver.gear.store import sql_gear_store_factory
+from app.skydiver.history.api import create_router
+from app.skydiver.history.service import HistoryService
+from app.skydiver.history.store import SqlHistoryStore, sql_history_store_factory
+from app.skydiver.logbook.api import create_router as create_logbook_router
+from app.skydiver.logbook.service import LogbookService
+from app.skydiver.logbook.store import sql_logbook_store_factory
+from app.tests.skydiver.support import Accounts
+
+NOW = datetime(2026, 11, 3, 12, 0, tzinfo=UTC)
+SOURCE = {"source_url": "https://example.org/dz", "checked_on": "2026-11-01"}
+
+
+class Api:
+    def __init__(self, client: TestClient, accounts: Accounts) -> None:
+        self.client = client
+        self.accounts = accounts
+        self.reviewer = accounts.session(reviewer=True)
+
+    def call(
+        self, method: str, path: str, secret: str | None = None, body: Any = None,
+        **params: Any,
+    ) -> httpx2.Response:  # fmt: skip
+        headers = {"authorization": f"Bearer {secret}"} if secret else {}
+        return self.client.request(
+            method, f"/api/skydiver/v1{path}", json=body, headers=headers,
+            params=params or None,
+        )  # fmt: skip
+
+    def ok(self, method: str, path: str, secret: str, body: Any = None, status: int = 200, **params: Any) -> Any:  # fmt: skip
+        response = self.call(method, path, secret, body, **params)
+        assert response.status_code == status, response.text
+        return response.json() if response.content else None
+
+    def venue(self) -> dict[str, Any]:
+        body = {"name": f"Hs{uuid.uuid4().hex[:8]} DZ", "country": "ES", **SOURCE}
+        venue = self.ok("POST", "/directory/venues", self.reviewer, body, 201)
+        self.ok(
+            "POST", f"/directory/venues/{venue['id']}/status", self.reviewer,
+            {"status": "listed"},
+        )  # fmt: skip
+        return dict(venue)
+
+    def place(self, secret: str) -> str:
+        body = {"name": "Farm strip", "country": "PT"}
+        return str(self.ok("POST", "/places", secret, body, 201)["id"])
+
+    def component(self, secret: str, label: str) -> str:
+        body = {"client_key": str(uuid.uuid4()), "kind": "main", "label": label}
+        return str(self.ok("POST", "/gear/components", secret, body, 201)["component"]["id"])  # fmt: skip
+
+    def jump(self, secret: str, on: str, **fields: Any) -> dict[str, Any]:
+        body = {
+            "client_key": str(uuid.uuid4()),
+            "jumped_on": on,
+            "jump_type": "belly",
+            "confirm_distinct": True,
+            **fields,
+        }
+        if "venue_id" not in fields and "place_id" not in fields:
+            body["place_id"] = self.place(secret)
+        return dict(self.ok("POST", "/jumps", secret, body, 201)["jump"])
+
+    def history(self, secret: str) -> dict[str, Any]:
+        return dict(self.ok("GET", "/history", secret))
+
+
+@pytest.fixture(scope="module")
+def api() -> Iterator[Api]:
+    accounts = Accounts.create()
+    directory = DirectoryService(
+        stores=sql_directory_store_factory(engine), clock=lambda: NOW
+    )
+    gear = GearService(stores=sql_gear_store_factory(engine), clock=lambda: NOW)
+    logbook = LogbookService(
+        stores=sql_logbook_store_factory(engine), clock=lambda: NOW, directory=directory
+    )
+    history = HistoryService(
+        stores=sql_history_store_factory(engine), clock=lambda: NOW, directory=directory
+    )
+    access = AccessDependencies(lambda: accounts.service)
+    app = FastAPI()
+    app.include_router(create_router(service=lambda: history, access=access))
+    app.include_router(create_logbook_router(service=lambda: logbook, access=access))
+    app.include_router(
+        create_directory_router(service=lambda: directory, access=access)
+    )
+    app.include_router(create_gear_router(service=lambda: gear, access=access))
+    with TestClient(app) as client:
+        yield Api(client, accounts)
+
+
+def test_without_a_baseline_only_recorded_entries_are_reported(api: Api) -> None:
+    owner = api.accounts.session()
+    empty = api.history(owner)
+    assert empty["totals"] == {
+        "recorded": 0, "prior_jumps": None, "before_on": None,
+        "recorded_before": None, "recorded_since": None, "lifetime": None,
+        "inconsistent": False,
+    }  # fmt: skip
+    assert empty["baseline"] is None and empty["last_jump_on"] is None
+    assert [m["month"] for m in empty["months"]][-1] == "2026-11"
+    assert len(empty["months"]) == 12
+
+    # A high jump number is not a lifetime total.
+    api.jump(owner, "2026-10-10", jump_number=900)
+    totals = api.history(owner)["totals"]
+    assert (totals["recorded"], totals["lifetime"]) == (1, None)
+
+
+def test_decision_fixture_b200_and_a_pre_cutoff_entry(api: Api) -> None:
+    owner = api.accounts.session()
+    for on in ("2026-06-01", "2026-07-04", "2026-10-30"):  # on/after D
+        api.jump(owner, on)
+    base = api.ok(
+        "PUT", "/history/baseline", owner,
+        {"prior_jumps": 200, "before_on": "2026-06-01"},
+    )  # fmt: skip
+    assert base["totals"]["lifetime"] == 203
+    assert base["baseline"]["version"] == 1 and base["baseline"]["source"] == "manual"
+
+    pre = api.jump(owner, "2026-05-31")  # already represented by B
+    t = api.history(owner)["totals"]
+    assert (t["recorded"], t["recorded_before"], t["recorded_since"]) == (4, 1, 3)
+    assert t["lifetime"] == 203 and not t["inconsistent"]
+
+    # Deleting the old entry does not rewrite the declared B.
+    api.ok("DELETE", f"/jumps/{pre['id']}", owner, status=204, version=pre["version"])
+    after = api.history(owner)
+    assert after["totals"]["lifetime"] == 203
+    assert after["baseline"]["prior_jumps"] == 200
+
+
+def test_too_many_entries_before_the_cutoff_are_flagged_not_rejected(
+    api: Api,
+) -> None:
+    owner = api.accounts.session()
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 1, "before_on": "2026-06-01"})  # fmt: skip
+    api.jump(owner, "2026-01-01")
+    api.jump(owner, "2026-02-01")  # saved, even though B says only one came before D
+    api.jump(owner, "2026-08-01")
+    t = api.history(owner)["totals"]
+    assert t["inconsistent"] and t["lifetime"] is None
+    assert (t["prior_jumps"], t["recorded_before"], t["recorded_since"]) == (1, 2, 1)
+
+    # The preview shows the correction's effect before anything is saved.
+    preview = api.ok(
+        "GET", "/history/baseline/preview", owner,
+        prior_jumps=40, before_on="2026-06-01",
+    )  # fmt: skip
+    assert preview["current"]["inconsistent"]
+    assert preview["proposed"]["lifetime"] == 41
+    assert api.history(owner)["baseline"]["prior_jumps"] == 1
+
+
+def test_corrections_compare_and_swap_and_keep_provenance(api: Api) -> None:
+    owner = api.accounts.session()
+    body = {"prior_jumps": 50, "before_on": "2025-01-01"}
+    first = api.ok("PUT", "/history/baseline", owner, body)["baseline"]
+    # A second "first declaration" (an older tab) does not overwrite.
+    again = api.call("PUT", "/history/baseline", owner, body)
+    assert again.status_code == 409 and again.json() == {"detail": "edit_conflict"}
+
+    corrected = api.ok(
+        "PUT", "/history/baseline", owner,
+        {"prior_jumps": 55, "before_on": "2025-02-01", "version": first["version"]},
+    )  # fmt: skip
+    assert corrected["baseline"]["version"] == 2
+    stale = api.call(
+        "PUT", "/history/baseline", owner,
+        {"prior_jumps": 60, "before_on": "2025-02-01", "version": 1},
+    )  # fmt: skip
+    assert stale.status_code == 409
+
+    # Saving the same values again records nothing.
+    same = api.ok(
+        "PUT", "/history/baseline", owner,
+        {"prior_jumps": 55, "before_on": "2025-02-01", "version": 2},
+    )  # fmt: skip
+    assert same["baseline"]["version"] == 2
+
+    assert api.call("DELETE", "/history/baseline", owner, version=1).status_code == 409
+    api.ok("DELETE", "/history/baseline", owner, status=204, version=2)
+    gone = api.history(owner)
+    assert gone["baseline"] is None and gone["totals"]["lifetime"] is None
+    assert [(e["kind"], e["detail"]) for e in gone["baseline_events"]] == [
+        ("declared", {"prior_jumps": 50, "before_on": "2025-01-01", "source": "manual"}),
+        ("corrected", {
+            "from": {"prior_jumps": 50, "before_on": "2025-01-01"},
+            "to": {"prior_jumps": 55, "before_on": "2025-02-01"},
+        }),
+        ("removed", {"from": {"prior_jumps": 55, "before_on": "2025-02-01"}}),
+    ]  # fmt: skip
+    # A correction based on the removed declaration conflicts; a new one is fine.
+    late = api.call(
+        "PUT", "/history/baseline", owner,
+        {"prior_jumps": 1, "before_on": "2025-02-01", "version": 2},
+    )  # fmt: skip
+    assert late.status_code == 409
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 1, "before_on": "2025-02-01"})  # fmt: skip
+
+
+def test_baseline_rules(api: Api) -> None:
+    owner = api.accounts.session()
+    future = api.call(
+        "PUT", "/history/baseline", owner, {"prior_jumps": 1, "before_on": "2026-11-05"}
+    )
+    assert future.status_code == 422
+    assert future.json() == {"detail": "baseline_date_in_future"}
+    # Today anywhere (UTC+14) is accepted.
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 1, "before_on": "2026-11-04"})  # fmt: skip
+    too_many = api.call(
+        "GET", "/history/baseline/preview", owner, prior_jumps=100_001, before_on="2026-01-01"
+    )  # fmt: skip
+    assert too_many.status_code == 422
+
+
+def test_breakdowns_derive_only_from_detailed_entries(api: Api) -> None:
+    owner = api.accounts.session()
+    venue, merged = api.venue(), api.venue()
+    place = api.place(owner)
+    main = api.component(owner, "Navigator")
+    api.component(owner, "Never jumped")
+    api.jump(owner, "2026-10-01", venue_id=venue["id"], jump_type="freefly",
+             component_ids=[main])  # fmt: skip
+    api.jump(owner, "2026-10-02", venue_id=merged["id"], jump_type="freefly")
+    api.jump(owner, "2025-03-02", place_id=place, component_ids=[main])
+    # A baseline adds no gear use or dated activity.
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 300, "before_on": "2026-01-01"})  # fmt: skip
+    api.ok(
+        "POST", f"/directory/venues/{merged['id']}/merge", api.reviewer,
+        {"into": venue["id"]},
+    )  # fmt: skip
+
+    h = api.history(owner)
+    assert (h["first_jump_on"], h["last_jump_on"]) == ("2025-03-02", "2026-10-02")
+    assert {t["jump_type"]: t["jumps"] for t in h["by_type"]} == {
+        "freefly": 2,
+        "belly": 1,
+    }
+    assert [(x["location"]["kind"], x["location"]["id"], x["jumps"]) for x in h["by_location"]] == [
+        ("venue", venue["id"], 2),  # the merged venue counts under the one that remains
+        ("place", place, 1),
+    ]  # fmt: skip
+    assert [(u["component"]["label"], u["jumps"], u["last_on"]) for u in h["by_component"]] == [
+        ("Navigator", 2, "2026-10-01"),
+    ]  # fmt: skip
+    months = {m["month"]: m["jumps"] for m in h["months"]}
+    assert months["2026-10"] == 2 and sum(months.values()) == 2  # 2025-03 is older
+    assert h["totals"]["lifetime"] == 302
+
+
+def test_owner_only_and_writes_need_a_confirmed_email(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    api.jump(owner, "2026-10-01")
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 9, "before_on": "2026-01-01"})  # fmt: skip
+    seen = api.history(other)
+    assert seen["totals"]["recorded"] == 0 and seen["baseline"] is None
+    assert seen["baseline_events"] == []
+
+    unverified = api.accounts.session(verified=False)
+    assert api.history(unverified)["totals"]["recorded"] == 0
+    refused = api.call(
+        "PUT",
+        "/history/baseline",
+        unverified,
+        {"prior_jumps": 1, "before_on": "2026-01-01"},
+    )
+    assert refused.status_code == 403
+    assert api.call("GET", "/history").status_code == 401
+
+
+def test_summaries_read_one_snapshot_and_the_pool_is_left_as_it_was() -> None:
+    stores = sql_history_store_factory(engine)
+    with stores() as store:
+        assert isinstance(store, SqlHistoryStore)
+        store.snapshot()
+        level = store._s.execute(text("SHOW transaction_isolation")).scalar_one()
+        assert level == "repeatable read"
+    with stores() as store:
+        assert isinstance(store, SqlHistoryStore)
+        level = store._s.execute(text("SHOW transaction_isolation")).scalar_one()
+        assert level == "read committed"

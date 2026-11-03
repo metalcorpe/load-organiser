@@ -23,6 +23,9 @@ from app.skydiver.gear.api import create_router as create_gear_router
 from app.skydiver.gear.service import GearService
 from app.skydiver.gear.store import sql_gear_store_factory
 from app.skydiver.health import utc_now
+from app.skydiver.history.api import create_router as create_history_router
+from app.skydiver.history.service import HistoryService
+from app.skydiver.history.store import sql_history_store_factory
 from app.skydiver.identity.api import client_ip_resolver
 from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.mail import FileOutboxMailer, SmtpMailer
@@ -113,6 +116,12 @@ logbook_service = LogbookService(
     directory=directory_service,
 )
 
+history_service = HistoryService(
+    stores=sql_history_store_factory(engine),
+    clock=utc_now,
+    directory=directory_service,
+)
+
 
 def create_app(*, include_legacy: bool) -> FastAPI:
     """Compose the API. The beta namespace is always mounted; legacy only on request.
@@ -157,6 +166,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_logbook_router(
             service=lambda: logbook_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_history_router(
+            service=lambda: history_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

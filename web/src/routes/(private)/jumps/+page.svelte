@@ -24,6 +24,7 @@
 		{data.page.recorded_total === 1 ? 'jump' : 'jumps'} recorded here. This counts the entries you
 		logged, not your lifetime total.
 	</p>
+	<p><a href="/history">History and totals</a></p>
 	{#if data.page.items.length === 0}
 		<p class="hint">
 			{data.older ? 'No older entries.' : 'No jumps yet. Add your first one; no gear or history is needed.'}

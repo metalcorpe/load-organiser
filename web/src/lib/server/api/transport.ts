@@ -180,7 +180,15 @@ export const OPERATIONS = {
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
-	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] }
+	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
+	getHistory: { method: 'GET', path: `${BETA}/history`, maxBodyBytes: 1024 * 1024 },
+	previewBaseline: {
+		method: 'GET',
+		path: `${BETA}/history/baseline/preview`,
+		query: ['prior_jumps', 'before_on']
+	},
+	setBaseline: { method: 'PUT', path: `${BETA}/history/baseline` },
+	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

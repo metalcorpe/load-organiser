@@ -62,6 +62,17 @@ Backend `backend/app/skydiver/logbook/` (`/api/skydiver/v1/jumps`); web `/jumps`
 
 Limits: the 2,000-jump cap is counted without a lock, so only the owner's own simultaneous saves could overshoot it slightly (the same accepted trade-off as gear). Measurements are stored as entered; no normalized value is derived yet. No offline drafts: leaving the form loses unsaved input.
 
+#### Implemented in #154 (beta)
+
+Backend `backend/app/skydiver/history/` (`/api/skydiver/v1/history`, `/history/baseline`, `/history/baseline/preview`); web `/history` and `/history/baseline` under Records. Owner-only throughout.
+
+- Totals derive only from distinct detailed entries. Without a baseline only the recorded count is shown, labelled as recorded; the highest jump number is never used as a total.
+- Optional baseline: B jumps (0–100,000) completed before date D (not after the latest local date anywhere). Lifetime total = B + entries dated on or after D. Entries before D are listed as already within B. If they outnumber B, the page flags it and shows no combined total; the jump is not rejected and B is not changed. Deleting an entry never rewrites B.
+- Changing B/D goes through a read-only preview (now vs with the change) before saving. A declaration carries no version; a correction or removal carries the version it was based on, taken from the first preview, so an older tab's save answers 409 `edit_conflict` instead of overwriting. Declarations, corrections (from/to) and removals are kept as private provenance (latest 50 shown) and remain after removal.
+- Summaries, read from one REPEATABLE READ snapshot so the figures agree: first/last recorded date, recorded jumps per calendar month for the last 12 months (ending with the month of the latest local date anywhere, so a not-yet-started month can briefly show 0), and counts by type, by place (venues merged since count under the venue that remains) and by component explicitly recorded on a jump, with its last use. The baseline adds no month, place, type or gear use.
+
+Not built here: export/restore of the baseline and its provenance (#155); sharing anything (#156/#157). Nothing is used as currency or eligibility evidence.
+
 ### Gear entry
 
 Require component type and a user-readable label. Manufacturer, model, serial, manufacture date, acquisition date/method, and service dates are optional to support unknown/borrowed/older equipment. Serial text preserves case, leading zeros, punctuation, and the original value; it is not a public unique ownership key.

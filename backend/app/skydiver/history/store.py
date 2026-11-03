@@ -1,0 +1,199 @@
+"""SQL adapter for personal history (#154). Every query is owner-scoped."""
+
+import uuid
+from collections.abc import Iterator
+from contextlib import contextmanager
+from datetime import date, datetime
+from typing import Any
+
+from sqlalchemy import Engine, delete, func, select, update
+from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlmodel import Session, col
+
+from app.skydiver.access.policy import Actor
+from app.skydiver.access.sql import owned
+from app.skydiver.directory.service import EditConflict
+from app.skydiver.directory.tables import SkydiverProvisionalPlace
+from app.skydiver.gear.tables import SkydiverComponent
+from app.skydiver.history.policy import Baseline
+from app.skydiver.history.service import (
+    BaselineEvent,
+    BaselineState,
+    HistoryStore,
+    StoreFactory,
+)
+from app.skydiver.history.tables import SkydiverJumpBaseline, SkydiverJumpBaselineEvent
+from app.skydiver.logbook.service import ComponentRef, PlaceRef
+from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpComponent
+
+B, E = SkydiverJumpBaseline, SkydiverJumpBaselineEvent
+J, L, C = SkydiverJump, SkydiverJumpComponent, SkydiverComponent
+
+
+class SqlHistoryStore:
+    def __init__(self, session: Session) -> None:
+        self._s = session
+
+    def snapshot(self) -> None:
+        # Must precede every query in the transaction; summaries then agree.
+        self._s.connection(execution_options={"isolation_level": "REPEATABLE READ"})
+
+    # baseline ---------------------------------------------------------------------
+
+    def baseline(self, actor: Actor) -> BaselineState | None:
+        row = self._s.execute(owned(B, actor)).scalars().first()
+        if row is None:
+            return None
+        return BaselineState(
+            row.prior_jumps, row.before_on, row.source, row.version, row.updated_at
+        )
+
+    def insert_baseline(self, actor: Actor, base: Baseline, now: datetime) -> bool:
+        result = self._s.execute(
+            pg_insert(B)
+            .values(
+                owner_person_id=actor.person_id,
+                prior_jumps=base.prior_jumps,
+                before_on=base.before_on,
+                source="manual",
+                version=1,
+                created_at=now,
+                updated_at=now,
+            )
+            .on_conflict_do_nothing(index_elements=["owner_person_id"])
+            .returning(col(B.owner_person_id))
+        )
+        return result.first() is not None
+
+    def update_baseline(
+        self, actor: Actor, base: Baseline, now: datetime, *, expected_version: int
+    ) -> None:
+        result = self._s.execute(
+            update(B)
+            .where(col(B.owner_person_id) == actor.person_id)
+            .where(col(B.version) == expected_version)
+            .values(
+                prior_jumps=base.prior_jumps,
+                before_on=base.before_on,
+                version=expected_version + 1,
+                updated_at=now,
+            )
+        )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
+
+    def delete_baseline(self, actor: Actor, *, expected_version: int) -> None:
+        result = self._s.execute(
+            delete(B)
+            .where(col(B.owner_person_id) == actor.person_id)
+            .where(col(B.version) == expected_version)
+        )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
+
+    def record(
+        self, actor: Actor, kind: str, detail: dict[str, Any], now: datetime
+    ) -> None:
+        self._s.add(
+            E(owner_person_id=actor.person_id, kind=kind, detail=detail, created_at=now)
+        )
+        self._s.flush()
+
+    def events(self, actor: Actor, limit: int) -> list[BaselineEvent]:
+        rows = self._s.execute(
+            owned(E, actor).order_by(col(E.id).desc()).limit(limit)
+        ).scalars()
+        return [BaselineEvent(r.kind, dict(r.detail), r.created_at) for r in rows][::-1]
+
+    # derived from detailed entries ----------------------------------------------
+
+    def count_jumps(self, actor: Actor) -> int:
+        return self._count(actor, None)
+
+    def count_before(self, actor: Actor, on: date) -> int:
+        return self._count(actor, on)
+
+    def _count(self, actor: Actor, before: date | None) -> int:
+        query = (
+            select(func.count())
+            .select_from(J)
+            .where(col(J.owner_person_id) == actor.person_id)
+        )
+        if before is not None:
+            query = query.where(col(J.jumped_on) < before)
+        return int(self._s.execute(query).scalar_one())
+
+    def date_range(self, actor: Actor) -> tuple[date | None, date | None]:
+        first, last = self._s.execute(
+            select(func.min(col(J.jumped_on)), func.max(col(J.jumped_on))).where(
+                col(J.owner_person_id) == actor.person_id
+            )
+        ).one()
+        return first, last
+
+    def per_day_since(self, actor: Actor, start: date) -> dict[date, int]:
+        rows = self._s.execute(
+            select(col(J.jumped_on), func.count())
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.jumped_on) >= start)
+            .group_by(col(J.jumped_on))
+        )
+        return {on: int(n) for on, n in rows.all()}
+
+    def by_type(self, actor: Actor) -> list[tuple[str, int]]:
+        rows = self._s.execute(
+            select(col(J.jump_type), func.count())
+            .where(col(J.owner_person_id) == actor.person_id)
+            .group_by(col(J.jump_type))
+        )
+        return [(kind, int(n)) for kind, n in rows.all()]
+
+    def by_location(
+        self, actor: Actor
+    ) -> list[tuple[uuid.UUID | None, uuid.UUID | None, int]]:
+        rows = self._s.execute(
+            select(col(J.venue_id), col(J.place_id), func.count())
+            .where(col(J.owner_person_id) == actor.person_id)
+            .group_by(col(J.venue_id), col(J.place_id))
+        )
+        return [(v, p, int(n)) for v, p, n in rows.all()]
+
+    def by_component(self, actor: Actor) -> list[tuple[ComponentRef, int, date]]:
+        rows = self._s.execute(
+            select(C, func.count(), func.max(col(J.jumped_on)))
+            .join(L, col(L.component_id) == col(C.id))
+            .join(J, col(J.id) == col(L.jump_id))
+            .where(col(C.owner_person_id) == actor.person_id)
+            .where(col(J.owner_person_id) == actor.person_id)
+            .group_by(col(C.id))
+        )
+        return [
+            (ComponentRef(c.id, c.kind, c.label, c.archived_at is not None), int(n), on)
+            for c, n, on in rows.all()
+        ]
+
+    def places(self, actor: Actor, place_ids: list[uuid.UUID]) -> list[PlaceRef]:
+        if not place_ids:
+            return []
+        rows = self._s.execute(
+            owned(SkydiverProvisionalPlace, actor).where(
+                col(SkydiverProvisionalPlace.id).in_(place_ids)
+            )
+        ).scalars()
+        return [PlaceRef(r.id, r.name, r.country) for r in rows]
+
+
+def sql_history_store_factory(engine: Engine) -> StoreFactory:
+    """Unit of work: commit on success, roll back on any exception."""
+
+    @contextmanager
+    def stores() -> Iterator[HistoryStore]:
+        with Session(engine) as session:
+            try:
+                yield SqlHistoryStore(session)
+            except BaseException:
+                session.rollback()
+                raise
+            session.commit()
+
+    return stores
