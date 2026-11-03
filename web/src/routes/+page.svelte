@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { COUNTRY_OPTIONS } from '#lib/countries.ts';
@@ -30,10 +31,13 @@
 	Listings come from reviewed sources; registration and availability are always with the organizer.
 </p>
 
-<form method="GET" class="form filters" role="search" data-sveltekit-keepfocus>
+<!-- defaultValue keeps text typed before hydration; the key resets the fields when
+     the URL's filters change (Clear filters, back/forward). -->
+{#key page.url.search}
+<form method="GET" class="form filters" role="search">
 	<div class="field wide">
 		<label for="q">Title or organizer</label>
-		<input id="q" name="q" type="search" maxlength="80" value={data.filters.q} autocomplete="off" />
+		<input id="q" name="q" type="search" maxlength="80" defaultValue={data.filters.q} autocomplete="off" />
 	</div>
 	<div class="field">
 		<label for="category">Type</label>
@@ -75,17 +79,18 @@
 	</div>
 	<div class="field">
 		<label for="from">Ending on or after</label>
-		<input id="from" name="from" type="date" value={data.filters.from} />
+		<input id="from" name="from" type="date" defaultValue={data.filters.from} />
 	</div>
 	<div class="field">
 		<label for="to">Starting on or before</label>
-		<input id="to" name="to" type="date" value={data.filters.to} />
+		<input id="to" name="to" type="date" defaultValue={data.filters.to} />
 	</div>
 	<div class="form-actions wide">
 		<button class="button" type="submit">Show listings</button>
 		{#if filtered}<a href="/">Clear filters</a>{/if}
 	</div>
 </form>
+{/key}
 
 {#if !data.result.ok}
 	<p class="form-error" role="alert">{listingMessage(data.result.reason)}</p>

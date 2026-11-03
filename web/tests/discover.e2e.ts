@@ -85,6 +85,11 @@ test.describe('discover board', () => {
 		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
 		const results = page.getByRole('list', { name: 'Listings' });
 		await expect(results.getByRole('link')).toHaveText([listing.title]);
+		// Clearing filters resets the form fields, not just the URL.
+		await page.getByRole('link', { name: 'Clear filters' }).first().click();
+		await expect(page).toHaveURL(`${ORIGIN}/`);
+		await expect(page.getByLabel('Title or organizer')).toHaveValue('');
+		await expect(page.getByLabel('Country')).toHaveValue('');
 
 		// A filter that excludes it gives an honest empty state.
 		await page.goto(`/?q=${base}&discipline=wingsuit`);
