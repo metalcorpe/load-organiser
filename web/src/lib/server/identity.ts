@@ -160,10 +160,14 @@ export async function requestPasswordReset(
 export async function resetPassword(
 	api: ApiTransport,
 	token: string,
-	newPassword: string
+	newPassword: string,
+	clientIp: string
 ): Promise<Outcome<null>> {
 	return done(
-		await call(api, 'resetPassword', { body: { token, new_password: newPassword } })
+		await call(api, 'resetPassword', {
+			body: { token, new_password: newPassword },
+			clientIp
+		})
 	);
 }
 

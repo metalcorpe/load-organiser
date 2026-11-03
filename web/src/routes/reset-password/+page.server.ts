@@ -13,7 +13,7 @@ export const load: PageServerLoad = ({ url }) => ({
 });
 
 export const actions: Actions = {
-	default: async ({ request, url, cookies, locals }) => {
+	default: async ({ request, url, cookies, locals, getClientAddress }) => {
 		const token = url.searchParams.get('token') ?? '';
 		if (!TOKEN.test(token)) return fail(400, { error: 'invalid_or_expired_token' });
 		const data = await request.formData();
@@ -22,7 +22,12 @@ export const actions: Actions = {
 		if (!password) return fail(400, { error: 'missing' });
 		if (password !== confirm) return fail(400, { error: 'password_mismatch' });
 
-		const outcome = await resetPassword(createRequestApi(), token, password);
+		const outcome = await resetPassword(
+			createRequestApi(),
+			token,
+			password,
+			getClientAddress()
+		);
 		if (!outcome.ok) return fail(statusFor(outcome.reason), { error: outcome.reason });
 
 		// Every session was revoked by the API, including any held by this browser.

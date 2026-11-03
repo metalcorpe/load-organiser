@@ -8,6 +8,7 @@ import random
 import re
 import uuid
 from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
@@ -22,8 +23,13 @@ from sqlmodel import Session, col
 from app.core.db import engine
 from app.models import User
 from app.skydiver.adapters import AppPasswordHasher
+from app.skydiver.identity import policy
 from app.skydiver.identity.api import PREFIX, client_ip_resolver, create_router
-from app.skydiver.identity.service import IdentityConfig, IdentityService
+from app.skydiver.identity.service import (
+    IdentityConfig,
+    IdentityService,
+    RegistrationClosed,
+)
 from app.skydiver.identity.store import sql_store_factory
 from app.skydiver.identity.tables import SkydiverAccountToken, SkydiverSession
 
@@ -646,3 +652,165 @@ def test_registration_treats_ambiguous_legacy_email_as_existing(
             text('SELECT count(*) FROM "user" WHERE lower(email) = :e'), {"e": lower}
         ).scalar_one()
     assert count == 2
+
+
+# ------------------------------------------------------- review fixes (#172)
+
+
+def _service(*, max_accounts: int = 10_000) -> IdentityService:
+    return IdentityService(
+        stores=sql_store_factory(engine),
+        hasher=AppPasswordHasher(),
+        mailer=Outbox(),
+        clock=lambda: datetime.now(UTC),
+        config=IdentityConfig(
+            web_origin="https://web.example",
+            registration_open=True,
+            max_accounts=max_accounts,
+        ),
+    )
+
+
+def _user_count() -> int:
+    with Session(engine) as session:
+        return int(session.execute(text('SELECT count(*) FROM "user"')).scalar_one())
+
+
+def test_hash_upgrade_on_login_keeps_other_sessions(harness: Harness) -> None:
+    address = email()
+    harness.register(address)
+    first = harness.login(address)
+    # Simulate a session issued while the stored hash was still legacy bcrypt.
+    legacy = bcrypt.hashpw(GOOD_PASSWORD.encode(), bcrypt.gensalt(rounds=4)).decode()
+    with Session(engine) as session:
+        user = session.execute(
+            select(User).where(col(User.email) == address)
+        ).scalar_one()
+        user.hashed_password = legacy
+        session.add(user)
+        session.execute(
+            text(
+                "UPDATE skydiver_session SET credential_marker = :m "
+                "WHERE account_id = :a"
+            ),
+            {"m": policy.credential_marker(legacy), "a": user.id},
+        )
+        session.commit()
+    assert harness.get("/session", first).status_code == 200
+
+    second = harness.login(address)  # upgrades bcrypt -> Argon2id
+    assert harness.get("/session", second).status_code == 200
+    assert harness.get("/session", first).status_code == 200
+
+
+def test_full_service_answers_alike_for_taken_and_unused_email(
+    harness: Harness,
+) -> None:
+    taken = email()
+    harness.register(taken)
+    harness.config["max_accounts"] = 0
+    answers = [
+        harness.post("/registrations", {"email": address, "password": GOOD_PASSWORD})
+        for address in (taken, email())
+    ]
+    assert [a.status_code for a in answers] == [403, 403]
+    assert answers[0].json() == answers[1].json()
+
+
+def test_registration_mail_to_one_address_is_limited(harness: Harness) -> None:
+    address = email()
+    harness.register(address)
+    for _ in range(5):
+        harness.ip = _random_ip()
+        harness.register(address)  # still a neutral 202
+    to_address = [m for m in harness.outbox.messages if m["to"] == address]
+    # The first registration consumed one of the three identifier slots.
+    assert len(to_address) == 3
+
+
+def test_reset_confirm_failures_are_throttled_per_ip(harness: Harness) -> None:
+    for _ in range(policy.RESET_CONFIRM_IP.limit):
+        bad = harness.post(
+            "/password-reset/confirm",
+            {"token": "x" * 43, "new_password": OTHER_PASSWORD},
+        )
+        assert bad.status_code == 400
+    blocked = harness.post(
+        "/password-reset/confirm", {"token": "x" * 43, "new_password": OTHER_PASSWORD}
+    )
+    assert blocked.status_code == 429
+    assert blocked.headers["retry-after"]
+
+    # Another client with a real link is unaffected.
+    address = email()
+    harness.ip = _random_ip()
+    harness.register(address)
+    harness.post("/password-reset", {"email": address})
+    token = harness.outbox.token_for(address, "/reset-password")
+    ok = harness.post(
+        "/password-reset/confirm", {"token": token, "new_password": OTHER_PASSWORD}
+    )
+    assert ok.status_code == 204
+
+
+def test_password_confirmation_shares_login_budget_for_mixed_case_email(
+    harness: Harness,
+) -> None:
+    stored = email().replace("jumper", "Jumper")
+    with Session(engine) as session:
+        session.add(
+            User(email=stored, hashed_password=AppPasswordHasher().hash(GOOD_PASSWORD))
+        )
+        session.commit()
+    secret = harness.login(stored.lower())
+    for _ in range(policy.LOGIN_PAIR.limit):
+        failed = harness.post(
+            "/sessions", {"email": stored.lower(), "password": OTHER_PASSWORD}
+        )
+        assert failed.status_code == 401
+    confirm = harness.post("/sessions/revoke-all", {"password": GOOD_PASSWORD}, secret)
+    assert confirm.status_code == 429
+
+
+def test_concurrent_registrations_same_email_create_one_account() -> None:
+    address = email()
+    service = _service()
+
+    def attempt(i: int) -> None:
+        service.register(
+            email=address,
+            password=GOOD_PASSWORD,
+            display_name=None,
+            client_ip=f"10.250.{i}.1",
+        )
+
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        list(pool.map(attempt, range(6)))  # re-raises any worker exception
+    with Session(engine) as session:
+        count = session.execute(
+            text('SELECT count(*) FROM "user" WHERE lower(email) = :e'), {"e": address}
+        ).scalar_one()
+    assert count == 1
+
+
+def test_concurrent_registrations_respect_account_cap() -> None:
+    service = _service(max_accounts=_user_count() + 1)
+    outcomes: list[str] = []
+
+    def attempt(i: int) -> None:
+        try:
+            service.register(
+                email=email(),
+                password=GOOD_PASSWORD,
+                display_name=None,
+                client_ip=f"10.251.{i}.1",
+            )
+            outcomes.append("created")
+        except RegistrationClosed:
+            outcomes.append("closed")
+
+    before = _user_count()
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        list(pool.map(attempt, range(6)))
+    assert sorted(outcomes) == ["closed"] * 5 + ["created"]
+    assert _user_count() == before + 1

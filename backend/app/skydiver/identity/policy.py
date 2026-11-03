@@ -35,6 +35,8 @@ LOGIN_IP = ThrottleRule("login_ip", 50, timedelta(minutes=15))
 RESET_IDENTIFIER = ThrottleRule("reset_identifier", 3, timedelta(hours=1))
 RESET_IP = ThrottleRule("reset_ip", 10, timedelta(hours=1))
 REGISTER_IP = ThrottleRule("register_ip", 10, timedelta(hours=1))
+REGISTER_IDENTIFIER = ThrottleRule("register_identifier", 3, timedelta(hours=1))
+RESET_CONFIRM_IP = ThrottleRule("reset_confirm_ip", 20, timedelta(hours=1))
 VERIFY_RESEND_ACCOUNT = ThrottleRule("verify_resend", 3, timedelta(hours=1))
 
 

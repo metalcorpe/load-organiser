@@ -40,7 +40,10 @@
 
 {#if data.sessionUnconfirmed}
 	<Notice title="Session not confirmed" tone="warn">
-		<p>The service could not be reached to confirm your session. Try again shortly.</p>
+		<p>
+			The service could not be reached to confirm your session. Try again shortly, or
+			<a href="/sign-out">sign out on this device</a>.
+		</p>
 	</Notice>
 {/if}
 

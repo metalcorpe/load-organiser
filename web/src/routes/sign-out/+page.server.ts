@@ -4,8 +4,9 @@ import { signOut } from '#lib/server/identity.ts';
 import { clearSession, readSessionSecret } from '#lib/server/session.ts';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = ({ locals }) => {
-	if (!locals.viewer) redirect(303, '/sign-in');
+export const load: PageServerLoad = ({ locals, cookies }) => {
+	// A cookie the API could not confirm (outage) is kept, so it must stay clearable.
+	if (!locals.viewer && !readSessionSecret(cookies)) redirect(303, '/sign-in');
 	return {};
 };
 

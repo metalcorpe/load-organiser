@@ -318,9 +318,13 @@ def create_router(
         status_code=status.HTTP_204_NO_CONTENT,
         dependencies=deps,
     )
-    def reset_password(body: ResetConfirmIn) -> Response:
+    def reset_password(body: ResetConfirmIn, request: Request) -> Response:
         try:
-            service().reset_password(token=body.token, new_password=body.new_password)
+            service().reset_password(
+                token=body.token,
+                new_password=body.new_password,
+                client_ip=client_ip(request),
+            )
         except IdentityError as error:
             return _problem(error)
         return Response(status_code=status.HTTP_204_NO_CONTENT, headers=NO_STORE)

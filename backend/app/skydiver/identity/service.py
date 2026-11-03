@@ -108,6 +108,16 @@ class IdentityStore(Protocol):
         expires_at: datetime,
     ) -> uuid.UUID: ...
     def set_session_marker(self, session_id: uuid.UUID, marker: str) -> None: ...
+    def carry_session_markers(
+        self, *, account_id: uuid.UUID, old_marker: str, new_marker: str, now: datetime
+    ) -> None:
+        """Re-mark the account's live sessions issued under `old_marker`."""
+        ...
+
+    def lock_registrations(self) -> None:
+        """Serialize registrations until the transaction ends."""
+        ...
+
     def find_session(self, secret_hash: str) -> StoredSession | None: ...
     def revoke_sessions(
         self,
@@ -253,8 +263,6 @@ class IdentityService:
         email = policy.normalize_email(email)
         name = (display_name or "").strip() or None
         now = self._clock()
-        # Hash before branching so both outcomes cost the same Argon2 work.
-        password_hash = self._hasher.hash(password)
         outbox = _Outbox([])
 
         with self._stores() as store:
@@ -262,10 +270,21 @@ class IdentityService:
             self._hit(store, policy.REGISTER_IP, now, client_ip)
             if not self._config.registration_open:
                 raise CommitThen(RegistrationClosed())
-            existing = store.email_in_use(email)
-            if not existing and store.count_accounts() >= self._config.max_accounts:
+            # Hash before branching so both outcomes cost the same Argon2 work, but
+            # only once the per-IP limit has admitted the request.
+            password_hash = self._hasher.hash(password)
+            # One registration at a time: the cap and the email check then see every
+            # committed account, and a same-email race cannot reach the unique index.
+            store.lock_registrations()
+            # The cap applies before the email lookup so a full service answers the
+            # same way for taken and unused addresses.
+            if store.count_accounts() >= self._config.max_accounts:
                 raise CommitThen(RegistrationClosed())
-            if existing:
+            if self._exceeded(store, policy.REGISTER_IDENTIFIER, now, email):
+                # Silent, like the reset identifier limit: bounds mail to one inbox.
+                return
+            self._hit(store, policy.REGISTER_IDENTIFIER, now, email)
+            if store.email_in_use(email):
                 outbox.add(
                     email,
                     f"{self._config.product_name}: sign-in help",
@@ -340,8 +359,15 @@ class IdentityService:
                 profile = store.lock_account(account.id, now)
                 current_hash = account.password_hash
                 if updated:
-                    # #170 compatibility: legacy bcrypt is upgraded to Argon2id.
+                    # #170 compatibility: legacy bcrypt is upgraded to Argon2id. Same
+                    # password, new encoding: live sessions must survive the rehash.
                     store.set_password_hash(account.id, updated)
+                    store.carry_session_markers(
+                        account_id=account.id,
+                        old_marker=policy.credential_marker(account.password_hash),
+                        new_marker=policy.credential_marker(updated),
+                        now=now,
+                    )
                     current_hash = updated
                 result = self._open_session(store, account, profile, now, current_hash)
         if failed or result is None:
@@ -377,11 +403,12 @@ class IdentityService:
         problem = policy.password_problem(new_password)
         if problem:
             raise PasswordRejected(problem)
-        new_hash = self._hasher.hash(new_password)
         now = self._clock()
         with self._stores() as store:
             account, _, session = self._authenticated(store, secret, now)
             self._confirm_password(store, account, current_password, now, client_ip)
+            # Hashed only after the session and current password are proven.
+            new_hash = self._hasher.hash(new_password)
             store.lock_account(account.id, now)
             store.set_password_hash(account.id, new_hash)
             # The current session survives the change; every other one is revoked.
@@ -437,13 +464,14 @@ class IdentityService:
             )
         self._flush(outbox, neutral=True)
 
-    def reset_password(self, *, token: str, new_password: str) -> None:
+    def reset_password(self, *, token: str, new_password: str, client_ip: str) -> None:
+        client_ip = policy.client_bucket(client_ip)
         problem = policy.password_problem(new_password)
         if problem:
             raise PasswordRejected(problem)
-        new_hash = self._hasher.hash(new_password)
         now = self._clock()
         with self._stores() as store:
+            self._check(store, policy.RESET_CONFIRM_IP, now, client_ip)
             consumed = store.consume_token(
                 token_hash=policy.hash_secret(token), purpose="reset_password", now=now
             )
@@ -455,7 +483,11 @@ class IdentityService:
                 # Issued to an address the account no longer uses.
                 or consumed.sent_to.lower() != account.email.lower()
             ):
-                raise InvalidToken()
+                # Only failures count, so a valid link is never refused.
+                self._hit(store, policy.RESET_CONFIRM_IP, now, client_ip)
+                raise CommitThen(InvalidToken())
+            # Hashed only once a live token has been consumed.
+            new_hash = self._hasher.hash(new_password)
             store.lock_account(account.id, now)
             store.set_password_hash(account.id, new_hash)
             # The reset link proved control of the inbox it was sent to.
@@ -525,10 +557,12 @@ class IdentityService:
         now: datetime,
         client_ip: str,
     ) -> None:
-        self._check(store, policy.LOGIN_PAIR, now, client_ip, account.email)
+        # Same key as login (normalised), so both share one failure budget.
+        identifier = policy.normalize_email(account.email)
+        self._check(store, policy.LOGIN_PAIR, now, client_ip, identifier)
         ok, _ = self._hasher.verify_and_update(password, account.password_hash)
         if not ok:
-            self._hit(store, policy.LOGIN_PAIR, now, client_ip, account.email)
+            self._hit(store, policy.LOGIN_PAIR, now, client_ip, identifier)
             raise CommitThen(ConfirmationFailed())
 
     def _verification_mail(

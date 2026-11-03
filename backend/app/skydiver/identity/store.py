@@ -27,6 +27,9 @@ from app.skydiver.identity.tables import (
     SkydiverThrottleEvent,
 )
 
+# Arbitrary fixed key for pg_advisory_xact_lock; unique within this database's code.
+_REGISTRATION_LOCK_KEY = 0x5B1E_7C2A_0145
+
 
 def _account(user: User) -> Account:
     return Account(
@@ -200,6 +203,22 @@ class SqlIdentityStore:
             .where(col(SkydiverSession.id) == session_id)
             .values(credential_marker=marker)
         )
+
+    def carry_session_markers(
+        self, *, account_id: uuid.UUID, old_marker: str, new_marker: str, now: datetime
+    ) -> None:
+        self._s.execute(
+            update(SkydiverSession)
+            .where(col(SkydiverSession.account_id) == account_id)
+            .where(col(SkydiverSession.credential_marker) == old_marker)
+            .where(col(SkydiverSession.revoked_at).is_(None))
+            .where(col(SkydiverSession.expires_at) > now)
+            .values(credential_marker=new_marker)
+        )
+
+    def lock_registrations(self) -> None:
+        # Transaction-scoped; released on commit or rollback.
+        self._s.execute(select(func.pg_advisory_xact_lock(_REGISTRATION_LOCK_KEY)))
 
     def find_session(self, secret_hash: str) -> StoredSession | None:
         s = (
