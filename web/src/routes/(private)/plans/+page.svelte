@@ -51,18 +51,18 @@
 				name="title"
 				required
 				maxlength="120"
-				value={data.start?.title ?? ''}
+				defaultValue={data.start?.title ?? ''}
 				autocomplete="off"
 			/>
 		</div>
 		<div class="dates">
 			<div class="field">
 				<label for="new-start">First day</label>
-				<input id="new-start" name="starts_on" type="date" required value={data.start?.startsOn ?? ''} />
+				<input id="new-start" name="starts_on" type="date" required defaultValue={data.start?.startsOn ?? ''} />
 			</div>
 			<div class="field">
 				<label for="new-end">Last day</label>
-				<input id="new-end" name="ends_on" type="date" required value={data.start?.endsOn ?? ''} />
+				<input id="new-end" name="ends_on" type="date" required defaultValue={data.start?.endsOn ?? ''} />
 			</div>
 		</div>
 		{#if !data.start && data.places.length > 0}
@@ -127,16 +127,16 @@
 						<input type="hidden" name="id" value={plan.id} />
 						<div class="field">
 							<label for="title-{plan.id}">Title</label>
-							<input id="title-{plan.id}" name="title" maxlength="120" value={plan.title} />
+							<input id="title-{plan.id}" name="title" maxlength="120" defaultValue={plan.title} />
 						</div>
 						<div class="dates">
 							<div class="field">
 								<label for="start-{plan.id}">First day</label>
-								<input id="start-{plan.id}" name="starts_on" type="date" value={plan.starts_on} />
+								<input id="start-{plan.id}" name="starts_on" type="date" defaultValue={plan.starts_on} />
 							</div>
 							<div class="field">
 								<label for="end-{plan.id}">Last day</label>
-								<input id="end-{plan.id}" name="ends_on" type="date" value={plan.ends_on} />
+								<input id="end-{plan.id}" name="ends_on" type="date" defaultValue={plan.ends_on} />
 							</div>
 						</div>
 						<div class="field">
