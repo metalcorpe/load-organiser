@@ -103,10 +103,14 @@ with psycopg.connect(host=os.environ['POSTGRES_SERVER'], port=os.environ['POSTGR
   in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' python -m app.initial_data"
 }
 
-# Lint/type gates cover the beta modules; legacy reference code is not gated (#146).
+# Lint/type gates cover the beta modules plus the legacy modules the beta imports
+# (app/models.py for User; app/core for settings and the engine). The rest of the
+# legacy backend is unmounted in the beta and not gated (decision 2026-11-03;
+# fixing it belongs to #166).
 BETA_PY="app/skydiver app/tests/skydiver tests/test_skydiver_health.py tests/test_skydiver_directory_policy.py \
 tests/test_skydiver_identity_policy.py tests/test_skydiver_access_policy.py tests/test_skydiver_opportunity_policy.py \
-app/main.py"
+app/main.py \
+app/models.py app/core"
 
 # --------------------------------------------------------------------- stages
 stage_backend() {
