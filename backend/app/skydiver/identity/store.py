@@ -30,6 +30,8 @@ from app.skydiver.identity.tables import (
     SkydiverThrottleEvent,
 )
 
+_UNIQUE_VIOLATION = "23505"
+
 
 def _account(user: User) -> Account:
     return Account(
@@ -255,8 +257,11 @@ class SqlIdentityStore:
                 display_name=display_name,
                 now=now,
             )
-        except IntegrityError:
+        except IntegrityError as error:
             attempt.rollback()
+            # Only a concurrent same-email insert is a lost race; anything else is a bug.
+            if getattr(error.orig, "sqlstate", None) != _UNIQUE_VIOLATION:
+                raise
             return None
         moved = self._s.execute(
             update(SkydiverRegistrationGate)

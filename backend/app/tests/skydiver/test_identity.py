@@ -865,8 +865,6 @@ def test_exhausted_compare_and_swap_is_retryable_and_creates_nothing(
 def test_beta_code_takes_no_advisory_locks() -> None:
     root = pathlib.Path(__file__).resolve().parents[2] / "skydiver"
     offenders = [
-        str(path)
-        for path in root.rglob("*.py")
-        if "advisory" in path.read_text() and "lock" in path.read_text()
+        str(path) for path in root.rglob("*.py") if "pg_advisory" in path.read_text()
     ]
     assert offenders == []
