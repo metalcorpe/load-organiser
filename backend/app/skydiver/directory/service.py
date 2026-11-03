@@ -220,6 +220,16 @@ class DirectoryService:
             venue=venue, replaced_id=venue_id if venue.id != venue_id else None
         )
 
+    def public_venues(self, venue_ids: list[uuid.UUID]) -> dict[uuid.UUID, Venue]:
+        """Merge-resolved public venues for these IDs, in one session; others omitted."""
+        found: dict[uuid.UUID, Venue] = {}
+        with self._stores() as store:
+            for venue_id in venue_ids:
+                venue = self._resolve(store, venue_id)
+                if venue is not None and venue.status in PUBLIC_STATUSES:
+                    found[venue_id] = venue
+        return found
+
     # -- reviewer -----------------------------------------------------------------
 
     def reviewer_venue(

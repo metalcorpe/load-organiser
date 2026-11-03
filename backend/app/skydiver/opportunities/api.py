@@ -304,7 +304,7 @@ def _public_provider(provider: Provider) -> ProviderOut:
     )
 
 
-def _public(item: Opportunity) -> OpportunityOut:
+def opportunity_out(item: Opportunity) -> OpportunityOut:
     row, provider, venue = item.row, item.provider, item.venue
     assert row.registration_url and row.source_url and row.checked_on
     return OpportunityOut(
@@ -481,7 +481,7 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return OpportunityPageOut(
-            items=[_public(i) for i in page.items], next_cursor=page.next_cursor
+            items=[opportunity_out(i) for i in page.items], next_cursor=page.next_cursor
         )
 
     @router.get(
@@ -498,7 +498,8 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return OpportunityDetailOut(
-            opportunity=_public(resolved.value), replaced_id=resolved.replaced_id
+            opportunity=opportunity_out(resolved.value),
+            replaced_id=resolved.replaced_id,
         )
 
     @router.get(

@@ -566,6 +566,24 @@ export type PlaceOut = {
 };
 
 /**
+ * PlaceRefOut
+ */
+export type PlaceRefOut = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
  * PlaceUpdateIn
  */
 export type PlaceUpdateIn = {
@@ -577,6 +595,126 @@ export type PlaceUpdateIn = {
      * Name
      */
     name?: string | null;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * PlanIn
+ */
+export type PlanIn = {
+    /**
+     * Ends On
+     */
+    ends_on: string;
+    /**
+     * Note
+     */
+    note?: string | null;
+    /**
+     * Opportunity Id
+     */
+    opportunity_id?: string | null;
+    /**
+     * Place Id
+     */
+    place_id?: string | null;
+    /**
+     * Starts On
+     */
+    starts_on: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * PlanOut
+ *
+ * A private dated plan. Never shared, never a jump or presence record.
+ */
+export type PlanOut = {
+    /**
+     * Ends On
+     */
+    ends_on: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Note
+     */
+    note: string | null;
+    /**
+     * Current public listing; null when unlinked or no longer public.
+     */
+    opportunity: OpportunityOut | null;
+    /**
+     * Opportunity Id
+     *
+     * Linked listing as stored; see `opportunity` for its state.
+     */
+    opportunity_id: string | null;
+    place: PlaceRefOut | null;
+    /**
+     * Place Id
+     */
+    place_id: string | null;
+    /**
+     * Starts On
+     */
+    starts_on: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    venue: VenueRefOut | null;
+    /**
+     * Venue Id
+     */
+    venue_id: string | null;
+};
+
+/**
+ * PlanUpdateIn
+ */
+export type PlanUpdateIn = {
+    /**
+     * Ends On
+     */
+    ends_on?: string | null;
+    /**
+     * Note
+     */
+    note?: string | null;
+    /**
+     * Opportunity Id
+     */
+    opportunity_id?: string | null;
+    /**
+     * Place Id
+     */
+    place_id?: string | null;
+    /**
+     * Starts On
+     */
+    starts_on?: string | null;
+    /**
+     * Title
+     */
+    title?: string | null;
     /**
      * Venue Id
      */
@@ -1034,6 +1172,48 @@ export type ReviewerVenueOut = {
      * Updated At
      */
     updated_at: string;
+};
+
+/**
+ * SavedOut
+ *
+ * A private bookmark. Saving is not registration, attendance or interest.
+ */
+export type SavedOut = {
+    /**
+     * Current public listing; null once it is no longer public.
+     */
+    opportunity: OpportunityOut | null;
+    /**
+     * Opportunity Id
+     *
+     * The ID that was saved.
+     */
+    opportunity_id: string;
+    /**
+     * Saved At
+     */
+    saved_at: string;
+    /**
+     * Title
+     *
+     * The listing title when it was saved.
+     */
+    title: string;
+};
+
+/**
+ * SavedStateOut
+ */
+export type SavedStateOut = {
+    /**
+     * Opportunity Id
+     */
+    opportunity_id: string;
+    /**
+     * Saved At
+     */
+    saved_at: string;
 };
 
 /**
@@ -2894,6 +3074,206 @@ export type UpdatePlaceResponses = {
 
 export type UpdatePlaceResponse = UpdatePlaceResponses[keyof UpdatePlaceResponses];
 
+export type ListPlansData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/plans';
+};
+
+export type ListPlansErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListPlansError = ListPlansErrors[keyof ListPlansErrors];
+
+export type ListPlansResponses = {
+    /**
+     * Response Listplans
+     *
+     * Successful Response
+     */
+    200: Array<PlanOut>;
+};
+
+export type ListPlansResponse = ListPlansResponses[keyof ListPlansResponses];
+
+export type CreatePlanData = {
+    body: PlanIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/plans';
+};
+
+export type CreatePlanErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreatePlanError = CreatePlanErrors[keyof CreatePlanErrors];
+
+export type CreatePlanResponses = {
+    /**
+     * Successful Response
+     */
+    201: PlanOut;
+};
+
+export type CreatePlanResponse = CreatePlanResponses[keyof CreatePlanResponses];
+
+export type DeletePlanData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Plan Id
+         */
+        plan_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/plans/{plan_id}';
+};
+
+export type DeletePlanErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type DeletePlanError = DeletePlanErrors[keyof DeletePlanErrors];
+
+export type DeletePlanResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeletePlanResponse = DeletePlanResponses[keyof DeletePlanResponses];
+
+export type UpdatePlanData = {
+    body: PlanUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Plan Id
+         */
+        plan_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/plans/{plan_id}';
+};
+
+export type UpdatePlanErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdatePlanError = UpdatePlanErrors[keyof UpdatePlanErrors];
+
+export type UpdatePlanResponses = {
+    /**
+     * Successful Response
+     */
+    200: PlanOut;
+};
+
+export type UpdatePlanResponse = UpdatePlanResponses[keyof UpdatePlanResponses];
+
 export type GetProviderData = {
     body?: never;
     path: {
@@ -2935,6 +3315,215 @@ export type GetProviderResponses = {
 };
 
 export type GetProviderResponse = GetProviderResponses[keyof GetProviderResponses];
+
+export type ListSavedData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/saved';
+};
+
+export type ListSavedErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListSavedError = ListSavedErrors[keyof ListSavedErrors];
+
+export type ListSavedResponses = {
+    /**
+     * Response Listsaved
+     *
+     * Successful Response
+     */
+    200: Array<SavedOut>;
+};
+
+export type ListSavedResponse = ListSavedResponses[keyof ListSavedResponses];
+
+export type UnsaveOpportunityData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/saved/{opportunity_id}';
+};
+
+export type UnsaveOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UnsaveOpportunityError = UnsaveOpportunityErrors[keyof UnsaveOpportunityErrors];
+
+export type UnsaveOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type UnsaveOpportunityResponse = UnsaveOpportunityResponses[keyof UnsaveOpportunityResponses];
+
+export type GetSavedData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/saved/{opportunity_id}';
+};
+
+export type GetSavedErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetSavedError = GetSavedErrors[keyof GetSavedErrors];
+
+export type GetSavedResponses = {
+    /**
+     * Successful Response
+     */
+    200: SavedStateOut;
+};
+
+export type GetSavedResponse = GetSavedResponses[keyof GetSavedResponses];
+
+export type SaveOpportunityData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/saved/{opportunity_id}';
+};
+
+export type SaveOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SaveOpportunityError = SaveOpportunityErrors[keyof SaveOpportunityErrors];
+
+export type SaveOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    200: SavedStateOut;
+    /**
+     * Created
+     */
+    201: SavedStateOut;
+};
+
+export type SaveOpportunityResponse = SaveOpportunityResponses[keyof SaveOpportunityResponses];
 
 export type SearchVenuesData = {
     body?: never;

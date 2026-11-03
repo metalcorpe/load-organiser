@@ -296,19 +296,36 @@ class OpportunityService:
 
     def public_opportunity(self, opportunity_id: uuid.UUID) -> Resolved[Opportunity]:
         """Ended opportunities stay readable by ID, labelled ended; drafts do not."""
+        found = self.public_opportunities([opportunity_id])[opportunity_id]
+        if found is None:
+            raise NotFound()
+        return found
+
+    def public_opportunities(
+        self, opportunity_ids: list[uuid.UUID]
+    ) -> dict[uuid.UUID, Resolved[Opportunity] | None]:
+        """Current public state of each ID (None when not public), in one session."""
         now = self._clock()
+        found: dict[uuid.UUID, Resolved[Opportunity] | None] = {}
         with self._stores() as store:
-            row = store.get_opportunity(opportunity_id)
-            hops = 0
-            while row is not None and (target := row.duplicate_of_id) is not None:
-                hops += 1
-                row = (
-                    store.get_opportunity(target) if hops <= MAX_REDIRECT_HOPS else None
+            for opportunity_id in opportunity_ids:
+                row = store.get_opportunity(opportunity_id)
+                hops = 0
+                while row is not None and (target := row.duplicate_of_id) is not None:
+                    hops += 1
+                    row = (
+                        store.get_opportunity(target)
+                        if hops <= MAX_REDIRECT_HOPS
+                        else None
+                    )
+                if row is None or row.status not in PUBLIC_STATUSES:
+                    found[opportunity_id] = None
+                    continue
+                found[opportunity_id] = Resolved(
+                    self._public(store, row, now),
+                    opportunity_id if row.id != opportunity_id else None,
                 )
-            if row is None or row.status not in PUBLIC_STATUSES:
-                raise NotFound()
-            item = self._public(store, row, now)
-        return Resolved(item, opportunity_id if row.id != opportunity_id else None)
+        return found
 
     def public_provider(self, provider_id: uuid.UUID) -> Resolved[Provider]:
         with self._stores() as store:
