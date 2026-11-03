@@ -137,7 +137,9 @@ class JumpOut(BaseModel):
     other_gear: str | None
     notes: str | None
     links: list[str]
-    source: Literal["manual"]
+    source: Literal["manual", "restored"] = Field(
+        description="`restored`: re-created from the owner's own export."
+    )
     provenance: Literal["self_reported"] = "self_reported"
     version: int
     created_at: datetime
@@ -218,7 +220,7 @@ def _jump(view: JumpView) -> JumpOut:
         other_gear=j.other_gear,
         notes=j.notes,
         links=list(j.links),
-        source="manual",
+        source="restored" if j.source == "restored" else "manual",
         version=j.version,
         created_at=j.created_at,
         updated_at=j.updated_at,

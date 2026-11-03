@@ -109,7 +109,7 @@ with psycopg.connect(host=os.environ['POSTGRES_SERVER'], port=os.environ['POSTGR
 # fixing it belongs to #166).
 BETA_PY="app/skydiver app/tests/skydiver tests/test_skydiver_health.py tests/test_skydiver_directory_policy.py \
 tests/test_skydiver_identity_policy.py tests/test_skydiver_access_policy.py tests/test_skydiver_opportunity_policy.py \
-tests/test_skydiver_gear_policy.py tests/test_skydiver_logbook_policy.py tests/test_skydiver_history_policy.py \
+tests/test_skydiver_gear_policy.py tests/test_skydiver_logbook_policy.py tests/test_skydiver_history_policy.py tests/test_skydiver_records_policy.py \
 app/main.py \
 app/models.py app/core"
 

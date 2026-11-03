@@ -78,7 +78,9 @@ class SkydiverJump(SQLModel, table=True):
             "freefall_seconds IS NULL OR freefall_seconds >= 0",
             name="ck_skydiver_jump_freefall",
         ),
-        CheckConstraint("source IN ('manual')", name="ck_skydiver_jump_source"),
+        CheckConstraint(
+            "source IN ('manual', 'restored')", name="ck_skydiver_jump_source"
+        ),
         Index("ix_skydiver_jump_owner_date", "owner_person_id", "jumped_on", "id"),
         Index("ix_skydiver_jump_owner_number", "owner_person_id", "jump_number"),
     )

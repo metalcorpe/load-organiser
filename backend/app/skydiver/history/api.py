@@ -44,7 +44,7 @@ class BaselineIn(BaseModel):
 class BaselineOut(BaseModel):
     prior_jumps: int
     before_on: date
-    source: Literal["manual"]
+    source: Literal["manual", "restored"]
     version: int
     updated_at: datetime
 
@@ -85,7 +85,7 @@ class ComponentUseOut(BaseModel):
 
 
 class BaselineEventOut(BaseModel):
-    kind: Literal["declared", "corrected", "removed"]
+    kind: Literal["declared", "corrected", "removed", "from_export"]
     detail: dict[str, Any]
     created_at: datetime
 
@@ -136,7 +136,7 @@ def _history(s: Summary) -> HistoryOut:
         baseline=BaselineOut(
             prior_jumps=s.baseline.prior_jumps,
             before_on=s.baseline.before_on,
-            source="manual",
+            source="restored" if s.baseline.source == "restored" else "manual",
             version=s.baseline.version,
             updated_at=s.baseline.updated_at,
         )

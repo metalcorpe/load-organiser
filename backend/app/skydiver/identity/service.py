@@ -435,6 +435,24 @@ class IdentityService:
             if session is not None and session.revoked_at is None:
                 store.revoke_sessions(now=now, reason="logout", ids=[session.id])
 
+    def confirm_password(self, *, secret: str, password: str, client_ip: str) -> None:
+        """Fresh password confirmation for a sensitive operation (e.g. restore).
+
+        Shares the login failure budget; raises ConfirmationFailed or Throttled.
+        """
+        client_ip = policy.client_bucket(client_ip)
+        now = self._clock()
+        with self._stores() as store:
+            account, _, _ = self._authenticated(store, secret, now)
+            self._confirm_password(store, account, password, now, client_ip)
+
+    def consume(self, *, rule: ThrottleRule, key: str) -> None:
+        """Count one attempt against `rule` for `key`; Throttled when over the limit."""
+        now = self._clock()
+        with self._stores() as store:
+            self._check(store, rule, now, key)
+            self._hit(store, rule, now, key)
+
     def revoke_all(self, *, secret: str, password: str, client_ip: str) -> None:
         client_ip = policy.client_bucket(client_ip)
         now = self._clock()
