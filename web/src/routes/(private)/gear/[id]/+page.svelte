@@ -51,7 +51,7 @@
 <form method="POST" action="?/save" class="form" novalidate>
 	{#if errorFor('save')}<p class="form-error" role="alert">{errorFor('save')}</p>{/if}
 	<input type="hidden" name="version" value={c?.version ?? ''} />
-	{#if !c}<input type="hidden" name="client_key" value={data.createKey} />{/if}
+	{#if !c}<input type="hidden" name="client_key" value={echoed?.client_key || data.createKey} />{/if}
 	<div class="field">
 		<label for="kind">Type</label>
 		<select id="kind" name="kind" required>
@@ -186,7 +186,12 @@
 	{#if page.url.searchParams.get('service')}<p role="status">Service entry saved.</p>{/if}
 	<form method="POST" action="?/service" class="form">
 		{#if errorFor('service')}<p class="form-error" role="alert">{errorFor('service')}</p>{/if}
-		<input type="hidden" name="client_key" value={data.serviceKey} />
+		<input
+			type="hidden"
+			name="client_key"
+			value={(form && form.form === 'service' && 'values' in form && form.values?.client_key) ||
+				data.serviceKey}
+		/>
 		<div class="pair">
 			<div class="field">
 				<label for="service-kind">Service</label>
