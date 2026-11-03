@@ -4,6 +4,7 @@ The clock and mailer are fakes; everything else (router, service, SQL store,
 migration-created tables, #170 hashing) is the production code path.
 """
 
+import pathlib
 import random
 import re
 import uuid
@@ -28,6 +29,7 @@ from app.skydiver.identity.api import PREFIX, client_ip_resolver, create_router
 from app.skydiver.identity.service import (
     IdentityConfig,
     IdentityService,
+    RegistrationBusy,
     RegistrationClosed,
 )
 from app.skydiver.identity.store import sql_store_factory
@@ -816,3 +818,55 @@ def test_concurrent_registrations_respect_account_cap() -> None:
         list(pool.map(attempt, range(6)))
     assert sorted(outcomes) == ["closed"] * 5 + ["created"]
     assert _user_count() == before + 1
+
+
+def _gate_version() -> int:
+    with Session(engine) as session:
+        return int(
+            session.execute(
+                text("SELECT version FROM skydiver_registration_gate WHERE id = 1")
+            ).scalar_one()
+        )
+
+
+def test_registration_advances_the_gate_once_per_account() -> None:
+    service = _service()
+    before, users = _gate_version(), _user_count()
+    for i in range(2):
+        service.register(
+            email=email(), password=GOOD_PASSWORD, display_name=None,
+            client_ip=f"10.252.{i}.1",
+        )  # fmt: skip
+    # A repeated address sends sign-in help and creates nothing.
+    address = email()
+    for i in range(2):
+        service.register(
+            email=address, password=GOOD_PASSWORD, display_name=None,
+            client_ip=f"10.252.{i + 10}.1",
+        )  # fmt: skip
+    assert _gate_version() - before == _user_count() - users == 3
+
+
+def test_exhausted_compare_and_swap_is_retryable_and_creates_nothing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.skydiver.identity import service as identity_service
+
+    monkeypatch.setattr(identity_service, "REGISTRATION_ATTEMPTS", 0)
+    before = _user_count()
+    with pytest.raises(RegistrationBusy):
+        _service().register(
+            email=email(), password=GOOD_PASSWORD, display_name=None,
+            client_ip="10.253.0.1",
+        )  # fmt: skip
+    assert _user_count() == before
+
+
+def test_beta_code_takes_no_advisory_locks() -> None:
+    root = pathlib.Path(__file__).resolve().parents[2] / "skydiver"
+    offenders = [
+        str(path)
+        for path in root.rglob("*.py")
+        if "advisory" in path.read_text() and "lock" in path.read_text()
+    ]
+    assert offenders == []

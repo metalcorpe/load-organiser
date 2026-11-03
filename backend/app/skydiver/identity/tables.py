@@ -7,6 +7,7 @@ import uuid
 from datetime import datetime
 
 from sqlalchemy import (
+    BigInteger,
     CheckConstraint,
     Column,
     DateTime,
@@ -123,3 +124,21 @@ class SkydiverRoleGrant(SQLModel, table=True):
     account_id: uuid.UUID = Field(sa_column=_account_fk())
     role: str = Field(max_length=32)
     granted_at: datetime = Field(sa_column=_instant())
+
+
+class SkydiverRegistrationGate(SQLModel, table=True):
+    """Single-row version for compare-and-swap registration (no locks held).
+
+    A registration commits only if it advances `version` from the value it read
+    before counting accounts; a concurrent registration makes it re-read and retry.
+    """
+
+    __tablename__ = "skydiver_registration_gate"
+    __table_args__ = (
+        CheckConstraint("id = 1", name="skydiver_registration_gate_single"),
+    )
+
+    id: int = Field(default=1, primary_key=True)
+    version: int = Field(
+        sa_column=Column(BigInteger, nullable=False, server_default="0")
+    )
