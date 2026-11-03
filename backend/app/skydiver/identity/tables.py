@@ -6,7 +6,15 @@ All instants are UTC-aware (`timestamptz`), unlike the legacy naive operational 
 import uuid
 from datetime import datetime
 
-from sqlalchemy import CheckConstraint, Column, DateTime, ForeignKey, Index, String
+from sqlalchemy import (
+    CheckConstraint,
+    Column,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    UniqueConstraint,
+)
 from sqlmodel import Field, SQLModel
 
 
@@ -97,3 +105,21 @@ class SkydiverThrottleEvent(SQLModel, table=True):
     bucket: str = Field(max_length=32)
     key_hash: str = Field(sa_column=Column(String(64), nullable=False))
     created_at: datetime = Field(sa_column=_instant())
+
+
+class SkydiverRoleGrant(SQLModel, table=True):
+    """Server-granted beta role (#146). Never registration input or a legacy flag.
+
+    Granted by an operator; there is no API for it in the beta.
+    """
+
+    __tablename__ = "skydiver_role_grant"
+    __table_args__ = (
+        CheckConstraint("role IN ('reviewer')", name="skydiver_role_grant_role"),
+        UniqueConstraint("account_id", "role", name="uq_skydiver_role_grant"),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    account_id: uuid.UUID = Field(sa_column=_account_fk())
+    role: str = Field(max_length=32)
+    granted_at: datetime = Field(sa_column=_instant())

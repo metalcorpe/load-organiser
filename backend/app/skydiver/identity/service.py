@@ -89,6 +89,10 @@ class IdentityStore(Protocol):
         ...
 
     def set_password_hash(self, account_id: uuid.UUID, password_hash: str) -> None: ...
+    def roles_for(self, account_id: uuid.UUID) -> frozenset[str]:
+        """Server-granted beta roles. Legacy superuser status is not one."""
+        ...
+
     def mark_email_verified(
         self, account_id: uuid.UUID, address: str, now: datetime
     ) -> bool:
@@ -204,6 +208,8 @@ class Viewer:
     display_name: str | None
     email_verified: bool
     session_expires_at: datetime
+    # Authorization input for the access layer (#146); not part of the API contract.
+    roles: frozenset[str] = frozenset()
 
 
 @dataclass(frozen=True)
@@ -378,7 +384,9 @@ class IdentityService:
         now = self._clock()
         with self._stores() as store:
             account, profile, session = self._authenticated(store, secret, now)
-            return self._viewer(account, profile, session.expires_at)
+            return self._viewer(
+                account, profile, session.expires_at, store.roles_for(account.id)
+            )
 
     def logout(self, *, secret: str) -> None:
         """Idempotent: an unknown or already revoked secret is not an error."""
@@ -591,7 +599,11 @@ class IdentityService:
         )
 
     def _viewer(
-        self, account: Account, profile: Profile, expires_at: datetime
+        self,
+        account: Account,
+        profile: Profile,
+        expires_at: datetime,
+        roles: frozenset[str] = frozenset(),
     ) -> Viewer:
         return Viewer(
             account_id=account.id,
@@ -600,6 +612,7 @@ class IdentityService:
             display_name=profile.display_name,
             email_verified=profile.email_verified_at is not None,
             session_expires_at=expires_at,
+            roles=roles,
         )
 
     def _exceeded(

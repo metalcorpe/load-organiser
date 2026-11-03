@@ -23,6 +23,7 @@ from app.skydiver.identity.tables import (
     SkydiverAccountState,
     SkydiverAccountToken,
     SkydiverPerson,
+    SkydiverRoleGrant,
     SkydiverSession,
     SkydiverThrottleEvent,
 )
@@ -147,6 +148,14 @@ class SqlIdentityStore:
             .where(col(User.id) == account_id)
             .values(hashed_password=password_hash)
         )
+
+    def roles_for(self, account_id: uuid.UUID) -> frozenset[str]:
+        rows = self._s.execute(
+            select(col(SkydiverRoleGrant.role)).where(
+                col(SkydiverRoleGrant.account_id) == account_id
+            )
+        ).all()
+        return frozenset(row[0] for row in rows)
 
     def mark_email_verified(
         self, account_id: uuid.UUID, address: str, now: datetime
