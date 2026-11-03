@@ -146,4 +146,50 @@ describe('createApiTransport', () => {
 			body: { ok: 'é' }
 		});
 	});
+
+	it('sends JSON bodies, bearer credentials and the proxy-keyed client address only', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(201, { ok: true }));
+		await createApiTransport({ fetch, origin: ORIGIN, proxyKey: 'k'.repeat(32) }).request(
+			'createSession',
+			{ body: { email: 'e' }, bearer: 'secret', clientIp: '203.0.113.9' }
+		);
+		const [url, init] = fetch.mock.calls[0];
+		expect(url).toBe('https://api.example.org/api/skydiver/v1/auth/sessions');
+		expect(init.method).toBe('POST');
+		expect(init.body).toBe('{"email":"e"}');
+		const headers = new Headers(init.headers);
+		expect(headers.get('authorization')).toBe('Bearer secret');
+		expect(headers.get('content-type')).toBe('application/json');
+		expect(headers.get('x-organiser-client-ip')).toBe('203.0.113.9');
+		expect(headers.get('x-organiser-proxy-key')).toBe('k'.repeat(32));
+		expect(headers.has('cookie')).toBe(false);
+	});
+
+	it('omits the client address without a proxy key', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
+		await createApiTransport({ fetch, origin: ORIGIN }).request('getSession', {
+			bearer: 's',
+			clientIp: '203.0.113.9'
+		});
+		const headers = new Headers(fetch.mock.calls[0][1].headers);
+		expect(headers.has('x-organiser-client-ip')).toBe(false);
+	});
+
+	it('handles 204 and Retry-After', async () => {
+		const empty = vi.fn<FetchLike>(async () => new Response(null, { status: 204 }));
+		expect(await createApiTransport({ fetch: empty, origin: ORIGIN }).request('deleteSession')).toEqual({
+			kind: 'response',
+			status: 204,
+			body: null
+		});
+		const limited = vi.fn<FetchLike>(async () =>
+			json(429, { detail: 'too_many_attempts' }, { 'retry-after': '900' })
+		);
+		expect(await createApiTransport({ fetch: limited, origin: ORIGIN }).request('createSession')).toEqual({
+			kind: 'response',
+			status: 429,
+			body: { detail: 'too_many_attempts' },
+			retryAfter: 900
+		});
+	});
 });

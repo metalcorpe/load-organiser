@@ -141,11 +141,11 @@ test.describe('private routes deny anonymous access', () => {
 		expect(JSON.stringify(body)).not.toContain('Not available yet');
 	});
 
-	test('direct navigation lands on the sign-in explanation', async ({ page }) => {
+	test('direct navigation lands on the sign-in form', async ({ page }) => {
 		await page.goto('/records');
 		await expect(page).toHaveURL('/sign-in?returnTo=%2Frecords');
 		await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
-		await expect(page.getByText('Accounts are not available yet')).toBeVisible();
+		await expect(page.getByText('Sign in to continue to the page you asked for.')).toBeVisible();
 		await expect(page.getByRole('heading', { name: 'Records' })).toHaveCount(0);
 	});
 
@@ -168,5 +168,26 @@ test.describe('upstream failure (API origin points at a closed port)', () => {
 		expect(response?.status()).toBe(200);
 		await expect(page.getByTestId('health')).toHaveAttribute('data-state', 'unreachable');
 		await expect(page.getByRole('heading', { name: 'API unreachable' })).toBeVisible();
+	});
+
+	test('a session the API cannot confirm can still be signed out', async ({ request }) => {
+		const cookie = `__Host-organiser_session=${'a'.repeat(43)}`;
+		// Not bounced to /sign-in: the unconfirmed cookie is kept, so it must be clearable.
+		const form = await request.get('/sign-out', { headers: { cookie }, maxRedirects: 0 });
+		expect(form.status()).toBe(200);
+
+		const signOut = await request.post('/sign-out', {
+			headers: {
+				cookie,
+				accept: 'text/html',
+				origin: 'http://127.0.0.1:4174',
+				'content-type': 'application/x-www-form-urlencoded'
+			},
+			data: '',
+			maxRedirects: 0
+		});
+		expect(signOut.status()).toBe(303);
+		expect(signOut.headers()['location']).toBe('/sign-in?notice=signed-out-unconfirmed');
+		expect(signOut.headers()['set-cookie']).toMatch(/__Host-organiser_session=;.*Max-Age=0/i);
 	});
 });

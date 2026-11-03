@@ -5,7 +5,7 @@
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
 	import type { LayoutProps } from './$types';
 
-	let { children }: LayoutProps = $props();
+	let { data, children }: LayoutProps = $props();
 </script>
 
 <svelte:head>
@@ -18,12 +18,22 @@
 <header>
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
+	<span class="account">
+		{#if data.viewer}
+			<a href="/profile" data-testid="current-account">{data.viewer.displayName ?? data.viewer.email}</a>
+		{:else}
+			<a href="/sign-in">Sign in</a>
+		{/if}
+	</span>
 </header>
 
 <AppNav />
 
 <main id="main" tabindex="-1">
-	{@render children()}
+	<!-- A different account (or none) remounts the page: no component state carries over. -->
+	{#key data.viewer?.accountId ?? 'anonymous'}
+		{@render children()}
+	{/key}
 </main>
 
 <footer>
@@ -61,6 +71,21 @@
 		color: var(--fg);
 		font-weight: 750;
 		text-decoration: none;
+	}
+
+	.account {
+		margin-left: auto;
+		min-width: 0;
+	}
+
+	.account a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		max-width: 14rem;
 	}
 
 	.badge {

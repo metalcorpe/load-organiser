@@ -17,6 +17,11 @@ export function safeReturnPath(raw: string | null | undefined): string | null {
 		return null;
 	}
 	if (url.origin !== PLACEHOLDER_ORIGIN) return null;
+	// Dot segments can normalise to a protocol-relative path ('/.//evil.example'),
+	// so the *result* must also be a single-slash, backslash-free path.
+	if (!url.pathname.startsWith('/') || url.pathname.startsWith('//') || url.pathname.includes('\\')) {
+		return null;
+	}
 	return `${url.pathname}${url.search}`;
 }
 

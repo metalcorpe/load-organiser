@@ -5,6 +5,16 @@ export type ClientOptions = {
 };
 
 /**
+ * Accepted
+ */
+export type Accepted = {
+    /**
+     * Status
+     */
+    status?: 'accepted';
+};
+
+/**
  * HealthStatus
  */
 export type HealthStatus = {
@@ -27,6 +37,629 @@ export type HealthStatus = {
      */
     status: 'ok' | 'unavailable';
 };
+
+/**
+ * LoginIn
+ */
+export type LoginIn = {
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Password
+     */
+    password: string;
+};
+
+/**
+ * PasswordChangeIn
+ */
+export type PasswordChangeIn = {
+    /**
+     * Current Password
+     */
+    current_password: string;
+    /**
+     * New Password
+     */
+    new_password: string;
+};
+
+/**
+ * PasswordConfirmIn
+ */
+export type PasswordConfirmIn = {
+    /**
+     * Password
+     */
+    password: string;
+};
+
+/**
+ * Problem
+ */
+export type Problem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * RegisterIn
+ */
+export type RegisterIn = {
+    /**
+     * Display Name
+     */
+    display_name?: string | null;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Password
+     */
+    password: string;
+};
+
+/**
+ * ResetConfirmIn
+ */
+export type ResetConfirmIn = {
+    /**
+     * New Password
+     */
+    new_password: string;
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
+ * ResetRequestIn
+ */
+export type ResetRequestIn = {
+    /**
+     * Email
+     */
+    email: string;
+};
+
+/**
+ * SessionOut
+ */
+export type SessionOut = {
+    /**
+     * Session Secret
+     *
+     * Opaque; store only in an HttpOnly cookie.
+     */
+    session_secret: string;
+    viewer: ViewerOut;
+};
+
+/**
+ * TokenIn
+ */
+export type TokenIn = {
+    /**
+     * Token
+     */
+    token: string;
+};
+
+/**
+ * ViewerOut
+ */
+export type ViewerOut = {
+    /**
+     * Account Id
+     */
+    account_id: string;
+    /**
+     * Display Name
+     */
+    display_name: string | null;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Email Verified
+     */
+    email_verified: boolean;
+    /**
+     * Person Id
+     */
+    person_id: string;
+    /**
+     * Session Expires At
+     */
+    session_expires_at: string;
+};
+
+export type ResendVerificationData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/email-verification';
+};
+
+export type ResendVerificationErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type ResendVerificationError = ResendVerificationErrors[keyof ResendVerificationErrors];
+
+export type ResendVerificationResponses = {
+    /**
+     * Successful Response
+     */
+    202: Accepted;
+};
+
+export type ResendVerificationResponse = ResendVerificationResponses[keyof ResendVerificationResponses];
+
+export type ConfirmEmailData = {
+    body: TokenIn;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/email-verification/confirm';
+};
+
+export type ConfirmEmailErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type ConfirmEmailError = ConfirmEmailErrors[keyof ConfirmEmailErrors];
+
+export type ConfirmEmailResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ConfirmEmailResponse = ConfirmEmailResponses[keyof ConfirmEmailResponses];
+
+export type ChangePasswordData = {
+    body: PasswordChangeIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/password';
+};
+
+export type ChangePasswordErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type ChangePasswordError = ChangePasswordErrors[keyof ChangePasswordErrors];
+
+export type ChangePasswordResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ChangePasswordResponse = ChangePasswordResponses[keyof ChangePasswordResponses];
+
+export type RequestPasswordResetData = {
+    body: ResetRequestIn;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/password-reset';
+};
+
+export type RequestPasswordResetErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type RequestPasswordResetError = RequestPasswordResetErrors[keyof RequestPasswordResetErrors];
+
+export type RequestPasswordResetResponses = {
+    /**
+     * Successful Response
+     */
+    202: Accepted;
+};
+
+export type RequestPasswordResetResponse = RequestPasswordResetResponses[keyof RequestPasswordResetResponses];
+
+export type ResetPasswordData = {
+    body: ResetConfirmIn;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/password-reset/confirm';
+};
+
+export type ResetPasswordErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
+
+export type ResetPasswordResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ResetPasswordResponse = ResetPasswordResponses[keyof ResetPasswordResponses];
+
+export type RegisterData = {
+    body: RegisterIn;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/registrations';
+};
+
+export type RegisterErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type RegisterError = RegisterErrors[keyof RegisterErrors];
+
+export type RegisterResponses = {
+    /**
+     * Successful Response
+     */
+    202: Accepted;
+};
+
+export type RegisterResponse = RegisterResponses[keyof RegisterResponses];
+
+export type DeleteSessionData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/session';
+};
+
+export type DeleteSessionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type DeleteSessionError = DeleteSessionErrors[keyof DeleteSessionErrors];
+
+export type DeleteSessionResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteSessionResponse = DeleteSessionResponses[keyof DeleteSessionResponses];
+
+export type GetSessionData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/session';
+};
+
+export type GetSessionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type GetSessionError = GetSessionErrors[keyof GetSessionErrors];
+
+export type GetSessionResponses = {
+    /**
+     * Successful Response
+     */
+    200: ViewerOut;
+};
+
+export type GetSessionResponse = GetSessionResponses[keyof GetSessionResponses];
+
+export type CreateSessionData = {
+    body: LoginIn;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/sessions';
+};
+
+export type CreateSessionErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type CreateSessionError = CreateSessionErrors[keyof CreateSessionErrors];
+
+export type CreateSessionResponses = {
+    /**
+     * Successful Response
+     */
+    201: SessionOut;
+};
+
+export type CreateSessionResponse = CreateSessionResponses[keyof CreateSessionResponses];
+
+export type RevokeAllSessionsData = {
+    body: PasswordConfirmIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/sessions/revoke-all';
+};
+
+export type RevokeAllSessionsErrors = {
+    /**
+     * Bad Request
+     */
+    400: Problem;
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+    /**
+     * Too Many Requests
+     */
+    429: Problem;
+    /**
+     * Service Unavailable
+     */
+    503: Problem;
+};
+
+export type RevokeAllSessionsError = RevokeAllSessionsErrors[keyof RevokeAllSessionsErrors];
+
+export type RevokeAllSessionsResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RevokeAllSessionsResponse = RevokeAllSessionsResponses[keyof RevokeAllSessionsResponses];
 
 export type GetHealthData = {
     body?: never;

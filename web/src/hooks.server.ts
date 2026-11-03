@@ -1,4 +1,6 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit/hooks';
+import { APP_ORIGIN } from '$app/env/private';
+import { isUnsafeMethod, originAllowed } from '#lib/server/origin-check.ts';
 import { isPrivateRoute, resolveViewer } from '#lib/server/viewer.ts';
 import { signInPath } from '#lib/safe-return.ts';
 
@@ -18,7 +20,21 @@ function withSecurityHeaders(response: Response): Response {
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	event.locals.viewer = resolveViewer();
+	if (
+		isUnsafeMethod(event.request.method) &&
+		!originAllowed(event.request.headers.get('origin'), APP_ORIGIN)
+	) {
+		return withSecurityHeaders(
+			new Response('Cross-origin request refused', {
+				status: 403,
+				headers: { 'content-type': 'text/plain; charset=utf-8' }
+			})
+		);
+	}
+
+	const resolution = await resolveViewer(event);
+	event.locals.viewer = resolution.viewer;
+	event.locals.sessionUnconfirmed = resolution.unconfirmed;
 
 	// Deny anonymous private requests before any load runs. Page server loads run in
 	// parallel with layout loads, so the (private) layout guard alone cannot stop a
@@ -33,7 +49,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		);
 	}
 
-	return withSecurityHeaders(await resolve(event));
+	const response = withSecurityHeaders(await resolve(event));
+	// Set centrally so every account-changing response, including action redirects, carries it.
+	if (event.locals.clearSiteCache) response.headers.set('clear-site-data', '"cache"');
+	return response;
 };
 
 export const handleError: HandleServerError = ({ kind, error }) => {

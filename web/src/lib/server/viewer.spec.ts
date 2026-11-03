@@ -2,15 +2,11 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { isRedirect } from '@sveltejs/kit';
 import { describe, expect, it } from 'vitest';
-import { isPrivateRoute, requireViewer, resolveViewer } from './viewer.ts';
+import { isPrivateRoute, requireViewer } from './viewer.ts';
 
 const PRIVATE_ROUTES = join(import.meta.dirname, '../../routes/(private)');
 
 describe('private route guard', () => {
-	it('has no fabricated viewer before #145', () => {
-		expect(resolveViewer()).toBeNull();
-	});
-
 	it('identifies private route ids', () => {
 		expect(isPrivateRoute('/(private)/records')).toBe(true);
 		expect(isPrivateRoute('/status')).toBe(false);

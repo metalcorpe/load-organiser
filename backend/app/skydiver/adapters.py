@@ -1,6 +1,7 @@
 """Concrete adapters for skydiver ports. Imported only by the composition root."""
 
 import logging
+import secrets
 import threading
 import time
 from collections.abc import Callable
@@ -70,3 +71,29 @@ def cached_probe(
             return last[1]
 
     return cached
+
+
+class AppPasswordHasher:
+    """#170 hashing (Argon2id, legacy bcrypt verification and upgrade) as a port."""
+
+    def __init__(self) -> None:
+        from app.core import security
+
+        self._security = security
+        # A real Argon2 hash to verify against when no account exists.
+        self._decoy = security.get_password_hash(secrets.token_urlsafe(24))
+
+    def hash(self, password: str) -> str:
+        return self._security.get_password_hash(password)
+
+    def verify_and_update(
+        self, password: str, stored_hash: str
+    ) -> tuple[bool, str | None]:
+        try:
+            return self._security.verify_and_update_password(password, stored_hash)
+        except Exception as exc:  # unknown/corrupt hash format: fail closed
+            logger.warning("Password hash not verifiable: %s", type(exc).__name__)
+            return False, None
+
+    def burn(self, password: str) -> None:
+        self._security.verify_password(password, self._decoy)
