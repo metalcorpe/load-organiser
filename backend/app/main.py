@@ -30,29 +30,9 @@ def custom_generate_unique_id(route: APIRoute) -> str:
 if settings.SENTRY_DSN and settings.ENVIRONMENT != "local":
     sentry_sdk.init(dsn=str(settings.SENTRY_DSN), enable_tracing=True)
 
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
-    generate_unique_id_function=custom_generate_unique_id,
-)
-
-# Set all CORS enabled origins
-if settings.all_cors_origins:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=settings.all_cors_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-
-app.include_router(api_router, prefix=settings.API_V1_STR)
-
-# Skydiver beta namespace (/api/skydiver/v1); legacy isolation is #146.
 health_probe = cached_probe(
     sql_database_probe(create_probe_engine(str(settings.SQLALCHEMY_DATABASE_URI)))
 )
-app.include_router(create_skydiver_router(database_probe=health_probe))
 
 
 def _identity_mailer() -> Mailer | None:
@@ -84,9 +64,43 @@ identity_service = IdentityService(
         product_name=settings.PROJECT_NAME,
     ),
 )
-app.include_router(
-    create_identity_router(
-        service=lambda: identity_service,
-        client_ip=client_ip_resolver(settings.SKYDIVER_WEB_PROXY_KEY),
+
+
+def create_app(*, include_legacy: bool) -> FastAPI:
+    """Compose the API. The beta namespace is always mounted; legacy only on request.
+
+    `include_legacy` must come from `settings.LEGACY_API_ENABLED`, which settings
+    refuse outside ENVIRONMENT=local, or from tests of the legacy prototype (#146).
+    """
+    local = settings.ENVIRONMENT == "local"
+    application = FastAPI(
+        title=settings.PROJECT_NAME,
+        generate_unique_id_function=custom_generate_unique_id,
+        # Outside local nothing but the beta allowlist is served, not even docs.
+        openapi_url=f"{settings.API_V1_STR}/openapi.json" if local else None,
+        docs_url="/docs" if local else None,
+        redoc_url="/redoc" if local else None,
     )
-)
+    application.include_router(create_skydiver_router(database_probe=health_probe))
+    application.include_router(
+        create_identity_router(
+            service=lambda: identity_service,
+            client_ip=client_ip_resolver(settings.SKYDIVER_WEB_PROXY_KEY),
+        )
+    )
+    if include_legacy:
+        # The beta API is called server-to-server by the web app and needs no CORS;
+        # only the legacy React client calls the API from a browser.
+        if settings.all_cors_origins:
+            application.add_middleware(
+                CORSMiddleware,
+                allow_origins=settings.all_cors_origins,
+                allow_credentials=True,
+                allow_methods=["*"],
+                allow_headers=["*"],
+            )
+        application.include_router(api_router, prefix=settings.API_V1_STR)
+    return application
+
+
+app = create_app(include_legacy=settings.LEGACY_API_ENABLED)

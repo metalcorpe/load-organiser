@@ -14,7 +14,9 @@ Frontend, built with Docker, with routes handled based on the path: http://local
 
 Backend, JSON based web API based on OpenAPI: http://localhost:8000
 
-Automatic interactive documentation with Swagger UI (from the OpenAPI backend): http://localhost:8000/docs
+Automatic interactive documentation with Swagger UI (from the OpenAPI backend): http://localhost:8000/docs (served only with `ENVIRONMENT=local`)
+
+> The legacy `/api/v1` prototype used by the React frontend is not mounted by default (#146). For local reference work, set `LEGACY_API_ENABLED=true` with `ENVIRONMENT=local`; the backend refuses it in any other environment. See [the API boundary](docs/product/api-boundary.md).
 
 Adminer, database web administration: http://localhost:8080
 

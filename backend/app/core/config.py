@@ -106,6 +106,18 @@ class Settings(BaseSettings):
             raise ValueError("SKYDIVER_WEB_PROXY_KEY is required outside local")
         return self
 
+    # Legacy /api/v1 prototype (operations, generic items, user administration,
+    # JWT login/signup). Reference/rollback only: never mounted outside local (#146).
+    LEGACY_API_ENABLED: bool = False
+
+    @model_validator(mode="after")
+    def _legacy_api_is_local_only(self) -> Self:
+        if self.LEGACY_API_ENABLED and self.ENVIRONMENT != "local":
+            raise ValueError(
+                "LEGACY_API_ENABLED is only allowed when ENVIRONMENT=local"
+            )
+        return self
+
     @model_validator(mode="after")
     def _outbox_is_local_only(self) -> Self:
         if self.SKYDIVER_MAIL_OUTBOX_DIR and self.ENVIRONMENT != "local":
