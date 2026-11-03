@@ -39,6 +39,18 @@ export type AliasOut = {
 };
 
 /**
+ * DuplicateIn
+ */
+export type DuplicateIn = {
+    /**
+     * Of
+     *
+     * The listing that remains.
+     */
+    of: string;
+};
+
+/**
  * EventOut
  */
 export type EventOut = {
@@ -106,6 +118,381 @@ export type MergeIn = {
      * The venue that remains.
      */
     into: string;
+};
+
+/**
+ * OpportunityCreateIn
+ *
+ * New listings are drafts; publish with the status operation.
+ */
+export type OpportunityCreateIn = {
+    /**
+     * Audience
+     */
+    audience?: Array<string> | null;
+    /**
+     * Category
+     */
+    category: 'event' | 'boogie' | 'camp' | 'course';
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Disciplines
+     */
+    disciplines?: Array<string> | null;
+    /**
+     * Ends On
+     */
+    ends_on?: string | null;
+    /**
+     * Languages
+     */
+    languages?: Array<string> | null;
+    /**
+     * Location Note
+     */
+    location_note?: string | null;
+    /**
+     * Prerequisites
+     */
+    prerequisites?: string | null;
+    /**
+     * Price Amount
+     */
+    price_amount?: number | string | null;
+    /**
+     * Price Basis
+     */
+    price_basis?: 'per_person' | 'per_jump' | 'per_day' | null;
+    /**
+     * Price Currency
+     */
+    price_currency?: string | null;
+    /**
+     * Price Note
+     */
+    price_note?: string | null;
+    /**
+     * Provider Id
+     */
+    provider_id: string;
+    /**
+     * Registration Url
+     */
+    registration_url?: string | null;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
+    /**
+     * Starts On
+     */
+    starts_on?: string | null;
+    /**
+     * Summary
+     */
+    summary?: string | null;
+    /**
+     * Time Zone
+     */
+    time_zone?: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * OpportunityDetailOut
+ */
+export type OpportunityDetailOut = {
+    opportunity: OpportunityOut;
+    /**
+     * Replaced Id
+     *
+     * Set when the requested listing was consolidated into this one.
+     */
+    replaced_id: string | null;
+};
+
+/**
+ * OpportunityOut
+ *
+ * A sourced dated opportunity. Not inventory: availability is not known here.
+ */
+export type OpportunityOut = {
+    /**
+     * Audience
+     *
+     * Empty: not stated.
+     */
+    audience: Array<'students' | 'licensed' | 'experienced'>;
+    /**
+     * Category
+     */
+    category: 'event' | 'boogie' | 'camp' | 'course';
+    /**
+     * Checked On
+     */
+    checked_on: string;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Disciplines
+     *
+     * Empty: not stated.
+     */
+    disciplines: Array<'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy'>;
+    /**
+     * Ended
+     *
+     * The end date has passed in `time_zone`.
+     */
+    ended: boolean;
+    /**
+     * Ends On
+     *
+     * Inclusive, in `time_zone`.
+     */
+    ends_on: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Languages
+     *
+     * ISO 639-1 codes. Empty: not stated.
+     */
+    languages: Array<string>;
+    /**
+     * Location Note
+     */
+    location_note: string | null;
+    /**
+     * Prerequisites
+     *
+     * As stated by the source.
+     */
+    prerequisites: string | null;
+    /**
+     * Price Amount
+     *
+     * Decimal string; null: not stated.
+     */
+    price_amount: string | null;
+    /**
+     * Price Basis
+     */
+    price_basis: 'per_person' | 'per_jump' | 'per_day' | null;
+    /**
+     * Price Currency
+     */
+    price_currency: string | null;
+    /**
+     * Price Note
+     */
+    price_note: string | null;
+    provider: ProviderRefOut;
+    /**
+     * Registration Url
+     *
+     * External registration or contact page.
+     */
+    registration_url: string;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string;
+    /**
+     * Starts On
+     *
+     * Null only while postponed without dates.
+     */
+    starts_on: string | null;
+    /**
+     * Status
+     */
+    status: 'published' | 'postponed' | 'cancelled';
+    /**
+     * Summary
+     */
+    summary: string | null;
+    /**
+     * Time Zone
+     *
+     * IANA zone of the schedule.
+     */
+    time_zone: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    venue: OpportunityVenueOut | null;
+};
+
+/**
+ * OpportunityPageOut
+ */
+export type OpportunityPageOut = {
+    /**
+     * Items
+     */
+    items: Array<OpportunityOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
+ * OpportunityStatusIn
+ */
+export type OpportunityStatusIn = {
+    /**
+     * Status
+     */
+    status: 'draft' | 'review' | 'published' | 'postponed' | 'cancelled' | 'archived';
+};
+
+/**
+ * OpportunityUpdateIn
+ */
+export type OpportunityUpdateIn = {
+    /**
+     * Audience
+     */
+    audience?: Array<string> | null;
+    /**
+     * Category
+     */
+    category?: 'event' | 'boogie' | 'camp' | 'course' | null;
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Disciplines
+     */
+    disciplines?: Array<string> | null;
+    /**
+     * Ends On
+     */
+    ends_on?: string | null;
+    /**
+     * Languages
+     */
+    languages?: Array<string> | null;
+    /**
+     * Location Note
+     */
+    location_note?: string | null;
+    /**
+     * Prerequisites
+     */
+    prerequisites?: string | null;
+    /**
+     * Price Amount
+     */
+    price_amount?: number | string | null;
+    /**
+     * Price Basis
+     */
+    price_basis?: 'per_person' | 'per_jump' | 'per_day' | null;
+    /**
+     * Price Currency
+     */
+    price_currency?: string | null;
+    /**
+     * Price Note
+     */
+    price_note?: string | null;
+    /**
+     * Provider Id
+     */
+    provider_id?: string | null;
+    /**
+     * Registration Url
+     */
+    registration_url?: string | null;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
+    /**
+     * Starts On
+     */
+    starts_on?: string | null;
+    /**
+     * Summary
+     */
+    summary?: string | null;
+    /**
+     * Time Zone
+     */
+    time_zone?: string | null;
+    /**
+     * Title
+     */
+    title?: string | null;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * OpportunityVenueOut
+ */
+export type OpportunityVenueOut = {
+    /**
+     * Closed
+     */
+    closed: boolean;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Locality
+     */
+    locality: string | null;
+    /**
+     * Name
+     */
+    name: string;
 };
 
 /**
@@ -204,6 +591,179 @@ export type Problem = {
 };
 
 /**
+ * ProviderCreateIn
+ */
+export type ProviderCreateIn = {
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Kind
+     */
+    kind: 'organization' | 'person';
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Publish
+     *
+     * False creates a draft.
+     */
+    publish?: boolean;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
+    /**
+     * Website Url
+     */
+    website_url?: string | null;
+};
+
+/**
+ * ProviderDetailOut
+ */
+export type ProviderDetailOut = {
+    provider: ProviderOut;
+    /**
+     * Replaced Id
+     *
+     * Set when the requested provider was merged into `provider`.
+     */
+    replaced_id: string | null;
+};
+
+/**
+ * ProviderMergeIn
+ */
+export type ProviderMergeIn = {
+    /**
+     * Into
+     *
+     * The provider that remains.
+     */
+    into: string;
+};
+
+/**
+ * ProviderOut
+ *
+ * A published organiser identity, as sourced. Not an endorsement or credential.
+ */
+export type ProviderOut = {
+    /**
+     * Checked On
+     */
+    checked_on: string;
+    /**
+     * Country
+     */
+    country: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'organization' | 'person';
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string;
+    /**
+     * Website Url
+     */
+    website_url: string | null;
+};
+
+/**
+ * ProviderRefOut
+ */
+export type ProviderRefOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'organization' | 'person';
+    /**
+     * Listed
+     *
+     * False when the provider has no public page.
+     */
+    listed: boolean;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * ProviderStatusIn
+ */
+export type ProviderStatusIn = {
+    /**
+     * Status
+     */
+    status: 'draft' | 'published' | 'archived';
+};
+
+/**
+ * ProviderUpdateIn
+ */
+export type ProviderUpdateIn = {
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Kind
+     */
+    kind?: 'organization' | 'person' | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
+    /**
+     * Website Url
+     */
+    website_url?: string | null;
+};
+
+/**
  * RegisterIn
  */
 export type RegisterIn = {
@@ -243,6 +803,178 @@ export type ResetRequestIn = {
      * Email
      */
     email: string;
+};
+
+/**
+ * ReviewerOpportunityOut
+ */
+export type ReviewerOpportunityOut = {
+    /**
+     * Audience
+     */
+    audience: Array<string>;
+    /**
+     * Category
+     */
+    category: 'event' | 'boogie' | 'camp' | 'course';
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Disciplines
+     */
+    disciplines: Array<string>;
+    /**
+     * Duplicate Of Id
+     */
+    duplicate_of_id: string | null;
+    /**
+     * Ends On
+     */
+    ends_on: string | null;
+    /**
+     * Events
+     */
+    events: Array<EventOut>;
+    /**
+     * Expires At
+     */
+    expires_at: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Languages
+     */
+    languages: Array<string>;
+    /**
+     * Location Note
+     */
+    location_note: string | null;
+    /**
+     * Prerequisites
+     */
+    prerequisites: string | null;
+    /**
+     * Price Amount
+     */
+    price_amount: string | null;
+    /**
+     * Price Basis
+     */
+    price_basis: string | null;
+    /**
+     * Price Currency
+     */
+    price_currency: string | null;
+    /**
+     * Price Note
+     */
+    price_note: string | null;
+    /**
+     * Provider Id
+     */
+    provider_id: string;
+    /**
+     * Registration Url
+     */
+    registration_url: string | null;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string | null;
+    /**
+     * Starts On
+     */
+    starts_on: string | null;
+    /**
+     * Status
+     */
+    status: 'draft' | 'review' | 'published' | 'postponed' | 'cancelled' | 'archived' | 'duplicate';
+    /**
+     * Summary
+     */
+    summary: string | null;
+    /**
+     * Time Zone
+     */
+    time_zone: string | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Venue Id
+     */
+    venue_id: string | null;
+};
+
+/**
+ * ReviewerProviderOut
+ */
+export type ReviewerProviderOut = {
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Country
+     */
+    country: string | null;
+    /**
+     * Events
+     */
+    events: Array<EventOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'organization' | 'person';
+    /**
+     * Merged Into Id
+     */
+    merged_into_id: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string | null;
+    /**
+     * Status
+     */
+    status: 'draft' | 'published' | 'archived' | 'merged';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Website Url
+     */
+    website_url: string | null;
 };
 
 /**
@@ -1035,6 +1767,476 @@ export type RevokeAllSessionsResponses = {
 
 export type RevokeAllSessionsResponse = RevokeAllSessionsResponses[keyof RevokeAllSessionsResponses];
 
+export type CreateOpportunityData = {
+    body: OpportunityCreateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/directory/opportunities';
+};
+
+export type CreateOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateOpportunityError = CreateOpportunityErrors[keyof CreateOpportunityErrors];
+
+export type CreateOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    201: ReviewerOpportunityOut;
+};
+
+export type CreateOpportunityResponse = CreateOpportunityResponses[keyof CreateOpportunityResponses];
+
+export type ReviewOpportunityData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/opportunities/{opportunity_id}';
+};
+
+export type ReviewOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ReviewOpportunityError = ReviewOpportunityErrors[keyof ReviewOpportunityErrors];
+
+export type ReviewOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerOpportunityOut;
+};
+
+export type ReviewOpportunityResponse = ReviewOpportunityResponses[keyof ReviewOpportunityResponses];
+
+export type UpdateOpportunityData = {
+    body: OpportunityUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/opportunities/{opportunity_id}';
+};
+
+export type UpdateOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateOpportunityError = UpdateOpportunityErrors[keyof UpdateOpportunityErrors];
+
+export type UpdateOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerOpportunityOut;
+};
+
+export type UpdateOpportunityResponse = UpdateOpportunityResponses[keyof UpdateOpportunityResponses];
+
+export type MarkOpportunityDuplicateData = {
+    body: DuplicateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/opportunities/{opportunity_id}/duplicate';
+};
+
+export type MarkOpportunityDuplicateErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type MarkOpportunityDuplicateError = MarkOpportunityDuplicateErrors[keyof MarkOpportunityDuplicateErrors];
+
+export type MarkOpportunityDuplicateResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerOpportunityOut;
+};
+
+export type MarkOpportunityDuplicateResponse = MarkOpportunityDuplicateResponses[keyof MarkOpportunityDuplicateResponses];
+
+export type SetOpportunityStatusData = {
+    body: OpportunityStatusIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/opportunities/{opportunity_id}/status';
+};
+
+export type SetOpportunityStatusErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SetOpportunityStatusError = SetOpportunityStatusErrors[keyof SetOpportunityStatusErrors];
+
+export type SetOpportunityStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerOpportunityOut;
+};
+
+export type SetOpportunityStatusResponse = SetOpportunityStatusResponses[keyof SetOpportunityStatusResponses];
+
+export type CreateProviderData = {
+    body: ProviderCreateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/directory/providers';
+};
+
+export type CreateProviderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateProviderError = CreateProviderErrors[keyof CreateProviderErrors];
+
+export type CreateProviderResponses = {
+    /**
+     * Successful Response
+     */
+    201: ReviewerProviderOut;
+};
+
+export type CreateProviderResponse = CreateProviderResponses[keyof CreateProviderResponses];
+
+export type ReviewProviderData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Provider Id
+         */
+        provider_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/providers/{provider_id}';
+};
+
+export type ReviewProviderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ReviewProviderError = ReviewProviderErrors[keyof ReviewProviderErrors];
+
+export type ReviewProviderResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerProviderOut;
+};
+
+export type ReviewProviderResponse = ReviewProviderResponses[keyof ReviewProviderResponses];
+
+export type UpdateProviderData = {
+    body: ProviderUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Provider Id
+         */
+        provider_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/providers/{provider_id}';
+};
+
+export type UpdateProviderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateProviderError = UpdateProviderErrors[keyof UpdateProviderErrors];
+
+export type UpdateProviderResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerProviderOut;
+};
+
+export type UpdateProviderResponse = UpdateProviderResponses[keyof UpdateProviderResponses];
+
+export type MergeProviderData = {
+    body: ProviderMergeIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Provider Id
+         */
+        provider_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/providers/{provider_id}/merge';
+};
+
+export type MergeProviderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type MergeProviderError = MergeProviderErrors[keyof MergeProviderErrors];
+
+export type MergeProviderResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerProviderOut;
+};
+
+export type MergeProviderResponse = MergeProviderResponses[keyof MergeProviderResponses];
+
+export type SetProviderStatusData = {
+    body: ProviderStatusIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Provider Id
+         */
+        provider_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/providers/{provider_id}/status';
+};
+
+export type SetProviderStatusErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SetProviderStatusError = SetProviderStatusErrors[keyof SetProviderStatusErrors];
+
+export type SetProviderStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerProviderOut;
+};
+
+export type SetProviderStatusResponse = SetProviderStatusResponses[keyof SetProviderStatusResponses];
+
 export type CreateVenueData = {
     body: VenueCreateIn;
     headers?: {
@@ -1367,6 +2569,134 @@ export type GetHealthResponses = {
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
 
+export type SearchOpportunitiesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Category
+         */
+        category?: 'event' | 'boogie' | 'camp' | 'course' | null;
+        /**
+         * Country
+         */
+        country?: string | null;
+        /**
+         * Discipline
+         */
+        discipline?: 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | null;
+        /**
+         * Audience
+         */
+        audience?: 'students' | 'licensed' | 'experienced' | null;
+        /**
+         * Provider
+         */
+        provider?: string | null;
+        /**
+         * Venue
+         */
+        venue?: string | null;
+        /**
+         * From
+         *
+         * Still running on or after this date.
+         */
+        from?: string | null;
+        /**
+         * To
+         *
+         * Starting on or before this date.
+         */
+        to?: string | null;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/opportunities';
+};
+
+export type SearchOpportunitiesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SearchOpportunitiesError = SearchOpportunitiesErrors[keyof SearchOpportunitiesErrors];
+
+export type SearchOpportunitiesResponses = {
+    /**
+     * Successful Response
+     */
+    200: OpportunityPageOut;
+};
+
+export type SearchOpportunitiesResponse = SearchOpportunitiesResponses[keyof SearchOpportunitiesResponses];
+
+export type GetOpportunityData = {
+    body?: never;
+    path: {
+        /**
+         * Opportunity Id
+         */
+        opportunity_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/opportunities/{opportunity_id}';
+};
+
+export type GetOpportunityErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetOpportunityError = GetOpportunityErrors[keyof GetOpportunityErrors];
+
+export type GetOpportunityResponses = {
+    /**
+     * Successful Response
+     */
+    200: OpportunityDetailOut;
+};
+
+export type GetOpportunityResponse = GetOpportunityResponses[keyof GetOpportunityResponses];
+
 export type ListPlacesData = {
     body?: never;
     headers?: {
@@ -1566,6 +2896,48 @@ export type UpdatePlaceResponses = {
 };
 
 export type UpdatePlaceResponse = UpdatePlaceResponses[keyof UpdatePlaceResponses];
+
+export type GetProviderData = {
+    body?: never;
+    path: {
+        /**
+         * Provider Id
+         */
+        provider_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/providers/{provider_id}';
+};
+
+export type GetProviderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetProviderError = GetProviderErrors[keyof GetProviderErrors];
+
+export type GetProviderResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProviderDetailOut;
+};
+
+export type GetProviderResponse = GetProviderResponses[keyof GetProviderResponses];
 
 export type SearchVenuesData = {
     body?: never;

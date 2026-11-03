@@ -105,7 +105,8 @@ with psycopg.connect(host=os.environ['POSTGRES_SERVER'], port=os.environ['POSTGR
 
 # Lint/type gates cover the beta modules; legacy reference code is not gated (#146).
 BETA_PY="app/skydiver app/tests/skydiver tests/test_skydiver_health.py tests/test_skydiver_directory_policy.py \
-tests/test_skydiver_identity_policy.py tests/test_skydiver_access_policy.py app/main.py"
+tests/test_skydiver_identity_policy.py tests/test_skydiver_access_policy.py tests/test_skydiver_opportunity_policy.py \
+app/main.py"
 
 # --------------------------------------------------------------------- stages
 stage_backend() {

@@ -1,6 +1,6 @@
 # Events, boogies, coaching, and schools board
 
-Status: feature proposal raised by the product owner. Discovery only; no implementation, participating organizers, accepted listings, or MVP commitment assumed.
+Status: feature proposal raised by the product owner. The provider and dated-opportunity backend is implemented by #149 (see [Implemented in #149](#implemented-in-149)); public pages and saves (#150), maintenance UI/submissions (#151) and real inventory are not. No participating organizers or accepted listings are assumed.
 
 Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. The [release brief](release-brief.md) proposes primary-source candidates and a review cadence. Real country inventory, reuse permissions and maintenance capacity remain unvalidated; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
 
@@ -85,3 +85,20 @@ Personal profile data can help suggest relevant activities or prepare an applica
 - Could sponsorship fund the board without obscuring relevance? Any promoted placement would need clear labeling; no revenue model is selected.
 
 Related: [F10 in the feature catalog](feature-catalog.md), [adoption strategy](adoption-strategy.md), and [needs discovery](needs-discovery.md).
+
+## Implemented in #149
+
+Backend only: `backend/app/skydiver/opportunities/`, API under `/api/skydiver/v1`. The board, detail pages and saves are #150.
+
+| Area | Behaviour |
+| --- | --- |
+| Provider | Person or organization offering an activity; distinct from venues. Name, kind, optional country and website, `source_url` + `checked_on` (required to publish). States `draft`, `published`, `archived`; `merged` only through a reviewed merge, which moves its listings to the survivor and keeps the old ID resolving. No account link, contact person, credential, affiliation or claim fields |
+| Opportunity | Category `event`, `boogie`, `camp` or `course` with one provider (organizer) and an optional public venue (merge-resolved when read; a venue filter also finds listings attached to venues merged into it). Country, optional location note, disciplines, audience (`students`, `licensed`, `experienced`), ISO 639-1 languages, summary, prerequisites as stated, optional price (amount + currency + basis `per_person`/`per_jump`/`per_day`, plus note) |
+| Schedule | Inclusive start/end calendar dates with an IANA location zone (`Europe/Madrid`, not `UTC` or offsets). Expiry is the end of the end date in that zone; ended listings leave search but stay readable by ID marked `ended`. Unknown dates are allowed only while postponed; they never expire and sort last |
+| Lifecycle | `draft` → `review` → `published` → `postponed`/`cancelled` → `archived`; archived can return to draft. Public: published, postponed, cancelled. Publishing requires source + last check, external registration/contact URL, a published provider, a public venue or location note, and dates (except postponed) |
+| Duplicates | A reviewer marks one listing a duplicate of another (final). Its ID resolves to the kept listing with `replaced_id`; the duplicate's source URL is recorded in the kept listing's history. A public listing cannot be consolidated into a non-public one. Nothing is merged automatically |
+| History | Every change is a reviewer-only event (`created`, `updated`, `rescheduled`, `status_changed`, `duplicate_of`, `provider_merged`, …) with the acting account. Public responses have a fixed field set with no account, history or internal state (tested) |
+| Not represented | Capacity, availability, waitlists, acceptance, bookings or payments; ongoing coach/school offers (beta decisions); organizer self-service; calendar export. A listing links out to `registration_url` only |
+
+No provider or opportunity data is shipped. Real inventory, source reuse review and maintenance effort are #151/#162 evidence.
+
