@@ -1,6 +1,6 @@
 # Gear serial numbers and ownership history
 
-Status: proposed extension of F04, prompted by the product owner's question about serial numbers and ownership records. Discovery only; not implemented or an agreed MVP requirement. It can provide individual value without dropzone adoption.
+Status: proposed extension of F04, prompted by the product owner's question about serial numbers and ownership records. The private inventory part selected for the beta is implemented by #152 (see [Implemented in #152](#implemented-in-152)); transfers, evidence uploads, cross-account matching and disputes are not. It can provide individual value without dropzone adoption.
 
 ## User need
 
@@ -84,3 +84,19 @@ Define retention, account deletion, sharing revocation, and what prior participa
 - Would manufacturer/rigger participation improve a later version? None is assumed arranged.
 
 Related: [feature catalog](feature-catalog.md), [adoption strategy](adoption-strategy.md), and [needs discovery](needs-discovery.md).
+
+## Implemented in #152
+
+Backend `backend/app/skydiver/gear/` (`/api/skydiver/v1/gear/...`); web `/gear` and `/gear/{id}` under Records. Owner-only throughout.
+
+| Area | Behaviour |
+| --- | --- |
+| Components | Container/harness, main, reserve, AAD or other, each with its own ID. Required: type and label. Optional: manufacturer, model, serial, manufacture date, notes. The serial is stored exactly as typed (case, leading zeros, punctuation; only edge spaces trimmed). Manufacture and acquisition dates keep their precision: `YYYY`, `YYYY-MM` or `YYYY-MM-DD`, never a guessed day, never in the future |
+| Relation and acquisition | Owned, borrowed or rented, chosen by the owner. Acquisition method (purchase, gift, inheritance, other) and date apply only to owned items. Every response carries `provenance: self_reported`; nothing says verified, title or airworthy |
+| Rigs | Named assemblies with dated membership (`from`, exclusive `until`). Moving a component closes the old stint on the move date and opens the new one; moves cannot be backdated before the current stint or set in the future (the latest calendar date anywhere, UTC+14, counts as today). Archiving a component or a rig ends current stints today and keeps history |
+| Servicing | Entries the owner records: repack, inspection, maintenance, AAD service, other; done date, optional due date and "done by" text. Labelled as the owner's own entries; the gear list shows the latest due date entered, with no overdue/airworthy status |
+| Corrections | Each change is a private history event. Changes to identifying fields (type, label, manufacturer, model, serial, dates, relation, acquisition) keep the earlier value; notes record only that they changed |
+| Privacy | Serials are compared only within the owner's own gear (a "same serial" note links the owner's other items). No lookup across accounts exists, so another person's claim is never revealed, matched or overridden, and recording a serial confers nothing |
+| Safety of writes | Creates and service entries carry a client key, so a retried form does not duplicate. Edits send the version they were based on; a stale edit gets `edit_conflict`. Limits: 50 components, 20 rigs, 100 service entries per component (working defaults; counts are checked without locks, so parallel requests by the same owner can overshoot slightly) |
+
+Not built: photo/document evidence (no hosted media in the beta), transfers, duplicate-claim review across accounts, lost/stolen reports, sharing a gear summary, and links from jumps to components (#153; deleting a component will then be refused once a jump references it, archive instead). Restore/export of gear is #155.

@@ -6,6 +6,8 @@ const PRIVATE_PATHS = [
 	'/records',
 	'/profile',
 	'/places',
+	'/gear',
+	'/gear/new',
 	'/saved',
 	'/plans'
 ];

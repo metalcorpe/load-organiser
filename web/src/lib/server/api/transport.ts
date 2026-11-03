@@ -141,7 +141,36 @@ export const OPERATIONS = {
 		method: 'GET',
 		path: `${BETA}/submissions`,
 		maxBodyBytes: 1024 * 1024
-	}
+	},
+	// Private gear (#152). Lists are bounded by 50 components and 20 rigs.
+	listComponents: {
+		method: 'GET',
+		path: `${BETA}/gear/components`,
+		query: ['archived'],
+		maxBodyBytes: 1024 * 1024
+	},
+	createComponent: { method: 'POST', path: `${BETA}/gear/components` },
+	getComponent: {
+		method: 'GET',
+		path: `${BETA}/gear/components/{id}`,
+		maxBodyBytes: 1024 * 1024
+	},
+	updateComponent: { method: 'PATCH', path: `${BETA}/gear/components/{id}` },
+	archiveComponent: { method: 'POST', path: `${BETA}/gear/components/{id}/archive` },
+	deleteComponent: {
+		method: 'DELETE',
+		path: `${BETA}/gear/components/{id}`,
+		query: ['version']
+	},
+	placeComponent: { method: 'POST', path: `${BETA}/gear/components/{id}/rig` },
+	addServiceEntry: { method: 'POST', path: `${BETA}/gear/components/{id}/service` },
+	listRigs: { method: 'GET', path: `${BETA}/gear/rigs`, maxBodyBytes: 1024 * 1024 },
+	createRig: { method: 'POST', path: `${BETA}/gear/rigs` },
+	deleteServiceEntry: {
+		method: 'DELETE',
+		path: `${BETA}/gear/components/{id}/service/{sub}`
+	},
+	updateRig: { method: 'PATCH', path: `${BETA}/gear/rigs/{id}` }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -161,6 +190,8 @@ export interface RequestOptions {
 	clientIp?: string;
 	/** Path parameter for `{id}` operations; must be a UUID. */
 	id?: string;
+	/** Second path parameter for `{sub}` operations; must be a UUID. */
+	sub?: string;
 	/** Query values; only the operation's allowlisted keys are accepted. */
 	query?: Record<string, string | undefined>;
 }
@@ -272,6 +303,12 @@ function buildPath(operation: Operation, call: RequestOptions): string | null {
 		if (!isUuid(call.id)) return null;
 		path = path.replace('{id}', call.id.toLowerCase());
 	} else if (call.id !== undefined) {
+		return null;
+	}
+	if (path.includes('{sub}')) {
+		if (!isUuid(call.sub)) return null;
+		path = path.replace('{sub}', call.sub.toLowerCase());
+	} else if (call.sub !== undefined) {
 		return null;
 	}
 	const allowed = new Set(operation.query ?? []);

@@ -2,6 +2,8 @@
 // (web/contracts/skydiver-v1.openapi.json). Regenerate with `npm run contracts:generate`.
 export type {
 	AliasOut,
+	ComponentDetailOut,
+	ComponentSummaryOut,
 	HealthStatus,
 	OpportunityDetailOut,
 	OpportunityOut,
@@ -14,6 +16,7 @@ export type {
 	ProviderDetailOut,
 	ProviderOut,
 	ProviderRefOut,
+	RigOut,
 	ReviewerOpportunityOut,
 	ReviewerProviderOut,
 	ReviewerVenueOut,
@@ -24,6 +27,7 @@ export type {
 	ReviewVenuePageOut,
 	SavedOut,
 	SavedStateOut,
+	ServiceOut,
 	SessionOut,
 	VenueDetailOut,
 	VenueOut,
