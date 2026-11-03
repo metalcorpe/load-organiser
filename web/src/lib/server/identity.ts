@@ -15,6 +15,8 @@ export interface Viewer {
 	displayName: string | null;
 	emailVerified: boolean;
 	sessionExpiresAt: string;
+	/** Server-granted reviewer role; the API still checks it on every reviewer call. */
+	reviewer: boolean;
 }
 
 export type Reason =
@@ -80,7 +82,9 @@ function isViewerOut(value: unknown): value is ViewerOut {
 		(v.display_name === null || typeof v.display_name === 'string') &&
 		typeof v.email_verified === 'boolean' &&
 		typeof v.session_expires_at === 'string' &&
-		!Number.isNaN(Date.parse(v.session_expires_at))
+		!Number.isNaN(Date.parse(v.session_expires_at)) &&
+		Array.isArray(v.roles) &&
+		v.roles.every((r) => typeof r === 'string')
 	);
 }
 
@@ -91,7 +95,8 @@ function toViewer(value: ViewerOut): Viewer {
 		email: value.email,
 		displayName: value.display_name ?? null,
 		emailVerified: value.email_verified,
-		sessionExpiresAt: new Date(value.session_expires_at).toISOString()
+		sessionExpiresAt: new Date(value.session_expires_at).toISOString(),
+		reviewer: value.roles.includes('reviewer')
 	};
 }
 

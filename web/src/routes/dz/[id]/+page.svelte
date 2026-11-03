@@ -66,6 +66,12 @@
 	the jumpers' own records.
 </p>
 
+<p>
+	<a href="/submit?kind=correction&target_kind=venue&target_id={venue.id}&title={encodeURIComponent(venue.name)}"
+		>Suggest a correction or report a problem</a
+	>
+</p>
+
 <h2>Upcoming listings here</h2>
 {#if !data.listings.ok}
 	<p class="form-error" role="alert">{listingMessage(data.listings.reason)}</p>

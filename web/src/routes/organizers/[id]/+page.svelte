@@ -46,6 +46,12 @@
 	does not mean the organizer manages this page.
 </p>
 
+<p>
+	<a href="/submit?kind=correction&target_kind=provider&target_id={provider.id}&title={encodeURIComponent(provider.name)}"
+		>Suggest a correction or report a problem</a
+	>
+</p>
+
 <h2>Upcoming listings</h2>
 {#if !data.listings.ok}
 	<p class="form-error" role="alert">{listingMessage(data.listings.reason)}</p>

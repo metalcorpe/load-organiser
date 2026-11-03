@@ -235,7 +235,8 @@ class Viewer:
     display_name: str | None
     email_verified: bool
     session_expires_at: datetime
-    # Authorization input for the access layer (#146); not part of the API contract.
+    # Authorization input for the access layer (#146). The API echoes the viewer's own
+    # roles so the web app can link reviewer tools; the API still enforces them.
     roles: frozenset[str] = frozenset()
 
 

@@ -1867,6 +1867,12 @@ export type ViewerOut = {
      */
     person_id: string;
     /**
+     * Roles
+     *
+     * The viewer's own server-granted beta roles, e.g. `reviewer`.
+     */
+    roles: Array<string>;
+    /**
      * Session Expires At
      */
     session_expires_at: string;

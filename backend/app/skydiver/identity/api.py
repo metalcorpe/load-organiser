@@ -80,6 +80,9 @@ class ViewerOut(BaseModel):
     display_name: str | None
     email_verified: bool
     session_expires_at: datetime
+    roles: list[str] = Field(
+        description="The viewer's own server-granted beta roles, e.g. `reviewer`."
+    )
 
 
 class SessionOut(BaseModel):
@@ -133,6 +136,7 @@ def _viewer(viewer: Viewer) -> ViewerOut:
         display_name=viewer.display_name,
         email_verified=viewer.email_verified,
         session_expires_at=viewer.session_expires_at,
+        roles=sorted(viewer.roles),
     )
 
 

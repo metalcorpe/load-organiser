@@ -10,7 +10,8 @@ export const load: LayoutServerLoad = ({ locals }) => {
 					email: viewer.email,
 					displayName: viewer.displayName,
 					emailVerified: viewer.emailVerified,
-					sessionExpiresAt: viewer.sessionExpiresAt
+					sessionExpiresAt: viewer.sessionExpiresAt,
+					reviewer: viewer.reviewer
 				}
 			: null,
 		sessionUnconfirmed: locals.sessionUnconfirmed

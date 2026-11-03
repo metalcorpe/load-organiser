@@ -3982,6 +3982,14 @@
             "title": "Person Id",
             "type": "string"
           },
+          "roles": {
+            "description": "The viewer's own server-granted beta roles, e.g. `reviewer`.",
+            "items": {
+              "type": "string"
+            },
+            "title": "Roles",
+            "type": "array"
+          },
           "session_expires_at": {
             "format": "date-time",
             "title": "Session Expires At",
@@ -3994,7 +4002,8 @@
           "email",
           "display_name",
           "email_verified",
-          "session_expires_at"
+          "session_expires_at",
+          "roles"
         ],
         "title": "ViewerOut",
         "type": "object"

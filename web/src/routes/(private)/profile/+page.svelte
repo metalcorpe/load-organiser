@@ -21,6 +21,10 @@
 </svelte:head>
 
 <h1>Profile</h1>
+
+{#if data.viewer?.reviewer}
+	<p><a href="/review">Maintenance</a>: reviewer tools for listings, organizers, dropzones and submissions.</p>
+{/if}
 <p class="lede">Your account. A public profile is not part of this release yet.</p>
 
 <section class="card" aria-labelledby="account-heading">
