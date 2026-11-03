@@ -19,6 +19,9 @@ from app.skydiver.api import create_router as create_skydiver_router
 from app.skydiver.directory.api import create_router as create_directory_router
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.directory.store import sql_directory_store_factory
+from app.skydiver.gear.api import create_router as create_gear_router
+from app.skydiver.gear.service import GearService
+from app.skydiver.gear.store import sql_gear_store_factory
 from app.skydiver.health import utc_now
 from app.skydiver.identity.api import client_ip_resolver
 from app.skydiver.identity.api import create_router as create_identity_router
@@ -99,6 +102,8 @@ submission_service = SubmissionService(
     is_open=lambda: settings.SKYDIVER_SUBMISSIONS_OPEN,
 )
 
+gear_service = GearService(stores=sql_gear_store_factory(engine), clock=utc_now)
+
 
 def create_app(*, include_legacy: bool) -> FastAPI:
     """Compose the API. The beta namespace is always mounted; legacy only on request.
@@ -131,6 +136,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_opportunity_router(
             service=lambda: opportunity_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_gear_router(
+            service=lambda: gear_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

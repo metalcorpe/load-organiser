@@ -208,6 +208,20 @@ describe('createApiTransport', () => {
 		expect(fetch).toHaveBeenCalledTimes(1);
 	});
 
+	it('fills {sub} only with a UUID, and refuses it where the path has none', async () => {
+		const fetch = vi.fn<FetchLike>(async () => new Response(null, { status: 204 }));
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		const id = '0b3e4f0c-1d2e-4f5a-8b6c-7d8e9f0a1b2c';
+		const sub = '1b3e4f0c-1d2e-4f5a-8b6c-7d8e9f0a1b2c';
+		await api.request('deleteServiceEntry', { id, sub });
+		expect(fetch.mock.calls[0][0]).toBe(`${ORIGIN}/api/skydiver/v1/gear/components/${id}/service/${sub}`);
+		for (const bad of [undefined, '../rigs', `${sub}/x`]) {
+			expect(await api.request('deleteServiceEntry', { id, sub: bad })).toEqual({ kind: 'invalid_request' });
+		}
+		expect(await api.request('getComponent', { id, sub })).toEqual({ kind: 'invalid_request' });
+		expect(fetch).toHaveBeenCalledTimes(1);
+	});
+
 	it('sends only allowlisted, encoded query parameters', async () => {
 		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
 		const api = createApiTransport({ fetch, origin: ORIGIN });
