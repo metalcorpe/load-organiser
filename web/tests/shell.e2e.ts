@@ -4,6 +4,8 @@ const PRIVATE_PATHS = [
 	'/activity',
 	'/jumps',
 	'/jumps/new',
+	'/history',
+	'/history/baseline',
 	'/records',
 	'/profile',
 	'/places',

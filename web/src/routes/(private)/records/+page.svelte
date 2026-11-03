@@ -8,6 +8,10 @@
 
 <ul>
 	<li><a href="/jumps">Logbook</a>: your private jump entries, wherever you jumped.</li>
+	<li>
+		<a href="/history">History</a>: totals, recent activity and the equipment you recorded, with an
+		optional prior jump count.
+	</li>
 	<li><a href="/gear">Gear</a>: your containers, canopies and AADs, rigs and service dates.</li>
 	<li><a href="/saved">Saved listings</a>: private bookmarks from Discover.</li>
 	<li><a href="/plans">Visit plans</a>: your own dated plans, visible only to you.</li>

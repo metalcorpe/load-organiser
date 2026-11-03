@@ -89,6 +89,123 @@
         "title": "ArchiveIn",
         "type": "object"
       },
+      "BaselineEventOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "title": "Detail",
+            "type": "object"
+          },
+          "kind": {
+            "enum": [
+              "declared",
+              "corrected",
+              "removed"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "detail",
+          "created_at"
+        ],
+        "title": "BaselineEventOut",
+        "type": "object"
+      },
+      "BaselineIn": {
+        "properties": {
+          "before_on": {
+            "format": "date",
+            "title": "Before On",
+            "type": "string"
+          },
+          "prior_jumps": {
+            "description": "Jumps completed before `before_on`, as you declare them.",
+            "maximum": 100000.0,
+            "minimum": 0.0,
+            "title": "Prior Jumps",
+            "type": "integer"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Omit to declare; the current version to correct.",
+            "title": "Version"
+          }
+        },
+        "required": [
+          "prior_jumps",
+          "before_on"
+        ],
+        "title": "BaselineIn",
+        "type": "object"
+      },
+      "BaselineOut": {
+        "properties": {
+          "before_on": {
+            "format": "date",
+            "title": "Before On",
+            "type": "string"
+          },
+          "prior_jumps": {
+            "title": "Prior Jumps",
+            "type": "integer"
+          },
+          "source": {
+            "const": "manual",
+            "title": "Source",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "prior_jumps",
+          "before_on",
+          "source",
+          "version",
+          "updated_at"
+        ],
+        "title": "BaselineOut",
+        "type": "object"
+      },
+      "BaselinePreviewOut": {
+        "properties": {
+          "current": {
+            "$ref": "#/components/schemas/TotalsOut"
+          },
+          "proposed": {
+            "$ref": "#/components/schemas/TotalsOut"
+          }
+        },
+        "required": [
+          "current",
+          "proposed"
+        ],
+        "title": "BaselinePreviewOut",
+        "type": "object"
+      },
       "ComponentDetailOut": {
         "properties": {
           "component": {
@@ -662,6 +779,29 @@
         "title": "ComponentUpdateIn",
         "type": "object"
       },
+      "ComponentUseOut": {
+        "properties": {
+          "component": {
+            "$ref": "#/components/schemas/ComponentRefOut"
+          },
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "last_on": {
+            "format": "date",
+            "title": "Last On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "component",
+          "jumps",
+          "last_on"
+        ],
+        "title": "ComponentUseOut",
+        "type": "object"
+      },
       "DuplicateIn": {
         "properties": {
           "of": {
@@ -793,6 +933,98 @@
           "checked_at"
         ],
         "title": "HealthStatus",
+        "type": "object"
+      },
+      "HistoryOut": {
+        "properties": {
+          "baseline": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BaselineOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "baseline_events": {
+            "description": "Private provenance, newest last (at most 50).",
+            "items": {
+              "$ref": "#/components/schemas/BaselineEventOut"
+            },
+            "title": "Baseline Events",
+            "type": "array"
+          },
+          "by_component": {
+            "description": "Only components explicitly recorded on a jump.",
+            "items": {
+              "$ref": "#/components/schemas/ComponentUseOut"
+            },
+            "title": "By Component",
+            "type": "array"
+          },
+          "by_location": {
+            "items": {
+              "$ref": "#/components/schemas/LocationCountOut"
+            },
+            "title": "By Location",
+            "type": "array"
+          },
+          "by_type": {
+            "items": {
+              "$ref": "#/components/schemas/TypeCountOut"
+            },
+            "title": "By Type",
+            "type": "array"
+          },
+          "first_jump_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Jump On"
+          },
+          "last_jump_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Jump On"
+          },
+          "months": {
+            "description": "The last 12 calendar months, oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/MonthOut"
+            },
+            "title": "Months",
+            "type": "array"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/TotalsOut"
+          }
+        },
+        "required": [
+          "totals",
+          "baseline",
+          "first_jump_on",
+          "last_jump_on",
+          "months",
+          "by_type",
+          "by_location",
+          "by_component",
+          "baseline_events"
+        ],
+        "title": "HistoryOut",
         "type": "object"
       },
       "JumpDetailOut": {
@@ -1646,6 +1878,23 @@
         "title": "JumpUpdateIn",
         "type": "object"
       },
+      "LocationCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          }
+        },
+        "required": [
+          "location",
+          "jumps"
+        ],
+        "title": "LocationCountOut",
+        "type": "object"
+      },
       "LocationOut": {
         "properties": {
           "closed": {
@@ -1747,6 +1996,25 @@
           "into"
         ],
         "title": "MergeIn",
+        "type": "object"
+      },
+      "MonthOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "month": {
+            "description": "YYYY-MM",
+            "title": "Month",
+            "type": "string"
+          }
+        },
+        "required": [
+          "month",
+          "jumps"
+        ],
+        "title": "MonthOut",
         "type": "object"
       },
       "OpportunityCreateIn": {
@@ -5455,6 +5723,109 @@
           "token"
         ],
         "title": "TokenIn",
+        "type": "object"
+      },
+      "TotalsOut": {
+        "properties": {
+          "before_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Declared cutoff D, if any.",
+            "title": "Before On"
+          },
+          "inconsistent": {
+            "title": "Inconsistent",
+            "type": "boolean"
+          },
+          "lifetime": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "B + recorded_since; null without a baseline or when inconsistent.",
+            "title": "Lifetime"
+          },
+          "prior_jumps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Declared B, if any.",
+            "title": "Prior Jumps"
+          },
+          "recorded": {
+            "description": "Distinct detailed entries.",
+            "title": "Recorded",
+            "type": "integer"
+          },
+          "recorded_before": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Detailed entries before D; already within B.",
+            "title": "Recorded Before"
+          },
+          "recorded_since": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Detailed entries on or after D.",
+            "title": "Recorded Since"
+          }
+        },
+        "required": [
+          "recorded",
+          "prior_jumps",
+          "before_on",
+          "recorded_before",
+          "recorded_since",
+          "lifetime",
+          "inconsistent"
+        ],
+        "title": "TotalsOut",
+        "type": "object"
+      },
+      "TypeCountOut": {
+        "properties": {
+          "jump_type": {
+            "title": "Jump Type",
+            "type": "string"
+          },
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jump_type",
+          "jumps"
+        ],
+        "title": "TypeCountOut",
         "type": "object"
       },
       "VenueCreateIn": {
@@ -10612,6 +10983,354 @@
         "summary": "Beta API and database availability",
         "tags": [
           "skydiver"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history": {
+      "get": {
+        "operationId": "getHistory",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get History",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history/baseline": {
+      "delete": {
+        "operationId": "removeBaseline",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "version",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "Version",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Remove Baseline",
+        "tags": [
+          "skydiver-history"
+        ]
+      },
+      "put": {
+        "operationId": "setBaseline",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BaselineIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HistoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Set Baseline",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history/baseline/preview": {
+      "get": {
+        "operationId": "previewBaseline",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "prior_jumps",
+            "required": true,
+            "schema": {
+              "maximum": 100000,
+              "minimum": 0,
+              "title": "Prior Jumps",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "before_on",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "title": "Before On",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaselinePreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Preview Baseline",
+        "tags": [
+          "skydiver-history"
         ]
       }
     },

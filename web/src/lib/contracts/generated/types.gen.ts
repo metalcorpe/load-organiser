@@ -59,6 +59,82 @@ export type ArchiveIn = {
 };
 
 /**
+ * BaselineEventOut
+ */
+export type BaselineEventOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Detail
+     */
+    detail: {
+        [key: string]: unknown;
+    };
+    /**
+     * Kind
+     */
+    kind: 'declared' | 'corrected' | 'removed';
+};
+
+/**
+ * BaselineIn
+ */
+export type BaselineIn = {
+    /**
+     * Before On
+     */
+    before_on: string;
+    /**
+     * Prior Jumps
+     *
+     * Jumps completed before `before_on`, as you declare them.
+     */
+    prior_jumps: number;
+    /**
+     * Version
+     *
+     * Omit to declare; the current version to correct.
+     */
+    version?: number | null;
+};
+
+/**
+ * BaselineOut
+ */
+export type BaselineOut = {
+    /**
+     * Before On
+     */
+    before_on: string;
+    /**
+     * Prior Jumps
+     */
+    prior_jumps: number;
+    /**
+     * Source
+     */
+    source: 'manual';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * BaselinePreviewOut
+ */
+export type BaselinePreviewOut = {
+    current: TotalsOut;
+    proposed: TotalsOut;
+};
+
+/**
  * ComponentDetailOut
  */
 export type ComponentDetailOut = {
@@ -293,6 +369,21 @@ export type ComponentUpdateIn = {
 };
 
 /**
+ * ComponentUseOut
+ */
+export type ComponentUseOut = {
+    component: ComponentRefOut;
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Last On
+     */
+    last_on: string;
+};
+
+/**
  * DuplicateIn
  */
 export type DuplicateIn = {
@@ -386,6 +477,48 @@ export type HealthStatus = {
      * Overall API availability for beta requests.
      */
     status: 'ok' | 'unavailable';
+};
+
+/**
+ * HistoryOut
+ */
+export type HistoryOut = {
+    baseline: BaselineOut | null;
+    /**
+     * Baseline Events
+     *
+     * Private provenance, newest last (at most 50).
+     */
+    baseline_events: Array<BaselineEventOut>;
+    /**
+     * By Component
+     *
+     * Only components explicitly recorded on a jump.
+     */
+    by_component: Array<ComponentUseOut>;
+    /**
+     * By Location
+     */
+    by_location: Array<LocationCountOut>;
+    /**
+     * By Type
+     */
+    by_type: Array<TypeCountOut>;
+    /**
+     * First Jump On
+     */
+    first_jump_on: string | null;
+    /**
+     * Last Jump On
+     */
+    last_jump_on: string | null;
+    /**
+     * Months
+     *
+     * The last 12 calendar months, oldest first.
+     */
+    months: Array<MonthOut>;
+    totals: TotalsOut;
 };
 
 /**
@@ -742,6 +875,17 @@ export type JumpUpdateIn = {
 };
 
 /**
+ * LocationCountOut
+ */
+export type LocationCountOut = {
+    /**
+     * Jumps
+     */
+    jumps: number;
+    location: LocationOut;
+};
+
+/**
  * LocationOut
  */
 export type LocationOut = {
@@ -799,6 +943,22 @@ export type MergeIn = {
      * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
      */
     version?: number | null;
+};
+
+/**
+ * MonthOut
+ */
+export type MonthOut = {
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Month
+     *
+     * YYYY-MM
+     */
+    month: string;
 };
 
 /**
@@ -2504,6 +2664,66 @@ export type TokenIn = {
      * Token
      */
     token: string;
+};
+
+/**
+ * TotalsOut
+ */
+export type TotalsOut = {
+    /**
+     * Before On
+     *
+     * Declared cutoff D, if any.
+     */
+    before_on: string | null;
+    /**
+     * Inconsistent
+     */
+    inconsistent: boolean;
+    /**
+     * Lifetime
+     *
+     * B + recorded_since; null without a baseline or when inconsistent.
+     */
+    lifetime: number | null;
+    /**
+     * Prior Jumps
+     *
+     * Declared B, if any.
+     */
+    prior_jumps: number | null;
+    /**
+     * Recorded
+     *
+     * Distinct detailed entries.
+     */
+    recorded: number;
+    /**
+     * Recorded Before
+     *
+     * Detailed entries before D; already within B.
+     */
+    recorded_before: number | null;
+    /**
+     * Recorded Since
+     *
+     * Detailed entries on or after D.
+     */
+    recorded_since: number | null;
+};
+
+/**
+ * TypeCountOut
+ */
+export type TypeCountOut = {
+    /**
+     * Jump Type
+     */
+    jump_type: string;
+    /**
+     * Jumps
+     */
+    jumps: number;
 };
 
 /**
@@ -5018,6 +5238,192 @@ export type GetHealthResponses = {
 };
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
+
+export type GetHistoryData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/history';
+};
+
+export type GetHistoryErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetHistoryError = GetHistoryErrors[keyof GetHistoryErrors];
+
+export type GetHistoryResponses = {
+    /**
+     * Successful Response
+     */
+    200: HistoryOut;
+};
+
+export type GetHistoryResponse = GetHistoryResponses[keyof GetHistoryResponses];
+
+export type RemoveBaselineData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Version
+         */
+        version: number;
+    };
+    url: '/api/skydiver/v1/history/baseline';
+};
+
+export type RemoveBaselineErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type RemoveBaselineError = RemoveBaselineErrors[keyof RemoveBaselineErrors];
+
+export type RemoveBaselineResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RemoveBaselineResponse = RemoveBaselineResponses[keyof RemoveBaselineResponses];
+
+export type SetBaselineData = {
+    body: BaselineIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/history/baseline';
+};
+
+export type SetBaselineErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SetBaselineError = SetBaselineErrors[keyof SetBaselineErrors];
+
+export type SetBaselineResponses = {
+    /**
+     * Successful Response
+     */
+    200: HistoryOut;
+};
+
+export type SetBaselineResponse = SetBaselineResponses[keyof SetBaselineResponses];
+
+export type PreviewBaselineData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Prior Jumps
+         */
+        prior_jumps: number;
+        /**
+         * Before On
+         */
+        before_on: string;
+    };
+    url: '/api/skydiver/v1/history/baseline/preview';
+};
+
+export type PreviewBaselineErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type PreviewBaselineError = PreviewBaselineErrors[keyof PreviewBaselineErrors];
+
+export type PreviewBaselineResponses = {
+    /**
+     * Successful Response
+     */
+    200: BaselinePreviewOut;
+};
+
+export type PreviewBaselineResponse = PreviewBaselineResponses[keyof PreviewBaselineResponses];
 
 export type ListJumpsData = {
     body?: never;
