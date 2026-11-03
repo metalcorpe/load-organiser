@@ -83,7 +83,9 @@
 <p><a href="/jumps">Logbook</a></p>
 <h1>Jump on {formatDay(jump.jumped_on)}</h1>
 <p class="lede">
-	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · entered by you, not verified
+	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'
+		? 'restored from your export'
+		: 'entered by you'}, not verified
 </p>
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Saved privately.</p>{/if}
 {#if data.detail.same_number.length > 0}
@@ -149,7 +151,13 @@
 	<ul class="results" aria-label="History">
 		{#each data.detail.events as event, i (i)}
 			<li>
-				<span class="title">{event.kind === 'created' ? 'Logged' : 'Corrected'} on {formatDay(event.created_at.slice(0, 10))}</span>
+				<span class="title"
+						>{event.kind === 'created'
+							? 'Logged'
+							: event.kind === 'from_export'
+								? 'Restored from your export'
+								: 'Corrected'} on {formatDay(event.created_at.slice(0, 10))}</span
+					>
 				{#if event.kind === 'corrected'}
 					{#each Object.entries(event.detail) as [name, change] (name)}
 						<span class="meta"

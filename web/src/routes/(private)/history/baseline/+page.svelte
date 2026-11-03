@@ -163,6 +163,8 @@
 						{:else if event.kind === 'corrected'}
 							Corrected from {declared(plain(event.detail.from).prior_jumps, plain(event.detail.from).before_on)}
 							to {declared(plain(event.detail.to).prior_jumps, plain(event.detail.to).before_on)}
+						{:else if event.kind === 'from_export'}
+							Restored from your export: {declared(plain(event.detail).prior_jumps, plain(event.detail).before_on)}
 						{:else}
 							Removed {declared(plain(event.detail.from).prior_jumps, plain(event.detail.from).before_on)}
 						{/if}
