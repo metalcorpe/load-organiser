@@ -10,6 +10,8 @@
 <h1>Records</h1>
 <p class="lede">Your logbook, gear and saved visits.</p>
 
-<Notice title="Not available yet" tone="warn">
-	<p>This area has not been built yet.</p>
+<p><a href="/places">Private places</a>: dropzones and fields you keep for your own records.</p>
+
+<Notice title="Logbook and gear not available yet" tone="warn">
+	<p>Jump entries, gear and saved visits have not been built yet.</p>
 </Notice>

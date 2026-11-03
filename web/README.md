@@ -6,18 +6,22 @@ official Cloudflare adapter for Workers. Scope and boundaries: [architecture](..
 
 `../frontend/` (React) stays in the repository as the reference/rollback input until a verified cutover.
 
-## Status (#144, #145)
+## Status (#144, #145, #148)
 
 Shell, navigation, route/layout boundaries, the server-only API transport, one real unauthenticated
 API flow (`/status`) and accounts: registration with email confirmation, sign-in/out, seven-day
-revocable sessions, password reset/change and sign-out everywhere. Discovery, records and social
-features are **not implemented**; their screens say so explicitly.
+revocable sessions, password reset/change and sign-out everywhere; the dropzone directory and private
+provisional places. Opportunity discovery, the logbook/gear records and social features are **not
+implemented**; their screens say so explicitly.
 
 ## Route inventory
 
 | Route | Access | Behaviour in #144 |
 | --- | --- | --- |
 | `/` Discover | Public SSR | Explains that no listings are published. No fixture or sample listings |
+| `/dz` | Public SSR | Directory search (name/alias/former name, country) over listed and closed venues; keyset “More results”; honest empty state (#148) |
+| `/dz/[id]` | Public SSR | Sourced venue detail; closed label; merged IDs answer `301` to the surviving venue; drafts and unknown IDs `404` |
+| `/places` | Private | Owner-only provisional places: add (name + country), edit, link to/unlink from a listed venue, remove |
 | `/status` | Public SSR | Live `GET /api/skydiver/v1/health` via the server transport: operational / degraded (DB down) / timeout / unreachable / unexpected response / not configured |
 | `/sign-in` | Public SSR, `noindex` | Form action; returns to a safe `returnTo`; a new sign-in revokes the browser's previous session |
 | `/register` | Public SSR, `noindex` | Neutral “check your email” answer whether or not the address already has an account |

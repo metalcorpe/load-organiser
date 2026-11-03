@@ -126,7 +126,7 @@ imports, checked by a test); HTTP and SQL adapters sit beside it.
 | Ownership | Personal-record tables carry `owner_person_id` (FK `skydiver_person.id`). The owner is set from the `Actor`, never from a request body, archive or legacy passenger name/email |
 | Owner-scoped reads/writes | `owned(model, actor)` / `get_owned(session, model, id, actor)` put the owner predicate and the ID in the same SQL query. Foreign and absent IDs both give 404 with the same body. Lists and counts use the same predicate |
 | Owner serialization | `lock_owner(session, actor)` locks the person row for quota/restore-style mutations (row lock, not a session-level lock) |
-| Roles | `skydiver_role_grant` rows, granted by an operator (no API). The only beta role is `reviewer`; unknown stored values grant nothing. `access.role(Role.REVIEWER)` gives 403 `forbidden`. Revocation applies on the next request |
+| Roles | `skydiver_role_grant` rows, granted by an operator with `python -m app.skydiver.access.grant <role> <email> [--revoke]` (no API). The only beta role is `reviewer`; unknown stored values grant nothing. `access.role(Role.REVIEWER)` gives 403 `forbidden`. Revocation applies on the next request |
 | Privilege limits | No role, including `reviewer`, reads another person's private records; reviewer access is scoped to the review cases of #151/#162. Legacy `is_superuser` confers no beta role |
 | Shared content | `may_view(viewer, owner, audience, active, relationship)`: owner always; otherwise active only. Public: anonymous and unblocked viewers. Followers: approved followers without a block in either direction. Private: owner only. Callers load relationship facts in the same transaction |
 

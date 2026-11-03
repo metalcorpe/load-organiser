@@ -340,3 +340,24 @@ def test_role_revocation_applies_on_the_next_request(probe: Probe) -> None:
         )
         session.commit()
     assert probe.call("GET", "/probe/review-queue", reviewer).status_code == 403
+
+
+def test_operator_command_grants_and_revokes_roles(probe: Probe) -> None:
+    from app.skydiver.access.grant import set_role
+
+    secret = probe.account()
+    email = probe.service.current_viewer(secret=secret).email
+    assert probe.call("GET", "/probe/review-queue", secret).status_code == 403
+    assert (
+        set_role(engine, email=email.upper(), role=Role.REVIEWER, grant=True)
+        == "granted"
+    )
+    # Idempotent: a second grant changes nothing.
+    assert set_role(engine, email=email, role=Role.REVIEWER, grant=True) == "granted"
+    assert probe.call("GET", "/probe/review-queue", secret).status_code == 200
+    assert set_role(engine, email=email, role=Role.REVIEWER, grant=False) == "revoked"
+    assert probe.call("GET", "/probe/review-queue", secret).status_code == 403
+    assert (
+        set_role(engine, email="nobody@example.com", role=Role.REVIEWER, grant=True)
+        == "no_unique_account"
+    )

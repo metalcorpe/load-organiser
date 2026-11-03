@@ -81,3 +81,31 @@ export async function sessionStatus(secret: string): Promise<number> {
 	});
 	return response.status;
 }
+
+/** Raw API session for `email`, for direct API setup and probes. */
+export async function apiSession(email: string, password = PASSWORD): Promise<string> {
+	const response = await post('/sessions', { email, password });
+	if (response.status !== 201) throw new Error(`sign-in failed: ${response.status}`);
+	return ((await response.json()) as { session_secret: string }).session_secret;
+}
+
+/** Session of the reviewer account that scripts/verify.sh granted the role to. */
+export async function reviewerSession(): Promise<string> {
+	return apiSession(required('E2E_REVIEWER_EMAIL'), required('E2E_REVIEWER_PASSWORD'));
+}
+
+/** Direct call to a beta API path (not the auth namespace). */
+export async function apiCall(
+	method: string,
+	path: string,
+	{ bearer, body }: { bearer?: string; body?: unknown } = {}
+): Promise<Response> {
+	const headers: Record<string, string> = {};
+	if (body !== undefined) headers['content-type'] = 'application/json';
+	if (bearer) headers.authorization = `Bearer ${bearer}`;
+	return fetch(`${api()}/api/skydiver/v1${path}`, {
+		method,
+		headers,
+		body: body === undefined ? undefined : JSON.stringify(body)
+	});
+}

@@ -15,6 +15,50 @@ export type Accepted = {
 };
 
 /**
+ * AliasIn
+ */
+export type AliasIn = {
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * AliasOut
+ */
+export type AliasOut = {
+    /**
+     * Kind
+     */
+    kind: 'alternate' | 'former' | 'merged';
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * EventOut
+ */
+export type EventOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Detail
+     */
+    detail: {
+        [key: string]: unknown;
+    };
+    /**
+     * Kind
+     */
+    kind: string;
+};
+
+/**
  * HealthStatus
  */
 export type HealthStatus = {
@@ -53,6 +97,18 @@ export type LoginIn = {
 };
 
 /**
+ * MergeIn
+ */
+export type MergeIn = {
+    /**
+     * Into
+     *
+     * The venue that remains.
+     */
+    into: string;
+};
+
+/**
  * PasswordChangeIn
  */
 export type PasswordChangeIn = {
@@ -74,6 +130,67 @@ export type PasswordConfirmIn = {
      * Password
      */
     password: string;
+};
+
+/**
+ * PlaceCreateIn
+ */
+export type PlaceCreateIn = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * PlaceOut
+ *
+ * A private provisional place. Visible to its owner only.
+ */
+export type PlaceOut = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    venue: VenueRefOut | null;
+};
+
+/**
+ * PlaceUpdateIn
+ */
+export type PlaceUpdateIn = {
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
 };
 
 /**
@@ -129,6 +246,68 @@ export type ResetRequestIn = {
 };
 
 /**
+ * ReviewerVenueOut
+ */
+export type ReviewerVenueOut = {
+    /**
+     * Aliases
+     */
+    aliases: Array<AliasOut>;
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Events
+     */
+    events: Array<EventOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Latitude
+     */
+    latitude: number | null;
+    /**
+     * Locality
+     */
+    locality: string | null;
+    /**
+     * Longitude
+     */
+    longitude: number | null;
+    /**
+     * Merged Into Id
+     */
+    merged_into_id: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string | null;
+    /**
+     * Status
+     */
+    status: 'draft' | 'listed' | 'closed' | 'merged';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
  * SessionOut
  */
 export type SessionOut = {
@@ -142,6 +321,16 @@ export type SessionOut = {
 };
 
 /**
+ * StatusIn
+ */
+export type StatusIn = {
+    /**
+     * Status
+     */
+    status: 'draft' | 'listed' | 'closed';
+};
+
+/**
  * TokenIn
  */
 export type TokenIn = {
@@ -149,6 +338,191 @@ export type TokenIn = {
      * Token
      */
     token: string;
+};
+
+/**
+ * VenueCreateIn
+ */
+export type VenueCreateIn = {
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Latitude
+     */
+    latitude?: number | null;
+    /**
+     * Listed
+     *
+     * False creates a draft that is not public.
+     */
+    listed?: boolean;
+    /**
+     * Locality
+     */
+    locality?: string | null;
+    /**
+     * Longitude
+     */
+    longitude?: number | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
+};
+
+/**
+ * VenueDetailOut
+ */
+export type VenueDetailOut = {
+    /**
+     * Replaced Id
+     *
+     * Set when the requested venue was merged into `venue`.
+     */
+    replaced_id: string | null;
+    venue: VenueOut;
+};
+
+/**
+ * VenueOut
+ *
+ * Public venue: source-backed identity only. No operator or endorsement data.
+ */
+export type VenueOut = {
+    /**
+     * Aliases
+     */
+    aliases: Array<AliasOut>;
+    /**
+     * Checked On
+     */
+    checked_on: string;
+    /**
+     * Country
+     *
+     * ISO 3166-1 alpha-2 code.
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Latitude
+     */
+    latitude: number | null;
+    /**
+     * Locality
+     */
+    locality: string | null;
+    /**
+     * Longitude
+     */
+    longitude: number | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Source Note
+     */
+    source_note: string | null;
+    /**
+     * Source Url
+     */
+    source_url: string;
+    /**
+     * Status
+     */
+    status: 'listed' | 'closed';
+};
+
+/**
+ * VenuePageOut
+ */
+export type VenuePageOut = {
+    /**
+     * Items
+     */
+    items: Array<VenueOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
+ * VenueRefOut
+ */
+export type VenueRefOut = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Status
+     */
+    status: 'listed' | 'closed';
+};
+
+/**
+ * VenueUpdateIn
+ */
+export type VenueUpdateIn = {
+    /**
+     * Checked On
+     */
+    checked_on?: string | null;
+    /**
+     * Country
+     */
+    country?: string | null;
+    /**
+     * Latitude
+     */
+    latitude?: number | null;
+    /**
+     * Locality
+     */
+    locality?: string | null;
+    /**
+     * Longitude
+     */
+    longitude?: number | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Source Note
+     */
+    source_note?: string | null;
+    /**
+     * Source Url
+     */
+    source_url?: string | null;
 };
 
 /**
@@ -661,6 +1035,313 @@ export type RevokeAllSessionsResponses = {
 
 export type RevokeAllSessionsResponse = RevokeAllSessionsResponses[keyof RevokeAllSessionsResponses];
 
+export type CreateVenueData = {
+    body: VenueCreateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues';
+};
+
+export type CreateVenueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateVenueError = CreateVenueErrors[keyof CreateVenueErrors];
+
+export type CreateVenueResponses = {
+    /**
+     * Successful Response
+     */
+    201: ReviewerVenueOut;
+};
+
+export type CreateVenueResponse = CreateVenueResponses[keyof CreateVenueResponses];
+
+export type ReviewVenueData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues/{venue_id}';
+};
+
+export type ReviewVenueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ReviewVenueError = ReviewVenueErrors[keyof ReviewVenueErrors];
+
+export type ReviewVenueResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerVenueOut;
+};
+
+export type ReviewVenueResponse = ReviewVenueResponses[keyof ReviewVenueResponses];
+
+export type UpdateVenueData = {
+    body: VenueUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues/{venue_id}';
+};
+
+export type UpdateVenueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateVenueError = UpdateVenueErrors[keyof UpdateVenueErrors];
+
+export type UpdateVenueResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerVenueOut;
+};
+
+export type UpdateVenueResponse = UpdateVenueResponses[keyof UpdateVenueResponses];
+
+export type AddVenueAliasData = {
+    body: AliasIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues/{venue_id}/aliases';
+};
+
+export type AddVenueAliasErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type AddVenueAliasError = AddVenueAliasErrors[keyof AddVenueAliasErrors];
+
+export type AddVenueAliasResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerVenueOut;
+};
+
+export type AddVenueAliasResponse = AddVenueAliasResponses[keyof AddVenueAliasResponses];
+
+export type MergeVenueData = {
+    body: MergeIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues/{venue_id}/merge';
+};
+
+export type MergeVenueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type MergeVenueError = MergeVenueErrors[keyof MergeVenueErrors];
+
+export type MergeVenueResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerVenueOut;
+};
+
+export type MergeVenueResponse = MergeVenueResponses[keyof MergeVenueResponses];
+
+export type SetVenueStatusData = {
+    body: StatusIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/directory/venues/{venue_id}/status';
+};
+
+export type SetVenueStatusErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SetVenueStatusError = SetVenueStatusErrors[keyof SetVenueStatusErrors];
+
+export type SetVenueStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewerVenueOut;
+};
+
+export type SetVenueStatusResponse = SetVenueStatusResponses[keyof SetVenueStatusResponses];
+
 export type GetHealthData = {
     body?: never;
     path?: never;
@@ -685,3 +1366,307 @@ export type GetHealthResponses = {
 };
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
+
+export type ListPlacesData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/places';
+};
+
+export type ListPlacesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListPlacesError = ListPlacesErrors[keyof ListPlacesErrors];
+
+export type ListPlacesResponses = {
+    /**
+     * Response Listplaces
+     *
+     * Successful Response
+     */
+    200: Array<PlaceOut>;
+};
+
+export type ListPlacesResponse = ListPlacesResponses[keyof ListPlacesResponses];
+
+export type CreatePlaceData = {
+    body: PlaceCreateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/places';
+};
+
+export type CreatePlaceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreatePlaceError = CreatePlaceErrors[keyof CreatePlaceErrors];
+
+export type CreatePlaceResponses = {
+    /**
+     * Successful Response
+     */
+    201: PlaceOut;
+};
+
+export type CreatePlaceResponse = CreatePlaceResponses[keyof CreatePlaceResponses];
+
+export type DeletePlaceData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Place Id
+         */
+        place_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/places/{place_id}';
+};
+
+export type DeletePlaceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type DeletePlaceError = DeletePlaceErrors[keyof DeletePlaceErrors];
+
+export type DeletePlaceResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeletePlaceResponse = DeletePlaceResponses[keyof DeletePlaceResponses];
+
+export type UpdatePlaceData = {
+    body: PlaceUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Place Id
+         */
+        place_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/places/{place_id}';
+};
+
+export type UpdatePlaceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdatePlaceError = UpdatePlaceErrors[keyof UpdatePlaceErrors];
+
+export type UpdatePlaceResponses = {
+    /**
+     * Successful Response
+     */
+    200: PlaceOut;
+};
+
+export type UpdatePlaceResponse = UpdatePlaceResponses[keyof UpdatePlaceResponses];
+
+export type SearchVenuesData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Country
+         */
+        country?: string | null;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/venues';
+};
+
+export type SearchVenuesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type SearchVenuesError = SearchVenuesErrors[keyof SearchVenuesErrors];
+
+export type SearchVenuesResponses = {
+    /**
+     * Successful Response
+     */
+    200: VenuePageOut;
+};
+
+export type SearchVenuesResponse = SearchVenuesResponses[keyof SearchVenuesResponses];
+
+export type GetVenueData = {
+    body?: never;
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/venues/{venue_id}';
+};
+
+export type GetVenueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetVenueError = GetVenueErrors[keyof GetVenueErrors];
+
+export type GetVenueResponses = {
+    /**
+     * Successful Response
+     */
+    200: VenueDetailOut;
+};
+
+export type GetVenueResponse = GetVenueResponses[keyof GetVenueResponses];

@@ -104,7 +104,7 @@ with psycopg.connect(host=os.environ['POSTGRES_SERVER'], port=os.environ['POSTGR
 }
 
 # Lint/type gates cover the beta modules; legacy reference code is not gated (#146).
-BETA_PY="app/skydiver app/tests/skydiver tests/test_skydiver_health.py \
+BETA_PY="app/skydiver app/tests/skydiver tests/test_skydiver_health.py tests/test_skydiver_directory_policy.py \
 tests/test_skydiver_identity_policy.py tests/test_skydiver_access_policy.py app/main.py"
 
 # --------------------------------------------------------------------- stages
@@ -150,10 +150,21 @@ EOF
     tail -20 "$SCRATCH/api.log" >&2
     exit 1
   }
+  log "e2e: reviewer account (registered through the API, role granted by the operator command)"
+  local reviewer_email reviewer_password
+  reviewer_email="reviewer-$(secret 6)@example.com"
+  reviewer_password=$(secret 16)
+  curl -sf -o /dev/null -X POST "http://127.0.0.1:$api_port/api/skydiver/v1/auth/registrations" \
+    -H 'content-type: application/json' -H "x-organiser-proxy-key: $proxy_key" \
+    -H 'x-organiser-client-ip: 10.99.0.1' \
+    -d "{\"email\":\"$reviewer_email\",\"password\":\"$reviewer_password\"}"
+  in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' python -m app.skydiver.access.grant reviewer '$reviewer_email'"
+
   log "e2e: Playwright against workerd previews"
   (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } &&
     E2E_API_ORIGIN="http://127.0.0.1:$api_port" E2E_MAIL_OUTBOX="$outbox" \
-      E2E_API_PROXY_KEY="$proxy_key" npm run test:e2e)
+      E2E_API_PROXY_KEY="$proxy_key" E2E_REVIEWER_EMAIL="$reviewer_email" \
+      E2E_REVIEWER_PASSWORD="$reviewer_password" npm run test:e2e)
   if grep -q 'HTTP/1.1" 5' "$SCRATCH/api.log"; then
     echo "API answered 5xx during e2e:" >&2
     grep 'HTTP/1.1" 5' "$SCRATCH/api.log" >&2
