@@ -1,0 +1,26 @@
+name: Bug
+description: Something in the beta behaves differently from its documented contract.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include passwords, session cookies, reset links or other people's private records.
+        For security problems use private vulnerability reporting instead.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behaviour
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit or environment
+      description: Commit SHA, and whether this was local, preview or deployed.

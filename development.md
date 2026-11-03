@@ -1,5 +1,7 @@
 # FastAPI Project - Development
 
+> This page documents the inherited Docker Compose stack, which runs the legacy prototype. To verify the skydiver beta, use `scripts/verify.sh` as described in [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Docker Compose
 
 * Start the local stack with Docker Compose:
