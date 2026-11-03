@@ -14,9 +14,10 @@ updates:
       interval: daily
     commit-message:
       prefix: ⬆
-  # npm
+  # npm: the SvelteKit beta app. The React frontend/ is reference-only (#144)
+  # and receives no dependency updates.
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /web
     schedule:
       interval: daily
     commit-message:
@@ -25,7 +26,6 @@ updates:
   - package-ecosystem: docker
     directories:
       - /backend
-      - /frontend
     schedule:
       interval: weekly
     commit-message:
