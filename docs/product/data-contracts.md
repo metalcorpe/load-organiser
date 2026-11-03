@@ -44,7 +44,7 @@ A summary stores only allowed selected values, not a live serialization of the p
 
 Follower audience means the current approved set, including later approvals. Explicit removal/block revokes that audience access. Public audience remains anonymously viewable while active; authenticated blocks cannot stop anonymous copies. Turning off public discoverability removes search/public-profile availability and withdraws public cards; existing authorized follower-only content may remain for approved followers. Explain this transition, rather than implying profile hiding automatically hides already shared content from approved followers.
 
-Concurrent publish/edit/delete, follow approval/block, and audience narrowing/read must not bypass the policy through different routes. Lock the relevant owner or relationship rows in a stable order, recheck inside the transaction and use database constraints. No route-specific privacy implementation or process-local permission cache. A generic unavailable response must not disclose whether another person's missing item is private, blocked, withdrawn or absent.
+Concurrent publish/edit/delete, follow approval/block, and audience narrowing/read must not bypass the policy through different routes. Use compare-and-swap on a version of the relevant owner or relationship record (row locks in a stable order only where that cannot express the rule), recheck inside the transaction and use database constraints. No route-specific privacy implementation or process-local permission cache. A generic unavailable response must not disclose whether another person's missing item is private, blocked, withdrawn or absent.
 
 ## Mutations, revisions and uncertain responses
 

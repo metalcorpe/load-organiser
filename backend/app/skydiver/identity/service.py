@@ -118,8 +118,24 @@ class IdentityStore(Protocol):
         """Re-mark the account's live sessions issued under `old_marker`."""
         ...
 
-    def lock_registrations(self) -> None:
-        """Serialize registrations until the transaction ends."""
+    def registration_version(self) -> int:
+        """Current registration gate version (read before counting accounts)."""
+        ...
+
+    def create_account_if_unchanged(
+        self,
+        *,
+        expected_version: int,
+        email: str,
+        password_hash: str,
+        display_name: str | None,
+        now: datetime,
+    ) -> Account | None:
+        """Compare-and-swap: create only if the gate still has `expected_version`.
+
+        None when another registration committed first or took the same email;
+        nothing from the attempt remains.
+        """
         ...
 
     def find_session(self, secret_hash: str) -> StoredSession | None: ...
@@ -158,6 +174,11 @@ Clock = Callable[[], datetime]
 # -------------------------------------------------------------------------- results
 
 
+# Compare-and-swap rounds per registration. Each lost round means another account
+# was committed meanwhile, so exhaustion needs sustained concurrent sign-ups.
+REGISTRATION_ATTEMPTS = 8
+
+
 class IdentityError(Exception):
     code = "identity_error"
 
@@ -176,6 +197,12 @@ class ConfirmationFailed(IdentityError):
 
 class RegistrationClosed(IdentityError):
     code = "registration_closed"
+
+
+class RegistrationBusy(IdentityError):
+    """Concurrent registrations kept winning the compare-and-swap; retry later."""
+
+    code = "registration_busy"
 
 
 class InvalidToken(IdentityError):
@@ -279,34 +306,45 @@ class IdentityService:
             # Hash before branching so both outcomes cost the same Argon2 work, but
             # only once the per-IP limit has admitted the request.
             password_hash = self._hasher.hash(password)
-            # One registration at a time: the cap and the email check then see every
-            # committed account, and a same-email race cannot reach the unique index.
-            store.lock_registrations()
+            # Compare-and-swap instead of a lock: read the gate version, then count
+            # and check the email; the insert commits only if the gate is unchanged.
+            # Otherwise another registration committed first, so re-read and retry.
             # The cap applies before the email lookup so a full service answers the
             # same way for taken and unused addresses.
+            version = store.registration_version()
             if store.count_accounts() >= self._config.max_accounts:
                 raise CommitThen(RegistrationClosed())
             if self._exceeded(store, policy.REGISTER_IDENTIFIER, now, email):
                 # Silent, like the reset identifier limit: bounds mail to one inbox.
                 return
             self._hit(store, policy.REGISTER_IDENTIFIER, now, email)
-            if store.email_in_use(email):
-                outbox.add(
-                    email,
-                    f"{self._config.product_name}: sign-in help",
-                    "Someone tried to create an account with this email address, "
-                    "which already has one.\n\nIf it was you, sign in or reset your "
-                    f"password at {self._config.web_origin}/forgot-password\n\n"
-                    "If it was not you, you can ignore this message.",
-                )
-            else:
-                account = store.create_account(
+            for _ in range(REGISTRATION_ATTEMPTS):
+                if store.email_in_use(email):
+                    outbox.add(
+                        email,
+                        f"{self._config.product_name}: sign-in help",
+                        "Someone tried to create an account with this email address, "
+                        "which already has one.\n\nIf it was you, sign in or reset "
+                        f"your password at {self._config.web_origin}/forgot-password"
+                        "\n\nIf it was not you, you can ignore this message.",
+                    )
+                    break
+                account = store.create_account_if_unchanged(
+                    expected_version=version,
                     email=email,
                     password_hash=password_hash,
                     display_name=name,
                     now=now,
                 )
-                outbox.add(*self._verification_mail(store, account, now))
+                if account is not None:
+                    outbox.add(*self._verification_mail(store, account, now))
+                    break
+                version = store.registration_version()
+                if store.count_accounts() >= self._config.max_accounts:
+                    raise CommitThen(RegistrationClosed())
+            else:
+                # Sustained contention: keep the throttle hits, report a retryable state.
+                raise CommitThen(RegistrationBusy())
         self._flush(outbox)
 
     def resend_verification(self, *, secret: str) -> None:

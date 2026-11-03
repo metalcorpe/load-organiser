@@ -7,6 +7,7 @@ from datetime import datetime
 
 from sqlalchemy import Engine, func, select, update
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
 from app.models import User
@@ -23,13 +24,13 @@ from app.skydiver.identity.tables import (
     SkydiverAccountState,
     SkydiverAccountToken,
     SkydiverPerson,
+    SkydiverRegistrationGate,
     SkydiverRoleGrant,
     SkydiverSession,
     SkydiverThrottleEvent,
 )
 
-# Arbitrary fixed key for pg_advisory_xact_lock; unique within this database's code.
-_REGISTRATION_LOCK_KEY = 0x5B1E_7C2A_0145
+_UNIQUE_VIOLATION = "23505"
 
 
 def _account(user: User) -> Account:
@@ -225,9 +226,54 @@ class SqlIdentityStore:
             .values(credential_marker=new_marker)
         )
 
-    def lock_registrations(self) -> None:
-        # Transaction-scoped; released on commit or rollback.
-        self._s.execute(select(func.pg_advisory_xact_lock(_REGISTRATION_LOCK_KEY)))
+    def registration_version(self) -> int:
+        return int(
+            self._s.execute(
+                select(col(SkydiverRegistrationGate.version)).where(
+                    col(SkydiverRegistrationGate.id) == 1
+                )
+            ).scalar_one()
+        )
+
+    def create_account_if_unchanged(
+        self,
+        *,
+        expected_version: int,
+        email: str,
+        password_hash: str,
+        display_name: str | None,
+        now: datetime,
+    ) -> Account | None:
+        """Create the account only if no registration committed since the read.
+
+        Runs in a savepoint: a moved gate or a concurrent same-email insert undoes
+        this attempt (and its row locks) and returns None so the caller re-reads.
+        """
+        attempt = self._s.begin_nested()
+        try:
+            account = self.create_account(
+                email=email,
+                password_hash=password_hash,
+                display_name=display_name,
+                now=now,
+            )
+        except IntegrityError as error:
+            attempt.rollback()
+            # Only a concurrent same-email insert is a lost race; anything else is a bug.
+            if getattr(error.orig, "sqlstate", None) != _UNIQUE_VIOLATION:
+                raise
+            return None
+        moved = self._s.execute(
+            update(SkydiverRegistrationGate)
+            .where(col(SkydiverRegistrationGate.id) == 1)
+            .where(col(SkydiverRegistrationGate.version) == expected_version)
+            .values(version=expected_version + 1)
+        )
+        if moved.rowcount != 1:  # type: ignore[attr-defined]
+            attempt.rollback()
+            return None
+        attempt.commit()
+        return account
 
     def find_session(self, secret_hash: str) -> StoredSession | None:
         s = (
