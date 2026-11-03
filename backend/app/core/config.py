@@ -93,6 +93,8 @@ class Settings(BaseSettings):
     SKYDIVER_WEB_ORIGIN: str = "http://localhost:5173"
     SKYDIVER_REGISTRATION_OPEN: bool = False
     SKYDIVER_MAX_ACCOUNTS: int = 25
+    # Suggestions/corrections/reports intake; closed by default, like registration.
+    SKYDIVER_SUBMISSIONS_OPEN: bool = False
     # Shared secret proving that the forwarded client IP comes from the web server.
     SKYDIVER_WEB_PROXY_KEY: str | None = None
     # Local/test only: write identity mail as JSON files instead of sending it.

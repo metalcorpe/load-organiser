@@ -138,7 +138,7 @@ stage_e2e() {
   proxy_key=$(secret 24)
   mkdir -p "$outbox"
   cat >>"$env_file" <<EOF
-export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_MAX_ACCOUNTS=1000
+export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_SUBMISSIONS_OPEN=true SKYDIVER_MAX_ACCOUNTS=1000
 export SKYDIVER_WEB_ORIGIN=https://127.0.0.1:4175 SKYDIVER_WEB_PROXY_KEY=$proxy_key
 export SKYDIVER_MAIL_OUTBOX_DIR=$outbox
 EOF
