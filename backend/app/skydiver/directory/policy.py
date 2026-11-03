@@ -28,6 +28,9 @@ SOURCE_NOTE_MAX = 280
 PAGE_DEFAULT = 20
 PAGE_MAX = 50
 QUERY_MAX = 80
+# Review cadence (release brief, operating default): recheck listed profiles after
+# 60 days without a successful source check.
+PROFILE_RECHECK_DAYS = 60
 
 
 class VenueStatus(StrEnum):

@@ -105,7 +105,11 @@
 				availability.
 			{/if}
 		</p>
-		{#if filtered}<p><a href="/">Clear filters</a></p>{/if}
+		<p>
+			{#if filtered}<a href="/">Clear filters</a> · {/if}<a href="/submit?kind=suggest_listing"
+				>Suggest a listing</a
+			>
+		</p>
 	</Notice>
 {:else}
 	<ul class="results" aria-label="Listings">

@@ -162,6 +162,12 @@
 	<p class="summary">{item.summary}</p>
 {/if}
 
+<p>
+	<a href="/submit?kind=correction&target_kind=opportunity&target_id={item.id}&title={encodeURIComponent(item.title)}"
+		>Suggest a correction or report a problem</a
+	>
+</p>
+
 <p class="hint">
 	Summarized from the source above. A listing is not an endorsement, and a dropzone shown here has
 	not necessarily confirmed anything in Load Organiser.

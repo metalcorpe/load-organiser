@@ -83,7 +83,65 @@ export const OPERATIONS = {
 	},
 	createPlan: { method: 'POST', path: `${BETA}/plans` },
 	updatePlan: { method: 'PATCH', path: `${BETA}/plans/{id}` },
-	deletePlan: { method: 'DELETE', path: `${BETA}/plans/{id}` }
+	deletePlan: { method: 'DELETE', path: `${BETA}/plans/{id}` },
+	// Reviewer maintenance (#151); the API enforces the reviewer role.
+	listReviewVenues: {
+		method: 'GET',
+		path: `${BETA}/directory/venues`,
+		query: ['q', 'status', 'due', 'cursor', 'limit']
+	},
+	listReviewProviders: {
+		method: 'GET',
+		path: `${BETA}/directory/providers`,
+		query: ['q', 'status', 'due', 'cursor', 'limit']
+	},
+	listReviewOpportunities: {
+		method: 'GET',
+		path: `${BETA}/directory/opportunities`,
+		query: ['q', 'status', 'due', 'cursor', 'limit']
+	},
+	reviewVenue: { method: 'GET', path: `${BETA}/directory/venues/{id}`, maxBodyBytes: 1024 * 1024 },
+	createVenue: { method: 'POST', path: `${BETA}/directory/venues` },
+	updateVenue: { method: 'PATCH', path: `${BETA}/directory/venues/{id}` },
+	addVenueAlias: { method: 'POST', path: `${BETA}/directory/venues/{id}/aliases` },
+	setVenueStatus: { method: 'POST', path: `${BETA}/directory/venues/{id}/status` },
+	mergeVenue: { method: 'POST', path: `${BETA}/directory/venues/{id}/merge` },
+	reviewProvider: {
+		method: 'GET',
+		path: `${BETA}/directory/providers/{id}`,
+		maxBodyBytes: 1024 * 1024
+	},
+	createProvider: { method: 'POST', path: `${BETA}/directory/providers` },
+	updateProvider: { method: 'PATCH', path: `${BETA}/directory/providers/{id}` },
+	setProviderStatus: { method: 'POST', path: `${BETA}/directory/providers/{id}/status` },
+	mergeProvider: { method: 'POST', path: `${BETA}/directory/providers/{id}/merge` },
+	reviewOpportunity: {
+		method: 'GET',
+		path: `${BETA}/directory/opportunities/{id}`,
+		maxBodyBytes: 1024 * 1024
+	},
+	createOpportunity: { method: 'POST', path: `${BETA}/directory/opportunities` },
+	updateOpportunity: { method: 'PATCH', path: `${BETA}/directory/opportunities/{id}` },
+	setOpportunityStatus: { method: 'POST', path: `${BETA}/directory/opportunities/{id}/status` },
+	markOpportunityDuplicate: {
+		method: 'POST',
+		path: `${BETA}/directory/opportunities/{id}/duplicate`
+	},
+	listReviewSubmissions: {
+		method: 'GET',
+		path: `${BETA}/directory/submissions`,
+		query: ['status', 'cursor', 'limit'],
+		// Up to 50 cases with 1,000-character messages and source links.
+		maxBodyBytes: 1024 * 1024
+	},
+	resolveSubmission: { method: 'POST', path: `${BETA}/directory/submissions/{id}/resolve` },
+	// Suggestions, corrections and reports (#151).
+	createSubmission: { method: 'POST', path: `${BETA}/submissions` },
+	listOwnSubmissions: {
+		method: 'GET',
+		path: `${BETA}/submissions`,
+		maxBodyBytes: 1024 * 1024
+	}
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

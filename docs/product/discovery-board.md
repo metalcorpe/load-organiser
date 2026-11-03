@@ -1,6 +1,6 @@
 # Events, boogies, coaching, and schools board
 
-Status: feature proposal raised by the product owner. The provider and dated-opportunity backend is implemented by #149 and the public board, detail pages, private saves and visit plans by #150 (see [Implemented in #149](#implemented-in-149) and [Implemented in #150](#implemented-in-150)); maintenance UI/submissions (#151) and real inventory are not. No participating organizers or accepted listings are assumed.
+Status: feature proposal raised by the product owner. The provider and dated-opportunity backend is implemented by #149 and the public board, detail pages, private saves and visit plans by #150 (see [Implemented in #149](#implemented-in-149) and [Implemented in #150](#implemented-in-150)); maintenance tools and submissions by #151 (see [Implemented in #151](#implemented-in-151)); real inventory is not. No participating organizers or accepted listings are assumed.
 
 Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. The [release brief](release-brief.md) proposes primary-source candidates and a review cadence. Real country inventory, reuse permissions and maintenance capacity remain unvalidated; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
 
@@ -117,3 +117,24 @@ Web: `/` (board), `/events/{id}`, `/organizers/{id}`, upcoming listings on `/dz/
 | Limits | 200 saves and 100 plans per person (working defaults, not measured). The web transport accepts up to 4 MB for these lists and 1 MB for a board page (20 listings requested) |
 
 Not built here: calendar export, alerts/subscriptions, following providers, map/calendar views, Report a correction (#151), and any shared intention (#159).
+
+## Implemented in #151
+
+Web: `/review` (reviewer dashboard, linked from Profile for reviewers only; others get 404), editors at `/review/listings/{id|new}`, `/review/organizers/{id|new}`, `/review/dropzones/{id|new}`, the queue at `/review/submissions`, and `/submit` for members. Backend: reviewer queues `GET /directory/{venues,providers,opportunities}`, `app/skydiver/moderation/` (`/submissions`, `/directory/submissions`).
+
+| Area | Behaviour |
+| --- | --- |
+| Maintenance | Reviewers create, edit, publish, postpone, cancel, archive and consolidate listings; create, publish, archive and merge organizers; create, rename, alias, close and merge dropzones. Every change is a history event with the reviewer account |
+| Concurrent edits | Each record has a `version`. Editors send the version they loaded; if someone saved in between, the change is refused (`edit_conflict`) and the form keeps the typed values to copy. No row locks: archiving or merging an organizer and publishing one of its listings cannot both succeed (`listings_version`) |
+| Review cadence | Dashboard "due" lists: public listings starting within 30 days not checked for 7; postponed listings not checked for 7; published organizers and listed dropzones not checked for 60. Ended listings leave public results automatically; expiry is not a source check |
+| Submissions | Signed-in, confirmed members send a listing or dropzone suggestion, or a correction/report about a public listing, organizer or dropzone (linked from each public page). Limits: 10 a day and 20 waiting per account; a retry of the same form is not a duplicate. Intake is off unless `SKYDIVER_SUBMISSIONS_OPEN=true`, so the owner can pause it. Reviewers see content, not the sender; the sender sees status and the reviewer's note. A submission never edits a record by itself |
+
+### Maintenance and claim policy (beta)
+
+- **Ownership.** The product owner holds the `reviewer` role and is the only maintainer. The cadence above is an operating default; record actual time spent per cycle for #162 and reduce published coverage if it does not fit. If the queue outgrows the time available, pause submissions (`SKYDIVER_SUBMISSIONS_OPEN=false`) and stop adding coverage; existing listings, saves and private records stay usable.
+- **Source checks.** `checked_on` is updated only after the reviewer has looked at the source. Automatic expiry of ended listings never counts as a check.
+- **Representative claims (manual).** There is no claim feature or organizer account in the beta. Someone who says they represent an organizer or dropzone uses a correction submission. The reviewer confirms authority through an independent channel (the contact published on the organizer's or dropzone's own site) before relying on it, then applies the change themselves with that source noted. A confirmed representative gains no account permissions and no access to anyone's saves, plans, private places, logbook, submissions or the identity of who saved, planned or reported anything.
+- **Demo data.** None is shipped. Any record created for a demonstration must have a title starting with `[Demo]`, must not be published on a public deployment, and must never name a real organizer or dropzone as a partner.
+- **Initial coverage.** Populating real European listings from permitted sources is owner work outside this code change: record the countries, categories, sources, reuse terms checked and time spent before launch (#162).
+
+Not built: automated source fetching or imports, organizer self-service, claim workflow, retention purge of resolved submissions (architecture target: minimal evidence for 30 days after account deletion; submissions lose their author on deletion now), per-field diffs on conflict, and pagination beyond the first 50 items in the editor's organizer/dropzone pickers (search narrows them).

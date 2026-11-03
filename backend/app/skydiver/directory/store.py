@@ -3,7 +3,7 @@
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Any
 
@@ -22,6 +22,7 @@ from app.skydiver.directory.policy import (
 from app.skydiver.directory.service import (
     Alias,
     DirectoryStore,
+    EditConflict,
     StoreFactory,
     Venue,
     VenueEvent,
@@ -70,13 +71,12 @@ class SqlDirectoryStore:
             source_note=row.source_note,
             checked_on=row.checked_on,
             updated_at=row.updated_at,
+            version=row.version,
             aliases=tuple(Alias(name=a, kind=AliasKind(k)) for a, k in aliases),
         )
 
-    def get_venue(self, venue_id: uuid.UUID, *, lock: bool = False) -> Venue | None:
+    def get_venue(self, venue_id: uuid.UUID) -> Venue | None:
         query = select(SkydiverVenue).where(col(SkydiverVenue.id) == venue_id)
-        if lock:
-            query = query.with_for_update()
         row = self._s.execute(query).scalars().first()
         return self._venue(row) if row else None
 
@@ -116,6 +116,35 @@ class SqlDirectoryStore:
         rows = self._s.execute(query.limit(limit)).scalars().all()
         return [(row.name_key, self._venue(row)) for row in rows]
 
+    def review_venues(
+        self,
+        *,
+        key: str,
+        status: VenueStatus | None,
+        checked_before: date | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Venue]]:
+        query = select(SkydiverVenue)
+        if key:
+            query = query.where(
+                col(SkydiverVenue.name_key).like(_like(key), escape="\\")
+            )
+        if status is not None:
+            query = query.where(col(SkydiverVenue.status) == status.value)
+        if checked_before is not None:
+            query = query.where(
+                col(SkydiverVenue.status) == VenueStatus.LISTED.value,
+                col(SkydiverVenue.checked_on) < checked_before,
+            )
+        if after:
+            query = query.where(
+                tuple_(col(SkydiverVenue.name_key), col(SkydiverVenue.id)) > after
+            )
+        query = query.order_by(col(SkydiverVenue.name_key), col(SkydiverVenue.id))
+        rows = self._s.execute(query.limit(limit)).scalars().all()
+        return [(row.name_key, self._venue(row)) for row in rows]
+
     def insert_venue(self, values: dict[str, Any], now: datetime) -> uuid.UUID:
         row = SkydiverVenue(
             **values,
@@ -128,14 +157,22 @@ class SqlDirectoryStore:
         return row.id
 
     def update_venue(
-        self, venue_id: uuid.UUID, values: dict[str, Any], now: datetime
+        self,
+        venue_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
     ) -> None:
         extra = {"name_key": search_key(values["name"])} if "name" in values else {}
-        self._s.execute(
+        result = self._s.execute(
             update(SkydiverVenue)
             .where(col(SkydiverVenue.id) == venue_id)
-            .values(**values, **extra, updated_at=now)
+            .where(col(SkydiverVenue.version) == expected_version)
+            .values(**values, **extra, version=expected_version + 1, updated_at=now)
         )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
 
     def add_alias(
         self, venue_id: uuid.UUID, name: str, kind: AliasKind, now: datetime

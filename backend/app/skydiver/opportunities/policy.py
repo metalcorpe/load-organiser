@@ -32,6 +32,15 @@ SPAN_MAX_DAYS = 366
 LANGUAGES_MAX = 8
 UNKNOWN_SORT_DATE = date(9999, 12, 31)  # postponed with no dates: listed last
 
+# Review cadence (release brief, operating defaults, not measured workload):
+# public listings starting within SOON_DAYS are due a check after
+# SOON_RECHECK_DAYS; postponed ones after POSTPONED_RECHECK_DAYS; published
+# organizer profiles after PROFILE_RECHECK_DAYS.
+SOON_DAYS = 30
+SOON_RECHECK_DAYS = 7
+POSTPONED_RECHECK_DAYS = 7
+PROFILE_RECHECK_DAYS = 60
+
 
 class ProviderKind(StrEnum):
     ORGANIZATION = "organization"

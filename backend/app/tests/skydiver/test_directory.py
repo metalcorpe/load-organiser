@@ -402,3 +402,54 @@ def test_venue_listing_is_not_a_claim_of_jumps(api: Api) -> None:
     assert api.call("GET", f"/venues/{venue['id']}").json()["venue"]["checked_on"] == (
         date(2026, 11, 1).isoformat()
     )
+
+
+# ------------------------------------------------------- compare-and-swap (#151)
+
+
+def test_stale_venue_edits_are_refused_not_overwritten(api: Api) -> None:
+    venue = api.venue(f"{token()} DZ")
+    path = f"/directory/venues/{venue['id']}"
+    assert venue["version"] == 1
+    first = api.call("PATCH", path, api.reviewer, {"locality": "A", "version": 1})
+    assert first.status_code == 200 and first.json()["version"] == 2
+    # A second reviewer still looking at version 1 is told, not silently overwritten.
+    stale = api.call("PATCH", path, api.reviewer, {"locality": "B", "version": 1})
+    assert stale.status_code == 409 and stale.json() == {"detail": "edit_conflict"}
+    current = api.call("GET", path, api.reviewer).json()
+    assert (current["locality"], current["version"]) == ("A", 2)
+    for method, suffix, body in (
+        ("POST", "/status", {"status": "closed", "version": 1}),
+        ("POST", "/aliases", {"name": "Old", "version": 1}),
+    ):
+        refused = api.call(method, path + suffix, api.reviewer, body)
+        assert refused.status_code == 409, suffix
+    # Without a version the change applies to whatever is current.
+    assert api.call("POST", path + "/status", api.reviewer, {"status": "closed"}).status_code == 200  # fmt: skip
+
+
+def test_merge_compares_both_venues(api: Api) -> None:
+    keep, dupe = api.venue(f"{token()} Keep"), api.venue(f"{token()} Dupe")
+    path = f"/directory/venues/{dupe['id']}/merge"
+    stale = api.call("POST", path, api.reviewer, {"into": keep["id"], "version": 9})
+    assert stale.status_code == 409
+    merged = api.call("POST", path, api.reviewer, {"into": keep["id"], "version": 1})
+    assert merged.status_code == 200
+    # The surviving venue's version moved too, so an edit based on its old view fails.
+    target = f"/directory/venues/{keep['id']}"
+    assert api.call("GET", target, api.reviewer).json()["version"] == 2
+    old_view = api.call("PATCH", target, api.reviewer, {"locality": "X", "version": 1})
+    assert old_view.status_code == 409
+
+
+def test_venue_review_queue_and_due_checks(api: Api) -> None:
+    base = token()
+    draft = api.venue(f"{base} Draft", listed=False)
+    old = api.venue(f"{base} Old", checked_on="2020-01-01")
+    api.venue(f"{base} Fresh", checked_on=date.today().isoformat())
+    every = api.call("GET", f"/directory/venues?q={base}", api.reviewer).json()["items"]
+    assert len(every) == 3 and draft["id"] in {v["id"] for v in every}
+    due = api.call("GET", f"/directory/venues?q={base}&due=true", api.reviewer).json()
+    assert [v["id"] for v in due["items"]] == [old["id"]]
+    member = api.accounts.session()
+    assert api.call("GET", "/directory/venues", member).status_code == 403

@@ -61,7 +61,8 @@
 				Listings appear only after a source has been reviewed. Nothing here is a complete
 				directory.
 			{/if}
-			Signed-in jumpers can keep a <a href="/places">private place</a> for any dropzone that is missing.
+			Signed-in jumpers can keep a <a href="/places">private place</a> for any dropzone that is missing,
+			or <a href="/submit?kind=suggest_venue">suggest it</a>.
 		</p>
 	</Notice>
 {:else}

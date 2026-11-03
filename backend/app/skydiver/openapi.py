@@ -18,6 +18,8 @@ from app.skydiver.directory.api import create_router as create_directory_router
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.service import IdentityService
+from app.skydiver.moderation.api import create_router as create_moderation_router
+from app.skydiver.moderation.service import SubmissionService
 from app.skydiver.opportunities.api import (
     create_router as create_opportunity_router,
 )
@@ -35,6 +37,10 @@ def _no_directory() -> DirectoryService:
 
 
 def _no_opportunities() -> OpportunityService:
+    raise RuntimeError("contract export only")
+
+
+def _no_submissions() -> SubmissionService:
     raise RuntimeError("contract export only")
 
 
@@ -60,6 +66,11 @@ def build_openapi() -> dict[str, Any]:
     )
     app.include_router(
         create_saves_router(service=_no_saves, access=AccessDependencies(_no_service))
+    )
+    app.include_router(
+        create_moderation_router(
+            service=_no_submissions, access=AccessDependencies(_no_service)
+        )
     )
     return app.openapi()
 

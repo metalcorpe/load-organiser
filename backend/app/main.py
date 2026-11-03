@@ -25,6 +25,9 @@ from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.mail import FileOutboxMailer, SmtpMailer
 from app.skydiver.identity.service import IdentityConfig, IdentityService, Mailer
 from app.skydiver.identity.store import sql_store_factory
+from app.skydiver.moderation.api import create_router as create_moderation_router
+from app.skydiver.moderation.service import SubmissionService
+from app.skydiver.moderation.store import sql_submission_store_factory
 from app.skydiver.opportunities.api import create_router as create_opportunity_router
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.opportunities.store import sql_listing_store_factory
@@ -88,6 +91,14 @@ saves_service = SavesService(
     directory=directory_service,
 )
 
+submission_service = SubmissionService(
+    stores=sql_submission_store_factory(engine),
+    clock=utc_now,
+    directory=directory_service,
+    opportunities=opportunity_service,
+    is_open=lambda: settings.SKYDIVER_SUBMISSIONS_OPEN,
+)
+
 
 def create_app(*, include_legacy: bool) -> FastAPI:
     """Compose the API. The beta namespace is always mounted; legacy only on request.
@@ -120,6 +131,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_opportunity_router(
             service=lambda: opportunity_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_moderation_router(
+            service=lambda: submission_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

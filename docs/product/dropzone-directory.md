@@ -1,6 +1,6 @@
 # Dropzone directory and jump attribution
 
-Status: documented product direction from discovery. The listing, provisional-place and merge foundation is implemented by #148 (see [Implemented in #148](#implemented-in-148)); claims, operator participation, suggestions/review UI (#151) and jump linking (#153) are not. Skydivers must be able to associate jumps with a dropzone before that operator registers or adopts the application.
+Status: documented product direction from discovery. The listing, provisional-place and merge foundation is implemented by #148 (see [Implemented in #148](#implemented-in-148)); maintenance tools, suggestions/corrections and the manual claim policy are implemented by #151 (see [discovery board](discovery-board.md#implemented-in-151)); claims as a feature, operator participation and jump linking (#153) are not. Skydivers must be able to associate jumps with a dropzone before that operator registers or adopts the application.
 
 ## Directory presence versus participation
 

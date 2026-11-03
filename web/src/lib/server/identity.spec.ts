@@ -9,7 +9,8 @@ const VIEWER = {
 	email: 'jumper@example.com',
 	display_name: null,
 	email_verified: false,
-	session_expires_at: '2026-11-09T12:00:00Z'
+	session_expires_at: '2026-11-09T12:00:00Z',
+	roles: []
 };
 
 function api(result: TransportResult, seen: unknown[] = []): ApiTransport {
@@ -25,7 +26,10 @@ describe('identity calls', () => {
 	it('maps a session response to a viewer without exposing other fields', async () => {
 		const seen: unknown[] = [];
 		const outcome = await signIn(
-			api({ kind: 'response', status: 201, body: { session_secret: SECRET, viewer: VIEWER } }, seen),
+			api(
+				{ kind: 'response', status: 201, body: { session_secret: SECRET, viewer: VIEWER } },
+				seen
+			),
 			{ email: 'jumper@example.com', password: 'p' },
 			'203.0.113.9'
 		);
@@ -39,7 +43,8 @@ describe('identity calls', () => {
 					email: VIEWER.email,
 					displayName: null,
 					emailVerified: false,
-					sessionExpiresAt: '2026-11-09T12:00:00.000Z'
+					sessionExpiresAt: '2026-11-09T12:00:00.000Z',
+					reviewer: false
 				}
 			}
 		});
@@ -64,23 +69,37 @@ describe('identity calls', () => {
 
 	it('maps problem codes, throttling and transport failures', async () => {
 		expect(
-			await getViewer(api({ kind: 'response', status: 401, body: { detail: 'not_authenticated' } }), SECRET)
+			await getViewer(
+				api({ kind: 'response', status: 401, body: { detail: 'not_authenticated' } }),
+				SECRET
+			)
 		).toEqual({ ok: false, reason: 'not_authenticated' });
 		expect(
 			await signIn(
-				api({ kind: 'response', status: 429, body: { detail: 'too_many_attempts' }, retryAfter: 900 }),
+				api({
+					kind: 'response',
+					status: 429,
+					body: { detail: 'too_many_attempts' },
+					retryAfter: 900
+				}),
 				{ email: 'e', password: 'p' },
 				'ip'
 			)
 		).toEqual({ ok: false, reason: 'too_many_attempts', retryAfter: 900 });
-		expect(await signOut(api({ kind: 'timeout' }), SECRET)).toEqual({ ok: false, reason: 'uncertain' });
+		expect(await signOut(api({ kind: 'timeout' }), SECRET)).toEqual({
+			ok: false,
+			reason: 'uncertain'
+		});
 		expect(await signOut(api({ kind: 'unreachable' }), SECRET)).toEqual({
 			ok: false,
 			reason: 'unavailable'
 		});
 		// Unknown upstream detail text is never passed through.
 		expect(
-			await getViewer(api({ kind: 'response', status: 500, body: { detail: 'SQL trace…' } }), SECRET)
+			await getViewer(
+				api({ kind: 'response', status: 500, body: { detail: 'SQL trace…' } }),
+				SECRET
+			)
 		).toEqual({ ok: false, reason: 'unavailable' });
 	});
 });
