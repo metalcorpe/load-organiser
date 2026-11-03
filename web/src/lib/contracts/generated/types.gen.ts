@@ -205,6 +205,28 @@ export type ComponentOut = {
 };
 
 /**
+ * ComponentRefOut
+ */
+export type ComponentRefOut = {
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
  * ComponentSummaryOut
  */
 export type ComponentSummaryOut = {
@@ -289,6 +311,20 @@ export type DuplicateIn = {
 };
 
 /**
+ * DuplicateProblem
+ */
+export type DuplicateProblem = {
+    /**
+     * Detail
+     */
+    detail: 'likely_duplicate';
+    /**
+     * Duplicate Of
+     */
+    duplicate_of: string;
+};
+
+/**
  * EventOut
  */
 export type EventOut = {
@@ -350,6 +386,387 @@ export type HealthStatus = {
      * Overall API availability for beta requests.
      */
     status: 'ok' | 'unavailable';
+};
+
+/**
+ * JumpDetailOut
+ */
+export type JumpDetailOut = {
+    /**
+     * Events
+     */
+    events: Array<JumpEventOut>;
+    jump: JumpOut;
+    /**
+     * Same Number
+     *
+     * Your other entries with this jump number (a possible mistake).
+     */
+    same_number: Array<string>;
+};
+
+/**
+ * JumpEventOut
+ */
+export type JumpEventOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Detail
+     */
+    detail: {
+        [key: string]: unknown;
+    };
+    /**
+     * Kind
+     */
+    kind: string;
+};
+
+/**
+ * JumpIn
+ */
+export type JumpIn = {
+    /**
+     * Altitude Datum
+     */
+    altitude_datum?: 'unspecified' | 'agl' | 'msl' | null;
+    /**
+     * Altitude Unit
+     *
+     * Required when an altitude is given.
+     */
+    altitude_unit?: 'ft' | 'm' | null;
+    /**
+     * Client Key
+     */
+    client_key: string;
+    /**
+     * Component Ids
+     *
+     * Your own components actually used. Omit if unknown.
+     */
+    component_ids?: Array<string> | null;
+    /**
+     * Confirm Distinct
+     *
+     * Save even though a likely duplicate exists (two real jumps).
+     */
+    confirm_distinct?: boolean;
+    /**
+     * Deployment Altitude
+     */
+    deployment_altitude?: number | null;
+    /**
+     * Exit Altitude
+     */
+    exit_altitude?: number | null;
+    /**
+     * Exit Time
+     *
+     * Local exit time as entered; needs `time_zone`.
+     */
+    exit_time?: string | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds?: number | null;
+    /**
+     * Jump Number
+     */
+    jump_number?: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     *
+     * The local calendar date of the jump.
+     */
+    jumped_on: string;
+    /**
+     * Links
+     */
+    links?: Array<string> | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Other Gear
+     *
+     * Borrowed, rented or unrecorded equipment.
+     */
+    other_gear?: string | null;
+    /**
+     * Place Id
+     *
+     * One of your private places.
+     */
+    place_id?: string | null;
+    /**
+     * Time Zone
+     *
+     * IANA time zone of `exit_time`, e.g. Europe/Madrid.
+     */
+    time_zone?: string | null;
+    /**
+     * Venue Id
+     *
+     * A listed dropzone.
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * JumpOut
+ *
+ * The owner's own record. `provenance` is always self-reported.
+ */
+export type JumpOut = {
+    /**
+     * Altitude Datum
+     */
+    altitude_datum: 'unspecified' | 'agl' | 'msl';
+    /**
+     * Altitude Unit
+     */
+    altitude_unit: 'ft' | 'm' | null;
+    /**
+     * Components
+     */
+    components: Array<ComponentRefOut>;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Deployment Altitude
+     */
+    deployment_altitude: number | null;
+    /**
+     * Exit Altitude
+     */
+    exit_altitude: number | null;
+    /**
+     * Exit Time
+     */
+    exit_time: string | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds: number | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Number
+     */
+    jump_number: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    /**
+     * Links
+     */
+    links: Array<string>;
+    location: LocationOut;
+    /**
+     * Notes
+     */
+    notes: string | null;
+    /**
+     * Other Gear
+     */
+    other_gear: string | null;
+    /**
+     * Provenance
+     */
+    provenance?: 'self_reported';
+    /**
+     * Source
+     */
+    source: 'manual';
+    /**
+     * Time Zone
+     */
+    time_zone: string | null;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * JumpPageOut
+ */
+export type JumpPageOut = {
+    /**
+     * Items
+     */
+    items: Array<JumpSummaryOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+    /**
+     * Recorded Total
+     *
+     * Detailed entries you recorded; not a lifetime total.
+     */
+    recorded_total: number;
+};
+
+/**
+ * JumpSummaryOut
+ */
+export type JumpSummaryOut = {
+    /**
+     * Components
+     */
+    components: Array<ComponentRefOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Number
+     */
+    jump_number: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    location: LocationOut;
+};
+
+/**
+ * JumpUpdateIn
+ */
+export type JumpUpdateIn = {
+    /**
+     * Altitude Datum
+     */
+    altitude_datum?: 'unspecified' | 'agl' | 'msl' | null;
+    /**
+     * Altitude Unit
+     *
+     * Required when an altitude is given.
+     */
+    altitude_unit?: 'ft' | 'm' | null;
+    /**
+     * Component Ids
+     *
+     * Your own components actually used. Omit if unknown.
+     */
+    component_ids?: Array<string> | null;
+    /**
+     * Deployment Altitude
+     */
+    deployment_altitude?: number | null;
+    /**
+     * Exit Altitude
+     */
+    exit_altitude?: number | null;
+    /**
+     * Exit Time
+     *
+     * Local exit time as entered; needs `time_zone`.
+     */
+    exit_time?: string | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds?: number | null;
+    /**
+     * Jump Number
+     */
+    jump_number?: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type?: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other' | null;
+    /**
+     * Jumped On
+     */
+    jumped_on?: string | null;
+    /**
+     * Links
+     */
+    links?: Array<string> | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Other Gear
+     *
+     * Borrowed, rented or unrecorded equipment.
+     */
+    other_gear?: string | null;
+    /**
+     * Place Id
+     */
+    place_id?: string | null;
+    /**
+     * Time Zone
+     *
+     * IANA time zone of `exit_time`, e.g. Europe/Madrid.
+     */
+    time_zone?: string | null;
+    /**
+     * Venue Id
+     */
+    venue_id?: string | null;
+    /**
+     * Version
+     */
+    version?: number | null;
+};
+
+/**
+ * LocationOut
+ */
+export type LocationOut = {
+    /**
+     * Closed
+     */
+    closed: boolean;
+    /**
+     * Country
+     */
+    country: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'venue' | 'place';
+    /**
+     * Name
+     *
+     * Null when a dropzone is no longer listed.
+     */
+    name: string | null;
 };
 
 /**
@@ -4601,6 +5018,304 @@ export type GetHealthResponses = {
 };
 
 export type GetHealthResponse = GetHealthResponses[keyof GetHealthResponses];
+
+export type ListJumpsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/jumps';
+};
+
+export type ListJumpsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Response 409 Listjumps
+     *
+     * Conflict
+     */
+    409: Problem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListJumpsError = ListJumpsErrors[keyof ListJumpsErrors];
+
+export type ListJumpsResponses = {
+    /**
+     * Successful Response
+     */
+    200: JumpPageOut;
+};
+
+export type ListJumpsResponse = ListJumpsResponses[keyof ListJumpsResponses];
+
+export type CreateJumpData = {
+    body: JumpIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps';
+};
+
+export type CreateJumpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Response 409 Createjump
+     *
+     * Conflict
+     */
+    409: Problem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateJumpError = CreateJumpErrors[keyof CreateJumpErrors];
+
+export type CreateJumpResponses = {
+    /**
+     * Successful Response
+     */
+    200: JumpDetailOut;
+    /**
+     * Created
+     */
+    201: JumpDetailOut;
+};
+
+export type CreateJumpResponse = CreateJumpResponses[keyof CreateJumpResponses];
+
+export type DeleteJumpData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Jump Id
+         */
+        jump_id: string;
+    };
+    query?: {
+        /**
+         * Version
+         */
+        version?: number | null;
+    };
+    url: '/api/skydiver/v1/jumps/{jump_id}';
+};
+
+export type DeleteJumpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Response 409 Deletejump
+     *
+     * Conflict
+     */
+    409: Problem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type DeleteJumpError = DeleteJumpErrors[keyof DeleteJumpErrors];
+
+export type DeleteJumpResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteJumpResponse = DeleteJumpResponses[keyof DeleteJumpResponses];
+
+export type GetJumpData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Jump Id
+         */
+        jump_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/jumps/{jump_id}';
+};
+
+export type GetJumpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Response 409 Getjump
+     *
+     * Conflict
+     */
+    409: Problem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetJumpError = GetJumpErrors[keyof GetJumpErrors];
+
+export type GetJumpResponses = {
+    /**
+     * Successful Response
+     */
+    200: JumpDetailOut;
+};
+
+export type GetJumpResponse = GetJumpResponses[keyof GetJumpResponses];
+
+export type UpdateJumpData = {
+    body: JumpUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Jump Id
+         */
+        jump_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/jumps/{jump_id}';
+};
+
+export type UpdateJumpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Response 409 Updatejump
+     *
+     * Conflict
+     */
+    409: Problem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateJumpError = UpdateJumpErrors[keyof UpdateJumpErrors];
+
+export type UpdateJumpResponses = {
+    /**
+     * Successful Response
+     */
+    200: JumpDetailOut;
+};
+
+export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
 
 export type SearchOpportunitiesData = {
     body?: never;

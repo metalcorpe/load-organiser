@@ -20,6 +20,8 @@ from app.skydiver.gear.api import create_router as create_gear_router
 from app.skydiver.gear.service import GearService
 from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.service import IdentityService
+from app.skydiver.logbook.api import create_router as create_logbook_router
+from app.skydiver.logbook.service import LogbookService
 from app.skydiver.moderation.api import create_router as create_moderation_router
 from app.skydiver.moderation.service import SubmissionService
 from app.skydiver.opportunities.api import (
@@ -43,6 +45,10 @@ def _no_opportunities() -> OpportunityService:
 
 
 def _no_gear() -> GearService:
+    raise RuntimeError("contract export only")
+
+
+def _no_logbook() -> LogbookService:
     raise RuntimeError("contract export only")
 
 
@@ -75,6 +81,11 @@ def build_openapi() -> dict[str, Any]:
     )
     app.include_router(
         create_gear_router(service=_no_gear, access=AccessDependencies(_no_service))
+    )
+    app.include_router(
+        create_logbook_router(
+            service=_no_logbook, access=AccessDependencies(_no_service)
+        )
     )
     app.include_router(
         create_moderation_router(
