@@ -25,6 +25,9 @@ from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.mail import FileOutboxMailer, SmtpMailer
 from app.skydiver.identity.service import IdentityConfig, IdentityService, Mailer
 from app.skydiver.identity.store import sql_store_factory
+from app.skydiver.opportunities.api import create_router as create_opportunity_router
+from app.skydiver.opportunities.service import OpportunityService
+from app.skydiver.opportunities.store import sql_listing_store_factory
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -71,6 +74,10 @@ identity_service = IdentityService(
 directory_service = DirectoryService(
     stores=sql_directory_store_factory(engine), clock=utc_now
 )
+opportunity_service = OpportunityService(
+    stores=sql_listing_store_factory(engine),
+    clock=utc_now,
+)
 
 
 def create_app(*, include_legacy: bool) -> FastAPI:
@@ -98,6 +105,12 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_directory_router(
             service=lambda: directory_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_opportunity_router(
+            service=lambda: opportunity_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )
