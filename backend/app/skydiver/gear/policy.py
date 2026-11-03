@@ -120,9 +120,10 @@ def check_service_dates(done_on: date, due_on: date | None, today: date) -> None
         raise RuleError("due_before_service")
 
 
-def check_membership(starts_on: date, current_from: date | None, today: date) -> None:
-    """Rig changes are dated; they cannot precede the current assembly or the future."""
+def check_membership(starts_on: date, not_before: date | None, today: date) -> None:
+    """Rig changes are dated and never overlap: not before the latest stint's start
+    (or its end, once it has ended), and not in the future."""
     if starts_on > today:
         raise RuleError("rig_date_in_future")
-    if current_from is not None and starts_on < current_from:
+    if not_before is not None and starts_on < not_before:
         raise RuleError("rig_date_before_current")

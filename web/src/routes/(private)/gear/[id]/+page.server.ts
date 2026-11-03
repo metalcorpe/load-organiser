@@ -105,12 +105,13 @@ export const actions: Actions = {
 		const data = await event.request.formData();
 		const rig = field(data, 'rig_id', { max: 64 });
 		const on = field(data, 'on', { max: 10 });
-		if (!DATE.test(on) || (rig && !isUuid(rig)))
+		// 'none' takes it out of its rig; an unchosen move is not sent.
+		if (!DATE.test(on) || (rig !== 'none' && !isUuid(rig)))
 			return fail(400, { form: 'place', error: 'invalid_input' });
 		const result = await call<ComponentDetailOut>(createRequestApi(), 'placeComponent', {
 			bearer: secret,
 			id: event.params.id,
-			body: { rig_id: rig || null, on, version: version(data) }
+			body: { rig_id: rig === 'none' ? null : rig, on, version: version(data) }
 		});
 		if (!result.ok) return fail(failStatus(result), { form: 'place', error: result.reason });
 		return { form: 'place', done: true };

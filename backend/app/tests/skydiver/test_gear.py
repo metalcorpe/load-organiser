@@ -3,6 +3,7 @@
 import json
 import uuid
 from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime
 from typing import Any
 
@@ -10,13 +11,15 @@ import httpx2
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from sqlmodel import Session
 
 from app.core.db import engine
 from app.skydiver.access.http import AccessDependencies
+from app.skydiver.access.policy import Actor, actor_roles
 from app.skydiver.gear import policy as gear_policy
 from app.skydiver.gear.api import create_router
-from app.skydiver.gear.service import GearService
-from app.skydiver.gear.store import sql_gear_store_factory
+from app.skydiver.gear.service import GearService, KeyReused
+from app.skydiver.gear.store import SqlGearStore, sql_gear_store_factory
 from app.tests.skydiver.support import Accounts
 
 NOW = datetime(2026, 11, 3, 12, 0, tzinfo=UTC)
@@ -228,3 +231,96 @@ def test_writes_need_a_confirmed_email_and_limits_apply(
     assert over.status_code == 409 and over.json() == {
         "detail": "component_limit_reached"
     }
+
+
+def test_stints_never_overlap_or_end_before_they_start(api: Api) -> None:
+    owner = api.accounts.session()
+    main = api.component(owner)["component"]
+    first, second = api.rig(owner, "Rig A"), api.rig(owner, "Rig B")
+    path = f"/gear/components/{main['id']}/rig"
+    api.ok("POST", path, owner, {"rig_id": first["id"], "on": "2026-10-01"})
+    api.ok("POST", path, owner, {"rig_id": None, "on": "2026-10-20"})
+    # Out of any rig, a new stint cannot start before the last one ended.
+    overlap = api.call(
+        "POST", path, owner, {"rig_id": second["id"], "on": "2026-10-05"}
+    )
+    assert overlap.status_code == 422
+    assert overlap.json() == {"detail": "rig_date_before_current"}
+
+    # NOW is 2026-11-03 UTC, already 2026-11-04 somewhere: a stint may start
+    # then, and archiving (component or rig) ends it no earlier than it began.
+    placed = api.ok("POST", path, owner, {"rig_id": second["id"], "on": "2026-11-04"})
+    archived = api.ok(
+        "POST", f"/gear/components/{main['id']}/archive", owner,
+        {"archived": True, "version": placed["component"]["version"]},
+    )  # fmt: skip
+    assert archived["rig_history"][0]["until_on"] == "2026-11-04"
+
+    other = api.component(owner, label="Other main")["component"]
+    rig = api.rig(owner, "Rig C")
+    api.ok(
+        "POST", f"/gear/components/{other['id']}/rig", owner,
+        {"rig_id": rig["id"], "on": "2026-11-04"},
+    )  # fmt: skip
+    api.ok("PATCH", f"/gear/rigs/{rig['id']}", owner, {"archived": True})
+    history = api.ok("GET", f"/gear/components/{other['id']}", owner)["rig_history"]
+    assert history[0]["until_on"] == "2026-11-04"
+
+
+class _LateStore(SqlGearStore):
+    """Misses the first by-key read, as a request racing a same-key retry would."""
+
+    missed: set[str] = set()
+
+    def _late(self, name: str, found: Any) -> Any:
+        if name not in self.missed:
+            self.missed.add(name)
+            return None
+        return found
+
+    def component_by_key(self, actor: Any, client_key: uuid.UUID) -> Any:
+        return self._late("component", super().component_by_key(actor, client_key))
+
+    def rig_by_key(self, actor: Any, client_key: uuid.UUID) -> Any:
+        return self._late("rig", super().rig_by_key(actor, client_key))
+
+    def service_by_key(self, actor: Any, client_key: uuid.UUID) -> Any:
+        return self._late("service", super().service_by_key(actor, client_key))
+
+
+def test_a_lost_same_key_race_returns_the_winner(api: Api) -> None:
+    owner = api.accounts.session()
+    actor = _actor(api.accounts.service.current_viewer(secret=owner))
+    real = GearService(stores=sql_gear_store_factory(engine), clock=lambda: NOW)
+    key, rig_key, service_key = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
+    fields = {"kind": "main", "label": "Main"}
+    first, _ = real.create_component(actor, key, fields)
+    real.create_rig(actor, rig_key, "Rig")
+    service = {"kind": "repack", "done_on": NOW.date()}
+    real.add_service(actor, first.component.id, service_key, service)
+
+    @contextmanager
+    def late_stores() -> Iterator[SqlGearStore]:
+        with Session(engine) as session:
+            yield _LateStore(session)
+            session.commit()
+
+    _LateStore.missed = set()
+    late = GearService(stores=late_stores, clock=lambda: NOW)
+    again, created = late.create_component(actor, key, fields)
+    assert (again.component.id, created) == (first.component.id, False)
+    assert late.create_rig(actor, rig_key, "Rig")[1] is False
+    _, created = late.add_service(actor, first.component.id, service_key, service)
+    assert created is False
+    _LateStore.missed = set()
+    with pytest.raises(KeyReused):
+        late.create_component(actor, key, {**fields, "label": "Other"})
+
+
+def _actor(viewer: Any) -> Actor:
+    return Actor(
+        account_id=viewer.account_id,
+        person_id=viewer.person_id,
+        email_verified=viewer.email_verified,
+        roles=actor_roles(viewer.roles),
+    )

@@ -50,8 +50,12 @@ export const GEAR_MESSAGES: Record<string, string> = {
 	acquired_invalid: 'Use YYYY, YYYY-MM or YYYY-MM-DD, not in the future.',
 	acquisition_requires_owned: 'Acquisition details apply only to gear you own.',
 	notes_too_long: 'Use at most 1,000 characters for notes.',
+	manufacturer_too_long: 'Use at most 80 characters for the manufacturer.',
+	model_too_long: 'Use at most 80 characters for the model.',
+	performed_by_too_long: 'Use at most 120 characters for who did the work.',
 	rig_date_in_future: 'The date cannot be in the future.',
-	rig_date_before_current: 'The date cannot be before the current assembly started.',
+	rig_date_before_current:
+		'The date cannot be before its latest rig change (the current rig started, or the last one ended).',
 	rig_unavailable: 'That rig is archived or no longer exists.',
 	already_in_rig: 'It is already in that rig.',
 	not_in_rig: 'It is not in a rig.',

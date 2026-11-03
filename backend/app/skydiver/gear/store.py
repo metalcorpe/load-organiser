@@ -7,6 +7,7 @@ from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy import Engine, delete, func, select, update
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
@@ -35,6 +36,8 @@ from app.skydiver.gear.tables import (
     SkydiverRigMembership,
     SkydiverServiceEntry,
 )
+
+_UNIQUE_VIOLATION = "23505"
 
 C, R, M, S, E = (
     SkydiverComponent,
@@ -86,6 +89,21 @@ class SqlGearStore:
     def __init__(self, session: Session) -> None:
         self._s = session
 
+    def _insert(self, row: Any) -> uuid.UUID | None:
+        """Insert in a savepoint; None if the owner's client key is already taken."""
+        attempt = self._s.begin_nested()
+        try:
+            self._s.add(row)
+            self._s.flush()
+        except IntegrityError as error:
+            attempt.rollback()
+            # Only a concurrent same-key insert is a lost race; anything else is a bug.
+            if getattr(error.orig, "sqlstate", None) != _UNIQUE_VIOLATION:
+                raise
+            return None
+        attempt.commit()
+        return row.id  # type: ignore[no-any-return]
+
     def _count(self, query: Any) -> int:
         return int(
             self._s.execute(
@@ -129,7 +147,7 @@ class SqlGearStore:
 
     def insert_component(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID:
+    ) -> uuid.UUID | None:
         row = C(
             owner_person_id=actor.person_id,
             client_key=client_key,
@@ -137,9 +155,7 @@ class SqlGearStore:
             updated_at=now,
             **values,
         )
-        self._s.add(row)
-        self._s.flush()
-        return row.id
+        return self._insert(row)
 
     def update_component(
         self,
@@ -209,7 +225,7 @@ class SqlGearStore:
 
     def insert_rig(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID:
+    ) -> uuid.UUID | None:
         values = dict(values)
         values.pop("fingerprint", None)  # a rig's content is its label
         row = R(
@@ -219,9 +235,7 @@ class SqlGearStore:
             updated_at=now,
             **values,
         )
-        self._s.add(row)
-        self._s.flush()
-        return row.id
+        return self._insert(row)
 
     def update_rig(
         self,
@@ -317,16 +331,14 @@ class SqlGearStore:
 
     def insert_service(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID:
+    ) -> uuid.UUID | None:
         row = S(
             owner_person_id=actor.person_id,
             client_key=client_key,
             created_at=now,
             **values,
         )
-        self._s.add(row)
-        self._s.flush()
-        return row.id
+        return self._insert(row)
 
     def delete_service(
         self, actor: Actor, component_id: uuid.UUID, entry_id: uuid.UUID

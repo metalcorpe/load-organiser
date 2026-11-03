@@ -136,7 +136,10 @@ class GearStore(Protocol):
     def list_components(self, actor: Actor, *, archived: bool) -> list[Component]: ...
     def insert_component(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID: ...
+    ) -> uuid.UUID | None:
+        """None when a concurrent request already inserted this client key."""
+        ...
+
     def update_component(
         self,
         actor: Actor,
@@ -162,7 +165,10 @@ class GearStore(Protocol):
     def list_rigs(self, actor: Actor) -> list[Rig]: ...
     def insert_rig(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID: ...
+    ) -> uuid.UUID | None:
+        """None when a concurrent request already inserted this client key."""
+        ...
+
     def update_rig(
         self,
         actor: Actor,
@@ -198,7 +204,10 @@ class GearStore(Protocol):
 
     def insert_service(
         self, actor: Actor, client_key: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> uuid.UUID: ...
+    ) -> uuid.UUID | None:
+        """None when a concurrent request already inserted this client key."""
+        ...
+
     def delete_service(
         self, actor: Actor, component_id: uuid.UUID, entry_id: uuid.UUID
     ) -> bool: ...
@@ -305,11 +314,18 @@ class GearService:
                 # overshoot by their number.
                 if store.count_components(actor) >= policy.MAX_COMPONENTS:
                     raise LimitReached("component_limit_reached")
-                component_id = store.insert_component(
+                inserted = store.insert_component(
                     actor, client_key, values | {"fingerprint": digest}, now
                 )
-                store.record(actor, component_id, "created", {}, now)
-                created = True
+                if inserted is None:  # a concurrent retry with the same key won
+                    raced = store.component_by_key(actor, client_key)
+                    if raced is None or raced.fingerprint != digest:
+                        raise KeyReused()
+                    created, component_id = False, raced.id
+                else:
+                    component_id = inserted
+                    store.record(actor, component_id, "created", {}, now)
+                    created = True
         return self.component(actor, component_id), created
 
     def update_component(
@@ -376,7 +392,7 @@ class GearService:
                 if archived:
                     for m in store.memberships(actor, component_id=component_id):
                         if m.until_on is None:
-                            store.close_membership(actor, m.id, now.date())
+                            store.close_membership(actor, m.id, _ends(m, now))
                 store.record(
                     actor, component_id, "archived" if archived else "restored", {}, now
                 )
@@ -431,6 +447,11 @@ class GearService:
             rig_id = store.insert_rig(
                 actor, client_key, values | {"fingerprint": digest}, now
             )
+            if rig_id is None:  # a concurrent retry with the same key won
+                rig = store.rig_by_key(actor, client_key)
+                if rig is None or rig.fingerprint != digest:
+                    raise KeyReused()
+                return rig, False
             rig = store.get_rig(actor, rig_id)
         assert rig is not None
         return rig, True
@@ -460,7 +481,7 @@ class GearService:
                 # An archived rig keeps its history but holds no current components.
                 for m in store.memberships(actor):
                     if m.rig_id == rig_id and m.until_on is None:
-                        store.close_membership(actor, m.id, now.date())
+                        store.close_membership(actor, m.id, _ends(m, now))
                         component = store.get_component(actor, m.component_id)
                         if component is not None:
                             store.update_component(
@@ -474,7 +495,7 @@ class GearService:
                                 actor,
                                 m.component_id,
                                 "rig_removed",
-                                {"rig": current.label, "on": now.date().isoformat()},
+                                {"rig": current.label, "on": _ends(m, now).isoformat()},
                                 now,
                             )
             rig = store.get_rig(actor, rig_id)
@@ -500,8 +521,11 @@ class GearService:
                 raise RuleError("component_archived")
             history = store.memberships(actor, component_id=component_id)
             current = next((m for m in history if m.until_on is None), None)
-            latest = history[0].from_on if history else None
-            policy.check_membership(on, latest, self._latest_local_date())
+            # Stints never overlap: a move cannot start before the current stint
+            # began or, out of any rig, before the last one ended.
+            last = history[0] if history else None
+            floor = (last.until_on or last.from_on) if last else None
+            policy.check_membership(on, floor, self._latest_local_date())
             rig: Rig | None = None
             if rig_id is not None:
                 rig = store.get_rig(actor, rig_id)
@@ -577,6 +601,11 @@ class GearService:
             entry_id = store.insert_service(
                 actor, client_key, values | {"fingerprint": digest}, now
             )
+            if entry_id is None:  # a concurrent retry with the same key won
+                raced = store.service_by_key(actor, client_key)
+                if raced is None or raced.fingerprint != digest:
+                    raise KeyReused()
+                return raced, False
             store.record(
                 actor,
                 component_id,
@@ -662,6 +691,12 @@ def _component_values_of(component: Component) -> dict[str, Any]:
         "acquired": component.acquired,
         "notes": component.notes,
     }
+
+
+def _ends(stint: Membership, now: datetime) -> date:
+    # A stint may start "tomorrow" in UTC terms (some owner's today); ending it
+    # earlier than it began would be an invalid, negative stint.
+    return max(stint.from_on, now.date())
 
 
 def _fresh[T: (Component, Rig)](row: T | None, expected: int | None) -> T:

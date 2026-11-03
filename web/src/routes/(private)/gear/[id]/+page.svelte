@@ -135,10 +135,11 @@
 			<div class="pair">
 				<div class="field">
 					<label for="rig_id">Move to</label>
-					<select id="rig_id" name="rig_id">
-						<option value="">Out of any rig</option>
-						{#each data.rigs as rig (rig.id)}
-							<option value={rig.id} selected={d.rig?.rig_id === rig.id}>{rig.label}</option>
+					<select id="rig_id" name="rig_id" required>
+						<option value="" disabled selected>Choose…</option>
+						{#if d.rig}<option value="none">Out of any rig</option>{/if}
+						{#each data.rigs.filter((r) => r.id !== d.rig?.rig_id) as rig (rig.id)}
+							<option value={rig.id}>{rig.label}</option>
 						{/each}
 					</select>
 				</div>

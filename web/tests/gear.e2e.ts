@@ -43,6 +43,11 @@ test.describe('private gear', () => {
 		await page.getByRole('button', { name: 'Update rig' }).click();
 		await expect(page.getByText('Rig updated.')).toBeVisible();
 		await expect(page.getByText('In Main rig since 1 March 2026.')).toBeVisible();
+		// The move picker starts unchosen and never offers the rig it is already in.
+		const moveTo = page.getByLabel('Move to');
+		await expect(moveTo).toHaveValue('');
+		await expect(moveTo.getByRole('option', { name: 'Main rig' })).toHaveCount(0);
+		await expect(moveTo.getByRole('option', { name: 'Out of any rig' })).toHaveCount(1);
 
 		await page.getByLabel('Service', { exact: true }).selectOption('repack');
 		await page.getByLabel('Done on', { exact: true }).fill('2026-10-01');
