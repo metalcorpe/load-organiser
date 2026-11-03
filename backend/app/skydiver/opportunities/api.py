@@ -208,6 +208,47 @@ class ReviewerOpportunityOut(BaseModel):
     events: list[EventOut]
 
 
+class ReviewProviderItemOut(BaseModel):
+    """A row in the maintenance queue (any status)."""
+
+    id: uuid.UUID
+    name: str
+    kind: ProviderKindName
+    status: Literal["draft", "published", "archived", "merged"]
+    checked_on: date | None
+    version: int
+    updated_at: datetime
+
+
+class ReviewProviderPageOut(BaseModel):
+    items: list[ReviewProviderItemOut]
+    next_cursor: str | None
+
+
+class ReviewOpportunityItemOut(BaseModel):
+    """A row in the maintenance queue (any status)."""
+
+    id: uuid.UUID
+    title: str
+    category: CategoryName
+    status: Literal[
+        "draft", "review", "published", "postponed", "cancelled", "archived",
+        "duplicate",
+    ]  # fmt: skip
+    provider_id: uuid.UUID
+    country: str
+    starts_on: date | None
+    ends_on: date | None
+    checked_on: date | None
+    version: int
+    updated_at: datetime
+
+
+class ReviewOpportunityPageOut(BaseModel):
+    items: list[ReviewOpportunityItemOut]
+    next_cursor: str | None
+
+
 class ProviderCreateIn(BaseModel):
     name: Name
     kind: ProviderKindName
@@ -565,6 +606,47 @@ def create_router(
         return provider_view(provider.id)
 
     @router.get(
+        "/directory/providers",
+        operation_id="listReviewProviders",
+        response_model=ReviewProviderPageOut,
+        dependencies=deps,
+    )
+    def list_review_providers(
+        _actor: Reviewer,
+        q: Annotated[str | None, Query(max_length=200)] = None,
+        status: Annotated[str | None, Query(max_length=16)] = None,
+        due: Annotated[
+            bool,
+            Query(
+                description="Only published organizers whose source check is overdue."
+            ),
+        ] = False,
+        cursor: Annotated[str | None, Query(max_length=512)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=50)] = None,
+    ) -> ReviewProviderPageOut | JSONResponse:
+        try:
+            page = service().review_providers(
+                query=q, status=status, due=due, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return ReviewProviderPageOut(
+            items=[
+                ReviewProviderItemOut(
+                    id=p.id,
+                    name=p.name,
+                    kind=p.kind.value,
+                    status=p.status.value,
+                    checked_on=p.checked_on,
+                    version=p.version,
+                    updated_at=p.updated_at,
+                )
+                for p in page.items
+            ],
+            next_cursor=page.next_cursor,
+        )
+
+    @router.get(
         "/directory/providers/{provider_id}",
         operation_id="reviewProvider",
         response_model=ReviewerProviderOut,
@@ -655,6 +737,51 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return opportunity_view(row.id)
+
+    @router.get(
+        "/directory/opportunities",
+        operation_id="listReviewOpportunities",
+        response_model=ReviewOpportunityPageOut,
+        dependencies=deps,
+    )
+    def list_review_opportunities(
+        _actor: Reviewer,
+        q: Annotated[str | None, Query(max_length=200)] = None,
+        status: Annotated[str | None, Query(max_length=16)] = None,
+        due: Annotated[
+            bool,
+            Query(
+                description="Public listings starting soon or postponed whose check is overdue."
+            ),
+        ] = False,
+        cursor: Annotated[str | None, Query(max_length=512)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=50)] = None,
+    ) -> ReviewOpportunityPageOut | JSONResponse:
+        try:
+            page = service().review_opportunities(
+                query=q, status=status, due=due, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return ReviewOpportunityPageOut(
+            items=[
+                ReviewOpportunityItemOut(
+                    id=row.id,
+                    title=row.title,
+                    category=row.category.value,
+                    status=row.status.value,
+                    provider_id=row.provider_id,
+                    country=row.country,
+                    starts_on=row.starts_on,
+                    ends_on=row.ends_on,
+                    checked_on=row.checked_on,
+                    version=row.version,
+                    updated_at=row.updated_at,
+                )
+                for row in page.items
+            ],
+            next_cursor=page.next_cursor,
+        )
 
     @router.get(
         "/directory/opportunities/{opportunity_id}",

@@ -12,7 +12,7 @@ import uuid
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Protocol
 
 from app.skydiver.access.policy import Actor
@@ -130,6 +130,18 @@ class DirectoryStore(Protocol):
         ...
 
     def insert_venue(self, values: dict[str, Any], now: datetime) -> uuid.UUID: ...
+    def review_venues(
+        self,
+        *,
+        key: str,
+        status: VenueStatus | None,
+        checked_before: date | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Venue]]:
+        """Any status; `checked_before` limits to listed venues checked before it."""
+        ...
+
     def update_venue(
         self,
         venue_id: uuid.UUID,
@@ -246,6 +258,39 @@ class DirectoryService:
         return found
 
     # -- reviewer -----------------------------------------------------------------
+
+    def review_venues(
+        self,
+        *,
+        query: str | None = None,
+        status: str | None = None,
+        due: bool = False,
+        cursor: str | None = None,
+        limit: int | None = None,
+    ) -> VenuePage:
+        """Maintenance queue: every status, or only listed venues due a source check."""
+        key = policy.search_key(query or "")[: policy.QUERY_MAX]
+        state = _status(status)
+        checked_before = (
+            self._clock().date() - timedelta(days=policy.PROFILE_RECHECK_DAYS)
+            if due
+            else None
+        )
+        after = decode_cursor(cursor) if cursor else None
+        size = policy.page_size(limit)
+        with self._stores() as store:
+            rows = store.review_venues(
+                key=key,
+                status=state,
+                checked_before=checked_before,
+                after=after,
+                limit=size + 1,
+            )
+        next_cursor = None
+        if len(rows) > size:
+            last_key, last = rows[size - 1]
+            next_cursor = encode_cursor(last_key, last.id)
+        return VenuePage(items=[v for _, v in rows[:size]], next_cursor=next_cursor)
 
     def reviewer_venue(
         self, actor: Actor, venue_id: uuid.UUID
@@ -570,6 +615,15 @@ class DirectoryService:
             values.get("source_url") and values.get("checked_on")
         ):
             raise DirectoryRuleError("source_required")
+
+
+def _status(raw: str | None) -> VenueStatus | None:
+    if not raw:
+        return None
+    try:
+        return VenueStatus(raw)
+    except ValueError:
+        raise DirectoryRuleError("status_invalid") from None
 
 
 def _current(venue: Venue | None, expected_version: int | None) -> Venue:

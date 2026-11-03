@@ -625,3 +625,39 @@ def test_concurrent_archive_and_publish_never_hide_a_live_organizer(api: Api) ->
             and provider_now["status"] != "published"
         ), (archived, published)
         assert {archived, published} <= {200, 409, 422}
+
+
+# ----------------------------------------------------------- review queues (#151)
+
+
+def test_review_queue_lists_every_status_for_reviewers_only(api: Api) -> None:
+    base = token()
+    provider = api.provider(f"{base} Org")
+    draft = api.draft(f"{base} Draft", provider["id"])
+    listed = api.listed(f"{base} Live", provider["id"])
+    queue = api.ok("GET", f"/directory/opportunities?q={base}")["items"]
+    assert {i["id"] for i in queue} == {draft["id"], listed["id"]}
+    drafts = api.ok("GET", f"/directory/opportunities?q={base}&status=draft")["items"]
+    assert [i["id"] for i in drafts] == [draft["id"]]
+    assert drafts[0]["version"] == 1
+    member = api.accounts.session()
+    assert api.call("GET", "/directory/opportunities", member).status_code == 403
+    assert api.call("GET", "/directory/opportunities").status_code == 401
+    bad = api.call("GET", "/directory/opportunities?status=secret", api.reviewer)
+    assert bad.json() == {"detail": "status_invalid"}
+
+
+def test_due_queue_follows_the_review_cadence(api: Api) -> None:
+    base = token()
+    provider = api.provider(f"{base} Org", checked_on="2026-08-01")
+    # Starts within 30 days of NOW (2026-11-03), last checked 2026-10-01: due.
+    soon = api.listed(f"{base} Soon", provider["id"], starts_on="2026-11-20", ends_on="2026-11-22", checked_on="2026-10-01")  # fmt: skip
+    # Starts within 30 days but checked yesterday: not due.
+    api.listed(f"{base} Fresh", provider["id"], starts_on="2026-11-20", ends_on="2026-11-22", checked_on="2026-11-02")  # fmt: skip
+    # Starts later: not due yet.
+    api.listed(f"{base} Later", provider["id"], starts_on="2027-03-01", ends_on="2027-03-02", checked_on="2026-10-01")  # fmt: skip
+    due = api.ok("GET", f"/directory/opportunities?q={base}&due=true")["items"]
+    assert [i["id"] for i in due] == [soon["id"]]
+    # A published organizer last checked more than 60 days ago is due.
+    profiles = api.ok("GET", f"/directory/providers?q={base}&due=true")["items"]
+    assert [p["id"] for p in profiles] == [provider["id"]]

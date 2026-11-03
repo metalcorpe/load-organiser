@@ -440,3 +440,16 @@ def test_merge_compares_both_venues(api: Api) -> None:
     assert api.call("GET", target, api.reviewer).json()["version"] == 2
     old_view = api.call("PATCH", target, api.reviewer, {"locality": "X", "version": 1})
     assert old_view.status_code == 409
+
+
+def test_venue_review_queue_and_due_checks(api: Api) -> None:
+    base = token()
+    draft = api.venue(f"{base} Draft", listed=False)
+    old = api.venue(f"{base} Old", checked_on="2020-01-01")
+    api.venue(f"{base} Fresh", checked_on=date.today().isoformat())
+    every = api.call("GET", f"/directory/venues?q={base}", api.reviewer).json()["items"]
+    assert len(every) == 3 and draft["id"] in {v["id"] for v in every}
+    due = api.call("GET", f"/directory/venues?q={base}&due=true", api.reviewer).json()
+    assert [v["id"] for v in due["items"]] == [old["id"]]
+    member = api.accounts.session()
+    assert api.call("GET", "/directory/venues", member).status_code == 403

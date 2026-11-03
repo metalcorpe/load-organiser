@@ -79,6 +79,24 @@ class VenuePageOut(BaseModel):
     next_cursor: str | None
 
 
+class ReviewVenueItemOut(BaseModel):
+    """A row in the maintenance queue (any status)."""
+
+    id: uuid.UUID
+    name: str
+    country: str
+    locality: str | None
+    status: Literal["draft", "listed", "closed", "merged"]
+    checked_on: date | None
+    version: int
+    updated_at: datetime
+
+
+class ReviewVenuePageOut(BaseModel):
+    items: list[ReviewVenueItemOut]
+    next_cursor: str | None
+
+
 class VenueDetailOut(BaseModel):
     venue: VenueOut
     replaced_id: uuid.UUID | None = Field(
@@ -372,6 +390,46 @@ def create_router(
     def reviewed(actor: Actor, venue: Venue) -> ReviewerVenueOut:
         _, events = service().reviewer_venue(actor, venue.id)
         return _reviewer(venue, events)
+
+    @router.get(
+        "/directory/venues",
+        operation_id="listReviewVenues",
+        response_model=ReviewVenuePageOut,
+        dependencies=deps,
+    )
+    def list_review_venues(
+        _actor: Reviewer,
+        q: Annotated[str | None, Query(max_length=200)] = None,
+        status: Annotated[str | None, Query(max_length=16)] = None,
+        due: Annotated[
+            bool,
+            Query(description="Only listed venues whose source check is overdue."),
+        ] = False,
+        cursor: Annotated[str | None, Query(max_length=512)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=50)] = None,
+    ) -> ReviewVenuePageOut | JSONResponse:
+        try:
+            page = service().review_venues(
+                query=q, status=status, due=due, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return ReviewVenuePageOut(
+            items=[
+                ReviewVenueItemOut(
+                    id=v.id,
+                    name=v.name,
+                    country=v.country,
+                    locality=v.locality,
+                    status=v.status.value,
+                    checked_on=v.checked_on,
+                    version=v.version,
+                    updated_at=v.updated_at,
+                )
+                for v in page.items
+            ],
+            next_cursor=page.next_cursor,
+        )
 
     @router.get(
         "/directory/venues/{venue_id}",

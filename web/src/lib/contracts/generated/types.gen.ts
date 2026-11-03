@@ -989,6 +989,176 @@ export type ResetRequestIn = {
 };
 
 /**
+ * ReviewOpportunityItemOut
+ *
+ * A row in the maintenance queue (any status).
+ */
+export type ReviewOpportunityItemOut = {
+    /**
+     * Category
+     */
+    category: 'event' | 'boogie' | 'camp' | 'course';
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Ends On
+     */
+    ends_on: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Provider Id
+     */
+    provider_id: string;
+    /**
+     * Starts On
+     */
+    starts_on: string | null;
+    /**
+     * Status
+     */
+    status: 'draft' | 'review' | 'published' | 'postponed' | 'cancelled' | 'archived' | 'duplicate';
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * ReviewOpportunityPageOut
+ */
+export type ReviewOpportunityPageOut = {
+    /**
+     * Items
+     */
+    items: Array<ReviewOpportunityItemOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
+ * ReviewProviderItemOut
+ *
+ * A row in the maintenance queue (any status).
+ */
+export type ReviewProviderItemOut = {
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'organization' | 'person';
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Status
+     */
+    status: 'draft' | 'published' | 'archived' | 'merged';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * ReviewProviderPageOut
+ */
+export type ReviewProviderPageOut = {
+    /**
+     * Items
+     */
+    items: Array<ReviewProviderItemOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
+ * ReviewVenueItemOut
+ *
+ * A row in the maintenance queue (any status).
+ */
+export type ReviewVenueItemOut = {
+    /**
+     * Checked On
+     */
+    checked_on: string | null;
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Locality
+     */
+    locality: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Status
+     */
+    status: 'draft' | 'listed' | 'closed' | 'merged';
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * ReviewVenuePageOut
+ */
+export type ReviewVenuePageOut = {
+    /**
+     * Items
+     */
+    items: Array<ReviewVenueItemOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
  * ReviewerOpportunityOut
  */
 export type ReviewerOpportunityOut = {
@@ -2016,6 +2186,76 @@ export type RevokeAllSessionsResponses = {
 
 export type RevokeAllSessionsResponse = RevokeAllSessionsResponses[keyof RevokeAllSessionsResponses];
 
+export type ListReviewOpportunitiesData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Status
+         */
+        status?: string | null;
+        /**
+         * Due
+         *
+         * Public listings starting soon or postponed whose check is overdue.
+         */
+        due?: boolean;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/directory/opportunities';
+};
+
+export type ListReviewOpportunitiesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListReviewOpportunitiesError = ListReviewOpportunitiesErrors[keyof ListReviewOpportunitiesErrors];
+
+export type ListReviewOpportunitiesResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewOpportunityPageOut;
+};
+
+export type ListReviewOpportunitiesResponse = ListReviewOpportunitiesResponses[keyof ListReviewOpportunitiesResponses];
+
 export type CreateOpportunityData = {
     body: OpportunityCreateIn;
     headers?: {
@@ -2271,6 +2511,76 @@ export type SetOpportunityStatusResponses = {
 
 export type SetOpportunityStatusResponse = SetOpportunityStatusResponses[keyof SetOpportunityStatusResponses];
 
+export type ListReviewProvidersData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Status
+         */
+        status?: string | null;
+        /**
+         * Due
+         *
+         * Only published organizers whose source check is overdue.
+         */
+        due?: boolean;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/directory/providers';
+};
+
+export type ListReviewProvidersErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListReviewProvidersError = ListReviewProvidersErrors[keyof ListReviewProvidersErrors];
+
+export type ListReviewProvidersResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewProviderPageOut;
+};
+
+export type ListReviewProvidersResponse = ListReviewProvidersResponses[keyof ListReviewProvidersResponses];
+
 export type CreateProviderData = {
     body: ProviderCreateIn;
     headers?: {
@@ -2525,6 +2835,76 @@ export type SetProviderStatusResponses = {
 };
 
 export type SetProviderStatusResponse = SetProviderStatusResponses[keyof SetProviderStatusResponses];
+
+export type ListReviewVenuesData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Status
+         */
+        status?: string | null;
+        /**
+         * Due
+         *
+         * Only listed venues whose source check is overdue.
+         */
+        due?: boolean;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/directory/venues';
+};
+
+export type ListReviewVenuesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListReviewVenuesError = ListReviewVenuesErrors[keyof ListReviewVenuesErrors];
+
+export type ListReviewVenuesResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewVenuePageOut;
+};
+
+export type ListReviewVenuesResponse = ListReviewVenuesResponses[keyof ListReviewVenuesResponses];
 
 export type CreateVenueData = {
     body: VenueCreateIn;

@@ -3,7 +3,7 @@
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 from typing import Any
 
@@ -108,6 +108,35 @@ class SqlDirectoryStore:
             )
         if country:
             query = query.where(col(SkydiverVenue.country) == country)
+        if after:
+            query = query.where(
+                tuple_(col(SkydiverVenue.name_key), col(SkydiverVenue.id)) > after
+            )
+        query = query.order_by(col(SkydiverVenue.name_key), col(SkydiverVenue.id))
+        rows = self._s.execute(query.limit(limit)).scalars().all()
+        return [(row.name_key, self._venue(row)) for row in rows]
+
+    def review_venues(
+        self,
+        *,
+        key: str,
+        status: VenueStatus | None,
+        checked_before: date | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Venue]]:
+        query = select(SkydiverVenue)
+        if key:
+            query = query.where(
+                col(SkydiverVenue.name_key).like(_like(key), escape="\\")
+            )
+        if status is not None:
+            query = query.where(col(SkydiverVenue.status) == status.value)
+        if checked_before is not None:
+            query = query.where(
+                col(SkydiverVenue.status) == VenueStatus.LISTED.value,
+                col(SkydiverVenue.checked_on) < checked_before,
+            )
         if after:
             query = query.where(
                 tuple_(col(SkydiverVenue.name_key), col(SkydiverVenue.id)) > after

@@ -9,7 +9,7 @@ import uuid
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, replace
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from typing import Any, Protocol
 
@@ -190,6 +190,22 @@ OPPORTUNITY_FIELDS = (
 _SCHEDULE = {"starts_on", "ends_on", "time_zone"}
 
 
+@dataclass(frozen=True)
+class DueRule:
+    """Public, not ended, and either starting soon or postponed, with a stale check."""
+
+    now: datetime
+    starts_until: date
+    soon_checked_before: date
+    postponed_checked_before: date
+
+
+@dataclass(frozen=True)
+class ReviewPage[T]:
+    items: list[T]
+    next_cursor: str | None
+
+
 class ListingStore(Protocol):
     def get_provider(self, provider_id: uuid.UUID) -> Provider | None: ...
     def insert_provider(self, values: dict[str, Any], now: datetime) -> uuid.UUID: ...
@@ -238,6 +254,30 @@ class ListingStore(Protocol):
         self, query: SearchQuery, after: tuple[str, uuid.UUID] | None, limit: int
     ) -> list[OpportunityRow]:
         """Public, not-ended opportunities ordered by (sort_on, id)."""
+        ...
+
+    def review_providers(
+        self,
+        *,
+        key: str,
+        status: str | None,
+        checked_before: date | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Provider]]:
+        """Any status; `checked_before` limits to published providers checked before it."""
+        ...
+
+    def review_opportunities(
+        self,
+        *,
+        key: str,
+        status: str | None,
+        due: DueRule | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[OpportunityRow]:
+        """Any status, ordered by (sort_on, id); `due` limits to overdue checks."""
         ...
 
     def public_venue(self, venue_id: uuid.UUID) -> VenueRef | None:
@@ -357,6 +397,77 @@ class OpportunityService:
         return Resolved(provider, provider_id if provider.id != provider_id else None)
 
     # -- reviewer: providers --------------------------------------------------------
+
+    def review_providers(
+        self,
+        *,
+        query: str | None = None,
+        status: str | None = None,
+        due: bool = False,
+        cursor: str | None = None,
+        limit: int | None = None,
+    ) -> ReviewPage[Provider]:
+        today = self._clock().date()
+        size = directory_policy.page_size(limit)
+        with self._stores() as store:
+            rows = store.review_providers(
+                key=directory_policy.search_key(query or "")[
+                    : directory_policy.QUERY_MAX
+                ],
+                status=_enum(ProviderStatus, status or None, "status"),
+                checked_before=today - timedelta(days=policy.PROFILE_RECHECK_DAYS)
+                if due
+                else None,
+                after=decode_cursor(cursor) if cursor else None,
+                limit=size + 1,
+            )
+        next_cursor = None
+        if len(rows) > size:
+            last_key, last = rows[size - 1]
+            next_cursor = encode_cursor(last_key, last.id)
+        return ReviewPage([p for _, p in rows[:size]], next_cursor)
+
+    def review_opportunities(
+        self,
+        *,
+        query: str | None = None,
+        status: str | None = None,
+        due: bool = False,
+        cursor: str | None = None,
+        limit: int | None = None,
+    ) -> ReviewPage[OpportunityRow]:
+        """Maintenance queue: drafts, review items, or public listings due a check."""
+        now = self._clock()
+        today = now.date()
+        rule = (
+            DueRule(
+                now=now,
+                starts_until=today + timedelta(days=policy.SOON_DAYS),
+                soon_checked_before=today - timedelta(days=policy.SOON_RECHECK_DAYS),
+                postponed_checked_before=today
+                - timedelta(days=policy.POSTPONED_RECHECK_DAYS),
+            )
+            if due
+            else None
+        )
+        size = directory_policy.page_size(limit)
+        with self._stores() as store:
+            rows = store.review_opportunities(
+                key=directory_policy.search_key(query or "")[
+                    : directory_policy.QUERY_MAX
+                ],
+                status=_enum(OpportunityStatus, status or None, "status"),
+                due=rule,
+                after=_decode(cursor) if cursor else None,
+                limit=size + 1,
+            )
+        next_cursor = None
+        if len(rows) > size:
+            last = rows[size - 1]
+            next_cursor = encode_cursor(
+                policy.sort_on(last.starts_on).isoformat(), last.id
+            )
+        return ReviewPage(rows[:size], next_cursor)
 
     def reviewer_provider(
         self, provider_id: uuid.UUID

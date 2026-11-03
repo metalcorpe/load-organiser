@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from typing import Any
 
-from sqlalchemy import Engine, func, or_, select, tuple_, update
+from sqlalchemy import Engine, and_, func, or_, select, tuple_, update
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
@@ -22,6 +22,7 @@ from app.skydiver.opportunities.policy import (
     ProviderStatus,
 )
 from app.skydiver.opportunities.service import (
+    DueRule,
     ListingEvent,
     ListingStore,
     OpportunityRow,
@@ -272,6 +273,67 @@ class SqlListingStore:
             stmt = stmt.where(col(o.ends_on) >= query.starts_from)
         if query.starts_until:
             stmt = stmt.where(col(o.starts_on) <= query.starts_until)
+        if after:
+            stmt = stmt.where(
+                tuple_(col(o.sort_on), col(o.id))
+                > (date.fromisoformat(after[0]), after[1])
+            )
+        stmt = stmt.order_by(col(o.sort_on), col(o.id)).limit(limit)
+        return [_opportunity(row) for row in self._s.execute(stmt).scalars()]
+
+    def review_providers(
+        self,
+        *,
+        key: str,
+        status: str | None,
+        checked_before: date | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Provider]]:
+        p = SkydiverProvider
+        stmt = select(p)
+        if key:
+            stmt = stmt.where(col(p.name_key).like(_like(key), escape="\\"))
+        if status:
+            stmt = stmt.where(col(p.status) == status)
+        if checked_before is not None:
+            stmt = stmt.where(
+                col(p.status) == ProviderStatus.PUBLISHED.value,
+                col(p.checked_on) < checked_before,
+            )
+        if after:
+            stmt = stmt.where(tuple_(col(p.name_key), col(p.id)) > after)
+        stmt = stmt.order_by(col(p.name_key), col(p.id)).limit(limit)
+        return [
+            (row.name_key, _provider(row)) for row in self._s.execute(stmt).scalars()
+        ]
+
+    def review_opportunities(
+        self,
+        *,
+        key: str,
+        status: str | None,
+        due: DueRule | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[OpportunityRow]:
+        o = SkydiverOpportunity
+        stmt = select(o)
+        if key:
+            stmt = stmt.where(col(o.title_key).like(_like(key), escape="\\"))
+        if status:
+            stmt = stmt.where(col(o.status) == status)
+        if due is not None:
+            soon = and_(
+                col(o.status) == OpportunityStatus.PUBLISHED.value,
+                col(o.starts_on) <= due.starts_until,
+                col(o.checked_on) < due.soon_checked_before,
+            )
+            postponed = and_(
+                col(o.status) == OpportunityStatus.POSTPONED.value,
+                col(o.checked_on) < due.postponed_checked_before,
+            )
+            stmt = stmt.where(or_(soon, postponed)).where(_not_ended(due.now))
         if after:
             stmt = stmt.where(
                 tuple_(col(o.sort_on), col(o.id))
