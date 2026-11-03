@@ -1,0 +1,83 @@
+/** Labels and messages for the private jump logbook (#153). Client-safe. */
+
+export const JUMP_TYPE_LABEL: Record<string, string> = {
+	unspecified: 'Not specified',
+	belly: 'Belly / formation',
+	freefly: 'Freefly',
+	angle: 'Angle / tracking',
+	wingsuit: 'Wingsuit',
+	canopy: 'Canopy piloting',
+	crw: 'Canopy formation (CRW)',
+	accuracy: 'Accuracy',
+	hop_and_pop: 'Hop and pop',
+	tandem: 'Tandem',
+	training: 'Training / coached',
+	other: 'Other'
+};
+
+export const DATUM_LABEL: Record<string, string> = {
+	unspecified: 'Not stated',
+	agl: 'Above ground (AGL)',
+	msl: 'Above sea level (MSL)'
+};
+
+export const JUMP_MESSAGES: Record<string, string> = {
+	missing: 'Enter the date and choose the jump type.',
+	confirm_delete: 'Tick the box to confirm deleting this jump.',
+	not_found: 'That jump no longer exists.',
+	not_authenticated: 'Your session has ended. Sign in again.',
+	email_unverified: 'Confirm your email address before saving jumps.',
+	edit_conflict:
+		'This jump changed since you opened it (perhaps in another tab). Nothing was saved. Reload to see the current details.',
+	client_key_reused: 'This form was already sent with different details. Reload and try again.',
+	jump_deleted: 'This jump was saved and later deleted. It was not saved again.',
+	jump_limit_reached: 'You have reached the limit of 2,000 jumps.',
+	jump_date_required: 'Enter the date of the jump.',
+	jump_date_in_future: 'The date cannot be in the future.',
+	jump_date_invalid: 'Check the date.',
+	location_required: 'Choose where you jumped.',
+	venue_not_listed: 'That dropzone is no longer listed. Choose another place.',
+	place_unknown: 'That private place no longer exists. Choose another place.',
+	jump_type_invalid: 'Choose the jump type.',
+	jump_number_invalid: 'The jump number must be a whole number of 1 or more.',
+	exit_time_invalid: 'Check the exit time.',
+	exit_time_incomplete: 'Enter the exit time together with its time zone.',
+	time_zone_required: 'An exit time needs its time zone, e.g. Europe/Madrid.',
+	time_zone_invalid: 'Use a time zone name such as Europe/Madrid.',
+	altitude_unit_required: 'Choose feet or metres for the altitudes.',
+	altitude_invalid: 'Check the altitudes.',
+	altitudes_incomplete: 'Check the altitudes.',
+	deployment_above_exit: 'The deployment altitude cannot be above the exit altitude.',
+	freefall_invalid: 'Freefall time must be between 0 and 600 seconds.',
+	notes_too_long: 'Use at most 2,000 characters for notes.',
+	other_gear_too_long: 'Use at most 200 characters for other equipment.',
+	too_many_links: 'Add at most five links.',
+	link_invalid: 'Links must be full http(s) addresses.',
+	too_many_components: 'Choose at most ten components.',
+	component_unknown: 'One of the chosen components no longer exists.',
+	component_limit_reached:
+		'You have reached the limit of 50 components. Nothing was saved; untick "Add a new component" or archive one first.',
+	label_required: 'Give the new component a label.',
+	invalid_input: 'Check the details you entered.',
+	uncertain:
+		'Save not confirmed: the service did not answer in time. It may or may not have been saved. Send the form again: it will not create a second entry.',
+	unavailable: 'The service is unavailable right now. Nothing was saved. Try again later.'
+};
+
+export function jumpMessage(code: string | undefined): string | undefined {
+	return code ? (JUMP_MESSAGES[code] ?? JUMP_MESSAGES.invalid_input) : undefined;
+}
+
+export function altitudeText(
+	exit: number | null,
+	deployment: number | null,
+	unit: string | null,
+	datum: string
+): string | null {
+	if (!unit || (exit === null && deployment === null)) return null;
+	const parts = [];
+	if (exit !== null) parts.push(`exit ${exit.toLocaleString('en-GB')} ${unit}`);
+	if (deployment !== null) parts.push(`deployment ${deployment.toLocaleString('en-GB')} ${unit}`);
+	const ref = datum === 'unspecified' ? '' : ` ${datum.toUpperCase()}`;
+	return parts.join(', ') + ref;
+}

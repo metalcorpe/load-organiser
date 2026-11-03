@@ -90,6 +90,10 @@ test.describe('private gear', () => {
 		await second.getByLabel('Model (optional)').fill('Something else');
 		await second.getByRole('button', { name: 'Save changes' }).click();
 		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
+		// Sending the re-shown stale form again still conflicts; it never overwrites.
+		await expect(second.getByLabel('Model (optional)')).toHaveValue('Something else');
+		await second.getByRole('button', { name: 'Save changes' }).click();
+		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
 		await page.reload();
 		await expect(page.getByLabel('Model (optional)')).toHaveValue('Optimum');
 	});

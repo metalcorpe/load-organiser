@@ -6,6 +6,8 @@ export const DIRECTORY_MESSAGES: Record<string, string> = {
 	email_unverified: 'Confirm your email address before saving private places.',
 	venue_not_listed: 'That dropzone is not listed.',
 	place_limit_reached: 'You have reached the limit of 200 private places. Remove one to add another.',
+	place_in_use:
+		'A logged jump is at this place, so it cannot be removed. Move those jumps to another place first.',
 	name_required: 'Enter a name.',
 	name_too_long: 'Use at most 120 characters for the name.',
 	country_invalid: 'Choose a country from the list.',

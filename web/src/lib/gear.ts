@@ -58,6 +58,8 @@ export const GEAR_MESSAGES: Record<string, string> = {
 		'The date cannot be before its latest rig change (the current rig started, or the last one ended).',
 	rig_unavailable: 'That rig is archived or no longer exists.',
 	already_in_rig: 'It is already in that rig.',
+	component_in_use:
+		'A jump records it as used, so it cannot be deleted. Archive it instead; past jumps keep it.',
 	not_in_rig: 'It is not in a rig.',
 	component_archived: 'Restore the item before changing its rig.',
 	service_incomplete: 'Choose the service type and the date it was done.',

@@ -9,6 +9,7 @@ from typing import Any
 
 from sqlalchemy import Engine, and_, delete, exists, func, or_, select, tuple_, update
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
@@ -16,6 +17,7 @@ from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.policy import (
     PUBLIC_STATUSES,
     AliasKind,
+    DirectoryRuleError,
     VenueStatus,
     search_key,
 )
@@ -297,11 +299,17 @@ class SqlDirectoryStore:
         )
 
     def delete_place(self, actor: Actor, place_id: uuid.UUID) -> None:
-        self._s.execute(
-            delete(SkydiverProvisionalPlace)
-            .where(col(SkydiverProvisionalPlace.id) == place_id)
-            .where(col(SkydiverProvisionalPlace.owner_person_id) == actor.person_id)
-        )
+        try:
+            self._s.execute(
+                delete(SkydiverProvisionalPlace)
+                .where(col(SkydiverProvisionalPlace.id) == place_id)
+                .where(col(SkydiverProvisionalPlace.owner_person_id) == actor.person_id)
+            )
+        except IntegrityError as error:
+            # A logged jump is at this place (#153); plans let go of it, jumps don't.
+            if getattr(error.orig, "sqlstate", None) == "23503":
+                raise DirectoryRuleError("place_in_use") from None
+            raise
 
 
 def sql_directory_store_factory(engine: Engine) -> StoreFactory:

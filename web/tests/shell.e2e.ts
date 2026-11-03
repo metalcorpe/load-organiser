@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const PRIVATE_PATHS = [
 	'/activity',
+	'/jumps',
 	'/jumps/new',
 	'/records',
 	'/profile',

@@ -440,6 +440,35 @@
         "title": "ComponentOut",
         "type": "object"
       },
+      "ComponentRefOut": {
+        "properties": {
+          "archived": {
+            "title": "Archived",
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "archived"
+        ],
+        "title": "ComponentRefOut",
+        "type": "object"
+      },
       "ComponentSummaryOut": {
         "properties": {
           "component": {
@@ -661,6 +690,26 @@
         "title": "DuplicateIn",
         "type": "object"
       },
+      "DuplicateProblem": {
+        "properties": {
+          "detail": {
+            "const": "likely_duplicate",
+            "title": "Detail",
+            "type": "string"
+          },
+          "duplicate_of": {
+            "format": "uuid",
+            "title": "Duplicate Of",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail",
+          "duplicate_of"
+        ],
+        "title": "DuplicateProblem",
+        "type": "object"
+      },
       "EventOut": {
         "properties": {
           "created_at": {
@@ -744,6 +793,910 @@
           "checked_at"
         ],
         "title": "HealthStatus",
+        "type": "object"
+      },
+      "JumpDetailOut": {
+        "properties": {
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/JumpEventOut"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "jump": {
+            "$ref": "#/components/schemas/JumpOut"
+          },
+          "same_number": {
+            "description": "Your other entries with this jump number (a possible mistake).",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Same Number",
+            "type": "array"
+          }
+        },
+        "required": [
+          "jump",
+          "events",
+          "same_number"
+        ],
+        "title": "JumpDetailOut",
+        "type": "object"
+      },
+      "JumpEventOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "detail": {
+            "additionalProperties": true,
+            "title": "Detail",
+            "type": "object"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "detail",
+          "created_at"
+        ],
+        "title": "JumpEventOut",
+        "type": "object"
+      },
+      "JumpIn": {
+        "properties": {
+          "altitude_datum": {
+            "anyOf": [
+              {
+                "enum": [
+                  "unspecified",
+                  "agl",
+                  "msl"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Altitude Datum"
+          },
+          "altitude_unit": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ft",
+                  "m"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required when an altitude is given.",
+            "title": "Altitude Unit"
+          },
+          "client_key": {
+            "format": "uuid",
+            "title": "Client Key",
+            "type": "string"
+          },
+          "component_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own components actually used. Omit if unknown.",
+            "title": "Component Ids"
+          },
+          "confirm_distinct": {
+            "default": false,
+            "description": "Save even though a likely duplicate exists (two real jumps).",
+            "title": "Confirm Distinct",
+            "type": "boolean"
+          },
+          "deployment_altitude": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Altitude"
+          },
+          "exit_altitude": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Altitude"
+          },
+          "exit_time": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Local exit time as entered; needs `time_zone`.",
+            "title": "Exit Time"
+          },
+          "freefall_seconds": {
+            "anyOf": [
+              {
+                "maximum": 3600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Freefall Seconds"
+          },
+          "jump_number": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Number"
+          },
+          "jump_type": {
+            "enum": [
+              "unspecified",
+              "belly",
+              "freefly",
+              "angle",
+              "wingsuit",
+              "canopy",
+              "crw",
+              "accuracy",
+              "hop_and_pop",
+              "tandem",
+              "training",
+              "other"
+            ],
+            "title": "Jump Type",
+            "type": "string"
+          },
+          "jumped_on": {
+            "description": "The local calendar date of the jump.",
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          },
+          "links": {
+            "anyOf": [
+              {
+                "items": {
+                  "maxLength": 2100,
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Links"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "other_gear": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Borrowed, rented or unrecorded equipment.",
+            "title": "Other Gear"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "One of your private places.",
+            "title": "Place Id"
+          },
+          "time_zone": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "IANA time zone of `exit_time`, e.g. Europe/Madrid.",
+            "title": "Time Zone"
+          },
+          "venue_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A listed dropzone.",
+            "title": "Venue Id"
+          }
+        },
+        "required": [
+          "client_key",
+          "jumped_on",
+          "jump_type"
+        ],
+        "title": "JumpIn",
+        "type": "object"
+      },
+      "JumpOut": {
+        "description": "The owner's own record. `provenance` is always self-reported.",
+        "properties": {
+          "altitude_datum": {
+            "enum": [
+              "unspecified",
+              "agl",
+              "msl"
+            ],
+            "title": "Altitude Datum",
+            "type": "string"
+          },
+          "altitude_unit": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ft",
+                  "m"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Altitude Unit"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentRefOut"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "deployment_altitude": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Altitude"
+          },
+          "exit_altitude": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Altitude"
+          },
+          "exit_time": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Time"
+          },
+          "freefall_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Freefall Seconds"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "jump_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Number"
+          },
+          "jump_type": {
+            "enum": [
+              "unspecified",
+              "belly",
+              "freefly",
+              "angle",
+              "wingsuit",
+              "canopy",
+              "crw",
+              "accuracy",
+              "hop_and_pop",
+              "tandem",
+              "training",
+              "other"
+            ],
+            "title": "Jump Type",
+            "type": "string"
+          },
+          "jumped_on": {
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          },
+          "links": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Links",
+            "type": "array"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "other_gear": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Gear"
+          },
+          "provenance": {
+            "const": "self_reported",
+            "default": "self_reported",
+            "title": "Provenance",
+            "type": "string"
+          },
+          "source": {
+            "const": "manual",
+            "title": "Source",
+            "type": "string"
+          },
+          "time_zone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Zone"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "jumped_on",
+          "location",
+          "jump_type",
+          "jump_number",
+          "exit_time",
+          "time_zone",
+          "exit_altitude",
+          "deployment_altitude",
+          "altitude_unit",
+          "altitude_datum",
+          "freefall_seconds",
+          "components",
+          "other_gear",
+          "notes",
+          "links",
+          "source",
+          "version",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "JumpOut",
+        "type": "object"
+      },
+      "JumpPageOut": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/JumpSummaryOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "recorded_total": {
+            "description": "Detailed entries you recorded; not a lifetime total.",
+            "title": "Recorded Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "recorded_total"
+        ],
+        "title": "JumpPageOut",
+        "type": "object"
+      },
+      "JumpSummaryOut": {
+        "properties": {
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentRefOut"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "jump_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Number"
+          },
+          "jump_type": {
+            "enum": [
+              "unspecified",
+              "belly",
+              "freefly",
+              "angle",
+              "wingsuit",
+              "canopy",
+              "crw",
+              "accuracy",
+              "hop_and_pop",
+              "tandem",
+              "training",
+              "other"
+            ],
+            "title": "Jump Type",
+            "type": "string"
+          },
+          "jumped_on": {
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          }
+        },
+        "required": [
+          "id",
+          "jumped_on",
+          "location",
+          "jump_type",
+          "jump_number",
+          "components"
+        ],
+        "title": "JumpSummaryOut",
+        "type": "object"
+      },
+      "JumpUpdateIn": {
+        "properties": {
+          "altitude_datum": {
+            "anyOf": [
+              {
+                "enum": [
+                  "unspecified",
+                  "agl",
+                  "msl"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Altitude Datum"
+          },
+          "altitude_unit": {
+            "anyOf": [
+              {
+                "enum": [
+                  "ft",
+                  "m"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required when an altitude is given.",
+            "title": "Altitude Unit"
+          },
+          "component_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own components actually used. Omit if unknown.",
+            "title": "Component Ids"
+          },
+          "deployment_altitude": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Altitude"
+          },
+          "exit_altitude": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exit Altitude"
+          },
+          "exit_time": {
+            "anyOf": [
+              {
+                "format": "time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Local exit time as entered; needs `time_zone`.",
+            "title": "Exit Time"
+          },
+          "freefall_seconds": {
+            "anyOf": [
+              {
+                "maximum": 3600.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Freefall Seconds"
+          },
+          "jump_number": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Number"
+          },
+          "jump_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "unspecified",
+                  "belly",
+                  "freefly",
+                  "angle",
+                  "wingsuit",
+                  "canopy",
+                  "crw",
+                  "accuracy",
+                  "hop_and_pop",
+                  "tandem",
+                  "training",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Type"
+          },
+          "jumped_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jumped On"
+          },
+          "links": {
+            "anyOf": [
+              {
+                "items": {
+                  "maxLength": 2100,
+                  "type": "string"
+                },
+                "maxItems": 10,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Links"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "other_gear": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Borrowed, rented or unrecorded equipment.",
+            "title": "Other Gear"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Place Id"
+          },
+          "time_zone": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "IANA time zone of `exit_time`, e.g. Europe/Madrid.",
+            "title": "Time Zone"
+          },
+          "venue_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Venue Id"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "title": "JumpUpdateIn",
+        "type": "object"
+      },
+      "LocationOut": {
+        "properties": {
+          "closed": {
+            "title": "Closed",
+            "type": "boolean"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "venue",
+              "place"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when a dropzone is no longer listed.",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "name",
+          "country",
+          "closed"
+        ],
+        "title": "LocationOut",
         "type": "object"
       },
       "LoginIn": {
@@ -9659,6 +10612,640 @@
         "summary": "Beta API and database availability",
         "tags": [
           "skydiver"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps": {
+      "get": {
+        "operationId": "listJumps",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 50,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Listjumps"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Jumps",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      },
+      "post": {
+        "operationId": "createJump",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JumpIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpDetailOut"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Createjump"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Create Jump",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/{jump_id}": {
+      "delete": {
+        "operationId": "deleteJump",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "jump_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Jump Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "version",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Deletejump"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Delete Jump",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      },
+      "get": {
+        "operationId": "getJump",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "jump_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Jump Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getjump"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Jump",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      },
+      "patch": {
+        "operationId": "updateJump",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "jump_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Jump Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JumpUpdateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Updatejump"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Update Jump",
+        "tags": [
+          "skydiver-logbook"
         ]
       }
     },

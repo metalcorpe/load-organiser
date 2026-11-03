@@ -170,7 +170,17 @@ export const OPERATIONS = {
 		method: 'DELETE',
 		path: `${BETA}/gear/components/{id}/service/{sub}`
 	},
-	updateRig: { method: 'PATCH', path: `${BETA}/gear/rigs/{id}` }
+	updateRig: { method: 'PATCH', path: `${BETA}/gear/rigs/{id}` },
+	listJumps: {
+		method: 'GET',
+		path: `${BETA}/jumps`,
+		query: ['cursor', 'limit'],
+		maxBodyBytes: 1024 * 1024
+	},
+	createJump: { method: 'POST', path: `${BETA}/jumps` },
+	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
+	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
+	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

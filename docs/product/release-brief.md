@@ -49,6 +49,19 @@ A visitor should find a useful real listing before creating an account or enteri
 
 Date-only entries stay date-only in the product; timestamp representation and time-zone rules are settled in #143. Different jumps on the same day are valid. Warn about likely duplicates rather than merging on date/DZ alone. Detailed counts derive from distinct personal entries, not jump numbers, publications, event saves or operator totals. An optional self-declared prior-history baseline uses a cutoff to avoid double-counting; show it separately from detailed records. The [baseline rules](beta-decisions.md) define the combined reported total. It never creates historical entries or automatic currency acceptance.
 
+#### Implemented in #153 (beta)
+
+Backend `backend/app/skydiver/logbook/` (`/api/skydiver/v1/jumps`); web `/jumps`, `/jumps/new` and `/jumps/{id}` under Records. Owner-only throughout.
+
+- Required: activity DATE (up to the latest local date anywhere, UTC+14; entered in the browser's local day), a listed venue (stored merge-resolved) or the owner's private place, and a type (`unspecified` allowed). Everything else is optional and null when not given: jump number, local exit time with its IANA zone (both or neither), exit/deployment altitude with an explicit unit and a datum that defaults to "not stated", freefall seconds, other-equipment text, notes (2,000) and up to five http(s) links that are never fetched.
+- Equipment actually used links only the owner's own components (archived ones stay linked). Nothing is preselected; unknown gear is no link. A component can be added from the jump form in the same submission, retry-safe. Deleting a component or private place a jump uses is refused (`component_in_use`, `place_in_use`); archive the component instead.
+- Creates carry a client key with a receipt that outlives the jump: a repeat returns the same entry, different content under the same key is 409, and a replay after deletion answers 410 `jump_deleted` without recreating it. A refused or unconfirmed form keeps its key, so resending cannot create a second entry.
+- Likely duplicate (same jump number, or the same date, place, type, time, altitudes, freefall and notes as an existing entry) answers 409 with the earlier entry; the jumper can view it or save a distinct jump. Edits are not blocked; the detail lists other entries with the same number.
+- Edits and deletes compare-and-swap the jump version (409 `edit_conflict`). History records creation and corrections with earlier values for facts; notes, links and other-equipment text record only that they changed.
+- The list shows the recorded total, labelled as entries recorded rather than a lifetime total. The prior-history baseline, summaries and gear-use counts belong to #154; publishing to #156.
+
+Limits: the 2,000-jump cap is counted without a lock, so only the owner's own simultaneous saves could overshoot it slightly (the same accepted trade-off as gear). Measurements are stored as entered; no normalized value is derived yet. No offline drafts: leaving the form loses unsaved input.
+
 ### Gear entry
 
 Require component type and a user-readable label. Manufacturer, model, serial, manufacture date, acquisition date/method, and service dates are optional to support unknown/borrowed/older equipment. Serial text preserves case, leading zeros, punctuation, and the original value; it is not a public unique ownership key.

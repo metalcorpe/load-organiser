@@ -9,7 +9,7 @@
 import type { ApiTransport, OperationId, RequestOptions } from './api/transport.ts';
 
 export type Refusal =
-	| { ok: false; reason: string; status: number }
+	| { ok: false; reason: string; status: number; body?: Record<string, unknown> }
 	| { ok: false; reason: 'uncertain' | 'unavailable' | 'not_found'; status: 0 };
 
 export type Result<T> = { ok: true; value: T; status: number } | Refusal;
@@ -34,7 +34,7 @@ export async function call<T>(
 	}
 	const detail = isRecord(result.body) ? result.body.detail : undefined;
 	if (typeof detail === 'string' && /^[a-z_]{1,64}$/.test(detail)) {
-		return { ok: false, reason: detail, status: result.status };
+		return { ok: false, reason: detail, status: result.status, body: result.body as Record<string, unknown> };
 	}
 	if (result.status === 401) return { ok: false, reason: 'not_authenticated', status: 401 };
 	if (result.status === 403) return { ok: false, reason: 'forbidden', status: 403 };

@@ -12,6 +12,7 @@ from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.access.sql import get_owned, owned
+from app.skydiver.directory.policy import DirectoryRuleError as RuleError
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.gear.policy import (
     AcquisitionMethod,
@@ -38,6 +39,7 @@ from app.skydiver.gear.tables import (
 )
 
 _UNIQUE_VIOLATION = "23505"
+_FOREIGN_KEY_VIOLATION = "23503"
 
 C, R, M, S, E = (
     SkydiverComponent,
@@ -177,12 +179,18 @@ class SqlGearStore:
     def delete_component(
         self, actor: Actor, component_id: uuid.UUID, *, expected_version: int
     ) -> None:
-        result = self._s.execute(
-            delete(C)
-            .where(col(C.id) == component_id)
-            .where(col(C.owner_person_id) == actor.person_id)
-            .where(col(C.version) == expected_version)
-        )
+        try:
+            result = self._s.execute(
+                delete(C)
+                .where(col(C.id) == component_id)
+                .where(col(C.owner_person_id) == actor.person_id)
+                .where(col(C.version) == expected_version)
+            )
+        except IntegrityError as error:
+            # A jump records it as used (#153): archive it instead.
+            if getattr(error.orig, "sqlstate", None) == _FOREIGN_KEY_VIOLATION:
+                raise RuleError("component_in_use") from None
+            raise
         if result.rowcount != 1:  # type: ignore[attr-defined]
             raise EditConflict()
 

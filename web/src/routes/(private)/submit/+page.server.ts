@@ -57,7 +57,7 @@ export const actions: Actions = {
 		const clientKey = field(data, 'client_key', { max: 64 });
 		const targetKind = pick(field(data, 'target_kind', { max: 16 }), TARGETS);
 		const targetId = field(data, 'target_id', { max: 64 });
-		const values = { message, source_url: sourceUrl };
+		const values = { message, source_url: sourceUrl, client_key: clientKey };
 		if (!kind || !isUuid(clientKey)) return fail(400, { error: 'invalid_input', values });
 		if (!message) return fail(400, { error: 'message_required', values });
 		const outcome = await call<OwnSubmission>(createRequestApi(), 'createSubmission', {

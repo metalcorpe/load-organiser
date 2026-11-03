@@ -45,7 +45,11 @@
 		{#if form && 'error' in form}
 			<p class="form-error" role="alert">{reviewMessage(form.error)}</p>
 		{/if}
-		<input type="hidden" name="client_key" value={data.clientKey} />
+		<input
+			type="hidden"
+			name="client_key"
+			value={(form && 'values' in form && form.values?.client_key) || data.clientKey}
+		/>
 		{#if data.target}
 			<input type="hidden" name="target_kind" value={data.target.kind} />
 			<input type="hidden" name="target_id" value={data.target.id} />
