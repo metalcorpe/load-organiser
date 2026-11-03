@@ -22,6 +22,12 @@ export type AliasIn = {
      * Name
      */
     name: string;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -48,6 +54,12 @@ export type DuplicateIn = {
      * The listing that remains.
      */
     of: string;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -118,6 +130,12 @@ export type MergeIn = {
      * The venue that remains.
      */
     into: string;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -376,6 +394,12 @@ export type OpportunityStatusIn = {
      * Status
      */
     status: 'draft' | 'review' | 'published' | 'postponed' | 'cancelled' | 'archived';
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -470,6 +494,12 @@ export type OpportunityUpdateIn = {
      * Venue Id
      */
     venue_id?: string | null;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -794,6 +824,12 @@ export type ProviderMergeIn = {
      * The provider that remains.
      */
     into: string;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -862,6 +898,12 @@ export type ProviderStatusIn = {
      * Status
      */
     status: 'draft' | 'published' | 'archived';
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -892,6 +934,12 @@ export type ProviderUpdateIn = {
      * Source Url
      */
     source_url?: string | null;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
     /**
      * Website Url
      */
@@ -1056,6 +1104,10 @@ export type ReviewerOpportunityOut = {
      * Venue Id
      */
     venue_id: string | null;
+    /**
+     * Version
+     */
+    version: number;
 };
 
 /**
@@ -1106,6 +1158,10 @@ export type ReviewerProviderOut = {
      * Updated At
      */
     updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
     /**
      * Website Url
      */
@@ -1172,6 +1228,10 @@ export type ReviewerVenueOut = {
      * Updated At
      */
     updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
 };
 
 /**
@@ -1237,6 +1297,12 @@ export type StatusIn = {
      * Status
      */
     status: 'draft' | 'listed' | 'closed';
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -1432,6 +1498,12 @@ export type VenueUpdateIn = {
      * Source Url
      */
     source_url?: string | null;
+    /**
+     * Version
+     *
+     * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
+     */
+    version?: number | null;
 };
 
 /**
@@ -1971,6 +2043,10 @@ export type CreateOpportunityErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2018,6 +2094,10 @@ export type ReviewOpportunityErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -2067,6 +2147,10 @@ export type UpdateOpportunityErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2114,6 +2198,10 @@ export type MarkOpportunityDuplicateErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -2163,6 +2251,10 @@ export type SetOpportunityStatusErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2205,6 +2297,10 @@ export type CreateProviderErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -2254,6 +2350,10 @@ export type ReviewProviderErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2301,6 +2401,10 @@ export type UpdateProviderErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -2350,6 +2454,10 @@ export type MergeProviderErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2397,6 +2505,10 @@ export type SetProviderStatusErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -2816,6 +2928,10 @@ export type SearchOpportunitiesErrors = {
      */
     404: Problem;
     /**
+     * Conflict
+     */
+    409: Problem;
+    /**
      * Unprocessable Content
      */
     422: Problem;
@@ -2857,6 +2973,10 @@ export type GetOpportunityErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */
@@ -3299,6 +3419,10 @@ export type GetProviderErrors = {
      * Not Found
      */
     404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
     /**
      * Unprocessable Content
      */

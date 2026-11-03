@@ -12,6 +12,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     Numeric,
     Text,
     UniqueConstraint,
@@ -61,6 +62,10 @@ class SkydiverVenue(SQLModel, table=True):
         default=None, sa_column=Column(Numeric(9, 6), nullable=True)
     )
     status: str = Field(max_length=16)
+    # Compare-and-swap version: every write sets version = version + 1 WHERE version = read.
+    version: int = Field(
+        default=1, sa_column=Column(Integer, nullable=False, server_default="1")
+    )
     merged_into_id: uuid.UUID | None = Field(
         default=None,
         sa_column=Column(ForeignKey("skydiver_venue.id"), nullable=True),

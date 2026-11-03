@@ -20,6 +20,19 @@
             "minLength": 1,
             "title": "Name",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -58,6 +71,19 @@
             "format": "uuid",
             "title": "Of",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -155,6 +181,19 @@
             "format": "uuid",
             "title": "Into",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -781,6 +820,19 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -1079,6 +1131,19 @@
               }
             ],
             "title": "Venue Id"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "title": "OpportunityUpdateIn",
@@ -1733,6 +1798,19 @@
             "format": "uuid",
             "title": "Into",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -1855,6 +1933,19 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -1941,6 +2032,19 @@
               }
             ],
             "title": "Source Url"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           },
           "website_url": {
             "anyOf": [
@@ -2297,6 +2401,10 @@
               }
             ],
             "title": "Venue Id"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -2327,6 +2435,7 @@
           "source_note",
           "checked_on",
           "updated_at",
+          "version",
           "events"
         ],
         "title": "ReviewerOpportunityOut",
@@ -2430,6 +2539,10 @@
             "title": "Updated At",
             "type": "string"
           },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
           "website_url": {
             "anyOf": [
               {
@@ -2454,6 +2567,7 @@
           "source_note",
           "checked_on",
           "updated_at",
+          "version",
           "events"
         ],
         "title": "ReviewerProviderOut",
@@ -2581,6 +2695,10 @@
             "format": "date-time",
             "title": "Updated At",
             "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
           }
         },
         "required": [
@@ -2597,6 +2715,7 @@
           "source_note",
           "checked_on",
           "updated_at",
+          "version",
           "events"
         ],
         "title": "ReviewerVenueOut",
@@ -2690,6 +2809,19 @@
             ],
             "title": "Status",
             "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "required": [
@@ -3099,6 +3231,19 @@
               }
             ],
             "title": "Source Url"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.",
+            "title": "Version"
           }
         },
         "title": "VenueUpdateIn",
@@ -4165,6 +4310,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -4253,6 +4408,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -4350,6 +4515,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -4451,6 +4626,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -4550,6 +4735,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -4639,6 +4834,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -4727,6 +4932,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -4824,6 +5039,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -4924,6 +5149,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -5022,6 +5257,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -5960,6 +6205,16 @@
             },
             "description": "Not Found"
           },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
           "422": {
             "content": {
               "application/json": {
@@ -6032,6 +6287,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {
@@ -6883,6 +7148,16 @@
               }
             },
             "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "content": {

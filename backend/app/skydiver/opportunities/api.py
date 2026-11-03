@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field
 from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor, Role
 from app.skydiver.directory.policy import DirectoryRuleError
+from app.skydiver.directory.service import EditConflict
 from app.skydiver.opportunities.policy import (
     OpportunityStatus,
     ProviderStatus,
@@ -163,6 +164,7 @@ class ReviewerProviderOut(BaseModel):
     source_note: str | None
     checked_on: date | None
     updated_at: datetime
+    version: int
     events: list[EventOut]
 
 
@@ -202,6 +204,7 @@ class ReviewerOpportunityOut(BaseModel):
     source_note: str | None
     checked_on: date | None
     updated_at: datetime
+    version: int
     events: list[EventOut]
 
 
@@ -216,6 +219,18 @@ class ProviderCreateIn(BaseModel):
     publish: bool = Field(default=False, description="False creates a draft.")
 
 
+ExpectedVersion = Annotated[
+    int | None,
+    Field(
+        ge=1,
+        description=(
+            "The `version` this change is based on. A different current version "
+            "answers 409 `edit_conflict`; omit only for last-writer-wins."
+        ),
+    ),
+]
+
+
 class ProviderUpdateIn(BaseModel):
     name: Name | None = None
     kind: ProviderKindName | None = None
@@ -224,14 +239,17 @@ class ProviderUpdateIn(BaseModel):
     source_url: Url | None = None
     source_note: Note | None = None
     checked_on: date | None = None
+    version: ExpectedVersion = None
 
 
 class ProviderStatusIn(BaseModel):
     status: Literal["draft", "published", "archived"]
+    version: ExpectedVersion = None
 
 
 class ProviderMergeIn(BaseModel):
     into: uuid.UUID = Field(description="The provider that remains.")
+    version: ExpectedVersion = None
 
 
 class OpportunityFields(BaseModel):
@@ -269,20 +287,23 @@ class OpportunityUpdateIn(OpportunityFields):
     category: CategoryName | None = None
     provider_id: uuid.UUID | None = None
     country: Country | None = None
+    version: ExpectedVersion = None
 
 
 class OpportunityStatusIn(BaseModel):
     status: Literal[
         "draft", "review", "published", "postponed", "cancelled", "archived"
     ]
+    version: ExpectedVersion = None
 
 
 class DuplicateIn(BaseModel):
     of: uuid.UUID = Field(description="The listing that remains.")
+    version: ExpectedVersion = None
 
 
 _ERRORS: dict[int | str, dict[str, Any]] = {
-    code: {"model": Problem} for code in (401, 403, 404, 422)
+    code: {"model": Problem} for code in (401, 403, 404, 409, 422)
 }
 
 
@@ -369,6 +390,7 @@ def _reviewer_provider(
         source_note=provider.source_note,
         checked_on=provider.checked_on,
         updated_at=provider.updated_at,
+        version=provider.version,
         events=_events(events),
     )
 
@@ -404,6 +426,7 @@ def _reviewer_opportunity(
         source_note=row.source_note,
         checked_on=row.checked_on,
         updated_at=row.updated_at,
+        version=row.version,
         events=_events(events),
     )
 
@@ -411,6 +434,8 @@ def _reviewer_opportunity(
 def _problem(error: Exception) -> JSONResponse:
     if isinstance(error, NotFound):
         code, detail = status.HTTP_404_NOT_FOUND, "not_found"
+    elif isinstance(error, EditConflict):
+        code, detail = status.HTTP_409_CONFLICT, error.code
     elif isinstance(error, DirectoryRuleError):
         code, detail = status.HTTP_422_UNPROCESSABLE_CONTENT, error.code
     else:
@@ -432,7 +457,7 @@ def create_router(
 
     deps = [Depends(no_store)]
     Reviewer = Annotated[Actor, Depends(access.role(Role.REVIEWER))]
-    Errors = (NotFound, DirectoryRuleError)
+    Errors = (NotFound, EditConflict, DirectoryRuleError)
 
     # -- public -------------------------------------------------------------------
 
@@ -564,7 +589,10 @@ def create_router(
     ) -> ReviewerProviderOut | JSONResponse:
         try:
             service().update_provider(
-                actor, provider_id, body.model_dump(exclude_unset=True)
+                actor,
+                provider_id,
+                body.model_dump(exclude_unset=True, exclude={"version"}),
+                expected_version=body.version,
             )
         except Errors as error:
             return _problem(error)
@@ -581,7 +609,10 @@ def create_router(
     ) -> ReviewerProviderOut | JSONResponse:
         try:
             service().set_provider_status(
-                actor, provider_id, ProviderStatus(body.status)
+                actor,
+                provider_id,
+                ProviderStatus(body.status),
+                expected_version=body.version,
             )
         except Errors as error:
             return _problem(error)
@@ -597,7 +628,9 @@ def create_router(
         provider_id: uuid.UUID, body: ProviderMergeIn, actor: Reviewer
     ) -> ReviewerProviderOut | JSONResponse:
         try:
-            provider = service().merge_providers(actor, provider_id, body.into)
+            provider = service().merge_providers(
+                actor, provider_id, body.into, expected_version=body.version
+            )
         except Errors as error:
             return _problem(error)
         return provider_view(provider.id)
@@ -648,7 +681,10 @@ def create_router(
     ) -> ReviewerOpportunityOut | JSONResponse:
         try:
             service().update_opportunity(
-                actor, opportunity_id, body.model_dump(exclude_unset=True)
+                actor,
+                opportunity_id,
+                body.model_dump(exclude_unset=True, exclude={"version"}),
+                expected_version=body.version,
             )
         except Errors as error:
             return _problem(error)
@@ -665,7 +701,10 @@ def create_router(
     ) -> ReviewerOpportunityOut | JSONResponse:
         try:
             service().set_opportunity_status(
-                actor, opportunity_id, OpportunityStatus(body.status)
+                actor,
+                opportunity_id,
+                OpportunityStatus(body.status),
+                expected_version=body.version,
             )
         except Errors as error:
             return _problem(error)
@@ -682,7 +721,9 @@ def create_router(
     ) -> ReviewerOpportunityOut | JSONResponse:
         """Consolidate this listing into `of`; its ID keeps resolving there."""
         try:
-            row = service().mark_duplicate(actor, opportunity_id, body.of)
+            row = service().mark_duplicate(
+                actor, opportunity_id, body.of, expected_version=body.version
+            )
         except Errors as error:
             return _problem(error)
         return opportunity_view(row.id)

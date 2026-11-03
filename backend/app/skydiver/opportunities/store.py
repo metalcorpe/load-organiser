@@ -12,6 +12,7 @@ from sqlmodel import Session, col
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import PUBLIC_STATUSES as PUBLIC_VENUE_STATUSES
 from app.skydiver.directory.policy import VenueStatus, search_key
+from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverVenue
 from app.skydiver.opportunities.policy import (
     PUBLIC_STATUSES,
@@ -57,6 +58,8 @@ def _provider(row: SkydiverProvider) -> Provider:
         source_note=row.source_note,
         checked_on=row.checked_on,
         updated_at=row.updated_at,
+        version=row.version,
+        listings_version=row.listings_version,
     )
 
 
@@ -89,6 +92,7 @@ def _opportunity(row: SkydiverOpportunity) -> OpportunityRow:
         status=OpportunityStatus(row.status),
         duplicate_of_id=row.duplicate_of_id,
         updated_at=row.updated_at,
+        version=row.version,
     )
 
 
@@ -104,12 +108,8 @@ class SqlListingStore:
 
     # providers --------------------------------------------------------------------
 
-    def get_provider(
-        self, provider_id: uuid.UUID, *, lock: bool = False
-    ) -> Provider | None:
+    def get_provider(self, provider_id: uuid.UUID) -> Provider | None:
         query = select(SkydiverProvider).where(col(SkydiverProvider.id) == provider_id)
-        if lock:
-            query = query.with_for_update()
         row = self._s.execute(query).scalars().first()
         return _provider(row) if row else None
 
@@ -125,14 +125,44 @@ class SqlListingStore:
         return row.id
 
     def update_provider(
-        self, provider_id: uuid.UUID, values: dict[str, Any], now: datetime
+        self,
+        provider_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
+        expected_listings_version: int | None = None,
     ) -> None:
         extra = {"name_key": search_key(values["name"])} if "name" in values else {}
-        self._s.execute(
+        query = (
             update(SkydiverProvider)
             .where(col(SkydiverProvider.id) == provider_id)
-            .values(**values, **extra, updated_at=now)
+            .where(col(SkydiverProvider.version) == expected_version)
         )
+        if expected_listings_version is not None:
+            query = query.where(
+                col(SkydiverProvider.listings_version) == expected_listings_version
+            )
+        result = self._s.execute(
+            query.values(
+                **values, **extra, version=expected_version + 1, updated_at=now
+            )
+        )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
+
+    def touch_provider_listings(
+        self, provider_id: uuid.UUID, expected_listings_version: int
+    ) -> None:
+        result = self._s.execute(
+            update(SkydiverProvider)
+            .where(col(SkydiverProvider.id) == provider_id)
+            .where(col(SkydiverProvider.status) == ProviderStatus.PUBLISHED.value)
+            .where(col(SkydiverProvider.listings_version) == expected_listings_version)
+            .values(listings_version=expected_listings_version + 1)
+        )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
 
     def count_live_opportunities(self, provider_id: uuid.UUID, now: datetime) -> int:
         return int(
@@ -148,31 +178,35 @@ class SqlListingStore:
     def reassign_provider(
         self, source_id: uuid.UUID, target_id: uuid.UUID, now: datetime
     ) -> list[uuid.UUID]:
-        # Lock the moving rows in ID order, the order every multi-row writer uses.
-        self._s.execute(
+        # Row by row in ID order (the order every multi-row writer uses), bumping each
+        # version so an edit based on the pre-merge listing is refused.
+        candidates = self._s.execute(
             select(col(SkydiverOpportunity.id))
             .where(col(SkydiverOpportunity.provider_id) == source_id)
             .order_by(col(SkydiverOpportunity.id))
-            .with_for_update()
-        ).all()
-        moved = self._s.execute(
-            update(SkydiverOpportunity)
-            .where(col(SkydiverOpportunity.provider_id) == source_id)
-            .values(provider_id=target_id, updated_at=now)
-            .returning(col(SkydiverOpportunity.id))
         ).scalars()
-        return sorted(moved)
+        moved = []
+        for opportunity_id in list(candidates):
+            result = self._s.execute(
+                update(SkydiverOpportunity)
+                .where(col(SkydiverOpportunity.id) == opportunity_id)
+                .where(col(SkydiverOpportunity.provider_id) == source_id)
+                .values(
+                    provider_id=target_id,
+                    version=col(SkydiverOpportunity.version) + 1,
+                    updated_at=now,
+                )
+            )
+            if result.rowcount == 1:  # type: ignore[attr-defined]
+                moved.append(opportunity_id)
+        return moved
 
     # opportunities -----------------------------------------------------------------
 
-    def get_opportunity(
-        self, opportunity_id: uuid.UUID, *, lock: bool = False
-    ) -> OpportunityRow | None:
+    def get_opportunity(self, opportunity_id: uuid.UUID) -> OpportunityRow | None:
         query = select(SkydiverOpportunity).where(
             col(SkydiverOpportunity.id) == opportunity_id
         )
-        if lock:
-            query = query.with_for_update()
         row = self._s.execute(query).scalars().first()
         return _opportunity(row) if row else None
 
@@ -188,14 +222,22 @@ class SqlListingStore:
         return row.id
 
     def update_opportunity(
-        self, opportunity_id: uuid.UUID, values: dict[str, Any], now: datetime
+        self,
+        opportunity_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
     ) -> None:
         extra = {"title_key": search_key(values["title"])} if "title" in values else {}
-        self._s.execute(
+        result = self._s.execute(
             update(SkydiverOpportunity)
             .where(col(SkydiverOpportunity.id) == opportunity_id)
-            .values(**values, **extra, updated_at=now)
+            .where(col(SkydiverOpportunity.version) == expected_version)
+            .values(**values, **extra, version=expected_version + 1, updated_at=now)
         )
+        if result.rowcount != 1:  # type: ignore[attr-defined]
+            raise EditConflict()
 
     def search(
         self, query: SearchQuery, after: tuple[str, uuid.UUID] | None, limit: int

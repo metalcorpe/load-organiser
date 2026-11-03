@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     Numeric,
     Text,
 )
@@ -63,6 +64,15 @@ class SkydiverProvider(SQLModel, table=True):
     country: str | None = Field(default=None, max_length=2)
     website_url: str | None = Field(default=None, max_length=2048)
     status: str = Field(max_length=16)
+    # Compare-and-swap version: every write sets version = version + 1 WHERE version = read.
+    version: int = Field(
+        default=1, sa_column=Column(Integer, nullable=False, server_default="1")
+    )
+    # Advanced whenever one of its listings is published or kept public, so archiving
+    # the provider and publishing a listing cannot both succeed concurrently.
+    listings_version: int = Field(
+        default=1, sa_column=Column(Integer, nullable=False, server_default="1")
+    )
     merged_into_id: uuid.UUID | None = Field(
         default=None,
         sa_column=Column(ForeignKey("skydiver_provider.id"), nullable=True),
@@ -158,6 +168,10 @@ class SkydiverOpportunity(SQLModel, table=True):
     source_note: str | None = Field(default=None, max_length=280)
     checked_on: date | None = Field(default=None, sa_column=Column(Date, nullable=True))
     status: str = Field(max_length=16)
+    # Compare-and-swap version: every write sets version = version + 1 WHERE version = read.
+    version: int = Field(
+        default=1, sa_column=Column(Integer, nullable=False, server_default="1")
+    )
     duplicate_of_id: uuid.UUID | None = Field(
         default=None,
         sa_column=Column(ForeignKey("skydiver_opportunity.id"), nullable=True),

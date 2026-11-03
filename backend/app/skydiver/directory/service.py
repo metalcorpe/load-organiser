@@ -37,6 +37,12 @@ class LimitReached(Exception):
     code = "place_limit_reached"
 
 
+class EditConflict(Exception):
+    """The record changed since the version the caller read (compare-and-swap)."""
+
+    code = "edit_conflict"
+
+
 @dataclass(frozen=True)
 class Alias:
     name: str
@@ -58,6 +64,7 @@ class Venue:
     checked_on: date | None
     updated_at: datetime
     aliases: tuple[Alias, ...] = ()
+    version: int = 1
 
 
 @dataclass(frozen=True)
@@ -110,7 +117,7 @@ class VenueChanges:
 
 
 class DirectoryStore(Protocol):
-    def get_venue(self, venue_id: uuid.UUID, *, lock: bool = False) -> Venue | None: ...
+    def get_venue(self, venue_id: uuid.UUID) -> Venue | None: ...
     def search(
         self,
         *,
@@ -124,8 +131,16 @@ class DirectoryStore(Protocol):
 
     def insert_venue(self, values: dict[str, Any], now: datetime) -> uuid.UUID: ...
     def update_venue(
-        self, venue_id: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> None: ...
+        self,
+        venue_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
+    ) -> None:
+        """Compare-and-swap write; raises EditConflict if the version moved."""
+        ...
+
     def add_alias(
         self, venue_id: uuid.UUID, name: str, kind: AliasKind, now: datetime
     ) -> None: ...
@@ -269,14 +284,17 @@ class DirectoryService:
         return venue
 
     def update_venue(
-        self, actor: Actor, venue_id: uuid.UUID, changes: VenueChanges
+        self,
+        actor: Actor,
+        venue_id: uuid.UUID,
+        changes: VenueChanges,
+        *,
+        expected_version: int | None = None,
     ) -> Venue:
         now = self._clock()
         values = self._validated(dict(changes.fields), now)
         with self._stores() as store:
-            current = store.get_venue(venue_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = _current(store.get_venue(venue_id), expected_version)
             if current.status is VenueStatus.MERGED:
                 raise DirectoryRuleError("venue_merged")
             merged = {**_venue_values(current), **values}
@@ -286,7 +304,7 @@ class DirectoryService:
             }
             if not changed:
                 return current
-            store.update_venue(venue_id, changed, now)
+            store.update_venue(venue_id, changed, now, expected_version=current.version)
             if "name" in changed:
                 # A rename keeps the identity; the previous name stays searchable.
                 store.add_alias(venue_id, current.name, AliasKind.FORMER, now)
@@ -319,15 +337,21 @@ class DirectoryService:
         assert venue is not None
         return venue
 
-    def add_alias(self, actor: Actor, venue_id: uuid.UUID, name: str) -> Venue:
+    def add_alias(
+        self,
+        actor: Actor,
+        venue_id: uuid.UUID,
+        name: str,
+        *,
+        expected_version: int | None = None,
+    ) -> Venue:
         now = self._clock()
         alias = policy.clean_text(name, field="alias", maximum=policy.ALIAS_MAX)
         with self._stores() as store:
-            current = store.get_venue(venue_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = _current(store.get_venue(venue_id), expected_version)
             if current.status is VenueStatus.MERGED:
                 raise DirectoryRuleError("venue_merged")
+            store.update_venue(venue_id, {}, now, expected_version=current.version)
             store.add_alias(venue_id, alias, AliasKind.ALTERNATE, now)
             store.record_event(venue_id, "alias_added", {"alias": alias}, actor, now)
             venue = store.get_venue(venue_id)
@@ -335,18 +359,26 @@ class DirectoryService:
         return venue
 
     def set_status(
-        self, actor: Actor, venue_id: uuid.UUID, status: VenueStatus
+        self,
+        actor: Actor,
+        venue_id: uuid.UUID,
+        status: VenueStatus,
+        *,
+        expected_version: int | None = None,
     ) -> Venue:
         now = self._clock()
         with self._stores() as store:
-            current = store.get_venue(venue_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = _current(store.get_venue(venue_id), expected_version)
             policy.check_transition(current.status, status)
             if current.status is status:
                 return current
             self._require_source(status, _venue_values(current))
-            store.update_venue(venue_id, {"status": status.value}, now)
+            store.update_venue(
+                venue_id,
+                {"status": status.value},
+                now,
+                expected_version=current.version,
+            )
             store.record_event(
                 venue_id,
                 "status_changed",
@@ -358,17 +390,20 @@ class DirectoryService:
         assert venue is not None
         return venue
 
-    def merge(self, actor: Actor, source_id: uuid.UUID, target_id: uuid.UUID) -> Venue:
+    def merge(
+        self,
+        actor: Actor,
+        source_id: uuid.UUID,
+        target_id: uuid.UUID,
+        *,
+        expected_version: int | None = None,
+    ) -> Venue:
         """Reviewed duplicate merge. References to the source keep resolving."""
         now = self._clock()
         with self._stores() as store:
-            # Stable lock order, so concurrent opposite merges cannot deadlock.
-            first, second = sorted((source_id, target_id))
-            locked = {first: store.get_venue(first, lock=True)}
-            if second != first:
-                locked[second] = store.get_venue(second, lock=True)
-            source, target = locked.get(source_id), locked.get(target_id)
-            if source is None or target is None:
+            source = _current(store.get_venue(source_id), expected_version)
+            target = store.get_venue(target_id)
+            if target is None:
                 raise NotFound()
             policy.check_merge(
                 policy.MergeCheck(
@@ -377,11 +412,18 @@ class DirectoryService:
                     same_venue=source_id == target_id,
                 )
             )
-            store.update_venue(
-                source_id,
-                {"status": VenueStatus.MERGED.value, "merged_into_id": target_id},
-                now,
-            )
+            # Both rows are compare-and-swapped (the target must still be public);
+            # writes go in ID order so opposite concurrent merges cannot deadlock.
+            writes = {
+                source_id: (
+                    {"status": VenueStatus.MERGED.value, "merged_into_id": target_id},
+                    source.version,
+                ),
+                target_id: ({}, target.version),
+            }
+            for venue_id in sorted(writes):
+                values, version = writes[venue_id]
+                store.update_venue(venue_id, values, now, expected_version=version)
             store.add_alias(target_id, source.name, AliasKind.MERGED, now)
             store.copy_aliases(source_id, target_id, now)
             store.record_event(
@@ -528,6 +570,15 @@ class DirectoryService:
             values.get("source_url") and values.get("checked_on")
         ):
             raise DirectoryRuleError("source_required")
+
+
+def _current(venue: Venue | None, expected_version: int | None) -> Venue:
+    """The venue as read, refused early when the caller's version is already stale."""
+    if venue is None:
+        raise NotFound()
+    if expected_version is not None and expected_version != venue.version:
+        raise EditConflict()
+    return venue
 
 
 def _venue_values(venue: Venue) -> dict[str, Any]:

@@ -16,7 +16,7 @@ from typing import Any, Protocol
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory import policy as directory_policy
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
-from app.skydiver.directory.service import decode_cursor, encode_cursor
+from app.skydiver.directory.service import EditConflict, decode_cursor, encode_cursor
 from app.skydiver.opportunities import policy
 from app.skydiver.opportunities.policy import (
     PUBLIC_PROVIDER_STATUSES,
@@ -60,6 +60,8 @@ class Provider:
     source_note: str | None
     checked_on: date | None
     updated_at: datetime
+    version: int = 1
+    listings_version: int = 1
 
 
 @dataclass(frozen=True)
@@ -93,6 +95,7 @@ class OpportunityRow:
     status: OpportunityStatus
     duplicate_of_id: uuid.UUID | None
     updated_at: datetime
+    version: int = 1
 
 
 @dataclass(frozen=True)
@@ -188,13 +191,26 @@ _SCHEDULE = {"starts_on", "ends_on", "time_zone"}
 
 
 class ListingStore(Protocol):
-    def get_provider(
-        self, provider_id: uuid.UUID, *, lock: bool = False
-    ) -> Provider | None: ...
+    def get_provider(self, provider_id: uuid.UUID) -> Provider | None: ...
     def insert_provider(self, values: dict[str, Any], now: datetime) -> uuid.UUID: ...
     def update_provider(
-        self, provider_id: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> None: ...
+        self,
+        provider_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
+        expected_listings_version: int | None = None,
+    ) -> None:
+        """Compare-and-swap write; raises EditConflict if a version moved."""
+        ...
+
+    def touch_provider_listings(
+        self, provider_id: uuid.UUID, expected_listings_version: int
+    ) -> None:
+        """Advance `listings_version` while the provider is still published."""
+        ...
+
     def count_live_opportunities(self, provider_id: uuid.UUID, now: datetime) -> int:
         """Public opportunities of the provider that have not ended."""
         ...
@@ -203,15 +219,21 @@ class ListingStore(Protocol):
         self, source_id: uuid.UUID, target_id: uuid.UUID, now: datetime
     ) -> list[uuid.UUID]: ...
 
-    def get_opportunity(
-        self, opportunity_id: uuid.UUID, *, lock: bool = False
-    ) -> OpportunityRow | None: ...
+    def get_opportunity(self, opportunity_id: uuid.UUID) -> OpportunityRow | None: ...
     def insert_opportunity(
         self, values: dict[str, Any], now: datetime
     ) -> uuid.UUID: ...
     def update_opportunity(
-        self, opportunity_id: uuid.UUID, values: dict[str, Any], now: datetime
-    ) -> None: ...
+        self,
+        opportunity_id: uuid.UUID,
+        values: dict[str, Any],
+        now: datetime,
+        *,
+        expected_version: int,
+    ) -> None:
+        """Compare-and-swap write; raises EditConflict if the version moved."""
+        ...
+
     def search(
         self, query: SearchQuery, after: tuple[str, uuid.UUID] | None, limit: int
     ) -> list[OpportunityRow]:
@@ -370,21 +392,26 @@ class OpportunityService:
         return provider
 
     def update_provider(
-        self, actor: Actor, provider_id: uuid.UUID, fields: dict[str, Any]
+        self,
+        actor: Actor,
+        provider_id: uuid.UUID,
+        fields: dict[str, Any],
+        *,
+        expected_version: int | None = None,
     ) -> Provider:
         now = self._clock()
         values = _provider_values(fields, now)
         with self._stores() as store:
-            current = store.get_provider(provider_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = _fresh(store.get_provider(provider_id), expected_version)
             if current.status is ProviderStatus.MERGED:
                 raise RuleError("provider_merged")
             before = _provider_dict(current)
             _require_provider_source(current.status, {**before, **values})
             changed = {k: v for k, v in values.items() if before[k] != v}
             if changed:
-                store.update_provider(provider_id, changed, now)
+                store.update_provider(
+                    provider_id, changed, now, expected_version=current.version
+                )
                 store.record_event(
                     provider_id=provider_id,
                     kind="updated",
@@ -397,13 +424,16 @@ class OpportunityService:
         return provider
 
     def set_provider_status(
-        self, actor: Actor, provider_id: uuid.UUID, status: ProviderStatus
+        self,
+        actor: Actor,
+        provider_id: uuid.UUID,
+        status: ProviderStatus,
+        *,
+        expected_version: int | None = None,
     ) -> Provider:
         now = self._clock()
         with self._stores() as store:
-            current = store.get_provider(provider_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = _fresh(store.get_provider(provider_id), expected_version)
             if current.status is status:
                 return current
             policy.check_provider_transition(current.status, status)
@@ -413,7 +443,15 @@ class OpportunityService:
             ):
                 # Public listings must keep a public organiser until they end or move.
                 raise RuleError("provider_in_use")
-            store.update_provider(provider_id, {"status": status.value}, now)
+            # Also compare listings_version: a listing published since the count
+            # makes this write fail rather than leave it with a hidden organizer.
+            store.update_provider(
+                provider_id,
+                {"status": status.value},
+                now,
+                expected_version=current.version,
+                expected_listings_version=current.listings_version,
+            )
             store.record_event(
                 provider_id=provider_id,
                 kind="status_changed",
@@ -426,17 +464,19 @@ class OpportunityService:
         return provider
 
     def merge_providers(
-        self, actor: Actor, source_id: uuid.UUID, target_id: uuid.UUID
+        self,
+        actor: Actor,
+        source_id: uuid.UUID,
+        target_id: uuid.UUID,
+        *,
+        expected_version: int | None = None,
     ) -> Provider:
         """Reviewed duplicate merge: listings move to the target; the source redirects."""
         now = self._clock()
         with self._stores() as store:
-            first, second = sorted((source_id, target_id))
-            locked = {first: store.get_provider(first, lock=True)}
-            if second != first:
-                locked[second] = store.get_provider(second, lock=True)
-            source, target = locked.get(source_id), locked.get(target_id)
-            if source is None or target is None:
+            source = _fresh(store.get_provider(source_id), expected_version)
+            target = store.get_provider(target_id)
+            if target is None:
                 raise NotFound()
             policy.check_provider_merge(
                 policy.ProviderMergeCheck(
@@ -445,12 +485,28 @@ class OpportunityService:
                     same=source_id == target_id,
                 )
             )
+            # Compare-and-swap both providers in ID order (providers before listings,
+            # like every listing writer), then move the listings.
+            writes: dict[uuid.UUID, tuple[dict[str, Any], Provider]] = {
+                source_id: (
+                    {
+                        "status": ProviderStatus.MERGED.value,
+                        "merged_into_id": target_id,
+                    },
+                    source,
+                ),
+                target_id: ({}, target),
+            }
+            for provider_id in sorted(writes):
+                values, read = writes[provider_id]
+                store.update_provider(
+                    provider_id,
+                    values,
+                    now,
+                    expected_version=read.version,
+                    expected_listings_version=read.listings_version,
+                )
             moved = store.reassign_provider(source_id, target_id, now)
-            store.update_provider(
-                source_id,
-                {"status": ProviderStatus.MERGED.value, "merged_into_id": target_id},
-                now,
-            )
             store.record_event(
                 provider_id=source_id,
                 kind="merged_into",
@@ -502,7 +558,9 @@ class OpportunityService:
         values = {k: full[k] for k in values} | _derived(full)
         values["status"] = OpportunityStatus.DRAFT.value
         with self._stores() as store:
-            values["provider_id"] = self._lock_provider(store, values["provider_id"])
+            values["provider_id"] = self._existing_provider(
+                store, values["provider_id"]
+            )
             values["venue_id"] = self._linkable_venue(store, values.get("venue_id"))
             opportunity_id = store.insert_opportunity(values, now)
             store.record_event(
@@ -517,7 +575,12 @@ class OpportunityService:
         return row
 
     def update_opportunity(
-        self, actor: Actor, opportunity_id: uuid.UUID, fields: dict[str, Any]
+        self,
+        actor: Actor,
+        opportunity_id: uuid.UUID,
+        fields: dict[str, Any],
+        *,
+        expected_version: int | None = None,
     ) -> OpportunityRow:
         now = self._clock()
         values = self._opportunity_values(fields, now)
@@ -526,9 +589,7 @@ class OpportunityService:
                 values["provider_id"] = self._existing_provider(
                     store, values["provider_id"]
                 )
-            current = self._lock_listing(
-                store, opportunity_id, values.get("provider_id")
-            )
+            current = _fresh(store.get_opportunity(opportunity_id), expected_version)
             if current.status is OpportunityStatus.DUPLICATE:
                 raise RuleError("opportunity_duplicate")
             before = _opportunity_dict(current)
@@ -539,21 +600,28 @@ class OpportunityService:
             changed = {k: full[k] for k in values if before[k] != full[k]}
             if not changed:
                 return current
-            self._check_public(store, current.status, full)
+            self._keep_public(store, current.status, full)
             if _SCHEDULE & set(changed):
                 changed.update(_derived(full))
-            store.update_opportunity(opportunity_id, changed, now)
+            store.update_opportunity(
+                opportunity_id, changed, now, expected_version=current.version
+            )
             self._record_changes(store, opportunity_id, before, changed, actor, now)
             row = store.get_opportunity(opportunity_id)
         assert row is not None
         return row
 
     def set_opportunity_status(
-        self, actor: Actor, opportunity_id: uuid.UUID, status: OpportunityStatus
+        self,
+        actor: Actor,
+        opportunity_id: uuid.UUID,
+        status: OpportunityStatus,
+        *,
+        expected_version: int | None = None,
     ) -> OpportunityRow:
         now = self._clock()
         with self._stores() as store:
-            current = self._lock_listing(store, opportunity_id)
+            current = _fresh(store.get_opportunity(opportunity_id), expected_version)
             if current.status is status:
                 return current
             policy.check_transition(current.status, status)
@@ -566,8 +634,10 @@ class OpportunityService:
                 changes |= cleared | _derived({**full, **cleared})
                 self._record_changes(store, opportunity_id, full, cleared, actor, now)
                 full |= cleared
-            self._check_public(store, status, full)
-            store.update_opportunity(opportunity_id, changes, now)
+            self._keep_public(store, status, full)
+            store.update_opportunity(
+                opportunity_id, changes, now, expected_version=current.version
+            )
             store.record_event(
                 opportunity_id=opportunity_id,
                 kind="status_changed",
@@ -580,17 +650,19 @@ class OpportunityService:
         return row
 
     def mark_duplicate(
-        self, actor: Actor, source_id: uuid.UUID, target_id: uuid.UUID
+        self,
+        actor: Actor,
+        source_id: uuid.UUID,
+        target_id: uuid.UUID,
+        *,
+        expected_version: int | None = None,
     ) -> OpportunityRow:
         """Consolidate a duplicate listing; its ID keeps resolving to the target."""
         now = self._clock()
         with self._stores() as store:
-            first, second = sorted((source_id, target_id))
-            locked = {first: store.get_opportunity(first, lock=True)}
-            if second != first:
-                locked[second] = store.get_opportunity(second, lock=True)
-            source, target = locked.get(source_id), locked.get(target_id)
-            if source is None or target is None:
+            source = _fresh(store.get_opportunity(source_id), expected_version)
+            target = store.get_opportunity(target_id)
+            if target is None:
                 raise NotFound()
             policy.check_duplicate(
                 policy.DuplicateCheck(
@@ -599,14 +671,22 @@ class OpportunityService:
                     same=source_id == target_id,
                 )
             )
-            store.update_opportunity(
-                source_id,
-                {
-                    "status": OpportunityStatus.DUPLICATE.value,
-                    "duplicate_of_id": target_id,
-                },
-                now,
-            )
+            # Compare-and-swap both (the target must still be public), in ID order.
+            writes: dict[uuid.UUID, tuple[dict[str, Any], int]] = {
+                source_id: (
+                    {
+                        "status": OpportunityStatus.DUPLICATE.value,
+                        "duplicate_of_id": target_id,
+                    },
+                    source.version,
+                ),
+                target_id: ({}, target.version),
+            }
+            for listing_id in sorted(writes):
+                values, version = writes[listing_id]
+                store.update_opportunity(
+                    listing_id, values, now, expected_version=version
+                )
             store.record_event(
                 opportunity_id=source_id,
                 kind="duplicate_of",
@@ -656,39 +736,16 @@ class OpportunityService:
             raise RuleError("provider_unknown")
         return provider.id
 
-    def _lock_provider(self, store: ListingStore, provider_id: uuid.UUID) -> uuid.UUID:
-        """Resolve and lock a provider so archiving or merging it waits for us."""
-        resolved = self._existing_provider(store, provider_id)
-        locked = store.get_provider(resolved, lock=True)
-        if locked is None or locked.merged_into_id is not None:
-            raise RuleError("opportunity_changed")  # merged meanwhile; retry
-        return resolved
-
-    def _lock_listing(
-        self,
-        store: ListingStore,
-        opportunity_id: uuid.UUID,
-        new_provider: uuid.UUID | None = None,
-    ) -> OpportunityRow:
-        """Lock providers before the listing: the order merges and archiving use."""
-        peek = store.get_opportunity(opportunity_id)
-        if peek is None:
-            raise NotFound()
-        for provider_id in sorted({peek.provider_id, new_provider or peek.provider_id}):
-            if provider_id == new_provider:
-                self._lock_provider(store, provider_id)
-            else:
-                store.get_provider(provider_id, lock=True)
-        current = store.get_opportunity(opportunity_id, lock=True)
-        if current is None:
-            raise NotFound()
-        if current.provider_id != peek.provider_id:
-            raise RuleError("opportunity_changed")  # a provider merge moved it; retry
-        return current
-
-    def _check_public(
+    def _keep_public(
         self, store: ListingStore, status: OpportunityStatus, full: dict[str, Any]
     ) -> None:
+        """Check publication rules and, for a public result, pin the organizer.
+
+        Advancing the provider's `listings_version` (only while it is published)
+        makes a concurrent archive or merge of the provider fail its own
+        compare-and-swap, so a public listing never ends up with a hidden organizer.
+        It runs before the listing write: providers before listings, everywhere.
+        """
         if status not in PUBLIC_STATUSES:
             return
         provider = store.get_provider(full["provider_id"])
@@ -706,6 +763,8 @@ class OpportunityService:
                 and provider.status in PUBLIC_PROVIDER_STATUSES,
             )
         )
+        assert provider is not None  # checked above
+        store.touch_provider_listings(provider.id, provider.listings_version)
 
     def _opportunity_values(self, raw: dict[str, Any], now: datetime) -> dict[str, Any]:
         values: dict[str, Any] = {}
@@ -811,6 +870,15 @@ _EMPTY_OPPORTUNITY: dict[str, Any] = dict.fromkeys(OPPORTUNITY_FIELDS) | {
     "audience": [],
     "languages": [],
 }
+
+
+def _fresh[T: (Provider, OpportunityRow)](row: T | None, expected: int | None) -> T:
+    """The record as read, refused early when the caller's version is already stale."""
+    if row is None:
+        raise NotFound()
+    if expected is not None and expected != row.version:
+        raise EditConflict()
+    return row
 
 
 def _check_shape(full: dict[str, Any]) -> None:

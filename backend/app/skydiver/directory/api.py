@@ -19,6 +19,7 @@ from app.skydiver.access.policy import Actor, Role
 from app.skydiver.directory.policy import DirectoryRuleError, VenueStatus
 from app.skydiver.directory.service import (
     DirectoryService,
+    EditConflict,
     LimitReached,
     NotFound,
     Place,
@@ -36,6 +37,16 @@ Name = Annotated[str, Field(min_length=1, max_length=200)]
 Country = Annotated[str, Field(min_length=2, max_length=2)]
 Url = Annotated[str, Field(max_length=2048)]
 Note = Annotated[str, Field(max_length=400)]
+ExpectedVersion = Annotated[
+    int | None,
+    Field(
+        ge=1,
+        description=(
+            "The `version` this change is based on. A different current version "
+            "answers 409 `edit_conflict`; omit only for last-writer-wins."
+        ),
+    ),
+]
 
 
 class Problem(BaseModel):
@@ -127,18 +138,22 @@ class VenueUpdateIn(BaseModel):
     source_url: Url | None = None
     source_note: Note | None = None
     checked_on: date | None = None
+    version: ExpectedVersion = None
 
 
 class AliasIn(BaseModel):
     name: Name
+    version: ExpectedVersion = None
 
 
 class StatusIn(BaseModel):
     status: Literal["draft", "listed", "closed"]
+    version: ExpectedVersion = None
 
 
 class MergeIn(BaseModel):
     into: uuid.UUID = Field(description="The venue that remains.")
+    version: ExpectedVersion = None  # of the merged (source) venue
 
 
 class EventOut(BaseModel):
@@ -161,6 +176,7 @@ class ReviewerVenueOut(BaseModel):
     source_note: str | None
     checked_on: date | None
     updated_at: datetime
+    version: int
     events: list[EventOut]
 
 
@@ -219,6 +235,7 @@ def _reviewer(venue: Venue, events: list[VenueEvent]) -> ReviewerVenueOut:
         source_note=venue.source_note,
         checked_on=venue.checked_on,
         updated_at=venue.updated_at,
+        version=venue.version,
         events=[
             EventOut(kind=e.kind, detail=e.detail, created_at=e.created_at)
             for e in events
@@ -229,7 +246,7 @@ def _reviewer(venue: Venue, events: list[VenueEvent]) -> ReviewerVenueOut:
 def _problem(error: Exception) -> JSONResponse:
     if isinstance(error, NotFound):
         code, detail = status.HTTP_404_NOT_FOUND, "not_found"
-    elif isinstance(error, LimitReached):
+    elif isinstance(error, LimitReached | EditConflict):
         code, detail = status.HTTP_409_CONFLICT, error.code
     elif isinstance(error, DirectoryRuleError):
         code, detail = status.HTTP_422_UNPROCESSABLE_CONTENT, error.code
@@ -252,7 +269,7 @@ def create_router(
     Reader = Annotated[Actor, Depends(access.actor)]
     Writer = Annotated[Actor, Depends(access.verified_actor)]
     Reviewer = Annotated[Actor, Depends(access.role(Role.REVIEWER))]
-    Errors = (NotFound, LimitReached, DirectoryRuleError)
+    Errors = (NotFound, LimitReached, EditConflict, DirectoryRuleError)
 
     # -- public -------------------------------------------------------------------
 
@@ -397,8 +414,9 @@ def create_router(
         venue_id: uuid.UUID, body: VenueUpdateIn, actor: Reviewer
     ) -> ReviewerVenueOut | JSONResponse:
         try:
+            fields = body.model_dump(exclude_unset=True, exclude={"version"})
             venue = service().update_venue(
-                actor, venue_id, VenueChanges(body.model_dump(exclude_unset=True))
+                actor, venue_id, VenueChanges(fields), expected_version=body.version
             )
         except Errors as error:
             return _problem(error)
@@ -414,7 +432,9 @@ def create_router(
         venue_id: uuid.UUID, body: AliasIn, actor: Reviewer
     ) -> ReviewerVenueOut | JSONResponse:
         try:
-            venue = service().add_alias(actor, venue_id, body.name)
+            venue = service().add_alias(
+                actor, venue_id, body.name, expected_version=body.version
+            )
         except Errors as error:
             return _problem(error)
         return reviewed(actor, venue)
@@ -429,7 +449,9 @@ def create_router(
         venue_id: uuid.UUID, body: StatusIn, actor: Reviewer
     ) -> ReviewerVenueOut | JSONResponse:
         try:
-            venue = service().set_status(actor, venue_id, VenueStatus(body.status))
+            venue = service().set_status(
+                actor, venue_id, VenueStatus(body.status), expected_version=body.version
+            )
         except Errors as error:
             return _problem(error)
         return reviewed(actor, venue)
@@ -444,7 +466,9 @@ def create_router(
         venue_id: uuid.UUID, body: MergeIn, actor: Reviewer
     ) -> ReviewerVenueOut | JSONResponse:
         try:
-            venue = service().merge(actor, venue_id, body.into)
+            venue = service().merge(
+                actor, venue_id, body.into, expected_version=body.version
+            )
         except Errors as error:
             return _problem(error)
         return reviewed(actor, venue)
