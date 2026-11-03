@@ -741,12 +741,14 @@ def test_reset_confirm_failures_are_throttled_per_ip(harness: Harness) -> None:
     assert blocked.status_code == 429
     assert blocked.headers["retry-after"]
 
-    # Another client with a real link is unaffected.
+    # A real link from the same (throttled) address still works.
     address = email()
+    blocked_ip = harness.ip
     harness.ip = _random_ip()
     harness.register(address)
     harness.post("/password-reset", {"email": address})
     token = harness.outbox.token_for(address, "/reset-password")
+    harness.ip = blocked_ip
     ok = harness.post(
         "/password-reset/confirm", {"token": token, "new_password": OTHER_PASSWORD}
     )

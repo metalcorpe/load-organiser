@@ -471,7 +471,6 @@ class IdentityService:
             raise PasswordRejected(problem)
         now = self._clock()
         with self._stores() as store:
-            self._check(store, policy.RESET_CONFIRM_IP, now, client_ip)
             consumed = store.consume_token(
                 token_hash=policy.hash_secret(token), purpose="reset_password", now=now
             )
@@ -483,7 +482,12 @@ class IdentityService:
                 # Issued to an address the account no longer uses.
                 or consumed.sent_to.lower() != account.email.lower()
             ):
-                # Only failures count, so a valid link is never refused.
+                # Only the failure path is limited: a live link is never refused
+                # because others behind the same address guessed badly.
+                if self._exceeded(store, policy.RESET_CONFIRM_IP, now, client_ip):
+                    raise CommitThen(
+                        Throttled(int(policy.RESET_CONFIRM_IP.window.total_seconds()))
+                    )
                 self._hit(store, policy.RESET_CONFIRM_IP, now, client_ip)
                 raise CommitThen(InvalidToken())
             # Hashed only once a live token has been consumed.
