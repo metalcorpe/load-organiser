@@ -620,7 +620,15 @@
             "title": "Price Note"
           },
           "provider": {
-            "$ref": "#/components/schemas/ProviderRefOut"
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProviderRefOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when the organizer is no longer published (ended listings)."
           },
           "registration_url": {
             "description": "External registration or contact page.",
@@ -1510,11 +1518,6 @@
             "title": "Kind",
             "type": "string"
           },
-          "listed": {
-            "description": "False when the provider has no public page.",
-            "title": "Listed",
-            "type": "boolean"
-          },
           "name": {
             "title": "Name",
             "type": "string"
@@ -1523,8 +1526,7 @@
         "required": [
           "id",
           "name",
-          "kind",
-          "listed"
+          "kind"
         ],
         "title": "ProviderRefOut",
         "type": "object"

@@ -280,6 +280,10 @@ class OpportunityService:
                 venue := store.public_venue(query.venue_id)
             ):
                 query = replace(query, venue_id=venue.id)  # filter by the survivor
+            if query.provider_id is not None and (
+                provider := self._resolve_provider(store, query.provider_id)
+            ):
+                query = replace(query, provider_id=provider.id)
             rows = store.search(query, after, size + 1)
             items = [self._public(store, row, now) for row in rows[:size]]
         next_cursor = None
@@ -481,9 +485,7 @@ class OpportunityService:
         values = {k: full[k] for k in values} | _derived(full)
         values["status"] = OpportunityStatus.DRAFT.value
         with self._stores() as store:
-            values["provider_id"] = self._existing_provider(
-                store, values["provider_id"]
-            )
+            values["provider_id"] = self._lock_provider(store, values["provider_id"])
             values["venue_id"] = self._linkable_venue(store, values.get("venue_id"))
             opportunity_id = store.insert_opportunity(values, now)
             store.record_event(
@@ -503,16 +505,16 @@ class OpportunityService:
         now = self._clock()
         values = self._opportunity_values(fields, now)
         with self._stores() as store:
-            current = store.get_opportunity(opportunity_id, lock=True)
-            if current is None:
-                raise NotFound()
-            if current.status is OpportunityStatus.DUPLICATE:
-                raise RuleError("opportunity_duplicate")
-            before = _opportunity_dict(current)
             if "provider_id" in values:
                 values["provider_id"] = self._existing_provider(
                     store, values["provider_id"]
                 )
+            current = self._lock_listing(
+                store, opportunity_id, values.get("provider_id")
+            )
+            if current.status is OpportunityStatus.DUPLICATE:
+                raise RuleError("opportunity_duplicate")
+            before = _opportunity_dict(current)
             if "venue_id" in values:
                 values["venue_id"] = self._linkable_venue(store, values["venue_id"])
             full = {**before, **values}
@@ -534,14 +536,21 @@ class OpportunityService:
     ) -> OpportunityRow:
         now = self._clock()
         with self._stores() as store:
-            current = store.get_opportunity(opportunity_id, lock=True)
-            if current is None:
-                raise NotFound()
+            current = self._lock_listing(store, opportunity_id)
             if current.status is status:
                 return current
             policy.check_transition(current.status, status)
-            self._check_public(store, status, _opportunity_dict(current))
-            store.update_opportunity(opportunity_id, {"status": status.value}, now)
+            full = _opportunity_dict(current)
+            changes: dict[str, Any] = {"status": status.value}
+            if status is OpportunityStatus.POSTPONED and full["starts_on"] is not None:
+                # The announced dates no longer hold: clear them so the listing
+                # neither expires on nor shows the old schedule. History keeps them.
+                cleared = {"starts_on": None, "ends_on": None}
+                changes |= cleared | _derived({**full, **cleared})
+                self._record_changes(store, opportunity_id, full, cleared, actor, now)
+                full |= cleared
+            self._check_public(store, status, full)
+            store.update_opportunity(opportunity_id, changes, now)
             store.record_event(
                 opportunity_id=opportunity_id,
                 kind="status_changed",
@@ -629,6 +638,36 @@ class OpportunityService:
         if provider is None:
             raise RuleError("provider_unknown")
         return provider.id
+
+    def _lock_provider(self, store: ListingStore, provider_id: uuid.UUID) -> uuid.UUID:
+        """Resolve and lock a provider so archiving or merging it waits for us."""
+        resolved = self._existing_provider(store, provider_id)
+        locked = store.get_provider(resolved, lock=True)
+        if locked is None or locked.merged_into_id is not None:
+            raise RuleError("opportunity_changed")  # merged meanwhile; retry
+        return resolved
+
+    def _lock_listing(
+        self,
+        store: ListingStore,
+        opportunity_id: uuid.UUID,
+        new_provider: uuid.UUID | None = None,
+    ) -> OpportunityRow:
+        """Lock providers before the listing: the order merges and archiving use."""
+        peek = store.get_opportunity(opportunity_id)
+        if peek is None:
+            raise NotFound()
+        for provider_id in sorted({peek.provider_id, new_provider or peek.provider_id}):
+            if provider_id == new_provider:
+                self._lock_provider(store, provider_id)
+            else:
+                store.get_provider(provider_id, lock=True)
+        current = store.get_opportunity(opportunity_id, lock=True)
+        if current is None:
+            raise NotFound()
+        if current.provider_id != peek.provider_id:
+            raise RuleError("opportunity_changed")  # a provider merge moved it; retry
+        return current
 
     def _check_public(
         self, store: ListingStore, status: OpportunityStatus, full: dict[str, Any]
@@ -855,6 +894,6 @@ def _decode(cursor: str) -> tuple[str, uuid.UUID]:
 def _json(value: Any) -> Any:
     if isinstance(value, date):
         return value.isoformat()
-    if isinstance(value, Decimal):
+    if isinstance(value, Decimal | uuid.UUID):
         return str(value)
     return value

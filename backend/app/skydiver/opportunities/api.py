@@ -86,7 +86,6 @@ class ProviderRefOut(BaseModel):
     id: uuid.UUID
     name: str
     kind: ProviderKindName
-    listed: bool = Field(description="False when the provider has no public page.")
 
 
 class OpportunityVenueOut(BaseModel):
@@ -105,7 +104,9 @@ class OpportunityOut(BaseModel):
     category: CategoryName
     status: Literal["published", "postponed", "cancelled"]
     ended: bool = Field(description="The end date has passed in `time_zone`.")
-    provider: ProviderRefOut
+    provider: ProviderRefOut | None = Field(
+        description="Null when the organizer is no longer published (ended listings)."
+    )
     venue: OpportunityVenueOut | None
     country: str
     location_note: str | None
@@ -313,11 +314,10 @@ def _public(item: Opportunity) -> OpportunityOut:
         status=row.status.value,  # type: ignore[arg-type]  # public statuses only
         ended=item.ended,
         provider=ProviderRefOut(
-            id=provider.id,
-            name=provider.name,
-            kind=provider.kind.value,
-            listed=provider.status is ProviderStatus.PUBLISHED,
-        ),
+            id=provider.id, name=provider.name, kind=provider.kind.value
+        )
+        if provider.status is ProviderStatus.PUBLISHED
+        else None,
         venue=OpportunityVenueOut(
             id=venue.id,
             name=venue.name,

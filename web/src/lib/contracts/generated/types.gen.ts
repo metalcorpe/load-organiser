@@ -309,7 +309,10 @@ export type OpportunityOut = {
      * Price Note
      */
     price_note: string | null;
-    provider: ProviderRefOut;
+    /**
+     * Null when the organizer is no longer published (ended listings).
+     */
+    provider: ProviderRefOut | null;
     /**
      * Registration Url
      *
@@ -707,12 +710,6 @@ export type ProviderRefOut = {
      * Kind
      */
     kind: 'organization' | 'person';
-    /**
-     * Listed
-     *
-     * False when the provider has no public page.
-     */
-    listed: boolean;
     /**
      * Name
      */

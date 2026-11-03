@@ -216,7 +216,6 @@ def test_public_listing_shape_hides_reviewer_and_history(api: Api) -> None:
         "id": provider["id"],
         "name": f"{base} Coaching Co",
         "kind": "person",
-        "listed": True,
     }
     assert public["disciplines"] == ["belly", "freefly"]
     assert public["languages"] == ["en", "es"]
@@ -299,8 +298,16 @@ def test_postponed_without_dates_stays_public_and_cancelled_shows_status(
         "PATCH", path, api.reviewer, {"starts_on": None, "ends_on": None}
     )
     assert cleared.json() == {"detail": "schedule_required"}
-    assert api.status(moved["id"], "postponed").status_code == 200
-    api.ok("PATCH", path, {"starts_on": None, "ends_on": None})
+    # Postponing clears the announced dates; history keeps them.
+    postponed = api.status(moved["id"], "postponed").json()
+    assert (postponed["starts_on"], postponed["ends_on"]) == (None, None)
+    assert postponed["time_zone"] == "Europe/Madrid"
+    old = [e for e in api.ok("GET", path)["events"] if e["kind"] == "rescheduled"]
+    assert old[-1]["detail"]["starts_on"] == {"from": "2026-11-20", "to": None}
+    # The old end date passing does not expire a postponed listing.
+    api.clock.now = datetime(2026, 11, 25, tzinfo=UTC)
+    assert f"{base} Moved" in api.titles(q=base)
+    api.clock.now = NOW
 
     items = api.search(q=base)
     assert [(i["title"], i["status"], i["starts_on"]) for i in items] == [
@@ -377,6 +384,8 @@ def test_provider_merge_moves_listings_and_redirects(api: Api) -> None:
     assert redirected["provider"]["id"] == keep["id"]
     assert redirected["replaced_id"] == dupe["id"]
     assert api.titles(provider=keep["id"]) == [f"{base} Clinic"]
+    # A filter by the merged provider's old ID finds the survivor's listings too.
+    assert api.titles(provider=dupe["id"]) == [f"{base} Clinic"]
     events = api.ok("GET", f"/directory/opportunities/{listing['id']}")["events"]
     assert events[-1]["kind"] == "provider_merged"
     # New listings for the merged provider attach to the survivor.
@@ -506,3 +515,40 @@ def test_unknown_ids_are_not_found(api: Api) -> None:
         ).json()
         == {"detail": "provider_unknown"}
     )  # fmt: skip
+
+
+def test_reassigning_provider_and_venue_is_recorded(api: Api) -> None:
+    base = token()
+    first = api.provider(f"{base} First")
+    second = api.provider(f"{base} Second")
+    venue = api.ok(
+        "POST", "/directory/venues", {"name": f"{base} DZ", "country": "ES", **SOURCE}, 201
+    )  # fmt: skip
+    item = api.listed(f"{base} Event", first["id"])
+    path = f"/directory/opportunities/{item['id']}"
+    api.ok("PATCH", path, {"provider_id": second["id"], "venue_id": venue["id"]})
+    updated = [e for e in api.ok("GET", path)["events"] if e["kind"] == "updated"]
+    assert updated[-1]["detail"] == {
+        "provider_id": {"from": first["id"], "to": second["id"]},
+        "venue_id": {"from": None, "to": venue["id"]},
+    }
+    # Moving a public listing to an unpublished organizer is refused.
+    hidden = api.provider(f"{base} Hidden", publish=False)
+    refused = api.call("PATCH", path, api.reviewer, {"provider_id": hidden["id"]})
+    assert refused.json() == {"detail": "provider_not_published"}
+
+
+def test_ended_listing_omits_an_organizer_that_is_no_longer_published(
+    api: Api,
+) -> None:
+    base = token()
+    provider = api.provider(f"{base} Org")
+    item = api.listed(f"{base} Past", provider["id"], starts_on="2026-11-03", ends_on="2026-11-03")  # fmt: skip
+    api.clock.now = datetime(2026, 11, 5, tzinfo=UTC)
+    api.ok(
+        "POST", f"/directory/providers/{provider['id']}/status", {"status": "archived"}
+    )
+    ended = api.call("GET", f"/opportunities/{item['id']}").json()["opportunity"]
+    assert ended["ended"] is True
+    assert ended["provider"] is None
+    assert f"{base} Org" not in json.dumps(ended)

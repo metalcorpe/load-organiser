@@ -148,6 +148,13 @@ class SqlListingStore:
     def reassign_provider(
         self, source_id: uuid.UUID, target_id: uuid.UUID, now: datetime
     ) -> list[uuid.UUID]:
+        # Lock the moving rows in ID order, the order every multi-row writer uses.
+        self._s.execute(
+            select(col(SkydiverOpportunity.id))
+            .where(col(SkydiverOpportunity.provider_id) == source_id)
+            .order_by(col(SkydiverOpportunity.id))
+            .with_for_update()
+        ).all()
         moved = self._s.execute(
             update(SkydiverOpportunity)
             .where(col(SkydiverOpportunity.provider_id) == source_id)
@@ -236,7 +243,7 @@ class SqlListingStore:
         """The venue and every venue merged into it, directly or through a chain."""
         v = SkydiverVenue
         chain = select(col(v.id)).where(col(v.id) == venue_id).cte(recursive=True)
-        chain = chain.union_all(
+        chain = chain.union(  # union, not union_all: terminates even on a cycle
             select(col(v.id)).where(col(v.merged_into_id) == chain.c.id)
         )
         return select(chain.c.id)
