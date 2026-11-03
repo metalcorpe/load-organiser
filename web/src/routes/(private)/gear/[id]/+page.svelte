@@ -50,7 +50,11 @@
 
 <form method="POST" action="?/save" class="form" novalidate>
 	{#if errorFor('save')}<p class="form-error" role="alert">{errorFor('save')}</p>{/if}
-	<input type="hidden" name="version" value={c?.version ?? ''} />
+	<input
+		type="hidden"
+		name="version"
+		value={(echoed && form && 'based' in form && form.based) || (c?.version ?? '')}
+	/>
 	{#if !c}<input type="hidden" name="client_key" value={echoed?.client_key || data.createKey} />{/if}
 	<div class="field">
 		<label for="kind">Type</label>

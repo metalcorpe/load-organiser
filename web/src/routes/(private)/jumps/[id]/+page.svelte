@@ -138,7 +138,7 @@
 		gear={data.gear.items}
 		{selected}
 		keys={{ component: echoed?.new_component_key || data.componentKey }}
-		version={jump.version}
+		version={(echoed && form && 'based' in form && form.based) || jump.version}
 		submitLabel="Save changes"
 	/>
 {/if}

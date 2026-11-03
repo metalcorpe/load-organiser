@@ -150,7 +150,8 @@
 			<label for="other_gear">Borrowed, rented or other equipment</label>
 			<input id="other_gear" name="other_gear" maxlength="200" placeholder="e.g. rented student rig" defaultValue={v('other_gear')} />
 		</div>
-		<details>
+		<!-- Open when re-shown with a label, so nothing hidden is sent again. -->
+		<details open={v('new_component_label') !== ''}>
 			<summary>Add a new component used on this jump</summary>
 			<input type="hidden" name="new_component_key" value={keys.component} />
 			<div class="pair">

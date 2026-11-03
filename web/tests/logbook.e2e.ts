@@ -148,6 +148,12 @@ test.describe('private logbook', () => {
 		await second.getByLabel('Type', { exact: true }).selectOption('canopy');
 		await second.getByRole('button', { name: 'Save changes' }).click();
 		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
+		// Sending the re-shown stale form again still conflicts; it never overwrites.
+		await expect(second.getByLabel('Type', { exact: true })).toHaveValue('canopy');
+		await second.getByRole('button', { name: 'Save changes' }).click();
+		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
+		await page.reload();
+		await expect(page.getByLabel('Type', { exact: true })).toHaveValue('angle');
 
 		const other = await browser.newContext({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 		const otherPage = await other.newPage();

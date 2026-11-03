@@ -61,11 +61,15 @@ export const actions: Actions = {
 	save: async (event) => {
 		const secret = secretFor(event);
 		const data = await event.request.formData();
-		const values = echo(data);
+		// A refusal re-renders the typed values with the version they were based on, so
+		// resending after an edit conflict conflicts again instead of overwriting.
+		const based = version(data);
+		const refuse = (status: number, error: string) =>
+			fail(status, { form: 'save', error, values: echo(data), based });
 		const parsed = jumpBody(data);
-		if ('error' in parsed) return fail(400, { form: 'save', error: parsed.error, values });
+		if ('error' in parsed) return refuse(400, parsed.error);
 		const extra = newComponent(data);
-		if (extra === 'invalid') return fail(400, { form: 'save', error: 'label_required', values });
+		if (extra === 'invalid') return refuse(400, 'label_required');
 		const api = createRequestApi();
 		const body = parsed.body;
 		if (extra) {
@@ -73,19 +77,15 @@ export const actions: Actions = {
 				bearer: secret,
 				body: { client_key: extra.clientKey, kind: extra.kind, label: extra.label }
 			});
-			if (!component.ok) {
-				return fail(failStatus(component), { form: 'save', error: component.reason, values });
-			}
+			if (!component.ok) return refuse(failStatus(component), component.reason);
 			body.component_ids = [...(body.component_ids as string[]), component.value.component.id];
 		}
 		const updated = await call<JumpDetailOut>(api, 'updateJump', {
 			bearer: secret,
 			id: event.params.id,
-			body: { ...body, version: version(data) }
+			body: { ...body, version: based }
 		});
-		if (!updated.ok) {
-			return fail(failStatus(updated), { form: 'save', error: updated.reason, values });
-		}
+		if (!updated.ok) return refuse(failStatus(updated), updated.reason);
 		redirect(303, `/jumps/${event.params.id}?saved=1`);
 	},
 

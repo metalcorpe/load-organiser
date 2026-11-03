@@ -69,8 +69,11 @@ export const actions: Actions = {
 			body.acquisition_method = null;
 			body.acquired = null;
 		}
+		// A refused edit re-renders with the version it was based on, so resending
+		// after an edit conflict conflicts again instead of overwriting.
+		const based = version(data);
 		if (!body.kind || !body.label)
-			return fail(400, { form: 'save', error: 'missing', values: echo(data) });
+			return fail(400, { form: 'save', error: 'missing', values: echo(data), based });
 		const api = createRequestApi();
 		if (event.params.id === 'new') {
 			const clientKey = field(data, 'client_key', { max: 64 });
@@ -92,10 +95,15 @@ export const actions: Actions = {
 		const updated = await call<ComponentDetailOut>(api, 'updateComponent', {
 			bearer: secret,
 			id: event.params.id,
-			body: { ...body, version: version(data) }
+			body: { ...body, version: based }
 		});
 		if (!updated.ok) {
-			return fail(failStatus(updated), { form: 'save', error: updated.reason, values: echo(data) });
+			return fail(failStatus(updated), {
+				form: 'save',
+				error: updated.reason,
+				values: echo(data),
+				based
+			});
 		}
 		return { form: 'save', done: true };
 	},
