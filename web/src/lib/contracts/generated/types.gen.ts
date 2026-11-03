@@ -45,6 +45,232 @@ export type AliasOut = {
 };
 
 /**
+ * ArchiveIn
+ */
+export type ArchiveIn = {
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Version
+     */
+    version?: number | null;
+};
+
+/**
+ * ComponentDetailOut
+ */
+export type ComponentDetailOut = {
+    component: ComponentOut;
+    /**
+     * Events
+     */
+    events: Array<GearEventOut>;
+    rig: RigRefOut | null;
+    /**
+     * Rig History
+     */
+    rig_history: Array<RigRefOut>;
+    /**
+     * Same Serial
+     *
+     * Your other components with the same serial (yours only).
+     */
+    same_serial: Array<string>;
+    /**
+     * Service
+     */
+    service: Array<ServiceOut>;
+};
+
+/**
+ * ComponentIn
+ */
+export type ComponentIn = {
+    /**
+     * Acquired
+     */
+    acquired?: string | null;
+    /**
+     * Acquisition Method
+     */
+    acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
+    /**
+     * Client Key
+     */
+    client_key: string;
+    /**
+     * Kind
+     */
+    kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Manufactured
+     */
+    manufactured?: string | null;
+    /**
+     * Manufacturer
+     */
+    manufacturer?: string | null;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Relation
+     */
+    relation?: 'owned' | 'borrowed' | 'rented' | null;
+    /**
+     * Serial
+     *
+     * Kept exactly as entered. Private.
+     */
+    serial?: string | null;
+};
+
+/**
+ * ComponentOut
+ *
+ * The owner's own record. `provenance` is always self-reported.
+ */
+export type ComponentOut = {
+    /**
+     * Acquired
+     */
+    acquired: string | null;
+    /**
+     * Acquisition Method
+     */
+    acquisition_method: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Manufactured
+     */
+    manufactured: string | null;
+    /**
+     * Manufacturer
+     */
+    manufacturer: string | null;
+    /**
+     * Model
+     */
+    model: string | null;
+    /**
+     * Notes
+     */
+    notes: string | null;
+    /**
+     * Provenance
+     */
+    provenance?: 'self_reported';
+    /**
+     * Relation
+     */
+    relation: 'owned' | 'borrowed' | 'rented';
+    /**
+     * Serial
+     */
+    serial: string | null;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * ComponentSummaryOut
+ */
+export type ComponentSummaryOut = {
+    component: ComponentOut;
+    /**
+     * Next Due
+     *
+     * Latest due date the owner entered; not an airworthiness status.
+     */
+    next_due: string | null;
+    rig: RigRefOut | null;
+};
+
+/**
+ * ComponentUpdateIn
+ */
+export type ComponentUpdateIn = {
+    /**
+     * Acquired
+     */
+    acquired?: string | null;
+    /**
+     * Acquisition Method
+     */
+    acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
+    /**
+     * Kind
+     */
+    kind?: 'container' | 'main' | 'reserve' | 'aad' | 'other' | null;
+    /**
+     * Label
+     */
+    label?: string | null;
+    /**
+     * Manufactured
+     */
+    manufactured?: string | null;
+    /**
+     * Manufacturer
+     */
+    manufacturer?: string | null;
+    /**
+     * Model
+     */
+    model?: string | null;
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Relation
+     */
+    relation?: 'owned' | 'borrowed' | 'rented' | null;
+    /**
+     * Serial
+     *
+     * Kept exactly as entered. Private.
+     */
+    serial?: string | null;
+    /**
+     * Version
+     */
+    version?: number | null;
+};
+
+/**
  * DuplicateIn
  */
 export type DuplicateIn = {
@@ -66,6 +292,26 @@ export type DuplicateIn = {
  * EventOut
  */
 export type EventOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Detail
+     */
+    detail: {
+        [key: string]: unknown;
+    };
+    /**
+     * Kind
+     */
+    kind: string;
+};
+
+/**
+ * GearEventOut
+ */
+export type GearEventOut = {
     /**
      * Created At
      */
@@ -1539,6 +1785,130 @@ export type ReviewerVenueOut = {
 };
 
 /**
+ * RigIn
+ */
+export type RigIn = {
+    /**
+     * Client Key
+     */
+    client_key: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * RigMemberOut
+ */
+export type RigMemberOut = {
+    /**
+     * From On
+     */
+    from_on: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * RigOut
+ */
+export type RigOut = {
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Components
+     */
+    components: Array<RigMemberOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * RigPlacementIn
+ */
+export type RigPlacementIn = {
+    /**
+     * On
+     *
+     * The day the change applies; past rigs keep dates.
+     */
+    on: string;
+    /**
+     * Rig Id
+     *
+     * Null takes it out of its rig.
+     */
+    rig_id: string | null;
+    /**
+     * Version
+     */
+    version?: number | null;
+};
+
+/**
+ * RigRefOut
+ */
+export type RigRefOut = {
+    /**
+     * From On
+     */
+    from_on: string;
+    /**
+     * Rig Id
+     */
+    rig_id: string;
+    /**
+     * Rig Label
+     */
+    rig_label: string;
+    /**
+     * Until On
+     */
+    until_on: string | null;
+};
+
+/**
+ * RigUpdateIn
+ */
+export type RigUpdateIn = {
+    /**
+     * Archived
+     */
+    archived?: boolean | null;
+    /**
+     * Label
+     */
+    label?: string | null;
+    /**
+     * Version
+     */
+    version?: number | null;
+};
+
+/**
  * SavedOut
  *
  * A private bookmark. Saving is not registration, attendance or interest.
@@ -1578,6 +1948,74 @@ export type SavedStateOut = {
      * Saved At
      */
     saved_at: string;
+};
+
+/**
+ * ServiceIn
+ */
+export type ServiceIn = {
+    /**
+     * Client Key
+     */
+    client_key: string;
+    /**
+     * Done On
+     */
+    done_on: string;
+    /**
+     * Due On
+     */
+    due_on?: string | null;
+    /**
+     * Kind
+     */
+    kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other';
+    /**
+     * Notes
+     */
+    notes?: string | null;
+    /**
+     * Performed By
+     */
+    performed_by?: string | null;
+};
+
+/**
+ * ServiceOut
+ */
+export type ServiceOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Done On
+     */
+    done_on: string;
+    /**
+     * Due On
+     */
+    due_on: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other';
+    /**
+     * Notes
+     */
+    notes: string | null;
+    /**
+     * Performed By
+     */
+    performed_by: string | null;
+    /**
+     * Provenance
+     */
+    provenance?: 'self_reported';
 };
 
 /**
@@ -3504,6 +3942,640 @@ export type SetVenueStatusResponses = {
 };
 
 export type SetVenueStatusResponse = SetVenueStatusResponses[keyof SetVenueStatusResponses];
+
+export type ListComponentsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Archived
+         */
+        archived?: boolean;
+    };
+    url: '/api/skydiver/v1/gear/components';
+};
+
+export type ListComponentsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListComponentsError = ListComponentsErrors[keyof ListComponentsErrors];
+
+export type ListComponentsResponses = {
+    /**
+     * Response Listcomponents
+     *
+     * Successful Response
+     */
+    200: Array<ComponentSummaryOut>;
+};
+
+export type ListComponentsResponse = ListComponentsResponses[keyof ListComponentsResponses];
+
+export type CreateComponentData = {
+    body: ComponentIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/gear/components';
+};
+
+export type CreateComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateComponentError = CreateComponentErrors[keyof CreateComponentErrors];
+
+export type CreateComponentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComponentDetailOut;
+    /**
+     * Created
+     */
+    201: ComponentDetailOut;
+};
+
+export type CreateComponentResponse = CreateComponentResponses[keyof CreateComponentResponses];
+
+export type DeleteComponentData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: {
+        /**
+         * Version
+         */
+        version?: number | null;
+    };
+    url: '/api/skydiver/v1/gear/components/{component_id}';
+};
+
+export type DeleteComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type DeleteComponentError = DeleteComponentErrors[keyof DeleteComponentErrors];
+
+export type DeleteComponentResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteComponentResponse = DeleteComponentResponses[keyof DeleteComponentResponses];
+
+export type GetComponentData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}';
+};
+
+export type GetComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type GetComponentError = GetComponentErrors[keyof GetComponentErrors];
+
+export type GetComponentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComponentDetailOut;
+};
+
+export type GetComponentResponse = GetComponentResponses[keyof GetComponentResponses];
+
+export type UpdateComponentData = {
+    body: ComponentUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}';
+};
+
+export type UpdateComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateComponentError = UpdateComponentErrors[keyof UpdateComponentErrors];
+
+export type UpdateComponentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComponentDetailOut;
+};
+
+export type UpdateComponentResponse = UpdateComponentResponses[keyof UpdateComponentResponses];
+
+export type ArchiveComponentData = {
+    body: ArchiveIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}/archive';
+};
+
+export type ArchiveComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ArchiveComponentError = ArchiveComponentErrors[keyof ArchiveComponentErrors];
+
+export type ArchiveComponentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComponentDetailOut;
+};
+
+export type ArchiveComponentResponse = ArchiveComponentResponses[keyof ArchiveComponentResponses];
+
+export type PlaceComponentData = {
+    body: RigPlacementIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}/rig';
+};
+
+export type PlaceComponentErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type PlaceComponentError = PlaceComponentErrors[keyof PlaceComponentErrors];
+
+export type PlaceComponentResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComponentDetailOut;
+};
+
+export type PlaceComponentResponse = PlaceComponentResponses[keyof PlaceComponentResponses];
+
+export type AddServiceEntryData = {
+    body: ServiceIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}/service';
+};
+
+export type AddServiceEntryErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type AddServiceEntryError = AddServiceEntryErrors[keyof AddServiceEntryErrors];
+
+export type AddServiceEntryResponses = {
+    /**
+     * Successful Response
+     */
+    200: ServiceOut;
+    /**
+     * Created
+     */
+    201: ServiceOut;
+};
+
+export type AddServiceEntryResponse = AddServiceEntryResponses[keyof AddServiceEntryResponses];
+
+export type DeleteServiceEntryData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Component Id
+         */
+        component_id: string;
+        /**
+         * Entry Id
+         */
+        entry_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/components/{component_id}/service/{entry_id}';
+};
+
+export type DeleteServiceEntryErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type DeleteServiceEntryError = DeleteServiceEntryErrors[keyof DeleteServiceEntryErrors];
+
+export type DeleteServiceEntryResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteServiceEntryResponse = DeleteServiceEntryResponses[keyof DeleteServiceEntryResponses];
+
+export type ListRigsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/gear/rigs';
+};
+
+export type ListRigsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type ListRigsError = ListRigsErrors[keyof ListRigsErrors];
+
+export type ListRigsResponses = {
+    /**
+     * Response Listrigs
+     *
+     * Successful Response
+     */
+    200: Array<RigOut>;
+};
+
+export type ListRigsResponse = ListRigsResponses[keyof ListRigsResponses];
+
+export type CreateRigData = {
+    body: RigIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/gear/rigs';
+};
+
+export type CreateRigErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type CreateRigError = CreateRigErrors[keyof CreateRigErrors];
+
+export type CreateRigResponses = {
+    /**
+     * Successful Response
+     */
+    200: RigOut;
+    /**
+     * Created
+     */
+    201: RigOut;
+};
+
+export type CreateRigResponse = CreateRigResponses[keyof CreateRigResponses];
+
+export type UpdateRigData = {
+    body: RigUpdateIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Rig Id
+         */
+        rig_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/gear/rigs/{rig_id}';
+};
+
+export type UpdateRigErrors = {
+    /**
+     * Unauthorized
+     */
+    401: Problem;
+    /**
+     * Forbidden
+     */
+    403: Problem;
+    /**
+     * Not Found
+     */
+    404: Problem;
+    /**
+     * Conflict
+     */
+    409: Problem;
+    /**
+     * Unprocessable Content
+     */
+    422: Problem;
+};
+
+export type UpdateRigError = UpdateRigErrors[keyof UpdateRigErrors];
+
+export type UpdateRigResponses = {
+    /**
+     * Successful Response
+     */
+    200: RigOut;
+};
+
+export type UpdateRigResponse = UpdateRigResponses[keyof UpdateRigResponses];
 
 export type GetHealthData = {
     body?: never;
