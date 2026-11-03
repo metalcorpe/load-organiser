@@ -1,6 +1,6 @@
 # Events, boogies, coaching, and schools board
 
-Status: feature proposal raised by the product owner. The provider and dated-opportunity backend is implemented by #149 (see [Implemented in #149](#implemented-in-149)); public pages and saves (#150), maintenance UI/submissions (#151) and real inventory are not. No participating organizers or accepted listings are assumed.
+Status: feature proposal raised by the product owner. The provider and dated-opportunity backend is implemented by #149 and the public board, detail pages, private saves and visit plans by #150 (see [Implemented in #149](#implemented-in-149) and [Implemented in #150](#implemented-in-150)); maintenance UI/submissions (#151) and real inventory are not. No participating organizers or accepted listings are assumed.
 
 Confirmed coverage: Europe first. The product owner will maintain the initial DZ and opportunity listings and handle corrections. The [release brief](release-brief.md) proposes primary-source candidates and a review cadence. Real country inventory, reuse permissions and maintenance capacity remain unvalidated; comprehensive European coverage is not assumed. Personal logging remains available for locations worldwide.
 
@@ -102,3 +102,18 @@ Backend only: `backend/app/skydiver/opportunities/`, API under `/api/skydiver/v1
 
 No provider or opportunity data is shipped. Real inventory, source reuse review and maintenance effort are #151/#162 evidence.
 
+
+## Implemented in #150
+
+Web: `/` (board), `/events/{id}`, `/organizers/{id}`, upcoming listings on `/dz/{id}`; private `/saved` and `/plans` under Records. Backend: `backend/app/skydiver/saves/` (`/saved`, `/plans`).
+
+| Area | Behaviour |
+| --- | --- |
+| Board | Server-rendered list with title/organizer search and type, country, discipline, audience and date filters held in the URL (shareable, back-button safe). Unknown filter values are dropped. Empty results say coverage is limited and offer Clear filters; they never widen the search. Upstream failure shows an error, not an empty board |
+| Detail | Organizer and venue shown separately; dates with their local zone or “Dates not announced”; prerequisites quoted as stated by the source; price or “Not stated”; “Availability is not tracked here”; source link and last check. Postponed, cancelled and ended listings say so. The primary action opens the organizer's registration page; the page states registration happens there |
+| Save | Guests see “Sign in to save this privately”, which returns to the listing with `?save=1`; the listing and its current status are shown again and the save happens only when the person presses Save privately. Saving is idempotent (`PUT`), needs a confirmed email, and shows “Saved privately — you are not registered.” A withdrawn listing stays in the saved list under its saved title as “No longer published”; a consolidated duplicate shows the kept listing |
+| Plans | Separate from saves. Title, first/last day (calendar dates, at most a year), optional private note, and at most one link: a public listing, a public dropzone or the person's own private place. A plan keeps its own dates; when the linked listing's dates differ, both are shown. Deleting a private place keeps the plan |
+| Privacy | Saves and plans are owner-only (`owner_person_id` predicate in SQL, 404 for foreign IDs) and never appear in public responses, counts or organizer/reviewer views. All responses and pages are `no-store` |
+| Limits | 200 saves and 100 plans per person (working defaults, not measured). The web transport accepts up to 4 MB for these lists and 1 MB for a board page (20 listings requested) |
+
+Not built here: calendar export, alerts/subscriptions, following providers, map/calendar views, Report a correction (#151), and any shared intention (#159).

@@ -25,8 +25,8 @@ from app.skydiver.opportunities.service import (
 )
 
 # Working caps per person (design defaults, not measured capacity).
-MAX_SAVED = 500
-MAX_PLANS = 200
+MAX_SAVED = 200
+MAX_PLANS = 100
 TITLE_MAX = 120
 NOTE_MAX = 500
 PLAN_SPAN_MAX_DAYS = 366

@@ -17,9 +17,11 @@ const BETA = '/api/skydiver/v1';
 const AUTH = `${BETA}/auth`;
 
 interface Operation {
-	readonly method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
+	readonly method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 	readonly path: string;
 	readonly query?: readonly string[];
+	/** Larger response cap for list operations whose bounded size exceeds the default. */
+	readonly maxBodyBytes?: number;
 }
 
 export const OPERATIONS = {
@@ -43,7 +45,45 @@ export const OPERATIONS = {
 	listPlaces: { method: 'GET', path: `${BETA}/places` },
 	createPlace: { method: 'POST', path: `${BETA}/places` },
 	updatePlace: { method: 'PATCH', path: `${BETA}/places/{id}` },
-	deletePlace: { method: 'DELETE', path: `${BETA}/places/{id}` }
+	deletePlace: { method: 'DELETE', path: `${BETA}/places/{id}` },
+	searchOpportunities: {
+		method: 'GET',
+		path: `${BETA}/opportunities`,
+		query: [
+			'q',
+			'category',
+			'country',
+			'discipline',
+			'audience',
+			'provider',
+			'venue',
+			'from',
+			'to',
+			'cursor',
+			'limit'
+		],
+		// At most 50 listings with bounded text fields.
+		maxBodyBytes: 1024 * 1024
+	},
+	getOpportunity: { method: 'GET', path: `${BETA}/opportunities/{id}` },
+	getProvider: { method: 'GET', path: `${BETA}/providers/{id}` },
+	// Bounded by the per-person caps (200 saves, 100 plans) and field limits.
+	listSaved: {
+		method: 'GET',
+		path: `${BETA}/saved`,
+		maxBodyBytes: 4 * 1024 * 1024
+	},
+	getSaved: { method: 'GET', path: `${BETA}/saved/{id}` },
+	saveOpportunity: { method: 'PUT', path: `${BETA}/saved/{id}` },
+	unsaveOpportunity: { method: 'DELETE', path: `${BETA}/saved/{id}` },
+	listPlans: {
+		method: 'GET',
+		path: `${BETA}/plans`,
+		maxBodyBytes: 4 * 1024 * 1024
+	},
+	createPlan: { method: 'POST', path: `${BETA}/plans` },
+	updatePlan: { method: 'PATCH', path: `${BETA}/plans/{id}` },
+	deletePlan: { method: 'DELETE', path: `${BETA}/plans/{id}` }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -108,7 +148,9 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			if (!options.origin) return { kind: 'not_configured' };
 			const url = buildPath(OPERATIONS[operation], call);
 			if (url === null) return { kind: 'invalid_request' };
-			const { method } = OPERATIONS[operation];
+			const spec: Operation = OPERATIONS[operation];
+			const { method } = spec;
+			const bodyLimit = spec.maxBodyBytes ?? maxBodyBytes;
 
 			const headers: Record<string, string> = { accept: 'application/json' };
 			if (call.body !== undefined) headers['content-type'] = 'application/json';
@@ -149,7 +191,7 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			}
 
 			try {
-				const text = await readBounded(response, maxBodyBytes);
+				const text = await readBounded(response, bodyLimit);
 				if (text === null) return { kind: 'invalid_response' };
 				const result: TransportResult = {
 					kind: 'response',
