@@ -63,6 +63,20 @@ describe('createApiTransport', () => {
 		expect(headers.has('x-organiser-confirm-password')).toBe(false);
 	});
 
+	it('accepts only a lowercase handle as a handle path parameter', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		for (const handle of ['Sam', 'a/../b', 'ab', 'sam%2f', undefined]) {
+			expect(await api.request('getPerson', { handle })).toEqual({ kind: 'invalid_request' });
+		}
+		expect(fetch).not.toHaveBeenCalled();
+		await api.request('getPerson', { handle: 'sam_flyer' });
+		expect(fetch.mock.calls[0][0]).toBe('https://api.example.org/api/skydiver/v1/people/sam_flyer');
+		expect(await api.request('getHealth', { handle: 'sam_flyer' })).toEqual({
+			kind: 'invalid_request'
+		});
+	});
+
 	it('creates independent transports per request', () => {
 		const a = createApiTransport({ fetch: vi.fn<FetchLike>(), origin: ORIGIN });
 		const b = createApiTransport({ fetch: vi.fn<FetchLike>(), origin: ORIGIN });

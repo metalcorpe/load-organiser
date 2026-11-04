@@ -136,6 +136,14 @@
 	</form>
 </section>
 
+<section class="card" aria-labelledby="public-heading">
+	<h2 id="public-heading">Public profile and people</h2>
+	<p>
+		<a href="/profile/public">Your public profile</a> is optional and separate from this account.
+		<a href="/people">People</a>: find people, follow requests, followers and blocked accounts.
+	</p>
+</section>
+
 <section class="card" aria-labelledby="data-heading">
 	<h2 id="data-heading">Your data</h2>
 	<p>
@@ -145,7 +153,7 @@
 </section>
 
 <Notice title="Not available yet" tone="warn">
-	<p>Public profile, follow requests, blocked users and account deletion come later.</p>
+	<p>Sharing jumps, the activity feed and account deletion come later.</p>
 </Notice>
 
 <style>

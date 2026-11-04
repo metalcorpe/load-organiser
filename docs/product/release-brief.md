@@ -108,6 +108,19 @@ Working text limits: private jump notes 2,000 characters, gear notes 1,000, prof
 - Unpublish, audience narrowing, follow removal, and account deletion must revoke future service access across all views/caches. A service cannot retract screenshots, copied data, or external media. Keep private pages out of shared/public caches.
 - Report profiles/posts from the relevant screen. The owner reviews the reported content and may hide public content or restrict publishing; this role does not grant routine access to private logs/gear. Publication stays disabled if moderation has no available owner.
 
+#### Implemented in #156 (beta)
+
+Backend `backend/app/skydiver/social/` (`/me/profile`, `/me/people/...`, `/people`, `/people/{handle}`, reviewer `/social/...`); web `/profile/public`, `/people`, public `/people/{handle}`, reviewer `/review/social`.
+
+- Profile: opt-in and separate from the account. Handle (3–30 lowercase letters/digits/underscores, unique ignoring case, a few reserved names, fixed once created so links keep working), display name, optional bio (280), up to five disciplines and an optional listed home dropzone. Nothing is copied from the email, registration name, logbook, gear, totals or baseline.
+- Visibility: the owner always; anyone else only while not hidden by a reviewer and, signed in, with no block either way; then if discoverable (also anonymously) or the viewer is an approved follower. Search finds discoverable profiles only and needs a session. Every refusal is the same 404 as an unknown handle; follow/block/report/unfollow on a profile the caller may not reach is also 404, so non-discoverable handles cannot be probed.
+- Follows always need approval; asking needs your own profile (the person sees who asks). Approve, decline, cancel, unfollow and remove follower. A follow grants nothing in private records (tested against the logbook API); it only matters for follower-shared posts (#157).
+- Block: removes both follows in the same transaction; approval is a conditional update that fails while a block exists; every read re-checks blocks. Unblocking does not restore follows. Public profiles stay visible to signed-out visitors; this is explained before blocking.
+- Reports: reason and optional note, one open report per reporter and target (a repeat is acknowledged, not stacked), 10 per day. A separate reviewer queue (not listing corrections) shows the reported profile's public fields at report time and now; decisions are no action, hide profile or restrict publishing (a reason is required and shown to the owner; the reporter is never shown to the reported person). Reviewers can lift restrictions with a reason. Publishing restriction takes effect with #157.
+- Limits: 500 follows/requests and 500 blocks per account; 50 follow requests per day; 120 searches per hour.
+
+Not built here: shared jump posts and their audiences (#157), the feed and venue activity (#158); account deletion; notifications. Visit intentions (#159) are deferred outside V1. The reviewer sees the reporter's handle (needed to judge abuse of reporting); profile owners never do.
+
 ## European discovery inventory and sources
 
 Europe is a coverage boundary, not a commitment to populate every country equally. Accept European suggestions from the start and show genuine gaps. Country inventory grows through reviewed sources; do not create fictional listings to fill a map or promise complete coverage. Personal logging outside maintained coverage remains usable.

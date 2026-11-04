@@ -24,6 +24,7 @@
 	<a class="button secondary" href="/review/organizers/new">New organizer</a>
 	<a class="button secondary" href="/review/dropzones/new">New dropzone</a>
 	<a href="/review/submissions">Submissions</a>
+	<a href="/review/social">Profile reports</a>
 </p>
 
 <form method="GET" class="form search" role="search">
