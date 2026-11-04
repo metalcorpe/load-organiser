@@ -36,7 +36,9 @@ class SkydiverJumpBaseline(SQLModel, table=True):
         CheckConstraint(
             "prior_jumps BETWEEN 0 AND 100000", name="ck_skydiver_baseline_prior"
         ),
-        CheckConstraint("source IN ('manual')", name="ck_skydiver_baseline_source"),
+        CheckConstraint(
+            "source IN ('manual', 'restored')", name="ck_skydiver_baseline_source"
+        ),
         CheckConstraint("version >= 1", name="ck_skydiver_baseline_version"),
     )
 

@@ -136,8 +136,16 @@
 	</form>
 </section>
 
+<section class="card" aria-labelledby="data-heading">
+	<h2 id="data-heading">Your data</h2>
+	<p>
+		<a href="/profile/data">Export or restore your records</a>: a file with your logbook, gear,
+		prior jump count, private places, saved listings and plans.
+	</p>
+</section>
+
 <Notice title="Not available yet" tone="warn">
-	<p>Public profile, follow requests, blocked users, export, restore and account deletion come later.</p>
+	<p>Public profile, follow requests, blocked users and account deletion come later.</p>
 </Notice>
 
 <style>

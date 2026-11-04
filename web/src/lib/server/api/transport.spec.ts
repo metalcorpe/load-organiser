@@ -34,6 +34,35 @@ describe('createApiTransport', () => {
 		expect([...headers.keys()]).toEqual(['accept']);
 	});
 
+	it('sends a restore file byte for byte with the confirmation header', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, { outcome: 'restored' }));
+		const raw = new TextEncoder().encode('{ "format" : 1 }');
+		await createApiTransport({ fetch, origin: ORIGIN }).request('restoreRecords', {
+			bearer: 'secret',
+			rawBody: raw,
+			confirmPassword: 'pass phrase'
+		});
+		const [url, init] = fetch.mock.calls[0];
+		expect(url).toBe('https://api.example.org/api/skydiver/v1/records/restore');
+		expect(init.body).toBe(raw);
+		const headers = new Headers(init.headers);
+		expect(headers.get('content-type')).toBe('application/json');
+		expect(headers.get('x-organiser-confirm-password')).toBe('pass phrase');
+	});
+
+	it('passes an export through as text without parsing it', async () => {
+		const file = '{"format":"load-organiser.personal-records","version":1}';
+		const fetch = vi.fn<FetchLike>(
+			async () => new Response(file, { headers: { 'content-type': 'application/json' } })
+		);
+		const result = await createApiTransport({ fetch, origin: ORIGIN }).request('exportRecords', {
+			bearer: 'secret'
+		});
+		expect(result).toEqual({ kind: 'response', status: 200, body: file });
+		const headers = new Headers(fetch.mock.calls[0][1].headers);
+		expect(headers.has('x-organiser-confirm-password')).toBe(false);
+	});
+
 	it('creates independent transports per request', () => {
 		const a = createApiTransport({ fetch: vi.fn<FetchLike>(), origin: ORIGIN });
 		const b = createApiTransport({ fetch: vi.fn<FetchLike>(), origin: ORIGIN });

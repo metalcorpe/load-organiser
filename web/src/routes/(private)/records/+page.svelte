@@ -17,4 +17,5 @@
 	<li><a href="/plans">Visit plans</a>: your own dated plans, visible only to you.</li>
 	<li><a href="/places">Private places</a>: dropzones and fields you keep for your own records.</li>
 	<li><a href="/submit">Suggestions and reports</a>: what you sent and its status.</li>
+	<li><a href="/profile/data">Your data</a>: export your records to a file, or restore one.</li>
 </ul>

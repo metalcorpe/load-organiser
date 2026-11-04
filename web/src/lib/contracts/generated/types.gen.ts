@@ -45,6 +45,44 @@ export type AliasOut = {
 };
 
 /**
+ * ArchiveCountsOut
+ */
+export type ArchiveCountsOut = {
+    /**
+     * Baseline
+     */
+    baseline: number;
+    /**
+     * Components
+     */
+    components: number;
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Places
+     */
+    places: number;
+    /**
+     * Plans
+     */
+    plans: number;
+    /**
+     * Rigs
+     */
+    rigs: number;
+    /**
+     * Saved Listings
+     */
+    saved_listings: number;
+    /**
+     * Service Entries
+     */
+    service_entries: number;
+};
+
+/**
  * ArchiveIn
  */
 export type ArchiveIn = {
@@ -75,7 +113,7 @@ export type BaselineEventOut = {
     /**
      * Kind
      */
-    kind: 'declared' | 'corrected' | 'removed';
+    kind: 'declared' | 'corrected' | 'removed' | 'from_export';
 };
 
 /**
@@ -115,7 +153,7 @@ export type BaselineOut = {
     /**
      * Source
      */
-    source: 'manual';
+    source: 'manual' | 'restored';
     /**
      * Updated At
      */
@@ -727,8 +765,10 @@ export type JumpOut = {
     provenance?: 'self_reported';
     /**
      * Source
+     *
+     * `restored`: re-created from the owner's own export.
      */
-    source: 'manual';
+    source: 'manual' | 'restored';
     /**
      * Time Zone
      */
@@ -1623,16 +1663,6 @@ export type PlanUpdateIn = {
 };
 
 /**
- * Problem
- */
-export type Problem = {
-    /**
-     * Detail
-     */
-    detail: string;
-};
-
-/**
  * ProviderCreateIn
  */
 export type ProviderCreateIn = {
@@ -1818,6 +1848,45 @@ export type ProviderUpdateIn = {
 };
 
 /**
+ * ReceiptOut
+ */
+export type ReceiptOut = {
+    /**
+     * Counts
+     */
+    counts: {
+        [key: string]: number;
+    };
+    /**
+     * Fingerprint
+     */
+    fingerprint: string;
+    /**
+     * Restored At
+     */
+    restored_at: string;
+};
+
+/**
+ * RecordsOut
+ */
+export type RecordsOut = {
+    /**
+     * Counts
+     *
+     * Records a restore manages, by kind.
+     */
+    counts: {
+        [key: string]: number;
+    };
+    /**
+     * Empty
+     */
+    empty: boolean;
+    last_restore: ReceiptOut | null;
+};
+
+/**
  * RegisterIn
  */
 export type RegisterIn = {
@@ -1877,6 +1946,73 @@ export type ResolveIn = {
      * Version
      */
     version?: number | null;
+};
+
+/**
+ * RestoreCheckOut
+ */
+export type RestoreCheckOut = {
+    /**
+     * Already Restored At
+     */
+    already_restored_at: string | null;
+    counts: ArchiveCountsOut;
+    /**
+     * Eligible
+     */
+    eligible: boolean;
+    /**
+     * Exported At
+     */
+    exported_at: string;
+    /**
+     * Fingerprint
+     *
+     * SHA-256 of the exact file.
+     */
+    fingerprint: string;
+    /**
+     * Plan Links Dropped
+     */
+    plan_links_dropped: number;
+    /**
+     * Reason
+     */
+    reason: 'records_not_empty' | 'already_restored' | null;
+    /**
+     * Saved Not Restorable
+     *
+     * Public titles of saved listings that are no longer published.
+     */
+    saved_not_restorable: Array<string>;
+    /**
+     * Venues To Private Places
+     */
+    venues_to_private_places: number;
+};
+
+/**
+ * RestoreOut
+ */
+export type RestoreOut = {
+    /**
+     * Counts
+     */
+    counts: {
+        [key: string]: number;
+    };
+    /**
+     * Fingerprint
+     */
+    fingerprint: string;
+    /**
+     * Outcome
+     */
+    outcome: 'restored' | 'already_restored';
+    /**
+     * Restored At
+     */
+    restored_at: string;
 };
 
 /**
@@ -2953,6 +3089,102 @@ export type ViewerOut = {
     session_expires_at: string;
 };
 
+/**
+ * Problem
+ */
+export type AppSkydiverDirectoryApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverGearApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverHistoryApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverIdentityApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverLogbookApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverModerationApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverOpportunitiesApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverRecordsApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+    /**
+     * Problem
+     *
+     * For archive_invalid: position and rule, no content.
+     */
+    problem?: string | null;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverSavesApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
 export type ResendVerificationData = {
     body?: never;
     headers?: {
@@ -2970,27 +3202,27 @@ export type ResendVerificationErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type ResendVerificationError = ResendVerificationErrors[keyof ResendVerificationErrors];
@@ -3015,27 +3247,27 @@ export type ConfirmEmailErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type ConfirmEmailError = ConfirmEmailErrors[keyof ConfirmEmailErrors];
@@ -3066,27 +3298,27 @@ export type ChangePasswordErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type ChangePasswordError = ChangePasswordErrors[keyof ChangePasswordErrors];
@@ -3111,27 +3343,27 @@ export type RequestPasswordResetErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type RequestPasswordResetError = RequestPasswordResetErrors[keyof RequestPasswordResetErrors];
@@ -3156,27 +3388,27 @@ export type ResetPasswordErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type ResetPasswordError = ResetPasswordErrors[keyof ResetPasswordErrors];
@@ -3201,27 +3433,27 @@ export type RegisterErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type RegisterError = RegisterErrors[keyof RegisterErrors];
@@ -3252,27 +3484,27 @@ export type DeleteSessionErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type DeleteSessionError = DeleteSessionErrors[keyof DeleteSessionErrors];
@@ -3303,27 +3535,27 @@ export type GetSessionErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type GetSessionError = GetSessionErrors[keyof GetSessionErrors];
@@ -3348,27 +3580,27 @@ export type CreateSessionErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type CreateSessionError = CreateSessionErrors[keyof CreateSessionErrors];
@@ -3399,27 +3631,27 @@ export type RevokeAllSessionsErrors = {
     /**
      * Bad Request
      */
-    400: Problem;
+    400: AppSkydiverIdentityApiProblem;
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverIdentityApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverIdentityApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverIdentityApiProblem;
     /**
      * Too Many Requests
      */
-    429: Problem;
+    429: AppSkydiverIdentityApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverIdentityApiProblem;
 };
 
 export type RevokeAllSessionsError = RevokeAllSessionsErrors[keyof RevokeAllSessionsErrors];
@@ -3473,23 +3705,23 @@ export type ListReviewOpportunitiesErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type ListReviewOpportunitiesError = ListReviewOpportunitiesErrors[keyof ListReviewOpportunitiesErrors];
@@ -3520,23 +3752,23 @@ export type CreateOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type CreateOpportunityError = CreateOpportunityErrors[keyof CreateOpportunityErrors];
@@ -3572,23 +3804,23 @@ export type ReviewOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type ReviewOpportunityError = ReviewOpportunityErrors[keyof ReviewOpportunityErrors];
@@ -3624,23 +3856,23 @@ export type UpdateOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type UpdateOpportunityError = UpdateOpportunityErrors[keyof UpdateOpportunityErrors];
@@ -3676,23 +3908,23 @@ export type MarkOpportunityDuplicateErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type MarkOpportunityDuplicateError = MarkOpportunityDuplicateErrors[keyof MarkOpportunityDuplicateErrors];
@@ -3728,23 +3960,23 @@ export type SetOpportunityStatusErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type SetOpportunityStatusError = SetOpportunityStatusErrors[keyof SetOpportunityStatusErrors];
@@ -3798,23 +4030,23 @@ export type ListReviewProvidersErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type ListReviewProvidersError = ListReviewProvidersErrors[keyof ListReviewProvidersErrors];
@@ -3845,23 +4077,23 @@ export type CreateProviderErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type CreateProviderError = CreateProviderErrors[keyof CreateProviderErrors];
@@ -3897,23 +4129,23 @@ export type ReviewProviderErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type ReviewProviderError = ReviewProviderErrors[keyof ReviewProviderErrors];
@@ -3949,23 +4181,23 @@ export type UpdateProviderErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type UpdateProviderError = UpdateProviderErrors[keyof UpdateProviderErrors];
@@ -4001,23 +4233,23 @@ export type MergeProviderErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type MergeProviderError = MergeProviderErrors[keyof MergeProviderErrors];
@@ -4053,23 +4285,23 @@ export type SetProviderStatusErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type SetProviderStatusError = SetProviderStatusErrors[keyof SetProviderStatusErrors];
@@ -4113,27 +4345,27 @@ export type ListReviewSubmissionsErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverModerationApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverModerationApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverModerationApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverModerationApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverModerationApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverModerationApiProblem;
 };
 
 export type ListReviewSubmissionsError = ListReviewSubmissionsErrors[keyof ListReviewSubmissionsErrors];
@@ -4169,27 +4401,27 @@ export type ResolveSubmissionErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverModerationApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverModerationApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverModerationApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverModerationApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverModerationApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverModerationApiProblem;
 };
 
 export type ResolveSubmissionError = ResolveSubmissionErrors[keyof ResolveSubmissionErrors];
@@ -4243,23 +4475,23 @@ export type ListReviewVenuesErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type ListReviewVenuesError = ListReviewVenuesErrors[keyof ListReviewVenuesErrors];
@@ -4290,23 +4522,23 @@ export type CreateVenueErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type CreateVenueError = CreateVenueErrors[keyof CreateVenueErrors];
@@ -4342,23 +4574,23 @@ export type ReviewVenueErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type ReviewVenueError = ReviewVenueErrors[keyof ReviewVenueErrors];
@@ -4394,23 +4626,23 @@ export type UpdateVenueErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type UpdateVenueError = UpdateVenueErrors[keyof UpdateVenueErrors];
@@ -4446,23 +4678,23 @@ export type AddVenueAliasErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type AddVenueAliasError = AddVenueAliasErrors[keyof AddVenueAliasErrors];
@@ -4498,23 +4730,23 @@ export type MergeVenueErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type MergeVenueError = MergeVenueErrors[keyof MergeVenueErrors];
@@ -4550,23 +4782,23 @@ export type SetVenueStatusErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type SetVenueStatusError = SetVenueStatusErrors[keyof SetVenueStatusErrors];
@@ -4602,23 +4834,23 @@ export type ListComponentsErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type ListComponentsError = ListComponentsErrors[keyof ListComponentsErrors];
@@ -4651,23 +4883,23 @@ export type CreateComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type CreateComponentError = CreateComponentErrors[keyof CreateComponentErrors];
@@ -4712,23 +4944,23 @@ export type DeleteComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type DeleteComponentError = DeleteComponentErrors[keyof DeleteComponentErrors];
@@ -4764,23 +4996,23 @@ export type GetComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type GetComponentError = GetComponentErrors[keyof GetComponentErrors];
@@ -4816,23 +5048,23 @@ export type UpdateComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type UpdateComponentError = UpdateComponentErrors[keyof UpdateComponentErrors];
@@ -4868,23 +5100,23 @@ export type ArchiveComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type ArchiveComponentError = ArchiveComponentErrors[keyof ArchiveComponentErrors];
@@ -4920,23 +5152,23 @@ export type PlaceComponentErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type PlaceComponentError = PlaceComponentErrors[keyof PlaceComponentErrors];
@@ -4972,23 +5204,23 @@ export type AddServiceEntryErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type AddServiceEntryError = AddServiceEntryErrors[keyof AddServiceEntryErrors];
@@ -5032,23 +5264,23 @@ export type DeleteServiceEntryErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type DeleteServiceEntryError = DeleteServiceEntryErrors[keyof DeleteServiceEntryErrors];
@@ -5079,23 +5311,23 @@ export type ListRigsErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type ListRigsError = ListRigsErrors[keyof ListRigsErrors];
@@ -5128,23 +5360,23 @@ export type CreateRigErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type CreateRigError = CreateRigErrors[keyof CreateRigErrors];
@@ -5184,23 +5416,23 @@ export type UpdateRigErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverGearApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverGearApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverGearApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverGearApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverGearApiProblem;
 };
 
 export type UpdateRigError = UpdateRigErrors[keyof UpdateRigErrors];
@@ -5256,19 +5488,19 @@ export type GetHistoryErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverHistoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverHistoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverHistoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverHistoryApiProblem;
 };
 
 export type GetHistoryError = GetHistoryErrors[keyof GetHistoryErrors];
@@ -5304,19 +5536,19 @@ export type RemoveBaselineErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverHistoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverHistoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverHistoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverHistoryApiProblem;
 };
 
 export type RemoveBaselineError = RemoveBaselineErrors[keyof RemoveBaselineErrors];
@@ -5347,19 +5579,19 @@ export type SetBaselineErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverHistoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverHistoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverHistoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverHistoryApiProblem;
 };
 
 export type SetBaselineError = SetBaselineErrors[keyof SetBaselineErrors];
@@ -5399,19 +5631,19 @@ export type PreviewBaselineErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverHistoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverHistoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverHistoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverHistoryApiProblem;
 };
 
 export type PreviewBaselineError = PreviewBaselineErrors[keyof PreviewBaselineErrors];
@@ -5451,29 +5683,29 @@ export type ListJumpsErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverLogbookApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverLogbookApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverLogbookApiProblem;
     /**
      * Response 409 Listjumps
      *
      * Conflict
      */
-    409: Problem | DuplicateProblem;
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
     /**
      * Gone
      */
-    410: Problem;
+    410: AppSkydiverLogbookApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverLogbookApiProblem;
 };
 
 export type ListJumpsError = ListJumpsErrors[keyof ListJumpsErrors];
@@ -5504,29 +5736,29 @@ export type CreateJumpErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverLogbookApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverLogbookApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverLogbookApiProblem;
     /**
      * Response 409 Createjump
      *
      * Conflict
      */
-    409: Problem | DuplicateProblem;
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
     /**
      * Gone
      */
-    410: Problem;
+    410: AppSkydiverLogbookApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverLogbookApiProblem;
 };
 
 export type CreateJumpError = CreateJumpErrors[keyof CreateJumpErrors];
@@ -5571,29 +5803,29 @@ export type DeleteJumpErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverLogbookApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverLogbookApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverLogbookApiProblem;
     /**
      * Response 409 Deletejump
      *
      * Conflict
      */
-    409: Problem | DuplicateProblem;
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
     /**
      * Gone
      */
-    410: Problem;
+    410: AppSkydiverLogbookApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverLogbookApiProblem;
 };
 
 export type DeleteJumpError = DeleteJumpErrors[keyof DeleteJumpErrors];
@@ -5629,29 +5861,29 @@ export type GetJumpErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverLogbookApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverLogbookApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverLogbookApiProblem;
     /**
      * Response 409 Getjump
      *
      * Conflict
      */
-    409: Problem | DuplicateProblem;
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
     /**
      * Gone
      */
-    410: Problem;
+    410: AppSkydiverLogbookApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverLogbookApiProblem;
 };
 
 export type GetJumpError = GetJumpErrors[keyof GetJumpErrors];
@@ -5687,29 +5919,29 @@ export type UpdateJumpErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverLogbookApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverLogbookApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverLogbookApiProblem;
     /**
      * Response 409 Updatejump
      *
      * Conflict
      */
-    409: Problem | DuplicateProblem;
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
     /**
      * Gone
      */
-    410: Problem;
+    410: AppSkydiverLogbookApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverLogbookApiProblem;
 };
 
 export type UpdateJumpError = UpdateJumpErrors[keyof UpdateJumpErrors];
@@ -5783,23 +6015,23 @@ export type SearchOpportunitiesErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type SearchOpportunitiesError = SearchOpportunitiesErrors[keyof SearchOpportunitiesErrors];
@@ -5829,23 +6061,23 @@ export type GetOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type GetOpportunityError = GetOpportunityErrors[keyof GetOpportunityErrors];
@@ -5876,23 +6108,23 @@ export type ListPlacesErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type ListPlacesError = ListPlacesErrors[keyof ListPlacesErrors];
@@ -5925,23 +6157,23 @@ export type CreatePlaceErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type CreatePlaceError = CreatePlaceErrors[keyof CreatePlaceErrors];
@@ -5977,23 +6209,23 @@ export type DeletePlaceErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type DeletePlaceError = DeletePlaceErrors[keyof DeletePlaceErrors];
@@ -6029,23 +6261,23 @@ export type UpdatePlaceErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type UpdatePlaceError = UpdatePlaceErrors[keyof UpdatePlaceErrors];
@@ -6076,23 +6308,23 @@ export type ListPlansErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type ListPlansError = ListPlansErrors[keyof ListPlansErrors];
@@ -6125,23 +6357,23 @@ export type CreatePlanErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type CreatePlanError = CreatePlanErrors[keyof CreatePlanErrors];
@@ -6177,23 +6409,23 @@ export type DeletePlanErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type DeletePlanError = DeletePlanErrors[keyof DeletePlanErrors];
@@ -6229,23 +6461,23 @@ export type UpdatePlanErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type UpdatePlanError = UpdatePlanErrors[keyof UpdatePlanErrors];
@@ -6275,23 +6507,23 @@ export type GetProviderErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverOpportunitiesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverOpportunitiesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverOpportunitiesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverOpportunitiesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverOpportunitiesApiProblem;
 };
 
 export type GetProviderError = GetProviderErrors[keyof GetProviderErrors];
@@ -6304,6 +6536,234 @@ export type GetProviderResponses = {
 };
 
 export type GetProviderResponse = GetProviderResponses[keyof GetProviderResponses];
+
+export type GetRecordsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/records';
+};
+
+export type GetRecordsErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type GetRecordsError = GetRecordsErrors[keyof GetRecordsErrors];
+
+export type GetRecordsResponses = {
+    /**
+     * Successful Response
+     */
+    200: RecordsOut;
+};
+
+export type GetRecordsResponse = GetRecordsResponses[keyof GetRecordsResponses];
+
+export type ExportRecordsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/records/export';
+};
+
+export type ExportRecordsErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type ExportRecordsError = ExportRecordsErrors[keyof ExportRecordsErrors];
+
+export type ExportRecordsResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
+
+export type RestoreRecordsData = {
+    /**
+     * The raw archive file (format v1), at most 8 MiB.
+     */
+    body: {
+        [key: string]: unknown;
+    };
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/records/restore';
+};
+
+export type RestoreRecordsErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type RestoreRecordsError = RestoreRecordsErrors[keyof RestoreRecordsErrors];
+
+export type RestoreRecordsResponses = {
+    /**
+     * Successful Response
+     */
+    200: RestoreOut;
+};
+
+export type RestoreRecordsResponse = RestoreRecordsResponses[keyof RestoreRecordsResponses];
+
+export type CheckRestoreData = {
+    /**
+     * The raw archive file (format v1), at most 8 MiB.
+     */
+    body: {
+        [key: string]: unknown;
+    };
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/records/restore/check';
+};
+
+export type CheckRestoreErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type CheckRestoreError = CheckRestoreErrors[keyof CheckRestoreErrors];
+
+export type CheckRestoreResponses = {
+    /**
+     * Successful Response
+     */
+    200: RestoreCheckOut;
+};
+
+export type CheckRestoreResponse = CheckRestoreResponses[keyof CheckRestoreResponses];
 
 export type ListSavedData = {
     body?: never;
@@ -6322,23 +6782,23 @@ export type ListSavedErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type ListSavedError = ListSavedErrors[keyof ListSavedErrors];
@@ -6376,23 +6836,23 @@ export type UnsaveOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type UnsaveOpportunityError = UnsaveOpportunityErrors[keyof UnsaveOpportunityErrors];
@@ -6428,23 +6888,23 @@ export type GetSavedErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type GetSavedError = GetSavedErrors[keyof GetSavedErrors];
@@ -6480,23 +6940,23 @@ export type SaveOpportunityErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverSavesApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverSavesApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverSavesApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverSavesApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverSavesApiProblem;
 };
 
 export type SaveOpportunityError = SaveOpportunityErrors[keyof SaveOpportunityErrors];
@@ -6531,27 +6991,27 @@ export type ListOwnSubmissionsErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverModerationApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverModerationApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverModerationApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverModerationApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverModerationApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverModerationApiProblem;
 };
 
 export type ListOwnSubmissionsError = ListOwnSubmissionsErrors[keyof ListOwnSubmissionsErrors];
@@ -6584,27 +7044,27 @@ export type CreateSubmissionErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverModerationApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverModerationApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverModerationApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverModerationApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverModerationApiProblem;
     /**
      * Service Unavailable
      */
-    503: Problem;
+    503: AppSkydiverModerationApiProblem;
 };
 
 export type CreateSubmissionError = CreateSubmissionErrors[keyof CreateSubmissionErrors];
@@ -6650,23 +7110,23 @@ export type SearchVenuesErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type SearchVenuesError = SearchVenuesErrors[keyof SearchVenuesErrors];
@@ -6696,23 +7156,23 @@ export type GetVenueErrors = {
     /**
      * Unauthorized
      */
-    401: Problem;
+    401: AppSkydiverDirectoryApiProblem;
     /**
      * Forbidden
      */
-    403: Problem;
+    403: AppSkydiverDirectoryApiProblem;
     /**
      * Not Found
      */
-    404: Problem;
+    404: AppSkydiverDirectoryApiProblem;
     /**
      * Conflict
      */
-    409: Problem;
+    409: AppSkydiverDirectoryApiProblem;
     /**
      * Unprocessable Content
      */
-    422: Problem;
+    422: AppSkydiverDirectoryApiProblem;
 };
 
 export type GetVenueError = GetVenueErrors[keyof GetVenueErrors];

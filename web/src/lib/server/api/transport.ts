@@ -22,6 +22,10 @@ interface Operation {
 	readonly query?: readonly string[];
 	/** Larger response cap for list operations whose bounded size exceeds the default. */
 	readonly maxBodyBytes?: number;
+	/** Longer upstream timeout for bounded bulk operations (restore). */
+	readonly timeoutMs?: number;
+	/** Return the JSON response as text, unparsed (export files are passed through). */
+	readonly raw?: boolean;
 }
 
 export const OPERATIONS = {
@@ -188,7 +192,17 @@ export const OPERATIONS = {
 		query: ['prior_jumps', 'before_on']
 	},
 	setBaseline: { method: 'PUT', path: `${BETA}/history/baseline` },
-	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] }
+	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] },
+	getRecords: { method: 'GET', path: `${BETA}/records` },
+	exportRecords: {
+		method: 'GET',
+		path: `${BETA}/records/export`,
+		raw: true,
+		maxBodyBytes: 9 * 1024 * 1024,
+		timeoutMs: 30_000
+	},
+	checkRestore: { method: 'POST', path: `${BETA}/records/restore/check`, timeoutMs: 30_000 },
+	restoreRecords: { method: 'POST', path: `${BETA}/records/restore`, timeoutMs: 60_000 }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -202,6 +216,10 @@ export function isUuid(value: unknown): value is string {
 export interface RequestOptions {
 	/** JSON body for POST operations. */
 	body?: unknown;
+	/** Exact JSON bytes to send instead of `body` (a restore file, fingerprinted upstream). */
+	rawBody?: Uint8Array<ArrayBuffer>;
+	/** Fresh password for an operation that requires it; sent only to the API. */
+	confirmPassword?: string;
 	/** Opaque session secret from the HttpOnly cookie. */
 	bearer?: string;
 	/** Client address from the platform (`getClientAddress`), for API throttling. */
@@ -258,9 +276,12 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			const spec: Operation = OPERATIONS[operation];
 			const { method } = spec;
 			const bodyLimit = spec.maxBodyBytes ?? maxBodyBytes;
+			const payload =
+				call.rawBody ?? (call.body === undefined ? undefined : JSON.stringify(call.body));
 
 			const headers: Record<string, string> = { accept: 'application/json' };
-			if (call.body !== undefined) headers['content-type'] = 'application/json';
+			if (payload !== undefined) headers['content-type'] = 'application/json';
+			if (call.confirmPassword) headers['x-organiser-confirm-password'] = call.confirmPassword;
 			if (call.bearer) headers.authorization = `Bearer ${call.bearer}`;
 			if (call.clientIp && options.proxyKey) {
 				headers['x-organiser-client-ip'] = call.clientIp;
@@ -272,9 +293,9 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 				response = await options.fetch(`${options.origin}${url}`, {
 					method,
 					headers,
-					body: call.body === undefined ? undefined : JSON.stringify(call.body),
+					body: payload,
 					redirect: 'manual',
-					signal: AbortSignal.timeout(timeoutMs)
+					signal: AbortSignal.timeout(spec.timeoutMs ?? timeoutMs)
 				});
 			} catch (error) {
 				return isTimeout(error) ? { kind: 'timeout' } : { kind: 'unreachable' };
@@ -303,7 +324,7 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 				const result: TransportResult = {
 					kind: 'response',
 					status: response.status,
-					body: JSON.parse(text)
+					body: spec.raw && response.ok ? text : JSON.parse(text)
 				};
 				if (retryAfter !== undefined) result.retryAfter = retryAfter;
 				return result;

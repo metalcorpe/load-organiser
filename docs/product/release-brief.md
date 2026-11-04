@@ -71,7 +71,17 @@ Backend `backend/app/skydiver/history/` (`/api/skydiver/v1/history`, `/history/b
 - Changing B/D goes through a read-only preview (now vs with the change) before saving. A declaration carries no version; a correction or removal carries the version it was based on, taken from the first preview, so an older tab's save answers 409 `edit_conflict` instead of overwriting. Declarations, corrections (from/to) and removals are kept as private provenance (latest 50 shown) and remain after removal.
 - Summaries, read from one REPEATABLE READ snapshot so the figures agree: first/last recorded date, recorded jumps per calendar month for the last 12 months (ending with the month of the latest local date anywhere, so a not-yet-started month can briefly show 0), and counts by type, by place (venues merged since count under the venue that remains) and by component explicitly recorded on a jump, with its last use. The baseline adds no month, place, type or gear use.
 
-Not built here: export/restore of the baseline and its provenance (#155); sharing anything (#156/#157). Nothing is used as currency or eligibility evidence.
+Not built here: sharing anything (#156/#157). Nothing is used as currency or eligibility evidence. Export/restore of the baseline and its provenance: #155 below.
+
+#### Implemented in #155 (beta)
+
+Backend `backend/app/skydiver/records/` (`/api/skydiver/v1/records`, `/records/export`, `/records/restore/check`, `/records/restore`); web Profile → Your data (`/profile/data`). Format: [export-format.md](export-format.md).
+
+- Export: free; owner's places, gear (rigs, stints, service, history), jumps with equipment used and history, baseline with provenance, saved listings and plans, plus snapshots of referenced public venues/listings; one REPEATABLE READ snapshot; instants in UTC; private attachment via a same-origin POST; 1 per account per 5 minutes. No credentials, email, roles, follows or other people's data (the schema cannot hold them).
+- Restore: 8 MiB raw / 4 MiB normalised; full validation without writes (`check` previews counts, detached references and eligibility; 10 per hour); restore needs a confirmed email and the password (3 per account per day). Exact-file SHA-256 receipt per owner: a repeat answers already restored with no writes. Non-empty records (places, gear, jumps, baseline, saved, plans) are refused before any write, with no deletion advice. Everything is inserted under new IDs in one transaction; records are marked `restored` with a `from_export` history entry.
+- Concurrency is compare-and-swap style, without a lock: emptiness is checked, the rows are inserted, and the managed collections are counted again before commit; any difference rolls the restore back (tested by interleaving a write). The `lock_owner` row lock that saves/plans/places still take is not used here (architecture A6 prefers compare-and-swap).
+
+Limits: a write that commits between the final recount and the restore's commit (a sub-millisecond window) is not detected. Writes do not reserve the 4 MiB export budget, so an account with very long notes on many jumps could produce an export that restore refuses as too large; counts limits keep typical accounts far below it, but this is not enforced at write time. The web passes up to 8 MiB through the Worker in memory; CPU time on the Workers free plan for an 8 MiB upload is untested. Gear history shows the restore entry as "from export".
 
 ### Gear entry
 
