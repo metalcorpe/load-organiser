@@ -282,15 +282,19 @@ class SocialService:
             visible = target is not None and policy.profile_visible(
                 discoverable=target.discoverable, hidden=target.hidden, facts=facts
             )
+            mine = store.profile(actor.person_id)
             refusal = policy.may_request_follow(
                 visible=visible,
                 facts=facts,
-                requester_has_profile=store.profile(actor.person_id) is not None,
+                requester_has_profile=mine is not None,
             )
             if refusal == "not_found" or target is None:
                 raise NotFound()
             if refusal:
                 raise SocialRefused(refusal)
+            if mine is not None and mine.hidden:
+                # A hidden profile would reappear to the person asked.
+                raise SocialRefused("profile_hidden")
             existing = store.follow_status(actor.person_id, target.person_id)
             if existing is not None:
                 return _state(existing)

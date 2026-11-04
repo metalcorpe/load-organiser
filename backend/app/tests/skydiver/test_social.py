@@ -356,3 +356,23 @@ def test_reports_reach_reviewers_who_can_hide_a_profile(api: Api) -> None:
         status=204,
     )  # fmt: skip
     assert api.ok("GET", f"/people/{target[1]}", None)["handle"] == target[1]
+
+
+def test_a_hidden_profile_disappears_from_other_peoples_lists(api: Api) -> None:
+    hidden, sam, third = api.person(), api.person(), api.person()
+    api.connected(hidden, sam)  # hidden follows sam
+    api.connected(sam, hidden)  # sam follows hidden
+    assert api.follow(hidden[0], third[1]) == "requested"
+    api.ok(
+        "PUT", f"/social/profiles/{hidden[1]}/moderation", api.reviewer,
+        {"hidden": True, "publishing_restricted": False, "reason": "Spam."},
+        status=204,
+    )  # fmt: skip
+    for relation in ("followers", "following"):
+        assert api.ok("GET", f"/me/people/{relation}", sam[0]) == [], relation
+    assert api.ok("GET", "/me/people/requests", third[0]) == []
+    assert api.ok("GET", "/me/profile", third[0])["pending_requests"] == 0
+    # A hidden profile cannot reappear to someone by asking to follow them.
+    other = api.person()
+    refused = api.call("PUT", f"/people/{other[1]}/follow", hidden[0])
+    assert refused.status_code == 409 and refused.json() == {"detail": "profile_hidden"}

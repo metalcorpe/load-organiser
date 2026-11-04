@@ -205,6 +205,11 @@ class SqlSocialStore:
                 .where(col(F.followee_person_id) == followee)
                 .where(col(F.status) == "pending")
                 .where(~_blocked(col(F.follower_person_id), followee))
+                .where(
+                    exists()
+                    .where(col(P.person_id) == col(F.follower_person_id))
+                    .where(col(P.hidden_at).is_(None))
+                )
             ).scalar_one()
         )
 
@@ -273,6 +278,8 @@ class SqlSocialStore:
                 .where(col(me) == person_id)
                 .where(col(F.status) == status)
                 .where(~_blocked(col(other), person_id))
+                # A profile hidden by a reviewer is not shown to anyone else.
+                .where(col(P.hidden_at).is_(None))
                 .order_by(col(when).desc())
             )
         rows = self._s.execute(query.limit(limit)).all()

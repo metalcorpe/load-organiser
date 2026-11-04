@@ -46,6 +46,7 @@ export const SOCIAL_MESSAGES: Record<string, string> = {
 	edit_conflict:
 		'Your profile changed since you opened this page (perhaps in another tab). Nothing was saved. Reload to see the current details.',
 	profile_required: 'Create your public profile first, so the person can see who is asking.',
+	profile_hidden: 'Your profile is hidden by a reviewer, so you cannot ask to follow people.',
 	follow_self: 'You cannot follow yourself.',
 	follow_limit_reached: 'You follow or have asked to follow 500 people, the current limit.',
 	block_limit_reached: 'You have blocked 500 people, the current limit.',
