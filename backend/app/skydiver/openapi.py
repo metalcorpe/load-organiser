@@ -34,6 +34,8 @@ from app.skydiver.records.api import create_router as create_records_router
 from app.skydiver.records.service import RecordsService
 from app.skydiver.saves.api import create_router as create_saves_router
 from app.skydiver.saves.service import SavesService
+from app.skydiver.social.api import create_router as create_social_router
+from app.skydiver.social.service import SocialService
 
 
 def _no_service() -> IdentityService:
@@ -61,6 +63,10 @@ def _no_history() -> HistoryService:
 
 
 def _no_records() -> RecordsService:
+    raise RuntimeError("contract export only")
+
+
+def _no_social() -> SocialService:
     raise RuntimeError("contract export only")
 
 
@@ -115,6 +121,13 @@ def build_openapi() -> dict[str, Any]:
     app.include_router(
         create_moderation_router(
             service=_no_submissions, access=AccessDependencies(_no_service)
+        )
+    )
+    app.include_router(
+        create_social_router(
+            service=_no_social,
+            identity=_no_service,
+            access=AccessDependencies(_no_service),
         )
     )
     return app.openapi()
