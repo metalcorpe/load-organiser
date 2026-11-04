@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Any
 
+from app.skydiver.directory import policy as directory
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
 from app.skydiver.gear import policy as gear
 from app.skydiver.gear.policy import AcquisitionMethod, Relation
@@ -70,6 +71,23 @@ def _unique(section: str, ids: list[uuid.UUID]) -> set[uuid.UUID]:
     return seen
 
 
+def _text(where: str, field: str, value: str | None, maximum: int) -> None:
+    """Single-line text must already be in the form the API stores (trimmed,
+    whitespace collapsed, NFC), so a restore holds only values the API accepts."""
+    if value is None:
+        return
+    if (
+        _rule(where, lambda: directory.clean_text(value, field=field, maximum=maximum))
+        != value
+    ):
+        raise ArchiveInvalid(f"{where}.{field}_invalid")
+
+
+def _country(where: str, value: str) -> None:
+    if _rule(where, lambda: directory.country_code(value)) != value:
+        raise ArchiveInvalid(f"{where}.country_invalid")
+
+
 def _rule(where: str, call: Any) -> Any:
     try:
         return call()
@@ -87,6 +105,11 @@ def check(archive: ArchiveV1, today: date) -> None:
     listings = _unique(
         "references.listings", [o.id for o in archive.references.listings]
     )
+    for i, v in enumerate(archive.references.venues):
+        _text(f"references.venues[{i}]", "name", v.name, directory.NAME_MAX)
+        _country(f"references.venues[{i}]", v.country)
+    for i, o in enumerate(archive.references.listings):
+        _text(f"references.listings[{i}]", "title", o.title, 200)
     places = _unique("places", [p.id for p in r.places])
     components = _unique("components", [c.id for c in r.components])
     rigs = _unique("rigs", [g.id for g in r.rigs])
@@ -95,11 +118,16 @@ def check(archive: ArchiveV1, today: date) -> None:
     _unique("saved_listings", [s.opportunity_id for s in r.saved_listings])
 
     for i, p in enumerate(r.places):
+        _text(f"places[{i}]", "name", p.name, directory.NAME_MAX)
+        _country(f"places[{i}]", p.country)
         if p.venue_id is not None and p.venue_id not in venues:
             raise ArchiveInvalid(f"places[{i}].venue_unknown")
 
     for i, c in enumerate(r.components):
         where = f"components[{i}]"
+        _text(where, "label", c.label, gear.LABEL_MAX)
+        _text(where, "manufacturer", c.manufacturer, gear.TEXT_MAX)
+        _text(where, "model", c.model, gear.TEXT_MAX)
         _rule(where, lambda c=c: gear.partial_date(c.manufactured, field="manufactured", today=today))  # fmt: skip
         acquired = _rule(where, lambda c=c: gear.partial_date(c.acquired, field="acquired", today=today))  # fmt: skip
         _rule(where, lambda c=c: gear.serial(c.serial))
@@ -114,9 +142,18 @@ def check(archive: ArchiveV1, today: date) -> None:
         )
 
     per_component: dict[uuid.UUID, int] = defaultdict(int)
+    for i, g in enumerate(r.rigs):
+        _text(f"rigs[{i}]", "label", g.label, gear.LABEL_MAX)
+
     for i, s in enumerate(r.service_entries):
         if s.component_id not in components:
             raise ArchiveInvalid(f"service_entries[{i}].component_unknown")
+        _text(
+            f"service_entries[{i}]",
+            "performed_by",
+            s.performed_by,
+            gear.PERFORMED_BY_MAX,
+        )
         _rule(
             f"service_entries[{i}]",
             lambda s=s: gear.check_service_dates(s.done_on, s.due_on, today),
@@ -157,11 +194,14 @@ def check(archive: ArchiveV1, today: date) -> None:
         _rule("baseline", lambda: history.baseline(b.prior_jumps, b.before_on, today))
 
     for i, saved in enumerate(r.saved_listings):
+        _text(f"saved_listings[{i}]", "title", saved.title, 200)
         if saved.opportunity_id not in listings:
             raise ArchiveInvalid(f"saved_listings[{i}].listing_unknown")
 
     for i, plan in enumerate(r.plans):
         where = f"plans[{i}]"
+        _text(where, "title", plan.title, 120)
+        _text(where, "note", plan.note, 500)
         if plan.ends_on < plan.starts_on:
             raise ArchiveInvalid(f"{where}.dates_invalid")
         if (plan.ends_on - plan.starts_on).days >= PLAN_SPAN_MAX_DAYS:

@@ -139,3 +139,25 @@ def test_remap_rewrites_known_ids_only() -> None:
         "notes": "changed",
         "x": [new, 3],
     }
+
+
+def test_text_must_be_what_the_api_would_store() -> None:
+    def place(**fields: Any) -> dict[str, Any]:
+        return {
+            "id": str(uuid.uuid4()), "name": "Strip", "country": "PT",
+            "created_at": AT, "updated_at": AT, **fields,
+        }  # fmt: skip
+
+    assert _problem(_archive(places=[place(name="   ")])) == "places[0].name_required"
+    assert _problem(_archive(places=[place(name=" Strip")])) == "places[0].name_invalid"
+    assert (
+        _problem(_archive(places=[place(name="Str\nip")])) == "places[0].name_invalid"
+    )
+    assert (
+        _problem(_archive(places=[place(country="ZZ")])) == "places[0].country_invalid"
+    )
+    assert _problem(_archive(components=[_component(label="Main  canopy")])) == (
+        "components[0].label_invalid"
+    )
+    rig = _rig() | {"label": "\tRig"}
+    assert _problem(_archive(rigs=[rig])) == "rigs[0].label_invalid"
