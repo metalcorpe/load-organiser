@@ -20,9 +20,8 @@
 			: { shares: ['type'], caption: '', link: '', audience: 'followers' }
 	);
 	const previewing = $derived(form?.form === 'preview');
-	const based = $derived(
-		(form && 'based' in form && typeof form.based === 'number' && form.based) || jump.version
-	);
+	// The version loaded with this page: the preview shows it and Publish sends it.
+	const based = $derived(jump.version);
 	const available: Record<string, boolean> = $derived({
 		type: jump.jump_type !== 'unspecified',
 		venue: jump.listed_venue !== null,

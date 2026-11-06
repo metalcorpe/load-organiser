@@ -23,7 +23,7 @@ function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies'>): str
 export const load: PageServerLoad = async (event) => {
 	const handle = event.params.handle.toLowerCase();
 	if (!isHandle(handle)) error(404, 'This profile is not available.');
-	if (handle !== event.params.handle) redirect(301, `/people/${handle}`);
+	if (handle !== event.params.handle) redirect(301, `/people/${handle}${event.url.search}`);
 	const api = createRequestApi();
 	const bearer = optionalSecret(event);
 	const before = event.url.searchParams.get('before') ?? '';

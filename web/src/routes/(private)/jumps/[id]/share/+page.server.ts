@@ -52,7 +52,8 @@ export const actions: Actions = {
 		const data = await event.request.formData();
 		const chosen = choices(data);
 		if (!chosen.audience) return fail(400, { form: 'share', error: 'audience_invalid', chosen });
-		return { form: 'preview', chosen, based: version(data) };
+		// The page reloads the jump; the preview shows, and Publish sends, that version.
+		return { form: 'preview', chosen };
 	},
 
 	publish: async (event) => {

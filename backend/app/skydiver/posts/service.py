@@ -271,7 +271,7 @@ class PostService:
                 raise NotFound()
             if expected_version is not None and current.version != expected_version:
                 raise EditConflict()
-            jump_id = store.delete_post(actor.person_id, post_id, current.version)
+            jump_id = store.delete_post(actor.person_id, post_id, expected_version)
             if jump_id is None:
                 raise EditConflict()
             store.record(actor.person_id, jump_id, "post_unpublished", {}, now)
