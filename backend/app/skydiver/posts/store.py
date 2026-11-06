@@ -19,6 +19,7 @@ from sqlalchemy import Engine, and_, delete, exists, or_, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlmodel import Session, col
 
+from app.skydiver.directory.tables import SkydiverVenue as V
 from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpEvent
 from app.skydiver.posts import policy
 from app.skydiver.posts.policy import Audience, Share
@@ -256,6 +257,48 @@ class SqlPostStore:
         if before is not None:
             where.append(col(T.id) < before)
         return self._readable(viewer, *where, limit=limit)
+
+    def following(
+        self, viewer: uuid.UUID, before: uuid.UUID | None, limit: int
+    ) -> list[tuple[Post, Person]]:
+        follows = (
+            exists()
+            .where(col(F.follower_person_id) == viewer)
+            .where(col(F.followee_person_id) == col(T.owner_person_id))
+            .where(col(F.status) == "approved")
+        )
+        where: list[Any] = [follows]
+        if before is not None:
+            where.append(col(T.id) < before)
+        return self._readable(viewer, *where, limit=limit)
+
+    def at_venues(
+        self,
+        viewer: uuid.UUID | None,
+        venue_ids: set[uuid.UUID],
+        before: uuid.UUID | None,
+        limit: int,
+    ) -> list[tuple[Post, Person]]:
+        where: list[Any] = [col(T.venue_id).in_(venue_ids)]
+        if before is not None:
+            where.append(col(T.id) < before)
+        return self._readable(viewer, *where, limit=limit)
+
+    def merged_into(self, venue_id: uuid.UUID, hops: int) -> set[uuid.UUID]:
+        found, frontier = {venue_id}, {venue_id}
+        for _ in range(hops):
+            frontier = (
+                set(
+                    self._s.execute(
+                        select(col(V.id)).where(col(V.merged_into_id).in_(frontier))
+                    ).scalars()
+                )
+                - found
+            )
+            if not frontier:
+                break
+            found |= frontier
+        return found
 
     def record(
         self,

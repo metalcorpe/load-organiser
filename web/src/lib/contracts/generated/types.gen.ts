@@ -6486,6 +6486,62 @@ export type UpdateJumpResponses = {
 
 export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
 
+export type GetFeedData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Before
+         */
+        before?: string | null;
+    };
+    url: '/api/skydiver/v1/me/feed';
+};
+
+export type GetFeedErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type GetFeedError = GetFeedErrors[keyof GetFeedErrors];
+
+export type GetFeedResponses = {
+    /**
+     * Successful Response
+     */
+    200: PostPageOut;
+};
+
+export type GetFeedResponse = GetFeedResponses[keyof GetFeedResponses];
+
 export type PublishJumpData = {
     body: PublishIn;
     headers?: {
@@ -9012,3 +9068,64 @@ export type GetVenueResponses = {
 };
 
 export type GetVenueResponse = GetVenueResponses[keyof GetVenueResponses];
+
+export type ListVenuePostsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Venue Id
+         */
+        venue_id: string;
+    };
+    query?: {
+        /**
+         * Before
+         */
+        before?: string | null;
+    };
+    url: '/api/skydiver/v1/venues/{venue_id}/posts';
+};
+
+export type ListVenuePostsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ListVenuePostsError = ListVenuePostsErrors[keyof ListVenuePostsErrors];
+
+export type ListVenuePostsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PostPageOut;
+};
+
+export type ListVenuePostsResponse = ListVenuePostsResponses[keyof ListVenuePostsResponses];

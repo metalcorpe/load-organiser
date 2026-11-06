@@ -1,4 +1,5 @@
 <script lang="ts">
+	import JumpCard from '#lib/components/JumpCard.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { listingMessage } from '#lib/listings.ts';
@@ -87,6 +88,27 @@
 {/if}
 {#if data.viewer}
 	<p><a href="/plans?venue={venue.id}">Plan a private visit here</a></p>
+{/if}
+
+<h2 id="shared-jumps">Shared jumps here</h2>
+<p class="hint">
+	Jump summaries people chose to share with this dropzone named, newest publication first; each
+	shows the date of the jump. Not a record of who is here now, and not a count of jumps.
+	{data.viewer ? '' : 'Signed out, you see public posts only.'}
+</p>
+{#if data.posts === null}
+	<p class="hint">Shared jumps are unavailable right now.</p>
+{:else if data.posts.items.length === 0}
+	<p>{data.olderPosts ? 'No older shared jumps here.' : 'No shared jumps here that you can see.'}</p>
+{:else}
+	<ul class="results" aria-label="Shared jumps here">
+		{#each data.posts.items as post (post.id)}
+			<li><JumpCard {post} /></li>
+		{/each}
+	</ul>
+{/if}
+{#if data.posts?.next_before}
+	<p><a href="/dz/{venue.id}?before={data.posts.next_before}#shared-jumps">Older shared jumps</a></p>
 {/if}
 
 <style>
