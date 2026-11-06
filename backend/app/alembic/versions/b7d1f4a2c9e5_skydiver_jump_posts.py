@@ -43,9 +43,7 @@ def upgrade() -> None:
         sa.Column("audience", sa.String(16), nullable=False),
         sa.Column("jumped_on", sa.Date(), nullable=False),
         sa.Column("jump_type", sa.String(16), nullable=True),
-        sa.Column(
-            "venue_id", UUID, sa.ForeignKey("skydiver_venue.id"), nullable=True
-        ),
+        sa.Column("venue_id", UUID, sa.ForeignKey("skydiver_venue.id"), nullable=True),
         sa.Column("exit_altitude", sa.Integer(), nullable=True),
         sa.Column("altitude_unit", sa.String(2), nullable=True),
         sa.Column("altitude_datum", sa.String(12), nullable=True),
@@ -101,7 +99,7 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     # Post reports cannot be expressed in the earlier schema; drop them.
-    op.execute(f"DELETE FROM {REPORT} WHERE post_key <> ''")
+    op.execute("DELETE FROM skydiver_social_report WHERE post_key <> ''")
     op.drop_constraint("ck_skydiver_social_report_remove_post", REPORT, type_="check")
     op.drop_constraint("ck_skydiver_social_report_decision", REPORT, type_="check")
     op.create_check_constraint(
