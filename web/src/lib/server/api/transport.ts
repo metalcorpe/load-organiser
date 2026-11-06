@@ -226,7 +226,21 @@ export const OPERATIONS = {
 		maxBodyBytes: 1024 * 1024
 	},
 	decideSocialReport: { method: 'POST', path: `${BETA}/social/reports/{id}/decision` },
-	moderateProfile: { method: 'PUT', path: `${BETA}/social/profiles/{handle}/moderation` }
+	moderateProfile: { method: 'PUT', path: `${BETA}/social/profiles/{handle}/moderation` },
+	// Published jump summaries (#157).
+	getJumpSharing: { method: 'GET', path: `${BETA}/me/jumps/{id}/sharing` },
+	publishJump: { method: 'POST', path: `${BETA}/me/jumps/{id}/post` },
+	changePostAudience: { method: 'PUT', path: `${BETA}/me/posts/{id}/audience` },
+	unpublishPost: { method: 'DELETE', path: `${BETA}/me/posts/{id}`, query: ['version'] },
+	getPost: { method: 'GET', path: `${BETA}/posts/{id}` },
+	// 20 cards with 280-character captions and 2,048-character links.
+	listPersonPosts: {
+		method: 'GET',
+		path: `${BETA}/people/{handle}/posts`,
+		query: ['before'],
+		maxBodyBytes: 512 * 1024
+	},
+	reportPost: { method: 'POST', path: `${BETA}/posts/{id}/reports` }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
