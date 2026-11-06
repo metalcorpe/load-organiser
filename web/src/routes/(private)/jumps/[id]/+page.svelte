@@ -6,6 +6,7 @@
 	import { directoryMessage } from '#lib/directory-messages.ts';
 	import { JUMP_TYPE_LABEL, altitudeText, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay } from '#lib/listings.ts';
+	import { AUDIENCE_LABEL, postEventText } from '#lib/posts.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -116,6 +117,20 @@
 	{/if}
 </dl>
 
+<h2>Sharing</h2>
+{#if data.post}
+	<p>
+		Published to {AUDIENCE_LABEL[data.post.audience].toLowerCase()}:
+		<a href="/posts/{data.post.id}">view post</a> · <a href="{base}/share">change or unpublish</a>
+	</p>
+	<p class="hint">Editing a value the post shares withdraws it first.</p>
+{:else}
+	<p>
+		{data.sharingOk ? 'Private: not shared with anyone.' : ''}
+		<a href="{base}/share">Share a summary of this jump</a>
+	</p>
+{/if}
+
 <h2>Edit</h2>
 {#if !data.emailVerified}
 	<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to edit jumps.</p>
@@ -152,11 +167,12 @@
 		{#each data.detail.events as event, i (i)}
 			<li>
 				<span class="title"
-						>{event.kind === 'created'
-							? 'Logged'
-							: event.kind === 'from_export'
-								? 'Restored from your export'
-								: 'Corrected'} on {formatDay(event.created_at.slice(0, 10))}</span
+						>{postEventText(event.kind, event.detail) ??
+							(event.kind === 'created'
+								? 'Logged'
+								: event.kind === 'from_export'
+									? 'Restored from your export'
+									: 'Corrected')} on {formatDay(event.created_at.slice(0, 10))}</span
 					>
 				{#if event.kind === 'corrected'}
 					{#each Object.entries(event.detail) as [name, change] (name)}

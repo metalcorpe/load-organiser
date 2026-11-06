@@ -121,6 +121,19 @@ Backend `backend/app/skydiver/social/` (`/me/profile`, `/me/people/...`, `/peopl
 
 Not built here: shared jump posts and their audiences (#157), the feed and venue activity (#158); account deletion; notifications. Visit intentions (#159) are deferred outside V1. The reviewer sees the reporter's handle (needed to judge abuse of reporting); profile owners never do.
 
+#### Implemented in #157 (beta)
+
+Backend `backend/app/skydiver/posts/` (`/me/jumps/{id}/sharing`, `/me/jumps/{id}/post`, `/me/posts/{id}/audience`, `/me/posts/{id}`, `/posts/{id}`, `/people/{handle}/posts`, `/posts/{id}/reports`); web `/jumps/{id}/share`, public `/posts/{id}`, shared jumps on `/people/{handle}`, post reports in `/review/social`.
+
+- Publishing is a separate action from the jump page: choose parts, preview, then publish exactly what was previewed from the jump version previewed (an edit in between is a conflict). The activity date is always shared; jump type, listed dropzone, exit altitude (with unit and reference) and freefall time are optional, with a caption (280) and one http(s) link. Never shared: notes, the jump's own links, equipment, serials, jump number, exit time, deployment altitude, a private place or a dropzone no longer listed. One post per jump; it does not count as a jump or change totals.
+- Audience: approved followers (including people approved later) or public. Public needs a discoverable profile. Publishing needs a profile that is not hidden or publishing-restricted. Readers: the owner; anyone else only while the profile is not hidden and, signed in, no block exists either way; then a public post of a discoverable profile, or any post for an approved follower. One SQL rule serves the single post and profile list; anything else is the same 404 as an unknown id.
+- Changes: audience can be narrowed or widened (widening re-checks publishing rights); unpublishing deletes the post and keeps the jump. Editing a shared value (date always; type, dropzone/place, altitude fields or freefall only if shared) deletes the post in the same transaction as the edit; other edits leave it unchanged. Deleting the jump deletes the post. Turning discoverability off deletes public posts in the same transaction; follower-only posts stay for approved followers. Each event is shown on the owner's jump history. Pages and API responses are `no-store`, so a removed post is not served from a shared cache.
+- Concurrency without locks: publishing compare-and-swaps the jump version and conditionally touches the profile (not hidden, not restricted, discoverable for public), so a concurrent edit, moderation or discoverability change either commits first and the publish fails, or waits and then sees and withdraws the new post.
+- Reports: posts can be reported from the post page into the same reviewer queue (one open report per reporter and post, separate from a profile report). The reviewer sees the card as reported and whether it is still published; "Remove the post" deletes it and shows the reason on the owner's jump history.
+- Limits: 50 publications per day; report limits are shared with profile reports.
+
+Not built here: the following feed and dropzone activity (#158); scheduled publishing; notifications. Export (#155) does not include posts and restore never republishes them. A profile lists 20 posts per page with a link to older ones.
+
 ## European discovery inventory and sources
 
 Europe is a coverage boundary, not a commitment to populate every country equally. Accept European suggestions from the start and show genuine gaps. Country inventory grows through reviewed sources; do not create fictional listings to fill a map or promise complete coverage. Personal logging outside maintained coverage remains usable.

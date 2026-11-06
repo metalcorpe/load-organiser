@@ -24,6 +24,8 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlmodel import Session, col
 
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.logbook.tables import SkydiverJumpEvent as E
+from app.skydiver.posts.tables import SkydiverJumpPost as T
 from app.skydiver.social.service import (
     Person,
     ProfileRow,
@@ -118,6 +120,26 @@ class SqlSocialStore:
         )
         if result.rowcount != 1:  # type: ignore[attr-defined]
             raise EditConflict()
+        if not values.get("discoverable", True):
+            # Not discoverable: public posts are withdrawn in the same transaction;
+            # follower-only posts stay for approved followers (#157).
+            withdrawn = self._s.execute(
+                delete(T)
+                .where(col(T.owner_person_id) == person_id)
+                .where(col(T.audience) == "public")
+                .returning(col(T.jump_id))
+            ).scalars()
+            for jump_id in withdrawn:
+                self._s.add(
+                    E(
+                        owner_person_id=person_id,
+                        jump_id=jump_id,
+                        kind="post_withdrawn",
+                        detail={"reason": "profile_not_discoverable"},
+                        created_at=now,
+                    )
+                )
+            self._s.flush()
 
     def moderate_profile(self, person_id: uuid.UUID, values: dict[str, Any]) -> None:
         # Reviewer state is not the owner's edit: the owner's version is unchanged.
@@ -333,7 +355,7 @@ class SqlSocialStore:
             pg_insert(R)
             .values(id=uuid.uuid7(), **values)
             .on_conflict_do_nothing(
-                index_elements=["reporter_person_id", "target_person_id"],
+                index_elements=["reporter_person_id", "target_person_id", "post_key"],
                 index_where=col(R.status) == "open",
             )
             .returning(col(R.id))
@@ -359,9 +381,20 @@ class SqlSocialStore:
             .order_by(col(R.id).desc())
             .limit(limit)
         ).all()
+        post_ids = {uuid.UUID(row[0].post_key) for row in rows if row[0].post_key}
+        live = (
+            set(
+                self._s.execute(
+                    select(col(T.id)).where(col(T.id).in_(post_ids))
+                ).scalars()
+            )
+            if post_ids
+            else set()
+        )
         out = []
         for row in rows:
             r, m = row[0], row._mapping
+            post_id = uuid.UUID(r.post_key) if r.post_key else None
             out.append(
                 Report(
                     id=r.id,
@@ -379,6 +412,8 @@ class SqlSocialStore:
                     decided_at=_utc(r.decided_at),
                     target_hidden=m["target_hidden_at"] is not None,
                     target_publishing_restricted=m["target_restricted_at"] is not None,
+                    post_id=post_id,
+                    post_live=post_id in live,
                 )
             )
         return out
@@ -389,6 +424,26 @@ class SqlSocialStore:
     def report(self, report_id: uuid.UUID) -> Report | None:
         found = self._reports(col(R.id) == report_id, limit=1)
         return found[0] if found else None
+
+    def remove_post(self, post_id: uuid.UUID, reason: str, now: datetime) -> bool:
+        row = self._s.execute(
+            delete(T)
+            .where(col(T.id) == post_id)
+            .returning(col(T.owner_person_id), col(T.jump_id))
+        ).first()
+        if row is None:
+            return False
+        self._s.add(
+            E(
+                owner_person_id=row[0],
+                jump_id=row[1],
+                kind="post_removed",
+                detail={"reason": reason},
+                created_at=now,
+            )
+        )
+        self._s.flush()
+        return True
 
     def close_report(
         self,

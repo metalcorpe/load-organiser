@@ -1,7 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import type { ProfileViewOut } from '#lib/contracts/index.ts';
+import type { PostPageOut, ProfileViewOut } from '#lib/contracts/index.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
-import { isHandle } from '#lib/server/api/transport.ts';
+import { isHandle, isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
 import { call, failStatus } from '#lib/server/maintenance.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
@@ -23,11 +23,18 @@ function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies'>): str
 export const load: PageServerLoad = async (event) => {
 	const handle = event.params.handle.toLowerCase();
 	if (!isHandle(handle)) error(404, 'This profile is not available.');
-	if (handle !== event.params.handle) redirect(301, `/people/${handle}`);
-	const person = await call<ProfileViewOut>(createRequestApi(), 'getPerson', {
-		bearer: optionalSecret(event),
-		handle
-	});
+	if (handle !== event.params.handle) redirect(301, `/people/${handle}${event.url.search}`);
+	const api = createRequestApi();
+	const bearer = optionalSecret(event);
+	const before = event.url.searchParams.get('before') ?? '';
+	const [person, posts] = await Promise.all([
+		call<ProfileViewOut>(api, 'getPerson', { bearer, handle }),
+		call<PostPageOut>(api, 'listPersonPosts', {
+			bearer,
+			handle,
+			query: { before: isUuid(before) ? before : undefined }
+		})
+	]);
 	if (!person.ok) {
 		// One answer for missing, hidden, blocked and not discoverable.
 		if (person.reason === 'not_found') error(404, 'This profile is not available.');
@@ -35,6 +42,9 @@ export const load: PageServerLoad = async (event) => {
 	}
 	return {
 		person: person.value,
+		// Each post is checked again by the API; a failure only hides the list.
+		posts: posts.ok ? posts.value : null,
+		older: isUuid(before),
 		signedIn: Boolean(event.locals.viewer),
 		emailVerified: event.locals.viewer?.emailVerified ?? false
 	};

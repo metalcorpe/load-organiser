@@ -63,6 +63,7 @@ class Decision(StrEnum):
     NO_ACTION = "no_action"
     HIDE_PROFILE = "hide_profile"
     RESTRICT_PUBLISHING = "restrict_publishing"
+    REMOVE_POST = "remove_post"  # only for a report about a post (#157)
 
 
 def handle(value: str) -> str:
@@ -99,9 +100,7 @@ def report_note(value: str | None) -> str | None:
 
 
 def moderation_reason(value: str | None) -> str | None:
-    return directory.optional_text(
-        value, field="reason", maximum=MODERATION_REASON_MAX
-    )
+    return directory.optional_text(value, field="reason", maximum=MODERATION_REASON_MAX)
 
 
 def search_query(value: str) -> str:

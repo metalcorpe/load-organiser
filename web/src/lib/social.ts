@@ -27,7 +27,8 @@ export const REPORT_REASONS: Record<string, string> = {
 export const DECISIONS: Record<string, string> = {
 	no_action: 'No action',
 	hide_profile: 'Hide the profile',
-	restrict_publishing: 'Restrict publishing'
+	restrict_publishing: 'Restrict publishing',
+	remove_post: 'Remove the post'
 };
 
 export const SOCIAL_MESSAGES: Record<string, string> = {
@@ -62,6 +63,7 @@ export const SOCIAL_MESSAGES: Record<string, string> = {
 	not_authenticated: 'Your session has ended. Sign in again.',
 	email_unverified: 'Confirm your email address first.',
 	too_many_attempts: 'Too many attempts. Wait a while and try again.',
+	decision_invalid: 'That decision does not apply to this report.',
 	invalid_input: 'Check the details you entered.',
 	uncertain:
 		'Not confirmed: the service did not answer in time. Reload to see whether it was applied.',

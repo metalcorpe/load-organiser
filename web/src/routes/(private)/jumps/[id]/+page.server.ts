@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import type { ComponentDetailOut, JumpDetailOut } from '#lib/contracts/index.ts';
+import type { ComponentDetailOut, JumpDetailOut, SharingOut } from '#lib/contracts/index.ts';
 import { isCountryCode } from '#lib/countries.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
@@ -31,13 +31,19 @@ export const load: PageServerLoad = async (event) => {
 		error(503, 'Your logbook is unavailable right now. Try again later.');
 	}
 	const jump = detail.value.jump;
-	const places = await placesFor(api, secret);
+	const [places, sharing] = await Promise.all([
+		placesFor(api, secret),
+		call<SharingOut>(api, 'getJumpSharing', { bearer: secret, id: jump.id })
+	]);
 	const changing = event.url.searchParams.get('change') === '1';
 	const override = await chosenLocation(api, secret, event.url, places ?? []);
 	return {
 		emailVerified: viewer.emailVerified,
 		detail: detail.value,
 		places: places ?? [],
+		// Null when sharing could not be read; the page then only links to it.
+		post: sharing.ok ? sharing.value.post : null,
+		sharingOk: sharing.ok,
 		changing,
 		override,
 		picker: changing ? await pickerData(api, event.url) : null,

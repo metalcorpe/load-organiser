@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import JumpCard from '#lib/components/JumpCard.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { REPORT_REASONS, disciplineLabel, socialMessage } from '#lib/social.ts';
 	import type { PageProps } from './$types';
@@ -37,6 +38,25 @@
 	A profile is the person's own description. It is not a verified identity, licence or experience
 	record, and it never gives access to their logbook or gear.
 </p>
+
+<section aria-labelledby="posts-heading">
+	<h2 id="posts-heading">Shared jumps</h2>
+	{#if data.posts === null}
+		<p class="hint">Shared jumps are unavailable right now.</p>
+	{:else if data.posts.items.length === 0}
+		<p class="hint">{data.older ? 'No older shared jumps.' : 'Nothing shared that you can see.'}</p>
+	{:else}
+		<p class="hint">Newest publication first; each shows the date of the jump itself.</p>
+		<ul class="results" aria-label="Shared jumps">
+			{#each data.posts.items as post (post.id)}
+				<li><JumpCard {post} author={false} /></li>
+			{/each}
+		</ul>
+	{/if}
+	{#if data.posts?.next_before}
+		<p><a href="/people/{p.handle}?before={data.posts.next_before}">Older shared jumps</a></p>
+	{/if}
+</section>
 
 {#if p.is_self}
 	<p role="status">This is your profile as others see it. <a href="/profile/public">Edit</a></p>
