@@ -55,6 +55,7 @@ export const SOCIAL_MESSAGES: Record<string, string> = {
 	reason_invalid: 'Choose a reason.',
 	reason_required: 'Give a reason; it is recorded and shown to the profile owner.',
 	note_too_long: 'Use at most 1,000 characters.',
+	reason_too_long: 'Use at most 280 characters for the reason.',
 	query_too_short: 'Enter at least two characters.',
 	confirm_block: 'Tick the box to confirm blocking.',
 	not_found: 'This profile is not available.',

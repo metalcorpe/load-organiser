@@ -129,13 +129,13 @@ class ReportOut(BaseModel):
 
 class DecisionIn(BaseModel):
     decision: Literal["no_action", "hide_profile", "restrict_publishing"]
-    reason: Annotated[str, Field(max_length=2000)] | None = None
+    reason: Annotated[str, Field(max_length=1000)] | None = None
 
 
 class ModerationIn(BaseModel):
     hidden: bool
     publishing_restricted: bool
-    reason: Annotated[str, Field(max_length=2000)]
+    reason: Annotated[str, Field(max_length=1000)]
 
 
 _ERRORS: dict[int | str, dict[str, Any]] = {

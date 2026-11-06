@@ -300,8 +300,11 @@ class SocialService:
                 return _state(existing)
             if store.count_following(actor.person_id) >= policy.MAX_FOLLOWING:
                 raise SocialRefused("follow_limit_reached")
-            store.insert_follow(actor.person_id, target.person_id, now)
-            return _state(store.follow_status(actor.person_id, target.person_id))
+            inserted = store.insert_follow(actor.person_id, target.person_id, now)
+            status = store.follow_status(actor.person_id, target.person_id)
+            if not inserted and status is None:
+                raise NotFound()  # a block was committed in between
+            return _state(status)
 
     def stop_following(self, actor: Actor, handle: str) -> None:
         """Cancel a request or unfollow. Idempotent for anyone the caller can reach."""
@@ -313,6 +316,8 @@ class SocialService:
         now = self._clock()
         with self._stores() as store:
             requester = self._reachable(store, actor, handle)
+            if requester.hidden:
+                raise NotFound()  # hidden by a reviewer: not listed, not approvable
             if store.follow_status(requester.person_id, actor.person_id) == "approved":
                 return
             if not store.approve_follow(requester.person_id, actor.person_id, now):
@@ -395,7 +400,7 @@ class SocialService:
             outcome = Decision(decision)
         except ValueError:
             raise RuleError("decision_invalid") from None
-        why = policy.report_note(reason)
+        why = policy.moderation_reason(reason)
         if outcome is not Decision.NO_ACTION and not why:
             raise RuleError("reason_required")
         now = self._clock()
@@ -430,7 +435,7 @@ class SocialService:
         reason: str | None,
     ) -> None:
         """Reviewer reversal or direct action, always with a recorded reason."""
-        why = policy.report_note(reason)
+        why = policy.moderation_reason(reason)
         if not why:
             raise RuleError("reason_required")
         now = self._clock()

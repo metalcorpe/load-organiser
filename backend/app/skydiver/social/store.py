@@ -244,7 +244,25 @@ class SqlSocialStore:
             .where(col(B.blocker_person_id) == blocker)
             .where(col(B.blocked_person_id) == blocked)
         )
-        return bool(result.rowcount)  # type: ignore[attr-defined]
+        removed = bool(result.rowcount)  # type: ignore[attr-defined]
+        if removed:
+            # A request inserted concurrently with the block (both read committed)
+            # can outlive it; unblocking must not bring it back.
+            self._s.execute(
+                delete(F).where(
+                    or_(
+                        and_(
+                            col(F.follower_person_id) == blocker,
+                            col(F.followee_person_id) == blocked,
+                        ),
+                        and_(
+                            col(F.follower_person_id) == blocked,
+                            col(F.followee_person_id) == blocker,
+                        ),
+                    )
+                )
+            )
+        return removed
 
     def count_blocks(self, blocker: uuid.UUID) -> int:
         return int(

@@ -39,6 +39,8 @@ DISCIPLINES = frozenset(
 MAX_FOLLOWING = 500  # outgoing follows and requests
 MAX_BLOCKS = 500
 REPORT_NOTE_MAX = 1000
+# Shown to the profile owner; stored in varchar(280) columns.
+MODERATION_REASON_MAX = 280
 SEARCH_MIN = 2
 SEARCH_MAX = 40
 
@@ -94,6 +96,12 @@ def disciplines(values: list[str] | None) -> list[str]:
 
 def report_note(value: str | None) -> str | None:
     return directory.optional_text(value, field="note", maximum=REPORT_NOTE_MAX)
+
+
+def moderation_reason(value: str | None) -> str | None:
+    return directory.optional_text(
+        value, field="reason", maximum=MODERATION_REASON_MAX
+    )
 
 
 def search_query(value: str) -> str:

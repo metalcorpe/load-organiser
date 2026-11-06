@@ -372,7 +372,20 @@ def test_a_hidden_profile_disappears_from_other_peoples_lists(api: Api) -> None:
         assert api.ok("GET", f"/me/people/{relation}", sam[0]) == [], relation
     assert api.ok("GET", "/me/people/requests", third[0]) == []
     assert api.ok("GET", "/me/profile", third[0])["pending_requests"] == 0
+    # Nor can the old request be approved by handle.
+    approve = api.call("POST", f"/me/people/requests/{hidden[1]}/approve", third[0])
+    assert approve.json() == NOT_FOUND
     # A hidden profile cannot reappear to someone by asking to follow them.
     other = api.person()
     refused = api.call("PUT", f"/people/{other[1]}/follow", hidden[0])
     assert refused.status_code == 409 and refused.json() == {"detail": "profile_hidden"}
+
+
+def test_a_reviewer_reason_fits_what_is_stored(api: Api) -> None:
+    target = api.person()
+    path = f"/social/profiles/{target[1]}/moderation"
+    body = {"hidden": True, "publishing_restricted": False}
+    long = api.call("PUT", path, api.reviewer, {**body, "reason": "x" * 281})
+    assert (long.status_code, long.json()) == (422, {"detail": "reason_too_long"})
+    api.ok("PUT", path, api.reviewer, {**body, "reason": "x" * 280}, status=204)
+    assert api.ok("GET", "/me/profile", target[0])["moderation_reason"] == "x" * 280

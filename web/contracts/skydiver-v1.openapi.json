@@ -868,7 +868,7 @@
           "reason": {
             "anyOf": [
               {
-                "maxLength": 2000,
+                "maxLength": 1000,
                 "type": "string"
               },
               {
@@ -2137,7 +2137,7 @@
             "type": "boolean"
           },
           "reason": {
-            "maxLength": 2000,
+            "maxLength": 1000,
             "title": "Reason",
             "type": "string"
           }

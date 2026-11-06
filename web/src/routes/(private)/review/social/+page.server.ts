@@ -30,7 +30,7 @@ export const actions: Actions = {
 		const data = await event.request.formData();
 		const id = field(data, 'id', { max: 64 });
 		if (!isUuid(id)) return fail(400, { form: 'decide', id, error: 'not_found' });
-		const reason = field(data, 'reason', { max: 2000, trim: true });
+		const reason = field(data, 'reason', { max: 1000, trim: true });
 		const result = await call(createRequestApi(), 'decideSocialReport', {
 			bearer: secret,
 			id,
@@ -51,7 +51,7 @@ export const actions: Actions = {
 			body: {
 				hidden: field(data, 'hidden', { max: 4 }) === 'on',
 				publishing_restricted: field(data, 'restricted', { max: 4 }) === 'on',
-				reason: field(data, 'reason', { max: 2000, trim: true })
+				reason: field(data, 'reason', { max: 1000, trim: true })
 			}
 		});
 		if (!result.ok) {
