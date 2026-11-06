@@ -97,6 +97,34 @@ export type ArchiveIn = {
 };
 
 /**
+ * AudienceChangeIn
+ */
+export type AudienceChangeIn = {
+    /**
+     * Audience
+     */
+    audience: 'followers' | 'public';
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
+ * AuthorOut
+ */
+export type AuthorOut = {
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle: string;
+};
+
+/**
  * BaselineEventOut
  */
 export type BaselineEventOut = {
@@ -428,7 +456,7 @@ export type DecisionIn = {
     /**
      * Decision
      */
-    decision: 'no_action' | 'hide_profile' | 'restrict_publishing';
+    decision: 'no_action' | 'hide_profile' | 'restrict_publishing' | 'remove_post';
     /**
      * Reason
      */
@@ -485,6 +513,24 @@ export type EventOut = {
      * Kind
      */
     kind: string;
+};
+
+/**
+ * ExitAltitudeOut
+ */
+export type ExitAltitudeOut = {
+    /**
+     * Datum
+     */
+    datum: 'unspecified' | 'agl' | 'msl';
+    /**
+     * Unit
+     */
+    unit: 'ft' | 'm';
+    /**
+     * Value
+     */
+    value: number;
 };
 
 /**
@@ -1790,6 +1836,97 @@ export type PlanUpdateIn = {
 };
 
 /**
+ * PostOut
+ */
+export type PostOut = {
+    /**
+     * Audience
+     */
+    audience: 'followers' | 'public';
+    author: AuthorOut;
+    /**
+     * Caption
+     */
+    caption: string | null;
+    exit_altitude: ExitAltitudeOut | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds: number | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Is Owner
+     */
+    is_owner: boolean;
+    /**
+     * Jump Id
+     *
+     * Owner only.
+     */
+    jump_id?: string | null;
+    /**
+     * Jump Type
+     */
+    jump_type: string | null;
+    /**
+     * Jumped On
+     *
+     * The activity date, not the publish time.
+     */
+    jumped_on: string;
+    /**
+     * Link
+     */
+    link: string | null;
+    /**
+     * Published At
+     */
+    published_at: string;
+    venue: PostVenueOut | null;
+    /**
+     * Version
+     *
+     * Owner only.
+     */
+    version?: number | null;
+};
+
+/**
+ * PostPageOut
+ */
+export type PostPageOut = {
+    /**
+     * Items
+     */
+    items: Array<PostOut>;
+    /**
+     * Next Before
+     */
+    next_before: string | null;
+};
+
+/**
+ * PostVenueOut
+ */
+export type PostVenueOut = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
  * ProfileIn
  */
 export type ProfileIn = {
@@ -2048,6 +2185,34 @@ export type ProviderUpdateIn = {
 };
 
 /**
+ * PublishIn
+ */
+export type PublishIn = {
+    /**
+     * Audience
+     */
+    audience: 'followers' | 'public';
+    /**
+     * Caption
+     */
+    caption?: string | null;
+    /**
+     * Jump Version
+     *
+     * The jump version that was previewed.
+     */
+    jump_version: number;
+    /**
+     * Link
+     */
+    link?: string | null;
+    /**
+     * Shares
+     */
+    shares?: Array<'type' | 'venue' | 'altitude' | 'freefall'>;
+};
+
+/**
  * ReceiptOut
  */
 export type ReceiptOut = {
@@ -2146,6 +2311,16 @@ export type ReportOut = {
      * Note
      */
     note: string | null;
+    /**
+     * Post Id
+     *
+     * Set when the report is about a published jump.
+     */
+    post_id?: string | null;
+    /**
+     * Post Live
+     */
+    post_live?: boolean;
     /**
      * Reason
      */
@@ -3020,6 +3195,74 @@ export type SessionOut = {
      */
     session_secret: string;
     viewer: ViewerOut;
+};
+
+/**
+ * SharingOut
+ */
+export type SharingOut = {
+    jump: SourceOut;
+    post: PostOut | null;
+    profile: SharingProfileOut | null;
+};
+
+/**
+ * SharingProfileOut
+ */
+export type SharingProfileOut = {
+    /**
+     * Discoverable
+     */
+    discoverable: boolean;
+    /**
+     * Handle
+     */
+    handle: string;
+    /**
+     * Hidden
+     */
+    hidden: boolean;
+    /**
+     * Publishing Restricted
+     */
+    publishing_restricted: boolean;
+};
+
+/**
+ * SourceOut
+ *
+ * The shareable values of the jump now; preview them before publishing.
+ */
+export type SourceOut = {
+    exit_altitude: ExitAltitudeOut | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds: number | null;
+    /**
+     * Has Private Place
+     */
+    has_private_place: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Type
+     */
+    jump_type: string;
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    /**
+     * Only a listed dropzone can be shared; a private place never.
+     */
+    listed_venue: PostVenueOut | null;
+    /**
+     * Version
+     */
+    version: number;
 };
 
 /**
@@ -6243,6 +6486,118 @@ export type UpdateJumpResponses = {
 
 export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
 
+export type PublishJumpData = {
+    body: PublishIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Jump Id
+         */
+        jump_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/jumps/{jump_id}/post';
+};
+
+export type PublishJumpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type PublishJumpError = PublishJumpErrors[keyof PublishJumpErrors];
+
+export type PublishJumpResponses = {
+    /**
+     * Successful Response
+     */
+    201: PostOut;
+};
+
+export type PublishJumpResponse = PublishJumpResponses[keyof PublishJumpResponses];
+
+export type GetJumpSharingData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Jump Id
+         */
+        jump_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/jumps/{jump_id}/sharing';
+};
+
+export type GetJumpSharingErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type GetJumpSharingError = GetJumpSharingErrors[keyof GetJumpSharingErrors];
+
+export type GetJumpSharingResponses = {
+    /**
+     * Successful Response
+     */
+    200: SharingOut;
+};
+
+export type GetJumpSharingResponse = GetJumpSharingResponses[keyof GetJumpSharingResponses];
+
 export type RemoveFollowerData = {
     body?: never;
     headers?: {
@@ -6468,6 +6823,123 @@ export type ListMyPeopleResponses = {
 };
 
 export type ListMyPeopleResponse = ListMyPeopleResponses[keyof ListMyPeopleResponses];
+
+export type UnpublishPostData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: {
+        /**
+         * Version
+         */
+        version?: number | null;
+    };
+    url: '/api/skydiver/v1/me/posts/{post_id}';
+};
+
+export type UnpublishPostErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type UnpublishPostError = UnpublishPostErrors[keyof UnpublishPostErrors];
+
+export type UnpublishPostResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type UnpublishPostResponse = UnpublishPostResponses[keyof UnpublishPostResponses];
+
+export type ChangePostAudienceData = {
+    body: AudienceChangeIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/posts/{post_id}/audience';
+};
+
+export type ChangePostAudienceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ChangePostAudienceError = ChangePostAudienceErrors[keyof ChangePostAudienceErrors];
+
+export type ChangePostAudienceResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ChangePostAudienceResponse = ChangePostAudienceResponses[keyof ChangePostAudienceResponses];
 
 export type GetOwnProfileData = {
     body?: never;
@@ -7047,6 +7519,67 @@ export type FollowPersonResponses = {
 
 export type FollowPersonResponse = FollowPersonResponses[keyof FollowPersonResponses];
 
+export type ListPersonPostsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: {
+        /**
+         * Before
+         */
+        before?: string | null;
+    };
+    url: '/api/skydiver/v1/people/{handle}/posts';
+};
+
+export type ListPersonPostsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ListPersonPostsError = ListPersonPostsErrors[keyof ListPersonPostsErrors];
+
+export type ListPersonPostsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PostPageOut;
+};
+
+export type ListPersonPostsResponse = ListPersonPostsResponses[keyof ListPersonPostsResponses];
+
 export type ReportPersonData = {
     body: ReportIn;
     headers?: {
@@ -7502,6 +8035,118 @@ export type UpdatePlanResponses = {
 };
 
 export type UpdatePlanResponse = UpdatePlanResponses[keyof UpdatePlanResponses];
+
+export type GetPostData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/posts/{post_id}';
+};
+
+export type GetPostErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type GetPostError = GetPostErrors[keyof GetPostErrors];
+
+export type GetPostResponses = {
+    /**
+     * Successful Response
+     */
+    200: PostOut;
+};
+
+export type GetPostResponse = GetPostResponses[keyof GetPostResponses];
+
+export type ReportPostData = {
+    body: ReportIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Post Id
+         */
+        post_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/posts/{post_id}/reports';
+};
+
+export type ReportPostErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ReportPostError = ReportPostErrors[keyof ReportPostErrors];
+
+export type ReportPostResponses = {
+    /**
+     * Successful Response
+     */
+    202: ReportReceivedOut;
+};
+
+export type ReportPostResponse = ReportPostResponses[keyof ReportPostResponses];
 
 export type GetProviderData = {
     body?: never;

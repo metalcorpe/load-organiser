@@ -120,18 +120,24 @@ class SkydiverSocialReport(SQLModel, table=True):
         ),
         CheckConstraint(
             "decision IS NULL OR decision IN "
-            "('no_action', 'hide_profile', 'restrict_publishing')",
+            "('no_action', 'hide_profile', 'restrict_publishing', 'remove_post')",
             name="ck_skydiver_social_report_decision",
         ),
         CheckConstraint(
             "(status = 'closed') = (decision IS NOT NULL)",
             name="ck_skydiver_social_report_decided",
         ),
-        # One open report per reporter and target: repeats are acknowledged, not stacked.
+        CheckConstraint(
+            "decision IS DISTINCT FROM 'remove_post' OR post_key <> ''",
+            name="ck_skydiver_social_report_remove_post",
+        ),
+        # One open report per reporter, target and post (or the profile itself):
+        # repeats are acknowledged, not stacked.
         Index(
             "uq_skydiver_social_report_open",
             "reporter_person_id",
             "target_person_id",
+            "post_key",
             unique=True,
             postgresql_where=text("status = 'open'"),
         ),
@@ -141,6 +147,12 @@ class SkydiverSocialReport(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
     reporter_person_id: uuid.UUID = Field(sa_column=_person())
     target_person_id: uuid.UUID = Field(sa_column=_person())
+    # '' for a profile report; the reported post's id otherwise (#157). Not a
+    # foreign key: the report outlives the post it is about.
+    post_key: str = Field(
+        default="",
+        sa_column=Column(String(36), nullable=False, server_default=""),
+    )
     reason: str = Field(sa_column=Column(String(16), nullable=False))
     note: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
     snapshot: dict = Field(  # type: ignore[type-arg]

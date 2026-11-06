@@ -204,6 +204,11 @@ class LogbookStore(Protocol):
         now: datetime,
     ) -> None: ...
     def events(self, actor: Actor, jump_id: uuid.UUID) -> list[JumpEvent]: ...
+    def withdraw_post(
+        self, actor: Actor, jump_id: uuid.UUID, changed: set[str]
+    ) -> bool:
+        """Delete the jump's published summary if `changed` touches a shared value."""
+        ...
 
 
 StoreFactory = Callable[[], AbstractContextManager[LogbookStore]]
@@ -399,6 +404,15 @@ class LogbookService:
                 if links_changed:
                     detail["equipment"] = "changed"
                 store.record(actor, jump_id, "corrected", detail, now)
+                # Same transaction: a shared value never changes under a live post.
+                if store.withdraw_post(actor, jump_id, set(changed)):
+                    store.record(
+                        actor,
+                        jump_id,
+                        "post_withdrawn",
+                        {"reason": "shared_field_changed"},
+                        now,
+                    )
         return self.jump(actor, jump_id)
 
     def delete_jump(

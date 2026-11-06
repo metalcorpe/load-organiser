@@ -31,6 +31,7 @@ from app.skydiver.logbook.tables import (
     SkydiverJumpEvent,
     SkydiverJumpReceipt,
 )
+from app.skydiver.posts import store as posts
 
 _UNIQUE_VIOLATION = "23505"
 J, L, R, E = SkydiverJump, SkydiverJumpComponent, SkydiverJumpReceipt, SkydiverJumpEvent
@@ -265,6 +266,11 @@ class SqlLogbookStore:
         )
         if result.rowcount != 1:  # type: ignore[attr-defined]
             raise EditConflict()
+
+    def withdraw_post(
+        self, actor: Actor, jump_id: uuid.UUID, changed: set[str]
+    ) -> bool:
+        return posts.withdraw(self._s, actor.person_id, jump_id, changed)
 
     def record(
         self,

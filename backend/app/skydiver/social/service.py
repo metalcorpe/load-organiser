@@ -97,6 +97,8 @@ class Report:
     decided_at: datetime | None
     target_hidden: bool
     target_publishing_restricted: bool
+    post_id: uuid.UUID | None = None  # set for a report about a post (#157)
+    post_live: bool = False  # the reported post is still published
 
 
 class SocialStore(Protocol):
@@ -160,6 +162,10 @@ class SocialStore(Protocol):
 
     def reports(self, status: str, limit: int) -> list[Report]: ...
     def report(self, report_id: uuid.UUID) -> Report | None: ...
+    def remove_post(self, post_id: uuid.UUID, reason: str, now: datetime) -> bool:
+        """Delete a reported post and tell its owner on the jump's history."""
+        ...
+
     def close_report(
         self,
         report_id: uuid.UUID,
@@ -408,10 +414,15 @@ class SocialService:
             current = store.report(report_id)
             if current is None:
                 raise NotFound()
+            if outcome is Decision.REMOVE_POST and current.post_id is None:
+                raise RuleError("decision_invalid")  # a profile report has no post
             if not store.close_report(
                 report_id, outcome.value, why, reviewer.account_id, now
             ):
                 raise EditConflict()  # already decided by another reviewer
+            if outcome is Decision.REMOVE_POST:
+                assert current.post_id is not None and why is not None
+                store.remove_post(current.post_id, why, now)  # gone already is fine
             target = store.profile_by_handle(current.target.handle)
             if target is not None and outcome is Decision.HIDE_PROFILE:
                 store.moderate_profile(

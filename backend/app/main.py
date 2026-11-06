@@ -40,6 +40,9 @@ from app.skydiver.moderation.store import sql_submission_store_factory
 from app.skydiver.opportunities.api import create_router as create_opportunity_router
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.opportunities.store import sql_listing_store_factory
+from app.skydiver.posts.api import create_router as create_posts_router
+from app.skydiver.posts.service import PostService
+from app.skydiver.posts.store import sql_post_store_factory
 from app.skydiver.records.api import create_router as create_records_router
 from app.skydiver.records.service import RecordsService
 from app.skydiver.records.store import sql_records_store_factory
@@ -134,6 +137,13 @@ social_service = SocialService(
     directory=directory_service,
 )
 
+post_service = PostService(
+    stores=sql_post_store_factory(engine),
+    clock=utc_now,
+    directory=directory_service,
+    social=social_service,
+)
+
 records_service = RecordsService(
     stores=sql_records_store_factory(engine),
     clock=utc_now,
@@ -211,6 +221,13 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_social_router(
             service=lambda: social_service,
+            identity=lambda: identity_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_posts_router(
+            service=lambda: post_service,
             identity=lambda: identity_service,
             access=AccessDependencies(lambda: identity_service),
         )

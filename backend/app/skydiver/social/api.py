@@ -125,10 +125,14 @@ class ReportOut(BaseModel):
     decided_at: datetime | None
     target_hidden: bool
     target_publishing_restricted: bool
+    post_id: uuid.UUID | None = Field(
+        default=None, description="Set when the report is about a published jump."
+    )
+    post_live: bool = False
 
 
 class DecisionIn(BaseModel):
-    decision: Literal["no_action", "hide_profile", "restrict_publishing"]
+    decision: Literal["no_action", "hide_profile", "restrict_publishing", "remove_post"]
     reason: Annotated[str, Field(max_length=1000)] | None = None
 
 
@@ -191,6 +195,8 @@ def _report(r: Report) -> ReportOut:
         decided_at=r.decided_at,
         target_hidden=r.target_hidden,
         target_publishing_restricted=r.target_publishing_restricted,
+        post_id=r.post_id,
+        post_live=r.post_live,
     )
 
 
