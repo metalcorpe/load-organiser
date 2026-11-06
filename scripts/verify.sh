@@ -14,7 +14,7 @@
 #     dropped and recreated; no other database is touched.
 #
 # CI=true runs `npm ci` before the web stages. Playwright browsers must be installed
-# (`npx playwright install chromium`). Nothing here deploys or contacts paid services.
+# (`npx playwright install chromium webkit`). Nothing here deploys or contacts paid services.
 set -euo pipefail
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
