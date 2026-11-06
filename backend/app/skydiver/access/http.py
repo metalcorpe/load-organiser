@@ -55,6 +55,20 @@ class AccessDependencies:
                 roles=actor_roles(viewer.roles),
             )
 
+        def optional_actor(
+            secret: Annotated[str, Depends(bearer_secret)],
+        ) -> Actor | None:
+            """For public reads that also serve signed-in viewers (blocks, follows).
+
+            No or an expired session reads as anonymous, never as an error.
+            """
+            if not secret:
+                return None
+            try:
+                return actor(secret)
+            except HTTPException:
+                return None
+
         def verified_actor(current: Annotated[Actor, Depends(actor)]) -> Actor:
             """For private writes: the account's email must be confirmed."""
             if not current.email_verified:
@@ -62,6 +76,7 @@ class AccessDependencies:
             return current
 
         self.actor = actor
+        self.optional_actor = optional_actor
         self.verified_actor = verified_actor
 
     def role(self, role: Role) -> Callable[..., Actor]:

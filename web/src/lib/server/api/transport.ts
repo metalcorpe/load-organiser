@@ -202,10 +202,40 @@ export const OPERATIONS = {
 		timeoutMs: 30_000
 	},
 	checkRestore: { method: 'POST', path: `${BETA}/records/restore/check`, timeoutMs: 30_000 },
-	restoreRecords: { method: 'POST', path: `${BETA}/records/restore`, timeoutMs: 60_000 }
+	restoreRecords: { method: 'POST', path: `${BETA}/records/restore`, timeoutMs: 60_000 },
+	getOwnProfile: { method: 'GET', path: `${BETA}/me/profile` },
+	saveOwnProfile: { method: 'PUT', path: `${BETA}/me/profile` },
+	listFollowRequests: { method: 'GET', path: `${BETA}/me/people/requests`, maxBodyBytes: 512 * 1024 },
+	listFollowers: { method: 'GET', path: `${BETA}/me/people/followers`, maxBodyBytes: 512 * 1024 },
+	listFollowing: { method: 'GET', path: `${BETA}/me/people/following`, maxBodyBytes: 512 * 1024 },
+	listBlocked: { method: 'GET', path: `${BETA}/me/people/blocked`, maxBodyBytes: 512 * 1024 },
+	searchPeople: { method: 'GET', path: `${BETA}/people`, query: ['q'] },
+	getPerson: { method: 'GET', path: `${BETA}/people/{handle}` },
+	followPerson: { method: 'PUT', path: `${BETA}/people/{handle}/follow` },
+	unfollowPerson: { method: 'DELETE', path: `${BETA}/people/{handle}/follow` },
+	approveFollower: { method: 'POST', path: `${BETA}/me/people/requests/{handle}/approve` },
+	rejectFollower: { method: 'DELETE', path: `${BETA}/me/people/requests/{handle}` },
+	removeFollower: { method: 'DELETE', path: `${BETA}/me/people/followers/{handle}` },
+	blockPerson: { method: 'PUT', path: `${BETA}/people/{handle}/block` },
+	unblockPerson: { method: 'DELETE', path: `${BETA}/people/{handle}/block` },
+	reportPerson: { method: 'POST', path: `${BETA}/people/{handle}/reports` },
+	listSocialReports: {
+		method: 'GET',
+		path: `${BETA}/social/reports`,
+		query: ['status'],
+		maxBodyBytes: 1024 * 1024
+	},
+	decideSocialReport: { method: 'POST', path: `${BETA}/social/reports/{id}/decision` },
+	moderateProfile: { method: 'PUT', path: `${BETA}/social/profiles/{handle}/moderation` }
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const HANDLE = /^[a-z][a-z0-9_]{2,29}$/;
+
+/** True for a profile handle in its stored (lowercase) form. */
+export function isHandle(value: unknown): value is string {
+	return typeof value === 'string' && HANDLE.test(value);
+}
 
 /** True for a canonical UUID string, the only value a path parameter accepts. */
 export function isUuid(value: unknown): value is string {
@@ -228,6 +258,8 @@ export interface RequestOptions {
 	id?: string;
 	/** Second path parameter for `{sub}` operations; must be a UUID. */
 	sub?: string;
+	/** Path parameter for `{handle}` operations; must be a lowercase profile handle. */
+	handle?: string;
 	/** Query values; only the operation's allowlisted keys are accepted. */
 	query?: Record<string, string | undefined>;
 }
@@ -342,6 +374,12 @@ function buildPath(operation: Operation, call: RequestOptions): string | null {
 		if (!isUuid(call.id)) return null;
 		path = path.replace('{id}', call.id.toLowerCase());
 	} else if (call.id !== undefined) {
+		return null;
+	}
+	if (path.includes('{handle}')) {
+		if (!isHandle(call.handle)) return null;
+		path = path.replace('{handle}', call.handle);
+	} else if (call.handle !== undefined) {
 		return null;
 	}
 	if (path.includes('{sub}')) {

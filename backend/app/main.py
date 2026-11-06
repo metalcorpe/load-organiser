@@ -46,6 +46,9 @@ from app.skydiver.records.store import sql_records_store_factory
 from app.skydiver.saves.api import create_router as create_saves_router
 from app.skydiver.saves.service import SavesService
 from app.skydiver.saves.store import sql_saves_store_factory
+from app.skydiver.social.api import create_router as create_social_router
+from app.skydiver.social.service import SocialService
+from app.skydiver.social.store import sql_social_store_factory
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -125,6 +128,12 @@ history_service = HistoryService(
     directory=directory_service,
 )
 
+social_service = SocialService(
+    stores=sql_social_store_factory(engine),
+    clock=utc_now,
+    directory=directory_service,
+)
+
 records_service = RecordsService(
     stores=sql_records_store_factory(engine),
     clock=utc_now,
@@ -196,6 +205,13 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_moderation_router(
             service=lambda: submission_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    application.include_router(
+        create_social_router(
+            service=lambda: social_service,
+            identity=lambda: identity_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

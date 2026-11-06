@@ -422,6 +422,20 @@ export type ComponentUseOut = {
 };
 
 /**
+ * DecisionIn
+ */
+export type DecisionIn = {
+    /**
+     * Decision
+     */
+    decision: 'no_action' | 'hide_profile' | 'restrict_publishing';
+    /**
+     * Reason
+     */
+    reason?: string | null;
+};
+
+/**
  * DuplicateIn
  */
 export type DuplicateIn = {
@@ -471,6 +485,16 @@ export type EventOut = {
      * Kind
      */
     kind: string;
+};
+
+/**
+ * FollowOut
+ */
+export type FollowOut = {
+    /**
+     * State
+     */
+    state: 'none' | 'requested' | 'following';
 };
 
 /**
@@ -557,6 +581,24 @@ export type HistoryOut = {
      */
     months: Array<MonthOut>;
     totals: TotalsOut;
+};
+
+/**
+ * HomeVenueOut
+ */
+export type HomeVenueOut = {
+    /**
+     * Country
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Name
+     */
+    name: string;
 };
 
 /**
@@ -986,6 +1028,24 @@ export type MergeIn = {
 };
 
 /**
+ * ModerationIn
+ */
+export type ModerationIn = {
+    /**
+     * Hidden
+     */
+    hidden: boolean;
+    /**
+     * Publishing Restricted
+     */
+    publishing_restricted: boolean;
+    /**
+     * Reason
+     */
+    reason: string;
+};
+
+/**
  * MonthOut
  */
 export type MonthOut = {
@@ -1392,6 +1452,55 @@ export type OpportunityVenueOut = {
 };
 
 /**
+ * OwnProfileOut
+ */
+export type OwnProfileOut = {
+    /**
+     * Bio
+     */
+    bio: string | null;
+    /**
+     * Disciplines
+     */
+    disciplines: Array<string>;
+    /**
+     * Discoverable
+     */
+    discoverable: boolean;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle: string;
+    /**
+     * Hidden
+     *
+     * Hidden by a reviewer: no one else sees it.
+     */
+    hidden: boolean;
+    home_venue: HomeVenueOut | null;
+    /**
+     * Moderation Reason
+     */
+    moderation_reason: string | null;
+    /**
+     * Pending Requests
+     */
+    pending_requests: number;
+    /**
+     * Publishing Restricted
+     */
+    publishing_restricted: boolean;
+    /**
+     * Version
+     */
+    version: number;
+};
+
+/**
  * OwnSubmissionOut
  *
  * What the submitter sees: their content, the status and the outcome note.
@@ -1461,6 +1570,24 @@ export type PasswordConfirmIn = {
      * Password
      */
     password: string;
+};
+
+/**
+ * PersonOut
+ */
+export type PersonOut = {
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     */
+    handle: string;
+    /**
+     * Since
+     */
+    since?: string | null;
 };
 
 /**
@@ -1660,6 +1787,79 @@ export type PlanUpdateIn = {
      * Venue Id
      */
     venue_id?: string | null;
+};
+
+/**
+ * ProfileIn
+ */
+export type ProfileIn = {
+    /**
+     * Bio
+     */
+    bio?: string | null;
+    /**
+     * Disciplines
+     */
+    disciplines?: Array<'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training'>;
+    /**
+     * Discoverable
+     */
+    discoverable?: boolean;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Handle
+     *
+     * Required when creating; fixed afterwards.
+     */
+    handle?: string | null;
+    /**
+     * Home Venue Id
+     */
+    home_venue_id?: string | null;
+    /**
+     * Version
+     *
+     * Omit to create; the current version to edit.
+     */
+    version?: number | null;
+};
+
+/**
+ * ProfileViewOut
+ */
+export type ProfileViewOut = {
+    /**
+     * Bio
+     */
+    bio: string | null;
+    /**
+     * Disciplines
+     */
+    disciplines: Array<string>;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Follow State
+     */
+    follow_state: 'none' | 'requested' | 'following';
+    /**
+     * Follows You
+     */
+    follows_you: 'none' | 'requested' | 'following';
+    /**
+     * Handle
+     */
+    handle: string;
+    home_venue: HomeVenueOut | null;
+    /**
+     * Is Self
+     */
+    is_self: boolean;
 };
 
 /**
@@ -1902,6 +2102,84 @@ export type RegisterIn = {
      * Password
      */
     password: string;
+};
+
+/**
+ * ReportIn
+ */
+export type ReportIn = {
+    /**
+     * Note
+     */
+    note?: string | null;
+    /**
+     * Reason
+     */
+    reason: 'impersonation' | 'harassment' | 'spam' | 'inappropriate' | 'other';
+};
+
+/**
+ * ReportOut
+ */
+export type ReportOut = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Decision
+     */
+    decision: string | null;
+    /**
+     * Decision Reason
+     */
+    decision_reason: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Note
+     */
+    note: string | null;
+    /**
+     * Reason
+     */
+    reason: string;
+    reporter: PersonOut | null;
+    /**
+     * Snapshot
+     */
+    snapshot: {
+        [key: string]: unknown;
+    };
+    /**
+     * Status
+     */
+    status: 'open' | 'closed';
+    target: PersonOut;
+    /**
+     * Target Hidden
+     */
+    target_hidden: boolean;
+    /**
+     * Target Publishing Restricted
+     */
+    target_publishing_restricted: boolean;
+};
+
+/**
+ * ReportReceivedOut
+ */
+export type ReportReceivedOut = {
+    /**
+     * Status
+     */
+    status?: 'received';
 };
 
 /**
@@ -3179,6 +3457,16 @@ export type AppSkydiverRecordsApiProblem = {
  * Problem
  */
 export type AppSkydiverSavesApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverSocialApiProblem = {
     /**
      * Detail
      */
@@ -5955,6 +6243,336 @@ export type UpdateJumpResponses = {
 
 export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
 
+export type RemoveFollowerData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/people/followers/{handle}';
+};
+
+export type RemoveFollowerErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type RemoveFollowerError = RemoveFollowerErrors[keyof RemoveFollowerErrors];
+
+export type RemoveFollowerResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RemoveFollowerResponse = RemoveFollowerResponses[keyof RemoveFollowerResponses];
+
+export type RejectFollowerData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/people/requests/{handle}';
+};
+
+export type RejectFollowerErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type RejectFollowerError = RejectFollowerErrors[keyof RejectFollowerErrors];
+
+export type RejectFollowerResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type RejectFollowerResponse = RejectFollowerResponses[keyof RejectFollowerResponses];
+
+export type ApproveFollowerData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/people/requests/{handle}/approve';
+};
+
+export type ApproveFollowerErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ApproveFollowerError = ApproveFollowerErrors[keyof ApproveFollowerErrors];
+
+export type ApproveFollowerResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ApproveFollowerResponse = ApproveFollowerResponses[keyof ApproveFollowerResponses];
+
+export type ListMyPeopleData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Relation
+         */
+        relation: 'requests' | 'followers' | 'following' | 'blocked';
+    };
+    query?: never;
+    url: '/api/skydiver/v1/me/people/{relation}';
+};
+
+export type ListMyPeopleErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ListMyPeopleError = ListMyPeopleErrors[keyof ListMyPeopleErrors];
+
+export type ListMyPeopleResponses = {
+    /**
+     * Response Listmypeople
+     *
+     * Successful Response
+     */
+    200: Array<PersonOut>;
+};
+
+export type ListMyPeopleResponse = ListMyPeopleResponses[keyof ListMyPeopleResponses];
+
+export type GetOwnProfileData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/profile';
+};
+
+export type GetOwnProfileErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type GetOwnProfileError = GetOwnProfileErrors[keyof GetOwnProfileErrors];
+
+export type GetOwnProfileResponses = {
+    /**
+     * Response Getownprofile
+     *
+     * Successful Response
+     */
+    200: OwnProfileOut | null;
+};
+
+export type GetOwnProfileResponse = GetOwnProfileResponses[keyof GetOwnProfileResponses];
+
+export type SaveOwnProfileData = {
+    body: ProfileIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/profile';
+};
+
+export type SaveOwnProfileErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type SaveOwnProfileError = SaveOwnProfileErrors[keyof SaveOwnProfileErrors];
+
+export type SaveOwnProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: OwnProfileOut;
+};
+
+export type SaveOwnProfileResponse = SaveOwnProfileResponses[keyof SaveOwnProfileResponses];
+
 export type SearchOpportunitiesData = {
     body?: never;
     path?: never;
@@ -6090,6 +6708,400 @@ export type GetOpportunityResponses = {
 };
 
 export type GetOpportunityResponse = GetOpportunityResponses[keyof GetOpportunityResponses];
+
+export type SearchPeopleData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+    };
+    url: '/api/skydiver/v1/people';
+};
+
+export type SearchPeopleErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type SearchPeopleError = SearchPeopleErrors[keyof SearchPeopleErrors];
+
+export type SearchPeopleResponses = {
+    /**
+     * Response Searchpeople
+     *
+     * Successful Response
+     */
+    200: Array<PersonOut>;
+};
+
+export type SearchPeopleResponse = SearchPeopleResponses[keyof SearchPeopleResponses];
+
+export type GetPersonData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}';
+};
+
+export type GetPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type GetPersonError = GetPersonErrors[keyof GetPersonErrors];
+
+export type GetPersonResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProfileViewOut;
+};
+
+export type GetPersonResponse = GetPersonResponses[keyof GetPersonResponses];
+
+export type UnblockPersonData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}/block';
+};
+
+export type UnblockPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type UnblockPersonError = UnblockPersonErrors[keyof UnblockPersonErrors];
+
+export type UnblockPersonResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type UnblockPersonResponse = UnblockPersonResponses[keyof UnblockPersonResponses];
+
+export type BlockPersonData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}/block';
+};
+
+export type BlockPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type BlockPersonError = BlockPersonErrors[keyof BlockPersonErrors];
+
+export type BlockPersonResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type BlockPersonResponse = BlockPersonResponses[keyof BlockPersonResponses];
+
+export type UnfollowPersonData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}/follow';
+};
+
+export type UnfollowPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type UnfollowPersonError = UnfollowPersonErrors[keyof UnfollowPersonErrors];
+
+export type UnfollowPersonResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type UnfollowPersonResponse = UnfollowPersonResponses[keyof UnfollowPersonResponses];
+
+export type FollowPersonData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}/follow';
+};
+
+export type FollowPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type FollowPersonError = FollowPersonErrors[keyof FollowPersonErrors];
+
+export type FollowPersonResponses = {
+    /**
+     * Successful Response
+     */
+    200: FollowOut;
+};
+
+export type FollowPersonResponse = FollowPersonResponses[keyof FollowPersonResponses];
+
+export type ReportPersonData = {
+    body: ReportIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/people/{handle}/reports';
+};
+
+export type ReportPersonErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ReportPersonError = ReportPersonErrors[keyof ReportPersonErrors];
+
+export type ReportPersonResponses = {
+    /**
+     * Successful Response
+     */
+    202: ReportReceivedOut;
+};
+
+export type ReportPersonResponse = ReportPersonResponses[keyof ReportPersonResponses];
 
 export type ListPlacesData = {
     body?: never;
@@ -6973,6 +7985,176 @@ export type SaveOpportunityResponses = {
 };
 
 export type SaveOpportunityResponse = SaveOpportunityResponses[keyof SaveOpportunityResponses];
+
+export type ModerateProfileData = {
+    body: ModerationIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Handle
+         */
+        handle: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/social/profiles/{handle}/moderation';
+};
+
+export type ModerateProfileErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ModerateProfileError = ModerateProfileErrors[keyof ModerateProfileErrors];
+
+export type ModerateProfileResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type ModerateProfileResponse = ModerateProfileResponses[keyof ModerateProfileResponses];
+
+export type ListSocialReportsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Status
+         */
+        status?: string;
+    };
+    url: '/api/skydiver/v1/social/reports';
+};
+
+export type ListSocialReportsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type ListSocialReportsError = ListSocialReportsErrors[keyof ListSocialReportsErrors];
+
+export type ListSocialReportsResponses = {
+    /**
+     * Response Listsocialreports
+     *
+     * Successful Response
+     */
+    200: Array<ReportOut>;
+};
+
+export type ListSocialReportsResponse = ListSocialReportsResponses[keyof ListSocialReportsResponses];
+
+export type DecideSocialReportData = {
+    body: DecisionIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Report Id
+         */
+        report_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/social/reports/{report_id}/decision';
+};
+
+export type DecideSocialReportErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSocialApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSocialApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSocialApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSocialApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSocialApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverSocialApiProblem;
+};
+
+export type DecideSocialReportError = DecideSocialReportErrors[keyof DecideSocialReportErrors];
+
+export type DecideSocialReportResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReportOut;
+};
+
+export type DecideSocialReportResponse = DecideSocialReportResponses[keyof DecideSocialReportResponses];
 
 export type ListOwnSubmissionsData = {
     body?: never;
