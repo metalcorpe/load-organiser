@@ -240,7 +240,15 @@ export const OPERATIONS = {
 		query: ['before'],
 		maxBodyBytes: 512 * 1024
 	},
-	reportPost: { method: 'POST', path: `${BETA}/posts/{id}/reports` }
+	reportPost: { method: 'POST', path: `${BETA}/posts/{id}/reports` },
+	// Following feed and dropzone activity (#158); 20 cards a page.
+	getFeed: { method: 'GET', path: `${BETA}/me/feed`, query: ['before'], maxBodyBytes: 512 * 1024 },
+	listVenuePosts: {
+		method: 'GET',
+		path: `${BETA}/venues/{id}/posts`,
+		query: ['before'],
+		maxBodyBytes: 512 * 1024
+	}
 } as const satisfies Record<string, Operation>;
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;

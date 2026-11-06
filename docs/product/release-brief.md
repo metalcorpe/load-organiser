@@ -134,6 +134,17 @@ Backend `backend/app/skydiver/posts/` (`/me/jumps/{id}/sharing`, `/me/jumps/{id}
 
 Not built here: the following feed and dropzone activity (#158); scheduled publishing; notifications. Export (#155) does not include posts and restore never republishes them. A profile lists 20 posts per page with a link to older ones.
 
+#### Implemented in #158 (beta)
+
+Backend `GET /me/feed` and `GET /venues/{id}/posts` in `backend/app/skydiver/posts/`; web `/activity` (replacing the placeholder) and "Shared jumps here" on `/dz/{id}`.
+
+- Feed: posts of people the reader follows with an approved follow, through the same readability rule as single posts, newest publication first, 20 a page with an "older" link. No ranking, no own posts, no suggestions mixed in; each card shows the jump date and the publication date separately.
+- Dropzone activity: posts that shared that listed dropzone, including posts saved under a listing later merged into it. Signed out: public posts of discoverable, visible profiles only. Signed in: audience, follow and block rules on every request. A jump logged at the dropzone whose venue was not shared does not appear. No counts, presence or "who is here" claims; the page says so.
+- Revocation: both views query on every request with no cache (`no-store`), so unpublishing, narrowing, removing a follower, blocks and reviewer hides apply on the next load (tested for unpublish, follower removal, re-approval, block, narrowing and hidden profiles).
+- Empty states: the feed links to people search, profile creation, discovery and the dropzone list; nothing is invented.
+
+Not built here: notifications, reactions or comments; a feed of your own posts (they are on your profile); dropzone pages for unlisted or draft venues (404).
+
 ## European discovery inventory and sources
 
 Europe is a coverage boundary, not a commitment to populate every country equally. Accept European suggestions from the start and show genuine gaps. Country inventory grows through reviewed sources; do not create fictional listings to fill a map or promise complete coverage. Personal logging outside maintained coverage remains usable.

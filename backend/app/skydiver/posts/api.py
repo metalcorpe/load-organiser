@@ -21,7 +21,7 @@ from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict, Venue
 from app.skydiver.identity.policy import ThrottleRule
 from app.skydiver.identity.service import IdentityService, Throttled
-from app.skydiver.posts.service import Card, PostService
+from app.skydiver.posts.service import Card, PostPage, PostService
 from app.skydiver.social.api import (
     NO_STORE,
     REPORT_RULE,
@@ -156,6 +156,12 @@ def _post(card: Card) -> PostOut:
         is_owner=card.is_owner,
         version=p.version if card.is_owner else None,
         jump_id=p.jump_id if card.is_owner else None,
+    )
+
+
+def _page(page: PostPage) -> PostPageOut:
+    return PostPageOut(
+        items=[_post(c) for c in page.items], next_before=page.next_before
     )
 
 
@@ -308,9 +314,30 @@ def create_router(
             page = service().by_person(viewer, handle, before)
         except Errors as error:
             return _problem(error)
-        return PostPageOut(
-            items=[_post(c) for c in page.items], next_before=page.next_before
-        )
+        return _page(page)
+
+    @router.get(
+        "/me/feed",
+        operation_id="getFeed",
+        response_model=PostPageOut,
+        dependencies=deps,
+    )
+    def feed(actor: Reader, before: uuid.UUID | None = None) -> PostPageOut:
+        return _page(service().feed(actor, before))
+
+    @router.get(
+        "/venues/{venue_id}/posts",
+        operation_id="listVenuePosts",
+        response_model=PostPageOut,
+        dependencies=deps,
+    )
+    def venue_posts(
+        venue_id: uuid.UUID, viewer: Viewer, before: uuid.UUID | None = None
+    ) -> PostPageOut | JSONResponse:
+        try:
+            return _page(service().at_venue(viewer, venue_id, before))
+        except Errors as error:
+            return _problem(error)
 
     @router.post(
         "/posts/{post_id}/reports",

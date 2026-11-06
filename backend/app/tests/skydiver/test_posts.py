@@ -345,3 +345,71 @@ def test_post_reports_reach_reviewers_who_can_remove_the_post(api: Api) -> None:
     assert removed["kind"] == "post_removed"
     assert removed["detail"] == {"reason": "Advertising is not allowed."}
     assert "Advert." not in json.dumps(removed)  # the reporter's note stays private
+
+
+# -- #158 following feed and dropzone activity ------------------------------------------
+
+
+def _ids(page: dict[str, Any]) -> list[str]:
+    return [p["id"] for p in page["items"]]
+
+
+def test_the_feed_holds_only_followed_peoples_readable_posts(api: Api) -> None:
+    me, followed, pending, stranger = api.person(), api.person(), api.person(), api.person()  # fmt: skip
+    api.connected(me, followed)
+    assert api.follow(me[0], pending[1]) == "requested"
+    older = api.published(followed[0], api.jump(followed[0]), audience="followers")
+    newer = api.published(followed[0], api.jump(followed[0], jumped_on="2026-01-02"))
+    api.published(pending[0], api.jump(pending[0]))
+    api.published(stranger[0], api.jump(stranger[0]))
+    api.published(me[0], api.jump(me[0]))
+
+    # Newest publication first, whatever the activity dates; nothing else mixed in.
+    feed = api.ok("GET", "/me/feed", me[0])
+    assert _ids(feed) == [newer["id"], older["id"]] and feed["next_before"] is None
+    assert feed["items"][0]["jumped_on"] == "2026-01-02"
+    assert _ids(api.ok("GET", "/me/feed", me[0], before=newer["id"])) == [older["id"]]
+    assert api.call("GET", "/me/feed").status_code == 401
+
+    # Unpublishing, narrowing nothing, removal of approval and blocks all apply.
+    api.ok("DELETE", f"/me/posts/{newer['id']}", followed[0], status=204)
+    assert _ids(api.ok("GET", "/me/feed", me[0])) == [older["id"]]
+    api.ok("DELETE", f"/me/people/followers/{me[1]}", followed[0], status=204)
+    assert api.ok("GET", "/me/feed", me[0])["items"] == []
+    api.connected(me, followed)
+    assert _ids(api.ok("GET", "/me/feed", me[0])) == [older["id"]]
+    api.ok("PUT", f"/people/{me[1]}/block", followed[0], status=204)
+    assert api.ok("GET", "/me/feed", me[0])["items"] == []
+
+
+def test_dropzone_activity_respects_audience_blocks_and_merges(api: Api) -> None:
+    owner, follower, blocked, hidden = api.person(), api.person(), api.person(), api.person()  # fmt: skip
+    api.connected(follower, owner)
+    venue = api.venue()
+    at = {"venue_id": venue["id"]}
+    public = api.published(owner[0], api.jump(owner[0], **at), shares=["venue"])
+    shared = api.published(owner[0], api.jump(owner[0], **at, jumped_on="2026-10-11"), shares=["venue"], audience="followers")  # fmt: skip
+    # Logged at the dropzone but the venue was not shared: not dropzone activity.
+    api.published(owner[0], api.jump(owner[0], **at, jumped_on="2026-10-12"))
+    api.published(hidden[0], api.jump(hidden[0], **at), shares=["venue"])
+    api.ok(
+        "PUT", f"/social/profiles/{hidden[1]}/moderation", api.reviewer,
+        {"hidden": True, "publishing_restricted": False, "reason": "Spam."},
+        status=204,
+    )  # fmt: skip
+    path = f"/venues/{venue['id']}/posts"
+
+    assert _ids(api.ok("GET", path, None)) == [public["id"]]  # guests: public only
+    assert _ids(api.ok("GET", path, follower[0])) == [shared["id"], public["id"]]
+    api.ok("PUT", f"/people/{owner[1]}/block", blocked[0], status=204)
+    assert api.ok("GET", path, blocked[0])["items"] == []
+
+    # A post saved under a venue later merged into this one still shows here.
+    dupe = api.venue()
+    moved = api.published(owner[0], api.jump(owner[0], venue_id=dupe["id"]), shares=["venue"])  # fmt: skip
+    api.ok("POST", f"/directory/venues/{dupe['id']}/merge", api.reviewer, {"into": venue["id"]})  # fmt: skip
+    assert moved["id"] in _ids(api.ok("GET", path, None))
+    assert api.ok("GET", f"/posts/{moved['id']}", None)["venue"]["id"] == venue["id"]
+
+    # Unknown or unlisted dropzones answer not found.
+    assert api.call("GET", f"/venues/{uuid.uuid7()}/posts").json() == NOT_FOUND

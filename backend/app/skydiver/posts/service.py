@@ -14,7 +14,12 @@ from typing import Any, Protocol
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
-from app.skydiver.directory.service import DirectoryService, EditConflict, Venue
+from app.skydiver.directory.service import (
+    MAX_MERGE_HOPS,
+    DirectoryService,
+    EditConflict,
+    Venue,
+)
 from app.skydiver.posts import policy
 from app.skydiver.posts.policy import Audience, Share
 from app.skydiver.social.policy import ReportReason, report_note
@@ -118,6 +123,23 @@ class PostStore(Protocol):
         before: uuid.UUID | None,
         limit: int,
     ) -> list[tuple[Post, Person]]: ...
+    def following(
+        self, viewer: uuid.UUID, before: uuid.UUID | None, limit: int
+    ) -> list[tuple[Post, Person]]:
+        """Readable posts of people the viewer follows (approved), newest first."""
+        ...
+
+    def at_venues(
+        self,
+        viewer: uuid.UUID | None,
+        venue_ids: set[uuid.UUID],
+        before: uuid.UUID | None,
+        limit: int,
+    ) -> list[tuple[Post, Person]]: ...
+    def merged_into(self, venue_id: uuid.UUID, hops: int) -> set[uuid.UUID]:
+        """The venue and every venue merged into it, following up to `hops` merges."""
+        ...
+
     def record(
         self,
         owner: uuid.UUID,
@@ -287,14 +309,30 @@ class PostService:
         post, author = found
         return Card(post, author, self._venues([post])[0], post.owner_person_id == me)
 
-    def by_person(
-        self, viewer: Actor | None, handle: str, before: uuid.UUID | None
+    def feed(self, actor: Actor, before: uuid.UUID | None) -> PostPage:
+        """Posts of people the actor follows, newest publication first. No ranking."""
+        with self._stores() as store:
+            rows = store.following(actor.person_id, before, PAGE + 1)
+        return self._page(rows, actor.person_id)
+
+    def at_venue(
+        self, viewer: Actor | None, venue_id: uuid.UUID, before: uuid.UUID | None
     ) -> PostPage:
-        # The profile itself must be visible; each post is then checked again in SQL.
-        profile = self._social.view(viewer, handle)
+        """Shared jumps at a listed dropzone that this viewer may read.
+
+        Not presence, attendance or a count: only published summaries, ordered by
+        publication, each showing its own activity date.
+        """
+        venue = self._listed(venue_id)
+        if venue is None:
+            raise NotFound()
         me = viewer.person_id if viewer else None
         with self._stores() as store:
-            rows = store.by_owner(me, profile.row.person_id, before, PAGE + 1)
+            ids = store.merged_into(venue.id, MAX_MERGE_HOPS)
+            rows = store.at_venues(me, ids, before, PAGE + 1)
+        return self._page(rows, me)
+
+    def _page(self, rows: list[tuple[Post, Person]], me: uuid.UUID | None) -> PostPage:
         more = len(rows) > PAGE
         rows = rows[:PAGE]
         venues = self._venues([p for p, _ in rows])
@@ -303,6 +341,16 @@ class PostService:
             for (p, a), v in zip(rows, venues, strict=True)
         ]
         return PostPage(items, rows[-1][0].id if more else None)
+
+    def by_person(
+        self, viewer: Actor | None, handle: str, before: uuid.UUID | None
+    ) -> PostPage:
+        # The profile itself must be visible; each post is then checked again in SQL.
+        profile = self._social.view(viewer, handle)
+        me = viewer.person_id if viewer else None
+        with self._stores() as store:
+            rows = store.by_owner(me, profile.row.person_id, before, PAGE + 1)
+        return self._page(rows, me)
 
     def report(
         self, actor: Actor, post_id: uuid.UUID, reason: str, note: str | None
