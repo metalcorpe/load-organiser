@@ -2,9 +2,12 @@
 
 One person (the owner) creates one of everything private. Every route that takes
 an id or handle is then called with the owner's identifiers by another verified
-user, by a reviewer and anonymously. None may succeed or echo private content,
-and the owner's records must be unchanged afterwards. New routes are covered
-automatically; a route this test cannot fill fails it until it is mapped.
+user, by a reviewer and anonymously, each write with a valid body (so input
+validation cannot answer before the ownership check does). None may succeed or
+echo private content, each answer must equal the answer for an id that does not
+exist (no existence leak), and the owner's records must be unchanged afterwards.
+New routes are covered automatically; a route this test cannot fill, or a write
+without a mapped body, fails it until it is mapped.
 """
 
 import json
@@ -32,7 +35,7 @@ NOT_OWNER_SCOPED = (
     "/venues/{venue_id}",
     "/saved/{opportunity_id}",
     "/me/people/{relation}",  # the caller's own lists; no other person's id
-    "/venues/{venue_id}/posts",  # public listing; readability tested in test_posts
+    "/venues/{venue_id}/posts",  # public listing: checked separately below
 )
 # Reviewer tools act on public directory/moderation records by design.
 REVIEWER_TOOLS = ("/directory/", "/social/")
@@ -86,19 +89,87 @@ def world() -> Iterator[tuple[World, dict[str, str], str]]:
             "provider_id": str(uuid.uuid7()),
             "submission_id": str(uuid.uuid7()),
             "report_id": str(uuid.uuid7()),
+            # Versions for write bodies: the owner's current ones, so a refusal can
+            # only come from ownership, never from a stale version.
+            "v_component": str(_record(component)["version"]),
+            "v_rig": str(_record(rig)["version"]),
+            "v_jump": str(jump["version"]),
+            "v_post": str(post["version"]),
         }
         yield w, ids, owner
 
 
-def _id(created: dict[str, Any]) -> str:
+def _record(created: dict[str, Any]) -> dict[str, Any]:
     """Created bodies wrap the record under one key or return it directly."""
     if "id" in created:
-        return str(created["id"])
+        return created
     (inner,) = (v for v in created.values() if isinstance(v, dict) and "id" in v)
-    return str(inner["id"])
+    return dict(inner)
 
 
-def _routes() -> list[tuple[str, str]]:
+def _id(created: dict[str, Any]) -> str:
+    return str(_record(created)["id"])
+
+
+def _fake(ids: dict[str, str]) -> dict[str, str]:
+    """The same parameters pointing at nothing that exists."""
+    fake = {k: (v if k.startswith("v_") else str(uuid.uuid7())) for k, v in ids.items()}
+    fake["handle"] = "zz" + uuid.uuid4().hex[:10]
+    return fake
+
+
+# A valid body for every parameterised write; reviewer tools get a plausible one
+# (their role check answers first).
+def _body(method: str, path: str, ids: dict[str, str]) -> dict[str, Any] | None:
+    v = {k: int(val) for k, val in ids.items() if k.startswith("v_")}
+    bodies: dict[tuple[str, str], dict[str, Any]] = {
+        ("PATCH", "/gear/components/{component_id}"): {
+            "label": "Changed",
+            "version": v["v_component"],
+        },  # fmt: skip
+        ("POST", "/gear/components/{component_id}/archive"): {
+            "archived": True,
+            "version": v["v_component"],
+        },  # fmt: skip
+        ("POST", "/gear/components/{component_id}/rig"): {
+            "rig_id": ids["rig_id"],
+            "on": "2026-10-02",
+            "version": v["v_component"],
+        },  # fmt: skip
+        ("POST", "/gear/components/{component_id}/service"): {
+            "client_key": str(uuid.uuid4()),
+            "kind": "repack",
+            "done_on": "2026-10-02",
+        },  # fmt: skip
+        ("PATCH", "/gear/rigs/{rig_id}"): {"label": "Changed", "version": v["v_rig"]},
+        ("PATCH", "/jumps/{jump_id}"): {"notes": "changed", "version": v["v_jump"]},
+        ("POST", "/me/jumps/{jump_id}/post"): {
+            "jump_version": v["v_jump"],
+            "audience": "followers",
+        },  # fmt: skip
+        ("PUT", "/me/posts/{post_id}/audience"): {
+            "audience": "public",
+            "version": v["v_post"],
+        },  # fmt: skip
+        ("POST", "/people/{handle}/reports"): {"reason": "spam"},
+        ("POST", "/posts/{post_id}/reports"): {"reason": "spam"},
+        ("PATCH", "/places/{place_id}"): {"name": "Changed"},
+        ("PATCH", "/plans/{plan_id}"): {"title": "Changed"},
+        ("PUT", "/social/profiles/{handle}/moderation"): {
+            "hidden": True,
+            "publishing_restricted": True,
+            "reason": "x",
+        },  # fmt: skip
+        ("POST", "/social/reports/{report_id}/decision"): {"decision": "no_action"},
+    }
+    if (method, path) in bodies:
+        return bodies[(method, path)]
+    if path.startswith("/directory/") and method != "GET":
+        return {"status": "listed", "into": ids["venue_id"], "of": ids["venue_id"], "name": "x"}  # fmt: skip
+    return None
+
+
+def _routes() -> list[tuple[str, str, bool]]:
     """Every parameterised beta operation, from the app's own OpenAPI document."""
     paths = create_app(include_legacy=False).openapi()["paths"]
     found = []
@@ -106,8 +177,8 @@ def _routes() -> list[tuple[str, str]]:
         path = full.removeprefix(PREFIX)
         if "{" not in path or path in NOT_OWNER_SCOPED:
             continue
-        for method in sorted(operations):
-            found.append((method.upper(), path))
+        for method, operation in sorted(operations.items()):
+            found.append((method.upper(), path, "requestBody" in operation))
     assert len(found) > 30  # a collection failure must not pass silently
     return found
 
@@ -119,32 +190,54 @@ def _fill(path: str, ids: dict[str, str]) -> str:
     return re.sub(r"{(\w+)}", lambda m: ids[m.group(1)], path)
 
 
-@pytest.mark.parametrize(("method", "path"), _routes())
+@pytest.mark.parametrize(("method", "path", "has_body"), _routes())
 def test_nobody_else_reaches_the_owners_records(
-    world: tuple[World, dict[str, str], str], method: str, path: str
+    world: tuple[World, dict[str, str], str], method: str, path: str, has_body: bool
 ) -> None:
     w, ids, _ = world
-    target = _fill(path, ids)
-    body: dict[str, Any] | None = {} if method in ("POST", "PUT", "PATCH") else None
-    other = w.accounts.session()
-    reviewer = w.accounts.session(reviewer=True)
-    callers: dict[str, str | None] = {"other": other, "anonymous": None}
-    if not path.startswith(REVIEWER_TOOLS):
+    fake = _fake(ids)
+    body, fake_body = _body(method, path, ids), _body(method, path, fake)
+    assert (body is not None) == has_body, f"map a valid body for {method} {path}"
+    callers: dict[str, str | None] = {
+        "other": w.accounts.session(),
+        "anonymous": None,
+    }
+    tool = path.startswith(REVIEWER_TOOLS)
+    if not tool:
         # The reviewer role grants nothing over private records.
-        callers["reviewer"] = reviewer
+        callers["reviewer"] = w.accounts.session(reviewer=True)
     for who, secret in callers.items():
-        response = w.call(method, target, secret, body)
-        assert not 200 <= response.status_code < 300, (
-            who,
-            method,
-            target,
-            response.text,
-        )
-        assert response.status_code in (401, 403, 404, 405, 409, 422), (
-            who,
-            response.status_code,
-        )
-        assert SECRET not in response.text, (who, method, target)
+        response = w.call(method, _fill(path, ids), secret, body)
+        where = (who, method, path, response.status_code, response.text)
+        assert SECRET not in response.text, where
+        if tool:
+            assert response.status_code == (401 if secret is None else 403), where
+            continue
+        allowed = (401, 404) if secret is None else (403, 404)
+        assert response.status_code in allowed, where
+        # The owner's real id answers exactly like an id that does not exist.
+        absent = w.call(method, _fill(path, fake), secret, fake_body)
+        assert (response.status_code, response.json()) == (
+            absent.status_code,
+            absent.json(),
+        ), where
+
+
+def test_dropzone_activity_shows_no_private_post(
+    world: tuple[World, dict[str, str], str],
+) -> None:
+    """The one public route that lists posts at the owner's dropzone."""
+    w, ids, _ = world
+    readers = {
+        "other": w.accounts.session(),
+        "reviewer": w.accounts.session(reviewer=True),
+        "anonymous": None,
+    }
+    for who, secret in readers.items():
+        response = w.call("GET", f"/venues/{ids['venue_id']}/posts", secret)
+        assert response.status_code == 200, who
+        assert ids["post_id"] not in response.text, who
+        assert SECRET not in response.text, who
 
 
 def test_the_owners_records_are_unchanged(
@@ -160,4 +253,7 @@ def test_the_owners_records_are_unchanged(
     # Nothing the other callers did created a follow, block or report.
     for relation in ("requests", "followers", "blocked"):
         assert w.ok("GET", f"/me/people/{relation}", owner) == [], relation
+    reviewer = w.accounts.session(reviewer=True)
+    reports = w.ok("GET", "/social/reports", reviewer)
+    assert all(r["target"]["handle"] != ids["handle"] for r in reports)
     assert json.dumps(jump).count(SECRET) == 1

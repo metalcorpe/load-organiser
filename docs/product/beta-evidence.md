@@ -48,7 +48,7 @@ No shared future-intention flow exists (#159 deferred).
 | --- | --- |
 | Direct links on every private path redirect to sign-in without private HTML | e2e `shell`: one test per private path, including `/jumps/{id}/share` |
 | Small screens: 44 px targets, no horizontal scroll | e2e `shell` on all three projects |
-| Keyboard: skip link first and focuses main | e2e `shell`; WebKit uses Option+Tab, as Safari on macOS does |
+| Keyboard: skip link first and focuses main | e2e `shell` with Tab in Chromium; in WebKit only with Option+Tab (see findings) |
 | No-friends first use | e2e `posts` test 2 (empty feed with people search, profile and discovery links) |
 | Failed or unconfirmed saves | e2e `discover` and `directory` (unconfirmed accounts), `auth` (unconfirmed writes blocked); older-tab conflicts in `gear`, `logbook`, `history`, `maintenance` |
 
@@ -56,17 +56,20 @@ No shared future-intention flow exists (#159 deferred).
 
 | Item | Evidence |
 | --- | --- |
-| Anonymous, owner, other user and reviewer on every parameterised route | backend `test_access_matrix.py`: the owner creates one of each private record (place, component, service entry, rig, jump, plan, follower-only post, non-discoverable profile). Every parameterised operation in the app's OpenAPI document is called with the owner's ids by another verified user, a reviewer (except reviewer tools) and anonymously: none succeeds or echoes private text, and the owner's records are unchanged. New routes are included automatically; an unmapped parameter fails the test. |
+| Anonymous, owner, other user and reviewer on every parameterised route | backend `test_access_matrix.py`: the owner creates one of each private record (place, component, service entry, rig, jump, plan, follower-only post, non-discoverable profile). Every parameterised operation in the app's OpenAPI document except public catalogue and caller-scoped routes is called with the owner's ids by another verified user, a reviewer (except reviewer tools, which members and guests are refused) and anonymously. Writes carry a valid body with the owner's current versions, so validation cannot answer before ownership does. Each answer is 401/403/404, equals the answer for a nonexistent id, and echoes no private text; the owner's records are unchanged and no report or follow was created. The public dropzone post list is checked separately: it answers 200 without the owner's follower-only post. New routes are included automatically; an unmapped parameter or write body fails the test. |
 | Session expiry, revocation and account switching | e2e `auth`: sign-out revocation and back navigation, switching accounts in one browser, two browsers with separate identities, forged or stale cookie, reset revokes other sessions, sign out everywhere |
 | Origin enforcement | e2e `auth`: cross-site, `null` and absent Origin refused on sign-in; cross-site sign-out ignored. e2e `boundaries`: cross-site POST to the JSON export route refused with a valid session cookie |
-| Cache and HTML/data payload boundaries | `no-store` on every page and API response (`shell` headers test; API `no_store` dependencies). e2e `boundaries`: the raw HTML and `__data.json` of a public post and profile, read signed out and as another user, contain the shared caption and never the place name, notes, other equipment, jump number or account email; the owner's private jump page data is not served without a session |
+| Cache and HTML/data payload boundaries | Pages: `no-store` set in `hooks.server.ts` for every response and checked by the `shell` headers test. API: each beta router adds `no-store` through a router dependency; no test enumerates every API response. e2e `boundaries`: the raw HTML and `__data.json` of a public post and profile (both 200 and both carrying the caption), read signed out and as another user, contain neither the place name, notes, other equipment nor account email, nor the field names of private values; the owner's jump page data contains those values for the owner and is not served without a session (303) |
 
 ## Findings from this run
 
-- **WebKit (iPhone emulation) passes the full suite.** Two tests needed engine-specific
-  handling, neither an application change:
-  - **Keyboard focus:** WebKit moves focus to links with Option+Tab, not Tab (Safari's
-    default on macOS). The skip link works with that key.
+- **WebKit (iPhone emulation) passes the full suite** with two engine-specific
+  adjustments, neither an application change:
+  - **Keyboard focus:** in WebKit the test presses Option+Tab, because by default Tab
+    there (as in Safari on macOS) skips links. Verified: the skip link is the first link
+    and moves focus to the main content. Not verified: what a Safari user with default
+    settings and a hardware keyboard reaches with Tab alone (likely form controls only),
+    which is browser behaviour rather than something the page can change.
   - **Sign-out headers:** WebKit's network instrumentation omits `Clear-Site-Data` and
     `Set-Cookie` from the sign-out redirect it reports; its trace shows only `Location`
     and `Cache-Control`. The server sets the header the same way for every browser
@@ -80,6 +83,8 @@ No shared future-intention flow exists (#159 deferred).
 - **Real devices:** iPhone Safari and Android Chrome. Emulation does not cover real
   keyboards, autofill, OS text size, safe areas, back-forward cache or network
   conditions.
+- **Safari keyboard defaults:** Tab-only navigation in real Safari, with and without
+  "Press Tab to highlight each item".
 - **Owner walkthrough:** a representative walkthrough by the owner and at least one other
   user of the journeys above, with notes. Earlier design acceptance does not count.
 - **Assistive technology:** screen-reader runs (VoiceOver, TalkBack). Automated checks

@@ -16,11 +16,16 @@ async function signIn(page: Page, email: string) {
 	await expect(page).toHaveURL(`${ORIGIN}/jumps`);
 }
 
-/** Every byte a reader receives for a page: its HTML and its client data request. */
-async function payload(request: APIRequestContext, path: string): Promise<string> {
+/** What a reader receives for a page: its HTML and its client data request, apart. */
+async function payload(request: APIRequestContext, path: string) {
 	const html = await request.get(path, { maxRedirects: 0 });
 	const data = await request.get(`${path.replace(/\/$/, '')}/__data.json`, { maxRedirects: 0 });
-	return `${html.status()} ${await html.text()} ${data.status()} ${await data.text()}`;
+	return {
+		htmlStatus: html.status(),
+		html: await html.text(),
+		dataStatus: data.status(),
+		data: await data.text()
+	};
 }
 
 test.describe('payload boundaries', () => {
@@ -45,6 +50,8 @@ test.describe('payload boundaries', () => {
 		await page.getByLabel('Type', { exact: true }).selectOption('freefly');
 		await page.getByText('Number, time and altitudes (optional)').click();
 		await page.getByLabel('Your jump number').fill('4321');
+		// Field names of private values; the values themselves are checked below.
+		const privateKeys = ['"notes"', '"other_gear"', '"jump_number"', '"place_id"', '"links"'];
 		await page.getByLabel('Borrowed, rented or other equipment').fill(secrets[2]);
 		await page.getByLabel('Notes (optional, private)').fill(secrets[1]);
 		await page.getByRole('button', { name: 'Save private jump' }).click();
@@ -68,17 +75,31 @@ test.describe('payload boundaries', () => {
 		await signIn(otherPage, await createAccount({ label: 'payload-other' }));
 		for (const reader of [guest, otherPage.request]) {
 			for (const path of [post!, `/people/${handle}`]) {
-				const body = await payload(reader, path);
-				expect(body).toContain(`Shared caption ${tag}`);
-				for (const secret of [...secrets, email, '4321']) {
-					expect(body, `${path} leaks ${secret}`).not.toContain(secret);
+				const got = await payload(reader, path);
+				// Both parts are real pages carrying the card, so the absence checks count.
+				expect([got.htmlStatus, got.dataStatus], path).toEqual([200, 200]);
+				expect(got.html, path).toContain(`Shared caption ${tag}`);
+				expect(got.data, path).toContain(`Shared caption ${tag}`);
+				for (const part of [got.html, got.data]) {
+					for (const secret of [...secrets, email]) {
+						expect(part, `${path} leaks ${secret}`).not.toContain(secret);
+					}
+					for (const key of privateKeys) expect(part, `${path} has ${key}`).not.toContain(key);
 				}
 			}
 		}
-		// The owner's private pages are not readable by data request without a session.
+		// The owner's private jump data: present for the owner (so the path is right),
+		// absent without a session.
 		const jumpPath = new URL(page.url()).pathname.replace(/\/share$/, '');
-		const privateData = await payload(guest, jumpPath);
-		for (const secret of secrets) expect(privateData).not.toContain(secret);
+		const own = await payload(page.request, jumpPath);
+		expect(own.dataStatus).toBe(200);
+		for (const secret of secrets) expect(own.data).toContain(secret);
+		const anonymous = await payload(guest, jumpPath);
+		expect(anonymous.htmlStatus).toBe(303);
+		for (const secret of secrets) {
+			expect(anonymous.html).not.toContain(secret);
+			expect(anonymous.data).not.toContain(secret);
+		}
 
 		await guest.dispose();
 		await otherPage.context().close();
