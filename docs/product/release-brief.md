@@ -139,9 +139,9 @@ Not built here: the following feed and dropzone activity (#158); scheduled publi
 Backend `POST /auth/account/deletion`; web "Delete account" on `/profile`.
 
 - Needs the current password (sharing the sign-in failure budget) and a ticked confirmation. One transaction deletes the account; its person, sessions, profile, follows both ways, blocks, posts, logbook, gear, places, history, saves, plans, restore receipts and reports by or about the person cascade with it. Public posts and the profile therefore disappear from every view on the next request.
-- Kept without the link to the person (foreign keys set to null): suggestions and problem reports sent about public listings, including their text, and reviewer history of public records.
-- The address can register again and starts empty. Tested: no row in any table references the deleted person afterwards; other people's records and the public directory are unchanged.
-- Not built: the deletion and revocation ledger that keeps a restore from an older backup from bringing a deleted account back (see `recovery-runbook.md`); a grace period or undo (deletion is immediate).
+- Kept without the link to the person (foreign keys set to null): suggestions and problem reports sent about public listings, including their text, and reviewer history: decisions on public records and on social reports (the decider column of social reports gained its foreign key in migration `c3e8a5f7d1b9`; earlier it kept a deleted reviewer's account id).
+- The address can register again and starts empty. Tested (`test_account_deletion.py`): afterwards no row of any table contains the deleted person id or account id anywhere in its text, which covers JSON and columns without foreign keys; a suggestion the person sent stays without its author; a reviewer who deletes their account leaves their decisions in place with the decider cleared; other people's records and the public directory are unchanged. Not tested: a write by the same account racing the deletion (expected to fail with a server error rather than restore anything, by reading the code only).
+- Not built: the deletion and revocation ledger that keeps a restore from an older backup from bringing a deleted account back (see `recovery-runbook.md`); a grace period or undo (deletion is immediate). Known consequence: a hidden or restricted person can delete and register again with the same address, and reports about them are deleted with the account.
 
 #### Implemented in #158 (beta)
 
