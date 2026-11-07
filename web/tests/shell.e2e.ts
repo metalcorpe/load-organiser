@@ -74,9 +74,14 @@ test.describe('public shell', () => {
 		}
 	});
 
-	test('skip link is first in tab order and moves focus to main content', async ({ page }) => {
+	test('skip link is first in tab order and moves focus to main content', async ({
+		page,
+		browserName
+	}) => {
 		await page.goto('/');
-		await page.keyboard.press('Tab');
+		// WebKit, like Safari on macOS, moves between links with Option+Tab; Tab alone
+		// reaches form controls only unless the user changes that setting.
+		await page.keyboard.press(browserName === 'webkit' ? 'Alt+Tab' : 'Tab');
 		const skip = page.getByRole('link', { name: 'Skip to content' });
 		await expect(skip).toBeFocused();
 		await page.keyboard.press('Enter');

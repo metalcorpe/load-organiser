@@ -42,6 +42,9 @@ export default defineConfig({
 	use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
 	projects: [
 		{ name: 'pixel-7', use: { ...devices['Pixel 7'] } },
+		// Mobile Safari's engine (WebKit) with iPhone viewport, touch and user agent.
+		// An emulation, not a real device check (#160 records that separately).
+		{ name: 'iphone-13', use: { ...devices['iPhone 13'] } },
 		{
 			name: 'chromium-320',
 			use: { ...devices['Desktop Chrome'], viewport: { width: 320, height: 640 }, hasTouch: true }
