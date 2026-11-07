@@ -56,14 +56,17 @@ def _references(*ids: str) -> dict[str, int]:
     """Rows in any table whose full text contains one of these ids.
 
     Matches every column type, including ids without a foreign key, JSON
-    snapshots and event details, and string keys.
+    snapshots and event details, and string keys. The erasure ledger is left out:
+    it keeps the ids of deleted rows, and only them, so that a restore cannot bring
+    the rows back (checked by `_ledger_holds_only_ids`).
     """
     found: dict[str, int] = {}
     with engine.connect() as conn:
         tables = conn.execute(
             text(
                 "SELECT table_name FROM information_schema.tables "
-                "WHERE table_schema = 'public' AND table_type = 'BASE TABLE'"
+                "WHERE table_schema = 'public' AND table_type = 'BASE TABLE' "
+                "AND table_name <> 'skydiver_erasure_ledger'"
             )
         ).scalars()
         for table in list(tables):
@@ -75,6 +78,26 @@ def _references(*ids: str) -> dict[str, int]:
                 if count:
                     found[f"{table}:{value}"] = count
     return found
+
+
+def _ledger_holds_only_ids(*ids: str) -> None:
+    """Ledger entries naming these ids record deletions by key, with no content."""
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text(
+                "SELECT action, row_key, row_values FROM skydiver_erasure_ledger "
+                "WHERE "
+                + " OR ".join(f"row_key::text LIKE :p{i}" for i in range(len(ids)))
+            ),
+            {f"p{i}": f"%{value}%" for i, value in enumerate(ids)},
+        ).all()
+    assert rows, "the deletion must be recorded for replay after a restore"
+    for action, key, values in rows:
+        if action == "delete":
+            assert values is None
+        else:  # the block made before deletion: two person ids and a time
+            assert action == "insert" and set(values) == {"blocker_person_id", "blocked_person_id", "created_at"}  # fmt: skip
+        assert all(isinstance(v, str) for v in key.values())
 
 
 def _account_id(api: Api, secret: str) -> str:
@@ -132,6 +155,7 @@ def test_deleting_an_account_removes_everything_it_owned(
     for relation in ("followers", "following", "requests"):
         assert api.ok("GET", f"/me/people/{relation}", friend) == [], relation
     assert _references(person_id, account_id) == {}
+    _ledger_holds_only_ids(person_id, account_id)
     # The suggestion stays for reviewers, without its author.
     with engine.connect() as conn:
         kept = conn.execute(
@@ -177,6 +201,7 @@ def test_a_reviewer_deleting_their_account_keeps_their_decisions_unlinked(api: A
     api.ok("POST", "/auth/account/deletion", reviewer, {"password": PASSWORD})
 
     assert _references(account_id) == {}
+    _ledger_holds_only_ids(account_id)
     with engine.connect() as conn:
         status, decided_by = conn.execute(
             text(

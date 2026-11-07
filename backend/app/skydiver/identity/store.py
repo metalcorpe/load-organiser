@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime
 
-from sqlalchemy import Engine, delete, func, select, update
+from sqlalchemy import Engine, delete, func, select, text, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
@@ -143,12 +143,23 @@ class SqlIdentityStore:
     def lock_account(self, account_id: uuid.UUID, now: datetime) -> Profile:
         return self._profile(account_id, now, lock=True)
 
-    def set_password_hash(self, account_id: uuid.UUID, password_hash: str) -> None:
+    def set_password_hash(
+        self, account_id: uuid.UUID, password_hash: str, *, replaced: bool
+    ) -> None:
         self._s.execute(
             update(User)
             .where(col(User.id) == account_id)
             .values(hashed_password=password_hash)
         )
+        if replaced:
+            # A restore must not bring back the password this one replaced (A9).
+            self._s.execute(
+                text(
+                    "INSERT INTO skydiver_erasure_ledger (action, table_name, row_key) "
+                    "VALUES ('password', 'user', jsonb_build_object('id', CAST(:id AS uuid)))"
+                ),
+                {"id": str(account_id)},
+            )
 
     def roles_for(self, account_id: uuid.UUID) -> frozenset[str]:
         rows = self._s.execute(

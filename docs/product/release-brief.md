@@ -141,7 +141,17 @@ Backend `POST /auth/account/deletion`; web "Delete account" on `/profile`.
 - Needs the current password (sharing the sign-in failure budget) and a ticked confirmation. One transaction deletes the account; its person, sessions, profile, follows both ways, blocks, posts, logbook, gear, places, history, saves, plans, restore receipts and reports by or about the person cascade with it. Public posts and the profile therefore disappear from every view on the next request.
 - Kept without the link to the person (foreign keys set to null): suggestions and problem reports sent about public listings, including their text, and reviewer history: decisions on public records and on social reports (the decider column of social reports gained its foreign key in migration `c3e8a5f7d1b9`; earlier it kept a deleted reviewer's account id).
 - The address can register again and starts empty. Tested (`test_account_deletion.py`): afterwards no row of any table contains the deleted person id or account id anywhere in its text, which covers JSON and columns without foreign keys; a suggestion the person sent stays without its author; a reviewer who deletes their account leaves their decisions in place with the decider cleared; other people's records and the public directory are unchanged. Not tested: a write by the same account racing the deletion (expected to fail with a server error rather than restore anything, by reading the code only).
-- Not built: the deletion and revocation ledger that keeps a restore from an older backup from bringing a deleted account back (see `recovery-runbook.md`); a grace period or undo (deletion is immediate). Known consequence: a hidden or restricted person can delete and register again with the same address, and reports about them are deleted with the account.
+- A restore from an older backup does not bring a deleted account back once the erasure ledger is replayed (see below and `recovery-runbook.md`). Until pruned, the ledger keeps the deleted account's ids, never its content.
+- Not built: a grace period or undo (deletion is immediate). Known consequence: a hidden or restricted person can delete and register again with the same address, and reports about them are deleted with the account.
+
+#### Erasure ledger (implemented, architecture A9)
+
+`app/skydiver/recovery/ledger.py`, migration `d4f9b6a2e8c1`; operator commands only, no API or screen.
+
+- Triggers record deletions, new blocks and changes to visibility and account state in `skydiver_erasure_ledger` in the same transaction; the identity store records new passwords. Entries hold keys and changed flags or times, no free text.
+- `export` writes the ledger for storage outside the backup set; `apply` replays it on a restored database, forces a password reset where the password changed after the backup, and revokes every session and token; `prune` drops old entries.
+- Tested: recording and refusal of malformed or unknown entries (`test_erasure_ledger.py`); the full backup, erase, export, restore and replay drill (`scripts/verify.sh recovery`).
+- Not decided (needs accounts): where exports are kept and how often they run. Not built: recording of ordinary edits, which a restore still reverts.
 
 #### Implemented in #158 (beta)
 
