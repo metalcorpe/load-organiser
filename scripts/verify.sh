@@ -241,6 +241,23 @@ stage_recovery() {
   log "recovery: the restored database behaves like the source at backup time"
   in_backend "$dst" "$drill check '$manifest'"
 
+  # Deletions and revocations made after the backup reach the restored copy only
+  # through the erasure ledger, exported from the source as an operator would.
+  log "recovery: erase after the backup, export the ledger, replay it on the restored copy"
+  local ledger="PYTHONPATH='$B' uv run --project '$B' python -m app.skydiver.recovery.ledger"
+  in_backend "$src" "$drill erase '$manifest'"
+  in_backend "$src" "$ledger export '$SCRATCH/ledger.jsonl'"
+  in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl'"
+  in_backend "$dst" "$drill replayed '$manifest'"
+  # A second replay changes nothing but the unknown replacement passwords.
+  in_backend "$dst" "$drill snapshot user" >"$SCRATCH/replayed-1.json"
+  in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl'"
+  in_backend "$dst" "$drill snapshot user" >"$SCRATCH/replayed-2.json"
+  diff -u "$SCRATCH/replayed-1.json" "$SCRATCH/replayed-2.json" || {
+    echo "a second ledger replay changed the restored database" >&2
+    exit 1
+  }
+
   # c6459ca8ce2a is the last legacy migration; every beta migration after it is
   # downgraded here with the restored data present. Legacy downgrades below it are
   # not supported (the template's unnamed foreign keys; legacy is #166).

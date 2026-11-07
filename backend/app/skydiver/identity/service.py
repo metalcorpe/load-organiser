@@ -88,7 +88,12 @@ class IdentityStore(Protocol):
         """As `profile`, holding the account's row lock until the transaction ends."""
         ...
 
-    def set_password_hash(self, account_id: uuid.UUID, password_hash: str) -> None: ...
+    def set_password_hash(
+        self, account_id: uuid.UUID, password_hash: str, *, replaced: bool
+    ) -> None:
+        """`replaced`: a new password, recorded for replay after a restore; False
+        for a rehash of the same password."""
+
     def roles_for(self, account_id: uuid.UUID) -> frozenset[str]:
         """Server-granted beta roles. Legacy superuser status is not one."""
         ...
@@ -410,7 +415,7 @@ class IdentityService:
                 if updated:
                     # #170 compatibility: legacy bcrypt is upgraded to Argon2id. Same
                     # password, new encoding: live sessions must survive the rehash.
-                    store.set_password_hash(account.id, updated)
+                    store.set_password_hash(account.id, updated, replaced=False)
                     store.carry_session_markers(
                         account_id=account.id,
                         old_marker=policy.credential_marker(account.password_hash),
@@ -494,7 +499,7 @@ class IdentityService:
             # Hashed only after the session and current password are proven.
             new_hash = self._hasher.hash(new_password)
             store.lock_account(account.id, now)
-            store.set_password_hash(account.id, new_hash)
+            store.set_password_hash(account.id, new_hash, replaced=True)
             # The current session survives the change; every other one is revoked.
             store.set_session_marker(session.id, policy.credential_marker(new_hash))
             store.retire_tokens(
@@ -577,7 +582,7 @@ class IdentityService:
             # Hashed only once a live token has been consumed.
             new_hash = self._hasher.hash(new_password)
             store.lock_account(account.id, now)
-            store.set_password_hash(account.id, new_hash)
+            store.set_password_hash(account.id, new_hash, replaced=True)
             # The reset link proved control of the inbox it was sent to.
             store.mark_email_verified(account.id, consumed.sent_to, now)
             store.retire_tokens(
