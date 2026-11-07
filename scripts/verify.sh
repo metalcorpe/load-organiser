@@ -10,8 +10,9 @@
 #   - nothing set: a throwaway cluster is created with `initdb` (on PATH, or PG_BIN)
 #     and removed afterwards;
 #   - VERIFY_PG_HOST/PORT/USER/PASSWORD for an existing *disposable* server, plus
-#     VERIFY_PG_DISPOSABLE=yes. The databases verify_backend and verify_e2e on it are
-#     dropped and recreated; no other database is touched.
+#     VERIFY_PG_DISPOSABLE=yes. The databases verify_backend, verify_e2e,
+#     verify_recovery, verify_restored and verify_fresh on it are dropped and
+#     recreated; no other database is touched.
 #
 # CI=true runs `npm ci` before the web stages. Playwright browsers must be installed
 # (`npx playwright install chromium webkit`). Nothing here deploys or contacts paid services.
@@ -221,7 +222,22 @@ stage_recovery() {
     echo "restored data differs from the backup source" >&2
     exit 1
   }
-  [ "$(grep -c '"' "$SCRATCH/after.json")" -gt 20 ] || { echo "snapshot looks empty" >&2; exit 1; }
+  in_backend "$dst" "$drill seeded '$SCRATCH/after.json'"
+  # The restored schema itself equals the source schema (before any round trip).
+  # Restore re-parses CHECK constraints and PostgreSQL deparses varchar IN-lists with
+  # an equivalent but differently cast ARRAY; on CHECK lines only, casts and
+  # parentheses are dropped before comparing. Every other line must match exactly.
+  local db
+  for db in verify_recovery verify_restored; do
+    PGPASSWORD=$PG_PASSWORD "$tools/pg_dump" $pg --schema-only --no-owner --no-privileges "$db" |
+      grep -v '^\\\(un\)\?restrict ' |
+      sed -e '/ CHECK /s/::character varying//g' -e '/ CHECK /s/::text\[\]//g' \
+        -e '/ CHECK /s/::text//g' -e '/ CHECK /s/[()]//g' >"$SCRATCH/restored-$db.sql"
+  done
+  diff -u "$SCRATCH/restored-verify_recovery.sql" "$SCRATCH/restored-verify_restored.sql" || {
+    echo "restored schema differs from the backup source" >&2
+    exit 1
+  }
   log "recovery: the restored database behaves like the source at backup time"
   in_backend "$dst" "$drill check '$manifest'"
 
@@ -232,7 +248,6 @@ stage_recovery() {
   alembic_cmd "$dst" downgrade c6459ca8ce2a
   alembic_cmd "$dst" upgrade head
   recreate_db "$fresh" verify_fresh
-  local schema
   for db in verify_restored verify_fresh; do
     # \restrict lines carry a random key per dump; everything else must match.
     PGPASSWORD=$PG_PASSWORD "$tools/pg_dump" $pg --schema-only --no-owner --no-privileges "$db" |

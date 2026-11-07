@@ -61,7 +61,7 @@ def seed(manifest: Path) -> None:
         _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
         _ok(c, "POST", "/plans", owner, {"title": "Recovery trip", "starts_on": "2026-12-03", "ends_on": "2026-12-04", "venue_id": venue["id"]})  # fmt: skip
         post = _ok(c, "POST", f"/me/jumps/{kept['id']}/post", owner, {"jump_version": kept["version"], "audience": "followers", "shares": ["venue"], "caption": "Recovery caption"})  # fmt: skip
-        _call(c, "POST", f"/people/{handle}/reports", follower, {"reason": "spam"})
+        _ok(c, "POST", f"/people/{handle}/reports", follower, {"reason": "spam"})
         _ok(c, "DELETE", "/auth/session", revoked)
         assert _call(c, "GET", "/me/profile", revoked).status_code == 401
     manifest.write_text(
@@ -103,6 +103,24 @@ def snapshot() -> dict[str, list[Any]]:
     return out
 
 
+# Tables the seed must populate; an empty one means the drill compared nothing.
+SEEDED = (
+    "skydiver_jump",
+    "skydiver_jump_post",
+    "skydiver_follow",
+    "skydiver_session",
+    "skydiver_social_report",
+    "skydiver_component",
+    "skydiver_jump_baseline",
+)
+
+
+def seeded(snapshot_file: Path) -> None:
+    counts = {t: v[0] for t, v in json.loads(snapshot_file.read_text()).items()}
+    empty = [t for t in SEEDED if counts.get(t, 0) == 0]
+    assert not empty, f"seeded tables are empty: {empty}"
+
+
 def check(manifest: Path) -> None:
     """The restored database behaves like the original at backup time."""
     m = json.loads(manifest.read_text())
@@ -133,6 +151,8 @@ def main(argv: list[str]) -> None:
     elif command == "snapshot":
         json.dump(snapshot(), sys.stdout, indent=1, sort_keys=True)
         sys.stdout.write("\n")
+    elif command == "seeded":
+        seeded(Path(argv[2]))
     elif command == "check":
         check(Path(argv[2]))
     else:

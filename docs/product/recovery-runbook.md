@@ -19,8 +19,14 @@ databases on a throwaway PostgreSQL 17 cluster:
    - a session that is then revoked
 2. **Back up** with `pg_dump -Fc`.
 3. **Restore** with `pg_restore --exit-on-error --no-owner` into an empty database.
-4. **Compare** row count and full-content digest of every table before and after;
-   any difference fails the run.
+4. **Compare data and schema:**
+   - Row count and full-content digest of every table must match before and after.
+   - The seeded tables must be non-empty, so the comparison cannot pass on an
+     empty database.
+   - The restored schema must match the source schema (`pg_dump --schema-only`).
+     Finding: restore re-parses CHECK constraints, and PostgreSQL deparses varchar
+     `IN` lists as an equivalent but differently cast `ARRAY`. Those lines are
+     compared without casts and parentheses; every other line must match exactly.
 5. **Behaviour after restore** (`recovery.py check`):
    - the kept jump's private note is intact and the deleted jump stays deleted
    - the revoked session stays revoked and the baseline is intact
