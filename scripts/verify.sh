@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Isolated verification for the skydiver beta (#147): backend, web, e2e.
 #
-#   scripts/verify.sh [backend] [web] [e2e]     (default: all three)
+#   scripts/verify.sh [backend] [web] [e2e] [recovery]   (default: all four)
 #
 # Never reads the repository .env: backend commands run from an empty temporary
 # directory with a cleared environment and generated throwaway secrets.
@@ -20,9 +20,9 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 B="$ROOT/backend"
 W="$ROOT/web"
-STAGES="${*:-backend web e2e}"
+STAGES="${*:-backend web e2e recovery}"
 for stage in $STAGES; do
-  case "$stage" in backend | web | e2e) ;; *) echo "unknown stage: $stage" >&2; exit 2 ;; esac
+  case "$stage" in backend | web | e2e | recovery) ;; *) echo "unknown stage: $stage" >&2; exit 2 ;; esac
 done
 
 SCRATCH=$(mktemp -d "${TMPDIR:-/tmp}/organiser-verify.XXXXXX")
@@ -39,7 +39,7 @@ secret() { openssl rand -hex "${1:-32}"; }
 log() { printf '\n== %s\n' "$*"; }
 
 needs_db=no
-case " $STAGES " in *" backend "* | *" e2e "*) needs_db=yes ;; esac
+case " $STAGES " in *" backend "* | *" e2e "* | *" recovery "*) needs_db=yes ;; esac
 
 # ---------------------------------------------------------------- PostgreSQL
 if [ "$needs_db" = yes ]; then
@@ -88,7 +88,8 @@ in_backend() {
     bash -c ". '$env_file'; $*")
 }
 
-recreate_db() {
+# An empty database (no schema), dropped first if it exists.
+empty_db() {
   local env_file=$1 db=$2
   in_backend "$env_file" "uv run --project '$B' python -c \"
 import os, psycopg
@@ -98,8 +99,19 @@ with psycopg.connect(host=os.environ['POSTGRES_SERVER'], port=os.environ['POSTGR
     c.execute('DROP DATABASE IF EXISTS $db WITH (FORCE)')
     c.execute('CREATE DATABASE $db')
 \""
+}
+
+alembic_cmd() {
+  local env_file=$1
+  shift
   sed "s#^script_location = .*#script_location = $B/app/alembic#" "$B/alembic.ini" >"$SCRATCH/alembic.ini"
-  in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' alembic -c '$SCRATCH/alembic.ini' upgrade head"
+  in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' alembic -c '$SCRATCH/alembic.ini' $*"
+}
+
+recreate_db() {
+  local env_file=$1 db=$2
+  empty_db "$env_file" "$db"
+  alembic_cmd "$env_file" upgrade head
   in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' python -m app.initial_data"
 }
 
@@ -176,6 +188,60 @@ EOF
     grep 'HTTP/1.1" 5' "$SCRATCH/api.log" >&2
     exit 1
   fi
+}
+
+# Local recovery drill (#161): backup/restore with pg_dump/pg_restore and a full
+# migration round trip, on disposable databases. Production backup destination,
+# schedule, encryption and key custody are not exercised here.
+stage_recovery() {
+  local src dst fresh tools pg manifest
+  tools=${PG_BIN_DIR:-$(dirname "$(command -v pg_dump || echo /missing/pg_dump)")}
+  [ -x "$tools/pg_dump" ] || { echo "pg_dump not found (set PG_BIN)" >&2; exit 2; }
+  pg="-h $PG_HOST -p $PG_PORT -U $PG_USER"
+  src=$(backend_env verify_recovery)
+  # One configuration for every database of the drill, as a real restore would use.
+  dst="$SCRATCH/env-verify_restored.sh" fresh="$SCRATCH/env-verify_fresh.sh"
+  sed 's/POSTGRES_DB=verify_recovery/POSTGRES_DB=verify_restored/' "$src" >"$dst"
+  sed 's/POSTGRES_DB=verify_recovery/POSTGRES_DB=verify_fresh/' "$src" >"$fresh"
+  manifest="$SCRATCH/recovery.json"
+  local drill="PYTHONPATH='$B' uv run --project '$B' python -m app.tests.skydiver.recovery"
+
+  log "recovery: seed verify_recovery through the API"
+  recreate_db "$src" verify_recovery
+  in_backend "$src" "$drill seed '$manifest'"
+  in_backend "$src" "$drill snapshot" >"$SCRATCH/before.json"
+
+  log "recovery: pg_dump (custom format), restore into an empty database"
+  PGPASSWORD=$PG_PASSWORD "$tools/pg_dump" $pg -Fc -f "$SCRATCH/backup.dump" verify_recovery
+  empty_db "$dst" verify_restored
+  PGPASSWORD=$PG_PASSWORD "$tools/pg_restore" $pg --exit-on-error --no-owner \
+    -d verify_restored "$SCRATCH/backup.dump"
+  in_backend "$dst" "$drill snapshot" >"$SCRATCH/after.json"
+  diff -u "$SCRATCH/before.json" "$SCRATCH/after.json" || {
+    echo "restored data differs from the backup source" >&2
+    exit 1
+  }
+  [ "$(grep -c '"' "$SCRATCH/after.json")" -gt 20 ] || { echo "snapshot looks empty" >&2; exit 1; }
+  log "recovery: the restored database behaves like the source at backup time"
+  in_backend "$dst" "$drill check '$manifest'"
+
+  # c6459ca8ce2a is the last legacy migration; every beta migration after it is
+  # downgraded here with the restored data present. Legacy downgrades below it are
+  # not supported (the template's unnamed foreign keys; legacy is #166).
+  log "recovery: downgrade every beta migration of the restored database, upgrade, compare schema"
+  alembic_cmd "$dst" downgrade c6459ca8ce2a
+  alembic_cmd "$dst" upgrade head
+  recreate_db "$fresh" verify_fresh
+  local schema
+  for db in verify_restored verify_fresh; do
+    # \restrict lines carry a random key per dump; everything else must match.
+    PGPASSWORD=$PG_PASSWORD "$tools/pg_dump" $pg --schema-only --no-owner --no-privileges "$db" |
+      grep -v '^\\\(un\)\?restrict ' >"$SCRATCH/schema-$db.sql"
+  done
+  diff -u "$SCRATCH/schema-verify_fresh.sql" "$SCRATCH/schema-verify_restored.sql" || {
+    echo "schema after downgrade/upgrade differs from a fresh migration" >&2
+    exit 1
+  }
 }
 
 for stage in $STAGES; do "stage_$stage"; done
