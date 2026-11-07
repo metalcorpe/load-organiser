@@ -2,7 +2,12 @@ import { fail, redirect } from '@sveltejs/kit';
 import { statusFor } from '#lib/auth-messages.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { field } from '#lib/server/forms.ts';
-import { changePassword, resendVerification, revokeAllSessions } from '#lib/server/identity.ts';
+import {
+	changePassword,
+	deleteAccount,
+	resendVerification,
+	revokeAllSessions
+} from '#lib/server/identity.ts';
 import { clearSession, readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad } from './$types';
@@ -62,5 +67,22 @@ export const actions: Actions = {
 		clearSession(cookies);
 		locals.clearSiteCache = true;
 		redirect(303, '/sign-in?notice=signed-out-everywhere');
+	},
+
+	deleteAccount: async ({ locals, url, cookies, request, getClientAddress }) => {
+		const secret = secretOrSignIn(locals, url, cookies);
+		const data = await request.formData();
+		if (field(data, 'confirm', { max: 4 }) !== 'on') {
+			return fail(400, { form: 'deleteAccount', error: 'confirm_delete' });
+		}
+		const password = field(data, 'password', { max: 1024 });
+		if (!password) return fail(400, { form: 'deleteAccount', error: 'missing' });
+		const outcome = await deleteAccount(createRequestApi(), secret, password, getClientAddress());
+		if (!outcome.ok) {
+			return fail(statusFor(outcome.reason), { form: 'deleteAccount', error: outcome.reason });
+		}
+		clearSession(cookies);
+		locals.clearSiteCache = true;
+		redirect(303, '/sign-in?notice=account-deleted');
 	}
 };

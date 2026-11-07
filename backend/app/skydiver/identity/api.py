@@ -254,6 +254,24 @@ def create_router(
         return Response(status_code=status.HTTP_204_NO_CONTENT, headers=NO_STORE)
 
     @router.post(
+        "/account/deletion",
+        operation_id="deleteAccount",
+        status_code=status.HTTP_204_NO_CONTENT,
+        dependencies=deps,
+    )
+    def delete_account(
+        body: PasswordConfirmIn, secret: Bearer, request: Request
+    ) -> Response:
+        """Delete the caller's account and owned records now; needs the password."""
+        try:
+            service().delete_account(
+                secret=secret, password=body.password, client_ip=client_ip(request)
+            )
+        except IdentityError as error:
+            return _problem(error)
+        return Response(status_code=status.HTTP_204_NO_CONTENT, headers=NO_STORE)
+
+    @router.post(
         "/password",
         operation_id="changePassword",
         status_code=status.HTTP_204_NO_CONTENT,

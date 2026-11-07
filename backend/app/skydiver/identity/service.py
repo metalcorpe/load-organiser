@@ -139,6 +139,10 @@ class IdentityStore(Protocol):
         ...
 
     def find_session(self, secret_hash: str) -> StoredSession | None: ...
+    def delete_account(self, account_id: uuid.UUID) -> None:
+        """Delete the account; its person, sessions and owned records cascade."""
+        ...
+
     def revoke_sessions(
         self,
         *,
@@ -460,6 +464,21 @@ class IdentityService:
             account, _, _ = self._authenticated(store, secret, now)
             self._confirm_password(store, account, password, now, client_ip)
             store.revoke_sessions(now=now, reason="revoke_all", account_id=account.id)
+
+    def delete_account(self, *, secret: str, password: str, client_ip: str) -> None:
+        """Delete the caller's account and everything it owns, after a fresh password.
+
+        One transaction: the session, profile, follows, blocks, posts, logbook, gear,
+        places, history, saves, plans, restore receipts and reports by or about the
+        person go together. Directory and moderation history keep their records with
+        the person reference cleared (foreign keys SET NULL).
+        """
+        client_ip = policy.client_bucket(client_ip)
+        now = self._clock()
+        with self._stores() as store:
+            account, _, _ = self._authenticated(store, secret, now)
+            self._confirm_password(store, account, password, now, client_ip)
+            store.delete_account(account.id)
 
     def change_password(
         self, *, secret: str, current_password: str, new_password: str, client_ip: str

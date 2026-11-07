@@ -11,6 +11,7 @@ export const AUTH_MESSAGES: Record<string, string> = {
 	password_too_long: 'Use at most 128 characters.',
 	password_mismatch: 'The two new passwords do not match.',
 	password_confirmation_failed: 'That password is incorrect.',
+	confirm_delete: 'Tick the box to confirm that you want to delete your account.',
 	mail_unavailable: 'Email cannot be sent right now, so this cannot continue. Try again later.',
 	invalid_input: 'Check the details you entered.',
 	uncertain:

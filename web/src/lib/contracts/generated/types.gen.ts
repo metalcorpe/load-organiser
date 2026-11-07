@@ -3716,6 +3716,57 @@ export type AppSkydiverSocialApiProblem = {
     detail: string;
 };
 
+export type DeleteAccountData = {
+    body: PasswordConfirmIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/auth/account/deletion';
+};
+
+export type DeleteAccountErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverIdentityApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverIdentityApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverIdentityApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverIdentityApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverIdentityApiProblem;
+    /**
+     * Service Unavailable
+     */
+    503: AppSkydiverIdentityApiProblem;
+};
+
+export type DeleteAccountError = DeleteAccountErrors[keyof DeleteAccountErrors];
+
+export type DeleteAccountResponses = {
+    /**
+     * Successful Response
+     */
+    204: void;
+};
+
+export type DeleteAccountResponse = DeleteAccountResponses[keyof DeleteAccountResponses];
+
 export type ResendVerificationData = {
     body?: never;
     headers?: {

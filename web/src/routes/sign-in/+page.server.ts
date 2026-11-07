@@ -7,7 +7,14 @@ import { signIn, signOut } from '#lib/server/identity.ts';
 import { readSessionSecret, storeSession } from '#lib/server/session.ts';
 import type { Actions, PageServerLoad } from './$types';
 
-const NOTICES = new Set(['reset', 'signed-out', 'signed-out-everywhere', 'signed-out-unconfirmed', 'verified']);
+const NOTICES = new Set([
+	'reset',
+	'signed-out',
+	'signed-out-everywhere',
+	'signed-out-unconfirmed',
+	'verified',
+	'account-deleted'
+]);
 
 export const load: PageServerLoad = ({ locals, url }) => {
 	const returnTo = safeReturnPath(url.searchParams.get('returnTo'));

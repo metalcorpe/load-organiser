@@ -35,6 +35,7 @@ export const OPERATIONS = {
 	getSession: { method: 'GET', path: `${AUTH}/session` },
 	deleteSession: { method: 'DELETE', path: `${AUTH}/session` },
 	revokeAllSessions: { method: 'POST', path: `${AUTH}/sessions/revoke-all` },
+	deleteAccount: { method: 'POST', path: `${AUTH}/account/deletion` },
 	changePassword: { method: 'POST', path: `${AUTH}/password` },
 	resendVerification: { method: 'POST', path: `${AUTH}/email-verification` },
 	confirmEmail: { method: 'POST', path: `${AUTH}/email-verification/confirm` },

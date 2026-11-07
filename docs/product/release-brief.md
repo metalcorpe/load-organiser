@@ -134,6 +134,15 @@ Backend `backend/app/skydiver/posts/` (`/me/jumps/{id}/sharing`, `/me/jumps/{id}
 
 Not built here: the following feed and dropzone activity (#158); scheduled publishing; notifications. Export (#155) does not include posts and restore never republishes them. A profile lists 20 posts per page with a link to older ones.
 
+#### Account deletion (implemented, architecture A9)
+
+Backend `POST /auth/account/deletion`; web "Delete account" on `/profile`.
+
+- Needs the current password (sharing the sign-in failure budget) and a ticked confirmation. One transaction deletes the account; its person, sessions, profile, follows both ways, blocks, posts, logbook, gear, places, history, saves, plans, restore receipts and reports by or about the person cascade with it. Public posts and the profile therefore disappear from every view on the next request.
+- Kept without the link to the person (foreign keys set to null): suggestions and problem reports sent about public listings, including their text, and reviewer history of public records.
+- The address can register again and starts empty. Tested: no row in any table references the deleted person afterwards; other people's records and the public directory are unchanged.
+- Not built: the deletion and revocation ledger that keeps a restore from an older backup from bringing a deleted account back (see `recovery-runbook.md`); a grace period or undo (deletion is immediate).
+
 #### Implemented in #158 (beta)
 
 Backend `GET /me/feed` and `GET /venues/{id}/posts` in `backend/app/skydiver/posts/`; web `/activity` (replacing the placeholder) and "Shared jumps here" on `/dz/{id}`.
