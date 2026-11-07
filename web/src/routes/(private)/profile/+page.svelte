@@ -136,6 +136,40 @@
 	</form>
 </section>
 
+<section class="card" aria-labelledby="delete-heading">
+	<h2 id="delete-heading">Delete account</h2>
+	<p>
+		Deletes this account now, with your logbook, gear, places, history, saved listings, plans,
+		public profile, follows, blocks, shared jumps and reports you made. Every session ends. This
+		cannot be undone; <a href="/profile/data">export your records</a> first if you want a copy.
+	</p>
+	<p class="hint">
+		People who already saw or copied something you shared publicly keep what they copied.
+		Suggestions and problem reports you sent about public listings stay with the reviewers,
+		unlinked from you; the text you wrote in them is kept.
+	</p>
+	<form method="POST" action="?/deleteAccount" class="form" novalidate>
+		{#if errorFor('deleteAccount')}
+			<p class="form-error" role="alert">{errorFor('deleteAccount')}</p>
+		{/if}
+		<div class="field">
+			<label for="delete_password">Password</label>
+			<input
+				id="delete_password"
+				name="password"
+				type="password"
+				autocomplete="current-password"
+				required
+				maxlength="1024"
+			/>
+		</div>
+		<label class="choice"><input type="checkbox" name="confirm" /> Delete my account and records</label>
+		<div class="form-actions">
+			<button class="button secondary" type="submit">Delete account</button>
+		</div>
+	</form>
+</section>
+
 <section class="card" aria-labelledby="public-heading">
 	<h2 id="public-heading">Public profile and people</h2>
 	<p>

@@ -185,6 +185,15 @@ export async function changePassword(
 	return done(await call(api, 'changePassword', { bearer: secret, body: input, clientIp }));
 }
 
+export async function deleteAccount(
+	api: ApiTransport,
+	secret: string,
+	password: string,
+	clientIp: string
+): Promise<Outcome<null>> {
+	return done(await call(api, 'deleteAccount', { bearer: secret, body: { password }, clientIp }));
+}
+
 export async function revokeAllSessions(
 	api: ApiTransport,
 	secret: string,

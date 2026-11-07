@@ -5,7 +5,7 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from datetime import datetime
 
-from sqlalchemy import Engine, func, select, update
+from sqlalchemy import Engine, delete, func, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
@@ -294,6 +294,9 @@ class SqlIdentityStore:
             revoked_at=s.revoked_at,
             credential_marker=s.credential_marker,
         )
+
+    def delete_account(self, account_id: uuid.UUID) -> None:
+        self._s.execute(delete(User).where(col(User.id) == account_id))
 
     def revoke_sessions(
         self,

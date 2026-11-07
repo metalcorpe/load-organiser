@@ -165,6 +165,9 @@ class SkydiverSocialReport(SQLModel, table=True):
     decision_reason: str | None = Field(
         default=None, sa_column=Column(String(280), nullable=True)
     )
-    decided_by_account_id: uuid.UUID | None = Field(default=None, nullable=True)
+    decided_by_account_id: uuid.UUID | None = Field(
+        default=None,
+        sa_column=Column(ForeignKey("user.id", ondelete="SET NULL"), nullable=True),
+    )
     decided_at: datetime | None = Field(default=None, sa_column=_instant(True))
     created_at: datetime = Field(sa_column=_instant())

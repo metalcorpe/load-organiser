@@ -23,6 +23,13 @@
 	</Notice>
 {:else if data.notice === 'signed-out'}
 	<Notice title="Signed out" tone="ok"><p>You are signed out on this device.</p></Notice>
+{:else if data.notice === 'account-deleted'}
+	<Notice title="Account deleted" tone="ok">
+		<p>
+			Your account and everything it held have been deleted, and every session has ended. You can
+			register again with the same address; it starts empty.
+		</p>
+	</Notice>
 {:else if data.notice === 'signed-out-everywhere'}
 	<Notice title="Signed out everywhere" tone="ok">
 		<p>Every session for your account has ended, including this one.</p>
