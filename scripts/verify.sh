@@ -251,8 +251,25 @@ stage_recovery() {
   in_backend "$dst" "$drill replayed '$manifest'"
   # The first replay added the file's entries to the restored ledger, so a second
   # replay finds every entry already held and changes nothing (sessions included).
+  # An entry that cannot apply (a block between people who do not exist) makes the
+  # replay exit 1 and is not marked as held, so every later replay reports it again.
+  local stray=00000000-0000-4000-8000-0000000000aa nobody=00000000-0000-4000-8000-0000000000
+  printf '{"id":"%s","recorded_at":"2026-11-08T00:00:00+00:00","action":"insert","table":"skydiver_block","key":{"blocker_person_id":"%sb1","blocked_person_id":"%sb2"},"values":{"blocker_person_id":"%sb1","blocked_person_id":"%sb2","created_at":"2026-11-08T00:00:00+00:00"}}\n' \
+    "$stray" "$nobody" "$nobody" "$nobody" "$nobody" >"$SCRATCH/unresolvable.jsonl"
   in_backend "$dst" "$drill snapshot" >"$SCRATCH/replayed-1.json"
-  in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl'"
+  local attempt
+  for attempt in 1 2; do
+    if in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl' '$SCRATCH/unresolvable.jsonl'" \
+      >"$SCRATCH/apply-$attempt.json"; then
+      echo "a replay with an unresolvable entry exited 0" >&2
+      exit 1
+    fi
+    grep -q "$stray insert skydiver_block: 23503" "$SCRATCH/apply-$attempt.json" || {
+      echo "replay $attempt did not report the unresolvable entry" >&2
+      cat "$SCRATCH/apply-$attempt.json" >&2
+      exit 1
+    }
+  done
   in_backend "$dst" "$drill snapshot" >"$SCRATCH/replayed-2.json"
   diff -u "$SCRATCH/replayed-1.json" "$SCRATCH/replayed-2.json" || {
     echo "a second ledger replay changed the restored database" >&2
