@@ -74,9 +74,8 @@
 	<h2 id="reviewers">Reports and reviewers</h2>
 	<p>
 		Reviewers, at first the people running the beta, check reported profiles and posts and suggestions
-		about listings. When
-		you report a profile or post, the reviewer sees your handle so that misuse of reporting can be
-		judged; the person you reported never sees who reported them. Suggestions, corrections and
+		about listings. When you report a profile or post, the reviewer sees your handle and display name
+		so that misuse of reporting can be judged; the person you reported never sees who reported them. Suggestions, corrections and
 		feedback reach reviewers without your name or email.
 	</p>
 	<p>
@@ -88,7 +87,10 @@
 <section aria-labelledby="account">
 	<h2 id="account">Your account and sign-in</h2>
 	<ul>
-		<li>Your email address is used to sign in, to confirm the address and for password resets.</li>
+		<li>
+			Your email address is used to sign in, to confirm the address, for password resets, and to tell
+			you if someone tries to register with it again.
+		</li>
 		<li>
 			Signing in sets one cookie that your browser cannot read from page scripts. A sign-in lasts at
 			most seven days and is not extended by use; up to five can be active at once.
@@ -111,7 +113,8 @@
 	</p>
 	<p>
 		A restore brings an export back into empty records only. It never overwrites or merges, and does
-		not republish posts.
+		not republish posts. A saved listing that is no longer public is left out, and a dropzone that is
+		no longer listed comes back as one of your private places.
 	</p>
 </section>
 
@@ -125,7 +128,8 @@
 	</p>
 	<p>
 		Kept without any link to you: suggestions, problem reports and feedback you sent, including what
-		you wrote, and reviewers' records of decisions about public listings and reports.
+		you wrote, and reviewers' records of decisions about public listings. If you are a reviewer, the
+		reports you decided stay, without your name.
 		Your email address can be used to register again; the new account starts empty.
 	</p>
 </section>
@@ -140,10 +144,17 @@
 	<p>If the service ever has to be restored from a backup:</p>
 	<ul>
 		<li>
-			Deletions, unpublished posts, blocks, removed follows, visibility changes and moderation decisions
-			made after the backup are applied again before the service reopens, so they do not come back.
-			To do that, the service keeps a record of the identifiers of deleted records and of the settings
-			that changed, never notes, names or other content, for as long as backups are kept.
+			Deleted records, unpublished posts, blocks, removed follows, visibility changes, hidden or
+			restricted profiles and removed posts are applied again before the service reopens, so they do
+			not come back. This works for changes recorded in a copy kept apart from the backups; changes
+			made after the last such copy can still come back, and how often copies are made is not settled.
+			A deletion that would break a restored record, such as a private place a restored jump still
+			uses, is listed for a person to resolve.
+		</li>
+		<li>
+			To do this, the service keeps a record of the identifiers of deleted records and of the settings
+			that changed, never notes, names or other content, until it is cleared after the backups that
+			need it have expired.
 		</li>
 		<li>Everyone has to sign in again.</li>
 		<li>If you changed your password after the backup, you will need to reset it by email.</li>
@@ -173,9 +184,10 @@
 <section aria-labelledby="feedback">
 	<h2 id="feedback">Feedback</h2>
 	<p>
-		Signed in, you can <a href="/submit?kind=feedback">send feedback about the beta</a>, suggest a
-		listing or correct one. You can follow what happened to it on the same page. To report a profile
-		or post, use "Report" on its page.
+		Signed in with a confirmed email address, you can
+		<a href="/submit?kind=feedback">send feedback about the beta</a>, suggest a listing or correct one,
+		and follow what happened to it on the same page. Sending can be paused while reviewers catch up;
+		the form then says so when you send. To report a profile or post, use "Report" on its page.
 	</p>
 </section>
 

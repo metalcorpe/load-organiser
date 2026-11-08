@@ -50,6 +50,10 @@ class SkydiverSubmission(SQLModel, table=True):
             name="ck_skydiver_submission_target_required",
         ),
         CheckConstraint(
+            "kind <> 'feedback' OR target_id IS NULL",
+            name="ck_skydiver_submission_feedback_untargeted",
+        ),
+        CheckConstraint(
             "(status = 'open') = (resolved_at IS NULL)",
             name="ck_skydiver_submission_resolved",
         ),
