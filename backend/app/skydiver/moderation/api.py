@@ -31,7 +31,9 @@ from app.skydiver.moderation.service import (
 PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
 
-KindName = Literal["suggest_venue", "suggest_listing", "correction", "report"]
+KindName = Literal[
+    "suggest_venue", "suggest_listing", "correction", "report", "feedback"
+]
 TargetName = Literal["venue", "provider", "opportunity"]
 StatusName = Literal["open", "accepted", "declined"]
 

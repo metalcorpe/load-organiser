@@ -9,7 +9,8 @@
 		suggest_venue: 'Dropzone suggestion',
 		suggest_listing: 'Listing suggestion',
 		correction: 'Correction',
-		report: 'Report'
+		report: 'Report',
+		feedback: 'Beta feedback'
 	};
 	const PUBLIC_PATH: Record<string, string> = {
 		venue: '/dz',

@@ -148,11 +148,41 @@ def test_retry_with_the_same_key_is_not_a_duplicate(api: Api) -> None:
         ),
         ({"kind": "suggest_listing", "message": "   "}, "message_required"),
         ({"kind": "suggest_listing", "source_url": "ftp://x"}, "source_url_invalid"),
+        (
+            {
+                "kind": "feedback",
+                "target_kind": "venue",
+                "target_id": str(uuid.uuid4()),
+            },  # fmt: skip
+            "target_not_allowed",
+        ),
+        ({"kind": "feedback", "message": "  "}, "message_required"),
     ],
 )
 def test_submission_validation(api: Api, body: dict[str, Any], expected: str) -> None:
     response = api.submit(api.accounts.session(), **body)
     assert response.status_code == 422 and response.json() == {"detail": expected}
+
+
+def test_feedback_reaches_the_review_queue_without_the_sender(api: Api) -> None:
+    member = api.accounts.session()
+    sent = api.submit(member, kind="feedback", message="The save button is hard to find.")  # fmt: skip
+    assert sent.status_code == 201, sent.text
+    item = sent.json()
+    assert (item["kind"], item["target_kind"], item["status"]) == ("feedback", None, "open")  # fmt: skip
+    queue = api.call("GET", "/directory/submissions?limit=50", api.reviewer).json()["items"]  # fmt: skip
+    case = next(i for i in queue if i["id"] == item["id"])
+    member_id = api.accounts.service.current_viewer(secret=member).account_id
+    assert str(member_id) not in json.dumps(case)
+    resolved = api.call(
+        "POST", f"/directory/submissions/{item['id']}/resolve", api.reviewer,
+        {"status": "accepted", "note": "Thanks, noted.", "version": case["version"]},
+    )  # fmt: skip
+    assert resolved.status_code == 200
+    mine = api.call("GET", "/submissions", member).json()
+    assert [(m["id"], m["status"], m["resolution_note"]) for m in mine] == [
+        (item["id"], "accepted", "Thanks, noted.")
+    ]
 
 
 def test_access_limits_and_pause(api: Api, monkeypatch: pytest.MonkeyPatch) -> None:

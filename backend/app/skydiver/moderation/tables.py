@@ -30,7 +30,7 @@ class SkydiverSubmission(SQLModel, table=True):
     __tablename__ = "skydiver_submission"
     __table_args__ = (
         CheckConstraint(
-            "kind IN ('suggest_venue', 'suggest_listing', 'correction', 'report')",
+            "kind IN ('suggest_venue', 'suggest_listing', 'correction', 'report', 'feedback')",
             name="ck_skydiver_submission_kind",
         ),
         CheckConstraint(

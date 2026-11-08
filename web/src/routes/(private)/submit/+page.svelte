@@ -10,7 +10,8 @@
 		suggest_venue: 'Suggest a dropzone',
 		suggest_listing: 'Suggest an event, camp or course',
 		correction: 'Correct information',
-		report: 'Report a problem'
+		report: 'Report a problem',
+		feedback: 'Feedback about the beta'
 	};
 	const STATUS_LABEL: Record<string, string> = {
 		open: 'Waiting for review',
@@ -19,7 +20,7 @@
 	};
 	const sent = $derived(page.url.searchParams.get('sent') === '1');
 	const kinds = $derived(
-		data.target ? ['correction', 'report'] : ['suggest_listing', 'suggest_venue']
+		data.target ? ['correction', 'report'] : ['suggest_listing', 'suggest_venue', 'feedback']
 	);
 </script>
 
@@ -30,8 +31,9 @@
 
 <h1>Suggest or report</h1>
 <p class="lede">
-	Tell the maintainer about a missing listing, outdated details or a problem. Nothing changes until a
-	person reviews it against a source. Your name and email are not shown to the reviewer.
+	Tell the maintainer about a missing listing, outdated details or a problem, or send feedback about
+	the beta. Listings change only after a person checks them against a source. Your name and email are
+	not shown to the reviewer.
 </p>
 
 {#if sent}<p role="status" class="ok">Sent. You can follow its status below.</p>{/if}

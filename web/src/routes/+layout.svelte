@@ -37,6 +37,7 @@
 </main>
 
 <footer>
+	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
 </footer>
 
@@ -108,6 +109,9 @@
 	}
 
 	footer {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.25rem;
 		max-width: 40rem;
 		margin: 0 auto;
 		padding: 0 1rem calc(var(--nav-height) + 1.5rem + env(safe-area-inset-bottom));

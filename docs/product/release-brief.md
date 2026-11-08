@@ -144,6 +144,16 @@ Backend `POST /auth/account/deletion`; web "Delete account" on `/profile`.
 - A restore from an older backup does not bring a deleted account back once the erasure ledger is replayed (see below and `recovery-runbook.md`). Until pruned, the ledger keeps the deleted account's ids, never its content.
 - Not built: a grace period or undo (deletion is immediate). Known consequence: a hidden or restricted person can delete and register again with the same address, and reports about them are deleted with the account.
 
+#### Privacy page and beta feedback (implemented, #162 in part)
+
+Web `/privacy` (public, linked from the footer and the profile page); submission kind `feedback` (migration `f1c4e8a6b3d2`) on `/submit?kind=feedback`, reviewed in `/review/submissions`.
+
+- The page states, from the current code: what stays private; what a profile and a shared jump can include and who can read them; that reviewers see a reporter's handle but reported people never see the reporter; what email and the session cookie are used for (seven-day fixed sign-in, five at most); export and restore; what account deletion removes and keeps unlinked; the backup targets (one a day, seven at most, not running yet) and what a restore re-applies or loses; known limits; how to send feedback.
+- Feedback is a message about the beta with no listing target (`target_not_allowed` otherwise), sent signed in, subject to the same daily and open limits and the same intake switch (`SKYDIVER_SUBMISSIONS_OPEN`) as suggestions. Reviewers see it without the sender's name or email, and the sender sees the status and reviewer note on `/submit`.
+- The outdated "sharing, feed and deletion come later" notice on `/profile` is replaced by links to the page and to feedback.
+- Tested: backend `test_moderation.py` (feedback reaches the queue without the sender; target refused; empty message refused); e2e `privacy` (footer link, sections, sign-in redirect for feedback; a member sends feedback and a reviewer sees it without the sender's email).
+- Not done here (#162, needs people): real listing coverage and maintainer ownership, a support link, a beta cohort and observed use. The page must be updated when backups start running or a limit changes; nothing checks that automatically.
+
 #### Erasure ledger (implemented, architecture A9)
 
 `app/skydiver/recovery/ledger.py`, migration `d4f9b6a2e8c1`; operator commands only, no API or screen.
