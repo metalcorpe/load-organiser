@@ -249,10 +249,11 @@ stage_recovery() {
   in_backend "$src" "$ledger export '$SCRATCH/ledger.jsonl'"
   in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl'"
   in_backend "$dst" "$drill replayed '$manifest'"
-  # A second replay changes nothing but the unknown replacement passwords.
-  in_backend "$dst" "$drill snapshot user" >"$SCRATCH/replayed-1.json"
+  # The first replay added the file's entries to the restored ledger, so a second
+  # replay finds every entry already held and changes nothing (sessions included).
+  in_backend "$dst" "$drill snapshot" >"$SCRATCH/replayed-1.json"
   in_backend "$dst" "$ledger apply '$SCRATCH/ledger.jsonl'"
-  in_backend "$dst" "$drill snapshot user" >"$SCRATCH/replayed-2.json"
+  in_backend "$dst" "$drill snapshot" >"$SCRATCH/replayed-2.json"
   diff -u "$SCRATCH/replayed-1.json" "$SCRATCH/replayed-2.json" || {
     echo "a second ledger replay changed the restored database" >&2
     exit 1

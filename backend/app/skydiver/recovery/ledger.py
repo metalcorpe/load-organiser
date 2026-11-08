@@ -44,7 +44,9 @@ class Replay:
 
     keys: tuple[str, ...]
     watched: tuple[str, ...] = ()
-    inserts: bool = False
+    # Columns of a recorded insert (only blocks), named so the replay never relies
+    # on the table's current column order.
+    inserts: tuple[str, ...] = ()
     # Rows referencing a deleted row that the deletion proves were gone: (table, column).
     detach: tuple[tuple[str, str], ...] = ()
 
@@ -55,7 +57,10 @@ REPLAY: dict[str, Replay] = {
     "skydiver_jump": Replay(("id",)),
     "skydiver_jump_post": Replay(("id",), ("audience",)),
     "skydiver_follow": Replay(("follower_person_id", "followee_person_id")),
-    "skydiver_block": Replay(("blocker_person_id", "blocked_person_id"), inserts=True),
+    "skydiver_block": Replay(
+        ("blocker_person_id", "blocked_person_id"),
+        inserts=("blocker_person_id", "blocked_person_id", "created_at"),
+    ),
     "skydiver_profile": Replay(
         ("person_id",), ("discoverable", "hidden_at", "publishing_restricted_at")
     ),
@@ -117,7 +122,9 @@ class Entry:
             not self.values or not set(self.values) <= set(spec.watched)
         ):
             raise LedgerError(f"unexpected update of {self.table} ({self.id})")
-        if self.action == "insert" and not (spec.inserts and self.values):
+        if self.action == "insert" and (
+            not spec.inserts or set(self.values or {}) != set(spec.inserts)
+        ):
             raise LedgerError(f"unexpected insert into {self.table} ({self.id})")
         if self.action == "password" and self.table != "user":
             raise LedgerError(f"unexpected password entry ({self.id})")
@@ -202,8 +209,11 @@ def prune(engine: Engine, days: int, now: datetime | None = None) -> int:
 @dataclass
 class Outcome:
     entries: int = 0
+    in_backup: int = 0
+    before_backup: int = 0
+    restored_ledger_empty: bool = False
     changed: int = 0
-    # Already as recorded, e.g. rows deleted before the backup or by a cascade.
+    # Already as recorded, e.g. rows a cascade removed with an earlier entry.
     unchanged: int = 0
     by_kind: dict[str, list[int]] = field(default_factory=dict)  # [changed, unchanged]
     skipped: list[str] = field(default_factory=list)
@@ -252,9 +262,11 @@ def _apply_one(conn: Connection, entry: Entry) -> int:
             {"row": row},
         )
     elif entry.action == "insert":
+        columns = ", ".join(_quote(c) for c in spec.inserts)
+        picked = ", ".join(f"r.{_quote(c)}" for c in spec.inserts)
         result = conn.execute(
             text(
-                f"INSERT INTO {table} SELECT r.* FROM {record} "  # noqa: S608
+                f"INSERT INTO {table} ({columns}) SELECT {picked} FROM {record} "  # noqa: S608
                 "ON CONFLICT DO NOTHING"
             ),
             {"row": json.dumps(entry.values)},
@@ -278,30 +290,42 @@ def apply(
     loaded: list[Entry] = [e for path in files for e in read(path)]
     with engine.begin() as conn:
         conn.execute(text("SET LOCAL skydiver.ledger_replay = 'on'"))
-        held = {e.id for e in stored(conn)}
-        entries = _merge([*stored(conn), *loaded])
+        restored = stored(conn)
+        held = {e.id for e in restored}
+        # Entries older than the oldest one the backup holds were pruned before it
+        # was taken; their changes are in it already.
+        horizon = restored[0].recorded_at if restored else None
+        outcome.restored_ledger_empty = horizon is None
+        entries = _merge([*restored, *loaded])
         outcome.entries = len(entries)
         for entry in entries:
-            if entry.id not in held:
-                conn.execute(
-                    text(
-                        f"INSERT INTO {LEDGER} (id, recorded_at, action, table_name, "  # noqa: S608
-                        "row_key, row_values) VALUES (:id, :at, :action, :table, "
-                        "CAST(:key AS jsonb), CAST(:values AS jsonb))"
-                    ),
-                    {
-                        "id": entry.id,
-                        "at": entry.recorded_at,
-                        "action": entry.action,
-                        "table": entry.table,
-                        "key": json.dumps(entry.key),
-                        "values": None
-                        if entry.values is None
-                        else json.dumps(entry.values),
-                    },
-                )
-                held.add(entry.id)
-                outcome.restored_entries += 1
+            if entry.id in held:
+                # Written in the same transaction as its change, so the backup holds
+                # the result already. Re-applying could undo a later change that
+                # reuses the key (a new follow) or lock out a password set since.
+                outcome.in_backup += 1
+                continue
+            if horizon is not None and entry.recorded_at < horizon:
+                outcome.before_backup += 1
+                continue
+            conn.execute(
+                text(
+                    f"INSERT INTO {LEDGER} (id, recorded_at, action, table_name, "  # noqa: S608
+                    "row_key, row_values) VALUES (:id, :at, :action, :table, "
+                    "CAST(:key AS jsonb), CAST(:values AS jsonb))"
+                ),
+                {
+                    "id": entry.id,
+                    "at": entry.recorded_at,
+                    "action": entry.action,
+                    "table": entry.table,
+                    "key": json.dumps(entry.key),
+                    "values": None
+                    if entry.values is None
+                    else json.dumps(entry.values),
+                },
+            )
+            outcome.restored_entries += 1
             savepoint = conn.begin_nested()
             try:
                 changed = _apply_one(conn, entry)
@@ -356,7 +380,11 @@ def main(argv: list[str]) -> None:
     elif command == "prune" and len(args) == 1:
         print(json.dumps({"pruned": prune(engine, int(args[0]))}))
     elif command == "apply":
-        print(json.dumps(apply(engine, [Path(a) for a in args]).as_json(), indent=1))
+        outcome = apply(engine, [Path(a) for a in args])
+        print(json.dumps(outcome.as_json(), indent=1))
+        if outcome.skipped:
+            # Committed, but someone has to look at what could not be applied.
+            raise SystemExit(1)
     else:
         raise SystemExit(__doc__)
 

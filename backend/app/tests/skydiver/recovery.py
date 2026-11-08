@@ -62,12 +62,19 @@ def seed(manifest: Path) -> None:
         kept = _ok(c, "POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-10", "jump_type": "belly", "venue_id": venue["id"], "notes": "kept note", "component_ids": [component["id"]]})["jump"]  # fmt: skip
         gone = _ok(c, "POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-11", "jump_type": "angle", "venue_id": venue["id"]})["jump"]  # fmt: skip
         _ok(c, "DELETE", f"/jumps/{gone['id']}?version={gone['version']}", owner)
+        # Removed and set again before the backup: a replay must not remove it again.
+        first = _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
+        _ok(c, "DELETE", f"/history/baseline?version={first['baseline']['version']}", owner)  # fmt: skip
         _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
+        later = _ok(c, "POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-13", "jump_type": "belly", "venue_id": venue["id"]})["jump"]  # fmt: skip
         plan = _ok(c, "POST", "/plans", owner, {"title": "Recovery trip", "starts_on": "2026-12-03", "ends_on": "2026-12-04", "venue_id": venue["id"]})  # fmt: skip
         post = _ok(c, "POST", f"/me/jumps/{kept['id']}/post", owner, {"jump_version": kept["version"], "audience": "followers", "shares": ["venue"], "caption": "Recovery caption"})  # fmt: skip
         _ok(c, "POST", f"/people/{handle}/reports", follower, {"reason": "spam"})
         _ok(c, "POST", "/jumps", leaver, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-12", "jump_type": "belly", "venue_id": venue["id"], "notes": "leaver note"})  # fmt: skip
         _ok(c, "DELETE", "/auth/session", revoked)
+        # Before the backup: a new password (kept by a replay) and a hidden profile.
+        _ok(c, "POST", "/auth/password", follower, {"current_password": PASSWORD, "new_password": SEED_PASSWORD})  # fmt: skip
+        _ok(c, "PUT", f"/social/profiles/{stranger_handle}/moderation", reviewer, {"hidden": True, "publishing_restricted": False, "reason": "Drill."})  # fmt: skip
         assert _call(c, "GET", "/me/profile", revoked).status_code == 401
     manifest.write_text(
         json.dumps(
@@ -82,6 +89,9 @@ def seed(manifest: Path) -> None:
                 "post": post["id"],
                 "venue": venue["id"],
                 "follower_handle": follower_handle,
+                "reviewer": reviewer,
+                "later_jump": later["id"],
+                "follower_account": _account(accounts, follower),
                 "stranger_handle": stranger_handle,
                 "component": component["id"],
                 "place": place["id"],
@@ -167,6 +177,7 @@ def check(manifest: Path) -> None:
 
 
 NEW_PASSWORD = "after the backup 2026"
+SEED_PASSWORD = "before the backup 2026"
 
 
 def erase(manifest: Path) -> None:
@@ -176,7 +187,12 @@ def erase(manifest: Path) -> None:
         owner = m["owner"]
         _ok(c, "DELETE", f"/me/posts/{m['post']}", owner)
         _ok(c, "DELETE", f"/me/people/followers/{m['follower_handle']}", owner)
+        reviewer = m["reviewer"]
+        _ok(c, "PUT", f"/social/profiles/{m['stranger_handle']}/moderation", reviewer, {"hidden": False, "publishing_restricted": False, "reason": "Drill."})  # fmt: skip
+        _ok(c, "PUT", f"/social/profiles/{m['follower_handle']}/moderation", reviewer, {"hidden": True, "publishing_restricted": True, "reason": "Drill."})  # fmt: skip
         _ok(c, "PUT", f"/people/{m['stranger_handle']}/block", owner)
+        later = _ok(c, "GET", f"/jumps/{m['later_jump']}", owner)["jump"]
+        _ok(c, "DELETE", f"/jumps/{m['later_jump']}?version={later['version']}", owner)
         # The component stops being used, then goes; the restored copy still links it.
         jump = _ok(c, "GET", f"/jumps/{m['kept_jump']}", owner)["jump"]
         _ok(c, "PATCH", f"/jumps/{m['kept_jump']}", owner, {"component_ids": [], "version": jump["version"]})  # fmt: skip
@@ -223,7 +239,19 @@ def replayed(manifest: Path) -> None:
                 _scalar(f"SELECT count(*) FROM {table} WHERE id = :id", id=m[key]) == 0
             ), table  # noqa: S608
         assert _scalar("SELECT discoverable FROM skydiver_profile WHERE person_id = :p", p=m["owner_person"]) is False  # fmt: skip
-        assert _call(c, "GET", f"/people/{m['follower_handle']}", None).status_code in (200, 404)  # fmt: skip
+        # Moderation after the backup, both ways: set and cleared.
+        assert _scalar("SELECT hidden_at IS NULL FROM skydiver_profile WHERE person_id = :p", p=m["stranger_person"]) is True  # fmt: skip
+        hidden, restricted = (_scalar(f"SELECT {c} IS NOT NULL FROM skydiver_profile p JOIN skydiver_person s ON s.id = p.person_id WHERE s.account_id = :a", a=m["follower_account"]) for c in ("hidden_at", "publishing_restricted_at"))  # fmt: skip  # noqa: S608
+        assert hidden is True and restricted is True
+        assert _scalar("SELECT count(*) FROM skydiver_jump WHERE id = :id", id=m["later_jump"]) == 0  # fmt: skip
+        # Changes from before the backup are not replayed again: the baseline set
+        # again after its removal stays, and the password changed then still works.
+        assert _scalar("SELECT prior_jumps FROM skydiver_jump_baseline WHERE owner_person_id = :p", p=m["owner_person"]) == 150  # fmt: skip
+        follower_email = _scalar('SELECT email FROM "user" WHERE id = :id', id=m["follower_account"])  # fmt: skip
+        signed_in = c.post(PREFIX + "/auth/sessions", json={"email": follower_email, "password": SEED_PASSWORD})  # fmt: skip
+        assert signed_in.status_code in (200, 201), signed_in.text
+        # Signed out again, so that the drill's own session is not left live.
+        _ok(c, "DELETE", "/auth/session", signed_in.json()["session_secret"])
         # What was not erased is still there: the kept jump, without the component.
         assert _scalar("SELECT notes FROM skydiver_jump WHERE id = :id", id=m["kept_jump"]) == "after restore"  # fmt: skip
         assert _scalar("SELECT count(*) FROM skydiver_jump_component WHERE jump_id = :id", id=m["kept_jump"]) == 0  # fmt: skip

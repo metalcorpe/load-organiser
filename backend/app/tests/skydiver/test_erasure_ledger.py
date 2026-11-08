@@ -88,7 +88,7 @@ def test_triggers_match_the_replay_map() -> None:
         if kind & 16:  # UPDATE
             spec["watched"] = tuple(args[1].split(","))
     expected = {
-        t: {"keys": r.keys, "watched": r.watched, "inserts": r.inserts}
+        t: {"keys": r.keys, "watched": r.watched, "inserts": bool(r.inserts)}
         for t, r in ledger.REPLAY.items()
     }
     assert found == expected
@@ -229,6 +229,17 @@ GOOD = {
             "values": {"bio": "x"},
         },  # fmt: skip
         {"action": "insert", "values": {"id": "x"}},  # inserts only for blocks
+        {
+            "action": "insert",
+            "table": "skydiver_block",
+            "key": {"blocker_person_id": "a", "blocked_person_id": "b"},
+            "values": {
+                "blocker_person_id": "a",
+                "blocked_person_id": "b",
+                "created_at": "2026-11-07T10:00:00+00:00",
+                "extra": 1,
+            },
+        },  # fmt: skip
         {"action": "password"},  # passwords only for accounts
         {"recorded_at": "2026-11-07T10:00:00"},  # no time zone
         {"id": "not a uuid"},

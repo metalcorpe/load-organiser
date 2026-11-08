@@ -84,26 +84,41 @@ changes before the restored database serves anyone. Built 2026-11-07, local only
   8 days). Until pruned, the ledger keeps the ids of deleted rows.
 - **Replay** (`... ledger apply FILE [FILE ...]`), on the restored database, before
   it serves traffic, in one transaction:
-  1. merges the entries of the files with those in the restored ledger (an entry
-     that differs between copies stops the replay) and adds the missing ones back
-  2. applies them in recording order, with recording switched off: deletes by key,
-     re-inserts blocks, sets recorded values; a component's jump links are removed
-     before the component, since deletion proves no jump used it any more
-  3. replaces each password changed after T with an unknown one: the new password is
+  1. merges the entries of the files with those in the restored ledger; an entry
+     that differs between copies stops the replay
+  2. leaves out entries the restored ledger already holds (written in the same
+     transaction as their change, so the backup contains the result) and file
+     entries older than its oldest entry (pruned before the backup). Re-applying
+     them could delete a follow or baseline created again before T, or lock out a
+     password set before T. If the restored ledger is empty, every file entry is
+     applied (reported as `restored_ledger_empty`)
+  3. applies the rest in recording order, with recording switched off, and adds them
+     to the restored ledger: deletes by key, re-inserts blocks, sets recorded
+     values; a component's jump links are removed before the component, since
+     deletion proves no jump used it any more
+  4. replaces each password changed after T with an unknown one: the new password is
      not in the restored copy, so that person resets it by email
-  4. revokes every session and deletes every email or reset token
+  5. revokes every session and deletes every email or reset token
   It prints counts per action and table. An entry that cannot be applied is rolled
   back alone and listed under `skipped`, for example a private place still used by a
-  restored jump (a jump needs its place, and its later location is not recorded).
-  A second replay changes nothing except the unknown passwords.
+  restored jump (a jump needs its place, and its later location is not recorded);
+  the rest is committed and the command exits with status 1 so that someone looks.
+  A second replay finds every entry held and changes nothing.
+- **Exports are trusted input.** Entries are checked against a fixed list of tables
+  and columns, so a file cannot name other SQL, but within that list a crafted file
+  could block people, lock out accounts or reverse moderation and visibility. Keep
+  exports where only operators can write and replay only copies the operator made.
 
 **Drill evidence** (`scripts/verify.sh recovery`, 2026-11-07, passed): after the
 backup the drill unpublishes a post, removes a follower, blocks a person, stops using
 and deletes a component, deletes a place and a plan, turns off discoverability,
-changes a password and deletes a second account. It exports the ledger from the
-source, replays it on the restored copy, and checks that none of these came back,
-that every older session and the old password are refused, that the kept jump is
-intact, and that a second replay leaves every table except `user` unchanged.
+changes a password, hides one profile and un-hides another, deletes a jump and
+deletes a second account. Before the backup it also changes a password and removes
+and sets again a history baseline. It exports the ledger from the source, replays it
+on the restored copy, and checks that none of the later changes came back, that the
+earlier password and baseline were left alone, that every older session and the old
+password are refused, that the kept jump is intact, and that a second replay leaves
+every table unchanged.
 
 **Still lost or reverted by a restore** (not erasures, so not recorded): edits after
 T to notes, captions, names, bios and other fields revert to their state at T;
