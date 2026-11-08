@@ -204,6 +204,19 @@ def test_prune_keeps_recent_entries() -> None:
         ledger.prune(engine, 0)
 
 
+def test_prune_records_its_cutoff_and_never_moves_it_back() -> None:
+    def cutoff() -> datetime:
+        with engine.connect() as conn:
+            return conn.execute(text("SELECT pruned_before FROM skydiver_erasure_ledger_pruned WHERE id = 1")).scalar_one()  # type: ignore[no-any-return]  # fmt: skip
+
+    now = datetime.now(UTC)
+    ledger.prune(engine, 30, now=now)
+    assert cutoff() >= now - timedelta(days=30)
+    recorded = cutoff()
+    ledger.prune(engine, 60, now=now)  # a longer retention does not lower it
+    assert cutoff() == recorded
+
+
 GOOD = {
     "id": str(uuid.uuid4()),
     "recorded_at": "2026-11-07T10:00:00+00:00",
