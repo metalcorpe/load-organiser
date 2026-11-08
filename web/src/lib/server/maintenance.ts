@@ -14,7 +14,7 @@ export type Refusal =
 
 export type Result<T> = { ok: true; value: T; status: number } | Refusal;
 
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
 
 export async function call<T>(
 	api: ApiTransport,

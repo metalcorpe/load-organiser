@@ -3314,6 +3314,18 @@ export type SubmissionIn = {
 };
 
 /**
+ * SubmissionIntakeOut
+ */
+export type SubmissionIntakeOut = {
+    /**
+     * Open
+     *
+     * False while new submissions are paused.
+     */
+    open: boolean;
+};
+
+/**
  * TokenIn
  */
 export type TokenIn = {
@@ -9015,6 +9027,57 @@ export type CreateSubmissionResponses = {
 };
 
 export type CreateSubmissionResponse = CreateSubmissionResponses[keyof CreateSubmissionResponses];
+
+export type GetSubmissionIntakeData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/submissions/intake';
+};
+
+export type GetSubmissionIntakeErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverModerationApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverModerationApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverModerationApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverModerationApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverModerationApiProblem;
+    /**
+     * Service Unavailable
+     */
+    503: AppSkydiverModerationApiProblem;
+};
+
+export type GetSubmissionIntakeError = GetSubmissionIntakeErrors[keyof GetSubmissionIntakeErrors];
+
+export type GetSubmissionIntakeResponses = {
+    /**
+     * Successful Response
+     */
+    200: SubmissionIntakeOut;
+};
+
+export type GetSubmissionIntakeResponse = GetSubmissionIntakeResponses[keyof GetSubmissionIntakeResponses];
 
 export type SearchVenuesData = {
     body?: never;

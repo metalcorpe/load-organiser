@@ -128,7 +128,10 @@
 	</p>
 	<p>
 		Kept without any link to you: suggestions, problem reports and feedback you sent, including what
-		you wrote, and reviewers' records of decisions about public listings. If you are a reviewer, the
+		you wrote, for 30 days and then deleted, whether or not a reviewer has read them. Copies stay in
+		backups until those expire, and after a restore from a backup the 30 days start again. That
+		deletion runs on a schedule which, like the backups, is not running yet. Also kept: reviewers' records of
+		decisions about public listings. If you are a reviewer, the
 		reports you decided stay, without your name.
 		Your email address can be used to register again; the new account starts empty.
 	</p>
@@ -186,8 +189,8 @@
 	<p>
 		Signed in with a confirmed email address, you can
 		<a href="/submit?kind=feedback">send feedback about the beta</a>, suggest a listing or correct one,
-		and follow what happened to it on the same page. Sending can be paused while reviewers catch up;
-		the form then says so when you send. To report a profile or post, use "Report" on its page.
+		and follow what happened to it on the same page. Sending can be paused; the page normally
+		says so before you write anything, and otherwise when you send. To report a profile or post, use "Report" on its page.
 	</p>
 </section>
 

@@ -139,7 +139,7 @@ Not built here: the following feed and dropzone activity (#158); scheduled publi
 Backend `POST /auth/account/deletion`; web "Delete account" on `/profile`.
 
 - Needs the current password (sharing the sign-in failure budget) and a ticked confirmation. One transaction deletes the account; its person, sessions, profile, follows both ways, blocks, posts, logbook, gear, places, history, saves, plans, restore receipts and reports by or about the person cascade with it. Public posts and the profile therefore disappear from every view on the next request.
-- Kept without the link to the person (foreign keys set to null): suggestions and problem reports sent about public listings, including their text, and reviewer history: decisions on public records and on social reports (the decider column of social reports gained its foreign key in migration `c3e8a5f7d1b9`; earlier it kept a deleted reviewer's account id).
+- Kept without the link to the person (foreign keys set to null): suggestions, problem reports and feedback, including their text, until the retention purge deletes them 30 days later (below), and reviewer history: decisions on public records and on social reports (the decider column of social reports gained its foreign key in migration `c3e8a5f7d1b9`; earlier it kept a deleted reviewer's account id).
 - The address can register again and starts empty. Tested (`test_account_deletion.py`): afterwards no row of any table contains the deleted person id or account id anywhere in its text, which covers JSON and columns without foreign keys; a suggestion the person sent stays without its author; a reviewer who deletes their account leaves their decisions in place with the decider cleared; other people's records and the public directory are unchanged. Not tested: a write by the same account racing the deletion (expected to fail with a server error rather than restore anything, by reading the code only).
 - A restore from an older backup does not bring a deleted account back once the erasure ledger is replayed (see below and `recovery-runbook.md`). Until pruned, the ledger keeps the deleted account's ids, never its content.
 - Not built: a grace period or undo (deletion is immediate). Known consequence: a hidden or restricted person can delete and register again with the same address, and reports about them are deleted with the account.
@@ -153,6 +153,15 @@ Web `/privacy` (public, linked from the footer and the profile page); submission
 - The outdated "sharing, feed and deletion come later" notice on `/profile` is replaced by links to the page and to feedback.
 - Tested: backend `test_moderation.py` (feedback reaches the queue without the sender; target refused; empty message refused); e2e `privacy` (footer link, sections, sign-in redirect for feedback; a member sends feedback and a reviewer sees it without the sender's email).
 - Not done here (#162, needs people): real listing coverage and maintainer ownership, a support link, a beta cohort and observed use. The page must be updated when backups start running or a limit changes; nothing checks that automatically.
+
+#### Submission retention after account deletion (implemented, #162)
+
+`app/skydiver/moderation/retention.py`, migration `a8d2f6c4e1b7`; an operator command, no screen.
+
+- A trigger sets `skydiver_submission.author_removed_at` when the author link is cleared, which happens through the person foreign key on every account deletion path. A check keeps exactly one of author and removal time. Rows already without an author got the migration time, so none is purged before 30 days from the migration.
+- `python -m app.skydiver.moderation.retention purge [DAYS]` deletes those submissions once the time is more than DAYS (default 30, the architecture's target) in the past, reviewed or not. It is not scheduled: it runs with the backups once hosting exists (`recovery-runbook.md`).
+- `GET /submissions/intake` tells a signed-in person whether new submissions are taken; `/submit` shows "Sending is paused" in place of the form when they are not. If that check fails the form is shown and sending reports the pause as before.
+- Tested: `test_account_deletion.py` (deleting the account sets the removal time), `test_submission_retention.py` (only rows past the period are deleted; author and time cannot both be missing), `test_moderation.py` (intake reports open, then paused; needs a session). Not tested in a browser: the paused notice, because the end-to-end server runs with submissions open.
 
 #### Erasure ledger (implemented, architecture A9)
 

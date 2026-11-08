@@ -1,9 +1,12 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { OwnSubmissionOut as OwnSubmission } from '#lib/contracts/index.ts';
+import type {
+	OwnSubmissionOut as OwnSubmission,
+	SubmissionIntakeOut as Intake
+} from '#lib/contracts/index.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
-import { call, failStatus, isList } from '#lib/server/maintenance.ts';
+import { call, failStatus, isList, isRecord } from '#lib/server/maintenance.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
@@ -28,14 +31,20 @@ export const load: PageServerLoad = async (event) => {
 	const params = event.url.searchParams;
 	const targetKind = pick(params.get('target_kind'), TARGETS);
 	const targetId = params.get('target_id');
-	const mine = await call<OwnSubmission[]>(
-		createRequestApi(),
-		'listOwnSubmissions',
-		{ bearer: secret },
-		isList
-	);
+	const api = createRequestApi();
+	const [mine, intake] = await Promise.all([
+		call<OwnSubmission[]>(api, 'listOwnSubmissions', { bearer: secret }, isList),
+		call<Intake>(
+			api,
+			'getSubmissionIntake',
+			{ bearer: secret },
+			(v) => isRecord(v) && typeof v.open === 'boolean'
+		)
+	]);
 	return {
 		emailVerified: viewer.emailVerified,
+		// Unknown when the check fails: the form stays, and sending reports a pause.
+		paused: intake.ok && !intake.value.open,
 		kind: pick(params.get('kind'), KINDS) ?? 'suggest_listing',
 		target: targetKind && isUuid(targetId) ? { kind: targetKind, id: targetId } : null,
 		title: (params.get('title') ?? '').slice(0, 160),

@@ -114,7 +114,12 @@ def _account(accounts: Accounts, secret: str) -> str:
 
 
 def snapshot() -> dict[str, list[Any]]:
-    """Row count and an order-independent digest of every table's full content."""
+    """Row count and an order-independent digest of every table's full content.
+
+    The drill seeds no submissions. If it ever seeds one from the leaver, replaying
+    the deletion stamps `skydiver_submission.author_removed_at` with the replay time,
+    so the restored row legitimately differs from the source: skip that column.
+    """
     out: dict[str, list[Any]] = {}
     with engine.connect() as conn:
         tables = conn.execute(

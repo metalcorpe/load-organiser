@@ -137,4 +137,4 @@ Web: `/review` (reviewer dashboard, linked from Profile for reviewers only; othe
 - **Demo data.** None is shipped. Any record created for a demonstration must have a title starting with `[Demo]`, must not be published on a public deployment, and must never name a real organizer or dropzone as a partner.
 - **Initial coverage.** Populating real European listings from permitted sources is owner work outside this code change: record the countries, categories, sources, reuse terms checked and time spent before launch (#162).
 
-Not built: automated source fetching or imports, organizer self-service, claim workflow, retention purge of resolved submissions (architecture target: minimal evidence for 30 days after account deletion; submissions lose their author on deletion now), per-field diffs on conflict, and pagination beyond the first 50 items in the editor's organizer/dropzone pickers (search narrows them).
+Not built: automated source fetching or imports, organizer self-service, claim workflow, per-field diffs on conflict, and pagination beyond the first 50 items in the editor's organizer/dropzone pickers (search narrows them).

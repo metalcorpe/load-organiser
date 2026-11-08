@@ -12,6 +12,7 @@ from sqlalchemy import (
     Integer,
     Text,
     UniqueConstraint,
+    text,
 )
 from sqlmodel import Field, SQLModel
 
@@ -24,7 +25,8 @@ class SkydiverSubmission(SQLModel, table=True):
     """A signed-in person's suggestion, correction or report.
 
     Reviewers see the content, never who sent it. The submitter sees status and the
-    resolution note. Deleting the account keeps the case without its author.
+    resolution note. Deleting the account keeps the case without its author until
+    `moderation.retention` purges it (a trigger stamps `author_removed_at`).
     """
 
     __tablename__ = "skydiver_submission"
@@ -62,6 +64,15 @@ class SkydiverSubmission(SQLModel, table=True):
         ),
         Index("ix_skydiver_submission_queue", "status", "created_at", "id"),
         Index("ix_skydiver_submission_submitter", "submitter_person_id", "created_at"),
+        CheckConstraint(
+            "(author_removed_at IS NULL) = (submitter_person_id IS NOT NULL)",
+            name="ck_skydiver_submission_author_removed",
+        ),
+        Index(
+            "ix_skydiver_submission_author_removed",
+            "author_removed_at",
+            postgresql_where=text("author_removed_at IS NOT NULL"),
+        ),
     )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
@@ -93,3 +104,7 @@ class SkydiverSubmission(SQLModel, table=True):
         default=1, sa_column=Column(Integer, nullable=False, server_default="1")
     )
     created_at: datetime = Field(sa_column=_instant())
+    # When the author's account was deleted; set by a database trigger.
+    author_removed_at: datetime | None = Field(
+        default=None, sa_column=_instant(nullable=True)
+    )

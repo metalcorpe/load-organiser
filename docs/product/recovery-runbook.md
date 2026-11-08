@@ -157,5 +157,13 @@ waits on a ledger export destination and schedule (#161 acceptance).
    - Prefer restoring the pre-migration dump or Neon branch.
    - Use `alembic downgrade` only when the dropped data is acceptable to lose (see
      "Data loss on downgrade").
-5. **Record** each drill: date, dump size, restore duration, the snapshot comparison
+5. **Submission retention:** run
+   `python -m app.skydiver.moderation.retention purge` daily from the same scheduler
+   as the backups. It deletes submissions whose author's account was deleted more
+   than 30 days ago (`author_removed_at`, set by a trigger when the author link is
+   cleared). After a restore, a deletion the ledger replays sets that time again, so
+   those submissions are kept up to 30 days from the replay, not from the original
+   deletion. A purged submission restored from an older backup still has its old
+   time and is removed by the next purge.
+6. **Record** each drill: date, dump size, restore duration, the snapshot comparison
    result and who performed it. The recovery owner is not yet named.

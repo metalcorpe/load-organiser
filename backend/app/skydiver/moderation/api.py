@@ -80,6 +80,10 @@ class ReviewSubmissionPageOut(BaseModel):
     next_cursor: str | None
 
 
+class SubmissionIntakeOut(BaseModel):
+    open: bool = Field(description="False while new submissions are paused.")
+
+
 class ResolveIn(BaseModel):
     status: Literal["accepted", "declined"]
     note: Annotated[str, Field(max_length=1000)] | None = Field(
@@ -172,6 +176,15 @@ def create_router(
     )
     def list_own_submissions(actor: Reader) -> list[OwnSubmissionOut]:
         return [OwnSubmissionOut(**_fields(i)) for i in service().mine(actor)]
+
+    @router.get(
+        "/submissions/intake",
+        operation_id="getSubmissionIntake",
+        response_model=SubmissionIntakeOut,
+        dependencies=deps,
+    )
+    def get_submission_intake(_actor: Reader) -> SubmissionIntakeOut:
+        return SubmissionIntakeOut(open=service().accepting())
 
     @router.get(
         "/directory/submissions",

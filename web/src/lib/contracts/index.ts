@@ -47,6 +47,7 @@ export type {
 	ServiceOut,
 	SessionOut,
 	SharingOut,
+	SubmissionIntakeOut,
 	TotalsOut,
 	VenueDetailOut,
 	VenueOut,
