@@ -186,9 +186,13 @@
 	</p>
 </section>
 
-<Notice title="Not available yet" tone="warn">
-	<p>Sharing jumps, the activity feed and account deletion come later.</p>
-</Notice>
+<section class="card" aria-labelledby="beta-heading">
+	<h2 id="beta-heading">About the beta</h2>
+	<p>
+		<a href="/privacy">Privacy and the beta</a>: what is private, what you share, deletion and
+		recovery, and known limits. <a href="/submit?kind=feedback">Send feedback</a>.
+	</p>
+</section>
 
 <style>
 	.card {

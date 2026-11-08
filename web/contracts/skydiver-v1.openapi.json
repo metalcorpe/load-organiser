@@ -3336,7 +3336,8 @@
               "suggest_venue",
               "suggest_listing",
               "correction",
-              "report"
+              "report",
+              "feedback"
             ],
             "title": "Kind",
             "type": "string"
@@ -5447,7 +5448,8 @@
               "suggest_venue",
               "suggest_listing",
               "correction",
-              "report"
+              "report",
+              "feedback"
             ],
             "title": "Kind",
             "type": "string"
@@ -6882,7 +6884,8 @@
               "suggest_venue",
               "suggest_listing",
               "correction",
-              "report"
+              "report",
+              "feedback"
             ],
             "title": "Kind",
             "type": "string"

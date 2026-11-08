@@ -42,6 +42,8 @@ class Kind(StrEnum):
     SUGGEST_LISTING = "suggest_listing"
     CORRECTION = "correction"
     REPORT = "report"
+    # About the beta itself, not a listing: never has a target.
+    FEEDBACK = "feedback"
 
 
 class TargetKind(StrEnum):
@@ -258,6 +260,8 @@ class SubmissionService:
             raise RuleError("target_incomplete")
         if kind in NEEDS_TARGET and target_id is None:
             raise RuleError("target_required")
+        if kind is Kind.FEEDBACK and target_id is not None:
+            raise RuleError("target_not_allowed")
         if target_kind is not None and target_id is not None:
             target_id = self._public_target(target_kind, target_id)
         message = directory_policy.clean_text(

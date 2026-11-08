@@ -30,7 +30,7 @@ class SkydiverSubmission(SQLModel, table=True):
     __tablename__ = "skydiver_submission"
     __table_args__ = (
         CheckConstraint(
-            "kind IN ('suggest_venue', 'suggest_listing', 'correction', 'report')",
+            "kind IN ('suggest_venue', 'suggest_listing', 'correction', 'report', 'feedback')",
             name="ck_skydiver_submission_kind",
         ),
         CheckConstraint(
@@ -48,6 +48,10 @@ class SkydiverSubmission(SQLModel, table=True):
         CheckConstraint(
             "kind NOT IN ('correction', 'report') OR target_id IS NOT NULL",
             name="ck_skydiver_submission_target_required",
+        ),
+        CheckConstraint(
+            "kind <> 'feedback' OR target_id IS NULL",
+            name="ck_skydiver_submission_feedback_untargeted",
         ),
         CheckConstraint(
             "(status = 'open') = (resolved_at IS NULL)",

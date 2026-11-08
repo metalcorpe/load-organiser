@@ -28,6 +28,7 @@ export const REVIEW_MESSAGES: Record<string, string> = {
 	submission_key_reused: 'This form was already sent with different content. Reload and try again.',
 	target_unavailable: 'That listing is no longer public.',
 	target_required: 'Corrections and reports need the listing they are about.',
+	target_not_allowed: 'Feedback about the beta is not about a listing. Send it without one.',
 	message_required: 'Describe the suggestion or problem.',
 	message_too_long: 'Use at most 1,000 characters.',
 	source_url_invalid: 'Use a full http(s) link, or leave it empty.'

@@ -1563,7 +1563,7 @@ export type OwnSubmissionOut = {
     /**
      * Kind
      */
-    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report';
+    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report' | 'feedback';
     /**
      * Message
      */
@@ -2601,7 +2601,7 @@ export type ReviewSubmissionOut = {
     /**
      * Kind
      */
-    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report';
+    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report' | 'feedback';
     /**
      * Message
      */
@@ -3294,7 +3294,7 @@ export type SubmissionIn = {
     /**
      * Kind
      */
-    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report';
+    kind: 'suggest_venue' | 'suggest_listing' | 'correction' | 'report' | 'feedback';
     /**
      * Message
      */

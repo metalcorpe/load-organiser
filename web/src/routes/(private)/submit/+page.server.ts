@@ -8,7 +8,7 @@ import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
 
-const KINDS = ['suggest_venue', 'suggest_listing', 'correction', 'report'] as const;
+const KINDS = ['suggest_venue', 'suggest_listing', 'correction', 'report', 'feedback'] as const;
 const TARGETS = ['venue', 'provider', 'opportunity'] as const;
 
 function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies'>): string {
