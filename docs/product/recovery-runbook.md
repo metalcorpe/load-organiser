@@ -33,7 +33,9 @@ databases on a throwaway PostgreSQL 17 cluster:
    - the follower can read the post; a stranger and a guest cannot
    - the dropzone activity lists the post for the follower
    - the restored database accepts a compare-and-swap write
-6. **Migration round trip on the restored data:** downgrade every beta migration
+6. **Ledger replay:** changes made on the source after the backup reach the restored
+   copy through the exported erasure ledger (see below).
+7. **Migration round trip on the restored data:** downgrade every beta migration
    (to `c6459ca8ce2a`, the last legacy revision) and upgrade to head again. The
    resulting schema must equal a fresh migration's schema (`pg_dump --schema-only`,
    ignoring the per-dump `\restrict` key).
@@ -53,31 +55,81 @@ Result on 2026-11-07: passed.
 - **Not exercised:** backup encryption, a durable off-site destination, scheduling,
   key custody, restore time on realistic data volume, and connection limits.
 
-## Known gap: deletions and revocations after the backup
+## Deletions and revocations after the backup: the erasure ledger
 
 A backup is the database at one moment. Restoring a backup taken at time T brings
-back everything deleted after T, including:
+back everything deleted or revoked after T. Architecture A9 requires replaying those
+changes before the restored database serves anyone. Built 2026-11-07, local only:
 
-- jumps, gear, plans and posts a person deleted or unpublished
-- follows removed or blocks added
-- profiles a reviewer hid
-- sessions that were revoked, for example after a password change or "sign out
-  everywhere"
+- **Recording.** Database triggers (migration `d4f9b6a2e8c1`) add an entry to
+  `skydiver_erasure_ledger` in the same transaction as each of these changes, so no
+  application path can skip it:
+  - deleted rows: accounts, jumps, posts, follows, blocks (unblock), components,
+    service entries, private places, plans, saved listings, the history baseline
+    and reviewer role grants, including rows removed by a cascade
+  - new blocks
+  - changes to account `is_active`, profile `discoverable`, `hidden_at` and
+    `publishing_restricted_at`, and post `audience`
+  - a new password (from change or reset; not a rehash at sign-in), recorded by the
+    identity store
+  Entries hold row keys and the changed values only (ids, flags, times), never notes,
+  captions, names or other free text.
+- **Export** (`python -m app.skydiver.recovery.ledger export FILE`): writes every entry
+  as JSON lines, replacing the file atomically. Copies must live outside the backup
+  set (**needs accounts**: same open gate as the backup destination) and be taken
+  more often than backups. Changes made after the last export are lost if the
+  database itself is lost; no schedule or interval is chosen yet.
+- **Prune** (`... ledger prune DAYS`): drops entries older than DAYS. Keep entries
+  longer than the oldest backup that could be restored (seven daily copies: at least
+  8 days). Until pruned, the ledger keeps the ids of deleted rows.
+- **Replay** (`... ledger apply FILE [FILE ...]`), on the restored database, before
+  it serves traffic, in one transaction:
+  1. merges the entries of the files with those in the restored ledger; an entry
+     that differs between copies stops the replay
+  2. leaves out entries the restored ledger already holds (written in the same
+     transaction as their change, so the backup contains the result) and file
+     entries older than its oldest entry (pruned before the backup). Re-applying
+     them could delete a follow or baseline created again before T, or lock out a
+     password set before T. If the restored ledger is empty, every file entry is
+     applied (reported as `restored_ledger_empty`)
+  3. applies the rest in recording order, with recording switched off, and adds them
+     to the restored ledger: deletes by key, re-inserts blocks, sets recorded
+     values; a component's jump links are removed before the component, since
+     deletion proves no jump used it any more
+  4. replaces each password changed after T with an unknown one: the new password is
+     not in the restored copy, so that person resets it by email
+  5. revokes every session and deletes every email or reset token
+  It prints counts per action and table. An entry that cannot be applied is rolled
+  back alone and listed under `skipped`, for example a private place still used by a
+  restored jump (a jump needs its place, and its later location is not recorded);
+  the rest is committed and the command exits with status 1 so that someone looks.
+  A second replay finds every entry held and changes nothing.
+- **Exports are trusted input.** Entries are checked against a fixed list of tables
+  and columns, so a file cannot name other SQL, but within that list a crafted file
+  could block people, lock out accounts or reverse moderation and visibility. Keep
+  exports where only operators can write and replay only copies the operator made.
 
-The architecture requires replaying deletions and revocations before accepting data
-again. **That replay is not built.** Until it is, a restore must be followed by:
+**Drill evidence** (`scripts/verify.sh recovery`, 2026-11-07, passed): after the
+backup the drill unpublishes a post, removes a follower, blocks a person, stops using
+and deletes a component, deletes a place and a plan, turns off discoverability,
+changes a password, hides one profile and un-hides another, deletes a jump and
+deletes a second account. Before the backup it also changes a password and removes
+and sets again a history baseline. It exports the ledger from the source, replays it
+on the restored copy, and checks that none of the later changes came back, that the
+earlier password and baseline were left alone, that every older session and the old
+password are refused, that the kept jump is intact, and that a second replay leaves
+every table unchanged.
 
-1. **Revoke all sessions.** Delete every row of `skydiver_session`, so everyone signs
-   in again and no revoked session is valid.
-2. **Close intake.** Keep registration closed (`SKYDIVER_REGISTRATION_OPEN=false`) and
-   keep the web app away from the restored API until step 3 is done. No switch that
-   stops writes for existing accounts exists yet.
-3. **Re-apply known changes.** Re-apply every unpublish, deletion, block and
-   moderation decision recorded after T from the application logs and reviewer
-   records. This depends on those being kept: no such journal exists yet.
+**Still lost or reverted by a restore** (not erasures, so not recorded): edits after
+T to notes, captions, names, bios and other fields revert to their state at T;
+records created after T, including reports, suggestions and reviewer decisions, are
+missing; email address changes are not recorded. Restoring still needs registration
+closed (`SKYDIVER_REGISTRATION_OPEN=false`) and the web app kept away from the API
+until the replay has run. No switch stops writes for existing accounts.
 
-Production data intake should not be approved until this is either built or
-accepted in writing as a manual procedure with a known gap (#161 acceptance).
+Not verified: the replay against Neon, against a production-sized ledger, or with a
+real email sender for the password resets it forces. Production data intake still
+waits on a ledger export destination and schedule (#161 acceptance).
 
 ## Production procedure (to repeat with the selected hosts)
 
@@ -88,7 +140,7 @@ accepted in writing as a manual procedure with a known gap (#161 acceptance).
      (non-pooled) connection string, to an encrypted destination outside Neon. That
      destination is not chosen; free durable storage is an open gate.
 2. **Restore test:** restore the latest dump into a new Neon branch or a local
-   database. Run `recovery.py snapshot` on both and compare, then run the smoke check
+   database, then replay the exported ledger (`ledger apply`). Run `recovery.py snapshot` on both and compare, then run the smoke check
    against the restored copy with test accounts only.
 3. **Migrations** (**needs accounts**):
    - Run `alembic upgrade head` over the direct connection before deploying the API
