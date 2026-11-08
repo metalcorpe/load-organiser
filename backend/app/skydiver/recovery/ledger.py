@@ -35,6 +35,7 @@ from sqlalchemy.exc import IntegrityError
 from app.core.security import get_password_hash
 
 LEDGER = "skydiver_erasure_ledger"
+PRUNED = "skydiver_erasure_ledger_pruned"
 ACTIONS = frozenset({"delete", "insert", "update", "password"})
 
 
@@ -199,6 +200,16 @@ def prune(engine: Engine, days: int, now: datetime | None = None) -> int:
         raise LedgerError("keep at least one day")
     cutoff = (now or datetime.now(UTC)) - timedelta(days=days)
     with engine.begin() as conn:
+        # The cutoff is kept in the database, so a backup knows which older entries
+        # it no longer lists (apply leaves those out). It only moves forward.
+        conn.execute(
+            text(
+                f"INSERT INTO {PRUNED} (id, pruned_before) VALUES (1, :cutoff) "  # noqa: S608
+                "ON CONFLICT (id) DO UPDATE SET pruned_before = "
+                f"greatest({PRUNED}.pruned_before, excluded.pruned_before)"
+            ),
+            {"cutoff": cutoff},
+        )
         result = conn.execute(
             text(f"DELETE FROM {LEDGER} WHERE recorded_at < :cutoff"),  # noqa: S608
             {"cutoff": cutoff},
@@ -292,10 +303,15 @@ def apply(
         conn.execute(text("SET LOCAL skydiver.ledger_replay = 'on'"))
         restored = stored(conn)
         held = {e.id for e in restored}
-        # Entries older than the oldest one the backup holds were pruned before it
-        # was taken; their changes are in it already.
-        horizon = restored[0].recorded_at if restored else None
-        outcome.restored_ledger_empty = horizon is None
+        # Entries older than the last prune cutoff recorded in the backup were
+        # deleted from it by that prune, so their changes were already committed
+        # (a prune keeps at least a day). Recording time is not commit order, so the
+        # oldest held entry is no bound: nothing newer than the cutoff is skipped
+        # unless the restored ledger holds it.
+        horizon = conn.execute(
+            text(f"SELECT pruned_before FROM {PRUNED} WHERE id = 1")  # noqa: S608
+        ).scalar_one_or_none()
+        outcome.restored_ledger_empty = not restored
         entries = _merge([*restored, *loaded])
         outcome.entries = len(entries)
         for entry in entries:
@@ -307,6 +323,18 @@ def apply(
                 continue
             if horizon is not None and entry.recorded_at < horizon:
                 outcome.before_backup += 1
+                continue
+            savepoint = conn.begin_nested()
+            try:
+                changed = _apply_one(conn, entry)
+            except IntegrityError as error:
+                # A block between people who no longer both exist, for example. Not
+                # added to the restored ledger, so the next replay tries it again.
+                savepoint.rollback()
+                code = getattr(error.orig, "sqlstate", "?")
+                outcome.skipped.append(
+                    f"{entry.id} {entry.action} {entry.table}: {code}"
+                )
                 continue
             conn.execute(
                 text(
@@ -325,19 +353,8 @@ def apply(
                     else json.dumps(entry.values),
                 },
             )
-            outcome.restored_entries += 1
-            savepoint = conn.begin_nested()
-            try:
-                changed = _apply_one(conn, entry)
-            except IntegrityError as error:
-                # A block between people who no longer both exist, for example.
-                savepoint.rollback()
-                code = getattr(error.orig, "sqlstate", "?")
-                outcome.skipped.append(
-                    f"{entry.id} {entry.action} {entry.table}: {code}"
-                )
-                continue
             savepoint.commit()
+            outcome.restored_entries += 1
             tally = outcome.by_kind.setdefault(f"{entry.action} {entry.table}", [0, 0])
             if changed:
                 outcome.changed += 1

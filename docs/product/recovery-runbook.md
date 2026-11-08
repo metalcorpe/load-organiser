@@ -88,12 +88,15 @@ changes before the restored database serves anyone. Built 2026-11-07, local only
      that differs between copies stops the replay
   2. leaves out entries the restored ledger already holds (written in the same
      transaction as their change, so the backup contains the result) and file
-     entries older than its oldest entry (pruned before the backup). Re-applying
+     entries older than the last prune cutoff the backup records (`prune` stores it
+     in `skydiver_erasure_ledger_pruned`; a transaction open longer than the
+     retention, at least a day, would defeat this). Recording time is not commit
+     order, so no other time bound is used. Re-applying
      them could delete a follow or baseline created again before T, or lock out a
      password set before T. If the restored ledger is empty, every file entry is
      applied (reported as `restored_ledger_empty`)
-  3. applies the rest in recording order, with recording switched off, and adds them
-     to the restored ledger: deletes by key, re-inserts blocks, sets recorded
+  3. applies the rest in recording order, with recording switched off, and adds
+     each one to the restored ledger once it has applied: deletes by key, re-inserts blocks, sets recorded
      values; a component's jump links are removed before the component, since
      deletion proves no jump used it any more
   4. replaces each password changed after T with an unknown one: the new password is
@@ -103,6 +106,8 @@ changes before the restored database serves anyone. Built 2026-11-07, local only
   back alone and listed under `skipped`, for example a private place still used by a
   restored jump (a jump needs its place, and its later location is not recorded);
   the rest is committed and the command exits with status 1 so that someone looks.
+  A skipped entry is not added to the restored ledger, so every later replay tries
+  it again.
   A second replay finds every entry held and changes nothing.
 - **Exports are trusted input.** Entries are checked against a fixed list of tables
   and columns, so a file cannot name other SQL, but within that list a crafted file
@@ -118,7 +123,8 @@ and sets again a history baseline. It exports the ledger from the source, replay
 on the restored copy, and checks that none of the later changes came back, that the
 earlier password and baseline were left alone, that every older session and the old
 password are refused, that the kept jump is intact, and that a second replay leaves
-every table unchanged.
+every table unchanged. It also replays an entry that cannot apply (a block between
+people who do not exist) twice: both runs exit 1 and report it, and nothing changes.
 
 **Still lost or reverted by a restore** (not erasures, so not recorded): edits after
 T to notes, captions, names, bios and other fields revert to their state at T;
