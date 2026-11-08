@@ -44,8 +44,8 @@
 	{#if data.paused}
 		<Notice title="Sending is paused" tone="warn">
 			<p>
-				Reviewers are catching up, so new submissions cannot be sent right now. Please come back
-				later. Your earlier submissions are listed below.
+				New submissions are not being taken right now. Please come back later. Your earlier
+				submissions are listed below.
 			</p>
 		</Notice>
 	{:else}

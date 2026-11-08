@@ -9,6 +9,14 @@ from sqlalchemy.exc import IntegrityError
 
 from app.core.db import engine
 from app.skydiver.moderation import retention
+from app.tests.skydiver.support import Accounts
+
+
+@pytest.fixture(scope="module")
+def api_person() -> uuid.UUID:
+    accounts = Accounts.create()
+    secret = accounts.session()
+    return accounts.service.current_viewer(secret=secret).person_id
 
 
 def _insert(conn, *, removed: datetime | None, person: uuid.UUID | None = None) -> uuid.UUID:  # type: ignore[no-untyped-def]  # fmt: skip
@@ -39,12 +47,18 @@ def test_purge_deletes_only_submissions_unlinked_longer_than_the_period() -> Non
     with engine.begin() as conn:
         old = _insert(conn, removed=now - timedelta(days=31))
         recent = _insert(conn, removed=now - timedelta(days=29))
-    assert retention.purge(engine, 30, now=now) >= 1
-    assert _left(old, recent) == {recent}
-    with pytest.raises(retention.RetentionError):
-        retention.purge(engine, 0)
+    try:
+        assert retention.purge(engine, 30, now=now) >= 1
+        assert _left(old, recent) == {recent}
+        with pytest.raises(retention.RetentionError):
+            retention.purge(engine, 0)
+    finally:
+        with engine.begin() as conn:
+            conn.execute(text("DELETE FROM skydiver_submission WHERE id = ANY(:ids)"), {"ids": [old, recent]})  # fmt: skip
 
 
-def test_an_author_and_a_removal_time_cannot_coexist() -> None:
+def test_exactly_one_of_author_and_removal_time_is_set(api_person: uuid.UUID) -> None:
     with pytest.raises(IntegrityError), engine.begin() as conn:
-        _insert(conn, removed=None)  # no author and no removal time
+        _insert(conn, removed=None)  # neither
+    with pytest.raises(IntegrityError), engine.begin() as conn:
+        _insert(conn, removed=datetime.now(UTC), person=api_person)  # both
