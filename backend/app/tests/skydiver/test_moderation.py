@@ -199,10 +199,14 @@ def test_access_limits_and_pause(api: Api, monkeypatch: pytest.MonkeyPatch) -> N
     assert over.status_code == 409
     assert over.json() == {"detail": "submission_limit_reached"}
 
+    reader = api.accounts.session()
+    assert api.call("GET", "/submissions/intake", reader).json() == {"open": True}
     api.gate["open"] = False
     try:
+        assert api.call("GET", "/submissions/intake", reader).json() == {"open": False}
         paused = api.submit(api.accounts.session(), kind="suggest_venue")
         assert paused.status_code == 503
         assert paused.json() == {"detail": "submissions_paused"}
     finally:
         api.gate["open"] = True
+    assert api.call("GET", "/submissions/intake", None).status_code == 401

@@ -142,6 +142,7 @@ export const OPERATIONS = {
 	resolveSubmission: { method: 'POST', path: `${BETA}/directory/submissions/{id}/resolve` },
 	// Suggestions, corrections and reports (#151).
 	createSubmission: { method: 'POST', path: `${BETA}/submissions` },
+	getSubmissionIntake: { method: 'GET', path: `${BETA}/submissions/intake` },
 	listOwnSubmissions: {
 		method: 'GET',
 		path: `${BETA}/submissions`,

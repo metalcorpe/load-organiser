@@ -186,6 +186,10 @@ class SubmissionService:
         assert created is not None
         return created, True
 
+    def accepting(self) -> bool:
+        """Whether new submissions are taken now (a retry of a sent one always is)."""
+        return self._is_open()
+
     def mine(self, actor: Actor) -> list[Submission]:
         with self._stores() as store:
             return store.mine(actor, 100)

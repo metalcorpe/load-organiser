@@ -7,6 +7,7 @@ email can register again as a new, empty account.
 
 import uuid
 from collections.abc import Iterator
+from datetime import timedelta
 from typing import Any
 
 import httpx2
@@ -156,15 +157,17 @@ def test_deleting_an_account_removes_everything_it_owned(
         assert api.ok("GET", f"/me/people/{relation}", friend) == [], relation
     assert _references(person_id, account_id) == {}
     _ledger_holds_only_ids(person_id, account_id)
-    # The suggestion stays for reviewers, without its author.
+    # The suggestion stays for reviewers, without its author, marked for the purge.
     with engine.connect() as conn:
         kept = conn.execute(
             text(
-                "SELECT submitter_person_id, message FROM skydiver_submission WHERE id = :id"
+                "SELECT submitter_person_id, message, now() - author_removed_at "
+                "FROM skydiver_submission WHERE id = :id"
             ),  # fmt: skip
             {"id": submission["id"]},
         ).one()
-    assert tuple(kept) == (None, "Moved north")
+    assert tuple(kept[:2]) == (None, "Moved north")
+    assert timedelta(0) <= kept[2] < timedelta(minutes=5)
 
     # Someone else's records and the public directory are unchanged.
     assert api.ok("GET", f"/people/{friend_handle}", friend)["handle"] == friend_handle

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import Notice from '#lib/components/Notice.svelte';
 	import { formatDay } from '#lib/listings.ts';
 	import { reviewMessage } from '#lib/review-messages.ts';
 	import type { PageProps } from './$types';
@@ -40,6 +41,14 @@
 
 <section aria-labelledby="form-heading">
 	<h2 id="form-heading">{data.target && data.title ? `About: ${data.title}` : 'New submission'}</h2>
+	{#if data.paused}
+		<Notice title="Sending is paused" tone="warn">
+			<p>
+				Reviewers are catching up, so new submissions cannot be sent right now. Please come back
+				later. Your earlier submissions are listed below.
+			</p>
+		</Notice>
+	{:else}
 	{#if !data.emailVerified}
 		<p class="hint">Confirm your email address on your <a href="/profile">profile</a> first.</p>
 	{/if}
@@ -85,6 +94,7 @@
 		</div>
 		<div class="form-actions"><button class="button" type="submit">Send</button></div>
 	</form>
+	{/if}
 </section>
 
 <h2>Your submissions</h2>
