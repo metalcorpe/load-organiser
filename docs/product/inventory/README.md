@@ -7,7 +7,7 @@ public pages on 2026-11-09; the owner checks each against its source and enters 
 
 | Country | Dropzones | Organizers | Listings | Dated listings | Leads |
 | --- | --- | --- | --- | --- | --- |
-| [Greece](GR.md) | 3 | 3 | 4 | 0 | 4 |
+| [Greece](GR.md) | 3 | 4 | 4 | 0 | 4 |
 | [Bulgaria](BG.md) | 3 | 5 | 7 | 0 | 10 |
 | [Spain](ES.md) | 5 | 5 | 18 | 13 | 13 |
 | [Portugal](PT.md) | 3 | 4 | 11 | 0 | 9 |
@@ -33,8 +33,10 @@ aggregators and are listed as leads.
 - **No national federation calendars** were found for Greece, Bulgaria or Portugal; Spain's
   RFAE calendar showed no parachuting events.
 - **Possible duplicates/relations to confirm:** Skydive Bulgaria and Skydive Sofia share a
-  company number; the Athens and Megara sites share a template and prices; Skydive Algarve
-  and Skydive Seven may use the same airfield.
+  company number; Skydive Algarve and Skydive Seven may use the same airfield.
+- **Greece, from the owner (2026-11-09):** Skydive Athens, Megara, Crete and Mesologi are
+  one organizer; Chortero is shared with Hellenic Skydivers (Facebook only; also runs events
+  at Thiva/Perneri); Skydive Attica also uses Megara. Recorded in `GR.md`.
 
 ## Effort
 
