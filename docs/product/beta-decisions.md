@@ -59,7 +59,8 @@ Owner decisions recorded 2026-11-09 (#162):
 - Sources: the association directories, operator calendars and organizers' own sites listed in the release brief's source table, entered by hand from each source page.
 - Entry: candidate records are drafted from public sources by the assistant (`docs/product/inventory/`); the owner checks each against its source and enters and publishes it through `/review`. A draft is not a reviewed record.
 - Maintenance: the owner confirmed the weekly routine (release brief, "Maintenance cadence"). The 60-day profile recheck stays the documented default and was not separately confirmed.
-- Funding: a voluntary support link is wanted. Provider, link and the cost figures to disclose are not chosen yet.
+- Funding: a voluntary support link is wanted, with running costs shown from the start. Provider and link are not chosen yet.
+- Later the same day: the researched candidate records are **development data only**, loaded into local databases for testing and never published in production (`scripts/dev.sh seed`). Facebook pages may be used as sources. The beta cohort is the owner alone for now.
 
 #151/#162 must perform a real inventory/review exercise before launch: collect permitted records for the enabled categories, walk the discovery query, check changes/expiry and record effort and gaps. Limit published inventory or pause expansion if maintenance is not sustainable. No numerical inventory target, time budget, acquisition/retention result or volunteer capacity is invented.
 

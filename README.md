@@ -18,6 +18,7 @@ Nothing is deployed. Work proceeds issue by issue under the
 | `backend/app/api/`, `frontend/` | Legacy prototype (operations API, React client). Reference/rollback only; not mounted by default (#146) |
 | `docs/product/` | Product, architecture and contract documents |
 | `scripts/verify.sh` | Isolated verification used locally and by CI |
+| `scripts/dev.sh` | Local development stack with data kept between runs (`.dev/`, git-ignored) |
 
 ## Verify a change
 
@@ -28,6 +29,22 @@ scripts/verify.sh backend    # or: web, e2e
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for prerequisites, the disposable-database rules and why
 the repository `.env` is never read by tests.
+
+## Run it locally
+
+```sh
+scripts/dev.sh start              # PostgreSQL, API and web on http://127.0.0.1:5180; Ctrl-C stops
+scripts/dev.sh mail               # newest outgoing email (sign-up confirmation link)
+scripts/dev.sh grant EMAIL        # reviewer role for your local account
+scripts/dev.sh seed EMAIL         # load the dev listings as that reviewer
+scripts/dev.sh reset              # delete all local data
+```
+
+Register at `/register`, confirm with the link from `scripts/dev.sh mail`, then `grant` and
+`seed` (with `start` running in another terminal, or on their own). Needs PostgreSQL 17+
+(`initdb` on PATH, or `PG_BIN`), `uv` and the web dependencies (`npm install` in `web/`).
+The dev listings are researched candidate records for local testing only; they are never
+loaded into production (`docs/product/inventory/README.md`).
 
 ## Origin and license
 
