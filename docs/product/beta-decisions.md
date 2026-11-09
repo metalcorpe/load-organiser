@@ -53,6 +53,14 @@ Invalid/unsupported input, foreign reference collisions, excessive file size, an
 
 The owner remains the initial maintainer and report reviewer. Start with a curated subset of sourced European dated opportunities and related DZs, not every country/category at equal depth. Record source, status, last check and actual coverage. The proposed weekly/60-day review routine is an operating default, not evidence that the workload fits the owner's schedule.
 
+Owner decisions recorded 2026-11-09 (#162):
+
+- Initial coverage: Greece, Bulgaria, Spain and Portugal; categories event, boogie, camp and course, with the dropzones and organizers they need. Other European countries keep accepting suggestions but are not actively populated.
+- Sources: the association directories, operator calendars and organizers' own sites listed in the release brief's source table, entered by hand from each source page.
+- Entry: candidate records are drafted from public sources by the assistant (`docs/product/inventory/`); the owner checks each against its source and enters and publishes it through `/review`. A draft is not a reviewed record.
+- Maintenance: the owner confirmed the weekly routine (release brief, "Maintenance cadence"). The 60-day profile recheck stays the documented default and was not separately confirmed.
+- Funding: a voluntary support link is wanted. Provider, link and the cost figures to disclose are not chosen yet.
+
 #151/#162 must perform a real inventory/review exercise before launch: collect permitted records for the enabled categories, walk the discovery query, check changes/expiry and record effort and gaps. Limit published inventory or pause expansion if maintenance is not sustainable. No numerical inventory target, time budget, acquisition/retention result or volunteer capacity is invented.
 
 #160 owns representative mobile/user validation after implementation, including independent discovery/logging value, no-friends first use, history totals, save reliability, private/public access, account switching and recovery. Closing planning issues does not mark those release checks complete.
