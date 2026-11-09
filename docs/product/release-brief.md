@@ -152,7 +152,16 @@ Web `/privacy` (public, linked from the footer and the profile page); submission
 - Feedback is a message about the beta with no listing target (`target_not_allowed` otherwise), sent signed in, subject to the same daily and open limits and the same intake switch (`SKYDIVER_SUBMISSIONS_OPEN`) as suggestions. Reviewers see it without the sender's name or email, and the sender sees the status and reviewer note on `/submit`.
 - The outdated "sharing, feed and deletion come later" notice on `/profile` is replaced by links to the page and to feedback.
 - Tested: backend `test_moderation.py` (feedback reaches the queue without the sender; target refused; empty message refused); e2e `privacy` (footer link, sections, sign-in redirect for feedback; a member sends feedback and a reviewer sees it without the sender's email).
-- Not done here (#162, needs people): real listing coverage and maintainer ownership, a support link, a beta cohort and observed use. The page must be updated when backups start running or a limit changes; nothing checks that automatically.
+- Not done here (#162, needs people): real listing coverage and maintainer ownership, a beta cohort and observed use. The page must be updated when backups start running or a limit changes; nothing checks that automatically.
+
+#### Support page (implemented, #162)
+
+Web `/support` (public, linked from the footer); data in `web/src/lib/support.ts`.
+
+- Voluntary Ko-fi link (`rel="external noopener noreferrer"`); support unlocks nothing and gates no record or export.
+- Running costs listed per item and month with a total. None are paid yet, so the page says so; `RUNNING_COSTS` must be updated by hand when a paid service starts or changes (#161). Nothing checks it.
+- The site does not record whether anyone gave; Ko-fi handles payment under its own terms.
+- Tested: e2e `privacy` (footer link, sections, the no-costs statement, link target and rel). Not tested: the table with costs, since the list is empty.
 
 #### Submission retention after account deletion (implemented, #162)
 

@@ -65,3 +65,17 @@ test.describe('privacy and feedback', () => {
 		await reviewer.context().close();
 	});
 });
+
+test('a visitor reaches the support page from the footer; it shows costs and the outside link', async ({
+	page
+}) => {
+	await page.goto('/');
+	await page.getByRole('contentinfo').getByRole('link', { name: 'Support the beta' }).click();
+	await expect(page).toHaveURL(`${ORIGIN}/support`);
+	await expect(page.getByRole('heading', { level: 1, name: 'Support the beta' })).toBeVisible();
+	await expect(page.getByRole('heading', { level: 2, name: 'Running costs' })).toBeVisible();
+	await expect(page.getByTestId('no-costs')).toContainText('Nothing is paid for yet');
+	const link = page.getByRole('link', { name: 'support Load Organiser on Ko-fi' });
+	await expect(link).toHaveAttribute('href', 'https://ko-fi.com/tavaninja');
+	await expect(link).toHaveAttribute('rel', /noopener/);
+});
