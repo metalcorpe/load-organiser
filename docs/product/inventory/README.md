@@ -1,5 +1,10 @@
 # Initial inventory: candidate records (#162)
 
+**Owner decision 2026-11-09: these records are development data only.** They are loaded into
+local databases for testing (`scripts/dev.sh seed`, from `dev-listings.json`) and are not
+published in production. The loader refuses to run unless `ENVIRONMENT=local`. Facebook pages
+may be used as sources.
+
 Owner decision 2026-11-09 (`../beta-decisions.md`): start with Greece, Bulgaria, Spain and
 Portugal; events, boogies, camps and courses. The assistant drafted candidate records from
 public pages on 2026-11-09; the owner checks each against its source and enters it through
@@ -37,6 +42,15 @@ aggregators and are listed as leads.
 - **Greece, from the owner (2026-11-09):** Skydive Athens, Megara, Crete and Mesologi are
   one organizer; Chortero is shared with Hellenic Skydivers (Facebook only; also runs events
   at Thiva/Perneri); Skydive Attica also uses Megara. Recorded in `GR.md`.
+
+## Dev data (`dev-listings.json`)
+
+The sheets as data for `python -m app.skydiver.devdata load`, with the owner's Greek organizer
+relations applied. Where a source names no registration link (email only), the source page is
+used. Records go through the normal rules: a local load on 2026-11-09 created 14 dropzones,
+18 organizers and 40 listings; the 13 with complete dates were published and the 27 undated
+ones wait in the review queue (`schedule_required`). 22 tags that are training methods, not
+disciplines (AFF, static line, tandem, packing...), are left out.
 
 ## Effort
 

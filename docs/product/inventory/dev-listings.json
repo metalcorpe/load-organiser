@@ -1,0 +1,1318 @@
+{
+ "_note": "DEV DATA ONLY (owner decision 2026-11-09). Candidate records drafted from public pages for local testing; unreviewed, not for production. Load with scripts/dev.sh seed. Review sheets: GR.md, BG.md, ES.md, PT.md. Where a source names no registration link (email only), registration_url is the source page.",
+ "drafted_on": "2026-11-09",
+ "venues": [
+  {
+   "key": "gr-kopaida-airfield-skydive-athens",
+   "name": "Kopaida Airfield",
+   "country": "GR",
+   "locality": "Skydive Athens)** (Kastro, Boeotia (Αεροδρόμιο Κωπαΐδας)",
+   "latitude": 38.454792,
+   "longitude": 23.137314,
+   "website": "https://www.skydive-athens.gr/",
+   "source_url": "https://www.skydive-athens.gr/"
+  },
+  {
+   "key": "gr-megara-pachi-civil-aviation-airport-lgmg",
+   "name": "Megara / Pachi Civil Aviation Airport (LGMG)",
+   "country": "GR",
+   "locality": "LGMG)** (Megara, Attica 19100",
+   "latitude": 37.9833,
+   "longitude": 23.3667,
+   "website": "https://skydivemegara.gr/en",
+   "source_url": "https://skydivemegara.gr/el"
+  },
+  {
+   "key": "gr-chortero-airfield-skydive-thessaloniki",
+   "name": "Chortero Airfield",
+   "country": "GR",
+   "locality": "Skydive Thessaloniki)** (Chortero, near Sidirokastro, Serres prefecture",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://www.skydive-thessaloniki.gr/",
+   "source_url": "https://www.skydive-thessaloniki.gr/index-en"
+  },
+  {
+   "key": "bg-skydive-bulgaria-dropzone-ihtiman-airfield-lbht",
+   "name": "Skydive Bulgaria dropzone, Ihtiman Airfield (LBHT)",
+   "country": "BG",
+   "locality": "LBHT)** (Chernyovo village, Ihtiman",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://skydivebulgaria.com/en/",
+   "source_url": "https://skydivebulgaria.com/en/dropzone/"
+  },
+  {
+   "key": "bg-sapareva-banya-airport",
+   "name": "Sapareva Banya Airport",
+   "country": "BG",
+   "locality": "Sapareva Banya, Kyustendil region",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://www.sko4i.bg/en/",
+   "source_url": "https://www.sko4i.bg/en/sapareva_banya_airport/Sapareva-Banya-Airport.html"
+  },
+  {
+   "key": "bg-shumen-airfield-gradishte",
+   "name": "Shumen Airfield (Gradishte)",
+   "country": "BG",
+   "locality": "Gradishte)** (Gradishte, near Shumen",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://skyshumen.com/",
+   "source_url": "https://skyshumen.com/izberi-adrenalin/tandemen-skok"
+  },
+  {
+   "key": "es-skydive-empuriabrava",
+   "name": "Skydive Empuriabrava",
+   "country": "ES",
+   "locality": "Empuriabrava (Sector Aeroclub, s/n, 17487 Empuriabrava, Girona)",
+   "latitude": 42.25857,
+   "longitude": 3.108934,
+   "website": "https://skydiveempuriabrava.com/",
+   "source_url": "https://skydiveempuriabrava.com/es/calendario-de-eventos/"
+  },
+  {
+   "key": "es-skydive-spain-aerodromo-la-juliana",
+   "name": "Skydive Spain (Aeródromo La Juliana)",
+   "country": "ES",
+   "locality": "Aeródromo La Juliana)** (Aeródromo La Juliana, near Sevilla",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://www.skydivespain.com/",
+   "source_url": "https://www.skydivespain.com/"
+  },
+  {
+   "key": "es-skydive-madrid-aerodromo-de-lillo",
+   "name": "Skydive Madrid (Aeródromo de Lillo)",
+   "country": "ES",
+   "locality": "Aeródromo de Lillo)** (Aeródromo de Lillo, Autovía A4 salida 81 (Toledo)",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://www.skydivemadrid.es/",
+   "source_url": "https://www.skydivemadrid.es/"
+  },
+  {
+   "key": "es-skytime-centro-de-paracaidismo",
+   "name": "SkyTime Centro de Paracaidismo",
+   "country": "ES",
+   "locality": "Aeródromo El Pinar, Camino de La Plana s/n, 12100 El Grao, Castellón",
+   "latitude": 39.9945917,
+   "longitude": 0.0252846,
+   "website": "https://www.skytime.es/",
+   "source_url": "https://www.skytime.es/"
+  },
+  {
+   "key": "es-ijump-gran-canaria",
+   "name": "iJump Gran Canaria",
+   "country": "ES",
+   "locality": "Playa del Inglés, San Bartolomé de Tirajana, Gran Canaria (check-in office)",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://www.ijump.es/",
+   "source_url": "https://www.ijump.es/"
+  },
+  {
+   "key": "pt-aerodromo-de-evora-skydive-portugal",
+   "name": "Aeródromo de Évora (Skydive Portugal)",
+   "country": "PT",
+   "locality": "Skydive Portugal)** (Évora",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://skydiveportugal.pt/",
+   "source_url": "https://skydiveportugal.pt/"
+  },
+  {
+   "key": "pt-aerodromo-de-portimao",
+   "name": "Aeródromo de Portimão",
+   "country": "PT",
+   "locality": "Portimão (Alvor), Algarve",
+   "latitude": null,
+   "longitude": null,
+   "website": null,
+   "source_url": "https://skydiveseven.pt/"
+  },
+  {
+   "key": "pt-aerodromo-de-proenca-a-nova",
+   "name": "Aeródromo de Proença-a-Nova",
+   "country": "PT",
+   "locality": "Proença-a-Nova",
+   "latitude": null,
+   "longitude": null,
+   "website": "https://skydiveporto.com/skydive-proenca/",
+   "source_url": "https://skydiveporto.com/skydive-porto/"
+  }
+ ],
+ "providers": [
+  {
+   "key": "gr-skydive-athens",
+   "name": "Skydive Athens",
+   "kind": "organization",
+   "country": "GR",
+   "website_url": "https://www.skydive-athens.gr/",
+   "source_url": "https://www.skydive-athens.gr/en/terms",
+   "note": "Owner: same organizer as Skydive Megara (formerly Skydive Greece), Skydive Crete and Skydive Mesologi."
+  },
+  {
+   "key": "gr-hellenic-skydivers",
+   "name": "Hellenic Skydivers",
+   "kind": "organization",
+   "country": "GR",
+   "website_url": null,
+   "source_url": "https://www.manawa.com/en/providers/1748-hellenic-skydivers",
+   "note": "Owner: active on Facebook only; shares Chortero airfield; runs events at Thiva (Perneri?)."
+  },
+  {
+   "key": "gr-skydive-attica",
+   "name": "Skydive Attica",
+   "kind": "organization",
+   "country": "GR",
+   "website_url": null,
+   "source_url": "https://www.unlimited-adrenaline.gr/skydive-attica/p/en/83",
+   "note": "Owner: uses Megara airfield."
+  },
+  {
+   "key": "gr-skydive-thessaloniki-aerosports-training-center-",
+   "name": "Skydive Thessaloniki",
+   "kind": "organization",
+   "country": "GR",
+   "website_url": "https://www.skydive-thessaloniki.gr/",
+   "source_url": "https://www.skydive-thessaloniki.gr/index-en"
+  },
+  {
+   "key": "bg-skydive-bulgaria",
+   "name": "Skydive Bulgaria",
+   "kind": "organization",
+   "country": "BG",
+   "website_url": "https://skydivebulgaria.com/en/",
+   "source_url": "https://skydivebulgaria.com/en/terms-and-conditions/"
+  },
+  {
+   "key": "bg-sko4i-bg-skydiving-bulgaria-club-sky-adventures-",
+   "name": "Sko4i.bg / Skydiving Bulgaria Club",
+   "kind": "organization",
+   "country": "BG",
+   "website_url": "https://www.sko4i.bg/en/",
+   "source_url": "https://www.sko4i.bg/en/info/i8/General-Terms.html"
+  },
+  {
+   "key": "bg-sky-shumen-club-for-air-sports",
+   "name": "Sky Shumen",
+   "kind": "organization",
+   "country": "BG",
+   "website_url": "https://skyshumen.com/",
+   "source_url": "https://skyshumen.com/za-nas"
+  },
+  {
+   "key": "bg-skydive-sofia",
+   "name": "Skydive Sofia",
+   "kind": "organization",
+   "country": "BG",
+   "website_url": "https://skydivesofia.com/",
+   "source_url": "https://skydivesofia.com/dropzone/"
+  },
+  {
+   "key": "bg-club-adrenalin-adrenalin-bg",
+   "name": "Club Adrenalin",
+   "kind": "organization",
+   "country": "BG",
+   "website_url": "https://adrenalin.bg/",
+   "source_url": "https://adrenalin.bg/en/deynosti/parachute-jump.html"
+  },
+  {
+   "key": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "name": "Skydive Empuriabrava",
+   "kind": "organization",
+   "country": "ES",
+   "website_url": "https://skydiveempuriabrava.com/",
+   "source_url": "https://skydiveempuriabrava.com/es/calendario-de-eventos/"
+  },
+  {
+   "key": "es-skydive-spain",
+   "name": "Skydive Spain",
+   "kind": "organization",
+   "country": "ES",
+   "website_url": "https://www.skydivespain.com/",
+   "source_url": "https://www.skydivespain.com/"
+  },
+  {
+   "key": "es-skydive-madrid",
+   "name": "Skydive Madrid",
+   "kind": "organization",
+   "country": "ES",
+   "website_url": "https://www.skydivemadrid.es/",
+   "source_url": "https://www.skydivemadrid.es/"
+  },
+  {
+   "key": "es-skytime-centro-de-paracaidismo",
+   "name": "SkyTime Centro de Paracaidismo",
+   "kind": "organization",
+   "country": "ES",
+   "website_url": "https://www.skytime.es/",
+   "source_url": "https://www.skytime.es/"
+  },
+  {
+   "key": "es-ijump-gran-canaria",
+   "name": "iJump Gran Canaria",
+   "kind": "organization",
+   "country": "ES",
+   "website_url": "https://www.ijump.es/",
+   "source_url": "https://www.ijump.es/"
+  },
+  {
+   "key": "pt-skydive-portugal",
+   "name": "Skydive Portugal",
+   "kind": "organization",
+   "country": "PT",
+   "website_url": "https://skydiveportugal.pt/",
+   "source_url": "https://skydiveportugal.pt/"
+  },
+  {
+   "key": "pt-skydive-algarve",
+   "name": "Skydive Algarve",
+   "kind": "organization",
+   "country": "PT",
+   "website_url": "https://www.skydivealgarve.com/",
+   "source_url": "https://www.skydivealgarve.com/"
+  },
+  {
+   "key": "pt-skydive-seven-sk7",
+   "name": "Skydive Seven",
+   "kind": "organization",
+   "country": "PT",
+   "website_url": "https://skydiveseven.pt/",
+   "source_url": "https://skydiveseven.pt/"
+  },
+  {
+   "key": "pt-skydive-porto-goxtreme-also-skydive-lisboa-skydi",
+   "name": "Skydive Porto",
+   "kind": "organization",
+   "country": "PT",
+   "website_url": "https://skydiveporto.com/",
+   "source_url": "https://skydiveporto.com/"
+  }
+ ],
+ "opportunities": [
+  {
+   "title": "AFF (Accelerated Free Fall)",
+   "category": "course",
+   "provider": "gr-skydive-athens",
+   "venue": "gr-megara-pachi-civil-aviation-airport-lgmg",
+   "country": "GR",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Athens",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Accelerated freefall course: 6-7 hour ground school then seven level jumps from 14,000 ft, with two instructors on levels 1-3 and one on levels 4-7.",
+   "prerequisites": "\"The minimum age is 16.\" No prior experience or tandem required.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": "Ground school 350€ (materials, logbook, registration, insurance); levels 1-3 350€ per jump; levels 4-7 270€ per jump.",
+   "registration_url": "https://skydivemegara.gr/en/contact",
+   "source_url": "https://skydivemegara.gr/en/aff"
+  },
+  {
+   "title": "AFF (Accelerated Free Fall)",
+   "category": "course",
+   "provider": "gr-skydive-thessaloniki-aerosports-training-center-",
+   "venue": "gr-chortero-airfield-skydive-thessaloniki",
+   "country": "GR",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Athens",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "AFF first jump with two instructors after a day-long ground school; student exits around 3,000 m and flies own canopy.",
+   "prerequisites": "Age 18+, a recent medical certificate, good physical condition, valid ID/passport; no scuba 24 h or alcohol 12 h before jumping.",
+   "price_amount": "390",
+   "price_currency": "EUR",
+   "price_basis": "per_jump",
+   "price_note": "€390 for the first AFF jump (ground training included); later levels not priced.",
+   "registration_url": "https://www.skydive-thessaloniki.gr/index-en",
+   "source_url": "https://www.skydive-thessaloniki.gr/index-en"
+  },
+  {
+   "title": "AFF Training",
+   "category": "course",
+   "provider": "gr-skydive-athens",
+   "venue": "gr-kopaida-airfield-skydive-athens",
+   "country": "GR",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Athens",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Accelerated freefall course: 6-7 hour ground school then seven level jumps from 14,000 ft, levels 1-3 with two instructors and 4-7 with one.",
+   "prerequisites": "\"The minimum age is 16.\" No prior experience or tandem required.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": "Ground school 350€; levels 1-3 350€ per jump; levels 4-7 270€ per jump; repeated levels charged again.",
+   "registration_url": "https://www.skydive-athens.gr/en/contact",
+   "source_url": "https://www.skydive-athens.gr/en/aff"
+  },
+  {
+   "title": "Static Line",
+   "category": "course",
+   "provider": "gr-skydive-thessaloniki-aerosports-training-center-",
+   "venue": "gr-chortero-airfield-skydive-thessaloniki",
+   "country": "GR",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Athens",
+   "disciplines": [
+    "static_line"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Static-line first jump from about 1,100 m with automatic canopy deployment, after a day-long ground school.",
+   "prerequisites": "Age 18+, a recent medical certificate, good physical condition, valid ID/passport.",
+   "price_amount": "220",
+   "price_currency": "EUR",
+   "price_basis": "per_jump",
+   "price_note": "€220 for the first jump (ground training included).",
+   "registration_url": "https://www.skydive-thessaloniki.gr/index-en",
+   "source_url": "https://www.skydive-thessaloniki.gr/index-en"
+  },
+  {
+   "title": "AFF Course",
+   "category": "course",
+   "provider": "bg-skydive-bulgaria",
+   "venue": "bg-skydive-bulgaria-dropzone-ihtiman-airfield-lbht",
+   "country": "BG",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Individual AFF course at Ihtiman: about 6 hours of ground training and a test, then 7 jumps from 4,000 m (3 with two instructors, 4 with one), video-debriefed.",
+   "prerequisites": null,
+   "price_amount": "1710",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "€1,710; includes all gear (parachute, helmet, altimeter, goggles, radio).",
+   "registration_url": "https://book.skydivebulgaria.com/book/",
+   "source_url": "https://skydivebulgaria.com/en/beginner-parachutists/"
+  },
+  {
+   "title": "Instructor Assisted Deployment (IAD) and Static Line",
+   "category": "course",
+   "provider": "bg-sko4i-bg-skydiving-bulgaria-club-sky-adventures-",
+   "venue": "bg-sapareva-banya-airport",
+   "country": "BG",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "static_line",
+    "iad"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Beginner progression starting with solo exits from about 1,100 m without freefall, focused on canopy flight; freefall introduced after jump 6.",
+   "prerequisites": "Age 18+ (or legal age), medical declaration, valid liability insurance; about 8 hours of ground school and an exam.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.sko4i.bg/en/contact/Contacts.html",
+   "source_url": "https://www.sko4i.bg/en/skydiving_school/Skydiving-School.html"
+  },
+  {
+   "title": "License Package A",
+   "category": "course",
+   "provider": "bg-skydive-bulgaria",
+   "venue": "bg-skydive-bulgaria-dropzone-ihtiman-airfield-lbht",
+   "country": "BG",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Post-AFF package at Ihtiman toward a USPA A licence: ground training plus 18 jumps (12 solo from 4,000 m, 1 solo from 1,500 m, 5 coach jumps), all video-recorded.",
+   "prerequisites": "Aimed at beginner skydivers seeking solo certification; USPA A requires 25 jumps and a written exam (as stated).",
+   "price_amount": "1225",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "€1,225",
+   "registration_url": "https://book.skydivebulgaria.com/book/",
+   "source_url": "https://skydivebulgaria.com/en/beginner-parachutists/"
+  },
+  {
+   "title": "SkyStarter AFF курс",
+   "category": "course",
+   "provider": "bg-skydive-sofia",
+   "venue": null,
+   "country": "BG",
+   "location_note": "Training camp abroad; price listed for Spain",
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Bulgarian-organised individual AFF course held during a camp abroad: about 6 hours of ground training and 7 jumps from 4,000-4,500 m with video debriefs.",
+   "prerequisites": "Age 18+ (over 50 needs prior assessment), weight up to 100 kg, health declaration; listed medical contraindications.",
+   "price_amount": "1990",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "1,990 € (Spain); includes training, 7 jumps, gear, video, insurance, logbook, T-shirt; travel and accommodation extra.",
+   "registration_url": "https://www.skydivesofia.com/book/",
+   "source_url": "https://skydivesofia.com/aff/"
+  },
+  {
+   "title": "Skydiving Course (AFF)",
+   "category": "course",
+   "provider": "bg-sko4i-bg-skydiving-bulgaria-club-sky-adventures-",
+   "venue": "bg-sapareva-banya-airport",
+   "country": "BG",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Seven-category AFF course with about 8 hours of ground school and an exam; first jump about 45 s freefall from roughly 3,500 m with two instructors.",
+   "prerequisites": "Age 18+ (or legal age for foreign citizens), medical declaration, valid third-party liability insurance; pass ground-school exam.",
+   "price_amount": "1636",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "1,636.00 €",
+   "registration_url": "https://www.sko4i.bg/en/skydiving_school/Skydiving-School.html",
+   "source_url": "https://www.sko4i.bg/en/skydiving_school/Skydiving-School.html"
+  },
+  {
+   "title": "Курс по скатаване (packing course)",
+   "category": "course",
+   "provider": "bg-skydive-sofia",
+   "venue": null,
+   "country": "BG",
+   "location_note": "Not stated",
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "packing"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Parachute packing course announced for November covering main steps, common pitfalls and speed tips for packing own and others' parachutes.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydivesofia.com/contacts/",
+   "source_url": "https://skydivesofia.com/en/"
+  },
+  {
+   "title": "Уингсют курс (wingsuit first-flight course)",
+   "category": "course",
+   "provider": "bg-skydive-sofia",
+   "venue": null,
+   "country": "BG",
+   "location_note": "At the dropzone where the participant is jumping (not named)",
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Sofia",
+   "disciplines": [
+    "wingsuit"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "First-flight wingsuit course with theory, ground training and three instructor-accompanied jumps with video and briefings/debriefings.",
+   "prerequisites": "At least 200 jumps with 100 in the past year (or 60 min freefall); logbook, liability insurance, valid licence; non-elliptical canopy under 1.3 wing loading; own first-flight wingsuit unless BSA member.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydivesofia.com/contacts/",
+   "source_url": "https://skydivesofia.com/wingsuit/"
+  },
+  {
+   "title": "Curso de Campana Marcos",
+   "category": "course",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-11-14",
+   "ends_on": "2026-11-14",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "canopy"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Canopy course led by a coach named Marcos at Skydive Madrid, Lillo.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/contacto/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "LET event",
+   "category": "event",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-11-14",
+   "ends_on": "2026-11-14",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [],
+   "audience": [],
+   "languages": [],
+   "summary": "Event named 'LET event' listed on the Skydive Madrid calendar for 14 November 2026.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/contacto/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "FAM Cats",
+   "category": "event",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-11-22",
+   "ends_on": "2026-11-22",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Madrid federation (FAM) 'Cats' formation-skydiving date on the Skydive Madrid calendar.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/eventos/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "Maniacs",
+   "category": "event",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-05",
+   "ends_on": "2026-12-05",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [],
+   "audience": [],
+   "languages": [],
+   "summary": "Recurring event named 'Maniacs' listed on the Skydive Madrid calendar for 5 December 2026.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/eventos/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "Título A",
+   "category": "course",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-05",
+   "ends_on": "2026-12-05",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Título A licence course after AFF: theory on equipment, formation technique and aircraft, plus jumps with an instructor.",
+   "prerequisites": "Si ya has hecho al menos 10 saltos de consolidación después de tu curso AFF",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/contacto/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "A-TEAM",
+   "category": "camp",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-12",
+   "ends_on": "2026-12-13",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [],
+   "languages": [],
+   "summary": "Two-day formation-flying training listed as 'Entrenamiento Básico' at Skydive Empuriabrava.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveempuriabrava.com/es/event/a-team-11/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/a-team-11/"
+  },
+  {
+   "title": "Curso de Campana Marcos",
+   "category": "course",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-12",
+   "ends_on": "2026-12-12",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "canopy"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "December edition of the canopy course led by Marcos at Skydive Madrid, Lillo.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/contacto/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "FAM Cats",
+   "category": "event",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-13",
+   "ends_on": "2026-12-13",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "December date of the Madrid federation (FAM) 'Cats' formation-skydiving series.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://www.skydivemadrid.es/eventos/",
+   "source_url": "https://www.skydivemadrid.es/eventos/"
+  },
+  {
+   "title": "CHRISTMAS BOOGIE 2026",
+   "category": "boogie",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2026-12-24",
+   "ends_on": "2026-12-31",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "freefly",
+    "belly",
+    "wingsuit"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Multi-discipline Christmas boogie with FS, freefly and wingsuit load organisers, beach and balloon jumps, two Twin Otters and a Pilatus Porter.",
+   "prerequisites": null,
+   "price_amount": "80",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "Registration fee (load organising not included): 80 EUR up to 14/11/2026, 95 EUR from 15/11/2026; load organising 4.80 EUR per jump; jump tickets separate. Max 250 participants.",
+   "registration_url": "https://skydiveempuriabrava.com/es/christmas-boogie-2026/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/christmas-boogie-2026/"
+  },
+  {
+   "title": "EASTER BOOGIE 2027",
+   "category": "boogie",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2027-03-25",
+   "ends_on": "2027-03-29",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [],
+   "audience": [],
+   "languages": [],
+   "summary": "Five-day multi-discipline Easter boogie at Skydive Empuriabrava.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveempuriabrava.com/es/event/easter-boogie-2027/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/easter-boogie-2027/"
+  },
+  {
+   "title": "40-Way EURO RECORD CAMP by Joyriders",
+   "category": "camp",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2027-04-16",
+   "ends_on": "2027-04-18",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [],
+   "languages": [],
+   "summary": "Three-day 40-way formation record-attempt camp run by Joyriders at Skydive Empuriabrava.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveempuriabrava.com/es/event/40-way-euro-record-camp-by-joyriders/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/40-way-euro-record-camp-by-joyriders/"
+  },
+  {
+   "title": "Formation flights 36-WAYS with Angelo Declerck",
+   "category": "camp",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2027-04-20",
+   "ends_on": "2027-04-24",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [],
+   "languages": [],
+   "summary": "Five-day advanced formation-flying training on 36-way formations with coach Angelo Declerck.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveempuriabrava.com/es/event/formation-flights-36-ways-with-angelo-declerck/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/formation-flights-36-ways-with-angelo-declerck/"
+  },
+  {
+   "title": "Patrick Passe 40-WAY FORMATIONS",
+   "category": "camp",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": "2027-04-21",
+   "ends_on": "2027-04-25",
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "belly"
+   ],
+   "audience": [],
+   "languages": [],
+   "summary": "Five-day advanced formation-flying training on 40-way formations led by Patrick Passe.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveempuriabrava.com/es/event/patrick-passe-40-way-formations/",
+   "source_url": "https://skydiveempuriabrava.com/es/event/patrick-passe-40-way-formations/"
+  },
+  {
+   "title": "AFF Course (AFF 1.0 / Gold Package / Expert Package)",
+   "category": "course",
+   "provider": "es-skydive-spain",
+   "venue": "es-skydive-spain-aerodromo-la-juliana",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Accelerated Freefall training sold as AFF 1.0, a 7-day Gold package or a 10-14 day Expert package.",
+   "prerequisites": "Third Party Liability insurance is mandatory for AFF courses.",
+   "price_amount": "2049",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "Gold Package 7 Days 2,049 EUR; Expert Package 10-14 Days 3,478.50 EUR; AFF 1.0 684.50 EUR.",
+   "registration_url": "https://www.skydivespain.com/aff-residential-course/",
+   "source_url": "https://www.skydivespain.com/prices/"
+  },
+  {
+   "title": "AFF Course / AFF Plus Course",
+   "category": "course",
+   "provider": "es-skydive-empuriabrava-jip-aviacio-slu",
+   "venue": "es-skydive-empuriabrava",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "aff",
+    "tandem"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "AFF course with ground school, an initial tandem jump and seven AFF levels; the Plus version adds 15 minutes of wind tunnel.",
+   "prerequisites": "Minimum age 16 (16-17 need notarised parental authorisation); sport fitness medical certificate mandatory.",
+   "price_amount": "2099",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "AFF COURSE 2099 EUR; AFF PLUS COURSE 2199 EUR; insurance from 80 EUR; low-season discount 4-6% October to May.",
+   "registration_url": "https://skydiveempuriabrava.com/en/contact/",
+   "source_url": "https://skydiveempuriabrava.com/en/introductory-skydiving-courses/"
+  },
+  {
+   "title": "AFF Residential Course",
+   "category": "course",
+   "provider": "es-skydive-spain",
+   "venue": "es-skydive-spain-aerodromo-la-juliana",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "AFF course bundled with shared accommodation about 6 km from the dropzone, daily and Sevilla airport transfers, in 7- or 14-night options.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": "7-Night Residential + AFF Gold Package: '+ 429€'; 14-Night Residential + AFF Expert Package: '+ 808€' (add-ons on top of AFF price). Page text also mentions '379€ extra' for 14 days - inconsistent.",
+   "registration_url": "https://www.skydivespain.com/aff-residential-course/",
+   "source_url": "https://www.skydivespain.com/aff-residential-course/"
+  },
+  {
+   "title": "Cursos PAC (Curso Básico / Clásico / Experto / Experto Plus de Caída Libre)",
+   "category": "course",
+   "provider": "es-skydive-madrid",
+   "venue": "es-skydive-madrid-aerodromo-de-lillo",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "PAC/AFF freefall courses in several packages, from levels 1-7 only up to bundles with tandem, tunnel, Título A theory and extra jumps.",
+   "prerequisites": "Over 16 (minors need in-person parental/guardian authorisation and ID); basic medical certificate required by RFAE.",
+   "price_amount": "1995",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "Iniciación 710 EUR; Básico 1995 EUR; Clásico 2195 EUR; Experto 2995 EUR; Pack EXPERTO Plus 3995 EUR. Prices apply to Club members; 4% discount for cash/transfer; federation licence and reserve fee not included except as stated.",
+   "registration_url": "https://oficinaweb.skydivemadrid.es/datosReserva.aspx?idioma=es",
+   "source_url": "https://www.skydivemadrid.es/cursos-pac/precio-cursos-pac/"
+  },
+  {
+   "title": "Xmas Boogie 2026",
+   "category": "boogie",
+   "provider": "es-skydive-spain",
+   "venue": "es-skydive-spain-aerodromo-la-juliana",
+   "country": "ES",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Madrid",
+   "disciplines": [],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Christmas boogie at Skydive Spain with Dornier G92 aircraft, daily videos and a team of load organisers; registration open.",
+   "prerequisites": "Minimum 100 jumps required to participate. You also must be licenced and current.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://bookings.burblesoft.eu/index/2351/342?",
+   "source_url": "https://www.skydivespain.com/xmas-boogie/"
+  },
+  {
+   "title": "Curso AFF Queda Livre Acelerada (QLA)",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Accelerated freefall course at Évora: 6-8 hours of theory then 7 levels (levels 1-3 with two instructors, 4-7 with one), about 50 s freefall per jump.",
+   "prerequisites": "Sports medical exam (exame médico desportivo) required.",
+   "price_amount": "1830",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "Theory+L1 €590, L2-3 €275 each, L4 €195, L5-7 €165 each; extras sold separately (insurance €140, manual €30, logbook €25, goggles €25, etc.).",
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/curso-aff-queda-livre-acelerada/"
+  },
+  {
+   "title": "Curso Queda Livre Assistida",
+   "category": "course",
+   "provider": "pt-skydive-porto-goxtreme-also-skydive-lisboa-skydi",
+   "venue": "pt-aerodromo-de-proenca-a-nova",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Assisted (accelerated) freefall course sold by Skydive Porto; AFF jumps at Proença-a-Nova with theory classes in Braga.",
+   "prerequisites": null,
+   "price_amount": "1850",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": null,
+   "registration_url": "https://skydiveporto.com/product/curso-queda-livre-assistida/",
+   "source_url": "https://skydiveporto.com/"
+  },
+  {
+   "title": "Curso de Abertura Automática (AA)",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "static_line"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Static-line style course at Évora with 4 jumps from 1,200 m without freefall; landing guided by instructor via radio.",
+   "prerequisites": "Sports medical exam required.",
+   "price_amount": "790",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": null,
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Curso de Dobragem",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "packing"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Packing course at Évora covering main canopy packing and equipment checks; stated as required for the A licence.",
+   "prerequisites": null,
+   "price_amount": "150",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": null,
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Curso de Freefly (Vertical, Angle, Dynamic)",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "freefly"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Coached freefly course at Évora per level (vertical, angle, dynamic) with 6 instructor slots, theory, briefings and video debriefs.",
+   "prerequisites": "For licence holders (no specific jump count stated).",
+   "price_amount": "625",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "€625 per course plus 6-18 student slots per level depending on progress.",
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Curso de Iniciação à Queda Livre",
+   "category": "course",
+   "provider": "pt-skydive-porto-goxtreme-also-skydive-lisboa-skydi",
+   "venue": "pt-aerodromo-de-proenca-a-nova",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Introductory freefall course sold by Skydive Porto.",
+   "prerequisites": null,
+   "price_amount": "550",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": null,
+   "registration_url": "https://skydiveporto.com/product/curso-de-iniciacao-a-queda-livre/",
+   "source_url": "https://skydiveporto.com/"
+  },
+  {
+   "title": "Curso de Wingsuit",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "wingsuit"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Coached wingsuit course at Évora with 6 instructor slots, theory, briefings and video debriefs.",
+   "prerequisites": "200 jumps completed.",
+   "price_amount": "625",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "€625 per course plus 6-12 student slots depending on progress.",
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Iniciação à Queda Livre (IQL)",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Introductory freefall course at Évora corresponding to the first level of the AFF programme.",
+   "prerequisites": "Sports medical exam required.",
+   "price_amount": "590",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": null,
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Safety Day",
+   "category": "event",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [],
+   "audience": [
+    "licensed",
+    "students"
+   ],
+   "languages": [],
+   "summary": "Free safety day at Évora reviewing procedures, inspecting equipment and sharing techniques; open to all.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": "Free.",
+   "registration_url": "https://skydiveportugal.pt/curso-de-voo-de-asa-e-dobragem/",
+   "source_url": "https://skydiveportugal.pt/curso-de-voo-de-asa-e-dobragem/"
+  },
+  {
+   "title": "Saltos Noturnos",
+   "category": "event",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "night"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Night jumps at Évora from 12,500 ft (first-timers from 5,000 ft) with an 18:30 briefing; count toward D licence night-jump requirement.",
+   "prerequisites": "B licence or higher; jumping regularly at the DZ or two familiarisation jumps on the day or day before; attend 18:30 briefing; illuminated altimeter.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydiveportugal.pt/saltos-noturnos/",
+   "source_url": "https://skydiveportugal.pt/saltos-noturnos/"
+  },
+  {
+   "title": "Voo de Asa (Estágio de Voo de Asa)",
+   "category": "course",
+   "provider": "pt-skydive-portugal",
+   "venue": "pt-aerodromo-de-evora-skydive-portugal",
+   "country": "PT",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Lisbon",
+   "disciplines": [
+    "canopy"
+   ],
+   "audience": [
+    "licensed"
+   ],
+   "languages": [],
+   "summary": "Two-day canopy flight course at Évora with basic and advanced levels and optional water-landing training in a pool.",
+   "prerequisites": "Licence holders; levels tied to licence (Level 1 for Licence B, Level 2 for Licence C).",
+   "price_amount": "150",
+   "price_currency": "EUR",
+   "price_basis": "per_person",
+   "price_note": "€150 for 2-day course, +€50 water training. Course page footnote also gives €250 (1 person) / €200 each (2) / €150 each (3+); jumps extra (slot €42, rental €15, packing €8).",
+   "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
+   "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  }
+ ]
+}

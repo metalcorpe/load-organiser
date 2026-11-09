@@ -19,8 +19,9 @@ a published record still needs its own source.
   (Thebes), at the airfield the owner believes is called Perneri.
 - **Skydive Attica** also uses the Megara airfield.
 
-Facebook is not used as a source by default (`release-brief.md`, source rules). Listing
-Hellenic Skydivers or its Thiva events with a Facebook page as the source is the owner's call.
+Owner decision 2026-11-09: Facebook pages may be used as sources. No Facebook page for
+Hellenic Skydivers was found by search; the dev data uses its manawa.com provider page until
+the owner supplies the Facebook link.
 
 ## Dropzones (directory venues)
 
