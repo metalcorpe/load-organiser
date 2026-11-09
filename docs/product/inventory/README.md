@@ -27,8 +27,9 @@ aggregators and are listed as leads.
   Their listings are ongoing courses (AFF, static line, packing, canopy) with no dates.
 - **Undated courses cannot be published by the current code.** A published listing needs
   start and end dates (`DATED_STATUSES` in `backend/app/skydiver/opportunities/policy.py`),
-  while the release brief's maintenance routine refers to "continuing offers". Until that is
-  decided, the dropzones and organizers can be published and these courses stay drafts.
+  and the beta scope is dated listings only (decided 2026-11-09, `../beta-decisions.md`): the
+  "continuing offers" in the maintenance routine are the deferred school/coach profiles. The
+  dropzones and organizers can be published; these courses stay unpublished until dated.
 - **Registration links.** Several Spanish listings register by email only (the event page
   names the address). The editor needs a link; the event page itself is the practical route.
 - **Reuse terms.** Most operators that publish terms reserve all rights or forbid reproduction
