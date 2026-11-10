@@ -59,7 +59,7 @@ Owner decisions recorded 2026-11-09 (#162):
 - Sources: the association directories, operator calendars and organizers' own sites listed in the release brief's source table, entered by hand from each source page.
 - Entry: candidate records are drafted from public sources by the assistant (`docs/product/inventory/`); the owner checks each against its source and enters and publishes it through `/review`. A draft is not a reviewed record.
 - Maintenance: the owner confirmed the weekly routine (release brief, "Maintenance cadence"). The 60-day profile recheck stays the documented default and was not separately confirmed.
-- Funding: a voluntary support link is wanted, with running costs shown from the start. Provider and link are not chosen yet.
+- Funding: a voluntary support link is wanted, with running costs shown from the start. Provider: Ko-fi (`https://ko-fi.com/tavaninja`), given by the owner later the same day; page `/support`. How the owner declares what it receives is for the owner and an accountant; nothing here assumes a tax treatment.
 - Later the same day: the researched candidate records are **development data only**, loaded into local databases for testing and never published in production (`scripts/dev.sh seed`). Facebook pages may be used as sources. The beta cohort is the owner alone for now.
 - Undated courses (ongoing AFF, static line, packing, canopy) stay unpublished. The beta lists dated opportunities only; an undated course would be a school profile, and standalone school/coach listings are later work (release brief, "Discovery" and "Inventory sources"). A course gets listed when its provider publishes dates. Decided 2026-11-09 under the owner's delegation.
 

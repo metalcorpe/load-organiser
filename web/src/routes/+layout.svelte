@@ -39,6 +39,7 @@
 <footer>
 	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
+	<a href="/support">Support the beta</a>
 </footer>
 
 <style>
