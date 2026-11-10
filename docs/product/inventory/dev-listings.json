@@ -151,6 +151,16 @@
    "longitude": 23.2575,
    "website": "https://discover-greece-tours.com/skydiving/",
    "source_url": "https://discover-greece-tours.com/skydiving/"
+  },
+  {
+   "key": "gr-mesolongi-civil-airfield",
+   "name": "Mesolongi Civil Airfield (Πολιτικό Αεροδρόμιο Μεσολογγίου)",
+   "country": "GR",
+   "locality": "Mesolongi, Aitoloakarnania",
+   "latitude": 38.3553973,
+   "longitude": 21.4791977,
+   "website": "https://skydivemessolonghi.gr/",
+   "source_url": "https://skydivemessolonghi.gr/"
   }
  ],
  "providers": [
@@ -159,9 +169,9 @@
    "name": "Skydive Athens",
    "kind": "organization",
    "country": "GR",
-   "website_url": "https://www.skydive-athens.gr/",
-   "source_url": "https://www.skydive-athens.gr/en/terms",
-   "note": "Owner: same organizer as Skydive Megara (formerly Skydive Greece), Skydive Crete and Skydive Mesologi."
+   "website_url": "https://skydiveingreece.gr/",
+   "source_url": "https://skydiveingreece.gr/",
+   "note": "Owner: \"Skydive in Greece\" is this organizer's network name; its page lists four centers: Skydive Athens (Kopaida), Skydive Megara (Pachi), Skydive Messolonghi (Mesolongi) and Skydive Crete (Tympaki, coming soon)."
   },
   {
    "key": "gr-hellenic-skydivers",
@@ -1323,6 +1333,32 @@
    "price_note": "€150 for 2-day course, +€50 water training. Course page footnote also gives €250 (1 person) / €200 each (2) / €150 each (3+); jumps extra (slot €42, rental €15, packing €8).",
    "registration_url": "https://skydiveportugal.pt/cursos-paraquedismo#cursos",
    "source_url": "https://skydiveportugal.pt/cursos-paraquedismo/"
+  },
+  {
+   "title": "Εκπαίδευση AFF",
+   "category": "course",
+   "provider": "gr-skydive-athens",
+   "venue": "gr-mesolongi-civil-airfield",
+   "country": "GR",
+   "location_note": null,
+   "starts_on": null,
+   "ends_on": null,
+   "time_zone": "Europe/Athens",
+   "disciplines": [
+    "aff"
+   ],
+   "audience": [
+    "students"
+   ],
+   "languages": [],
+   "summary": "Skydive Messolonghi's AFF course for learning to jump solo; the page gives no dates and asks students to phone.",
+   "prerequisites": null,
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_note": null,
+   "registration_url": "https://skydivemessolonghi.gr/",
+   "source_url": "https://skydivemessolonghi.gr/"
   }
  ]
 }

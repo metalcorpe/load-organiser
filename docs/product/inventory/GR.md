@@ -9,11 +9,16 @@ Drafted 2026-11-09 by the assistant from public pages (About 22 page fetches/HTT
 From the owner's local knowledge, not from a source page. It settles how records relate;
 a published record still needs its own source.
 
+- **Skydive in Greece** (<https://skydiveingreece.gr/>) is the network name of the Skydive Athens organizer (owner, 2026-11-10).
 - **One organizer, four names:** Skydive Athens, Skydive Megara (formerly Skydive Greece),
   Skydive Crete and Skydive Mesologi are the same organizer. Enter **one provider**, not one
   per name. The provider record has no alias field: pick the main name and note the others in
-  its source note. Kopaida and Megara stay separate venues; Crete and Mesologi venues are not
-  yet identified (no web presence found for either name on 2026-11-09, nor in a Greek-language search on 2026-11-10).
+  its source note. Kopaida and Megara stay separate venues. Mesologi is spelled **Skydive Messolonghi** by the
+  operator and jumps at the Mesolongi civil airfield. The operator's network page
+  <https://skydiveingreece.gr/> ("Skydive in Greece", checked 2026-11-10) confirms the four
+  centers belong together: "Τέσσερα κέντρα ελεύθερης πτώσης, ένας ουρανός." It places Skydive
+  Crete at **Τυμπάκι (Tympaki) airfield**, marked "Σύντομα" (coming soon); see the dropzone
+  candidate below.
 - **Chortero airfield** is shared by Skydive Thessaloniki and Hellenic Skydivers.
 - **Hellenic Skydivers** is active only on Facebook, and also runs events at Thiva
   (Thebes), at the airfield the owner believes is called Perneri.
@@ -53,13 +58,28 @@ the owner supplies the Facebook link.
   - Reuse: not reviewed.
   - Check: Added 2026-11-10. Owner: Hellenic Skydivers runs events here. OpenAIP marks it "skydive: no" (old record). Which organizers use it (Discover Greece Skydiving, Skydive Greece/Megara, Hellenic Skydivers) is not settled by one source.
 
+- [ ] **Mesolongi Civil Airfield (Πολιτικό Αεροδρόμιο Μεσολογγίου)** (Mesolongi, Aitoloakarnania, GR)
+  - Coordinates: 38.3553973, 21.4791977 (operator page, used in the dev data; the Aero Club page on greekhelicopters.gr gives N38 21' 41.36 E021 28' 14.66, runway 07-25, about 1 km away: not reconciled, check on a map before publishing) · Website: <https://skydivemessolonghi.gr/>
+  - Source: <https://skydivemessolonghi.gr/> (address "Αεροδρόμιο Μεσολογγίου, Μεσολόγγι"; phone +30 697 0300 222, the same number Skydive Athens lists)
+  - Operating evidence: Local news, 10 Nov 2026, reports the official start of Skydive Messolonghi at the civil airfield with the Mesolongi Aero Club, "αξιοποιώντας παράλληλα την τεχνογνωσία των καταξιωμένων κέντρων Skydive Athens και Skydive Megara": <https://messolonghinews.gr/skydive-messolonghi-kentro-eleftheris-ptosis/>. Tandems from 14,000 ft, AFF, boogies "planned"; no dates.
+  - Reuse: only "© 2026 Skydive Messolonghi"; no terms page.
+  - Check: Added 2026-11-10. The operator page itself does not name Skydive Athens; the link to the organizer rests on the owner, the shared phone number and the news article.
+
+- [ ] **Tympaki Airfield (Αεροδρόμιο Τυμπάκι)** (Tympaki, Heraklion, Crete, GR) · *coming soon, not in the dev data*
+  - Coordinates: — · Website: <https://skydiveingreece.gr/> (center "Skydive Crete", email info@skydivingcrete.gr)
+  - Source: <https://skydiveingreece.gr/> (operator network page: "Αεροδρόμιο Τυμπάκι, Κρήτη", marked "Σύντομα")
+  - Operating evidence: none yet; tandem only is announced. No dates.
+  - Reuse: only "© 2026 Skydive in Greece".
+  - Check: Added 2026-11-10. Enter as a venue once the operator shows it operating.
+
 ## Organizers (providers)
 
-- [ ] **One provider: Skydive Athens / Skydive Megara / Skydive Crete / Skydive Mesologi** (organization; owner: same organizer)
+- [ ] **One provider: Skydive Athens / Skydive Megara / Skydive Crete / Skydive Messolonghi** (organization; owner: same organizer)
   - Choose the main name. Note the others in the source note.
+  - Network page (operator, checked 2026-11-10): <https://skydiveingreece.gr/> "Skydive in Greece", the organizer's network name (owner), lists the four centers with airfields and contacts; it is the dev data's source for this provider. The page states "Κέντρα πιστοποιημένα από την USPA" (the operator's claim; not checked with USPA).
   - Skydive Athens: website <https://www.skydive-athens.gr/>, source <https://www.skydive-athens.gr/en/terms>. Legal entity Skydive Athens S.A. (terms page). Contact +30 697 0300 222, info@skydive-athens.gr.
   - Skydive Megara (formerly Skydive Greece): website <https://skydivemegara.gr/en>, source <https://skydivemegara.gr/en/our-club>. Founded 1988, ELAO-authorized 1989, USPA member since 1995, renamed August 2026 (per our-club page). Contact +30 6937 45 81 04, info@skydivemegara.gr.
-  - Skydive Crete, Skydive Mesologi: no website found.
+  - Skydive Messolonghi: <https://skydivemessolonghi.gr/>, +30 697 0300 222, info@skydivemessolonghi.gr. Skydive Crete: no own site yet; info@skydivingcrete.gr (network page).
   - Reuse: both sites' terms forbid copying/reproduction and linking without prior written consent.
 
 - [ ] **Hellenic Skydivers** (organization)
@@ -125,10 +145,19 @@ A listing can be published only with a source, a registration link, a published 
   - Check: 'static_line' is not in the brief's example discipline list; adjust to schema. Confirm the site is current.
   - **Blocks publishing:** no complete dates
 
+- [ ] **Εκπαίδευση AFF** · course · Skydive Athens / Megara (one organizer), as Skydive Messolonghi
+  - Where: Mesolongi Civil Airfield · When: — to — (Europe/Athens) · Page says: no dates; contact by phone.
+  - Summary: AFF course for learning to jump solo.
+  - Disciplines: aff · Audience: students · Languages: —
+  - Prerequisites: — · Price: —
+  - Registration: <https://skydivemessolonghi.gr/> (phone only) · Source: <https://skydivemessolonghi.gr/>
+  - Blocks publishing: no dates.
+
 ## Leads not recorded
 
 Found only on aggregators, social media or unreachable pages. Not facts; a starting point for a later check.
 
+- Skydive Crete, earlier operation (superseded by the Tympaki candidate above): aggregators place it at Maleme, Chania, around 2016-2017 (TripAdvisor: <https://www.tripadvisor.com/Attraction_Review-g189419-d12616061-Reviews-Skydive_Crete-Maleme_Chania_Prefecture_Crete.html>; a 2016 video "Skydive Athens - Maleme Airport"). skydive-crete.gr is for sale; the current operator address is info@skydivingcrete.gr.
 - Discover Greece Skydiving (part of Discover Greece Tours) jumps at Thiva / Perneri, Friday to Sunday; no events, camps or courses with dates listed (checked 2026-11-10): <https://discover-greece-tours.com/skydiving/>
 - Skydive Greece Facebook page (former name of Skydive Megara, per the owner): <https://www.facebook.com/skydivegreece/> (Found 2026-11-10; describes a USPA-affiliated school with a Cessna 206 Turbo. Not fetched in full.)
 - Hellenic Skydivers (now an organizer candidate above): aggregators also mention Polykastro / Lagadas and Megara: <https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers> (Only directory/aggregator snippets; hellenicskydivers.gr redirects to skydive-thessaloniki.gr. Not fetched.)
