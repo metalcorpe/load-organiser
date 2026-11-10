@@ -49,8 +49,8 @@ aggregators and are listed as leads.
 The sheets as data for `python -m app.skydiver.devdata load`, with the owner's Greek organizer
 relations applied. Where a source names no registration link (email only), the source page is
 used. Records go through the normal rules: a local load on 2026-11-09 created 14 dropzones (16 after Thiva / Perneri and Mesolongi were added on 2026-11-10),
-18 organizers and 40 listings (41 with the Mesolongi AFF course); the 13 with complete dates were published and the 27 undated
-ones wait in the review queue (`schedule_required`). 22 tags that are training methods, not
+18 organizers and 40 listings (41 with the Mesolongi AFF course); the 13 with complete dates were published and the undated ones (27; 28 with the Mesolongi course)
+wait in the review queue (`schedule_required`). 22 tags that are training methods, not
 disciplines (AFF, static line, tandem, packing...), are left out.
 
 ## Effort
