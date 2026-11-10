@@ -163,6 +163,13 @@ Web `/support` (public, linked from the footer); data in `web/src/lib/support.ts
 - The site does not record whether anyone gave; Ko-fi handles payment under its own terms.
 - Tested: e2e `privacy` (footer link, sections, the no-costs statement, link target and rel). Not tested: the table with costs, since the list is empty.
 
+#### Board country filter shows coverage (implemented, #162)
+
+`GET /opportunities/countries` (`listOpportunityCountries`, public): the sorted country codes that have at least one public, not-ended listing, by the same rule as the board search. The board's Country select offers only those, plus a country already selected in the URL. If the call fails, the select offers every country rather than none.
+
+- Tested: backend `test_opportunities.py` (published listing included; draft-only and ended countries excluded; sorted); web unit `countries.spec.ts`; e2e `discover` (covered country offered, uncovered not, a link to an uncovered country keeps its value).
+- Not done: the dropzone directory (`/dz`) still offers every country; its coverage rule (listed venues) differs and was not asked for.
+
 #### Submission retention after account deletion (implemented, #162)
 
 `app/skydiver/moderation/retention.py`, migration `a8d2f6c4e1b7`; an operator command, no screen.

@@ -136,6 +136,10 @@ class OpportunityPageOut(BaseModel):
     next_cursor: str | None
 
 
+class OpportunityCountriesOut(BaseModel):
+    countries: list[str]
+
+
 class OpportunityDetailOut(BaseModel):
     opportunity: OpportunityOut
     replaced_id: uuid.UUID | None = Field(
@@ -549,6 +553,16 @@ def create_router(
         return OpportunityPageOut(
             items=[opportunity_out(i) for i in page.items], next_cursor=page.next_cursor
         )
+
+    @router.get(
+        "/opportunities/countries",
+        operation_id="listOpportunityCountries",
+        response_model=OpportunityCountriesOut,
+        dependencies=deps,
+    )
+    def list_opportunity_countries() -> OpportunityCountriesOut:
+        """ISO country codes that have at least one upcoming public opportunity."""
+        return OpportunityCountriesOut(countries=service().countries())
 
     @router.get(
         "/opportunities/{opportunity_id}",

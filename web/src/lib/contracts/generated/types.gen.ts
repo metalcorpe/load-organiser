@@ -1108,6 +1108,16 @@ export type MonthOut = {
 };
 
 /**
+ * OpportunityCountriesOut
+ */
+export type OpportunityCountriesOut = {
+    /**
+     * Countries
+     */
+    countries: Array<string>;
+};
+
+/**
  * OpportunityCreateIn
  *
  * New listings are drafts; publish with the status operation.
@@ -7253,6 +7263,47 @@ export type SearchOpportunitiesResponses = {
 };
 
 export type SearchOpportunitiesResponse = SearchOpportunitiesResponses[keyof SearchOpportunitiesResponses];
+
+export type ListOpportunityCountriesData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/opportunities/countries';
+};
+
+export type ListOpportunityCountriesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverOpportunitiesApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverOpportunitiesApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverOpportunitiesApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverOpportunitiesApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverOpportunitiesApiProblem;
+};
+
+export type ListOpportunityCountriesError = ListOpportunityCountriesErrors[keyof ListOpportunityCountriesErrors];
+
+export type ListOpportunityCountriesResponses = {
+    /**
+     * Successful Response
+     */
+    200: OpportunityCountriesOut;
+};
+
+export type ListOpportunityCountriesResponse = ListOpportunityCountriesResponses[keyof ListOpportunityCountriesResponses];
 
 export type GetOpportunityData = {
     body?: never;

@@ -2243,6 +2243,22 @@
         "title": "MonthOut",
         "type": "object"
       },
+      "OpportunityCountriesOut": {
+        "properties": {
+          "countries": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Countries",
+            "type": "array"
+          }
+        },
+        "required": [
+          "countries"
+        ],
+        "title": "OpportunityCountriesOut",
+        "type": "object"
+      },
       "OpportunityCreateIn": {
         "description": "New listings are drafts; publish with the status operation.",
         "properties": {
@@ -14951,6 +14967,78 @@
           }
         },
         "summary": "Search Opportunities",
+        "tags": [
+          "skydiver-opportunities"
+        ]
+      }
+    },
+    "/api/skydiver/v1/opportunities/countries": {
+      "get": {
+        "description": "ISO country codes that have at least one upcoming public opportunity.",
+        "operationId": "listOpportunityCountries",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpportunityCountriesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__opportunities__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__opportunities__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__opportunities__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__opportunities__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__opportunities__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Opportunity Countries",
         "tags": [
           "skydiver-opportunities"
         ]

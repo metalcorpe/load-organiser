@@ -51,6 +51,7 @@ export const OPERATIONS = {
 	createPlace: { method: 'POST', path: `${BETA}/places` },
 	updatePlace: { method: 'PATCH', path: `${BETA}/places/{id}` },
 	deletePlace: { method: 'DELETE', path: `${BETA}/places/{id}` },
+	listOpportunityCountries: { method: 'GET', path: `${BETA}/opportunities/countries` },
 	searchOpportunities: {
 		method: 'GET',
 		path: `${BETA}/opportunities`,
