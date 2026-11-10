@@ -61,6 +61,7 @@ Owner decisions recorded 2026-11-09 (#162):
 - Maintenance: the owner confirmed the weekly routine (release brief, "Maintenance cadence"). The 60-day profile recheck stays the documented default and was not separately confirmed.
 - Funding: a voluntary support link is wanted, with running costs shown from the start. Provider and link are not chosen yet.
 - Later the same day: the researched candidate records are **development data only**, loaded into local databases for testing and never published in production (`scripts/dev.sh seed`). Facebook pages may be used as sources. The beta cohort is the owner alone for now.
+- Undated courses (ongoing AFF, static line, packing, canopy) stay unpublished. The beta lists dated opportunities only; an undated course would be a school profile, and standalone school/coach listings are later work (release brief, "Discovery" and "Inventory sources"). A course gets listed when its provider publishes dates. Decided 2026-11-09 under the owner's delegation.
 
 #151/#162 must perform a real inventory/review exercise before launch: collect permitted records for the enabled categories, walk the discovery query, check changes/expiry and record effort and gaps. Limit published inventory or pause expansion if maintenance is not sustainable. No numerical inventory target, time budget, acquisition/retention result or volunteer capacity is invented.
 
