@@ -61,6 +61,33 @@ export function formatRange(start: string | null, end: string | null): string {
 	return `${startText} – ${formatDay(end)}`;
 }
 
+const MONTH_SHORT = new Intl.DateTimeFormat('en-GB', { month: 'short', timeZone: 'UTC' });
+
+/** The card's date stub: start month and day, and where the listing runs to. */
+export interface DateStub {
+	month: string;
+	day: string;
+	/** "–31" within a month, "–2 Jan" across months; null for a single day. */
+	until: string | null;
+}
+
+export function dateStub(start: string | null, end: string | null): DateStub | null {
+	if (!start || !end) return null;
+	const stub: DateStub = {
+		month: MONTH_SHORT.format(day(start)),
+		day: String(Number(start.slice(8))),
+		until: null
+	};
+	if (end !== start) {
+		const endDay = String(Number(end.slice(8)));
+		stub.until =
+			end.slice(0, 7) === start.slice(0, 7)
+				? `–${endDay}`
+				: `–${endDay} ${MONTH_SHORT.format(day(end))}`;
+	}
+	return stub;
+}
+
 export function languageName(code: string): string {
 	try {
 		return LANGUAGES.of(code) ?? code;

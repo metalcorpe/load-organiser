@@ -23,6 +23,16 @@
 		form && 'saved' in form ? true : form && 'removed' in form ? false : Boolean(data.saved.savedAt)
 	);
 	const signedIn = $derived(Boolean(data.viewer));
+	// What the source does not say, named once instead of a row of "Not stated" each.
+	const unstated = $derived(
+		[
+			!item.disciplines.length && 'disciplines',
+			!item.audience.length && 'who it is for',
+			!item.prerequisites && 'prerequisites',
+			!item.languages.length && 'languages',
+			!price && !item.price_note && 'price'
+		].filter((v): v is string => Boolean(v))
+	);
 	const signInToSave = $derived(
 		`/sign-in?returnTo=${encodeURIComponent(`/events/${item.id}?save=1`)}`
 	);
@@ -41,9 +51,10 @@
 
 <p><a href="/">All listings</a></p>
 <h1>{item.title}</h1>
-<p class="lede">
-	{CATEGORY_LABEL[item.category]} · {formatRange(item.starts_on, item.ends_on)}
-	{#if status}<span class="tag">{status}</span>{/if}
+<p class="lede headline">
+	<span class="badge">{CATEGORY_LABEL[item.category]}</span>
+	{#if status}<span class="badge status">{status}</span>{/if}
+	<span>{formatRange(item.starts_on, item.ends_on)}</span>
 </p>
 
 {#if item.status === 'cancelled'}
@@ -65,8 +76,8 @@
 		Open organizer registration
 	</a>
 	<p class="hint">
-		Opens {hostOf(item.registration_url)}. Registration, availability and payment are handled by the
-		organizer, not here.
+		Opens {hostOf(item.registration_url)}. Availability is not tracked here: places, registration and
+		payment are with the organizer.
 	</p>
 
 	{#if form && 'error' in form}
@@ -98,15 +109,11 @@
 	{/if}
 </section>
 
+{#if item.summary}
+	<p class="summary">{item.summary}</p>
+{/if}
+
 <dl>
-	<dt>Organizer</dt>
-	<dd>
-		{#if item.provider}
-			<a href="/organizers/{item.provider.id}">{item.provider.name}</a>
-		{:else}
-			<span class="hint">No longer listed</span>
-		{/if}
-	</dd>
 	<dt>Where</dt>
 	<dd>
 		<!-- One grid item: the dd is a grid, so bare text would start a new row. -->
@@ -123,47 +130,55 @@
 		{formatRange(item.starts_on, item.ends_on)}
 		{#if item.time_zone && item.starts_on}<span class="hint">({item.time_zone} local dates)</span>{/if}
 	</dd>
-	<dt>Disciplines</dt>
+	<dt>Organizer</dt>
 	<dd>
-		{item.disciplines.length
-			? item.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')
-			: 'Not stated'}
-	</dd>
-	<dt>Intended for</dt>
-	<dd>
-		{item.audience.length ? item.audience.map((a) => AUDIENCE_LABEL[a]).join(', ') : 'Not stated'}
-	</dd>
-	<dt>Prerequisites</dt>
-	<dd>
-		{#if item.prerequisites}
-			<span class="quote">{item.prerequisites}</span>
-			<span class="hint">As stated by the source. Eligibility is decided by the organizer.</span>
+		{#if item.provider}
+			<a href="/organizers/{item.provider.id}">{item.provider.name}</a>
 		{:else}
-			Not stated — ask the organizer.
+			<span class="hint">No longer listed</span>
 		{/if}
 	</dd>
-	<dt>Languages</dt>
-	<dd>{item.languages.length ? item.languages.map(languageName).join(', ') : 'Not stated'}</dd>
-	<dt>Price</dt>
-	<dd>
-		{price ?? 'Not stated'}
-		{#if item.price_note}<span class="hint">{item.price_note}</span>{/if}
-	</dd>
-	<dt>Places</dt>
-	<dd>Availability is not tracked here. Check with the organizer.</dd>
+	{#if price || item.price_note}
+		<dt>Price</dt>
+		<dd>
+			{#if price}<span>{price}</span>{/if}
+			{#if item.price_note}<span class="hint">{item.price_note}</span>{/if}
+		</dd>
+	{/if}
+	{#if item.disciplines.length}
+		<dt>Disciplines</dt>
+		<dd>{item.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')}</dd>
+	{/if}
+	{#if item.audience.length}
+		<dt>Intended for</dt>
+		<dd>{item.audience.map((a) => AUDIENCE_LABEL[a]).join(', ')}</dd>
+	{/if}
+	{#if item.prerequisites}
+		<dt>Prerequisites</dt>
+		<dd>
+			<span class="quote">{item.prerequisites}</span>
+			<span class="hint">As stated by the source. Eligibility is decided by the organizer.</span>
+		</dd>
+	{/if}
+	{#if item.languages.length}
+		<dt>Languages</dt>
+		<dd>{item.languages.map(languageName).join(', ')}</dd>
+	{/if}
 	<dt>Source</dt>
 	<dd>
 		<a href={item.source_url} rel="external noopener noreferrer nofollow">{hostOf(item.source_url)}</a>
 		{#if item.source_note}<span class="hint">({item.source_note})</span>{/if}
+		<span class="hint">Last checked {formatDay(item.checked_on)}</span>
 	</dd>
-	<dt>Last checked</dt>
-	<dd>{formatDay(item.checked_on)}</dd>
 </dl>
 
-{#if item.summary}
-	<h2>About</h2>
-	<p class="summary">{item.summary}</p>
+{#if unstated.length}
+	<p class="hint unstated">
+		Not stated by the source: {unstated.join(', ')}. Ask the organizer.
+	</p>
 {/if}
+
+
 
 <p>
 	<a href="/submit?kind=correction&target_kind=opportunity&target_id={item.id}&title={encodeURIComponent(item.title)}"
@@ -171,12 +186,20 @@
 	>
 </p>
 
-<p class="hint">
-	Summarized from the source above. A listing is not an endorsement, and a dropzone shown here has
-	not necessarily confirmed anything in Load Organiser.
-</p>
+<p class="hint">Summarized from the source. A listing is not an endorsement by the dropzone or by Load Organiser.</p>
 
 <style>
+	.headline {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem 0.6rem;
+	}
+
+	.unstated {
+		margin: -0.25rem 0 1rem;
+	}
+
 	.actions {
 		display: grid;
 		gap: 0.6rem;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatPrice, formatRange, statusLabel } from './listings.ts';
+import { dateStub, formatPrice, formatRange, statusLabel } from './listings.ts';
 
 describe('formatRange', () => {
 	it('formats calendar dates without shifting them', () => {
@@ -21,5 +21,14 @@ describe('listing labels', () => {
 		expect(statusLabel('published', false)).toBeNull();
 		expect(statusLabel('published', true)).toBe('Ended');
 		expect(statusLabel('cancelled', true)).toBe('Cancelled');
+	});
+});
+
+describe('dateStub', () => {
+	it('shows the start and how far the listing runs', () => {
+		expect(dateStub('2026-12-24', '2026-12-31')).toEqual({ month: 'Dec', day: '24', until: '–31' });
+		expect(dateStub('2027-06-28', '2027-07-03')).toEqual({ month: 'Jun', day: '28', until: '–3 Jul' });
+		expect(dateStub('2026-11-14', '2026-11-14')).toEqual({ month: 'Nov', day: '14', until: null });
+		expect(dateStub(null, null)).toBeNull();
 	});
 });

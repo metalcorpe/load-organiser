@@ -58,7 +58,7 @@
 {:else if data.listings.items.length === 0}
 	<p>No upcoming listings from this organizer are published here.</p>
 {:else}
-	<ul class="results" aria-label="Upcoming listings">
+	<ul class="results cards" aria-label="Upcoming listings">
 		{#each data.listings.items as item (item.id)}
 			<li><ListingItem {item} /></li>
 		{/each}
