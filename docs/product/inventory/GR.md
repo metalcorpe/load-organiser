@@ -13,9 +13,11 @@ a published record still needs its own source.
   Skydive Crete and Skydive Mesologi are the same organizer. Enter **one provider**, not one
   per name. The provider record has no alias field: pick the main name and note the others in
   its source note. Kopaida and Megara stay separate venues. Mesologi is spelled **Skydive Messolonghi** by the
-  operator and jumps at the Mesolongi civil airfield (found 2026-11-10, below). Crete: only
-  aggregators place it at Maleme, Chania, around 2016-2017, and it probably no longer runs (see
-  "Leads not recorded").
+  operator and jumps at the Mesolongi civil airfield. The operator's network page
+  <https://skydiveingreece.gr/> ("Skydive in Greece", checked 2026-11-10) confirms the four
+  centers belong together: "Τέσσερα κέντρα ελεύθερης πτώσης, ένας ουρανός." It places Skydive
+  Crete at **Τυμπάκι (Tympaki) airfield**, marked "Σύντομα" (coming soon); see the dropzone
+  candidate below.
 - **Chortero airfield** is shared by Skydive Thessaloniki and Hellenic Skydivers.
 - **Hellenic Skydivers** is active only on Facebook, and also runs events at Thiva
   (Thebes), at the airfield the owner believes is called Perneri.
@@ -62,13 +64,21 @@ the owner supplies the Facebook link.
   - Reuse: only "© 2026 Skydive Messolonghi"; no terms page.
   - Check: Added 2026-11-10. The operator page itself does not name Skydive Athens; the link to the organizer rests on the owner, the shared phone number and the news article.
 
+- [ ] **Tympaki Airfield (Αεροδρόμιο Τυμπάκι)** (Tympaki, Heraklion, Crete, GR) · *coming soon, not in the dev data*
+  - Coordinates: — · Website: <https://skydiveingreece.gr/> (center "Skydive Crete", email info@skydivingcrete.gr)
+  - Source: <https://skydiveingreece.gr/> (operator network page: "Αεροδρόμιο Τυμπάκι, Κρήτη", marked "Σύντομα")
+  - Operating evidence: none yet; tandem only is announced. No dates.
+  - Reuse: only "© 2026 Skydive in Greece".
+  - Check: Added 2026-11-10. Enter as a venue once the operator shows it operating.
+
 ## Organizers (providers)
 
-- [ ] **One provider: Skydive Athens / Skydive Megara / Skydive Crete / Skydive Mesologi** (organization; owner: same organizer)
+- [ ] **One provider: Skydive Athens / Skydive Megara / Skydive Crete / Skydive Messolonghi** (organization; owner: same organizer)
   - Choose the main name. Note the others in the source note.
+  - Network page (operator, checked 2026-11-10): <https://skydiveingreece.gr/> "Skydive in Greece" lists the four centers with airfields and contacts; it is the dev data's source for this provider. "Κέντρα πιστοποιημένα από την USPA".
   - Skydive Athens: website <https://www.skydive-athens.gr/>, source <https://www.skydive-athens.gr/en/terms>. Legal entity Skydive Athens S.A. (terms page). Contact +30 697 0300 222, info@skydive-athens.gr.
   - Skydive Megara (formerly Skydive Greece): website <https://skydivemegara.gr/en>, source <https://skydivemegara.gr/en/our-club>. Founded 1988, ELAO-authorized 1989, USPA member since 1995, renamed August 2026 (per our-club page). Contact +30 6937 45 81 04, info@skydivemegara.gr.
-  - Skydive Crete, Skydive Mesologi: no website found.
+  - Skydive Messolonghi: <https://skydivemessolonghi.gr/>, +30 697 0300 222, info@skydivemessolonghi.gr. Skydive Crete: no own site yet; info@skydivingcrete.gr (network page).
   - Reuse: both sites' terms forbid copying/reproduction and linking without prior written consent.
 
 - [ ] **Hellenic Skydivers** (organization)
@@ -146,7 +156,7 @@ A listing can be published only with a source, a registration link, a published 
 
 Found only on aggregators, social media or unreachable pages. Not facts; a starting point for a later check.
 
-- Skydive Crete (same organizer per the owner): aggregators place it at Maleme, Chania (TripAdvisor listing from about 2017: <https://www.tripadvisor.com/Attraction_Review-g189419-d12616061-Reviews-Skydive_Crete-Maleme_Chania_Prefecture_Crete.html>; Trip.com gives "Maleme" and the Skydive Athens phone number). A 2016 video is titled "Skydive Athens - Maleme Airport". skydive-crete.gr is for sale and skydivecrete.gr is now an unrelated site; an undated forum reply says teams come from Athens "for events in Chania or Heraklion but not every season". Not a venue until an operator page or the owner confirms a current airfield (checked 2026-11-10).
+- Skydive Crete, earlier operation (superseded by the Tympaki candidate above): aggregators place it at Maleme, Chania, around 2016-2017 (TripAdvisor: <https://www.tripadvisor.com/Attraction_Review-g189419-d12616061-Reviews-Skydive_Crete-Maleme_Chania_Prefecture_Crete.html>; a 2016 video "Skydive Athens - Maleme Airport"). skydive-crete.gr is for sale; the current operator address is info@skydivingcrete.gr.
 - Discover Greece Skydiving (part of Discover Greece Tours) jumps at Thiva / Perneri, Friday to Sunday; no events, camps or courses with dates listed (checked 2026-11-10): <https://discover-greece-tours.com/skydiving/>
 - Skydive Greece Facebook page (former name of Skydive Megara, per the owner): <https://www.facebook.com/skydivegreece/> (Found 2026-11-10; describes a USPA-affiliated school with a Cessna 206 Turbo. Not fetched in full.)
 - Hellenic Skydivers (now an organizer candidate above): aggregators also mention Polykastro / Lagadas and Megara: <https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers> (Only directory/aggregator snippets; hellenicskydivers.gr redirects to skydive-thessaloniki.gr. Not fetched.)

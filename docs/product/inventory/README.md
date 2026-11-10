@@ -12,7 +12,7 @@ public pages on 2026-11-09; the owner checks each against its source and enters 
 
 | Country | Dropzones | Organizers | Listings | Dated listings | Leads |
 | --- | --- | --- | --- | --- | --- |
-| [Greece](GR.md) | 5 | 4 | 5 | 0 | 6 |
+| [Greece](GR.md) | 6 | 4 | 5 | 0 | 6 |
 | [Bulgaria](BG.md) | 3 | 5 | 7 | 0 | 10 |
 | [Spain](ES.md) | 5 | 5 | 18 | 13 | 13 |
 | [Portugal](PT.md) | 3 | 4 | 11 | 0 | 9 |
