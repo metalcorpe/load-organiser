@@ -25,7 +25,10 @@
 {#if data.viewer?.reviewer}
 	<p><a href="/review">Maintenance</a>: reviewer tools for listings, organizers, dropzones and submissions.</p>
 {/if}
-<p class="lede">Your account. A public profile is not part of this release yet.</p>
+<p class="lede">
+	Your account, sign-in and records. Your public profile is optional and separate: see
+	<a href="#public-heading">Public profile and people</a>.
+</p>
 
 <section class="card" aria-labelledby="account-heading">
 	<h2 id="account-heading">Account</h2>
