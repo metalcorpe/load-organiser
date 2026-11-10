@@ -61,6 +61,13 @@ test.describe('personal history', () => {
 		await page.goto('/history');
 		await expect(page.getByText('Reported total: 201 jumps')).toBeVisible();
 		await expect(page.getByText('already within your declared count')).toBeVisible();
+		// The Records hub shows the same total and the latest jump date.
+		await page.goto('/records');
+		const summary = page.getByRole('region', { name: 'Summary' });
+		await expect(summary).toContainText('201 jumps');
+		await expect(summary).toContainText('(200 declared + 1 recorded)');
+		await expect(summary).toContainText('Last jump 10 October 2026');
+		await page.goto('/history');
 		await expect(
 			page.getByRole('table', { name: 'Recorded jumps in the last 12 months' })
 		).toContainText('Oct 2026');
