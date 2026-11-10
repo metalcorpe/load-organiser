@@ -5,7 +5,13 @@ import { createRequestApi } from '#lib/server/api/client.ts';
 import { createPlace } from '#lib/server/directory.ts';
 import { field } from '#lib/server/forms.ts';
 import { jumpBody, newComponent } from '#lib/server/jump-form.ts';
-import { chosenLocation, gearFor, pickerData, placesFor } from '#lib/server/jump-page.ts';
+import {
+	chosenLocation,
+	gearFor,
+	pickerData,
+	placesFor,
+	recentLocations
+} from '#lib/server/jump-page.ts';
 import { call, failStatus } from '#lib/server/maintenance.ts';
 import { echo } from '#lib/server/review-forms.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
@@ -31,6 +37,7 @@ export const load: PageServerLoad = async (event) => {
 		places: places ?? [],
 		chosen,
 		picker: chosen ? null : await pickerData(api, event.url),
+		recent: chosen ? [] : await recentLocations(api, secret),
 		gear: chosen ? await gearFor(api, secret) : { ok: true, items: [] },
 		// One key per rendered form; a refused or unconfirmed send reuses it.
 		keys: { jump: crypto.randomUUID(), component: crypto.randomUUID() }

@@ -89,3 +89,47 @@ export async function gearFor(
 	for (const item of linked) if (!items.some((i) => i.id === item.id)) items.push(item);
 	return { ok: active.ok, items };
 }
+
+export type RecentLocation = {
+	kind: 'venue' | 'place';
+	id: string;
+	name: string;
+	country: string | null;
+};
+
+/**
+ * Where the viewer jumped most recently, newest first and without repeats: the
+ * one-tap choices at the top of the picker. Empty on any error; the picker still works.
+ */
+export async function recentLocations(
+	api: ApiTransport,
+	secret: string,
+	limit = 4
+): Promise<RecentLocation[]> {
+	const page = await call<{ items: unknown[] }>(
+		api,
+		'listJumps',
+		{ bearer: secret, query: { limit: '30' } },
+		(v): v is { items: unknown[] } =>
+			typeof v === 'object' && v !== null && Array.isArray((v as { items?: unknown }).items)
+	);
+	if (!page.ok) return [];
+	const seen = new Set<string>();
+	const out: RecentLocation[] = [];
+	for (const item of page.value.items) {
+		const loc = (item as { location?: Record<string, unknown> }).location;
+		if (!loc || (loc.kind !== 'venue' && loc.kind !== 'place')) continue;
+		if (typeof loc.id !== 'string' || typeof loc.name !== 'string' || loc.closed === true) continue;
+		const key = `${loc.kind}:${loc.id}`;
+		if (seen.has(key)) continue;
+		seen.add(key);
+		out.push({
+			kind: loc.kind,
+			id: loc.id,
+			name: loc.name,
+			country: typeof loc.country === 'string' ? loc.country : null
+		});
+		if (out.length === limit) break;
+	}
+	return out;
+}

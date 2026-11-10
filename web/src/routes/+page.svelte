@@ -70,7 +70,7 @@
 		<button class="button" type="submit">Search</button>
 	</div>
 	<details class="more">
-		<summary>Filters{chips.length ? ` (${chips.length})` : ''}</summary>
+		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
 		<div class="form filters">
 			<div class="field">
 				<label for="category">Type</label>
@@ -200,36 +200,6 @@
 
 	.more {
 		margin-top: 0.25rem;
-	}
-
-	.more summary {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		min-height: 44px;
-		color: var(--accent);
-		font-weight: 650;
-		cursor: pointer;
-		list-style: none;
-	}
-
-	.more summary::-webkit-details-marker {
-		display: none;
-	}
-
-	/* A chevron that turns when the panel opens: the one cue that this expands. */
-	.more summary::after {
-		content: '';
-		width: 0.45rem;
-		height: 0.45rem;
-		border-right: 2px solid currentColor;
-		border-bottom: 2px solid currentColor;
-		transform: translateY(-2px) rotate(45deg);
-		transition: transform 120ms ease-out;
-	}
-
-	.more[open] summary::after {
-		transform: translateY(2px) rotate(-135deg);
 	}
 
 	.filters {
