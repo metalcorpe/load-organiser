@@ -12,6 +12,7 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.core.db import engine
 from app.skydiver import devdata
+from app.skydiver.directory.policy import SOURCE_NOTE_MAX
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.opportunities.service import OpportunityService
@@ -135,3 +136,8 @@ def test_the_dev_listings_file_matches_what_the_loader_reads() -> None:
         assert o["provider"] in providers, o["title"]
         assert o["venue"] is None or o["venue"] in venues, o["title"]
         assert o["category"] in ("event", "boogie", "camp", "course"), o["title"]
+    # Notes go through the source-note length rule (a 286-character note once broke seeding).
+    for p in data["providers"]:
+        note = devdata._note(p["key"], p.get("note"))
+        assert len(note) <= SOURCE_NOTE_MAX and note.endswith(p.get("note") or "."), p["key"]  # fmt: skip
+    assert len(devdata._note("k" * 60, "x" * 500)) == SOURCE_NOTE_MAX
