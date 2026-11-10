@@ -30,7 +30,7 @@ from sqlmodel import Session, col
 
 from app.models import User
 from app.skydiver.access.policy import Actor, Role, actor_roles
-from app.skydiver.directory.policy import DirectoryRuleError
+from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
 from app.skydiver.directory.service import DirectoryService, VenueInput
 from app.skydiver.identity.tables import SkydiverPerson, SkydiverRoleGrant
 from app.skydiver.opportunities.policy import Audience, Discipline, OpportunityStatus
@@ -68,7 +68,7 @@ def _slug(value: str) -> str:
 
 def _note(key: str, extra: str | None = None) -> str:
     note = f"{MARK}{key} Unreviewed candidate, local development only."
-    return f"{note} {extra}"[:400] if extra else note
+    return f"{note} {extra}"[:SOURCE_NOTE_MAX] if extra else note
 
 
 def reviewer_actor(engine: Engine, email: str) -> Actor:
