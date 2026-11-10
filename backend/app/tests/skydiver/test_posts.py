@@ -18,13 +18,19 @@ from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.logbook.api import create_router as create_logbook_router
 from app.skydiver.logbook.service import LogbookService
 from app.skydiver.logbook.store import sql_logbook_store_factory
+from app.skydiver.opportunities.service import OpportunityService
+from app.skydiver.opportunities.store import sql_listing_store_factory
 from app.skydiver.posts.api import create_router as create_posts_router
 from app.skydiver.posts.service import PostService
 from app.skydiver.posts.store import sql_post_store_factory
+from app.skydiver.records.api import PASSWORD_HEADER
+from app.skydiver.records.api import create_router as create_records_router
+from app.skydiver.records.service import RecordsService
+from app.skydiver.records.store import sql_records_store_factory
 from app.skydiver.social.api import create_router as create_social_router
 from app.skydiver.social.service import SocialService
 from app.skydiver.social.store import sql_social_store_factory
-from app.tests.skydiver.support import Accounts
+from app.tests.skydiver.support import PASSWORD, Accounts
 from app.tests.skydiver.test_social import NOW, SOURCE
 from app.tests.skydiver.test_social import Api as SocialApi
 
@@ -85,6 +91,17 @@ def api() -> Iterator[Api]:
         create_directory_router(service=lambda: directory, access=access)
     )
     app.include_router(create_logbook_router(service=lambda: logbook, access=access))
+    opportunities = OpportunityService(stores=sql_listing_store_factory(engine), clock=lambda: NOW)  # fmt: skip
+    records = RecordsService(
+        stores=sql_records_store_factory(engine), clock=lambda: NOW,
+        directory=directory, opportunities=opportunities,
+    )  # fmt: skip
+    app.include_router(
+        create_records_router(
+            service=lambda: records, identity=lambda: accounts.service, access=access,
+            client_ip=lambda _: "203.0.113.8",
+        )
+    )  # fmt: skip
     with TestClient(app) as client:
         yield Api(client, accounts)
 
@@ -413,3 +430,36 @@ def test_dropzone_activity_respects_audience_blocks_and_merges(api: Api) -> None
 
     # Unknown or unlisted dropzones answer not found.
     assert api.call("GET", f"/venues/{uuid.uuid7()}/posts").json() == NOT_FOUND
+
+
+def test_a_jump_that_was_shared_still_exports_and_restores(api: Api) -> None:
+    """Found locally on 2026-11-10: post events in a jump's history made export fail."""
+    owner, _ = api.person()
+    jump = api.jump(owner)
+    post = api.published(owner, jump)
+    api.ok("PUT", f"/me/posts/{post['id']}/audience", owner, {"audience": "followers", "version": 1}, status=204)  # fmt: skip
+    api.ok("DELETE", f"/me/posts/{post['id']}?version=2", owner, status=204)
+    api.published(owner, api.ok("GET", f"/jumps/{jump['id']}", owner)["jump"])
+
+    exported = api.call("GET", "/records/export", owner)
+    assert exported.status_code == 200, exported.text
+    archive = json.loads(exported.content)
+    kinds = [e["kind"] for e in archive["records"]["jump_events"]]
+    assert kinds == ["created", "post_published", "post_audience", "post_unpublished", "post_published"]  # fmt: skip
+
+    target, _ = api.person()
+    headers = {"authorization": f"Bearer {target}", "content-type": "application/json"}
+    check = api.client.post("/api/skydiver/v1/records/restore/check", content=exported.content, headers=headers)  # fmt: skip
+    assert check.json()["eligible"], check.text
+    done = api.client.post(
+        "/api/skydiver/v1/records/restore", content=exported.content,
+        headers=headers | {PASSWORD_HEADER: PASSWORD},
+    )  # fmt: skip
+    assert done.status_code == 200, done.text
+    restored = api.ok("GET", "/jumps", target)["items"]
+    assert len(restored) == 1
+    # Restore keeps the history but never republishes: the copy has no post.
+    copy = api.ok("GET", f"/me/jumps/{restored[0]['id']}/sharing", target)
+    assert copy["post"] is None
+    copy_kinds = [e["kind"] for e in api.events(target, restored[0]["id"])]
+    assert copy_kinds[-1] == "from_export" and "post_published" in copy_kinds

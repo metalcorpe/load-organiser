@@ -127,9 +127,17 @@ class JumpV1(_Strict):
     updated_at: Instant
 
 
+JumpEventKind = Literal[
+    "created", "corrected", "from_export",
+    # Sharing is part of the jump's private history (posts/service.py). Restore
+    # copies these entries as history only; it never republishes a post.
+    "post_published", "post_audience", "post_unpublished",
+]  # fmt: skip
+
+
 class JumpEventV1(_Strict):
     jump_id: uuid.UUID
-    kind: Literal["created", "corrected", "from_export"]
+    kind: JumpEventKind
     detail: dict[str, Any]
     created_at: Instant
 
