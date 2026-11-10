@@ -9,6 +9,7 @@ Drafted 2026-11-09 by the assistant from public pages (About 22 page fetches/HTT
 From the owner's local knowledge, not from a source page. It settles how records relate;
 a published record still needs its own source.
 
+- **Skydive in Greece** (<https://skydiveingreece.gr/>) is the network name of the Skydive Athens organizer (owner, 2026-11-10).
 - **One organizer, four names:** Skydive Athens, Skydive Megara (formerly Skydive Greece),
   Skydive Crete and Skydive Mesologi are the same organizer. Enter **one provider**, not one
   per name. The provider record has no alias field: pick the main name and note the others in
@@ -75,7 +76,7 @@ the owner supplies the Facebook link.
 
 - [ ] **One provider: Skydive Athens / Skydive Megara / Skydive Crete / Skydive Messolonghi** (organization; owner: same organizer)
   - Choose the main name. Note the others in the source note.
-  - Network page (operator, checked 2026-11-10): <https://skydiveingreece.gr/> "Skydive in Greece" lists the four centers with airfields and contacts; it is the dev data's source for this provider. "Κέντρα πιστοποιημένα από την USPA".
+  - Network page (operator, checked 2026-11-10): <https://skydiveingreece.gr/> "Skydive in Greece", the organizer's network name (owner), lists the four centers with airfields and contacts; it is the dev data's source for this provider. "Κέντρα πιστοποιημένα από την USPA".
   - Skydive Athens: website <https://www.skydive-athens.gr/>, source <https://www.skydive-athens.gr/en/terms>. Legal entity Skydive Athens S.A. (terms page). Contact +30 697 0300 222, info@skydive-athens.gr.
   - Skydive Megara (formerly Skydive Greece): website <https://skydivemegara.gr/en>, source <https://skydivemegara.gr/en/our-club>. Founded 1988, ELAO-authorized 1989, USPA member since 1995, renamed August 2026 (per our-club page). Contact +30 6937 45 81 04, info@skydivemegara.gr.
   - Skydive Messolonghi: <https://skydivemessolonghi.gr/>, +30 697 0300 222, info@skydivemessolonghi.gr. Skydive Crete: no own site yet; info@skydivingcrete.gr (network page).
