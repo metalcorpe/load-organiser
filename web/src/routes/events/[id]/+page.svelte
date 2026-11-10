@@ -109,11 +109,14 @@
 	</dd>
 	<dt>Where</dt>
 	<dd>
-		{#if item.venue}
-			<a href="/dz/{item.venue.id}">{item.venue.name}</a>{item.venue.closed ? ' (closed)' : ''},
-		{/if}
-		{#if item.location_note}{item.location_note},{/if}
-		{countryName(item.country)}
+		<!-- One grid item: the dd is a grid, so bare text would start a new row. -->
+		<span>
+			{#if item.venue}
+				<a href="/dz/{item.venue.id}">{item.venue.name}</a>{item.venue.closed ? ' (closed)' : ''},
+			{/if}
+			{#if item.location_note}{item.location_note},{/if}
+			{countryName(item.country)}
+		</span>
 	</dd>
 	<dt>Dates</dt>
 	<dd>
