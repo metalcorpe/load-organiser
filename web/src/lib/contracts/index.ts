@@ -13,6 +13,7 @@ export type {
 	JumpPageOut,
 	JumpSummaryOut,
 	LocationOut,
+	OpportunityCountriesOut,
 	OpportunityDetailOut,
 	OpportunityOut,
 	OpportunityPageOut,

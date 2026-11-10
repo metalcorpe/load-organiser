@@ -256,6 +256,10 @@ class ListingStore(Protocol):
         """Public, not-ended opportunities ordered by (sort_on, id)."""
         ...
 
+    def public_countries(self, now: datetime) -> list[str]:
+        """Country codes with at least one public, not-ended opportunity, sorted."""
+        ...
+
     def review_providers(
         self,
         *,
@@ -308,6 +312,11 @@ class OpportunityService:
         self._clock = clock
 
     # -- public -------------------------------------------------------------------
+
+    def countries(self) -> list[str]:
+        """Countries the board can show: the same public, not-ended rule as search."""
+        with self._stores() as store:
+            return store.public_countries(self._clock())
 
     def search(
         self, filters: OpportunityFilter, *, cursor: str | None, limit: int | None

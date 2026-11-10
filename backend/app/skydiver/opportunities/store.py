@@ -281,6 +281,17 @@ class SqlListingStore:
         stmt = stmt.order_by(col(o.sort_on), col(o.id)).limit(limit)
         return [_opportunity(row) for row in self._s.execute(stmt).scalars()]
 
+    def public_countries(self, now: datetime) -> list[str]:
+        o = SkydiverOpportunity
+        stmt = (
+            select(col(o.country))
+            .where(col(o.status).in_(_PUBLIC))
+            .where(_not_ended(now))
+            .distinct()
+            .order_by(col(o.country))
+        )
+        return [str(code) for code in self._s.execute(stmt).scalars()]
+
     def review_providers(
         self,
         *,

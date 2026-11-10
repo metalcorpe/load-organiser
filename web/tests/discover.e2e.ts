@@ -78,6 +78,14 @@ test.describe('discover board', () => {
 		const listing = await publishListing(`${base} Summer boogie`);
 
 		await page.goto('/');
+		// The country filter offers covered countries only (no listing anywhere uses AF).
+		const countries = page.getByLabel('Country');
+		await expect(countries.locator('option[value="PT"]')).toHaveCount(1);
+		await expect(countries.locator('option[value="AF"]')).toHaveCount(0);
+		// A shared link to an uncovered country keeps its selection.
+		await page.goto('/?country=AF');
+		await expect(page.getByLabel('Country')).toHaveValue('AF');
+		await page.goto('/');
 		await page.getByLabel('Title or organizer').fill(base);
 		await page.getByLabel('Country').selectOption('PT');
 		await page.getByLabel('Discipline').selectOption('freefly');

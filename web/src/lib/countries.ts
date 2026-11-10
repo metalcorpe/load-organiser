@@ -46,3 +46,17 @@ export const COUNTRY_OPTIONS: readonly { code: string; name: string }[] = COUNTR
 export function isCountryCode(value: string): boolean {
 	return COUNTRY_CODES.includes(value);
 }
+
+/**
+ * Country options for the board: the countries with upcoming listings, plus the selected one
+ * so a shared link keeps its filter. Without a coverage list (API unavailable), every country.
+ */
+export function coverageOptions(
+	covered: readonly string[] | null,
+	selected = ''
+): readonly { code: string; name: string }[] {
+	if (covered === null) return COUNTRY_OPTIONS;
+	const keep = new Set(covered);
+	if (selected) keep.add(selected);
+	return COUNTRY_OPTIONS.filter((option) => keep.has(option.code));
+}

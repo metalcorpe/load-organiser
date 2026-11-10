@@ -11,6 +11,7 @@ import type {
 	SavedOut,
 	SavedStateOut
 } from '#lib/contracts/index.ts';
+import { isCountryCode } from '#lib/countries.ts';
 import { AUDIENCE_VALUES, CATEGORY_VALUES, DISCIPLINE_VALUES } from '#lib/listing-filters.ts';
 import type { ApiTransport, OperationId, RequestOptions } from './api/transport.ts';
 
@@ -395,4 +396,15 @@ export async function deletePlan(
 ): Promise<ListingOutcome<null>> {
 	const outcome = await call(api, 'deletePlan', { bearer: secret, id });
 	return outcome.ok ? { ok: true, value: null } : outcome;
+}
+
+/** Countries with upcoming public listings (#162: the board shows actual coverage). */
+export async function listCoverageCountries(api: ApiTransport): Promise<ListingOutcome<string[]>> {
+	const result = await call(api, 'listOpportunityCountries');
+	if (!result.ok) return result;
+	const body = result.value.body;
+	if (!isRecord(body) || !listOf(isString)(body.countries)) {
+		return { ok: false, reason: 'unavailable' };
+	}
+	return { ok: true, value: (body.countries as string[]).filter(isCountryCode) };
 }

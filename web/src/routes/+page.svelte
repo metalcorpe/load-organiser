@@ -2,7 +2,7 @@
 	import { page } from '$app/state';
 	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
-	import { COUNTRY_OPTIONS } from '#lib/countries.ts';
+	import { coverageOptions } from '#lib/countries.ts';
 	import {
 		AUDIENCE_VALUES,
 		CATEGORY_VALUES,
@@ -14,6 +14,7 @@
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
+	const countryOptions = $derived(coverageOptions(data.countries, data.filters.country));
 	const filtered = $derived(hasFilters(data.filters));
 </script>
 
@@ -52,7 +53,7 @@
 		<label for="country">Country</label>
 		<select id="country" name="country">
 			<option value="" selected={!data.filters.country}>Any country</option>
-			{#each COUNTRY_OPTIONS as option (option.code)}
+			{#each countryOptions as option (option.code)}
 				<option value={option.code} selected={option.code === data.filters.country}
 					>{option.name}</option
 				>

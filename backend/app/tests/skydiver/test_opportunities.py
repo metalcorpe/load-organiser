@@ -661,3 +661,23 @@ def test_due_queue_follows_the_review_cadence(api: Api) -> None:
     # A published organizer last checked more than 60 days ago is due.
     profiles = api.ok("GET", f"/directory/providers?q={base}&due=true")["items"]
     assert [p["id"] for p in profiles] == [provider["id"]]
+
+
+def test_countries_lists_only_places_with_upcoming_public_listings(api: Api) -> None:
+    base = token()
+    provider = api.provider(f"{base} Org")
+    api.listed(f"{base} Tuvalu", provider["id"], country="TV")
+    api.draft(f"{base} Nauru draft", provider["id"], country="NR")
+    api.listed(
+        f"{base} Palau ended", provider["id"], country="PW",
+        starts_on="2026-10-01", ends_on="2026-10-02", time_zone="Pacific/Palau",
+    )  # fmt: skip
+
+    response = api.call("GET", "/opportunities/countries")
+    assert response.status_code == 200, response.text
+    assert response.headers["cache-control"] == "no-store"
+    countries = response.json()["countries"]
+    assert "TV" in countries
+    assert "NR" not in countries  # not public
+    assert "PW" not in countries  # ended
+    assert countries == sorted(set(countries))
