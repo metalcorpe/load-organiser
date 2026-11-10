@@ -13,7 +13,7 @@ a published record still needs its own source.
   Skydive Crete and Skydive Mesologi are the same organizer. Enter **one provider**, not one
   per name. The provider record has no alias field: pick the main name and note the others in
   its source note. Kopaida and Megara stay separate venues; Crete and Mesologi venues are not
-  yet identified (no web presence found for either name on 2026-11-09).
+  yet identified (no web presence found for either name on 2026-11-09, nor in a Greek-language search on 2026-11-10).
 - **Chortero airfield** is shared by Skydive Thessaloniki and Hellenic Skydivers.
 - **Hellenic Skydivers** is active only on Facebook, and also runs events at Thiva
   (Thebes), at the airfield the owner believes is called Perneri.
@@ -45,6 +45,13 @@ the owner supplies the Facebook link.
   - Operating evidence: Weak: site lists per-jump prices and says the school operates on a permanent basis, but the only date is '(c) 2018'; current activity is referenced only on Facebook.
   - Reuse: no terms found (only '(c) 2018 Skydive Thessaloniki')
   - Check: Confirm Skydive Thessaloniki still operates in 2026 (site looks unmaintained since 2018). Owner: the airfield is shared with Hellenic Skydivers. hellenicskydivers.gr redirects to this site.
+
+- [ ] **Thiva / Perneri Airfield** (Near Thiva, by lakes Yliki and Paralimni, Boeotia, GR)
+  - Coordinates: 38.3756, 23.2575 (OpenAIP "THIVA / PERNERI", ultralight site, record updated 2023-01-07: <https://www.openaip.net/data/airports/62614b2e1eacded7b7bbe7a6>) · Website: —
+  - Source: <https://discover-greece-tours.com/skydiving/> (Discover Greece Skydiving: dropzone at "Perneri" Airport next to lakes Yliki and Paralimni, near Thiva)
+  - Operating evidence: That page says jumps run Friday to Sunday all year; other days the area is reserved for the Hellenic Army. Skydive Greece's Facebook page (<https://www.facebook.com/skydivegreece/>) and reseller pages also offer tandems at Perneri.
+  - Reuse: not reviewed.
+  - Check: Added 2026-11-10. Owner: Hellenic Skydivers runs events here. OpenAIP marks it "skydive: no" (old record). Which organizers use it (Discover Greece Skydiving, Skydive Greece/Megara, Hellenic Skydivers) is not settled by one source.
 
 ## Organizers (providers)
 
@@ -122,7 +129,8 @@ A listing can be published only with a source, a registration link, a published 
 
 Found only on aggregators, social media or unreachable pages. Not facts; a starting point for a later check.
 
-- Owner: Hellenic Skydivers runs events at Thiva, airfield believed to be Perneri. A venue candidate once a source names the airfield. Tandem jumps from 10,000 ft at Perneri airport, Thebes (operator unnamed): <https://www.unlimited-adrenaline.gr/tandem-skydive-from-10000ft-at-perneri-airport-in-thebes-+-handycam/a/en/3997> (Reseller page returned 403; operator and airfield not confirmed from any operator site.)
+- Discover Greece Skydiving (part of Discover Greece Tours) jumps at Thiva / Perneri, Friday to Sunday; no events, camps or courses with dates listed (checked 2026-11-10): <https://discover-greece-tours.com/skydiving/>
+- Skydive Greece Facebook page (former name of Skydive Megara, per the owner): <https://www.facebook.com/skydivegreece/> (Found 2026-11-10; describes a USPA-affiliated school with a Cessna 206 Turbo. Not fetched in full.)
 - Hellenic Skydivers (now an organizer candidate above): aggregators also mention Polykastro / Lagadas and Megara: <https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers> (Only directory/aggregator snippets; hellenicskydivers.gr redirects to skydive-thessaloniki.gr. Not fetched.)
 - Hellenic Aeroathletic Federation (ΕΛ.Α.Ο.) - national body authorizing parachute schools: <https://minsports.gov.gr/?p=16963> (No federation website or parachuting calendar/member-club list found; no events located.)
 - Operators' Facebook/Instagram (skydivegreece, skydiveathens, SkydiveThessaloniki) may announce seasonal offers or events: <https://www.facebook.com/SkydiveThessaloniki/> (Social media only; not used as a source.)
