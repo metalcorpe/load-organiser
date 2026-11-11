@@ -257,3 +257,63 @@ def test_the_owners_records_are_unchanged(
     reports = w.ok("GET", "/social/reports", reviewer)
     assert all(r["target"]["handle"] != ids["handle"] for r in reports)
     assert json.dumps(jump).count(SECRET) == 1
+
+
+# Routes without an id that anyone may call: sign-in and recovery entry points,
+# the public catalogue and the health check. Everything else needs a session.
+ANONYMOUS_ALLOWED = {
+    ("POST", "/auth/registrations"),
+    ("POST", "/auth/sessions"),
+    ("POST", "/auth/email-verification/confirm"),
+    ("POST", "/auth/password-reset"),
+    ("POST", "/auth/password-reset/confirm"),
+    ("DELETE", "/auth/session"),  # sign-out: idempotent, answers nothing
+    ("GET", "/health"),
+    ("GET", "/opportunities"),
+    ("GET", "/opportunities/countries"),
+    ("GET", "/venues"),
+}
+
+
+def _collection_routes() -> list[tuple[str, str]]:
+    """Every beta operation without a path parameter, from the app's OpenAPI document."""
+    paths = create_app(include_legacy=False).openapi()["paths"]
+    found = [
+        (method.upper(), full.removeprefix(PREFIX))
+        for full, operations in sorted(paths.items())
+        if "{" not in full
+        for method in sorted(operations)
+    ]
+    assert len(found) > 30  # a collection failure must not pass silently
+    return [route for route in found if route not in ANONYMOUS_ALLOWED]
+
+
+@pytest.mark.parametrize(("method", "path"), _collection_routes())
+def test_collection_routes_refuse_anonymous_callers(
+    world: tuple[World, dict[str, str], str], method: str, path: str
+) -> None:
+    """Lists, export and restore are the whole private record: no session, no answer.
+
+    New routes are covered automatically; a deliberately public one must be added
+    to ANONYMOUS_ALLOWED.
+    """
+    w, _, _ = world
+    # A well-formed body, so input validation cannot answer before the session check.
+    password = "matrix password 2026"
+    bodies: dict[str, Any] = {
+        "/auth/account/deletion": {"password": password},
+        "/auth/sessions/revoke-all": {"password": password},
+        "/auth/password": {
+            "current_password": password,
+            "new_password": password + "!",
+        },
+    }
+    body = bodies.get(path, {} if method in ("POST", "PUT", "PATCH") else None)
+    response = w.call(method, path, None, body)
+    assert response.status_code == 401, (
+        method,
+        path,
+        response.status_code,
+        response.text,
+    )
+    assert SECRET not in response.text

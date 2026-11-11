@@ -1,8 +1,10 @@
 """#155 personal export and empty-record restore over HTTP against PostgreSQL."""
 
 import json
+import threading
 import uuid
 from collections.abc import Iterator
+from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from datetime import UTC, datetime
 from typing import Any
@@ -584,3 +586,34 @@ def test_a_failure_part_way_rolls_back_everything(api: Api) -> None:
         _service(api, Failing).restore(actor, raw, before_write=lambda: None)
     assert api.ok("GET", "/records", target)["empty"]
     assert _receipts(actor) == 0
+
+
+def test_two_different_files_restored_at_once_never_merge(api: Api) -> None:
+    """Both restores pass the emptiness check before either commits (#160 race)."""
+    first, second, target = (api.accounts.session() for _ in range(3))
+    api.ok("POST", "/places", first, {"name": "First strip", "country": "PT"}, 201)
+    api.ok("POST", "/places", second, {"name": "Second strip", "country": "ES"}, 201)
+    raws = [api.export(first), api.export(second)]
+    actor = _actor(api, target)
+    both_counted = threading.Barrier(2, timeout=10)
+
+    class Simultaneous(SqlRecordsStore):
+        def managed_counts(self, actor: Actor) -> dict[str, int]:
+            counts = super().managed_counts(actor)
+            if any(counts.values()):  # the recount, with this restore's own rows
+                both_counted.wait()
+            return counts
+
+    service = _service(api, Simultaneous)
+
+    def attempt(raw: bytes) -> str:
+        try:
+            return service.restore(actor, raw, before_write=lambda: None).outcome
+        except RecordsNotEmpty:
+            return "not_empty"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results = sorted(pool.map(attempt, raws))
+    assert results == ["not_empty", "restored"]
+    assert _places(actor) == 1
+    assert _receipts(actor) == 1

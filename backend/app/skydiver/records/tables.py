@@ -1,4 +1,8 @@
-"""Completed-restore receipts (#155). Owner-scoped; one per exact archive file."""
+"""Completed-restore receipts (#155). Owner-scoped; one per exact archive file.
+
+`sequence` numbers a person's restores; the unique (owner, sequence) pair is the
+compare-and-swap that lets only one of two simultaneous restores commit (#160).
+"""
 
 import uuid
 from datetime import datetime
@@ -19,6 +23,9 @@ class SkydiverRestoreReceipt(SQLModel, table=True):
         UniqueConstraint(
             "owner_person_id", "fingerprint", name="uq_skydiver_restore_receipt"
         ),
+        UniqueConstraint(
+            "owner_person_id", "sequence", name="uq_skydiver_restore_receipt_sequence"
+        ),
     )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
@@ -30,6 +37,7 @@ class SkydiverRestoreReceipt(SQLModel, table=True):
         )
     )
     fingerprint: str = Field(sa_column=Column(String(64), nullable=False))
+    sequence: int = Field(sa_column=Column(Integer, nullable=False))
     format_version: int = Field(sa_column=Column(Integer, nullable=False))
     counts: dict = Field(  # type: ignore[type-arg]
         default_factory=dict, sa_column=Column(_JSON, nullable=False)

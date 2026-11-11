@@ -1,12 +1,16 @@
 import { expect, test, type Browser, type BrowserContext, type Page } from '@playwright/test';
+import { randomBytes, randomUUID } from 'node:crypto';
 import {
 	NEW_PASSWORD,
 	PASSWORD,
+	apiCall,
+	apiSession,
 	createAccount,
 	mailedToken,
 	sessionStatus,
 	uniqueEmail
 } from './support/accounts.ts';
+import { PRIVATE_PATHS } from './support/paths.ts';
 
 // Production cookie path: HTTPS workerd preview with the __Host- Secure cookie.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -154,6 +158,65 @@ test.describe('sessions', () => {
 		await page.goto('/profile');
 		await expect(page.getByTestId('account-email')).toHaveText(second);
 		expect(await page.content()).not.toContain(first);
+	});
+
+	test('after switching accounts none of the previous records appear anywhere', async ({ page }) => {
+		const first = await createAccount({ label: 'first' });
+		const second = await createAccount({ label: 'second' });
+		const secret = `switch-${randomBytes(5).toString('hex')}`;
+		const bearer = await apiSession(first);
+		const created = async (path: string, body: unknown) => {
+			const response = await apiCall('POST', path, { bearer, body });
+			expect(response.status, path).toBeLessThan(300);
+			return (await response.json()) as Record<string, unknown>;
+		};
+		const place = await created('/places', { name: `${secret} place`, country: 'PT' });
+		await created('/jumps', {
+			client_key: randomUUID(),
+			jumped_on: '2026-10-10',
+			jump_type: 'belly',
+			place_id: place.id,
+			notes: `${secret} note`
+		});
+		await created('/plans', {
+			title: `${secret} plan`,
+			starts_on: '2026-12-03',
+			ends_on: '2026-12-04',
+			place_id: place.id
+		});
+
+		await page.goto('/sign-in?returnTo=%2Fjumps');
+		await signIn(page, first);
+		await expect(page.getByText(`${secret} place`).first()).toBeVisible();
+		await page.goto('/profile');
+		await page.getByRole('button', { name: 'Sign out', exact: true }).click();
+		await signIn(page, second);
+		await page.goto('/profile');
+		await expect(page.getByTestId('account-email')).toHaveText(second);
+
+		for (const path of ['/jumps', '/places', '/plans', '/records', '/history', '/activity', '/saved']) {
+			const html = await page.request.get(path);
+			expect(await html.text(), path).not.toContain(secret);
+			const data = await page.request.get(`${path}/__data.json`);
+			expect(await data.text(), `${path}/__data.json`).not.toContain(secret);
+		}
+		// The client-side router must not reuse the first account's loaded pages either.
+		await page.goto('/jumps');
+		await expect(page.getByText('No jumps yet.')).toBeVisible();
+		expect(await page.content()).not.toContain(secret);
+	});
+
+	test('signed-in private pages and their data are never cached', async ({ page }) => {
+		await page.goto('/sign-in?returnTo=%2Fprofile');
+		await signIn(page, await createAccount({ label: 'cache' }));
+		await expect(page.getByTestId('account-email')).toBeVisible();
+		for (const path of PRIVATE_PATHS) {
+			for (const url of [path, `${path}/__data.json`]) {
+				const response = await page.request.get(url, { maxRedirects: 0 });
+				expect(response.status(), url).toBeLessThan(500);
+				expect(response.headers()['cache-control'], url).toBe('no-store');
+			}
+		}
 	});
 
 	test('two signed-in browsers keep request-local identities', async ({ browser }) => {

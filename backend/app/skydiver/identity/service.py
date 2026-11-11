@@ -358,11 +358,13 @@ class IdentityService:
         self._flush(outbox)
 
     def resend_verification(self, *, secret: str) -> None:
-        self._require_mailer()
         now = self._clock()
         outbox = _Outbox([])
         with self._stores() as store:
+            # Who is asking comes first: a caller without a session learns nothing,
+            # not even whether mail is working.
             account, profile, _ = self._authenticated(store, secret, now)
+            self._require_mailer()
             if profile.email_verified_at is not None:
                 return
             key = str(account.id)
