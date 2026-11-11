@@ -17,6 +17,8 @@ Rules the tokens carry:
 
 - `brand` (navy): one pop card or header per screen.
 - `accent` (orange): actions (main buttons, active tab, links). `highlight`: key numbers on `brand`.
+- Form fields use `field` and `field-border`; the border keeps 3:1 against the field, cards and
+  page in both themes (WCAG 1.4.11). Plain card edges use `border`.
 - Listing types (`boogie`, `camp`, `course`, `event`): a `bg` tint for the date tile and an `fg`
   colour for the tag, always with the type's icon (`TypeIcon`), never colour alone.
 

@@ -143,5 +143,15 @@
 			"$type": "color",
 			"$value": "#fbeceb"
 		}
+	},
+	"field": {
+		"$type": "color",
+		"$value": "#ffffff",
+		"$description": "Form field background"
+	},
+	"field-border": {
+		"$type": "color",
+		"$value": "#7b8da4",
+		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
 	}
 }

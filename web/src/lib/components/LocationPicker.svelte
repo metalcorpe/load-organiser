@@ -182,9 +182,9 @@
 		min-width: 0;
 		min-height: 44px;
 		padding: 0.5rem 0.75rem;
-		border: 1px solid var(--border);
+		border: 1px solid var(--field-border);
 		border-radius: 9px;
-		background: var(--surface);
+		background: var(--field);
 		color: var(--fg);
 		font: inherit;
 	}
