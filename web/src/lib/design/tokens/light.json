@@ -1,0 +1,147 @@
+{
+	"$description": "Design E (light), chosen by the owner on 2026-11-11.",
+	"bg": {
+		"$type": "color",
+		"$value": "#f4f7fa",
+		"$description": "Page background"
+	},
+	"surface": {
+		"$type": "color",
+		"$value": "#ffffff",
+		"$description": "Cards, inputs, tab bar"
+	},
+	"surface-soft": {
+		"$type": "color",
+		"$value": "#eaf0f6"
+	},
+	"fg": {
+		"$type": "color",
+		"$value": "#0e2238",
+		"$description": "Body text"
+	},
+	"muted": {
+		"$type": "color",
+		"$value": "#55667a",
+		"$description": "Secondary text"
+	},
+	"border": {
+		"$type": "color",
+		"$value": "#dce4ec"
+	},
+	"accent": {
+		"$type": "color",
+		"$value": "#c4461c",
+		"$description": "Actions: main buttons, active tab, links"
+	},
+	"accent-fg": {
+		"$type": "color",
+		"$value": "#ffffff",
+		"$description": "Text on accent"
+	},
+	"accent-soft": {
+		"$type": "color",
+		"$value": "#fbe6dd"
+	},
+	"focus": {
+		"$type": "color",
+		"$value": "#2f6fd6",
+		"$description": "Focus ring"
+	},
+	"brand": {
+		"$type": "color",
+		"$value": "#0e2238",
+		"$description": "Navy pop cards and headers: one per screen"
+	},
+	"brand-fg": {
+		"$type": "color",
+		"$value": "#ffffff"
+	},
+	"brand-muted": {
+		"$type": "color",
+		"$value": "#c9d6e4"
+	},
+	"highlight": {
+		"$type": "color",
+		"$value": "#ff8a5c",
+		"$description": "Key numbers on brand"
+	},
+	"icon": {
+		"$type": "color",
+		"$value": "#2f6fd6",
+		"$description": "Fact list icons"
+	},
+	"boogie": {
+		"bg": {
+			"$type": "color",
+			"$value": "#fbf0dc"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#8a5a00"
+		}
+	},
+	"camp": {
+		"bg": {
+			"$type": "color",
+			"$value": "#ddf2ec"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#1e6b5b"
+		}
+	},
+	"course": {
+		"bg": {
+			"$type": "color",
+			"$value": "#ece8fb"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#5b45b8"
+		}
+	},
+	"event": {
+		"bg": {
+			"$type": "color",
+			"$value": "#fbe3ec"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#a3305f"
+		}
+	},
+	"warn": {
+		"bg": {
+			"$type": "color",
+			"$value": "#fff8e6"
+		},
+		"border": {
+			"$type": "color",
+			"$value": "#d9c282"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#6b4e0c"
+		}
+	},
+	"ok": {
+		"fg": {
+			"$type": "color",
+			"$value": "#1d5f37"
+		},
+		"bg": {
+			"$type": "color",
+			"$value": "#e5f4ea"
+		}
+	},
+	"bad": {
+		"fg": {
+			"$type": "color",
+			"$value": "#8f2f2c"
+		},
+		"bg": {
+			"$type": "color",
+			"$value": "#fbeceb"
+		}
+	}
+}

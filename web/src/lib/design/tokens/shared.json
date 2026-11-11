@@ -1,0 +1,38 @@
+{
+	"font": {
+		"display": {
+			"$type": "fontFamily",
+			"$value": [
+				"Outfit",
+				"system-ui",
+				"sans-serif"
+			],
+			"$description": "Headings and numbers"
+		},
+		"body": {
+			"$type": "fontFamily",
+			"$value": [
+				"Figtree",
+				"system-ui",
+				"-apple-system",
+				"Segoe UI",
+				"Roboto",
+				"sans-serif"
+			]
+		}
+	},
+	"radius": {
+		"$type": "dimension",
+		"$value": {
+			"value": 16,
+			"unit": "px"
+		}
+	},
+	"nav-height": {
+		"$type": "dimension",
+		"$value": {
+			"value": 64,
+			"unit": "px"
+		}
+	}
+}

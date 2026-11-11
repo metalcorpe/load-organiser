@@ -1,0 +1,17 @@
+{
+	"source": ["src/lib/design/tokens/shared.json", "src/lib/design/tokens/light.json"],
+	"usesDtcg": true,
+	"platforms": {
+		"css": {
+			"transformGroup": "css",
+			"buildPath": "src/lib/design/",
+			"files": [
+				{
+					"destination": "tokens-light.css",
+					"format": "css/variables",
+					"options": { "selector": ":root", "showFileHeader": false }
+				}
+			]
+		}
+	}
+}

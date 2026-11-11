@@ -1,0 +1,20 @@
+{
+	"source": ["src/lib/design/tokens/dark.json"],
+	"usesDtcg": true,
+	"platforms": {
+		"css": {
+			"transformGroup": "css",
+			"buildPath": "src/lib/design/",
+			"files": [
+				{
+					"destination": "tokens-dark.css",
+					"format": "css/variables",
+					"options": {
+						"selector": ["@media (prefers-color-scheme: dark)", ":root"],
+						"showFileHeader": false
+					}
+				}
+			]
+		}
+	}
+}
