@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dateStub, formatPrice, formatRange, statusLabel } from './listings.ts';
+import { dateStub, formatPrice, formatRange, spanDays, statusLabel } from './listings.ts';
 
 describe('formatRange', () => {
 	it('formats calendar dates without shifting them', () => {
@@ -30,5 +30,14 @@ describe('dateStub', () => {
 		expect(dateStub('2027-06-28', '2027-07-03')).toEqual({ month: 'Jun', day: '28', until: '–3 Jul' });
 		expect(dateStub('2026-11-14', '2026-11-14')).toEqual({ month: 'Nov', day: '14', until: null });
 		expect(dateStub(null, null)).toBeNull();
+	});
+});
+
+describe('spanDays', () => {
+	it('counts both ends, across months and years', () => {
+		expect(spanDays('2026-12-24', '2026-12-31')).toBe(8);
+		expect(spanDays('2026-12-30', '2027-01-02')).toBe(4);
+		expect(spanDays('2026-11-14', '2026-11-14')).toBe(1);
+		expect(spanDays(null, null)).toBe(0);
 	});
 });

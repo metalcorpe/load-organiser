@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Notice from '#lib/components/Notice.svelte';
+	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import {
 		AUDIENCE_LABEL,
@@ -23,6 +24,31 @@
 		form && 'saved' in form ? true : form && 'removed' in form ? false : Boolean(data.saved.savedAt)
 	);
 	const signedIn = $derived(Boolean(data.viewer));
+	// The header's big dates: "24–31" with "December 2026", or the full range across months.
+	const MONTH_YEAR = new Intl.DateTimeFormat('en-GB', {
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'UTC'
+	});
+	const bigDates = $derived.by(() => {
+		const { starts_on: s, ends_on: e } = item;
+		if (!s || !e) return null;
+		if (s.slice(0, 7) !== e.slice(0, 7)) return { big: '', small: formatRange(s, e) };
+		const d = (v: string) => String(Number(v.slice(8)));
+		return {
+			big: s === e ? d(s) : `${d(s)}–${d(e)}`,
+			small: MONTH_YEAR.format(new Date(`${s}T00:00:00Z`))
+		};
+	});
+	const audienceLine = $derived(
+		[
+			item.audience.map((a) => AUDIENCE_LABEL[a]).join(', '),
+			item.disciplines.map((d) => DISCIPLINE_LABEL[d].toLowerCase()).join(', ')
+		]
+			.filter(Boolean)
+			.join(' · ')
+			.replace(/^./, (c) => c.toUpperCase())
+	);
 	// What the source does not say, named once instead of a row of "Not stated" each.
 	const unstated = $derived(
 		[
@@ -49,13 +75,27 @@
 	/>
 </svelte:head>
 
-<p><a href="/">All listings</a></p>
-<h1>{item.title}</h1>
-<p class="lede headline">
-	<span class="badge">{CATEGORY_LABEL[item.category]}</span>
-	{#if status}<span class="badge status">{status}</span>{/if}
-	<span>{formatRange(item.starts_on, item.ends_on)}</span>
-</p>
+<section class="hero type-{item.category}" aria-labelledby="listing-title">
+	<a class="back" href="/">All listings</a>
+	<p class="pills">
+		<span class="type-pill"><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]}</span>
+		{#if status}<span class="badge status">{status}</span>{/if}
+	</p>
+	<h1 id="listing-title">{item.title}</h1>
+	{#if bigDates}
+		<p class="dates">
+			{#if bigDates.big}<span class="big">{bigDates.big}</span>{/if}
+			<span class="small">{bigDates.small}</span>
+		</p>
+	{:else}
+		<p class="dates"><span class="small">Dates not announced</span></p>
+	{/if}
+	<p class="where-line">
+		{item.venue ? item.venue.name : (item.location_note ?? '')}{item.venue || item.location_note
+			? ', '
+			: ''}{countryName(item.country)}
+	</p>
+</section>
 
 {#if item.status === 'cancelled'}
 	<Notice title="Cancelled" tone="warn">
@@ -70,6 +110,34 @@
 		<p>This listing has ended. It stays here so links and saved items keep working.</p>
 	</Notice>
 {/if}
+
+{#if item.summary}
+	<p class="summary">{item.summary}</p>
+{/if}
+
+<ul class="facts">
+	<li>
+		<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z" /><circle cx="12" cy="9" r="2.5" /></svg>
+		<span
+			>{#if item.venue}<a href="/dz/{item.venue.id}">{item.venue.name}</a
+				>{item.venue.closed ? ' (closed)' : ''}{', '}{/if}{#if item.location_note}{item.location_note}{', '}{/if}{countryName(
+				item.country
+			)}</span
+		>
+	</li>
+	{#if price || item.price_note}
+		<li>
+			<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M15 9.2A3.5 3.5 0 0 0 9 11h0a3.5 3.5 0 0 0 6 1.8M7.5 11h5M7.5 13.5h5" /></svg>
+			<span>{price ?? ''}{price && item.price_note ? '. ' : ''}{item.price_note ?? ''}</span>
+		</li>
+	{/if}
+	{#if audienceLine}
+		<li>
+			<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></svg>
+			<span>{audienceLine}</span>
+		</li>
+	{/if}
+</ul>
 
 <section class="actions" aria-label="Register or save">
 	<a class="button" href={item.registration_url} rel="external noopener noreferrer nofollow">
@@ -109,22 +177,7 @@
 	{/if}
 </section>
 
-{#if item.summary}
-	<p class="summary">{item.summary}</p>
-{/if}
-
 <dl>
-	<dt>Where</dt>
-	<dd>
-		<!-- One grid item: the dd is a grid, so bare text would start a new row. -->
-		<span>
-			{#if item.venue}
-				<a href="/dz/{item.venue.id}">{item.venue.name}</a>{item.venue.closed ? ' (closed)' : ''},
-			{/if}
-			{#if item.location_note}{item.location_note},{/if}
-			{countryName(item.country)}
-		</span>
-	</dd>
 	<dt>Dates</dt>
 	<dd>
 		{formatRange(item.starts_on, item.ends_on)}
@@ -138,21 +191,6 @@
 			<span class="hint">No longer listed</span>
 		{/if}
 	</dd>
-	{#if price || item.price_note}
-		<dt>Price</dt>
-		<dd>
-			{#if price}<span>{price}</span>{/if}
-			{#if item.price_note}<span class="hint">{item.price_note}</span>{/if}
-		</dd>
-	{/if}
-	{#if item.disciplines.length}
-		<dt>Disciplines</dt>
-		<dd>{item.disciplines.map((d) => DISCIPLINE_LABEL[d]).join(', ')}</dd>
-	{/if}
-	{#if item.audience.length}
-		<dt>Intended for</dt>
-		<dd>{item.audience.map((a) => AUDIENCE_LABEL[a]).join(', ')}</dd>
-	{/if}
 	{#if item.prerequisites}
 		<dt>Prerequisites</dt>
 		<dd>
@@ -189,11 +227,98 @@
 <p class="hint">Summarized from the source. A listing is not an endorsement by the dropzone or by Load Organiser.</p>
 
 <style>
-	.headline {
+	/* The navy header: the one brand block on this page. */
+	.hero {
+		display: grid;
+		gap: 0.5rem;
+		margin: 0 -1rem 1rem;
+		padding: 0.75rem 1.25rem 1.4rem;
+		border-radius: 0 0 26px 26px;
+		background: var(--brand);
+		color: var(--brand-fg);
+	}
+
+	.hero p {
+		margin: 0;
+	}
+
+	.back {
+		justify-self: start;
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		color: var(--brand-fg);
+	}
+
+	.pills {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.4rem 0.6rem;
+		gap: 0.4rem;
+	}
+
+	.hero h1 {
+		margin: 0.1rem 0 0;
+		font-size: 1.9rem;
+		line-height: 1.1;
+	}
+
+	.dates {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.25rem 0.6rem;
+	}
+
+	.big {
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 3.1rem;
+		line-height: 0.95;
+		color: var(--highlight);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.small {
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 1.15rem;
+		color: var(--brand-muted);
+	}
+
+	.where-line {
+		color: var(--brand-muted);
+	}
+
+	.summary {
+		font-size: 1.05rem;
+		line-height: 1.55;
+	}
+
+	/* B's fact list: place, price, who it is for. */
+	.facts {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1rem;
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	.facts li {
+		display: grid;
+		grid-template-columns: 1.4rem 1fr;
+		gap: 0.7rem;
+		align-items: start;
+	}
+
+	.facts svg {
+		width: 1.25rem;
+		height: 1.25rem;
+		margin-top: 0.1rem;
+		fill: none;
+		stroke: var(--icon);
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
 	}
 
 	.unstated {

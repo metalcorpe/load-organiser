@@ -1,12 +1,20 @@
 <script lang="ts">
-	import '@fontsource/barlow-condensed/latin-700.css';
 	import type { OpportunityOut } from '#lib/contracts/index.ts';
+	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
-	import { CATEGORY_LABEL, dateStub, formatPrice, formatRange, statusLabel } from '#lib/listings.ts';
+	import {
+		CATEGORY_LABEL,
+		dateStub,
+		formatPrice,
+		formatRange,
+		spanDays,
+		statusLabel
+	} from '#lib/listings.ts';
 
 	let { item }: { item: OpportunityOut } = $props();
 	const status = $derived(statusLabel(item.status, item.ended));
 	const stub = $derived(dateStub(item.starts_on, item.ends_on));
+	const days = $derived(spanDays(item.starts_on, item.ends_on));
 	const place = $derived(item.venue ? item.venue.name : (item.location_note ?? ''));
 	// The organizer only when it adds something the place name does not already say.
 	const organizer = $derived(
@@ -17,25 +25,32 @@
 	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
 </script>
 
-<article class="listing" class:muted={item.status === 'cancelled' || item.ended}>
-	<div class="stub" aria-hidden="true">
+<article
+	class="listing type-{item.category}"
+	class:muted={item.status === 'cancelled' || item.ended}
+>
+	<div class="tile" aria-hidden="true">
 		{#if stub}
 			<span class="month">{stub.month}</span>
 			<span class="day">{stub.day}</span>
-			{#if stub.until}<span class="until">{stub.until}</span>{/if}
 		{:else}
 			<span class="tba">TBA</span>
 		{/if}
 	</div>
 	<div class="body">
-		<a class="title" href="/events/{item.id}">{item.title}</a>
-		<p class="when">
-			<span class="badge">{CATEGORY_LABEL[item.category]}</span>
+		<p class="kind">
+			<span class="type-tag"
+				><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]}{days > 1
+					? ` · ${days} days`
+					: ''}</span
+			>
 			{#if status}<span class="badge status">{status}</span>{/if}
 			<span class="visually-hidden">{formatRange(item.starts_on, item.ends_on)}</span>
 		</p>
-		<p class="line">{place ? `${place}, ` : ''}{countryName(item.country)}</p>
-		{#if organizer}<p class="line">By {organizer}</p>{/if}
+		<a class="title" href="/events/{item.id}">{item.title}</a>
+		<p class="line">
+			{place ? `${place}, ` : ''}{countryName(item.country)}{organizer ? ` · by ${organizer}` : ''}
+		</p>
 		{#if price}<p class="line price">{price}</p>{/if}
 	</div>
 </article>
@@ -45,17 +60,17 @@
 		position: relative;
 		flex: 1 1 100%;
 		display: grid;
-		grid-template-columns: 4.25rem 1fr;
+		grid-template-columns: 3.6rem 1fr;
 		gap: 0.9rem;
-		align-items: start;
-		padding: 0.85rem;
-		border: 1px solid var(--border);
+		align-items: center;
+		padding: 0.65rem;
 		border-radius: var(--radius);
 		background: var(--surface);
+		box-shadow: 0 0 0 1px var(--border);
 	}
 
 	.listing:hover {
-		border-color: var(--accent);
+		box-shadow: 0 0 0 1px var(--accent);
 	}
 
 	.listing:focus-within {
@@ -63,45 +78,39 @@
 		outline-offset: 2px;
 	}
 
-	.muted .stub,
+	.muted .tile,
 	.muted .title {
 		opacity: 0.65;
 	}
 
-	/* The manifest-board stub: the one place the condensed face appears. */
-	.stub {
+	/* The type's tint, carrying the start date. */
+	.tile {
 		display: grid;
 		justify-items: center;
 		align-content: center;
-		min-height: 4.25rem;
-		padding: 0.35rem 0.2rem;
-		border-radius: 8px;
-		background: var(--accent-soft);
-		color: var(--fg);
-		font-family: 'Barlow Condensed', system-ui, sans-serif;
-		font-weight: 700;
+		min-height: 3.75rem;
+		border-radius: 12px;
+		background: var(--type-bg);
+		color: var(--type-fg);
 		line-height: 1;
-		text-align: center;
 	}
 
 	.month {
-		font-size: 0.95rem;
-		color: var(--accent);
+		font-size: 0.78rem;
+		font-weight: 600;
 	}
 
 	.day {
-		font-size: 1.9rem;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1.6rem;
 		font-variant-numeric: tabular-nums;
 	}
 
-	.until {
-		font-size: 0.95rem;
-		color: var(--muted);
-	}
-
 	.tba {
-		font-size: 1.2rem;
-		color: var(--muted);
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 1rem;
 	}
 
 	.body {
@@ -110,9 +119,20 @@
 		min-width: 0;
 	}
 
+	p {
+		margin: 0;
+	}
+
+	.kind {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
 	.title {
-		font-weight: 650;
-		font-size: 1.05rem;
+		font-weight: 600;
+		font-size: 1.02rem;
 		line-height: 1.3;
 		color: var(--fg);
 		text-decoration: none;
@@ -131,20 +151,9 @@
 		outline: none;
 	}
 
-	p {
-		margin: 0;
-	}
-
-	.when {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.35rem;
-		margin: 0.15rem 0;
-	}
-
 	.line {
 		color: var(--muted);
-		font-size: 0.95rem;
+		font-size: 0.9rem;
 		overflow-wrap: anywhere;
 	}
 

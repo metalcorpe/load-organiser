@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import FeaturedListing from '#lib/components/FeaturedListing.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName, coverageOptions } from '#lib/countries.ts';
@@ -15,13 +16,29 @@
 		CATEGORY_LABEL,
 		DISCIPLINE_LABEL,
 		formatDay,
-		listingMessage
+		listingMessage,
+		spanDays
 	} from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const countryOptions = $derived(coverageOptions(data.countries, data.filters.country));
 	const filtered = $derived(hasFilters(data.filters));
+	// On the plain first page, the next multi-day boogie or camp gets the navy card and is not
+	// repeated in the list.
+	const featured = $derived(
+		!filtered && !data.paged && data.result.ok && data.result.items.length > 1
+			? (data.result.items.find(
+					(i) =>
+						(i.category === 'boogie' || i.category === 'camp') &&
+						i.status === 'published' &&
+						spanDays(i.starts_on, i.ends_on) > 1
+				) ?? null)
+			: null
+	);
+	const listed = $derived(
+		data.result.ok ? data.result.items.filter((i) => i.id !== featured?.id) : []
+	);
 	// Each active filter (other than the search text) as a chip that removes just that filter.
 	const chips = $derived(
 		[
@@ -161,8 +178,12 @@
 		</p>
 	</Notice>
 {:else}
+	{#if featured}
+		<FeaturedListing item={featured} />
+		<h2 class="list-heading">Coming up</h2>
+	{/if}
 	<ul class="results cards" aria-label="Listings">
-		{#each data.result.items as item (item.id)}
+		{#each listed as item (item.id)}
 			<li><ListingItem {item} /></li>
 		{/each}
 	</ul>
@@ -241,6 +262,11 @@
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
+	}
+
+	.list-heading {
+		font-size: 1.15rem;
+		margin: 0 0 0.25rem;
 	}
 
 	.pager {
