@@ -45,10 +45,10 @@
 		{#if !group.ok}
 			{@render failed(group.reason)}
 		{:else}
-			<ul class="results" aria-label="Matching {kind}">
+			<ul class="results rows" aria-label="Matching {kind}">
 				{#each group.items as item (item.id)}
 					<li>
-						<a href="/review/{kind}/{item.id}">{'title' in item ? item.title : item.name}</a>
+						<a class="title" href="/review/{kind}/{item.id}">{'title' in item ? item.title : item.name}</a>
 						<span class="meta">{kind.slice(0, -1)} · {item.status}</span>
 					</li>
 				{:else}
@@ -76,10 +76,10 @@
 {:else if data.dueListings.items.length === 0}
 	<p>Nothing due.</p>
 {:else}
-	<ul class="results" aria-label="Listings due a check">
+	<ul class="results rows" aria-label="Listings due a check">
 		{#each data.dueListings.items as item (item.id)}
 			<li>
-				<a href="/review/listings/{item.id}">{item.title}</a>
+				<a class="title" href="/review/listings/{item.id}">{item.title}</a>
 				<span class="meta">{item.status} · {formatRange(item.starts_on, item.ends_on)} · {checked(item.checked_on)}</span>
 			</li>
 		{/each}
@@ -91,10 +91,10 @@
 	{#if !group.ok}
 		{@render failed(group.reason)}
 	{:else if group.items.length > 0}
-		<ul class="results" aria-label={index === 0 ? 'In review' : 'Drafts'}>
+		<ul class="results rows" aria-label={index === 0 ? 'In review' : 'Drafts'}>
 			{#each group.items as item (item.id)}
 				<li>
-					<a href="/review/listings/{item.id}">{item.title}</a>
+					<a class="title" href="/review/listings/{item.id}">{item.title}</a>
 					<span class="meta">{item.status} · {formatRange(item.starts_on, item.ends_on)}</span>
 				</li>
 			{/each}
@@ -108,10 +108,10 @@
 {:else if data.dueOrganizers.items.length === 0}
 	<p>Nothing due.</p>
 {:else}
-	<ul class="results" aria-label="Organizers due a check">
+	<ul class="results rows" aria-label="Organizers due a check">
 		{#each data.dueOrganizers.items as item (item.id)}
 			<li>
-				<a href="/review/organizers/{item.id}">{item.name}</a>
+				<a class="title" href="/review/organizers/{item.id}">{item.name}</a>
 				<span class="meta">{checked(item.checked_on)}</span>
 			</li>
 		{/each}
@@ -124,10 +124,10 @@
 {:else if data.dueDropzones.items.length === 0}
 	<p>Nothing due.</p>
 {:else}
-	<ul class="results" aria-label="Dropzones due a check">
+	<ul class="results rows" aria-label="Dropzones due a check">
 		{#each data.dueDropzones.items as item (item.id)}
 			<li>
-				<a href="/review/dropzones/{item.id}">{item.name}</a>
+				<a class="title" href="/review/dropzones/{item.id}">{item.name}</a>
 				<span class="meta">{checked(item.checked_on)}</span>
 			</li>
 		{/each}

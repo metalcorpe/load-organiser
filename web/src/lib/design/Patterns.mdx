@@ -1,0 +1,58 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design/Page patterns" />
+
+# Page patterns
+
+Shared CSS in `src/app.css`, used by pages rather than components. Switch the theme in the toolbar.
+
+## Section card: `.card`
+
+One section of a page. A heading as its first child loses its top margin.
+
+<section className="card" aria-labelledby="pattern-card">
+  <h2 id="pattern-card">Sharing</h2>
+  <p>Private: not shared with anyone. <a href="#">Share a summary of this jump</a></p>
+</section>
+
+## Row cards: `ul.results.rows`
+
+A list of things. The row's first `a.title` covers the whole row; other links, buttons and form
+controls in the row stay clickable above it.
+
+<ul className="results rows" aria-label="Example rows">
+  <li>
+    <a className="title" href="#">Sabre3 170</a>
+    <span className="meta">Main canopy · Mine (owned)</span>
+  </li>
+  <li>
+    <a className="title" href="#">Thiva / Perneri Airfield</a>
+    <span className="meta">Near Thiva, Greece · <a href="#">Source</a></span>
+  </li>
+</ul>
+
+## Label and value list: `dl`
+
+<dl>
+  <dt>Where</dt>
+  <dd>Mesolongi Civil Airfield, Greece</dd>
+  <dt>Equipment</dt>
+  <dd>Not recorded</dd>
+</dl>
+
+## Form group: `fieldset`
+
+<fieldset>
+  <legend>Equipment used (optional)</legend>
+  <div className="field">
+    <label htmlFor="pattern-other">Borrowed, rented or other equipment</label>
+    <input id="pattern-other" placeholder="e.g. rented student rig" />
+  </div>
+</fieldset>
+
+## Folding section: `details > summary`
+
+<details>
+  <summary>Number, time and altitudes (optional)</summary>
+  <p>Folded content.</p>
+</details>

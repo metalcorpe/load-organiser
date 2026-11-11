@@ -82,12 +82,6 @@
 </svelte:head>
 
 <p><a href="/jumps">Logbook</a></p>
-<h1>Jump on {formatDay(jump.jumped_on)}</h1>
-<p class="lede">
-	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'
-		? 'restored from your export'
-		: 'entered by you'}, not verified
-</p>
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Saved privately.</p>{/if}
 {#if data.detail.same_number.length > 0}
 	<p class="hint" role="note">
@@ -97,6 +91,14 @@
 	</p>
 {/if}
 
+<section class="hero" aria-labelledby="jump-title">
+<h1 id="jump-title">Jump on {formatDay(jump.jumped_on)}</h1>
+{#if jump.jump_number}<p class="number" aria-hidden="true">#{jump.jump_number}</p>{/if}
+<p class="lede">
+	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'
+		? 'restored from your export'
+		: 'entered by you'}, not verified
+</p>
 <dl class="facts">
 	<dt>Where</dt>
 	<dd>{current.name}{current.detail ? ` (${current.detail.replace(/^ · /, '')})` : ''}</dd>
@@ -116,8 +118,10 @@
 		</dd>
 	{/if}
 </dl>
+</section>
 
-<h2>Sharing</h2>
+<section class="card" aria-labelledby="sharing-heading">
+<h2 id="sharing-heading">Sharing</h2>
 {#if data.post}
 	<p>
 		Published to {AUDIENCE_LABEL[data.post.audience].toLowerCase()}:
@@ -131,7 +135,10 @@
 	</p>
 {/if}
 
-<h2>Edit</h2>
+</section>
+
+<section class="card" aria-labelledby="edit-heading">
+<h2 id="edit-heading">Edit</h2>
 {#if !data.emailVerified}
 	<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to edit jumps.</p>
 {/if}
@@ -160,10 +167,13 @@
 	/>
 {/if}
 
+</section>
+
 {#if data.detail.events.length > 0}
-	<h2>History</h2>
+	<section class="card" aria-labelledby="history-heading">
+	<h2 id="history-heading">History</h2>
 	<p class="hint">Your private record of changes. Earlier notes and links are not kept.</p>
-	<ul class="results" aria-label="History">
+	<ul class="results rows" aria-label="History">
 		{#each data.detail.events as event, i (i)}
 			<li>
 				<span class="title"
@@ -186,9 +196,11 @@
 			</li>
 		{/each}
 	</ul>
+	</section>
 {/if}
 
-<h2>Delete</h2>
+<section class="card danger" aria-labelledby="delete-heading">
+<h2 id="delete-heading">Delete</h2>
 <form method="POST" action="?/delete" class="form">
 	{#if errorFor('delete')}<p class="form-error" role="alert">{errorFor('delete')}</p>{/if}
 	<input type="hidden" name="version" value={jump.version} />
@@ -196,4 +208,46 @@
 	<p class="hint">This cannot be undone. Your gear and places are kept.</p>
 	<div class="form-actions"><button class="button secondary" type="submit">Delete jump</button></div>
 </form>
+</section>
 
+
+<style>
+	/* The jump itself: the screen's one navy card. */
+	.hero {
+		position: relative;
+		margin: 0.5rem 0 1rem;
+		padding: 1.1rem;
+		border-radius: 22px;
+		background: var(--brand);
+		color: var(--brand-fg);
+	}
+
+	.hero h1 {
+		margin: 0 4.5rem 0.35rem 0;
+	}
+
+	.hero .lede,
+	.hero :global(dt) {
+		color: var(--brand-muted);
+	}
+
+	.hero :global(a) {
+		color: var(--brand-fg);
+	}
+
+	.number {
+		position: absolute;
+		top: 1rem;
+		right: 1.1rem;
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 2rem;
+		line-height: 1;
+		color: var(--highlight);
+	}
+
+	.danger {
+		box-shadow: 0 0 0 1px var(--bad-fg);
+	}
+</style>

@@ -153,7 +153,7 @@
 	{#if data.history.baseline_events.length > 0}
 		<h2>Changes</h2>
 		<p class="hint">Your private record of what you declared and corrected.</p>
-		<ul class="results" aria-label="Changes">
+		<ul class="results rows" aria-label="Changes">
 			{#each data.history.baseline_events as event, i (i)}
 				<li>
 					<span class="title">{formatDay(event.created_at.slice(0, 10))}</span>

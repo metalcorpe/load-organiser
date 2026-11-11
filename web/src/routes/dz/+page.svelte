@@ -26,10 +26,7 @@
 </svelte:head>
 
 <h1>Dropzones</h1>
-<p class="lede">
-	Source-backed listings you can find and log against. A listing is not an endorsement and does not
-	mean the dropzone uses or has confirmed anything in Load Organiser.
-</p>
+<p class="lede">Dropzones from public sources. A listing is not an endorsement.</p>
 
 <form method="GET" class="form search" role="search" data-sveltekit-keepfocus>
 	<div class="field">
@@ -66,10 +63,10 @@
 		</p>
 	</Notice>
 {:else}
-	<ul class="results" aria-label="Dropzones">
+	<ul class="results rows" aria-label="Dropzones">
 		{#each data.result.items as venue (venue.id)}
 			<li>
-				<a href="/dz/{venue.id}">{venue.name}</a>
+				<a class="title" href="/dz/{venue.id}">{venue.name}</a>
 				<span class="meta">
 					{venue.locality ? `${venue.locality}, ` : ''}{countryName(venue.country)}
 				</span>

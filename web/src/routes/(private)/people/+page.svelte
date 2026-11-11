@@ -50,7 +50,7 @@
 	{#if data.search.items.length === 0}
 		<p class="hint">No discoverable profile matches. People who keep their profile private cannot be found.</p>
 	{:else}
-		<ul class="results" aria-label="Search results">
+		<ul class="results rows" aria-label="Search results">
 			{#each data.search.items as person (person.handle)}
 				<li><a class="title" href="/people/{person.handle}">{person.display_name}</a> <span class="meta">@{person.handle}</span></li>
 			{/each}
@@ -90,7 +90,7 @@
 	<p class="hint">
 		Approving lets them see what you share with followers, including what you shared before.
 	</p>
-	<ul class="results" aria-label="Follow requests">
+	<ul class="results rows" aria-label="Follow requests">
 		{#each data.requests as person (person.handle)}
 			<li>
 				{@render who(person)}
@@ -112,7 +112,7 @@
 {:else if data.followers.length === 0}
 	<p class="hint">No followers yet.</p>
 {:else}
-	<ul class="results" aria-label="Followers">
+	<ul class="results rows" aria-label="Followers">
 		{#each data.followers as person (person.handle)}
 			<li>
 				{@render who(person)}
@@ -132,7 +132,7 @@
 {:else if data.following.length === 0}
 	<p class="hint">You follow no one yet.</p>
 {:else}
-	<ul class="results" aria-label="Following">
+	<ul class="results rows" aria-label="Following">
 		{#each data.following as person (person.handle)}
 			<li>{@render who(person)}</li>
 		{/each}
@@ -146,7 +146,7 @@
 {:else if data.blocked.length === 0}
 	<p class="hint">You have blocked no one.</p>
 {:else}
-	<ul class="results" aria-label="Blocked">
+	<ul class="results rows" aria-label="Blocked">
 		{#each data.blocked as person (person.handle)}
 			<li>
 				<span class="title">{person.display_name}</span> <span class="meta">@{person.handle}</span>

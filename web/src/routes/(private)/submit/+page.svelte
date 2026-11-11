@@ -103,7 +103,7 @@
 {:else if data.mine.items.length === 0}
 	<p>You have not sent anything yet.</p>
 {:else}
-	<ul class="results" aria-label="Your submissions">
+	<ul class="results rows" aria-label="Your submissions">
 		{#each data.mine.items as item (item.id)}
 			<li>
 				<span class="title">{KIND_LABEL[item.kind]}</span>
