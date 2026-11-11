@@ -153,10 +153,4 @@
 		gap: 1rem;
 	}
 
-	.choice {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
-		min-height: 44px;
-	}
 </style>

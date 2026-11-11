@@ -110,7 +110,9 @@ h1 {
 	font-weight: 650;
 }
 
-.field input {
+.field input:not([type='checkbox'], [type='radio']) {
+	min-width: 0;
+	max-width: 100%;
 	min-height: 44px;
 	padding: 0.5rem 0.75rem;
 	border: 1px solid var(--field-border);
@@ -118,6 +120,22 @@ h1 {
 	background: var(--field);
 	color: var(--fg);
 	font: inherit;
+}
+
+/* A checkbox or radio with its text: one 44px row, box beside the words. */
+.choice {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	min-height: 44px;
+}
+
+.choice > input {
+	flex: none;
+	width: 1.15rem;
+	height: 1.15rem;
+	margin: 0;
+	accent-color: var(--accent);
 }
 
 .field input[aria-invalid='true'] {
