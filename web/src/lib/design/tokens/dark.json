@@ -22,7 +22,7 @@
 	},
 	"border": {
 		"$type": "color",
-		"$value": "#22354f"
+		"$value": "#3a5780"
 	},
 	"accent": {
 		"$type": "color",
@@ -133,5 +133,15 @@
 			"$type": "color",
 			"$value": "#3a1b1a"
 		}
+	},
+	"field": {
+		"$type": "color",
+		"$value": "#0b1624",
+		"$description": "Form field background"
+	},
+	"field-border": {
+		"$type": "color",
+		"$value": "#5a7598",
+		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
 	}
 }

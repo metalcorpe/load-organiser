@@ -33,4 +33,6 @@
   --ok-bg: #e5f4ea;
   --bad-fg: #8f2f2c;
   --bad-bg: #fbeceb;
+  --field: #ffffff; /** Form field background */
+  --field-border: #7b8da4; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
 }

@@ -4,7 +4,7 @@
   --surface-soft: #1a2d47;
   --fg: #e8eef5;
   --muted: #9fb0c3;
-  --border: #22354f;
+  --border: #3a5780;
   --accent: #ff8a5c;
   --accent-fg: #1a0e08;
   --accent-soft: #3a2318;
@@ -29,4 +29,6 @@
   --ok-bg: #173022;
   --bad-fg: #f4aca8;
   --bad-bg: #3a1b1a;
+  --field: #0b1624; /** Form field background */
+  --field-border: #5a7598; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
 }
