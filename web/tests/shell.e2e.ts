@@ -40,7 +40,7 @@ test.describe('public shell', () => {
 		expect(headers['content-security-policy']).toContain("frame-ancestors 'none'");
 		expect(headers['x-content-type-options']).toBe('nosniff');
 
-		await expect(page.getByRole('heading', { level: 1, name: 'Discover' })).toBeVisible();
+		await expect(page.getByRole('heading', { level: 1, name: 'Events' })).toBeVisible();
 		// Either reviewed listings or the honest empty state; never placeholder activity.
 		await expect(
 			page
@@ -49,14 +49,8 @@ test.describe('public shell', () => {
 		).toBeVisible();
 
 		const nav = page.getByRole('navigation', { name: 'Primary' });
-		await expect(nav.getByRole('link')).toHaveText([
-			'Discover',
-			'Activity',
-			'Add jump',
-			'Records',
-			'Profile'
-		]);
-		await expect(nav.getByRole('link', { name: 'Discover' })).toHaveAttribute('aria-current', 'page');
+		await expect(nav.getByRole('link')).toHaveText(['Events', 'Logbook', 'Friends', 'Me']);
+		await expect(nav.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
 		expect(errors).toEqual([]);
 	});
 
@@ -181,9 +175,9 @@ test.describe('private routes deny anonymous access', () => {
 		await page.goto('/');
 		await page
 			.getByRole('navigation', { name: 'Primary' })
-			.getByRole('link', { name: 'Add jump' })
+			.getByRole('link', { name: 'Logbook' })
 			.click();
-		await expect(page).toHaveURL('/sign-in?returnTo=%2Fjumps%2Fnew');
+		await expect(page).toHaveURL('/sign-in?returnTo=%2Fjumps');
 		await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
 	});
 });

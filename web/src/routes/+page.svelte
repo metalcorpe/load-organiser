@@ -59,14 +59,14 @@
 </script>
 
 <svelte:head>
-	<title>Discover · Load Organiser</title>
+	<title>Events · Load Organiser</title>
 	<meta
 		name="description"
 		content="Dated skydiving events, boogies, camps and courses in Europe, linked to their organizers' own pages."
 	/>
 </svelte:head>
 
-<h1>Discover</h1>
+<h1>Events</h1>
 <p class="lede">Dated events, boogies, camps and courses. Register on the organizer's site.</p>
 
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when

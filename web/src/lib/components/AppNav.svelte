@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { PRIMARY_NAV, isCurrent } from '#lib/navigation.ts';
+	import { PRIMARY_NAV, isCurrentTab } from '#lib/navigation.ts';
 	import NavIcon from './NavIcon.svelte';
 </script>
 
 <nav aria-label="Primary">
 	<ul>
 		{#each PRIMARY_NAV as item (item.href)}
-			{@const current = isCurrent(item.href, page.url.pathname)}
+			{@const current = isCurrentTab(item, page.url.pathname)}
 			<li>
 				<a href={item.href} aria-current={current ? 'page' : undefined}>
 					<NavIcon name={item.icon} />
@@ -30,7 +30,7 @@
 
 	ul {
 		display: grid;
-		grid-template-columns: repeat(5, minmax(0, 1fr));
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 		max-width: 40rem;
 		margin: 0 auto;
 		padding: 0;

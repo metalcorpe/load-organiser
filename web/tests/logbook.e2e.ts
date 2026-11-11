@@ -101,6 +101,11 @@ test.describe('private logbook', () => {
 		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
 		await page.goto('/jumps/new');
 		await expect(page.getByLabel('Place name')).toBeHidden();
+		// The Logbook home offers the same place as its one-tap main action.
+		await page.goto('/jumps');
+		await page.getByRole('link', { name: `Log a jump at ${name}` }).click();
+		await expect(page.getByText(name, { exact: true })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
 	});
 
 	test('a likely duplicate warns, and a distinct jump still saves', async ({ page }) => {

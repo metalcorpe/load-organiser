@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Notice from '#lib/components/Notice.svelte';
+	import RecordTiles from '#lib/components/RecordTiles.svelte';
 	import { authMessage } from '#lib/auth-messages.ts';
 	import type { PageProps } from './$types';
 
@@ -29,6 +30,8 @@
 	Your account, sign-in and records. Your public profile is optional and separate: see
 	<a href="#public-heading">Public profile and people</a>.
 </p>
+
+<RecordTiles />
 
 <section class="card" aria-labelledby="account-heading">
 	<h2 id="account-heading">Account</h2>
