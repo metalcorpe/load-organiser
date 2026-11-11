@@ -33,7 +33,7 @@
 					>
 				</p>
 				<div class="side">
-					<p role="status">
+					<p>
 						{n(data.page.recorded_total)}
 						{data.page.recorded_total === 1 ? 'jump' : 'jumps'} recorded here.
 					</p>
@@ -167,7 +167,7 @@
 	.chip {
 		display: inline-flex;
 		align-items: center;
-		min-height: 40px;
+		min-height: 44px;
 		padding: 0 0.9rem;
 		border-radius: 999px;
 		border: 1px solid color-mix(in srgb, var(--brand-fg) 30%, transparent);

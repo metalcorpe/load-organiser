@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
 	import ReviewHistory from '#lib/components/ReviewHistory.svelte';
 	import { COUNTRY_OPTIONS } from '#lib/countries.ts';
@@ -106,7 +107,7 @@
 			</div>
 			<div class="field">
 				<label for="summary">Summary (optional)</label>
-				<textarea id="summary" name="summary" maxlength="500" rows="3">{v('summary', l?.summary)}</textarea>
+				<TextArea id="summary" name="summary" maxlength={500} rows={3} initial={v('summary', l?.summary)} />
 			</div>
 		</fieldset>
 
@@ -172,7 +173,7 @@
 			</div>
 			<div class="field">
 				<label for="prerequisites">Prerequisites, as the source states them</label>
-				<textarea id="prerequisites" name="prerequisites" maxlength="1000" rows="3">{v('prerequisites', l?.prerequisites)}</textarea>
+				<TextArea id="prerequisites" name="prerequisites" maxlength={1000} rows={3} initial={v('prerequisites', l?.prerequisites)} />
 			</div>
 		</fieldset>
 

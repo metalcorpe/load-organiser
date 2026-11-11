@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 # Isolated verification for the skydiver beta (#147): backend, web, e2e.
 #
-#   scripts/verify.sh [backend] [web] [e2e] [recovery]   (default: all four)
+#   scripts/verify.sh [backend] [web] [storybook] [e2e] [recovery]   (default: all five)
+#
+# Faster runs while iterating (the full default run is still what a PR needs):
+#   E2E_ARGS="tests/logbook.e2e.ts --project=chromium-320" scripts/verify.sh e2e
+#     passes Playwright options through: one file, one device, -g 'test name'...
+#     (shell-evaluated: a developer convenience, not for untrusted input).
+#   E2E_WORKERS=N sets parallel browsers (default 1; more was not faster here, see playwright.config.ts).
+#   `web` before `e2e` in the same run builds once; e2e alone builds itself.
 #
 # Never reads the repository .env: backend commands run from an empty temporary
 # directory with a cleared environment and generated throwaway secrets.
@@ -21,9 +28,9 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 B="$ROOT/backend"
 W="$ROOT/web"
-STAGES="${*:-backend web e2e recovery}"
+STAGES="${*:-backend web storybook e2e recovery}"
 for stage in $STAGES; do
-  case "$stage" in backend | web | e2e | recovery) ;; *) echo "unknown stage: $stage" >&2; exit 2 ;; esac
+  case "$stage" in backend | web | storybook | e2e | recovery) ;; *) echo "unknown stage: $stage" >&2; exit 2 ;; esac
 done
 
 SCRATCH=$(mktemp -d "${TMPDIR:-/tmp}/organiser-verify.XXXXXX")
@@ -35,6 +42,7 @@ cleanup() {
   rm -rf "$SCRATCH"
 }
 trap cleanup EXIT
+WEB_BUILT=""
 mkdir -p "$SCRATCH/empty"
 secret() { openssl rand -hex "${1:-32}"; }
 log() { printf '\n== %s\n' "$*"; }
@@ -140,9 +148,14 @@ stage_backend() {
 }
 
 stage_web() {
-  log "web: install, check, unit tests, build, Storybook build"
-  (cd "$W" && { [ -z "${CI:-}" ] || npm ci; } && npm run check && npm run test:unit && npm run build \
-    && npm run storybook:build)
+  log "web: install, check, unit tests, build"
+  (cd "$W" && { [ -z "${CI:-}" ] || npm ci; } && npm run check && npm run test:unit && npm run build)
+  WEB_BUILT=yes
+}
+
+stage_storybook() {
+  log "storybook: static build (a broken story fails here)"
+  (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } && npm run storybook:build)
 }
 
 stage_e2e() {
@@ -184,7 +197,8 @@ EOF
   (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } &&
     E2E_API_ORIGIN="http://127.0.0.1:$api_port" E2E_MAIL_OUTBOX="$outbox" \
       E2E_API_PROXY_KEY="$proxy_key" E2E_REVIEWER_EMAIL="$reviewer_email" \
-      E2E_REVIEWER_PASSWORD="$reviewer_password" npm run test:e2e)
+      E2E_REVIEWER_PASSWORD="$reviewer_password" bash -c \
+      "if [ '${WEB_BUILT:-}' = yes ]; then npx playwright test ${E2E_ARGS:-}; else npm run build && npx playwright test ${E2E_ARGS:-}; fi")
   if grep -q 'HTTP/1.1" 5' "$SCRATCH/api.log"; then
     echo "API answered 5xx during e2e:" >&2
     grep 'HTTP/1.1" 5' "$SCRATCH/api.log" >&2
