@@ -180,7 +180,7 @@
 		</fieldset>
 		<div class="field">
 			<label for="caption">Caption (optional, up to 280 characters)</label>
-			<textarea id="caption" name="caption" maxlength="280" rows="3">{chosen.caption}</textarea>
+			<textarea id="caption" name="caption" maxlength="280" rows="3" defaultValue={chosen.caption}></textarea>
 		</div>
 		<div class="field">
 			<label for="link">Link (optional, e.g. a video you host elsewhere)</label>

@@ -117,7 +117,7 @@
 	{/if}
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
-		<textarea id="notes" name="notes" maxlength="1000" rows="3">{v('notes', c?.notes)}</textarea>
+		<textarea id="notes" name="notes" maxlength="1000" rows="3" defaultValue={v('notes', c?.notes)}></textarea>
 	</div>
 	<p class="hint">
 		This is your own record. It is not proof of ownership and does not say whether the item is

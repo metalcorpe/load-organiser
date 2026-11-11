@@ -177,11 +177,11 @@
 
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
-		<textarea id="notes" name="notes" maxlength="2000" rows="3">{v('notes')}</textarea>
+		<textarea id="notes" name="notes" maxlength="2000" rows="3" defaultValue={v('notes')}></textarea>
 	</div>
 	<div class="field">
 		<label for="links">Links (optional, private; one per line, at most five)</label>
-		<textarea id="links" name="links" rows="2" spellcheck="false">{v('links')}</textarea>
+		<textarea id="links" name="links" rows="2" spellcheck="false" defaultValue={v('links')}></textarea>
 	</div>
 	<p class="hint">This is your own record. Nothing here is shared or verified.</p>
 	<div class="form-actions">

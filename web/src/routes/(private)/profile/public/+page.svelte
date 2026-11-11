@@ -76,7 +76,7 @@
 		</div>
 		<div class="field">
 			<label for="bio">Bio (optional)</label>
-			<textarea id="bio" name="bio" rows="3" maxlength="280">{v('bio', own?.bio ?? '')}</textarea>
+			<textarea id="bio" name="bio" rows="3" maxlength="280" defaultValue={v('bio', own?.bio ?? '')}></textarea>
 		</div>
 		<fieldset class="field">
 			<legend>Disciplines (optional, up to five)</legend>

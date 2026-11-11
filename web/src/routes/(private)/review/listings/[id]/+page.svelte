@@ -106,7 +106,7 @@
 			</div>
 			<div class="field">
 				<label for="summary">Summary (optional)</label>
-				<textarea id="summary" name="summary" maxlength="500" rows="3">{v('summary', l?.summary)}</textarea>
+				<textarea id="summary" name="summary" maxlength="500" rows="3" defaultValue={v('summary', l?.summary)}></textarea>
 			</div>
 		</fieldset>
 
@@ -172,7 +172,7 @@
 			</div>
 			<div class="field">
 				<label for="prerequisites">Prerequisites, as the source states them</label>
-				<textarea id="prerequisites" name="prerequisites" maxlength="1000" rows="3">{v('prerequisites', l?.prerequisites)}</textarea>
+				<textarea id="prerequisites" name="prerequisites" maxlength="1000" rows="3" defaultValue={v('prerequisites', l?.prerequisites)}></textarea>
 			</div>
 		</fieldset>
 
