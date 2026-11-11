@@ -213,3 +213,34 @@ h1 {
 	font-size: 0.85rem;
 	color: var(--muted);
 }
+
+/* Short labels on cards: a listing's type or status. Sentence case, never a sentence. */
+.badge {
+	display: inline-block;
+	padding: 0.05rem 0.5rem;
+	border-radius: 6px;
+	background: var(--surface-soft);
+	border: 1px solid var(--border);
+	color: var(--fg);
+	font-size: 0.8rem;
+	font-weight: 600;
+	line-height: 1.5;
+}
+
+.badge.status {
+	background: var(--warn-bg);
+	border-color: var(--warn-border);
+	color: var(--warn-fg);
+}
+
+/* A list of cards: spacing instead of row borders. */
+.results.cards {
+	display: grid;
+	gap: 0.6rem;
+	margin: 0.75rem 0;
+}
+
+.results.cards > li {
+	border-bottom: 0;
+	padding: 0;
+}

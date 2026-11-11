@@ -87,11 +87,21 @@ test.describe('discover board', () => {
 		await expect(page.getByLabel('Country')).toHaveValue('AF');
 		await page.goto('/');
 		await page.getByLabel('Title or organizer').fill(base);
+		// The filters beyond the search box are folded away until asked for.
+		await expect(page.getByLabel('Country')).toBeHidden();
+		await page.locator('summary', { hasText: 'Filters' }).click();
 		await page.getByLabel('Country').selectOption('PT');
 		await page.getByLabel('Discipline').selectOption('freefly');
 		await page.getByRole('button', { name: 'Show listings' }).click();
 		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
 		const results = page.getByRole('list', { name: 'Listings' });
+		await expect(results.getByRole('link')).toHaveText([listing.title]);
+		// Active filters show as chips; each removes only itself.
+		await expect(page.locator('summary', { hasText: 'Filters (2)' })).toBeVisible();
+		const chips = page.getByRole('list', { name: 'Active filters' });
+		await chips.getByRole('link', { name: 'Remove Freefly' }).click();
+		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
+		await expect(page).not.toHaveURL(/discipline=/);
 		await expect(results.getByRole('link')).toHaveText([listing.title]);
 		// Clearing filters resets the form fields, not just the URL.
 		await page.getByRole('link', { name: 'Clear filters' }).first().click();
