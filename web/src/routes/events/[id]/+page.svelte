@@ -65,7 +65,7 @@
 </script>
 
 <svelte:head>
-	<title>{item.title} · Discover · Load Organiser</title>
+	<title>{item.title} · Events · Load Organiser</title>
 	<meta
 		name="description"
 		content="{CATEGORY_LABEL[item.category]} in {countryName(item.country)}, {formatRange(

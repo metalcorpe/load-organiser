@@ -16,4 +16,4 @@
 		{page.error?.message ?? 'The page could not be loaded.'} (Error {page.status})
 	{/if}
 </p>
-<p><a class="button secondary" href="/">Go to Discover</a></p>
+<p><a class="button secondary" href="/">Go to Events</a></p>
