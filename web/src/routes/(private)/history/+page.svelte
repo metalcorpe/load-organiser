@@ -10,6 +10,8 @@
 
 	let { data }: PageProps = $props();
 	const h = $derived(data.history);
+	// Bar lengths for the month table, relative to the busiest month (at least 1 to avoid /0).
+	const peak = $derived(h.ok ? Math.max(1, ...h.months.map((m) => m.jumps)) : 1);
 </script>
 
 <svelte:head>
@@ -19,7 +21,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>History</h1>
-<p class="lede">Totals from your own entries. Only you can see them; nothing here is verified.</p>
+<p class="lede">Totals from your own entries, private to you.</p>
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Prior jump count saved.</p>{/if}
 {#if page.url.searchParams.get('removed')}
 	<p role="status" class="ok">Prior jump count removed. Your recorded jumps are kept.</p>
@@ -29,7 +31,9 @@
 	<p class="form-error" role="alert">{historyMessage(h.reason)}</p>
 {:else}
 	{@const t = h.totals}
-	<h2>Totals</h2>
+	<section class="hero" aria-labelledby="totals-heading">
+	<h2 id="totals-heading" class="visually-hidden">Totals</h2>
+	<p class="big" aria-hidden="true">{count(h.baseline && !t.inconsistent ? (t.lifetime ?? 0) : t.recorded).replace(/ jumps?$/, '')}</p>
 	{#if !h.baseline}
 		<p role="status"><strong>{count(t.recorded)}</strong> recorded here.</p>
 		<p class="hint">
@@ -71,11 +75,13 @@
 		</dl>
 		<p><a href="/history/baseline">Change prior jump count</a></p>
 	{/if}
+	</section>
 
 	{#if t.recorded === 0}
 		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>
 	{:else}
-		<h2>Recent activity</h2>
+		<section class="card" aria-labelledby="activity-heading">
+		<h2 id="activity-heading">Recent activity</h2>
 		<p>
 			Last recorded jump: {h.last_jump_on ? formatDay(h.last_jump_on) : 'none'}. First recorded: {h.first_jump_on
 				? formatDay(h.first_jump_on)
@@ -86,12 +92,17 @@
 			<thead><tr><th scope="col">Month</th><th scope="col">Jumps</th></tr></thead>
 			<tbody>
 				{#each [...h.months].reverse() as m (m.month)}
-					<tr><th scope="row">{formatMonth(m.month)}</th><td>{m.jumps}</td></tr>
+					<tr>
+						<th scope="row">{formatMonth(m.month)}</th>
+						<td><span class="track" aria-hidden="true"><span class="bar" style="--w: {(m.jumps / peak) * 100}%"></span></span>{m.jumps}</td>
+					</tr>
 				{/each}
 			</tbody>
 		</table>
-		<p class="hint">Activity counts recorded entries only. It is not evidence of currency or eligibility.</p>
+		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
+		</section>
 
+		<section class="card">
 		<h2>By type</h2>
 		<ul class="results" aria-label="By type">
 			{#each h.by_type as item (item.jump_type)}
@@ -101,7 +112,9 @@
 				</li>
 			{/each}
 		</ul>
+		</section>
 
+		<section class="card">
 		<h2>By place</h2>
 		<ul class="results" aria-label="By place">
 			{#each h.by_location as item (item.location.kind + item.location.id)}
@@ -121,7 +134,9 @@
 				</li>
 			{/each}
 		</ul>
+		</section>
 
+		<section class="card">
 		<h2>Equipment used</h2>
 		{#if h.by_component.length === 0}
 			<p class="hint">No jump records a component yet.</p>
@@ -143,10 +158,63 @@
 			Counts only jumps where you ticked the component. Jumps without recorded gear and your prior jump
 			count add no use.
 		</p>
+		</section>
 	{/if}
 {/if}
 
 <style>
+	/* Totals: the screen's one navy card. */
+	.hero {
+		margin: 0.5rem 0 1rem;
+		padding: 1.1rem;
+		border-radius: 22px;
+		background: var(--brand);
+		color: var(--brand-fg);
+	}
+
+	.hero :global(a) {
+		color: var(--brand-fg);
+	}
+
+	.hero :global(.hint),
+	.hero :global(.meta),
+	.hero :global(dt) {
+		color: var(--brand-muted);
+	}
+
+	.big {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-display);
+		font-weight: 700;
+		font-size: 3.4rem;
+		line-height: 0.95;
+		color: var(--highlight);
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* A fixed track per row, so the bars compare at a glance; the number stays the data. */
+	.track {
+		display: inline-block;
+		width: 9rem;
+		height: 0.6rem;
+		margin-right: 0.6rem;
+		border-radius: 999px;
+		background: var(--surface-soft);
+		vertical-align: middle;
+	}
+
+	.bar {
+		display: block;
+		width: var(--w);
+		height: 100%;
+		border-radius: 999px;
+		background: var(--accent);
+	}
+
+	.months td {
+		white-space: nowrap;
+	}
+
 	.months {
 		border-collapse: collapse;
 		margin-block: 0.5rem;

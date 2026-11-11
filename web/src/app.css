@@ -214,6 +214,7 @@ h1 {
 }
 
 /* A <summary> that opens a folded section, with a chevron that turns when it opens. */
+details > summary,
 .disclosure {
 	display: inline-flex;
 	align-items: center;
@@ -225,10 +226,12 @@ h1 {
 	list-style: none;
 }
 
+details > summary::-webkit-details-marker,
 .disclosure::-webkit-details-marker {
 	display: none;
 }
 
+details > summary::after,
 .disclosure::after {
 	content: '';
 	width: 0.45rem;
@@ -239,6 +242,7 @@ h1 {
 	transition: transform 120ms ease-out;
 }
 
+details[open] > summary::after,
 details[open] > .disclosure::after {
 	transform: translateY(2px) rotate(-135deg);
 }
@@ -283,4 +287,65 @@ details[open] > .disclosure::after {
 	color: var(--type-fg);
 	font-size: 0.85rem;
 	font-weight: 600;
+}
+
+/* Shared page structure for design E: sections as cards, readable label/value lists, form groups. */
+h2 {
+	font-size: 1.25rem;
+	line-height: 1.25;
+	margin: 1.5rem 0 0.5rem;
+}
+
+.card {
+	margin: 1rem 0;
+	padding: 1rem;
+	border-radius: var(--radius);
+	background: var(--surface);
+	box-shadow: 0 0 0 1px var(--border);
+}
+
+.card > h2:first-child,
+.card > h3:first-child {
+	margin-top: 0;
+}
+
+dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 0.35rem 1rem;
+	margin: 0.75rem 0;
+}
+
+dt {
+	color: var(--muted);
+}
+
+dd {
+	margin: 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+@media (max-width: 30rem) {
+	dl {
+		grid-template-columns: 1fr;
+		gap: 0.1rem;
+	}
+
+	dd {
+		margin-bottom: 0.5rem;
+	}
+}
+
+fieldset {
+	margin: 0;
+	padding: 0.75rem 1rem 1rem;
+	min-width: 0;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+}
+
+legend {
+	padding: 0 0.35rem;
+	font-weight: 650;
 }
