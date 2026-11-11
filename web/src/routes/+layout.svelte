@@ -1,4 +1,12 @@
 <script lang="ts">
+	import '@fontsource/figtree/latin-400.css';
+	import '@fontsource/figtree/latin-ext-400.css';
+	import '@fontsource/figtree/latin-600.css';
+	import '@fontsource/figtree/latin-ext-600.css';
+	import '@fontsource/outfit/latin-600.css';
+	import '@fontsource/outfit/latin-ext-600.css';
+	import '@fontsource/outfit/latin-700.css';
+	import '@fontsource/outfit/latin-ext-700.css';
 	import '../app.css';
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';

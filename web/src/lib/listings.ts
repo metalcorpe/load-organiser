@@ -88,6 +88,12 @@ export function dateStub(start: string | null, end: string | null): DateStub | n
 	return stub;
 }
 
+/** How many calendar days a listing runs, both ends included; 0 when undated. */
+export function spanDays(start: string | null, end: string | null): number {
+	if (!start || !end) return 0;
+	return Math.round((day(end).getTime() - day(start).getTime()) / 86_400_000) + 1;
+}
+
 export function languageName(code: string): string {
 	try {
 		return LANGUAGES.of(code) ?? code;
