@@ -133,12 +133,6 @@
 		margin-bottom: 0.3rem;
 	}
 
-	.choice {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
-		min-height: 44px;
-	}
 
 	.title {
 		font-weight: 600;
