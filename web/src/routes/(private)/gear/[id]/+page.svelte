@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
 	import ReviewHistory from '#lib/components/ReviewHistory.svelte';
 	import { KIND_LABEL, METHOD_LABEL, RELATION_LABEL, SERVICE_LABEL, gearMessage } from '#lib/gear.ts';
@@ -117,7 +118,7 @@
 	{/if}
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
-		<textarea id="notes" name="notes" maxlength="1000" rows="3" defaultValue={v('notes', c?.notes)}></textarea>
+		<TextArea id="notes" name="notes" maxlength={1000} rows={3} initial={v('notes', c?.notes)} />
 	</div>
 	<p class="hint">
 		This is your own record. It is not proof of ownership and does not say whether the item is

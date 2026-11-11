@@ -6,6 +6,7 @@
 # Faster runs while iterating (the full default run is still what a PR needs):
 #   E2E_ARGS="tests/logbook.e2e.ts --project=chromium-320" scripts/verify.sh e2e
 #     passes Playwright options through: one file, one device, -g 'test name'...
+#     (shell-evaluated: a developer convenience, not for untrusted input).
 #   E2E_WORKERS=N sets parallel browsers (default 1; more was not faster here, see playwright.config.ts).
 #   `web` before `e2e` in the same run builds once; e2e alone builds itself.
 #
@@ -154,7 +155,7 @@ stage_web() {
 
 stage_storybook() {
   log "storybook: static build (a broken story fails here)"
-  (cd "$W" && npm run storybook:build)
+  (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } && npm run storybook:build)
 }
 
 stage_e2e() {

@@ -78,9 +78,14 @@
 		outline-offset: 2px;
 	}
 
-	.muted .tile,
+	/* Cancelled or ended: neutral colours instead of opacity, so text keeps its contrast. */
+	.muted .tile {
+		background: var(--surface-soft);
+		color: var(--muted);
+	}
+
 	.muted .title {
-		opacity: 0.65;
+		color: var(--muted);
 	}
 
 	/* The type's tint, carrying the start date. */

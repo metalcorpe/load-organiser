@@ -18,7 +18,8 @@
 	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
 </script>
 
-<section class="featured type-{item.category}" aria-label="Next big event">
+<section class="featured type-{item.category}" aria-labelledby="featured-heading">
+	<h2 id="featured-heading" class="visually-hidden">Next big event</h2>
 	<div class="text">
 		<span class="type-pill"
 			><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]} · next big one</span

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
 	import JumpCard from '#lib/components/JumpCard.svelte';
 	import type { PostOut } from '#lib/contracts/index.ts';
@@ -180,7 +181,7 @@
 		</fieldset>
 		<div class="field">
 			<label for="caption">Caption (optional, up to 280 characters)</label>
-			<textarea id="caption" name="caption" maxlength="280" rows="3" defaultValue={chosen.caption}></textarea>
+			<TextArea id="caption" name="caption" maxlength={280} rows={3} initial={chosen.caption} />
 		</div>
 		<div class="field">
 			<label for="link">Link (optional, e.g. a video you host elsewhere)</label>

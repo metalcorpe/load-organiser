@@ -127,6 +127,25 @@ test.describe('private logbook', () => {
 		await expect(page.getByText('2 jumps recorded here.', { exact: false })).toBeVisible();
 	});
 
+	test('saved notes are in the page without JavaScript', async ({ page, browser }) => {
+		// The server renders the saved text into the field, so a form posted before (or without)
+		// hydration keeps it instead of sending an empty field.
+		await signIn(page, await createAccount({ label: 'nojs' }));
+		const id = await logJump(page);
+		await page.getByLabel('Notes (optional, private)').fill('kept without js');
+		await page.getByRole('button', { name: 'Save changes' }).click();
+		await expect(page.getByRole('list', { name: 'History' })).toContainText('Notes: changed');
+		const nojs = await browser.newContext({
+			storageState: await page.context().storageState(),
+			javaScriptEnabled: false,
+			ignoreHTTPSErrors: true
+		});
+		const plain = await nojs.newPage();
+		await plain.goto(`${ORIGIN}/jumps/${id}`);
+		await expect(plain.getByLabel('Notes (optional, private)')).toHaveValue('kept without js');
+		await nojs.close();
+	});
+
 	test('edit keeps a correction history, then delete', async ({ page }) => {
 		await signIn(page, await createAccount({ label: 'edits' }));
 		const id = await logJump(page);

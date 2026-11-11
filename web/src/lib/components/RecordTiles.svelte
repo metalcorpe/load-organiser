@@ -2,6 +2,7 @@
 	/** Where a member's own records live: shown on Records and on the Me tab. */
 	const groups = [
 		{
+			id: 'jumps',
 			heading: 'Jumps',
 			items: [
 				{ href: '/jumps', name: 'Logbook', text: 'Every jump you logged, wherever you jumped.' },
@@ -10,6 +11,7 @@
 			]
 		},
 		{
+			id: 'trips',
 			heading: 'Trips',
 			items: [
 				{ href: '/saved', name: 'Saved listings', text: 'Events you bookmarked.' },
@@ -18,6 +20,7 @@
 			]
 		},
 		{
+			id: 'data',
 			heading: 'Your data',
 			items: [
 				{ href: '/profile/data', name: 'Export or restore', text: 'A copy of all your records as a file.' },
@@ -27,9 +30,9 @@
 	];
 </script>
 
-{#each groups as group (group.heading)}
-	<section aria-labelledby="g-{group.heading}">
-		<h2 id="g-{group.heading}">{group.heading}</h2>
+{#each groups as group (group.id)}
+	<section aria-labelledby="tiles-{group.id}">
+		<h2 id="tiles-{group.id}">{group.heading}</h2>
 		<ul class="tiles">
 			{#each group.items as item (item.href)}
 				<li>

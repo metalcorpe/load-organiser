@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextArea from '#lib/components/TextArea.svelte';
 	import { onMount } from 'svelte';
 	import { KIND_LABEL } from '#lib/gear.ts';
 	import { DATUM_LABEL, JUMP_TYPE_LABEL } from '#lib/jumps.ts';
@@ -177,11 +178,11 @@
 
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
-		<textarea id="notes" name="notes" maxlength="2000" rows="3" defaultValue={v('notes')}></textarea>
+		<TextArea id="notes" name="notes" maxlength={2000} rows={3} initial={v('notes')} />
 	</div>
 	<div class="field">
 		<label for="links">Links (optional, private; one per line, at most five)</label>
-		<textarea id="links" name="links" rows="2" spellcheck="false" defaultValue={v('links')}></textarea>
+		<TextArea id="links" name="links" rows={2} spellcheck="false" initial={v('links')} />
 	</div>
 	<p class="hint">This is your own record. Nothing here is shared or verified.</p>
 	<div class="form-actions">

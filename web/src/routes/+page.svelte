@@ -32,7 +32,9 @@
 					(i) =>
 						(i.category === 'boogie' || i.category === 'camp') &&
 						i.status === 'published' &&
-						spanDays(i.starts_on, i.ends_on) > 1
+						spanDays(i.starts_on, i.ends_on) > 1 &&
+						// "Next big one" means not started yet (UTC date; good enough for a label).
+						(i.starts_on ?? '') > new Date().toISOString().slice(0, 10)
 				) ?? null)
 			: null
 	);

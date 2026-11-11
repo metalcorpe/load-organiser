@@ -1,4 +1,5 @@
 <script lang="ts">
+	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
 	import { countryName } from '#lib/countries.ts';
 	import { DISCIPLINES, disciplineLabel, socialMessage } from '#lib/social.ts';
@@ -76,7 +77,7 @@
 		</div>
 		<div class="field">
 			<label for="bio">Bio (optional)</label>
-			<textarea id="bio" name="bio" rows="3" maxlength="280" defaultValue={v('bio', own?.bio ?? '')}></textarea>
+			<TextArea id="bio" name="bio" rows={3} maxlength={280} initial={v('bio', own?.bio ?? '')} />
 		</div>
 		<fieldset class="field">
 			<legend>Disciplines (optional, up to five)</legend>

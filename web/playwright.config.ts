@@ -41,7 +41,7 @@ export default defineConfig({
 	// One browser at a time by default. Measured 2026-11-11: 4 workers were not faster on an
 	// 8-core machine (previews, API and database compete for the same CPU) and exposed
 	// timing assumptions in several tests. E2E_WORKERS=N to experiment.
-	workers: Number(process.env.E2E_WORKERS ?? 1),
+	workers: Number(process.env.E2E_WORKERS) || 1,
 	use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
 	projects: [
 		{ name: 'pixel-7', use: { ...devices['Pixel 7'] } },
