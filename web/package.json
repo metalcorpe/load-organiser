@@ -14,6 +14,7 @@
 		"check": "npm run types:check && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json --noEmit",
 		"gen": "node -e \"require('node:fs').rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types --strict-vars=false",
 		"contracts:generate": "openapi-ts",
+		"tokens:build": "style-dictionary build --config sd.light.json && style-dictionary build --config sd.dark.json",
 		"test:unit": "vitest --run",
 		"test:e2e": "npm run build && playwright test",
 		"types:check": "node -e \"require('node:fs').rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types --strict-vars=false --check"
@@ -27,6 +28,8 @@
 		"@sveltejs/kit": "3.1.1",
 		"@sveltejs/vite-plugin-svelte": "7.3.1",
 		"@types/node": "26.6.6",
+		"colorjs.io": "0.7.1",
+		"style-dictionary": "5.7.1",
 		"svelte": "5.57.3",
 		"svelte-check": "4.7.8",
 		"typescript": "6.0.3",

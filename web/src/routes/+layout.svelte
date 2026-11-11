@@ -7,6 +7,8 @@
 	import '@fontsource/outfit/latin-ext-600.css';
 	import '@fontsource/outfit/latin-700.css';
 	import '@fontsource/outfit/latin-ext-700.css';
+	import '#lib/design/tokens-light.css';
+	import '#lib/design/tokens-dark.css';
 	import '../app.css';
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';

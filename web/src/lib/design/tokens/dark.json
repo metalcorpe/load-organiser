@@ -1,0 +1,137 @@
+{
+	"$description": "Design G (dark), chosen by the owner on 2026-11-11.",
+	"bg": {
+		"$type": "color",
+		"$value": "#0b1624"
+	},
+	"surface": {
+		"$type": "color",
+		"$value": "#13233a"
+	},
+	"surface-soft": {
+		"$type": "color",
+		"$value": "#1a2d47"
+	},
+	"fg": {
+		"$type": "color",
+		"$value": "#e8eef5"
+	},
+	"muted": {
+		"$type": "color",
+		"$value": "#9fb0c3"
+	},
+	"border": {
+		"$type": "color",
+		"$value": "#22354f"
+	},
+	"accent": {
+		"$type": "color",
+		"$value": "#ff8a5c"
+	},
+	"accent-fg": {
+		"$type": "color",
+		"$value": "#1a0e08"
+	},
+	"accent-soft": {
+		"$type": "color",
+		"$value": "#3a2318"
+	},
+	"focus": {
+		"$type": "color",
+		"$value": "#7faef5"
+	},
+	"brand": {
+		"$type": "color",
+		"$value": "#1d3b63"
+	},
+	"brand-fg": {
+		"$type": "color",
+		"$value": "#f3f6fa"
+	},
+	"brand-muted": {
+		"$type": "color",
+		"$value": "#c9d6e4"
+	},
+	"highlight": {
+		"$type": "color",
+		"$value": "#ff8a5c"
+	},
+	"icon": {
+		"$type": "color",
+		"$value": "#7faef5"
+	},
+	"boogie": {
+		"bg": {
+			"$type": "color",
+			"$value": "#3a2c12"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#f2c46b"
+		}
+	},
+	"camp": {
+		"bg": {
+			"$type": "color",
+			"$value": "#12332c"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#6ed3ba"
+		}
+	},
+	"course": {
+		"bg": {
+			"$type": "color",
+			"$value": "#241f45"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#b7a8ff"
+		}
+	},
+	"event": {
+		"bg": {
+			"$type": "color",
+			"$value": "#3a1626"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#f29bbe"
+		}
+	},
+	"warn": {
+		"bg": {
+			"$type": "color",
+			"$value": "#2c2512"
+		},
+		"border": {
+			"$type": "color",
+			"$value": "#6b5a26"
+		},
+		"fg": {
+			"$type": "color",
+			"$value": "#f1d68d"
+		}
+	},
+	"ok": {
+		"fg": {
+			"$type": "color",
+			"$value": "#9fe0b5"
+		},
+		"bg": {
+			"$type": "color",
+			"$value": "#173022"
+		}
+	},
+	"bad": {
+		"fg": {
+			"$type": "color",
+			"$value": "#f4aca8"
+		},
+		"bg": {
+			"$type": "color",
+			"$value": "#3a1b1a"
+		}
+	}
+}
