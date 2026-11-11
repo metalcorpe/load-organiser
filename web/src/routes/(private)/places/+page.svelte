@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { COUNTRY_OPTIONS, countryName } from '#lib/countries.ts';
 	import { directoryMessage } from '#lib/directory-messages.ts';
@@ -18,6 +19,7 @@
 </svelte:head>
 
 <h1>Private places</h1>
+<PrivacyLabel />
 <p class="lede">
 	Places only you can see. Use one when a dropzone is not listed, so logging never waits for a
 	listing. Adding a place does not publish it, suggest it or notify anyone.

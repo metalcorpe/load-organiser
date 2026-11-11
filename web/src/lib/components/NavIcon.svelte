@@ -5,9 +5,9 @@
 </script>
 
 <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
-	{#if name === 'events'}
-		<rect x="3" y="5" width="18" height="16" rx="2" />
-		<path d="M3 10h18M8 3v4M16 3v4" />
+	{#if name === 'explore'}
+		<circle cx="12" cy="12" r="9" />
+		<path d="m15.5 8.5-2 5-5 2 2-5z" />
 	{:else if name === 'logbook'}
 		<path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z" />
 		<path d="M5 17a3 3 0 0 1 3-3h11" />

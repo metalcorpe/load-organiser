@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName } from '#lib/countries.ts';
@@ -21,6 +22,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>History</h1>
+<PrivacyLabel />
 <p class="lede">Totals from your own entries, private to you.</p>
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Prior jump count saved.</p>{/if}
 {#if page.url.searchParams.get('removed')}

@@ -48,9 +48,12 @@ test.describe('public shell', () => {
 				.or(page.getByText('No listings published yet'))
 		).toBeVisible();
 
-		const nav = page.getByRole('navigation', { name: 'Primary' });
-		await expect(nav.getByRole('link')).toHaveText(['Events', 'Logbook', 'Friends', 'Me']);
-		await expect(nav.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
+		// Guests browse the public area without the members' tab bar.
+		await expect(page.getByRole('navigation', { name: 'Primary' })).toHaveCount(0);
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Join' })).toBeVisible();
+		const explore = page.getByRole('navigation', { name: 'Explore' });
+		await expect(explore.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
 		expect(errors).toEqual([]);
 	});
 
@@ -171,12 +174,18 @@ test.describe('private routes deny anonymous access', () => {
 		await expect(page.getByRole('heading', { name: 'Records' })).toHaveCount(0);
 	});
 
-	test('tab navigation to a private section is redirected client-side', async ({ page }) => {
+	test('the Explore switch moves between the public views, client-side', async ({ page }) => {
 		await page.goto('/');
-		await page
-			.getByRole('navigation', { name: 'Primary' })
-			.getByRole('link', { name: 'Logbook' })
-			.click();
+		await page.getByRole('navigation', { name: 'Explore' }).getByRole('link', { name: 'Dropzones' }).click();
+		await expect(page).toHaveURL('/dz');
+		await expect(page.getByRole('heading', { level: 1, name: 'Dropzones' })).toBeVisible();
+		await expect(
+			page.getByRole('navigation', { name: 'Explore' }).getByRole('link', { name: 'Dropzones' })
+		).toHaveAttribute('aria-current', 'page');
+	});
+
+	test('a private section opened as a guest asks to sign in', async ({ page }) => {
+		await page.goto('/jumps');
 		await expect(page).toHaveURL('/sign-in?returnTo=%2Fjumps');
 		await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
 	});

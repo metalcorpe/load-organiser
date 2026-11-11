@@ -6,14 +6,17 @@ const current = (pathname: string) =>
 	PRIMARY_NAV.filter((item) => isCurrentTab(item, pathname)).map((item) => item.label);
 
 describe('primary navigation', () => {
-	it('has the four tabs of design E, only Events public', () => {
-		expect(PRIMARY_NAV.map((item) => item.label)).toEqual(['Events', 'Logbook', 'Friends', 'Me']);
+	it('has the four member tabs, only Explore public', () => {
+		expect(PRIMARY_NAV.map((item) => item.label)).toEqual(['Explore', 'Logbook', 'Friends', 'Me']);
 		expect(PRIMARY_NAV.filter((item) => !item.private).map((item) => item.href)).toEqual(['/']);
 	});
 
 	it('highlights exactly one tab for each section', () => {
-		expect(current('/')).toEqual(['Events']);
-		expect(current('/events/abc')).toEqual(['Events']);
+		expect(current('/')).toEqual(['Explore']);
+		expect(current('/events/abc')).toEqual(['Explore']);
+		expect(current('/dz')).toEqual(['Explore']);
+		expect(current('/dz/abc')).toEqual(['Explore']);
+		expect(current('/organizers/abc')).toEqual(['Explore']);
 		expect(current('/jumps')).toEqual(['Logbook']);
 		expect(current('/jumps/new')).toEqual(['Logbook']);
 		expect(current('/history/baseline')).toEqual(['Logbook']);
@@ -24,7 +27,7 @@ describe('primary navigation', () => {
 		expect(current('/profile/data')).toEqual(['Me']);
 		expect(current('/status')).toEqual([]);
 		expect(current('/jumpsx')).toEqual([]);
-		expect(isCurrentTab(tab('Events'), '/dz')).toBe(false);
+		expect(isCurrentTab(tab('Explore'), '/dzx')).toBe(false);
 	});
 
 	it('keeps the plain section check', () => {
