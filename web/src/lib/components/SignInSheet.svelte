@@ -31,6 +31,7 @@
 			const link = (event.target as Element | null)?.closest?.('a[data-sign-in]');
 			if (!(link instanceof HTMLAnchorElement)) return;
 			event.preventDefault();
+			if (page.state.signIn) return; // already open, or opening: one history entry only
 			opener = link;
 			const target = new URL(link.href).searchParams.get('returnTo');
 			const back = safeReturnPath(target) ?? `${page.url.pathname}${page.url.search}`;
@@ -69,9 +70,15 @@
 		event.preventDefault();
 		close();
 	}
+
+	// The browser can close a modal dialog itself (for example a second Escape, or Android's back
+	// gesture) without a cancel event. Drop the history entry too, or the next open would be ignored.
+	function onClose() {
+		if (page.state.signIn) history.back();
+	}
 </script>
 
-<dialog bind:this={dialog} aria-labelledby="sheet-title" oncancel={onCancel}>
+<dialog bind:this={dialog} aria-labelledby="sheet-title" oncancel={onCancel} onclose={onClose}>
 	<!-- Rendered only while open: no duplicate form fields on the page underneath. -->
 	{#if returnTo}
 	<div class="sheet">
@@ -86,7 +93,7 @@
 			</div>
 			<div class="field">
 				<label for="sheet-password">Password</label>
-				<input id="sheet-password" name="password" type="password" autocomplete="current-password" required />
+				<input id="sheet-password" name="password" type="password" autocomplete="current-password" required maxlength="1024" />
 			</div>
 			<div class="form-actions">
 				<button class="button" type="submit">Sign in</button>
@@ -111,6 +118,11 @@
 		color: var(--fg);
 		box-shadow: 0 0 0 1px var(--border);
 		overflow: auto;
+	}
+
+	/* No scrolling of the page behind the open sheet. */
+	:global(html:has(dialog[open])) {
+		overflow: hidden;
 	}
 
 	dialog::backdrop {

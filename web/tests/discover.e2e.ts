@@ -149,6 +149,32 @@ test.describe('discover board', () => {
 		await expect(page).toHaveURL(`${ORIGIN}/events/${listing.id}`);
 	});
 
+	test('header Sign in opens the sheet for this page; Close closes it; members never get it', async ({
+		page
+	}) => {
+		await page.goto('/dz');
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		const trigger = page.getByRole('banner').getByRole('link', { name: 'Sign in' });
+		await expect(trigger).toHaveAttribute('href', '/sign-in?returnTo=%2Fdz');
+		await trigger.click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await expect(sheet).toBeVisible();
+		await sheet.getByRole('button', { name: 'Close' }).click();
+		await expect(sheet).toBeHidden();
+		await expect(trigger).toBeFocused();
+		await expect(page).toHaveURL(`${ORIGIN}/dz`);
+
+		// Signed in from the sheet, the member is back on /dz with no sheet and no Sign in.
+		await trigger.click();
+		await sheet.getByLabel('Email', { exact: true }).fill(await createAccount({ label: 'sheet' }));
+		await sheet.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/dz`);
+		await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+		await expect(page.getByRole('dialog')).toHaveCount(0);
+		await expect(page.locator('html[data-sign-in-sheet]')).toHaveCount(0);
+	});
+
 	test('without JavaScript, sign in to save opens the full sign-in page', async ({ browser }) => {
 		const listing = await publishListing(`${token()} Plain boogie`);
 		const plain = await browser.newContext({ javaScriptEnabled: false, ignoreHTTPSErrors: true });

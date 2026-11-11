@@ -36,7 +36,7 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-height: 40px;
+		min-height: 44px;
 		min-width: 7.5rem;
 		padding: 0 1rem;
 		border-radius: 999px;
