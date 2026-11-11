@@ -75,7 +75,7 @@
 {#if !data.viewer}
 	<p class="join-line">
 		Members also keep a private logbook, gear and history, and save events.
-		<a href="/register">Join</a> or <a href="/sign-in">sign in</a>.
+		<a href="/register">Join</a> or <a href="/sign-in?returnTo=%2F" data-sign-in>sign in</a>.
 	</p>
 {/if}
 

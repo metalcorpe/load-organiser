@@ -13,9 +13,22 @@
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
+	import SignInSheet from '#lib/components/SignInSheet.svelte';
+	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
+	// Sign in from the header returns to this page, except from the account pages themselves.
+	const onAccountPage = $derived(
+		['/sign-in', '/register', '/forgot-password', '/reset-password', '/sign-out'].some((p) =>
+			page.url.pathname.startsWith(p)
+		)
+	);
+	const signInHref = $derived(
+		onAccountPage
+			? '/sign-in'
+			: `/sign-in?returnTo=${encodeURIComponent(page.url.pathname + page.url.search)}`
+	);
 	const initials = $derived(
 		(data.viewer?.displayName ?? data.viewer?.email ?? '')
 			.split(/[\s@._-]+/)
@@ -44,14 +57,14 @@
 				<span class="who" data-testid="current-account">{data.viewer.displayName ?? data.viewer.email}</span>
 			</a>
 		{:else}
-			<a href="/sign-in">Sign in</a>
+			<a href={signInHref} data-sign-in>Sign in</a>
 			<a class="button join" href="/register">Join</a>
 		{/if}
 	</span>
 </header>
 
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
-{#if data.viewer}<AppNav />{/if}
+{#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
 <main id="main" tabindex="-1">
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
