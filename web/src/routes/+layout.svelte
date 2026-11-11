@@ -13,15 +13,28 @@
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
+	import SignInSheet from '#lib/components/SignInSheet.svelte';
+	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
+	// Sign in from the header returns to this page, except from the account pages themselves.
+	const onAccountPage = $derived(
+		['/sign-in', '/register', '/forgot-password', '/reset-password', '/sign-out', '/verify-email'].some((p) =>
+			page.url.pathname.startsWith(p)
+		)
+	);
+	const signInHref = $derived(
+		onAccountPage
+			? '/sign-in'
+			: `/sign-in?returnTo=${encodeURIComponent(page.url.pathname + page.url.search)}`
+	);
 	const initials = $derived(
 		(data.viewer?.displayName ?? data.viewer?.email ?? '')
 			.split(/[\s@._-]+/)
 			.filter(Boolean)
 			.slice(0, 2)
-			.map((part) => part[0]?.toUpperCase() ?? '')
+			.map((part) => Array.from(part)[0]?.toUpperCase() ?? '')
 			.join('')
 	);
 </script>
@@ -44,14 +57,14 @@
 				<span class="who" data-testid="current-account">{data.viewer.displayName ?? data.viewer.email}</span>
 			</a>
 		{:else}
-			<a href="/sign-in">Sign in</a>
+			<a href={signInHref} data-sign-in>Sign in</a>
 			<a class="button join" href="/register">Join</a>
 		{/if}
 	</span>
 </header>
 
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
-{#if data.viewer}<AppNav />{/if}
+{#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
 <main id="main" tabindex="-1">
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
@@ -94,6 +107,7 @@
 		display: inline-flex;
 		align-items: center;
 		min-height: 44px;
+		white-space: nowrap;
 		color: var(--fg);
 		font-weight: 750;
 		text-decoration: none;
@@ -108,7 +122,7 @@
 	}
 
 	.account .join {
-		min-height: 40px;
+		min-height: 44px;
 		padding: 0.35rem 1rem;
 		color: var(--accent-fg);
 	}
@@ -134,6 +148,8 @@
 	}
 
 	.who {
+		min-width: 0;
+		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: var(--muted);
@@ -144,10 +160,20 @@
 		display: inline-flex;
 		align-items: center;
 		min-height: 44px;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	/* Only a member's name may be shortened; Sign in and Join always show in full. */
+	.me {
+		min-width: 0;
 		max-width: 14rem;
+	}
+
+	/* The smallest phones need the room for Sign in and Join. */
+	@media (max-width: 22.5rem) {
+		.badge {
+			display: none;
+		}
 	}
 
 	.badge {

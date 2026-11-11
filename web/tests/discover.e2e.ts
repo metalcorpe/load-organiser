@@ -129,14 +129,78 @@ test.describe('discover board', () => {
 		await expect(page.getByRole('link', { name: listing.title })).toBeVisible();
 	});
 
+	test('the sign-in sheet closes with Escape and Back, and returns focus', async ({ page }) => {
+		const listing = await publishListing(`${token()} Sheet boogie`);
+		await page.goto(`/events/${listing.id}`);
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		const trigger = page.getByRole('link', { name: 'Sign in to save this privately' });
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await trigger.click();
+		await expect(sheet).toBeVisible();
+		await expect(sheet.getByLabel('Email', { exact: true })).toBeFocused();
+		await page.keyboard.press('Escape');
+		await expect(sheet).toBeHidden();
+		await expect(trigger).toBeFocused();
+		await expect(page).toHaveURL(`${ORIGIN}/events/${listing.id}`);
+		await trigger.click();
+		await expect(sheet).toBeVisible();
+		await page.goBack();
+		await expect(sheet).toBeHidden();
+		await expect(page).toHaveURL(`${ORIGIN}/events/${listing.id}`);
+	});
+
+	test('header Sign in opens the sheet for this page; Close closes it; members never get it', async ({
+		page
+	}) => {
+		await page.goto('/dz');
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		const trigger = page.getByRole('banner').getByRole('link', { name: 'Sign in' });
+		await expect(trigger).toHaveAttribute('href', '/sign-in?returnTo=%2Fdz');
+		await trigger.click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await expect(sheet).toBeVisible();
+		await sheet.getByRole('button', { name: 'Close' }).click();
+		await expect(sheet).toBeHidden();
+		await expect(trigger).toBeFocused();
+		await expect(page).toHaveURL(`${ORIGIN}/dz`);
+
+		// Signed in from the sheet, the member is back on /dz with no sheet and no Sign in.
+		await trigger.click();
+		await sheet.getByLabel('Email', { exact: true }).fill(await createAccount({ label: 'sheet' }));
+		await sheet.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/dz`);
+		await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+		await expect(page.getByRole('dialog')).toHaveCount(0);
+		await expect(page.locator('html[data-sign-in-sheet]')).toHaveCount(0);
+	});
+
+	test('without JavaScript, sign in to save opens the full sign-in page', async ({ browser }) => {
+		const listing = await publishListing(`${token()} Plain boogie`);
+		const plain = await browser.newContext({ javaScriptEnabled: false, ignoreHTTPSErrors: true });
+		const page = await plain.newPage();
+		await page.goto(`${ORIGIN}/events/${listing.id}`);
+		await page.getByRole('link', { name: 'Sign in to save this privately' }).click();
+		await expect(page).toHaveURL(/\/sign-in\?returnTo=/);
+		await expect(page.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
+		await plain.close();
+	});
+
 	test('sign in to save returns to the listing and saves only on request', async ({ page }) => {
 		const listing = await publishListing(`${token()} Canopy course`);
 		const email = await createAccount({ label: 'saver' });
 
 		await page.goto(`/events/${listing.id}`);
+		// A tap before the scripts load follows the plain link (the fallback); wait for the sheet.
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
 		await page.getByRole('link', { name: 'Sign in to save this privately' }).click();
-		await expect(page).toHaveURL(/\/sign-in\?returnTo=/);
-		await signInHere(page, email);
+		// The sign-in opens as a sheet over the listing; the address does not change.
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await expect(sheet).toBeVisible();
+		await expect(page).toHaveURL(`${ORIGIN}/events/${listing.id}`);
+		await sheet.getByLabel('Email', { exact: true }).fill(email);
+		await sheet.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/events/${listing.id}?save=1`);
 		await expect(page.getByText('You signed in to save this listing')).toBeVisible();
 

@@ -11,6 +11,10 @@ declare global {
 			/** Set by account-changing actions; the hook adds `Clear-Site-Data: "cache"`. */
 			clearSiteCache?: boolean;
 		}
+		interface PageState {
+			/** Return path while the sign-in sheet is open (shallow routing; Back closes it). */
+			signIn?: string;
+		}
 	}
 }
 

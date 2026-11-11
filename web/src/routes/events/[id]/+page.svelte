@@ -152,7 +152,7 @@
 		<p class="form-error" role="alert">{listingMessage(form.error)}</p>
 	{/if}
 	{#if !signedIn}
-		<a class="button secondary" href={signInToSave}>Sign in to save this privately</a>
+		<a class="button secondary" href={signInToSave} data-sign-in>Sign in to save this privately</a>
 	{:else if isSaved}
 		<p role="status" class="ok">Saved privately — you are not registered.</p>
 		<form method="POST" action="?/unsave">
