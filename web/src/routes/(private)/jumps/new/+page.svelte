@@ -67,6 +67,7 @@
 		q={data.picker?.q ?? ''}
 		matches={data.picker?.matches ?? null}
 		places={data.places}
+		recent={data.recent}
 		error={form && form.form === 'place' && 'error' in form ? directoryMessage(form.error) : undefined}
 	/>
 {/if}

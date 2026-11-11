@@ -244,3 +244,33 @@ h1 {
 	border-bottom: 0;
 	padding: 0;
 }
+
+/* A <summary> that opens a folded section, with a chevron that turns when it opens. */
+.disclosure {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	min-height: 44px;
+	color: var(--accent);
+	font-weight: 650;
+	cursor: pointer;
+	list-style: none;
+}
+
+.disclosure::-webkit-details-marker {
+	display: none;
+}
+
+.disclosure::after {
+	content: '';
+	width: 0.45rem;
+	height: 0.45rem;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: translateY(-2px) rotate(45deg);
+	transition: transform 120ms ease-out;
+}
+
+details[open] > .disclosure::after {
+	transform: translateY(2px) rotate(-135deg);
+}

@@ -93,6 +93,14 @@ test.describe('private logbook', () => {
 		await expect(page.getByRole('list', { name: 'Jumps' })).toContainText(
 			`Not specified · ${name}`
 		);
+		// The next jump starts from it: recent places are one tap, and the add-place
+		// form is folded away for someone who already has a place.
+		await page.goto('/jumps/new');
+		await page.getByRole('list', { name: 'Recent places' }).getByRole('link', { name }).click();
+		await expect(page.getByText(name, { exact: true })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
+		await page.goto('/jumps/new');
+		await expect(page.getByLabel('Place name')).toBeHidden();
 	});
 
 	test('a likely duplicate warns, and a distinct jump still saves', async ({ page }) => {
