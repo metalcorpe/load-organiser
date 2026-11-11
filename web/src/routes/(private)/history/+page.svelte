@@ -104,7 +104,7 @@
 
 		<section class="card">
 		<h2>By type</h2>
-		<ul class="results" aria-label="By type">
+		<ul class="results rows" aria-label="By type">
 			{#each h.by_type as item (item.jump_type)}
 				<li>
 					<span class="title">{JUMP_TYPE_LABEL[item.jump_type] ?? item.jump_type}</span>
@@ -116,7 +116,7 @@
 
 		<section class="card">
 		<h2>By place</h2>
-		<ul class="results" aria-label="By place">
+		<ul class="results rows" aria-label="By place">
 			{#each h.by_location as item (item.location.kind + item.location.id)}
 				<li>
 					<span class="title"
@@ -141,7 +141,7 @@
 		{#if h.by_component.length === 0}
 			<p class="hint">No jump records a component yet.</p>
 		{:else}
-			<ul class="results" aria-label="Equipment used">
+			<ul class="results rows" aria-label="Equipment used">
 				{#each h.by_component as use (use.component.id)}
 					<li>
 						<a class="title" href="/gear/{use.component.id}">{use.component.label}</a>

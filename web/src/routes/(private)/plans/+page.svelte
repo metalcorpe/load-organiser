@@ -91,7 +91,7 @@
 {:else if data.plans.items.length === 0}
 	<p>No plans yet.</p>
 {:else}
-	<ul class="results" aria-label="Your plans">
+	<ul class="results rows" aria-label="Your plans">
 		{#each data.plans.items as plan (plan.id)}
 			{@const item = plan.opportunity}
 			<li>

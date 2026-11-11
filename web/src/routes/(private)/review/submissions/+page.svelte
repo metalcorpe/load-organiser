@@ -49,7 +49,7 @@
 {:else if data.page.items.length === 0}
 	<p>No {data.status} submissions.</p>
 {:else}
-	<ul class="results" aria-label="Submissions">
+	<ul class="results rows" aria-label="Submissions">
 		{#each data.page.items as item (item.id)}
 			<li>
 				<span class="title">{KIND_LABEL[item.kind]}</span>

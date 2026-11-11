@@ -28,7 +28,7 @@
 {:else if data.saved.items.length === 0}
 	<p>You have not saved any listings. <a href="/">Browse listings</a>.</p>
 {:else}
-	<ul class="results" aria-label="Saved listings">
+	<ul class="results rows" aria-label="Saved listings">
 		{#each data.saved.items as entry (entry.opportunity_id)}
 			{@const item = entry.opportunity}
 			<li>

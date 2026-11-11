@@ -173,7 +173,7 @@
 	{#if d.service.length === 0}
 		<p>No service entries.</p>
 	{:else}
-		<ul class="results" aria-label="Service entries">
+		<ul class="results rows" aria-label="Service entries">
 			{#each d.service as entry (entry.id)}
 				<li>
 					<span class="title">{SERVICE_LABEL[entry.kind]} on {formatDay(entry.done_on)}</span>

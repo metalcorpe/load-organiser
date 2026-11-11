@@ -39,7 +39,7 @@
 {:else if data.reports.items.length === 0}
 	<p class="hint">{data.status === 'open' ? 'No open reports.' : 'No decided reports yet.'}</p>
 {:else}
-	<ul class="results" aria-label="Reports">
+	<ul class="results rows" aria-label="Reports">
 		{#each data.reports.items as report (report.id)}
 			<li>
 				<span class="title"

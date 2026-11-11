@@ -16,10 +16,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>Gear</h1>
-<p class="lede">
-	Your own private record of containers, canopies and AADs. Everything here is what you entered: it
-	does not verify ownership, servicing or airworthiness, and nobody else can see it.
-</p>
+<p class="lede">Containers, canopies and AADs, private to you. Not proof of ownership or airworthiness.</p>
 
 {#if !data.emailVerified}
 	<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to save gear.</p>
@@ -40,7 +37,7 @@
 {:else if data.components.items.length === 0}
 	<p>{data.archived ? 'No archived components.' : 'No components yet. Gear is optional; logging a jump never requires it.'}</p>
 {:else}
-	<ul class="results" aria-label="Components">
+	<ul class="results rows" aria-label="Components">
 		{#each data.components.items as item (item.component.id)}
 			<li>
 				<a class="title" href="/gear/{item.component.id}">{item.component.label}</a>
@@ -56,13 +53,14 @@
 {/if}
 
 {#if !data.archived}
-	<h2>Rigs</h2>
+	<section class="card" aria-labelledby="rigs-heading">
+	<h2 id="rigs-heading">Rigs</h2>
 	<p class="hint">A rig is a dated assembly. Moving a component keeps where it was before.</p>
 	{#if errorFor('archiveRig')}<p class="form-error" role="alert">{errorFor('archiveRig')}</p>{/if}
 	{#if !data.rigs.ok}
 		<p class="form-error" role="alert">{gearMessage(data.rigs.reason)}</p>
 	{:else}
-		<ul class="results" aria-label="Rigs">
+		<ul class="results rows" aria-label="Rigs">
 			{#each data.rigs.items as rig (rig.id)}
 				<li>
 					<span class="title">{rig.label}{rig.archived ? ' (archived)' : ''}</span>
@@ -95,6 +93,7 @@
 		</div>
 		<div class="form-actions"><button class="button secondary" type="submit">Add rig</button></div>
 	</form>
+	</section>
 {/if}
 
 <style>
