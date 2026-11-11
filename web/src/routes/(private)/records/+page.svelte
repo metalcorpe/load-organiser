@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import RecordTiles from '#lib/components/RecordTiles.svelte';
 	import { formatDay } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -16,6 +17,7 @@
 </svelte:head>
 
 <h1>Records</h1>
+<PrivacyLabel />
 <p class="lede">Private to you.</p>
 
 {#if s}

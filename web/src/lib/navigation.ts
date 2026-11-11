@@ -1,4 +1,4 @@
-export type NavIcon = 'events' | 'logbook' | 'friends' | 'me';
+export type NavIcon = 'explore' | 'logbook' | 'friends' | 'me';
 
 export interface NavItem {
 	href: string;
@@ -10,9 +10,18 @@ export interface NavItem {
 	also: readonly string[];
 }
 
-/** Four tabs from design E (owner, 2026-11-11): logging lives in Logbook, records in Me. */
+/**
+ * Members' four tabs (design E, owner 2026-11-11). Guests get no tab bar: the public area is
+ * Explore (Events | Dropzones), reached from the header and the Explore switch.
+ */
 export const PRIMARY_NAV: readonly NavItem[] = [
-	{ href: '/', label: 'Events', icon: 'events', private: false, also: ['/events'] },
+	{
+		href: '/',
+		label: 'Explore',
+		icon: 'explore',
+		private: false,
+		also: ['/events', '/dz', '/organizers']
+	},
 	{ href: '/jumps', label: 'Logbook', icon: 'logbook', private: true, also: ['/history'] },
 	{ href: '/activity', label: 'Friends', icon: 'friends', private: true, also: ['/people', '/posts'] },
 	{

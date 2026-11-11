@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import { formatRange, listingMessage, statusLabel } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -19,6 +20,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>Visit plans</h1>
+<PrivacyLabel />
 <p class="lede">
 	Private dated plans. Nobody else sees them: they are not shared, not a registration and never turn
 	into a logged jump.

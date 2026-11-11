@@ -16,6 +16,14 @@
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
+	const initials = $derived(
+		(data.viewer?.displayName ?? data.viewer?.email ?? '')
+			.split(/[\s@._-]+/)
+			.filter(Boolean)
+			.slice(0, 2)
+			.map((part) => part[0]?.toUpperCase() ?? '')
+			.join('')
+	);
 </script>
 
 <svelte:head>
@@ -30,14 +38,20 @@
 	<span class="badge">Preview</span>
 	<span class="account">
 		{#if data.viewer}
-			<a href="/profile" data-testid="current-account">{data.viewer.displayName ?? data.viewer.email}</a>
+			<a class="me" href="/profile">
+				<span class="avatar" aria-hidden="true">{initials}</span>
+				<span class="visually-hidden">My account:</span>
+				<span class="who" data-testid="current-account">{data.viewer.displayName ?? data.viewer.email}</span>
+			</a>
 		{:else}
 			<a href="/sign-in">Sign in</a>
+			<a class="button join" href="/register">Join</a>
 		{/if}
 	</span>
 </header>
 
-<AppNav />
+<!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
+{#if data.viewer}<AppNav />{/if}
 
 <main id="main" tabindex="-1">
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
@@ -46,7 +60,7 @@
 	{/key}
 </main>
 
-<footer>
+<footer class:with-nav={Boolean(data.viewer)}>
 	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
 	<a href="/support">Support the beta</a>
@@ -86,8 +100,44 @@
 	}
 
 	.account {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
 		margin-left: auto;
 		min-width: 0;
+	}
+
+	.account .join {
+		min-height: 40px;
+		padding: 0.35rem 1rem;
+		color: var(--accent-fg);
+	}
+
+	.me {
+		gap: 0.5rem;
+		color: var(--fg);
+		text-decoration: none;
+	}
+
+	.avatar {
+		display: inline-grid;
+		place-items: center;
+		flex: none;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 999px;
+		background: var(--brand);
+		color: var(--brand-fg);
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: 0.85rem;
+	}
+
+	.who {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		color: var(--muted);
+		font-size: 0.9rem;
 	}
 
 	.account a {
@@ -125,7 +175,12 @@
 		gap: 0 1.25rem;
 		max-width: 40rem;
 		margin: 0 auto;
-		padding: 0 1rem calc(var(--nav-height) + 1.5rem + env(safe-area-inset-bottom));
+		padding: 0 1rem 2rem;
+	}
+
+	/* Room for the members' fixed tab bar on phones. */
+	footer.with-nav {
+		padding-bottom: calc(var(--nav-height) + 1.5rem + env(safe-area-inset-bottom));
 	}
 
 	footer a {
@@ -135,7 +190,7 @@
 	}
 
 	@media (min-width: 48rem) {
-		footer {
+		footer.with-nav {
 			padding-bottom: 2rem;
 		}
 	}

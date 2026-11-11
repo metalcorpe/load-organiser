@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { formatDay } from '#lib/listings.ts';
 	import { describeCounts, recordsMessage } from '#lib/records.ts';
@@ -20,6 +21,7 @@
 
 <p><a href="/profile">Profile</a></p>
 <h1>Your data</h1>
+<PrivacyLabel />
 <p class="lede">Keep a copy of your records, or bring a copy back. Both are free and private.</p>
 
 {#if !data.records.ok}

@@ -39,6 +39,11 @@ test.describe('private logbook', () => {
 	}) => {
 		await signIn(page, await createAccount({ label: 'logbook' }));
 		await expect(page.getByText('No jumps yet.')).toBeVisible();
+		// Members get the four tabs and a privacy label on their records.
+		const tabs = page.getByRole('navigation', { name: 'Primary' });
+		await expect(tabs.getByRole('link')).toHaveText(['Explore', 'Logbook', 'Friends', 'Me']);
+		await expect(tabs.getByRole('link', { name: 'Logbook' })).toHaveAttribute('aria-current', 'page');
+		await expect(page.getByText('Private logbook — only you can see your jumps')).toBeVisible();
 		await startAtNewPlace(page);
 		// The date defaults to the jumper's local day and stays editable.
 		await expect(page.getByLabel('Date', { exact: true })).not.toHaveValue('');

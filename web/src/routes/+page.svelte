@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
 	import { page } from '$app/state';
 	import FeaturedListing from '#lib/components/FeaturedListing.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
@@ -68,8 +69,15 @@
 	/>
 </svelte:head>
 
+<ExploreSwitch />
 <h1>Events</h1>
 <p class="lede">Dated events, boogies, camps and courses. Register on the organizer's site.</p>
+{#if !data.viewer}
+	<p class="join-line">
+		Members also keep a private logbook, gear and history, and save events.
+		<a href="/register">Join</a> or <a href="/sign-in">sign in</a>.
+	</p>
+{/if}
 
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
@@ -264,6 +272,11 @@
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
+	}
+
+	.join-line {
+		margin: -0.25rem 0 0.75rem;
+		color: var(--muted);
 	}
 
 	.list-heading {

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import JumpForm from '#lib/components/JumpForm.svelte';
 	import LocationPicker from '#lib/components/LocationPicker.svelte';
@@ -93,6 +94,11 @@
 
 <section class="hero" aria-labelledby="jump-title">
 <h1 id="jump-title">Jump on {formatDay(jump.jumped_on)}</h1>
+<PrivacyLabel
+	text={data.post
+		? `Private entry — a summary is shared with ${data.post.audience === 'public' ? 'anyone (public)' : 'approved followers'}`
+		: 'Private entry — only you can see it'}
+/>
 {#if jump.jump_number}<p class="number" aria-hidden="true">#{jump.jump_number}</p>{/if}
 <p class="lede">
 	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'

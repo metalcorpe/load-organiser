@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -18,6 +19,7 @@
 	<h1>Logbook</h1>
 	<a href="/history">History</a>
 </div>
+<PrivacyLabel text="Private logbook — only you can see your jumps" />
 
 {#if !data.page.ok}
 	<p class="form-error" role="alert">{jumpMessage(data.page.reason)}</p>

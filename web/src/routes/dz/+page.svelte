@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { COUNTRY_OPTIONS, countryName } from '#lib/countries.ts';
 	import { directoryMessage } from '#lib/directory-messages.ts';
@@ -25,6 +26,7 @@
 	/>
 </svelte:head>
 
+<ExploreSwitch />
 <h1>Dropzones</h1>
 <p class="lede">Dropzones from public sources. A listing is not an endorsement.</p>
 
@@ -87,25 +89,6 @@
 <style>
 	.search {
 		margin-bottom: 1rem;
-	}
-
-	.results {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-	}
-
-	.results li {
-		border-bottom: 1px solid var(--border);
-		padding: 0.75rem 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.25rem 0.75rem;
-		align-items: baseline;
-	}
-
-	.results a {
-		font-weight: 600;
 	}
 
 	.meta {

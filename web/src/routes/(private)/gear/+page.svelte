@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import { formatDay } from '#lib/listings.ts';
 	import { KIND_LABEL, RELATION_LABEL, gearMessage } from '#lib/gear.ts';
@@ -16,6 +17,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>Gear</h1>
+<PrivacyLabel />
 <p class="lede">Containers, canopies and AADs, private to you. Not proof of ownership or airworthiness.</p>
 
 {#if !data.emailVerified}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { CATEGORY_LABEL, formatRange, listingMessage, statusLabel } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
@@ -12,6 +13,7 @@
 
 <p><a href="/records">Records</a></p>
 <h1>Saved listings</h1>
+<PrivacyLabel />
 <p class="lede">
 	Bookmarks only you can see. Saving does not register you, reserve a place or tell the organizer
 	anything.
