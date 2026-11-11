@@ -1,0 +1,65 @@
+import { Meta, ColorPalette, ColorItem, Typeset } from '@storybook/addon-docs/blocks';
+import light from './tokens/light.json';
+import dark from './tokens/dark.json';
+
+<Meta title="Design/Foundations" />
+
+export const flat = (tokens, prefix = '') =>
+  Object.entries(tokens).flatMap(([key, token]) =>
+    key.startsWith('$')
+      ? []
+      : token && typeof token === 'object' && '$value' in token
+        ? [[`${prefix}${key}`, token.$value, token.$description]]
+        : flat(token, `${prefix}${key}-`)
+  );
+
+export const lightTokens = flat(light);
+export const darkTokens = Object.fromEntries(flat(dark).map(([name, value]) => [name, value]));
+
+# Foundations
+
+Design **E** (light) and **G** (dark), chosen by the owner on 2026-11-11. Every swatch below is read
+from `src/lib/design/tokens/*.json`, the same files Style Dictionary builds the app's CSS from
+(`npm run tokens:build`). Use the toolbar's theme switch to see components in each theme.
+
+## Rules
+
+- **Navy (`brand`)** is structure: one pop card or header per screen.
+- **Orange (`accent`)** is for actions: main buttons, the active tab, links. **`highlight`** is for
+  key numbers on navy.
+- **Listing types** each have a tint (`*-bg`, the date tile) and a text colour (`*-fg`, the tag),
+  always with the type's icon. Colour is never the only cue.
+- Tap targets are at least 44px. Text meets WCAG 2.1 contrast; `tokens.spec.ts` checks every pair.
+
+## Colour: light (E) and dark (G)
+
+Each row shows the light value, then the dark value.
+
+<ColorPalette>
+  {lightTokens.map(([name, value, description]) => (
+    <ColorItem
+      key={name}
+      title={`--${name}`}
+      subtitle={description ?? ''}
+      colors={{ light: value, dark: darkTokens[name] }}
+    />
+  ))}
+</ColorPalette>
+
+## Type
+
+Headings and numbers: **Outfit** (`--font-display`). Text: **Figtree** (`--font-body`). Greek and
+Cyrillic fall back to the system font.
+
+<Typeset
+  fontFamily="Outfit, system-ui, sans-serif"
+  fontWeight={600}
+  fontSizes={['3.1rem', '1.9rem', '1.5rem', '1.15rem']}
+  sampleText="Christmas Boogie 24–31"
+/>
+
+<Typeset
+  fontFamily="Figtree, system-ui, sans-serif"
+  fontSizes={['1.05rem', '1rem', '0.9rem', '0.85rem']}
+  sampleText="Load organisers for FS, freefly and wingsuit. Εκπαίδευση AFF."
+/>

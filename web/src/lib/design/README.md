@@ -19,3 +19,15 @@ Rules the tokens carry:
 - `accent` (orange): actions (main buttons, active tab, links). `highlight`: key numbers on `brand`.
 - Listing types (`boogie`, `camp`, `course`, `event`): a `bg` tint for the date tile and an `fg`
   colour for the tag, always with the type's icon (`TypeIcon`), never colour alone.
+
+## Storybook (local only)
+
+- `npm run storybook` serves it at <http://127.0.0.1:6006>; `npm run storybook:build` writes a static
+  copy to `storybook-static/` (git-ignored). `scripts/verify.sh` runs the build so a broken story
+  fails the web stage.
+- Stories live next to their components (`*.stories.ts`, CSF with `@storybook/sveltekit`); shared
+  fixtures in `src/lib/stories/fixtures.ts`. `Design/Foundations` (`Foundations.mdx`) shows every
+  token from the JSON files with the rules above.
+- The toolbar's theme switch sets `data-theme` on the page; Style Dictionary also builds
+  `tokens-*-forced.css` for that, which only Storybook loads. The app follows the system setting.
+- Add a story with every new or restyled component.

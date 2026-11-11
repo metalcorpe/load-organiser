@@ -1,5 +1,7 @@
 {
-	"source": ["src/lib/design/tokens/dark.json"],
+	"source": [
+		"src/lib/design/tokens/dark.json"
+	],
 	"usesDtcg": true,
 	"platforms": {
 		"css": {
@@ -10,7 +12,18 @@
 					"destination": "tokens-dark.css",
 					"format": "css/variables",
 					"options": {
-						"selector": ["@media (prefers-color-scheme: dark)", ":root"],
+						"selector": [
+							"@media (prefers-color-scheme: dark)",
+							":root"
+						],
+						"showFileHeader": false
+					}
+				},
+				{
+					"destination": "tokens-dark-forced.css",
+					"format": "css/variables",
+					"options": {
+						"selector": ":root[data-theme=\"dark\"]",
 						"showFileHeader": false
 					}
 				}
