@@ -1,5 +1,8 @@
 {
-	"source": ["src/lib/design/tokens/shared.json", "src/lib/design/tokens/light.json"],
+	"source": [
+		"src/lib/design/tokens/shared.json",
+		"src/lib/design/tokens/light.json"
+	],
 	"usesDtcg": true,
 	"platforms": {
 		"css": {
@@ -9,7 +12,18 @@
 				{
 					"destination": "tokens-light.css",
 					"format": "css/variables",
-					"options": { "selector": ":root", "showFileHeader": false }
+					"options": {
+						"selector": ":root",
+						"showFileHeader": false
+					}
+				},
+				{
+					"destination": "tokens-light-forced.css",
+					"format": "css/variables",
+					"options": {
+						"selector": ":root[data-theme=\"light\"]",
+						"showFileHeader": false
+					}
 				}
 			]
 		}

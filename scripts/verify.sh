@@ -140,8 +140,9 @@ stage_backend() {
 }
 
 stage_web() {
-  log "web: install, check, unit tests, build"
-  (cd "$W" && { [ -z "${CI:-}" ] || npm ci; } && npm run check && npm run test:unit && npm run build)
+  log "web: install, check, unit tests, build, Storybook build"
+  (cd "$W" && { [ -z "${CI:-}" ] || npm ci; } && npm run check && npm run test:unit && npm run build \
+    && npm run storybook:build)
 }
 
 stage_e2e() {

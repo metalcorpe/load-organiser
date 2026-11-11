@@ -8,9 +8,11 @@ describe('generated tokens', () => {
 	for (const config of ['sd.light.json', 'sd.dark.json']) {
 		it(`${config} output is up to date (npm run tokens:build)`, async () => {
 			const sd = new StyleDictionary(config, { verbosity: 'silent' });
-			const [file] = await sd.formatPlatform('css');
-			const committed = readFileSync(file.destination ?? '', 'utf8');
-			expect(committed).toBe(file.output);
+			const files = await sd.formatPlatform('css');
+			expect(files.length).toBeGreaterThan(0);
+			for (const file of files) {
+				expect(readFileSync(file.destination ?? '', 'utf8'), file.destination).toBe(file.output);
+			}
 		});
 	}
 });

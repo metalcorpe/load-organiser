@@ -28,3 +28,4 @@ playwright-report
 # Wrangler local variables/secrets (never commit)
 .dev.vars
 .dev.vars.*
+storybook-static
