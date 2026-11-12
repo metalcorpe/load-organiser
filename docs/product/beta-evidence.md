@@ -107,7 +107,18 @@ discoverability off. Not added: null or absent Origin on authenticated form acti
 other than sign-in (one central check, unit tested), a "starts today" listing case, a
 private save while the API is down (an offline submit is now stopped with the input kept;
 added 2026-11-12), a dedicated first-use test of `/people`, `/plans`,
-`/gear` and `/records`, and automated accessibility (axe) checks.
+`/gear` and `/records`.
+
+Accessibility, added 2026-11-12: e2e `a11y` runs axe 4.14 (WCAG 2.0/2.1 A and AA, 2.2 AA
+rules) on 37 pages in light and dark, in Chromium at 320 px and WebKit (iPhone 13): every
+public page signed out (with a real listing, organiser, dropzone, profile and post), the
+open sign-in sheet, every member page with records in it, and the maintenance pages as
+the reviewer. It found no violations; a planted image without alt text was reported, so
+the rules run. axe covers only part of WCAG. After a form submit, the returned page now
+moves focus to its first error (e2e `auth`), because an alert already present at page
+load is often not announced. Errors are per form, not per field: most inputs carry no
+`aria-invalid` or `aria-describedby`, and the message names the field instead. Not
+checked by a person: screen readers (see the owner checklist).
 
 ## Not yet verified (needs people or devices)
 

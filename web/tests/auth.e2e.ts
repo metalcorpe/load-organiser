@@ -91,6 +91,8 @@ test.describe('sessions', () => {
 		await page.goto('/sign-in');
 		await signIn(page, email, NEW_PASSWORD);
 		await expect(page.getByRole('alert')).toBeVisible();
+		// The page that comes back moves focus to the error, so screen readers announce it.
+		await expect(page.getByRole('alert')).toBeFocused();
 		// The server-rendered form keeps the email, never the password.
 		await expect(page.getByLabel('Email')).toHaveValue(email);
 		await expect(page.getByLabel('Password', { exact: true })).toHaveValue('');
