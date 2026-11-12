@@ -35,9 +35,11 @@ or an issue.
 ## 2. FastAPI Cloud (API)
 
 - Application directory: `backend`. The app is found at `app/main.py` (`app`).
-- Python: the project requires 3.15 (`backend/pyproject.toml`, `backend/.python-version`).
-  **Untested whether FastAPI Cloud offers 3.15**; if the build fails on the version,
-  that is the first finding to record here.
+- Python: 3.14 (`backend/.python-version`, `requires-python = ">=3.14"`). Finding
+  2026-11-12: FastAPI Cloud's build has no Python 3.15 ("No interpreter found for
+  Python 3.15+gil in managed installations"; its uv predates 3.15), so the backend
+  moved to 3.14, the minimum the code needs (`uuid.uuid7`). Do not pin a patch
+  release: the host offers whichever 3.14.x its uv knows.
 - Neon integration: link the staging database; it sets `DATABASE_URL`. Whether it
   injects the pooled or direct string is untested; the backend accepts either.
 - Environment variables:
