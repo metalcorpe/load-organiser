@@ -1,7 +1,9 @@
 import { fail, redirect } from '@sveltejs/kit';
 import type { ComponentDetailOut, JumpDetailOut } from '#lib/contracts/index.ts';
 import { isCountryCode } from '#lib/countries.ts';
+import { nextJumpValues } from '#lib/jumps.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
+import { isUuid } from '#lib/server/api/transport.ts';
 import { createPlace } from '#lib/server/directory.ts';
 import { field } from '#lib/server/forms.ts';
 import { jumpBody, newComponent } from '#lib/server/jump-form.ts';
@@ -31,6 +33,14 @@ export const load: PageServerLoad = async (event) => {
 	const api = createRequestApi();
 	const places = await placesFor(api, secret);
 	const chosen = await chosenLocation(api, secret, event.url, places ?? []);
+	// "Log the next jump": start from one of the caller's own jumps. Another person's id
+	// answers not found, exactly like a missing one, and then the form starts empty.
+	const from = event.url.searchParams.get('from');
+	const source =
+		chosen && isUuid(from)
+			? await call<JumpDetailOut>(api, 'getJump', { bearer: secret, id: from })
+			: null;
+	const prefill = source?.ok ? nextJumpValues(source.value.jump) : null;
 	return {
 		emailVerified: viewer.emailVerified,
 		placesOk: places !== null,
@@ -39,6 +49,7 @@ export const load: PageServerLoad = async (event) => {
 		picker: chosen ? null : await pickerData(api, event.url),
 		recent: chosen ? [] : await recentLocations(api, secret),
 		gear: chosen ? await gearFor(api, secret) : { ok: true, items: [] },
+		prefill,
 		// One key per rendered form; a refused or unconfirmed send reuses it.
 		keys: { jump: crypto.randomUUID(), component: crypto.randomUUID() }
 	};

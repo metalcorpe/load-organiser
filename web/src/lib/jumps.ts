@@ -1,4 +1,5 @@
 /** Labels and messages for the private jump logbook (#153). Client-safe. */
+import type { JumpOut } from './contracts/index.ts';
 
 export const JUMP_TYPE_LABEL: Record<string, string> = {
 	unspecified: 'Not specified',
@@ -80,4 +81,25 @@ export function altitudeText(
 	if (deployment !== null) parts.push(`deployment ${deployment.toLocaleString('en-GB')} ${unit}`);
 	const ref = datum === 'unspecified' ? '' : ` ${datum.toUpperCase()}`;
 	return parts.join(', ') + ref;
+}
+
+/**
+ * Form values for the next jump after `jump`: same day, place, type, gear and
+ * altitudes, the next jump number. Notes, links, other gear, exit time and freefall
+ * time describe one jump only and start empty. Archived gear is not preselected.
+ */
+export function nextJumpValues(jump: JumpOut): { values: Record<string, string>; selected: string[] } {
+	return {
+		values: {
+			jumped_on: jump.jumped_on,
+			jump_type: jump.jump_type,
+			jump_number: jump.jump_number === null ? '' : String(jump.jump_number + 1),
+			time_zone: jump.time_zone ?? '',
+			exit_altitude: jump.exit_altitude?.toString() ?? '',
+			deployment_altitude: jump.deployment_altitude?.toString() ?? '',
+			altitude_unit: jump.altitude_unit ?? '',
+			altitude_datum: jump.altitude_datum
+		},
+		selected: jump.components.filter((c) => !c.archived).map((c) => c.id)
+	};
 }

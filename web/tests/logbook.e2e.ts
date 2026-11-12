@@ -34,6 +34,50 @@ async function logJump(page: Page): Promise<string> {
 }
 
 test.describe('private logbook', () => {
+	test('log the next jump of the day in one step, with or without jump numbers', async ({ page }) => {
+		await signIn(page, await createAccount({ label: 'nextjump' }));
+		await startAtNewPlace(page, 'Next strip');
+		await page.getByLabel('Date', { exact: true }).fill('2026-10-12');
+		await page.getByLabel('Type', { exact: true }).selectOption('freefly');
+		await page.getByText('Number, time and altitudes (optional)').click();
+		await page.getByLabel('Your jump number').fill('120');
+		await page.getByLabel('Exit altitude').fill('4000');
+		await page.getByLabel('Metres').check();
+		await page.getByLabel('Notes (optional, private)').fill('Only about the first load.');
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+
+		// Same place, day, type and altitude; the next number; nothing jump-specific.
+		await page.getByRole('link', { name: 'Log the next jump' }).click();
+		await expect(page.getByText('Next strip', { exact: true })).toBeVisible();
+		await expect(page.getByLabel('Date', { exact: true })).toHaveValue('2026-10-12');
+		await expect(page.getByLabel('Type', { exact: true })).toHaveValue('freefly');
+		await expect(page.getByLabel('Your jump number')).toHaveValue('121');
+		await expect(page.getByLabel('Exit altitude')).toHaveValue('4000');
+		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('');
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		await expect(page.getByText('#121', { exact: true })).toBeVisible();
+
+		// Without numbers the next load matches the duplicate check exactly; choosing
+		// "Log the next jump" already says it is another jump.
+		await page.goto('/jumps/new');
+		await page.getByText('Not listed? Add a private place').click();
+		await page.getByLabel('Place name').fill('Plain strip');
+		await page.getByLabel('Country', { exact: true }).selectOption('PT');
+		await page.getByRole('button', { name: 'Use this place' }).click();
+		await expect(page.getByText('Plain strip', { exact: true })).toBeVisible();
+		await page.getByLabel('Date', { exact: true }).fill('2026-10-13');
+		await page.getByLabel('Type', { exact: true }).selectOption('belly');
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		await page.getByRole('link', { name: 'Log the next jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		await page.goto('/jumps');
+		await expect(page.getByText('4 jumps recorded here.', { exact: false })).toBeVisible();
+	});
+
 	test('an offline save sends nothing and keeps what was typed', async ({ page, context }) => {
 		await signIn(page, await createAccount({ label: 'offline' }));
 		await startAtNewPlace(page);
