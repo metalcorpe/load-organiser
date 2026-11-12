@@ -201,6 +201,24 @@ export type BaselinePreviewOut = {
 };
 
 /**
+ * BroughtForwardOut
+ */
+export type BroughtForwardOut = {
+    /**
+     * Freefall Seconds
+     *
+     * Their recorded freefall time; entries without one add nothing.
+     */
+    freefall_seconds: number;
+    /**
+     * Jumps
+     *
+     * Your entries dated before `from_on`.
+     */
+    jumps: number;
+};
+
+/**
  * ColumnsOut
  */
 export type ColumnsOut = {
@@ -2187,6 +2205,23 @@ export type PostVenueOut = {
      * Name
      */
     name: string;
+};
+
+/**
+ * PrintPageOut
+ *
+ * Full entries, oldest first, for printing your own logbook.
+ */
+export type PrintPageOut = {
+    brought_forward: BroughtForwardOut;
+    /**
+     * Items
+     */
+    items: Array<JumpOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
 };
 
 /**
@@ -7105,6 +7140,76 @@ export type UndoJumpImportResponses = {
 };
 
 export type UndoJumpImportResponse = UndoJumpImportResponses[keyof UndoJumpImportResponses];
+
+export type ListJumpsInOrderData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * From On
+         */
+        from_on?: string | null;
+        /**
+         * Until On
+         */
+        until_on?: string | null;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/jumps/in-order';
+};
+
+export type ListJumpsInOrderErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Listjumpsinorder
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type ListJumpsInOrderError = ListJumpsInOrderErrors[keyof ListJumpsInOrderErrors];
+
+export type ListJumpsInOrderResponses = {
+    /**
+     * Successful Response
+     */
+    200: PrintPageOut;
+};
+
+export type ListJumpsInOrderResponse = ListJumpsInOrderResponses[keyof ListJumpsInOrderResponses];
 
 export type GetJumpNumberingData = {
     body?: never;

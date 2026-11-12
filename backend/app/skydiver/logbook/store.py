@@ -250,6 +250,40 @@ class SqlLogbookStore:
         ).scalars()
         return [JumpEvent(r.kind, dict(r.detail), r.created_at) for r in rows]
 
+    def in_order(
+        self,
+        actor: Actor,
+        from_on: date | None,
+        until_on: date | None,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+    ) -> list[Jump]:
+        query = owned(J, actor)
+        if from_on is not None:
+            query = query.where(col(J.jumped_on) >= from_on)
+        if until_on is not None:
+            query = query.where(col(J.jumped_on) <= until_on)
+        if after is not None:
+            on, last_id = after
+            query = query.where(
+                or_(
+                    col(J.jumped_on) > on,
+                    and_(col(J.jumped_on) == on, col(J.id) > last_id),
+                )
+            )
+        rows = self._s.execute(
+            query.order_by(col(J.jumped_on), col(J.id)).limit(limit)
+        ).scalars()
+        return self._with_components(list(rows))
+
+    def totals_before(self, actor: Actor, on: date) -> tuple[int, int]:
+        count, freefall = self._s.execute(
+            select(func.count(), func.coalesce(func.sum(col(J.freefall_seconds)), 0))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.jumped_on) < on)
+        ).one()
+        return int(count), int(freefall)
+
     # writes ----------------------------------------------------------------------
 
     def insert_jump(

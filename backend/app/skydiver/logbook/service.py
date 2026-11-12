@@ -32,6 +32,8 @@ from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 
 DEFAULT_PAGE = 20
 MAX_PAGE = 50
+# Printing reads the whole logbook (at most MAX_JUMPS) in few requests.
+MAX_PRINT_PAGE = 200
 
 
 class NotFound(Exception):
@@ -189,6 +191,15 @@ class NumberedRef:
     number: int
 
 
+@dataclass(frozen=True)
+class PrintPage:
+    items: list[JumpView]
+    next_cursor: str | None
+    # Entries dated before the range and their recorded freefall time.
+    before_jumps: int
+    before_freefall_seconds: int
+
+
 class LogbookStore(Protocol):
     def lock_owner(self, actor: Actor) -> None:
         """Serialise this person's jump-limit checks (manual creates and imports)."""
@@ -213,6 +224,20 @@ class LogbookStore(Protocol):
 
     def numbered(self, actor: Actor) -> list[NumberedRef]:
         """The owner's numbered jumps by number, then date and id (bounded by the limit)."""
+
+    def in_order(
+        self,
+        actor: Actor,
+        from_on: date | None,
+        until_on: date | None,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+    ) -> list[Jump]:
+        """Oldest activity date first, then oldest entry; dates inclusive."""
+        ...
+
+    def totals_before(self, actor: Actor, on: date) -> tuple[int, int]:
+        """(entries, recorded freefall seconds) dated before `on`."""
         ...
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
@@ -408,6 +433,30 @@ class LogbookService:
                 if row.jump_number
                 else [],
             )
+
+    def in_order(
+        self,
+        actor: Actor,
+        *,
+        from_on: date | None = None,
+        until_on: date | None = None,
+        cursor: str | None = None,
+        limit: int | None = None,
+    ) -> PrintPage:
+        """Full entries oldest first, for a printed logbook. Dates are inclusive."""
+        if from_on is not None and until_on is not None and from_on > until_on:
+            raise RuleError("date_range_invalid")
+        size = min(max(limit or MAX_PRINT_PAGE, 1), MAX_PRINT_PAGE)
+        after = _after(cursor) if cursor else None
+        with self._stores() as store:
+            rows = store.in_order(actor, from_on, until_on, after, size + 1)
+            before = store.totals_before(actor, from_on) if from_on else (0, 0)
+            views = self._views(store, actor, rows[:size])
+        next_cursor = None
+        if len(rows) > size:
+            last = rows[size - 1]
+            next_cursor = encode_cursor(last.jumped_on.isoformat(), last.id)
+        return PrintPage(views, next_cursor, before[0], before[1])
 
     # -- writes -----------------------------------------------------------------------
 

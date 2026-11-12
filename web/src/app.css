@@ -429,3 +429,42 @@ legend {
 	color: var(--muted);
 	font-size: 0.9rem;
 }
+
+/* Printing: the page content only, black on white. The app header, tab bar, footer and
+   anything marked .no-print stay on screen. A page that prints a document (the printable
+   logbook) sets its own sheet layout with `page: logbook`. */
+@media print {
+	:root {
+		color-scheme: light;
+	}
+
+	body {
+		background: #fff;
+		color: #000;
+	}
+
+	.skip-link,
+	body > div > header,
+	body > div > footer,
+	nav[aria-label='Primary'],
+	.no-print {
+		display: none !important;
+	}
+
+	main {
+		max-width: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: none;
+	}
+}
+
+/* A wide paper-logbook table: landscape on A4 or Letter, whichever the printer uses. */
+@page logbook {
+	size: landscape;
+	margin: 10mm;
+}
