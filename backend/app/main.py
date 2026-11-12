@@ -253,6 +253,10 @@ def create_app(*, include_legacy: bool) -> FastAPI:
             access=AccessDependencies(lambda: identity_service),
         )
     )
+    if settings.SKYDIVER_REQUIRE_PROXY_KEY and settings.SKYDIVER_WEB_PROXY_KEY:
+        from app.skydiver.web_only import WebOnly
+
+        application.add_middleware(WebOnly, proxy_key=settings.SKYDIVER_WEB_PROXY_KEY)
     if include_legacy:
         # The beta API is called server-to-server by the web app and needs no CORS;
         # only the legacy React client calls the API from a browser.

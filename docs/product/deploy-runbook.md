@@ -51,6 +51,7 @@ or an issue.
 | `SECRET_KEY` | secret (see above) |
 | `SKYDIVER_WEB_ORIGIN` | the Worker's https address, `https://load-organiser.metalcorpe.workers.dev` |
 | `SKYDIVER_WEB_PROXY_KEY` | secret, the shared proxy key |
+| `SKYDIVER_REQUIRE_PROXY_KEY` | `true`: closed beta, the API answers only the web server (others get 404; health stays open) |
 | `SKYDIVER_MIGRATE_ON_START` | `true`: migrations run when the app starts (see "Order of a deploy") |
 | `SKYDIVER_BOOTSTRAP_REVIEWER` | your email: the reviewer role is granted at start-up once that account exists |
 | `SKYDIVER_REGISTRATION_OPEN` | `true` with `SKYDIVER_MAX_ACCOUNTS=1`: you register on the site, nobody else can (needs mail) |
@@ -144,3 +145,13 @@ for the next deploy) so the reviewer role is granted. Without mail, use
 - **Vercel**: the repository is also connected to Vercel, which builds every branch
   behind Vercel's login. It is not part of this setup; disconnect it to avoid two web
   hosts.
+
+## Closed beta (owner decision 2026-11-12)
+
+- **Web:** Cloudflare Access on the Worker (Workers & Pages → `load-organiser` →
+  Access → Protect this Worker behind Access → All traffic → allowed emails). Visitors
+  prove an allowed email with a one-time code before the app runs.
+- **API:** `SKYDIVER_REQUIRE_PROXY_KEY=true`. Every call from the web server carries
+  `SKYDIVER_WEB_PROXY_KEY` (`x-organiser-proxy-key`); anything else gets a plain 404,
+  except `/api/skydiver/v1/health`. The key must be identical on both sides (Cloudflare
+  secret `API_PROXY_KEY`), or every page reports the service as unavailable.

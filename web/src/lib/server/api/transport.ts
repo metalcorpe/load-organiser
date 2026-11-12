@@ -374,9 +374,12 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			if (payload !== undefined) headers['content-type'] = spec.contentType ?? 'application/json';
 			if (call.confirmPassword) headers['x-organiser-confirm-password'] = call.confirmPassword;
 			if (call.bearer) headers.authorization = `Bearer ${call.bearer}`;
-			if (call.clientIp && options.proxyKey) {
-				headers['x-organiser-client-ip'] = call.clientIp;
+			// Every call carries the key when one is configured: a hosted API can then
+			// refuse anything that did not come through this server (#161). The client
+			// address is forwarded only alongside it, so the API never trusts it alone.
+			if (options.proxyKey) {
 				headers['x-organiser-proxy-key'] = options.proxyKey;
+				if (call.clientIp) headers['x-organiser-client-ip'] = call.clientIp;
 			}
 
 			let response: Response;
