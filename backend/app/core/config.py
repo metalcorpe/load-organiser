@@ -109,6 +109,12 @@ class Settings(BaseSettings):
     # New posts and widening a post to public; closed by default. Unpublishing,
     # narrowing and private logging never depend on it.
     SKYDIVER_PUBLISHING_OPEN: bool = False
+    # Hosted deploys (#161): apply Alembic migrations when the app starts, over the
+    # direct (not pooled) connection and under an advisory lock. Off locally and in tests.
+    SKYDIVER_MIGRATE_ON_START: bool = False
+    # Hosted deploys: at start-up, grant the reviewer role to this account if it
+    # exists (the owner, after registering on the site). Idempotent; empty: nothing.
+    SKYDIVER_BOOTSTRAP_REVIEWER: EmailStr | None = None
     # Shared secret proving that the forwarded client IP comes from the web server.
     SKYDIVER_WEB_PROXY_KEY: str | None = None
     # Local/test only: write identity mail as JSON files instead of sending it.

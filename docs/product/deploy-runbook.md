@@ -51,10 +51,12 @@ or an issue.
 | `SECRET_KEY` | secret (see above) |
 | `SKYDIVER_WEB_ORIGIN` | the Worker's https address, e.g. `https://load-organiser-web.<your-subdomain>.workers.dev` |
 | `SKYDIVER_WEB_PROXY_KEY` | secret, the shared proxy key |
-| `SKYDIVER_REGISTRATION_OPEN` | `false` (no mail sender: registration cannot confirm addresses) |
+| `SKYDIVER_MIGRATE_ON_START` | `true`: migrations run when the app starts (see "Order of a deploy") |
+| `SKYDIVER_BOOTSTRAP_REVIEWER` | your email: the reviewer role is granted at start-up once that account exists |
+| `SKYDIVER_REGISTRATION_OPEN` | `true` with `SKYDIVER_MAX_ACCOUNTS=1`: you register on the site, nobody else can (needs mail) |
 | `SKYDIVER_SUBMISSIONS_OPEN` | `false` until the review routine is in use |
 | `SKYDIVER_PUBLISHING_OPEN` | `false` until there is someone to share with |
-| `SKYDIVER_MAX_ACCOUNTS` | `5` |
+| `SKYDIVER_MAX_ACCOUNTS` | `1` while staging is owner-only |
 
 Leave unset: `LEGACY_API_ENABLED`, `SKYDIVER_MAIL_OUTBOX_DIR` (both refused outside
 local), `FIRST_SUPERUSER*` (not used by the beta), `EMAILS_FROM_NAME` (falls back to
@@ -97,16 +99,21 @@ against Resend until the first deploy: send yourself a password reset to check.
 
 ## 4. Order of a deploy
 
-1. Migrations first, from your terminal: `export DATABASE_URL='<direct string>'`, then
-   `scripts/staging.sh status` and `scripts/staging.sh migrate`. A migration must work
-   with the code that is still running (FastAPI Cloud replaces instances gradually):
-   add before using; stop using before removing.
+1. Migrations run when the app starts (`SKYDIVER_MIGRATE_ON_START=true`,
+   `backend/app/skydiver/migrate.py`): over Neon's direct host (the `-pooler` part is
+   dropped from the injected `DATABASE_URL`), in one transaction, without locks. When
+   several instances start at once, one applies them and the others roll back and go
+   on. A failed migration stops the new instances; the running ones keep serving. A
+   migration must work with the code that is still running (FastAPI Cloud replaces
+   instances gradually): add before using; stop using before removing.
+   `scripts/staging.sh` stays available for status checks and manual runs.
 2. Merge to `main`: FastAPI Cloud and Cloudflare each build and deploy from it.
 3. Check the API health address, then the web address.
 
-First time only, after step 3:
-- `scripts/staging.sh create-account you@example.com` (asks for the password twice),
-- `scripts/staging.sh grant-reviewer you@example.com`.
+First time only, after step 3: register on the web address with the email in
+`SKYDIVER_BOOTSTRAP_REVIEWER`, confirm it from the Resend mail, then redeploy (or wait
+for the next deploy) so the reviewer role is granted. Without mail, use
+`scripts/staging.sh create-account` and `grant-reviewer` instead.
 
 ## 5. Smoke check (record results in this file)
 

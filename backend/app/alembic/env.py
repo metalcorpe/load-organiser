@@ -10,7 +10,9 @@ config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
-fileConfig(config.config_file_name)
+# Called from the app (no ini file), the app's own logging stays in charge.
+if config.config_file_name is not None:
+    fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
 # for 'autogenerate' support
@@ -19,7 +21,7 @@ fileConfig(config.config_file_name)
 # target_metadata = None
 
 from app.models import SQLModel  # noqa
-from app.core.config import settings # noqa
+from app.core.config import settings  # noqa
 
 target_metadata = SQLModel.metadata
 
@@ -61,6 +63,17 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+    # The app's start-up step (app/skydiver/migrate.py) passes its own connection,
+    # already holding the migration lock; the CLI path below opens one itself.
+    shared = config.attributes.get("connection")
+    if shared is not None:
+        context.configure(
+            connection=shared, target_metadata=target_metadata, compare_type=True
+        )
+        with context.begin_transaction():
+            context.run_migrations()
+        return
+
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = get_url()
     connectable = engine_from_config(
