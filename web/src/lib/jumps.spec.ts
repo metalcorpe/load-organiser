@@ -26,7 +26,7 @@ const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 
 describe('nextJumpValues', () => {
 	it('keeps the day, type, altitudes and gear, and counts on', () => {
-		const next = nextJumpValues(jump());
+		const next = nextJumpValues(jump(), { sameDay: true });
 		expect(next.values).toEqual({
 			jumped_on: '2026-11-08',
 			jump_type: 'freefly',
@@ -41,14 +41,18 @@ describe('nextJumpValues', () => {
 	});
 
 	it('never carries what describes one jump only', () => {
-		const values = nextJumpValues(jump()).values;
+		const values = nextJumpValues(jump(), { sameDay: true }).values;
 		for (const name of ['notes', 'links', 'other_gear', 'exit_time', 'freefall_seconds']) {
 			expect(values).not.toHaveProperty(name);
 		}
 	});
 
 	it('leaves the number empty when the jump had none', () => {
-		expect(nextJumpValues(jump({ jump_number: null })).values.jump_number).toBe('');
-		expect(nextJumpValues(jump({ exit_altitude: null })).values.exit_altitude).toBe('');
+		expect(nextJumpValues(jump({ jump_number: null }), { sameDay: true }).values.jump_number).toBe('');
+		expect(nextJumpValues(jump({ exit_altitude: null }), { sameDay: true }).values.exit_altitude).toBe('');
+	});
+
+	it('leaves the date to the jumper\'s own today unless it is the same day', () => {
+		expect(nextJumpValues(jump(), { sameDay: false }).values.jumped_on).toBe('');
 	});
 });

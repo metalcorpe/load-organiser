@@ -43,7 +43,11 @@
 				</div>
 			</div>
 			{#if first}
-				<a class="button log" href={pick(first)}>Log a jump at {first.name}</a>
+				{#if data.continueFrom}
+					<a class="button log" href="{pick(first)}&from={data.continueFrom}">Log the next jump at {first.name}</a>
+				{:else}
+					<a class="button log" href={pick(first)}>Log a jump at {first.name}</a>
+				{/if}
 				<p class="others">
 					{#each data.recent.slice(1) as loc (loc.kind + loc.id)}
 						<a class="chip" href={pick(loc)}>{loc.name}</a>

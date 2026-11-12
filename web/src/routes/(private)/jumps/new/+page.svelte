@@ -22,7 +22,7 @@
 	const duplicateOf = $derived(saveForm && 'duplicateOf' in saveForm ? saveForm.duplicateOf : null);
 	// Keep the search and chosen place in the action URL so a refusal re-renders here.
 	const query = $derived(
-		[...page.url.searchParams].filter(([k]) => k === 'venue' || k === 'place' || k === 'from').map(([k, val]) => `${k}=${encodeURIComponent(val)}`).join('&')
+		[...page.url.searchParams].filter(([k]) => k === 'venue' || k === 'place' || k === 'from' || k === 'day').map(([k, val]) => `${k}=${encodeURIComponent(val)}`).join('&')
 	);
 </script>
 

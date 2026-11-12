@@ -84,14 +84,19 @@ export function altitudeText(
 }
 
 /**
- * Form values for the next jump after `jump`: same day, place, type, gear and
- * altitudes, the next jump number. Notes, links, other gear, exit time and freefall
- * time describe one jump only and start empty. Archived gear is not preselected.
+ * Form values for the next jump after `jump`: same place, type, gear and altitudes,
+ * the next jump number, and the same day when `sameDay` (catching up on one day's
+ * loads); otherwise the date starts empty and the form fills in the jumper's own today.
+ * Notes, links, other gear, exit time and freefall time describe one jump only and
+ * start empty. Archived gear is not preselected.
  */
-export function nextJumpValues(jump: JumpOut): { values: Record<string, string>; selected: string[] } {
+export function nextJumpValues(
+	jump: JumpOut,
+	{ sameDay }: { sameDay: boolean }
+): { values: Record<string, string>; selected: string[] } {
 	return {
 		values: {
-			jumped_on: jump.jumped_on,
+			jumped_on: sameDay ? jump.jumped_on : '',
 			jump_type: jump.jump_type,
 			jump_number: jump.jump_number === null ? '' : String(jump.jump_number + 1),
 			time_zone: jump.time_zone ?? '',

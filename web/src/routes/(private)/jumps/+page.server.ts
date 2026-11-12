@@ -26,6 +26,9 @@ export const load: PageServerLoad = async (event) => {
 
 	// Recent places come from the newest jumps on this page: distinct, newest first, open ones only.
 	const recent: { kind: 'venue' | 'place'; id: string; name: string }[] = [];
+	// The newest jump, when the first recent place is its place: the main button then
+	// continues from it (gear, type, altitudes, next number), on the jumper's today.
+	let continueFrom: string | null = null;
 	if (page.ok && !cursor) {
 		const seen = new Set<string>();
 		for (const jump of page.value.items) {
@@ -36,6 +39,10 @@ export const load: PageServerLoad = async (event) => {
 			recent.push({ kind: loc.kind, id: loc.id, name: loc.name });
 			if (recent.length === 3) break;
 		}
+		const newest = page.value.items[0];
+		if (newest && recent[0] && newest.location.kind === recent[0].kind && newest.location.id === recent[0].id) {
+			continueFrom = newest.id;
+		}
 	}
 
 	const totals = history?.ok ? history.value.totals : null;
@@ -45,6 +52,7 @@ export const load: PageServerLoad = async (event) => {
 			: { ok: false as const, reason: page.reason },
 		older: Boolean(cursor),
 		recent,
+		continueFrom,
 		summary:
 			history?.ok && totals
 				? {
