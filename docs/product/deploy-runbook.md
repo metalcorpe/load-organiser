@@ -49,7 +49,7 @@ or an issue.
 | `ENVIRONMENT` | `staging` |
 | `PROJECT_NAME` | `Load Organiser` |
 | `SECRET_KEY` | secret (see above) |
-| `SKYDIVER_WEB_ORIGIN` | the Worker's https address, e.g. `https://load-organiser-web.<your-subdomain>.workers.dev` |
+| `SKYDIVER_WEB_ORIGIN` | the Worker's https address, `https://load-organiser.metalcorpe.workers.dev` |
 | `SKYDIVER_WEB_PROXY_KEY` | secret, the shared proxy key |
 | `SKYDIVER_REGISTRATION_OPEN` | `false` (no mail sender: registration cannot confirm addresses) |
 | `SKYDIVER_SUBMISSIONS_OPEN` | `false` until the review routine is in use |
@@ -81,6 +81,10 @@ against Resend until the first deploy: send yourself a password reset to check.
 
 ## 3. Cloudflare Workers Builds (web)
 
+- The Worker is named `load-organiser` (as in the dashboard; `web/wrangler.jsonc` must
+  use the same name). Finding 2026-11-12: with the root directory unset, Workers Builds
+  built the old template frontend (`frontend/`, "Full Stack FastAPI Project"); the root
+  directory must be `web`.
 - Root directory: `web`. Build command: `npm ci && npm run build`. Deploy command:
   `npx wrangler deploy`. Production branch: `main`. Builds for other branches: off.
 - `web/wrangler.jsonc` turns on the `*.workers.dev` address, keeps pull-request preview
