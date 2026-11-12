@@ -66,6 +66,16 @@ export function isNotable(candidate: number | null, highest: number | null): boo
 	return Math.round(candidate * 100) - Math.round(highest * 100) > NOTABLE_STEP * 100;
 }
 
+export type LoadingContext = { usualGrams: number | null; unit: WeightUnit; highest: number | null };
+
+/**
+ * The jump form's context, or an empty one in `unit` when it could not be read, so
+ * the prefilled number, its label and the unit sent with it always agree.
+ */
+export function formLoading(loading: LoadingContext | null, unit: WeightUnit): LoadingContext {
+	return loading ?? { usualGrams: null, unit, highest: null };
+}
+
 /** The calm note on the jump form; no advice. */
 export function highestNote(candidate: number, highest: number): string {
 	return `This is your highest wing loading so far (${formatLoading(candidate)}; previous highest ${formatLoading(highest)}).`;

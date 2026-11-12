@@ -65,8 +65,10 @@ changes before the restored database serves anyone. Built 2026-11-07, local only
   `skydiver_erasure_ledger` in the same transaction as each of these changes, so no
   application path can skip it:
   - deleted rows: accounts, jumps, posts, follows, blocks (unblock), components,
-    service entries, private places, plans, saved listings, the history baseline
-    and reviewer role grants, including rows removed by a cascade
+    service entries, private places, plans, saved listings, the history baseline,
+    the stated licence (migration `a3f6c9e2d7b4`), the usual exit weight (migration
+    `e8b3d5f1a7c4`; the owner key only, never the weight) and reviewer role grants,
+    including rows removed by a cascade
   - new blocks
   - changes to account `is_active`, profile `discoverable`, `hidden_at` and
     `publishing_restricted_at`, and post `audience`
@@ -127,7 +129,9 @@ every table unchanged. It also replays an entry that cannot apply (a block betwe
 people who do not exist) twice: both runs exit 1 and report it, and nothing changes.
 
 **Still lost or reverted by a restore** (not erasures, so not recorded): edits after
-T to notes, captions, names, bios and other fields revert to their state at T;
+T to notes, captions, names, bios and other fields revert to their state at T,
+including an exit weight entered or cleared on a single jump (a jump field, removed
+with the jump when the jump is deleted) and the weight unit preference;
 records created after T, including reports, suggestions and reviewer decisions, are
 missing; email address changes are not recorded. Restoring still needs registration
 closed (`SKYDIVER_REGISTRATION_OPEN=false`) and the web app kept away from the API

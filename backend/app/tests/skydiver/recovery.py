@@ -69,6 +69,7 @@ def seed(manifest: Path) -> None:
         _ok(c, "DELETE", f"/history/baseline?version={first['baseline']['version']}", owner)  # fmt: skip
         _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
         _ok(c, "PUT", "/me/licence", owner, {"licence": "b"})
+        _ok(c, "PUT", "/me/exit-weight", owner, {"value": 180, "unit": "lb"})
         later = _ok(c, "POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-13", "jump_type": "belly", "venue_id": venue["id"]})["jump"]  # fmt: skip
         plan = _ok(c, "POST", "/plans", owner, {"title": "Recovery trip", "starts_on": "2026-12-03", "ends_on": "2026-12-04", "venue_id": venue["id"]})  # fmt: skip
         post = _ok(c, "POST", f"/me/jumps/{kept['id']}/post", owner, {"jump_version": kept["version"], "audience": "followers", "shares": ["venue"], "caption": "Recovery caption"})  # fmt: skip
@@ -153,6 +154,7 @@ SEEDED = (
     "skydiver_component",
     "skydiver_jump_baseline",
     "skydiver_jumper_licence",
+    "skydiver_exit_weight",
 )
 
 
@@ -176,6 +178,7 @@ def check(manifest: Path) -> None:
         history = _ok(c, "GET", "/history", m["owner"])
         assert history["baseline"]["prior_jumps"] == 150
         assert history["currency"]["licence"] == "b"
+        assert history["exit_weight"] == {"grams": 81_647, "value": 180.0, "unit": "lb"}
         # Audience and follow state survive: the follower reads, a stranger does not.
         assert _ok(c, "GET", f"/posts/{m['post']}", m["follower"])["caption"] == "Recovery caption"  # fmt: skip
         assert _call(c, "GET", f"/posts/{m['post']}", m["stranger"]).status_code == 404
@@ -211,6 +214,9 @@ def erase(manifest: Path) -> None:
         _ok(c, "DELETE", f"/places/{m['place']}", owner)
         _ok(c, "DELETE", f"/plans/{m['plan']}", owner)
         _ok(c, "PUT", "/me/licence", owner, {"licence": "none"})  # deletes its row
+        _ok(
+            c, "PUT", "/me/exit-weight", owner, {"value": None, "unit": "lb"}
+        )  # deletes its row
         profile = _ok(c, "GET", "/me/profile", owner)
         _ok(c, "PUT", "/me/profile", owner, {"handle": profile["handle"], "display_name": profile["display_name"], "discoverable": False, "version": profile["version"]})  # fmt: skip
         _ok(c, "POST", "/auth/password", owner, {"current_password": PASSWORD, "new_password": NEW_PASSWORD})  # fmt: skip
@@ -251,6 +257,8 @@ def replayed(manifest: Path) -> None:
             ), table  # noqa: S608
         # The licence (set before the backup) was cleared after it: it stays cleared.
         assert _scalar("SELECT count(*) FROM skydiver_jumper_licence WHERE owner_person_id = :p", p=m["owner_person"]) == 0  # fmt: skip
+        # So was the usual exit weight: it stays cleared too.
+        assert _scalar("SELECT count(*) FROM skydiver_exit_weight WHERE owner_person_id = :p", p=m["owner_person"]) == 0  # fmt: skip
         assert _scalar("SELECT discoverable FROM skydiver_profile WHERE person_id = :p", p=m["owner_person"]) is False  # fmt: skip
         # Moderation after the backup, both ways: set and cleared.
         assert _scalar("SELECT hidden_at IS NULL FROM skydiver_profile WHERE person_id = :p", p=m["stranger_person"]) is True  # fmt: skip

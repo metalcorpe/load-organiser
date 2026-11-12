@@ -7,6 +7,7 @@
 	import { directoryMessage } from '#lib/directory-messages.ts';
 	import { JUMP_TYPE_LABEL, altitudeText, jumpMessage } from '#lib/jumps.ts';
 	import {
+		formLoading,
 		formatLoading,
 		formatWeight,
 		inUnit,
@@ -23,6 +24,11 @@
 	const echoed = $derived(
 		form && form.form === 'save' && 'values' in form && form.values ? form.values : null
 	);
+	// The form's unit, also when the context could not be read: the jump's own unit.
+	const context = $derived(formLoading(data.loading, jump.wing_loading.unit));
+	const shownWeight = $derived(
+		jump.exit_weight_grams === null ? '' : String(inUnit(jump.exit_weight_grams, context.unit))
+	);
 	const saved = $derived<Record<string, string>>({
 		jumped_on: jump.jumped_on,
 		jump_type: jump.jump_type,
@@ -36,10 +42,10 @@
 		freefall_seconds: jump.freefall_seconds?.toString() ?? '',
 		other_gear: jump.other_gear ?? '',
 		aircraft: jump.aircraft ?? '',
-		exit_weight:
-			jump.exit_weight_grams === null
-				? ''
-				: String(inUnit(jump.exit_weight_grams, data.loading?.unit ?? jump.wing_loading.unit)),
+		exit_weight: shownWeight,
+		exit_weight_unit: context.unit,
+		exit_weight_saved: jump.exit_weight_grams?.toString() ?? '',
+		exit_weight_shown: shownWeight,
 		notes: jump.notes ?? '',
 		links: jump.links.join('\n')
 	});
@@ -207,7 +213,7 @@
 		keys={{ component: echoed?.new_component_key || data.componentKey }}
 		version={(echoed && form && 'based' in form && form.based) || jump.version}
 		submitLabel="Save changes"
-		loading={data.loading}
+		loading={context}
 	/>
 {/if}
 

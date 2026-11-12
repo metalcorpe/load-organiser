@@ -679,6 +679,7 @@ def _rows(
                 "owner_person_id": owner,
                 "grams": r.exit_weight.grams,
                 "unit": r.exit_weight.unit,
+                "updated_at": now,
             }
         ]
     return out

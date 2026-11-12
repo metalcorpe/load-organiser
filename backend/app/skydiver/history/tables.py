@@ -98,3 +98,30 @@ class SkydiverJumperLicence(SQLModel, table=True):
     )
     licence: str = Field(sa_column=Column(String(8), nullable=False))
     updated_at: datetime = Field(sa_column=_instant())
+
+
+class SkydiverExitWeight(SQLModel, table=True):
+    """The jumper's usual exit weight (body and gear), for wing loading. No row: none.
+
+    Private and self-reported; never shown to anyone else or verified. Clearing it
+    deletes the row, and the deletion is recorded in the erasure ledger (owner key
+    only, never the weight), so a restore plus a ledger replay keeps it cleared.
+    """
+
+    __tablename__ = "skydiver_exit_weight"
+    __table_args__ = (
+        CheckConstraint(
+            "grams BETWEEN 30000 AND 250000", name="ck_skydiver_exit_weight_grams"
+        ),
+        CheckConstraint("unit IN ('kg', 'lb')", name="ck_skydiver_exit_weight_unit"),
+    )
+
+    owner_person_id: uuid.UUID = Field(
+        sa_column=Column(
+            ForeignKey("skydiver_person.id", ondelete="CASCADE"), primary_key=True
+        )
+    )
+    grams: int = Field(sa_column=Column(Integer, nullable=False))
+    # The unit it was entered in, to show it back as entered.
+    unit: str = Field(sa_column=Column(String(2), nullable=False))
+    updated_at: datetime = Field(sa_column=_instant())

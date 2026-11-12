@@ -29,6 +29,7 @@ from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
+from app.skydiver.history.tables import SkydiverExitWeight
 from app.skydiver.identity.tables import SkydiverPerson
 from app.skydiver.logbook import loading
 from app.skydiver.logbook.loading import WeightUnit
@@ -493,14 +494,17 @@ class SqlLogbookStore:
 
 
 def usual_exit_weight(session: Session, actor: Actor) -> ExitWeight:
-    """The jumper's usual exit weight, kept on their own person row."""
-    P = SkydiverPerson
+    """The jumper's usual exit weight (its own table), in the unit it was entered
+    in; without one, the unit the jumper last chose (kept on the person row)."""
+    P, W = SkydiverPerson, SkydiverExitWeight
     row = session.execute(
-        select(col(P.exit_weight_grams), col(P.exit_weight_unit)).where(
-            col(P.id) == actor.person_id
-        )
+        select(col(W.grams), col(W.unit), col(P.weight_unit))
+        .select_from(P)
+        .outerjoin(W, col(W.owner_person_id) == col(P.id))
+        .where(col(P.id) == actor.person_id)
     ).first()
-    grams, unit = row if row is not None else (None, None)
+    grams, entered, chosen = row if row is not None else (None, None, None)
+    unit = entered or chosen
     return ExitWeight(grams, WeightUnit(unit) if unit else WeightUnit.KG)
 
 

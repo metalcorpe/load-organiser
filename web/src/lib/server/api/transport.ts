@@ -246,7 +246,7 @@ export const OPERATIONS = {
 		path: `${BETA}/jumps/recent-aircraft`,
 		query: ['venue_id', 'place_id']
 	},
-	// The usual exit weight and the highest wing loading so far, for the jump form.
+	// The usual exit weight and the highest wing loading of the other jumps, for the jump form.
 	getWingLoadingContext: {
 		method: 'GET',
 		path: `${BETA}/jumps/wing-loading`,

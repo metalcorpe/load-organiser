@@ -164,7 +164,7 @@ class HistoryStore(Protocol):
 
     def exit_weight(self, actor: Actor) -> ExitWeight: ...
     def set_exit_weight(
-        self, actor: Actor, grams: int | None, unit: WeightUnit | None
+        self, actor: Actor, grams: int | None, unit: WeightUnit | None, now: datetime
     ) -> None:
         """Last write wins; None clears it."""
         ...
@@ -331,7 +331,7 @@ class HistoryService:
         """A private setting for wing loading; never verified. None clears it."""
         grams = loading.grams(value, unit) if value is not None else None
         with self._stores() as store:
-            store.set_exit_weight(actor, grams, unit)
+            store.set_exit_weight(actor, grams, unit, self._clock())
         return ExitWeight(grams, unit)
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:

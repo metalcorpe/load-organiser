@@ -26,6 +26,7 @@ from app.skydiver.history.service import (
     StoreFactory,
 )
 from app.skydiver.history.tables import (
+    SkydiverExitWeight,
     SkydiverJumpBaseline,
     SkydiverJumpBaselineEvent,
     SkydiverJumperLicence,
@@ -162,16 +163,25 @@ class SqlHistoryStore:
         return usual_exit_weight(self._s, actor)
 
     def set_exit_weight(
-        self, actor: Actor, grams: int | None, unit: WeightUnit | None
+        self, actor: Actor, grams: int | None, unit: WeightUnit | None, now: datetime
     ) -> None:
-        P = SkydiverPerson
-        self._s.execute(
-            update(P)
-            .where(col(P.id) == actor.person_id)
-            .values(
-                exit_weight_grams=grams,
-                exit_weight_unit=unit.value if grams is not None and unit else None,
+        P, W = SkydiverPerson, SkydiverExitWeight
+        if unit is not None:  # the chosen unit outlives a cleared weight
+            self._s.execute(
+                update(P)
+                .where(col(P.id) == actor.person_id)
+                .values(weight_unit=unit.value)
             )
+        if grams is None:
+            # A deletion, so the erasure ledger records it (owner key only).
+            self._s.execute(delete(W).where(col(W.owner_person_id) == actor.person_id))
+            return
+        assert unit is not None
+        values = {"grams": grams, "unit": unit.value, "updated_at": now}
+        self._s.execute(
+            pg_insert(W)
+            .values(owner_person_id=actor.person_id, **values)
+            .on_conflict_do_update(index_elements=["owner_person_id"], set_=values)
         )
 
     def entry_facts(self, actor: Actor) -> list[EntryFacts]:

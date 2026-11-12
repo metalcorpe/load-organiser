@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+	formLoading,
 	formatLoading,
 	formatWeight,
 	highestNote,
@@ -61,6 +62,14 @@ describe('wing loading', () => {
 		});
 		// A weight is set (no row lacks one): say why the others have none.
 		expect(listNote([row(null, 'main_canopy')])?.count).toBe(1);
+	});
+});
+
+describe('the jump form context', () => {
+	it("keeps the jumper's unit when the context could not be read", () => {
+		expect(formLoading(null, 'lb')).toEqual({ usualGrams: null, unit: 'lb', highest: null });
+		const read = { usualGrams: 81_647, unit: 'lb' as const, highest: 1.2 };
+		expect(formLoading(read, 'kg')).toBe(read);
 	});
 });
 

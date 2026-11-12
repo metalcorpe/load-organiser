@@ -22,6 +22,7 @@ from app.skydiver.gear.tables import (
     SkydiverServiceEntry,
 )
 from app.skydiver.history.tables import (
+    SkydiverExitWeight,
     SkydiverJumpBaseline,
     SkydiverJumpBaselineEvent,
     SkydiverJumperLicence,
@@ -338,16 +339,17 @@ class SqlRecordsStore:
         if not rows:
             return
         if table == "exit_weight":
-            # A setting on the person row: the account's own wins, as for the licence.
+            # A setting: the account's own wins, as for the licence.
+            self._s.execute(
+                pg_insert(SkydiverExitWeight).values(rows).on_conflict_do_nothing()
+            )
             P = SkydiverPerson
             for row in rows:
                 self._s.execute(
                     update(P)
                     .where(col(P.id) == row["owner_person_id"])
-                    .where(col(P.exit_weight_grams).is_(None))
-                    .values(
-                        exit_weight_grams=row["grams"], exit_weight_unit=row["unit"]
-                    )
+                    .where(col(P.weight_unit).is_(None))
+                    .values(weight_unit=row["unit"])
                 )
             return
         if table == "licence":

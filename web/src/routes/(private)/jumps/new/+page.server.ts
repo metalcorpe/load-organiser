@@ -68,7 +68,7 @@ export const load: PageServerLoad = async (event) => {
 				})
 			: null;
 	const aircraft = recent?.ok ? recent.value.aircraft : null;
-	// The usual exit weight and the highest wing loading so far, for the form's note.
+	// The usual exit weight and the highest wing loading of the other jumps, for the note.
 	// One call; without an answer the form has no note.
 	const loading = chosen ? await loadingFor(api, secret) : null;
 	const next = proposedNumber(highest);

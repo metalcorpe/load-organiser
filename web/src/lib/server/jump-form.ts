@@ -38,8 +38,13 @@ export function jumpBody(data: FormData): { body: JumpBody } | { error: string }
 	const hasAltitude = numbers.exit_altitude !== null || numbers.deployment_altitude !== null;
 
 	const unit = field(data, 'exit_weight_unit', { max: 2 }) === 'lb' ? 'lb' : 'kg';
-	const weight = parseWeight(field(data, 'exit_weight', { max: 12, trim: true }), unit);
+	const typedWeight = field(data, 'exit_weight', { max: 12, trim: true });
+	const weight = parseWeight(typedWeight, unit);
 	if (weight === 'invalid') return { error: 'exit_weight_invalid' };
+	// An edit leaves an untouched weight out, so it is never rounded through the unit.
+	const savedWeight = field(data, 'exit_weight_saved', { max: 12 });
+	const weightUnchanged =
+		/^\d+$/.test(savedWeight) && typedWeight === field(data, 'exit_weight_shown', { max: 12, trim: true });
 
 	const exitTime = field(data, 'exit_time', { max: 8 });
 	if (exitTime && !TIME.test(exitTime)) return { error: 'exit_time_invalid' };
@@ -76,7 +81,7 @@ export function jumpBody(data: FormData): { body: JumpBody } | { error: string }
 			other_gear: text(data, 'other_gear', 400),
 			aircraft: text(data, 'aircraft', 120),
 			// Empty: the jumper's usual exit weight applies.
-			exit_weight_grams: weight,
+			...(weightUnchanged ? {} : { exit_weight_grams: weight }),
 			notes: text(data, 'notes', 4000),
 			links
 		}

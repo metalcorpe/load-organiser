@@ -10,6 +10,7 @@
 		isNotable,
 		parseWeight,
 		wingLoading,
+		type LoadingContext,
 		type WeightUnit
 	} from '#lib/wing-loading.ts';
 
@@ -20,8 +21,6 @@
 		archived: boolean;
 		canopySize?: number | null;
 	};
-	/** For the wing loading note: the usual exit weight and the highest so far. */
-	type LoadingContext = { usualGrams: number | null; unit: WeightUnit; highest: number | null };
 
 	/**
 	 * The private jump form (#153), for both a new entry and an edit. Values come
@@ -58,6 +57,7 @@
 		numberHint?: string | null;
 		/** Why the aircraft is filled in, e.g. "From your last jump at this place." */
 		aircraftHint?: string | null;
+		/** For the wing loading note: the usual exit weight and the highest of the other jumps. */
 		loading?: LoadingContext | null;
 	} = $props();
 
@@ -78,7 +78,12 @@
 
 	const v = (name: string) => values[name] ?? '';
 	const chosen = $derived(new Set(selected));
-	const unit = $derived<WeightUnit>(loading?.unit ?? 'kg');
+	// A refused form keeps the unit its number was typed in.
+	const unit = $derived<WeightUnit>(
+		v('exit_weight_unit') === 'lb' || v('exit_weight_unit') === 'kg'
+			? (v('exit_weight_unit') as WeightUnit)
+			: (loading?.unit ?? 'kg')
+	);
 
 	// The wing loading note follows the ticked gear and the weight typed, read from the
 	// form itself (the inputs stay uncontrolled, so nothing typed before hydration is lost).
@@ -266,6 +271,12 @@
 	<div class="field">
 		<label for="exit_weight">Exit weight on this jump in {UNIT_LABEL[unit]} (optional)</label>
 		<input type="hidden" name="exit_weight_unit" value={unit} />
+		{#if v('exit_weight_saved')}
+			<!-- The saved weight and how it was shown: an untouched field is not sent again,
+			     so a conversion to and from the unit never changes it. -->
+			<input type="hidden" name="exit_weight_saved" value={v('exit_weight_saved')} />
+			<input type="hidden" name="exit_weight_shown" value={v('exit_weight_shown')} />
+		{/if}
 		<input
 			id="exit_weight"
 			name="exit_weight"

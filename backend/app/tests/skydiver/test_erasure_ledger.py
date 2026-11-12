@@ -112,6 +112,32 @@ def test_clearing_a_licence_records_its_owner_key_only(api: Api) -> None:
     ]
 
 
+def test_clearing_an_exit_weight_records_its_owner_key_only(api: Api) -> None:
+    owner = api.accounts.session()
+    person = api.ok("GET", "/auth/session", owner)["person_id"]
+    start = _now()
+    api.ok("PUT", "/me/exit-weight", owner, {"value": 81.6, "unit": "kg"})
+    api.ok("PUT", "/me/exit-weight", owner, {"value": 180, "unit": "lb"})
+    assert _mine(_since(start), person) == []  # setting or changing records nothing
+    api.ok("PUT", "/me/exit-weight", owner, {"value": None, "unit": "lb"})
+    entries = _mine(_since(start), person)
+    assert entries == [
+        {
+            "action": "delete",
+            "table": "skydiver_exit_weight",
+            "key": {"owner_person_id": person},
+            "values": None,
+        }
+    ]
+    # Ids and times only: the weight itself is never in the ledger.
+    assert "81647" not in json.dumps(entries) and "81600" not in json.dumps(entries)
+    # The chosen unit is a preference and stays.
+    assert api.ok("GET", "/me/exit-weight", owner) == {
+        "exit_weight": None,
+        "unit": "lb",
+    }
+
+
 def test_deletions_record_keys_without_content(api: Api) -> None:
     owner = api.accounts.session()
     start = _now()
