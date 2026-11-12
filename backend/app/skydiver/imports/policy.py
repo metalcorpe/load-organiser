@@ -115,7 +115,8 @@ DELIMITERS = (",", ";", "\t")
 
 
 def delimiter(text: str) -> str:
-    """The delimiter used most in the heading line (the first non-empty line).
+    """The delimiter used most in the heading line (the first non-empty line),
+    outside double quotes.
 
     Deliberately simple and linear: no sniffing of the whole sample (csv.Sniffer
     runs backtracking regular expressions over untrusted text and guesses).
@@ -125,7 +126,15 @@ def delimiter(text: str) -> str:
         if line.strip():
             heading = line
             break
-    counts = [heading.count(d) for d in DELIMITERS]
+    # Characters inside double quotes are part of a heading, not separators.
+    outside, quoted = [], False
+    for char in heading:
+        if char == '"':
+            quoted = not quoted
+        elif not quoted:
+            outside.append(char)
+    unquoted = "".join(outside)
+    counts = [unquoted.count(d) for d in DELIMITERS]
     best = max(range(len(DELIMITERS)), key=lambda i: (counts[i], -i))
     return DELIMITERS[best] if counts[best] else ","
 

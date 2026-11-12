@@ -107,10 +107,10 @@ test('import a spreadsheet, see the jumps in the logbook, then undo it', async (
 	// Undo removes the imported jumps and the place nothing else uses.
 	await page.goto('/records/import');
 	const imports = page.getByRole('list', { name: 'Your imports' });
-	await imports.getByRole('button', { name: 'Undo this import' }).click();
+	await imports.getByRole('button', { name: /^Undo the import of .* UTC$/ }).click();
 	await expect(imports.getByRole('alert')).toContainText('Tick the box to confirm');
-	await page.getByLabel('Delete the jumps from this import').check();
-	await page.getByRole('button', { name: 'Undo this import' }).click();
+	await page.getByLabel(/^Delete the 2 jumps from the import of .* UTC$/).check();
+	await page.getByRole('button', { name: /^Undo the import of .* UTC$/ }).click();
 	await expect(page.getByRole('heading', { name: 'Import undone' })).toBeVisible();
 	await expect(page.getByText('Removed 2 jumps and 1 private place.', { exact: true })).toBeVisible();
 	await expect(page.getByRole('list', { name: 'Your imports' })).toContainText('Undone on');

@@ -18,7 +18,7 @@ Paper logbooks, FlySight, GPX, FIT and other device files are out of scope.
 
 - At most 1 MiB and 2,000 data rows (the logbook limit), at most 100 columns.
 - UTF-8 with or without a byte-order mark, UTF-16 with a byte-order mark, otherwise read as Windows-1252. The page says when Windows-1252 was used.
-- Comma, semicolon or tab separated: the separator used most in the heading line wins (ties: comma, then semicolon, then tab).
+- Comma, semicolon or tab separated: the separator used most in the heading line, outside double quotes, wins (ties: comma, then semicolon, then tab).
 - The first non-empty row holds the headings. Blank rows are ignored but still counted, so row numbers match the file: row 1 is the first row under the headings.
 
 ### Columns
@@ -75,8 +75,8 @@ Nothing is written when: the file is too large or unreadable, has no headings, t
 - The fingerprint is the SHA-256 of the exact file bytes plus the date order, unit, country and the columns used. The same fingerprint again answers "already imported" with the original counts and writes nothing. After an undo the same file can be imported again.
 - The import row claims the person's next import number and the fingerprint, both unique per person, so two simultaneous imports of the same file write it once.
 - The jump and place limits are counted behind the same per-person gate (a row lock on the person, `access.sql.lock_owner`) that adding a private place by hand already used; logging a jump by hand now takes it too. An import and a hand-made jump or place at the same time therefore cannot both pass a limit.
-- Undo sets its time only where it is still empty, so a second undo answers `already_undone` and changes nothing. Another person's import answers exactly like a missing one.
-- Checks are limited to 60 an hour and imports to 10 a day per account. An import needs a confirmed email; a check needs only a session.
+- Undo takes the same per-person gate first, so it never deletes a place an import is reusing, and an import never counts as a duplicate a jump that an undo is deleting. It sets its time only where it is still empty, so a second undo answers `already_undone` and changes nothing. Another person's import answers exactly like a missing one.
+- Checks are limited to 60 an hour per account. Import requests are limited to 30 an hour, counted before the file is read, and completed imports to 10 a day: a refused import (nothing to import, a limit, a missing country) does not use the daily quota. An import needs a confirmed email; a check needs only a session.
 
 ## Tested and untested
 
@@ -89,3 +89,5 @@ Untested or known limits:
 - The import row and its undo time are not in the erasure ledger. After a database restore from backup, an undo made later is replayed as jump and place deletions, but the import still lists as not undone.
 - Big files (2,000 rows) were tested for the limit only, not for response time on the production host.
 - The file has to be chosen again for each step (no JavaScript upload state is kept), which is clumsy on phones; not validated with users.
+- The daily import quota is checked before and counted after an import, so two imports sent at the same moment as the tenth can both complete (at most a few over the 10). The hourly limit on import requests still applies.
+- Sending the import form twice (a double click) imports once; the second answer says the file was already imported and was not imported a second time. The button is not disabled while the first request runs.

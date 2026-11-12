@@ -15,6 +15,10 @@ export interface ImportChoices {
 	date_order: 'dmy' | 'mdy' | 'ymd';
 	unit: 'ft' | 'm';
 	country: string;
+	/** Explicit column choices (`none` or a 0-based index); absent means detect. */
+	columns: Record<string, string>;
+	/** The fingerprint of the checked file and choices, or ''. */
+	expected: string;
 }
 
 export type ImportUpload =
@@ -26,42 +30,52 @@ export type ImportUpload =
 	  }
 	| { ok: false; error: string; status: number; choices: ImportChoices };
 
-const DEFAULTS: ImportChoices = { date_order: 'dmy', unit: 'ft', country: '' };
+const DEFAULTS: ImportChoices = {
+	date_order: 'dmy',
+	unit: 'ft',
+	country: '',
+	columns: {},
+	expected: ''
+};
 
 function text(data: FormData, name: string): string {
 	const value = data.get(name);
 	return typeof value === 'string' ? value.slice(0, 100) : '';
 }
 
-/** The options as sent, each reduced to an allowed value. */
+/**
+ * The options, column choices and checked fingerprint as sent, each reduced to an
+ * allowed value. Echoed back after a refusal so the form keeps them.
+ */
 export function readChoices(data: FormData): ImportChoices {
 	const order = text(data, 'date_order');
 	const unit = text(data, 'unit');
 	const country = text(data, 'country').toUpperCase();
+	const columns: Record<string, string> = {};
+	for (const field of IMPORT_FIELDS) {
+		const value = text(data, `col_${field}`);
+		// "auto" or anything unexpected: let the API detect the column from its heading.
+		if (value === 'none' || /^\d{1,3}$/.test(value)) columns[field] = value;
+	}
+	const expected = text(data, 'expected');
 	return {
 		date_order: order === 'mdy' || order === 'ymd' ? order : 'dmy',
 		unit: unit === 'm' ? 'm' : 'ft',
-		country: /^[A-Z]{2}$/.test(country) ? country : ''
+		country: /^[A-Z]{2}$/.test(country) ? country : '',
+		columns,
+		expected: /^[0-9a-f]{64}$/.test(expected) ? expected : ''
 	};
 }
 
 /** Query values for the API: options, explicit column choices and the checked fingerprint. */
-export function importQuery(
-	data: FormData,
-	choices: ImportChoices
-): Record<string, string | undefined> {
+export function importQuery(choices: ImportChoices): Record<string, string | undefined> {
 	const query: Record<string, string | undefined> = {
 		date_order: choices.date_order,
 		unit: choices.unit,
 		country: choices.country || undefined
 	};
-	for (const field of IMPORT_FIELDS) {
-		const value = text(data, `col_${field}`);
-		// "auto" or anything unexpected: let the API detect the column from its heading.
-		if (value === 'none' || /^\d{1,3}$/.test(value)) query[`col_${field}`] = value;
-	}
-	const expected = text(data, 'expected');
-	if (/^[0-9a-f]{64}$/.test(expected)) query.expected = expected;
+	for (const [field, value] of Object.entries(choices.columns)) query[`col_${field}`] = value;
+	if (choices.expected) query.expected = choices.expected;
 	return query;
 }
 
@@ -96,6 +110,6 @@ export async function readImportUpload(request: Request): Promise<ImportUpload> 
 		ok: true,
 		bytes: new Uint8Array(await file.arrayBuffer()),
 		choices,
-		query: importQuery(data, choices)
+		query: importQuery(choices)
 	};
 }

@@ -4,6 +4,7 @@ import {
 	describeImport,
 	describeUndo,
 	importMessage,
+	importWhen,
 	rowProblem
 } from './imports.ts';
 
@@ -49,5 +50,11 @@ describe('import labels', () => {
 		expect(importMessage('country_required')).toBe(IMPORT_MESSAGES.country_required);
 		expect(importMessage('mystery')).toBe(IMPORT_MESSAGES.invalid_input);
 		expect(importMessage(undefined)).toBeUndefined();
+	});
+
+	it('names when an import happened, to the minute in UTC', () => {
+		expect(importWhen('2026-11-12T13:05:59.123+00:00')).toBe('12 November 2026, 13:05 UTC');
+		expect(importWhen('2026-11-12T23:30:00-02:00')).toBe('13 November 2026, 01:30 UTC');
+		expect(importWhen('not a date')).toBe('not a date');
 	});
 });

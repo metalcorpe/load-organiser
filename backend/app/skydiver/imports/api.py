@@ -53,6 +53,9 @@ PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
 
 CHECK_RULE = ThrottleRule("jumps_import_check", 60, timedelta(hours=1))
+# Every import request, counted before the file is parsed (cheap, generous).
+ATTEMPT_RULE = ThrottleRule("jumps_import_attempt", 30, timedelta(hours=1))
+# Completed imports only: a refused import does not use the daily quota.
 IMPORT_RULE = ThrottleRule("jumps_import", 10, timedelta(days=1))
 
 JumpTypeName = Literal[
@@ -329,13 +332,16 @@ def create_router(
     ) -> ImportResultOut | JSONResponse:
         try:
             raw = await _raw(request)
+            await run_in_threadpool(consume, ATTEMPT_RULE, actor)
+            key = str(actor.account_id)
             result = await run_in_threadpool(
                 lambda: service().run(
                     actor,
                     raw,
                     checked(choices),
                     expected=expected,
-                    before_write=lambda: consume(IMPORT_RULE, actor),
+                    before_write=lambda: identity().allow(rule=IMPORT_RULE, key=key),
+                    after_write=lambda: identity().record(rule=IMPORT_RULE, key=key),
                 )
             )
         except Errors as error:

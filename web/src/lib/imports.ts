@@ -117,3 +117,25 @@ export function describeUndo(counts: Record<string, number>): string {
 		: '';
 	return `Removed ${jumps}${places}`;
 }
+
+/**
+ * When an import happened, to the minute in UTC: "12 November 2026, 13:05 UTC". Also
+ * what makes each past import's undo controls distinct for assistive technology.
+ */
+export function importWhen(instant: string): string {
+	const at = new Date(instant);
+	if (Number.isNaN(at.getTime())) return instant;
+	const date = at.toLocaleDateString('en-GB', {
+		day: 'numeric',
+		month: 'long',
+		year: 'numeric',
+		timeZone: 'UTC'
+	});
+	const time = at.toLocaleTimeString('en-GB', {
+		hour: '2-digit',
+		minute: '2-digit',
+		hourCycle: 'h23',
+		timeZone: 'UTC'
+	});
+	return `${date}, ${time} UTC`;
+}

@@ -49,6 +49,8 @@ def test_comma_semicolon_and_tab_files_read_the_same(delimiter: str) -> None:
             ";",
         ),  # the heading line decides, not the data
         ("\n\n  \nDate\tPlace\n", "\t"),  # the first non-empty line
+        ('Date;Place;"Notes, remarks, misc"\n', ";"),  # quoted text is not counted
+        ('"a;b;c",Place\n', ","),
         ("Date,Place;Notes\n", ","),  # a tie goes to the comma
         ("Date;Place\tNotes\n", ";"),  # then to the semicolon
         ("Date\n2024-01-01\n", ","),  # one column

@@ -10,6 +10,7 @@
 		describeImport,
 		describeUndo,
 		importMessage,
+		importWhen,
 		rowProblem
 	} from '#lib/imports.ts';
 	import { JUMP_TYPE_LABEL } from '#lib/jumps.ts';
@@ -28,7 +29,7 @@
 	const choices = $derived(
 		form && 'choices' in form && form.choices
 			? form.choices
-			: { date_order: 'dmy', unit: 'ft', country: '' }
+			: { date_order: 'dmy', unit: 'ft', country: '', columns: {}, expected: '' }
 	);
 	const check = $derived(form && form.form === 'check' && 'check' in form ? form.check : null);
 	const result = $derived(form && form.form === 'import' && 'result' in form ? form.result : null);
@@ -63,8 +64,8 @@
 			{#if result.outcome === 'imported'}
 				Imported {describeImport(result.item.counts)}.
 			{:else}
-				This exact file was already imported on {day(result.item.created_at)} with these choices
-				({describeImport(result.item.counts)}). Nothing was changed.
+				This exact file was already imported on {importWhen(result.item.created_at)} with these
+				choices ({describeImport(result.item.counts)}). It was not imported a second time.
 			{/if}
 		</p>
 		<p>Imported jumps show as imported by you, not verified.</p>
@@ -91,7 +92,14 @@
 		{/if}
 		<div class="field">
 			<label for="check_file">Spreadsheet file (CSV)</label>
-			<input id="check_file" name="file" type="file" accept=".csv,text/csv" />
+			<input
+				id="check_file"
+				name="file"
+				type="file"
+				accept=".csv,text/csv"
+				aria-describedby="check_file_hint"
+			/>
+			<p class="hint" id="check_file_hint">A .csv file of up to 1 MB and 2,000 rows.</p>
 		</div>
 		<div class="field">
 			<label for="check_date_order">Dates are written as</label>
@@ -238,6 +246,14 @@
 			<input type="hidden" name="date_order" value={choices.date_order} />
 			<input type="hidden" name="unit" value={choices.unit} />
 			<input type="hidden" name="country" value={choices.country} />
+			{#if !check}
+				<!-- After a refused import: keep the column choices and the checked file's
+				     fingerprint, so checking again does not fall back to detected columns. -->
+				{#each Object.entries(choices.columns) as [name, value] (name)}
+					<input type="hidden" name="col_{name}" {value} />
+				{/each}
+				{#if choices.expected}<input type="hidden" name="expected" value={choices.expected} />{/if}
+			{/if}
 			{#if check}
 				<input type="hidden" name="expected" value={check.fingerprint} />
 				<fieldset>
@@ -262,8 +278,16 @@
 			{/if}
 			<div class="field">
 				<label for="import_file">Choose the same file again</label>
-				<input id="import_file" name="file" type="file" accept=".csv,text/csv" />
-				<p class="hint">The file is not kept between steps, so it is sent again with each button.</p>
+				<input
+					id="import_file"
+					name="file"
+					type="file"
+					accept=".csv,text/csv"
+					aria-describedby="import_file_hint"
+				/>
+				<p class="hint" id="import_file_hint">
+					The file is not kept between steps, so it is sent again with each button.
+				</p>
 			</div>
 			<div class="form-actions">
 				<button class="button secondary" type="submit" formaction="?/check">Check again</button>
@@ -290,10 +314,12 @@
 		<ul class="results rows" aria-label="Your imports">
 			{#each data.imports.items as item (item.id)}
 				<li>
-					<span class="title">Imported on {day(item.created_at)}</span>
+					<span class="title">Imported on {importWhen(item.created_at)}</span>
 					<span class="meta">{describeImport(item.counts)}</span>
 					{#if item.undone_at}
-						<span class="meta">Undone on {day(item.undone_at)}. {describeUndo(item.counts)}.</span>
+						<span class="meta"
+							>Undone on {importWhen(item.undone_at)}. {describeUndo(item.counts)}.</span
+						>
 					{:else}
 						<form method="POST" action="?/undo" class="form undo">
 							{#if errorFor('undo', item.id)}
@@ -301,15 +327,18 @@
 							{/if}
 							<input type="hidden" name="id" value={item.id} />
 							<label class="choice"
-								><input type="checkbox" name="confirm" /> Delete the jumps from this import</label
+								><input type="checkbox" name="confirm" aria-describedby="undo_hint_{item.id}" />
+								Delete the {jumps(item.counts.jumps ?? 0)} from the import of {importWhen(
+									item.created_at
+								)}</label
 							>
-							<p class="hint">
+							<p class="hint" id="undo_hint_{item.id}">
 								Every jump this import added is deleted, even if you edited it since, with the new
 								private places nothing else uses. This cannot be reversed.
 							</p>
 							<div class="form-actions">
 								<button class="button secondary" type="submit" disabled={!data.emailVerified}
-									>Undo this import</button
+									>Undo the import of {importWhen(item.created_at)}</button
 								>
 							</div>
 						</form>

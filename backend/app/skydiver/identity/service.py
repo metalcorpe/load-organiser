@@ -464,6 +464,18 @@ class IdentityService:
             self._check(store, rule, now, key)
             self._hit(store, rule, now, key)
 
+    def allow(self, *, rule: ThrottleRule, key: str) -> None:
+        """Throttled when `key` is already over `rule`; counts nothing (see `record`)."""
+        now = self._clock()
+        with self._stores() as store:
+            self._check(store, rule, now, key)
+
+    def record(self, *, rule: ThrottleRule, key: str) -> None:
+        """Count one use against `rule` for `key`, after the use succeeded."""
+        now = self._clock()
+        with self._stores() as store:
+            self._hit(store, rule, now, key)
+
     def revoke_all(self, *, secret: str, password: str, client_ip: str) -> None:
         client_ip = policy.client_bucket(client_ip)
         now = self._clock()

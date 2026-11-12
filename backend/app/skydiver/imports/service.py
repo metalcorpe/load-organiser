@@ -263,8 +263,11 @@ class ImportService:
         *,
         expected: str | None,
         before_write: Callable[[], None],
+        after_write: Callable[[], None] = lambda: None,
     ) -> Outcome:
-        """`before_write` runs once, only when a write will be attempted (throttle)."""
+        """`before_write` runs once before a write is attempted (it may refuse, e.g.
+        a quota already used up); `after_write` runs only after an import committed,
+        so a refused import does not count against the quota."""
         table, columns, digest = self._read(raw, options)
         if expected is not None and expected != digest:
             raise ImportChanged()
@@ -275,9 +278,12 @@ class ImportService:
         before_write()
         for _ in range(ATTEMPTS):
             try:
-                return self._attempt(actor, table, columns, options, digest)
+                outcome = self._attempt(actor, table, columns, options, digest)
             except _LostRace:
                 continue
+            if outcome.outcome == "imported":
+                after_write()
+            return outcome
         raise ImportBusy()
 
     def _attempt(
@@ -392,6 +398,10 @@ class ImportService:
     def undo(self, actor: Actor, import_id: uuid.UUID) -> ImportRecord:
         now = self._clock()
         with self._stores() as store:
+            # The per-person gate first, as for imports and manual creates: an
+            # import cannot reuse a place, or count a jump as a duplicate, that this
+            # undo is deleting, and undo cannot delete a place a new jump now uses.
+            store.lock_owner(actor)
             record = store.get(actor, import_id)
             if record is None:
                 raise NotFound()

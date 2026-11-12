@@ -26,7 +26,7 @@ from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.imports.api import create_router
 from app.skydiver.imports.policy import Options
-from app.skydiver.imports.service import ImportService, LimitReached
+from app.skydiver.imports.service import ImportService, LimitReached, PlaceName
 from app.skydiver.imports.store import SqlImportStore, sql_import_store_factory
 from app.skydiver.logbook.api import create_router as create_logbook_router
 from app.skydiver.logbook.service import LimitReached as JumpLimitReached
@@ -569,3 +569,59 @@ def test_an_import_and_a_place_added_meanwhile_never_pass_the_place_limit(
             "place_limit_reached",
         )
     assert _count(SkydiverProvisionalPlace, actor) == 200
+
+
+def test_an_undo_and_an_import_reusing_its_place_do_not_collide(api: Api) -> None:
+    """The undo waits for the import, so it keeps the place the new jump now uses."""
+    owner = api.accounts.session()
+    actor = _actor(api, owner)
+    first = api.run(owner, _csv("2024-03-12,1,Shared field,,,,"), country="PT").json()
+    read = threading.Event()
+
+    class Slow(SqlImportStore):
+        def own_places(self, actor: Actor) -> list[PlaceName]:
+            places = super().own_places(actor)
+            read.set()
+            time.sleep(0.5)  # the undo starts while this import holds the place
+            return places
+
+    def undo() -> dict[str, int]:
+        assert read.wait(10)
+        return api.imports.undo(actor, uuid.UUID(first["item"]["id"])).counts
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        imported = pool.submit(
+            lambda: _service(Slow).run(
+                actor, _csv("2024-03-13,2,Shared field,,,,"), Options(country="PT"),
+                expected=None, before_write=lambda: None,
+            ).outcome
+        )  # fmt: skip
+        undone = pool.submit(undo)
+        assert imported.result() == "imported"
+        counts = undone.result()
+    assert (counts["removed_jumps"], counts["removed_places"]) == (1, 0)
+    assert [j["jump_number"] for j in api.jumps(owner)] == [2]
+    assert [p["name"] for p in api.ok("GET", "/places", owner)] == ["Shared field"]
+
+
+def test_only_completed_imports_use_the_daily_quota(api: Api) -> None:
+    owner = api.accounts.session()
+    for _ in range(11):  # refused: new places but no country
+        refused = api.run(owner, _csv("2024-03-12,1,Nowhere,,,,"))
+        assert refused.json()["detail"] == "country_required"
+    for n in range(1, 11):
+        done = api.run(owner, _csv(f"2024-03-12,{n},Quota field,,,,"), country="PT")
+        assert done.json()["outcome"] == "imported", done.text
+    over = api.run(owner, _csv("2024-03-12,11,Quota field,,,,"), country="PT")
+    assert (over.status_code, over.json()["detail"]) == (429, "too_many_attempts")
+    assert int(over.headers["retry-after"]) > 0
+    assert len(api.ok("GET", "/jumps?limit=50", owner)["items"]) == 10
+
+
+def test_import_requests_are_throttled_before_the_file_is_read(api: Api) -> None:
+    owner = api.accounts.session()
+    for _ in range(30):
+        assert api.run(owner, b"\x00not a spreadsheet").status_code == 400
+    valid = api.run(owner, _csv("2024-03-12,1,Late field,,,,"), country="PT")
+    assert (valid.status_code, valid.json()["detail"]) == (429, "too_many_attempts")
+    assert api.jumps(owner) == []

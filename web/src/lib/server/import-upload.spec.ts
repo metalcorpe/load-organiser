@@ -36,7 +36,9 @@ describe('readImportUpload', () => {
 		expect(upload.choices).toEqual({
 			date_order: 'mdy',
 			unit: 'm',
-			country: 'PT'
+			country: 'PT',
+			columns: { type: '3', notes: 'none' },
+			expected: 'f'.repeat(64)
 		});
 		expect(upload.query).toEqual({
 			date_order: 'mdy',
@@ -74,6 +76,16 @@ describe('readImportUpload', () => {
 			status: 400
 		});
 		expect(!missing.ok && missing.choices.date_order).toBe('ymd');
+
+		// A refusal keeps the column choices and checked fingerprint for the form.
+		const kept = new FormData();
+		kept.set('col_place', '2');
+		kept.set('expected', 'a'.repeat(64));
+		const echoed = await readImportUpload(await post(kept));
+		expect(!echoed.ok && echoed.choices).toMatchObject({
+			columns: { place: '2' },
+			expected: 'a'.repeat(64)
+		});
 
 		const big = new FormData();
 		big.set('file', csv('x'.repeat(IMPORT_MAX_BYTES + 1)));
