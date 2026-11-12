@@ -9,6 +9,7 @@ from typing import Any
 from sqlalchemy import (
     ColumnElement,
     Engine,
+    Subquery,
     and_,
     delete,
     false,
@@ -28,11 +29,15 @@ from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
+from app.skydiver.identity.tables import SkydiverPerson
+from app.skydiver.logbook import loading
+from app.skydiver.logbook.loading import WeightUnit
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 from app.skydiver.logbook.service import (
     BatchRecord,
     ComponentRef,
     Criteria,
+    ExitWeight,
     Jump,
     JumpEvent,
     LogbookStore,
@@ -84,6 +89,7 @@ def _jump(row: SkydiverJump, component_ids: list[uuid.UUID]) -> Jump:
         freefall_seconds=row.freefall_seconds,
         other_gear=row.other_gear,
         aircraft=row.aircraft,
+        exit_weight_grams=row.exit_weight_grams,
         notes=row.notes,
         links=tuple(row.links or ()),
         component_ids=tuple(component_ids),
@@ -294,7 +300,29 @@ class SqlLogbookStore:
             )
         ).scalars()
         return [
-            ComponentRef(r.id, r.kind, r.label, r.archived_at is not None) for r in rows
+            ComponentRef(
+                r.id, r.kind, r.label, r.archived_at is not None, r.canopy_size_sqft
+            )
+            for r in rows
+        ]
+
+    def exit_weight(self, actor: Actor) -> ExitWeight:
+        return usual_exit_weight(self._s, actor)
+
+    def loading_inputs(
+        self, actor: Actor, exclude: uuid.UUID | None = None
+    ) -> list[loading.Inputs]:
+        mains = main_canopies(actor)
+        query = (
+            select(col(J.exit_weight_grams), mains.c.mains, mains.c.size)
+            .outerjoin(mains, mains.c.jump_id == col(J.id))
+            .where(col(J.owner_person_id) == actor.person_id)
+        )
+        if exclude is not None:
+            query = query.where(col(J.id) != exclude)
+        return [
+            loading.Inputs(weight, int(count or 0), size)
+            for weight, count, size in self._s.execute(query).all()
         ]
 
     def places(self, actor: Actor, place_ids: list[uuid.UUID]) -> list[PlaceRef]:
@@ -462,6 +490,37 @@ class SqlLogbookStore:
                     for c in component_ids
                 ],
             )
+
+
+def usual_exit_weight(session: Session, actor: Actor) -> ExitWeight:
+    """The jumper's usual exit weight, kept on their own person row."""
+    P = SkydiverPerson
+    row = session.execute(
+        select(col(P.exit_weight_grams), col(P.exit_weight_unit)).where(
+            col(P.id) == actor.person_id
+        )
+    ).first()
+    grams, unit = row if row is not None else (None, None)
+    return ExitWeight(grams, WeightUnit(unit) if unit else WeightUnit.KG)
+
+
+def main_canopies(actor: Actor) -> Subquery:
+    """Per jump of the owner: how many main canopies it records, and their largest
+    size (the size, when exactly one is recorded). Jumps without one are absent."""
+    C = SkydiverComponent
+    return (
+        select(
+            col(L.jump_id).label("jump_id"),
+            func.count().label("mains"),
+            func.max(col(C.canopy_size_sqft)).label("size"),
+        )
+        .join(C, col(C.id) == col(L.component_id))
+        .where(col(L.owner_person_id) == actor.person_id)
+        .where(col(C.owner_person_id) == actor.person_id)
+        .where(col(C.kind) == "main")
+        .group_by(col(L.jump_id))
+        .subquery()
+    )
 
 
 def _conditions(actor: Actor, where: Criteria) -> list[ColumnElement[bool]]:

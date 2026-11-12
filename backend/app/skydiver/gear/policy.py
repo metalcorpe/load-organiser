@@ -41,6 +41,9 @@ JUMP_LIMIT_LABEL_MAX = 80
 # fewer jumps (or over it).
 JUMP_LIMIT_SOON_SHARE = 10  # percent
 JUMP_LIMIT_SOON_MAX = 25
+# A canopy's size in square feet as the owner enters it (main or reserve only).
+CANOPY_SIZE_MIN = 20
+CANOPY_SIZE_MAX = 400
 
 
 class ComponentKind(StrEnum):
@@ -202,6 +205,17 @@ def jump_limit_status(limit: int, used: int) -> DueStatus:
     if left <= JUMP_LIMIT_SOON_MAX and left * 100 <= limit * JUMP_LIMIT_SOON_SHARE:
         return DueStatus.SOON
     return DueStatus.LATER
+
+
+def canopy_size(value: int | None, kind: ComponentKind) -> int | None:
+    """A main or reserve canopy's size in whole square feet; None when not entered."""
+    if value is None:
+        return None
+    if kind not in (ComponentKind.MAIN, ComponentKind.RESERVE):
+        raise RuleError("canopy_size_not_a_canopy")
+    if not CANOPY_SIZE_MIN <= value <= CANOPY_SIZE_MAX:
+        raise RuleError("canopy_size_invalid")
+    return value
 
 
 def end_of_life(value: date | None) -> date | None:

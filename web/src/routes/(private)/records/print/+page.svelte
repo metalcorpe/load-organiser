@@ -8,10 +8,13 @@
 	let { data }: PageProps = $props();
 	const o = $derived(data.options);
 	const r = $derived(data.result);
-	const pages = $derived(r.ok ? paginate(r.jumps, { notes: o.notes, before: r.before }) : []);
+	const pages = $derived(
+		r.ok ? paginate(r.jumps, { notes: o.notes, loading: o.loading, before: r.before }) : []
+	);
 	const last = $derived(pages.at(-1) ?? null);
-	// Number, date, place, type, aircraft, exit, freefall, equipment, [notes], signature.
-	const columns = $derived(o.notes ? 10 : 9);
+	// Number, date, place, type, aircraft, exit, freefall, equipment, [wing loading],
+	// [notes], signature.
+	const columns = $derived(9 + (o.loading ? 1 : 0) + (o.notes ? 1 : 0));
 	const range = $derived(
 		o.from && o.until
 			? `${formatDay(o.from)} to ${formatDay(o.until)}`
@@ -39,7 +42,9 @@
 			instructor's or witness's signature.
 		</p>
 
-		<form method="GET" class="options" aria-label="What to print">
+		<!-- novalidate: the server checks the dates; WebKit otherwise blocks the submit
+		     silently on a date field it considers half-filled. -->
+		<form method="GET" class="options" aria-label="What to print" novalidate>
 			<div class="field">
 				<label for="print-from">From</label>
 				<input id="print-from" name="from" type="date" defaultValue={o.from} />
@@ -52,9 +57,16 @@
 				<input type="checkbox" name="notes" value="yes" defaultChecked={o.notes} />
 				Include notes (shortened)
 			</label>
+			<label class="choice">
+				<input type="checkbox" name="loading" value="yes" defaultChecked={o.loading} />
+				Include wing loading
+			</label>
 			<button class="button secondary" type="submit">Show</button>
 		</form>
-		<p class="hint">Leave the dates empty to include every jump. Notes are left out unless you tick the box.</p>
+		<p class="hint">
+			Leave the dates empty to include every jump. Notes and wing loading are left out unless you
+			tick their boxes.
+		</p>
 
 		{#if r.ok && pages.length > 0}
 			<p>
@@ -108,6 +120,7 @@
 								<th scope="col" class="num">Exit altitude</th>
 								<th scope="col" class="num">Freefall</th>
 								<th scope="col">Equipment</th>
+								{#if o.loading}<th scope="col" class="num">Wing loading</th>{/if}
 								{#if o.notes}<th scope="col">Notes</th>{/if}
 								<th scope="col" class="sign">Signature</th>
 							</tr>
@@ -123,6 +136,7 @@
 									<td class="num">{row.exit}</td>
 									<td class="num">{row.freefall}</td>
 									<td>{row.equipment}</td>
+									{#if o.loading}<td class="num">{row.loading}</td>{/if}
 									{#if o.notes}<td class="notes">{row.notes}</td>{/if}
 									<td class="sign"></td>
 								</tr>

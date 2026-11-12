@@ -7,6 +7,7 @@ import {
 	dueText,
 	dueWhat,
 	itemState,
+	parseCanopySize,
 	parseInterval,
 	parseJumpLimit,
 	shortDay,
@@ -152,5 +153,18 @@ describe('jump limits', () => {
 		expect(parseJumpLimit('0')).toBe('invalid');
 		expect(parseJumpLimit('100001')).toBe('invalid');
 		expect(parseJumpLimit('ten')).toBe('invalid');
+	});
+});
+
+describe('parseCanopySize', () => {
+	it('accepts whole square feet from 20 to 400, or nothing', () => {
+		expect(parseCanopySize('')).toBeNull();
+		expect(parseCanopySize(' 170 ')).toBe(170);
+		expect(parseCanopySize('170 sq ft')).toBe(170);
+		expect(parseCanopySize('20')).toBe(20);
+		expect(parseCanopySize('400')).toBe(400);
+		expect(parseCanopySize('19')).toBe('invalid');
+		expect(parseCanopySize('401')).toBe('invalid');
+		expect(parseCanopySize('170.5')).toBe('invalid');
 	});
 });

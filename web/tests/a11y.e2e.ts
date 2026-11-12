@@ -126,6 +126,24 @@ async function world(): Promise<World> {
 	});
 	// A stated licence: currency, the next-licence line (Logbook) and section (History).
 	await apiCall('PUT', '/me/licence', { bearer, body: { licence: 'b' } });
+	// An exit weight and a sized main on a jump: wing loading on the jump, the Logbook
+	// row, History's chart and the jump form's sizes; the first jump stays unknown.
+	await apiCall('PUT', '/me/exit-weight', { bearer, body: { value: 82, unit: 'kg' } });
+	const main = (
+		await created('/gear/components', bearer, {
+			client_key: randomUUID(),
+			kind: 'main',
+			label: 'Axe main',
+			canopy_size_sqft: 170
+		})
+	).component;
+	await created('/jumps', bearer, {
+		client_key: randomUUID(),
+		jumped_on: '2026-10-11',
+		jump_type: 'freefly',
+		venue_id: venue.id,
+		component_ids: [main.id]
+	});
 	// A prior jump count: History's milestones include ones "before you kept this logbook".
 	await apiCall('PUT', '/history/baseline', {
 		bearer,
@@ -173,6 +191,8 @@ async function world(): Promise<World> {
 				'/records',
 				'/records/import',
 				'/records/print',
+				// With the optional wing loading column.
+				'/records/print?loading=yes',
 				// The spreadsheet download refused (dates out of order), with its message.
 				'/records?spreadsheet=date_range_invalid&from=2026-10-02&until=2026-10-01',
 				'/gear',

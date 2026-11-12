@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Index,
+    Integer,
     String,
     UniqueConstraint,
 )
@@ -38,11 +39,26 @@ class SkydiverPerson(SQLModel, table=True):
     """Persistent jumper identity: one per account, separate from credentials and roles."""
 
     __tablename__ = "skydiver_person"
+    __table_args__ = (
+        CheckConstraint(
+            "(exit_weight_grams IS NULL AND exit_weight_unit IS NULL)"
+            " OR (exit_weight_grams BETWEEN 30000 AND 250000"
+            " AND exit_weight_unit IN ('kg', 'lb'))",
+            name="ck_skydiver_person_exit_weight",
+        ),
+    )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     account_id: uuid.UUID = Field(sa_column=_account_fk(unique=True))
     display_name: str | None = Field(default=None, max_length=80)
     created_at: datetime = Field(sa_column=_instant())
+    # The jumper's usual exit weight (body and gear), a private setting for wing
+    # loading: grams, and the unit they entered it in. Owner-only; never shown to
+    # anyone else, never verified. Read and written by the history module.
+    exit_weight_grams: int | None = Field(
+        default=None, sa_column=Column(Integer, nullable=True)
+    )
+    exit_weight_unit: str | None = Field(default=None, max_length=2)
 
 
 class SkydiverAccountState(SQLModel, table=True):

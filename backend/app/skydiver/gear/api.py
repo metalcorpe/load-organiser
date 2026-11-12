@@ -92,6 +92,11 @@ class ComponentDetails(BaseModel):
         description="The service whose latest entry restarts the count; default"
         " maintenance.",
     )
+    canopy_size_sqft: Annotated[int, Field(ge=20, le=400)] | None = Field(
+        default=None,
+        description="A main or reserve canopy's size in square feet, as you enter it."
+        " The main's size gives the wing loading of the jumps it is recorded on.",
+    )
 
 
 class ComponentIn(ComponentDetails):
@@ -158,6 +163,7 @@ class ComponentOut(BaseModel):
     jump_limit: int | None
     jump_limit_label: str | None
     jump_limit_service_kind: ServiceKindName | None
+    canopy_size_sqft: int | None = Field(description="Square feet; mains and reserves.")
     archived: bool
     provenance: Literal["self_reported"] = "self_reported"
     version: int
@@ -297,6 +303,7 @@ def _component(c: Component) -> ComponentOut:
         jump_limit_service_kind=c.jump_limit_service_kind.value
         if c.jump_limit_service_kind
         else None,
+        canopy_size_sqft=c.canopy_size_sqft,
         archived=c.archived_at is not None,
         version=c.version,
         updated_at=c.updated_at,

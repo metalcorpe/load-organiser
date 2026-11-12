@@ -78,6 +78,7 @@ def _component(row: SkydiverComponent) -> Component:
         jump_limit_service_kind=ServiceKind(row.jump_limit_service_kind)
         if row.jump_limit_service_kind
         else None,
+        canopy_size_sqft=row.canopy_size_sqft,
     )
 
 

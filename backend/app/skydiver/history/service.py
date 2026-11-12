@@ -13,6 +13,7 @@ from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
+from decimal import Decimal
 from typing import Any, Literal, Protocol
 
 from app.skydiver.access.policy import Actor
@@ -22,7 +23,9 @@ from app.skydiver.history.currency import Currency, Licence
 from app.skydiver.history.licences import Progress
 from app.skydiver.history.milestones import Milestone
 from app.skydiver.history.policy import Baseline, Totals
-from app.skydiver.logbook.service import ComponentRef, Location, PlaceRef
+from app.skydiver.logbook import loading
+from app.skydiver.logbook.loading import Inputs, LoadingRange, WeightUnit
+from app.skydiver.logbook.service import ComponentRef, ExitWeight, Location, PlaceRef
 
 EVENTS_SHOWN = 50
 
@@ -63,6 +66,26 @@ class Summary:
     baseline_events: list[BaselineEvent]
     currency: Currency
     progress: Progress | None = None  # None without a licence
+    # Highest wing loading jumped per month (latest months that have one), and
+    # the range over every entry with what the others lack.
+    loading_months: list[tuple[str, Decimal, int]] | None = None
+    loading: LoadingRange | None = None
+    exit_weight: ExitWeight | None = None
+
+
+@dataclass(frozen=True)
+class EntryFacts:
+    """What statistics need of one detailed entry."""
+
+    jumped_on: date
+    jump_type: str
+    venue_id: uuid.UUID | None
+    place_id: uuid.UUID | None
+    aircraft: str | None
+    freefall_seconds: int | None
+    exit_altitude: int | None
+    altitude_unit: str | None
+    inputs: Inputs
 
 
 @dataclass(frozen=True)
@@ -131,6 +154,17 @@ class HistoryStore(Protocol):
         """Last write wins; NONE removes the setting."""
         ...
 
+    def exit_weight(self, actor: Actor) -> ExitWeight: ...
+    def set_exit_weight(
+        self, actor: Actor, grams: int | None, unit: WeightUnit | None
+    ) -> None:
+        """Last write wins; None clears it."""
+        ...
+
+    def entry_facts(self, actor: Actor) -> list[EntryFacts]:
+        """Every detailed entry of the owner (at most MAX_JUMPS), in no order."""
+        ...
+
     def count_jumps(self, actor: Actor) -> int: ...
     def entries(self, actor: Actor) -> list[EntryRow]:
         """Every detailed entry of the owner (at most MAX_JUMPS), in no order."""
@@ -193,6 +227,9 @@ class HistoryService:
             events = store.events(actor, EVENTS_SHOWN)
             licence = store.licence(actor)
             seconds, with_time, without_time = store.freefall(actor)
+            usual = store.exit_weight(actor)
+            rows = store.entry_facts(actor)
+        loadings = [(r.jumped_on, loading.of(r.inputs, usual.grams)) for r in rows]
         per_month = dict.fromkeys(months, 0)
         for day, jumps in per_day.items():
             key = f"{day.year:04d}-{day.month:02d}"
@@ -223,7 +260,23 @@ class HistoryService:
                 entries_with_freefall=with_time,
                 entries_without_freefall=without_time,
             ),
+            loading_months=loading.loading_by_month(loadings),
+            loading=loading.loading_range(item for _, item in loadings),
+            exit_weight=usual,
         )
+
+    def exit_weight(self, actor: Actor) -> ExitWeight:
+        with self._stores() as store:
+            return store.exit_weight(actor)
+
+    def set_exit_weight(
+        self, actor: Actor, value: Decimal | None, unit: WeightUnit
+    ) -> ExitWeight:
+        """A private setting for wing loading; never verified. None clears it."""
+        grams = loading.grams(value, unit) if value is not None else None
+        with self._stores() as store:
+            store.set_exit_weight(actor, grams, unit)
+        return ExitWeight(grams, unit)
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:
         """Totals now and with this declaration, without saving anything."""

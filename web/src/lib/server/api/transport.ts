@@ -246,6 +246,12 @@ export const OPERATIONS = {
 		path: `${BETA}/jumps/recent-aircraft`,
 		query: ['venue_id', 'place_id']
 	},
+	// The usual exit weight and the highest wing loading so far, for the jump form.
+	getWingLoadingContext: {
+		method: 'GET',
+		path: `${BETA}/jumps/wing-loading`,
+		query: ['exclude']
+	},
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
@@ -261,6 +267,8 @@ export const OPERATIONS = {
 	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] },
 	getLicence: { method: 'GET', path: `${BETA}/me/licence` },
 	setLicence: { method: 'PUT', path: `${BETA}/me/licence` },
+	getExitWeight: { method: 'GET', path: `${BETA}/me/exit-weight` },
+	setExitWeight: { method: 'PUT', path: `${BETA}/me/exit-weight` },
 	getRecords: { method: 'GET', path: `${BETA}/records` },
 	exportRecords: {
 		method: 'GET',

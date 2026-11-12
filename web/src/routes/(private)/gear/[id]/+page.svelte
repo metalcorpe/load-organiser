@@ -6,6 +6,7 @@
 	import ReviewHistory from '#lib/components/ReviewHistory.svelte';
 	import { localToday } from '#lib/currency.ts';
 	import {
+		CANOPY_KINDS,
 		KIND_LABEL,
 		METHOD_LABEL,
 		RELATION_LABEL,
@@ -37,6 +38,8 @@
 	// Shown when the record is a reserve (works without JS after a save) or when the
 	// type is changed to reserve in the browser.
 	const showInterval = $derived(savedKind === 'reserve' || kind === 'reserve');
+	// Only a main or reserve canopy has a size, the same way.
+	const showSize = $derived(CANOPY_KINDS.includes(savedKind) || CANOPY_KINDS.includes(kind));
 	// The server's UTC day until the browser gives the jumper's own calendar day.
 	// svelte-ignore state_referenced_locally
 	let today = $state(data.today);
@@ -55,8 +58,9 @@
 <h1>{c ? c.label : 'Add a component'}</h1>
 {#if c}
 	<p class="lede">
-		{KIND_LABEL[c.kind]} · {RELATION_LABEL[c.relation]}{c.archived ? ' · archived' : ''} · entered by
-		you, not verified
+		{KIND_LABEL[c.kind]}{c.canopy_size_sqft ? ` · ${c.canopy_size_sqft} sq ft` : ''} · {RELATION_LABEL[
+			c.relation
+		]}{c.archived ? ' · archived' : ''} · entered by you, not verified
 	</p>
 {/if}
 {#if page.url.searchParams.get('saved') || (form && form.form === 'save' && 'done' in form)}
@@ -100,6 +104,23 @@
 		<input id="label" name="label" maxlength="80" required defaultValue={v('label', c?.label)} />
 		<p class="hint">How you recognise it, e.g. "Blue Sabre 2 170".</p>
 	</div>
+	{#if showSize}
+		<div class="field">
+			<label for="canopy_size_sqft">Canopy size in square feet (optional)</label>
+			<input
+				id="canopy_size_sqft"
+				name="canopy_size_sqft"
+				inputmode="numeric"
+				maxlength="10"
+				aria-describedby="canopy-size-hint"
+				defaultValue={v('canopy_size_sqft', c?.canopy_size_sqft?.toString())}
+			/>
+			<p class="hint" id="canopy-size-hint">
+				As on the canopy's label, e.g. 170. A main canopy's size gives the wing loading of the jumps
+				it is recorded on, with your exit weight.
+			</p>
+		</div>
+	{/if}
 	<div class="pair">
 		<div class="field">
 			<label for="manufacturer">Manufacturer (optional)</label>

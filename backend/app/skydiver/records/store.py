@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from datetime import UTC, date, datetime
 from typing import Any
 
-from sqlalchemy import Engine, func, insert, select
+from sqlalchemy import Engine, func, insert, select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, SQLModel, col
@@ -26,6 +26,8 @@ from app.skydiver.history.tables import (
     SkydiverJumpBaselineEvent,
     SkydiverJumperLicence,
 )
+from app.skydiver.identity.tables import SkydiverPerson
+from app.skydiver.logbook.store import usual_exit_weight
 from app.skydiver.logbook.tables import (
     SkydiverJump,
     SkydiverJumpComponent,
@@ -101,6 +103,7 @@ class SqlRecordsStore:
             used.setdefault(link.jump_id, []).append(link.component_id)
         baseline = self._s.execute(owned(B, actor)).scalars().first()
         licence = self._s.execute(owned(SkydiverJumperLicence, actor)).scalars().first()
+        weight = usual_exit_weight(self._s, actor)
         stamps = ("created_at", "updated_at")
         event = ("kind", "created_at")
         records = {
@@ -127,6 +130,7 @@ class SqlRecordsStore:
                     "jump_limit",
                     "jump_limit_label",
                     "jump_limit_service_kind",
+                    "canopy_size_sqft",
                     "archived_at",
                     *stamps,
                 )  # fmt: skip
@@ -176,6 +180,7 @@ class SqlRecordsStore:
                     "freefall_seconds",
                     "other_gear",
                     "aircraft",
+                    "exit_weight_grams",
                     "notes",
                     "source",
                     *stamps,
@@ -213,6 +218,9 @@ class SqlRecordsStore:
                 for p in self._rows(VP, actor, col(VP.starts_on), col(VP.id))
             ],
             "licence": licence.licence if licence else None,
+            "exit_weight": {"grams": weight.grams, "unit": weight.unit.value}
+            if weight.grams is not None
+            else None,
         }
         return v1.RecordsV1.model_validate(records)
 
@@ -328,6 +336,19 @@ class SqlRecordsStore:
 
     def insert_rows(self, table: str, rows: list[dict[str, Any]]) -> None:
         if not rows:
+            return
+        if table == "exit_weight":
+            # A setting on the person row: the account's own wins, as for the licence.
+            P = SkydiverPerson
+            for row in rows:
+                self._s.execute(
+                    update(P)
+                    .where(col(P.id) == row["owner_person_id"])
+                    .where(col(P.exit_weight_grams).is_(None))
+                    .values(
+                        exit_weight_grams=row["grams"], exit_weight_unit=row["unit"]
+                    )
+                )
             return
         if table == "licence":
             # The account's own current setting wins over the archive's.

@@ -20,6 +20,7 @@ from app.skydiver.history.policy import Baseline
 from app.skydiver.history.service import (
     BaselineEvent,
     BaselineState,
+    EntryFacts,
     EntryRow,
     HistoryStore,
     StoreFactory,
@@ -29,7 +30,11 @@ from app.skydiver.history.tables import (
     SkydiverJumpBaselineEvent,
     SkydiverJumperLicence,
 )
-from app.skydiver.logbook.service import ComponentRef, PlaceRef
+from app.skydiver.identity.tables import SkydiverPerson
+from app.skydiver.logbook import loading
+from app.skydiver.logbook.loading import WeightUnit
+from app.skydiver.logbook.service import ComponentRef, ExitWeight, PlaceRef
+from app.skydiver.logbook.store import main_canopies, usual_exit_weight
 from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpComponent
 
 B, E = SkydiverJumpBaseline, SkydiverJumpBaselineEvent
@@ -150,6 +155,61 @@ class SqlHistoryStore:
                 set_={"licence": licence.value, "updated_at": now},
             )
         )
+
+    # exit weight ------------------------------------------------------------------
+
+    def exit_weight(self, actor: Actor) -> ExitWeight:
+        return usual_exit_weight(self._s, actor)
+
+    def set_exit_weight(
+        self, actor: Actor, grams: int | None, unit: WeightUnit | None
+    ) -> None:
+        P = SkydiverPerson
+        self._s.execute(
+            update(P)
+            .where(col(P.id) == actor.person_id)
+            .values(
+                exit_weight_grams=grams,
+                exit_weight_unit=unit.value if grams is not None and unit else None,
+            )
+        )
+
+    def entry_facts(self, actor: Actor) -> list[EntryFacts]:
+        mains = main_canopies(actor)
+        rows = self._s.execute(
+            select(
+                col(J.jumped_on),
+                col(J.jump_type),
+                col(J.venue_id),
+                col(J.place_id),
+                col(J.aircraft),
+                col(J.freefall_seconds),
+                col(J.exit_altitude),
+                col(J.altitude_unit),
+                col(J.exit_weight_grams),
+                mains.c.mains,
+                mains.c.size,
+            )
+            .outerjoin(mains, mains.c.jump_id == col(J.id))
+            .where(col(J.owner_person_id) == actor.person_id)
+        )
+        return [
+            EntryFacts(
+                jumped_on=on,
+                jump_type=kind,
+                venue_id=venue,
+                place_id=place,
+                aircraft=aircraft,
+                freefall_seconds=freefall,
+                exit_altitude=altitude,
+                altitude_unit=unit,
+                inputs=loading.Inputs(weight, int(mains or 0), size),
+            )
+            for (
+                on, kind, venue, place, aircraft, freefall, altitude, unit,
+                weight, mains, size,
+            ) in rows.all()
+        ]  # fmt: skip
 
     def entries(self, actor: Actor) -> list[EntryRow]:
         rows = self._s.execute(

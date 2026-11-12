@@ -15,6 +15,7 @@ import { jumpBody, newComponent } from '#lib/server/jump-form.ts';
 import {
 	chosenLocation,
 	gearFor,
+	loadingFor,
 	pickerData,
 	placesFor,
 	recentLocations
@@ -67,6 +68,9 @@ export const load: PageServerLoad = async (event) => {
 				})
 			: null;
 	const aircraft = recent?.ok ? recent.value.aircraft : null;
+	// The usual exit weight and the highest wing loading so far, for the form's note.
+	// One call; without an answer the form has no note.
+	const loading = chosen ? await loadingFor(api, secret) : null;
 	const next = proposedNumber(highest);
 	const suggestion = next === null ? null : { number: String(next), hint: numberHint(highest) };
 	return {
@@ -80,6 +84,7 @@ export const load: PageServerLoad = async (event) => {
 		prefill,
 		suggestion,
 		aircraft,
+		loading,
 		// One key per rendered form; a refused or unconfirmed send reuses it.
 		keys: { jump: crypto.randomUUID(), component: crypto.randomUUID() }
 	};

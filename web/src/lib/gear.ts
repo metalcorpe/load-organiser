@@ -73,6 +73,8 @@ export const GEAR_MESSAGES: Record<string, string> = {
 	jump_limit_label_required: 'Say what is due at the limit, e.g. "Reline".',
 	jump_limit_label_too_long: 'Use at most 80 characters for what is due at the limit.',
 	jump_limit_service_kind_invalid: 'Choose which service restarts the count.',
+	canopy_size_invalid: 'Enter the canopy size in whole square feet, from 20 to 400.',
+	canopy_size_not_a_canopy: 'Only a main or reserve canopy has a size. Clear the size or change the type.',
 	invalid_input: 'Check the details you entered.',
 	uncertain:
 		'The service did not answer in time. The change may or may not have been saved; reload to check before trying again.',
@@ -219,6 +221,18 @@ export function parseJumpLimit(raw: string): number | null | 'invalid' {
 	if (!/^\d{1,6}$/.test(text)) return 'invalid';
 	const jumps = Number(text);
 	return jumps >= 1 && jumps <= 100_000 ? jumps : 'invalid';
+}
+
+/** Only a main or reserve canopy has a size. */
+export const CANOPY_KINDS: readonly string[] = ['main', 'reserve'];
+
+/** The optional canopy size field: empty, or whole square feet from 20 to 400. */
+export function parseCanopySize(raw: string): number | null | 'invalid' {
+	const text = raw.trim().replace(/\s*(sq\.?\s*ft|ft2|ft²)$/i, '');
+	if (!text) return null;
+	if (!/^\d{1,3}$/.test(text)) return 'invalid';
+	const size = Number(text);
+	return size >= 20 && size <= 400 ? size : 'invalid';
 }
 
 /** The optional repack interval field: empty, or whole days from 1 to 730. */

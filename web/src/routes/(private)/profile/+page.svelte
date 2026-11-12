@@ -3,6 +3,7 @@
 	import RecordTiles from '#lib/components/RecordTiles.svelte';
 	import { authMessage } from '#lib/auth-messages.ts';
 	import { LICENCES, LICENCE_LABEL, licenceMessage } from '#lib/currency.ts';
+	import { UNIT_NAME, inUnit, weightMessage } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -10,6 +11,19 @@
 	const errorFor = (name: string) =>
 		form && form.form === name && 'error' in form ? authMessage(form.error) : undefined;
 	const doneFor = (name: string) => Boolean(form && form.form === name && 'done' in form && form.done);
+	// A refused weight re-shows what was typed; otherwise the saved weight in its unit.
+	const weightEcho = $derived(
+		form && form.form === 'exitWeight' && 'values' in form && form.values ? form.values : null
+	);
+	const savedWeight = $derived(data.exitWeight?.exit_weight ?? null);
+	const weightUnit = $derived(weightEcho?.exit_weight_unit || data.exitWeight?.unit || 'kg');
+	const weightValue = $derived(
+		weightEcho
+			? weightEcho.exit_weight
+			: savedWeight
+				? String(inUnit(savedWeight.grams, savedWeight.unit))
+				: ''
+	);
 	const expires = $derived(
 		new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(
 			new Date(account.sessionExpiresAt)
@@ -90,6 +104,60 @@
 		</div>
 		<div class="form-actions">
 			<button class="button" type="submit">Save licence</button>
+		</div>
+	</form>
+</section>
+
+<section class="card" aria-labelledby="weight-heading">
+	<h2 id="weight-heading">Exit weight</h2>
+	<p>
+		Private to you. Your weight with your gear on, used only to show the wing loading of your jumps
+		(exit weight over the size of your main canopy). A jump can have its own exit weight; this one
+		is used for the others. It is not checked and not shared.
+	</p>
+	<form method="POST" action="?/exitWeight" class="form" novalidate>
+		{#if doneFor('exitWeight')}
+			<p role="status" class="ok">
+				{form && 'cleared' in form && form.cleared ? 'Exit weight removed.' : 'Exit weight saved.'}
+			</p>
+		{:else if form && form.form === 'exitWeight' && 'error' in form}
+			<p class="form-error" role="alert" id="exit-weight-error">{weightMessage(form.error)}</p>
+		{/if}
+		{#if data.exitWeight === null}
+			<p class="hint">Your current exit weight could not be loaded. Saving sets it again.</p>
+		{/if}
+		<div class="pair">
+			<div class="field">
+				<label for="exit_weight">Exit weight (optional)</label>
+				<input
+					id="exit_weight"
+					name="exit_weight"
+					inputmode="decimal"
+					maxlength="6"
+					autocomplete="off"
+					defaultValue={weightValue}
+					aria-describedby="exit-weight-hint"
+					aria-invalid={weightEcho && form && 'error' in form ? 'true' : undefined}
+				/>
+				<p class="hint" id="exit-weight-hint">30 to 250 kg (67 to 551 lb). Leave empty to remove it.</p>
+			</div>
+			<fieldset class="field">
+				<legend>Unit</legend>
+				{#each Object.entries(UNIT_NAME) as [value, name] (value)}
+					<label class="choice"
+						><input
+							type="radio"
+							name="exit_weight_unit"
+							{value}
+							defaultChecked={weightUnit === value}
+						/>
+						{name}</label
+					>
+				{/each}
+			</fieldset>
+		</div>
+		<div class="form-actions">
+			<button class="button" type="submit">Save exit weight</button>
 		</div>
 	</form>
 </section>

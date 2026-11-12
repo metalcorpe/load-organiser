@@ -66,6 +66,7 @@ class Component:
     jump_limit: int | None = None
     jump_limit_label: str | None = None
     jump_limit_service_kind: ServiceKind | None = None
+    canopy_size_sqft: int | None = None
 
 
 @dataclass(frozen=True)
@@ -438,6 +439,9 @@ class GearService:
             current = _fresh(store.get_component(actor, component_id), expected_version)
             before = _component_values_of(current)
             merged = {**before, **values}
+            policy.canopy_size(
+                merged["canopy_size_sqft"], ComponentKind(merged["kind"])
+            )
             policy.check_acquisition(
                 Relation(merged["relation"]),
                 AcquisitionMethod(merged["acquisition_method"])
@@ -778,7 +782,15 @@ class GearService:
             values["jump_limit_service_kind"] = (
                 limit_set.service_kind.value if limit_set else None
             )
+        if "canopy_size_sqft" in raw or not partial:
+            # Checked against the kind below (create) or the merged kind (edit).
+            values["canopy_size_sqft"] = policy.canopy_size(
+                raw.get("canopy_size_sqft"), ComponentKind.MAIN
+            )
         if not partial:
+            policy.canopy_size(
+                values["canopy_size_sqft"], ComponentKind(values["kind"])
+            )
             policy.check_acquisition(
                 Relation(values["relation"]),
                 AcquisitionMethod(values["acquisition_method"])
@@ -811,6 +823,7 @@ def _component_values_of(component: Component) -> dict[str, Any]:
         "jump_limit_service_kind": component.jump_limit_service_kind.value
         if component.jump_limit_service_kind
         else None,
+        "canopy_size_sqft": component.canopy_size_sqft,
     }
 
 

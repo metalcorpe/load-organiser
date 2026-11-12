@@ -10,6 +10,7 @@ a first declaration carries none. Nothing here is shared, verified or a credenti
 import uuid
 from collections.abc import Callable
 from datetime import date, datetime
+from decimal import Decimal
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, Query, Response, status
@@ -24,9 +25,20 @@ from app.skydiver.history import licences
 from app.skydiver.history.currency import SOURCE, Currency, Licence
 from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Totals
-from app.skydiver.history.service import HistoryService, MilestoneList, Summary
-from app.skydiver.logbook.api import ComponentRefOut, LocationOut
-from app.skydiver.logbook.service import Location
+from app.skydiver.history.service import (
+    HistoryService,
+    MilestoneList,
+    Summary,
+)
+from app.skydiver.logbook.api import (
+    ComponentRefOut,
+    ExitWeightOut,
+    LocationOut,
+    MissingName,
+    WeightUnitName,
+)
+from app.skydiver.logbook.loading import LoadingRange, WeightUnit, in_unit
+from app.skydiver.logbook.service import ExitWeight, Location
 
 PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
@@ -148,6 +160,30 @@ class LicenceProgressOut(BaseModel):
     source: Literal["USPA SIM 3-1"] = licences.SOURCE
 
 
+class LoadingMonthOut(BaseModel):
+    month: str = Field(description="YYYY-MM")
+    highest: float = Field(description="The highest wing loading jumped that month.")
+    jumps: int = Field(description="Entries that month with a known wing loading.")
+
+
+class MissingCountOut(BaseModel):
+    missing: MissingName
+    jumps: int
+
+
+class LoadingRangeOut(BaseModel):
+    """Wing loading over your entries: exit weight in pounds over the main canopy's
+    size in square feet. Not advice."""
+
+    lowest: float | None
+    highest: float | None
+    known: int = Field(description="Entries with a known wing loading.")
+    unknown: int
+    missing: list[MissingCountOut] = Field(
+        description="What the unknown entries lack (an entry can lack two things)."
+    )
+
+
 class HistoryOut(BaseModel):
     totals: TotalsOut
     baseline: BaselineOut | None
@@ -166,6 +202,29 @@ class HistoryOut(BaseModel):
     )
     currency: CurrencyOut
     progress: LicenceProgressOut | None = Field(description="Null without a licence.")
+    wing_loading_months: list[LoadingMonthOut] = Field(
+        description="The highest wing loading per month, for the latest 24 months that"
+        " have one, oldest first."
+    )
+    wing_loading: LoadingRangeOut
+    exit_weight: ExitWeightOut | None = Field(
+        description="Your usual exit weight; null when not set."
+    )
+
+
+class ExitWeightIn(BaseModel):
+    value: Annotated[Decimal, Field(gt=0, le=1000, decimal_places=1)] | None = Field(
+        description="Your usual exit weight (body and gear), 30 to 250 kg (67 to 551"
+        " lb), to one decimal; null clears it."
+    )
+    unit: WeightUnitName
+
+
+class ExitWeightSettingOut(BaseModel):
+    """Private to you; used only for wing loading. Never verified."""
+
+    exit_weight: ExitWeightOut | None
+    unit: WeightUnitName = Field(description="Your unit for weights.")
 
 
 class MilestoneOut(BaseModel):
@@ -214,6 +273,24 @@ def _totals(t: Totals) -> TotalsOut:
         recorded_since=t.recorded_since,
         lifetime=t.lifetime,
         inconsistent=t.inconsistent,
+    )
+
+
+def _weight(w: ExitWeight | None) -> ExitWeightOut | None:
+    if w is None or w.grams is None:
+        return None
+    return ExitWeightOut(
+        grams=w.grams, value=float(in_unit(w.grams, w.unit)), unit=w.unit.value
+    )
+
+
+def _range(r: LoadingRange) -> LoadingRangeOut:
+    return LoadingRangeOut(
+        lowest=float(r.lowest) if r.lowest is not None else None,
+        highest=float(r.highest) if r.highest is not None else None,
+        known=r.known,
+        unknown=r.unknown,
+        missing=[MissingCountOut(missing=m.value, jumps=n) for m, n in r.missing],
     )
 
 
@@ -314,6 +391,12 @@ def _history(s: Summary) -> HistoryOut:
         ],
         currency=_currency(s.currency),
         progress=_progress(s.progress),
+        wing_loading_months=[
+            LoadingMonthOut(month=m, highest=float(v), jumps=n)
+            for m, v, n in s.loading_months or []
+        ],
+        wing_loading=_range(s.loading or LoadingRange(None, None, 0, 0, [])),
+        exit_weight=_weight(s.exit_weight),
     )
 
 
@@ -428,5 +511,30 @@ def create_router(
     def set_licence(body: LicenceIn, actor: Writer) -> LicenceOut:
         saved = service().set_licence(actor, Licence(body.licence))
         return LicenceOut(licence=saved.value)
+
+    @router.get(
+        "/me/exit-weight",
+        operation_id="getExitWeight",
+        response_model=ExitWeightSettingOut,
+        dependencies=deps,
+    )
+    def get_exit_weight(actor: Reader) -> ExitWeightSettingOut:
+        found = service().exit_weight(actor)
+        return ExitWeightSettingOut(exit_weight=_weight(found), unit=found.unit.value)
+
+    @router.put(
+        "/me/exit-weight",
+        operation_id="setExitWeight",
+        response_model=ExitWeightSettingOut,
+        dependencies=deps,
+    )
+    def set_exit_weight(
+        body: ExitWeightIn, actor: Writer
+    ) -> ExitWeightSettingOut | JSONResponse:
+        try:
+            saved = service().set_exit_weight(actor, body.value, WeightUnit(body.unit))
+        except Errors as error:
+            return _problem(error)
+        return ExitWeightSettingOut(exit_weight=_weight(saved), unit=saved.unit.value)
 
     return router

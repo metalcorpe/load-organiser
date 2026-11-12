@@ -287,6 +287,7 @@ export type BatchItemOut = {
      * False when it already has these values.
      */
     will_change: boolean;
+    wing_loading: WingLoadingOut;
 };
 
 /**
@@ -519,6 +520,12 @@ export type ComponentIn = {
      */
     acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
     /**
+     * Canopy Size Sqft
+     *
+     * A main or reserve canopy's size in square feet, as you enter it. The main's size gives the wing loading of the jumps it is recorded on.
+     */
+    canopy_size_sqft?: number | null;
+    /**
      * Client Key
      */
     client_key: string;
@@ -607,6 +614,12 @@ export type ComponentOut = {
      */
     archived: boolean;
     /**
+     * Canopy Size Sqft
+     *
+     * Square feet; mains and reserves.
+     */
+    canopy_size_sqft: number | null;
+    /**
      * End Of Life On
      */
     end_of_life_on: string | null;
@@ -687,6 +700,12 @@ export type ComponentRefOut = {
      */
     archived: boolean;
     /**
+     * Canopy Size Sqft
+     *
+     * A main or reserve canopy's size in square feet.
+     */
+    canopy_size_sqft?: number | null;
+    /**
      * Id
      */
     id: string;
@@ -726,6 +745,12 @@ export type ComponentUpdateIn = {
      * Acquisition Method
      */
     acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
+    /**
+     * Canopy Size Sqft
+     *
+     * A main or reserve canopy's size in square feet, as you enter it. The main's size gives the wing loading of the jumps it is recorded on.
+     */
+    canopy_size_sqft?: number | null;
     /**
      * End Of Life On
      *
@@ -946,6 +971,59 @@ export type ExitAltitudeOut = {
 };
 
 /**
+ * ExitWeightIn
+ */
+export type ExitWeightIn = {
+    /**
+     * Unit
+     */
+    unit: 'kg' | 'lb';
+    /**
+     * Value
+     *
+     * Your usual exit weight (body and gear), 30 to 250 kg (67 to 551 lb), to one decimal; null clears it.
+     */
+    value: number | string | null;
+};
+
+/**
+ * ExitWeightOut
+ */
+export type ExitWeightOut = {
+    /**
+     * Grams
+     *
+     * The weight in grams.
+     */
+    grams: number;
+    /**
+     * Unit
+     */
+    unit: 'kg' | 'lb';
+    /**
+     * Value
+     *
+     * In `unit`, to one decimal, as you entered it.
+     */
+    value: number;
+};
+
+/**
+ * ExitWeightSettingOut
+ *
+ * Private to you; used only for wing loading. Never verified.
+ */
+export type ExitWeightSettingOut = {
+    exit_weight: ExitWeightOut | null;
+    /**
+     * Unit
+     *
+     * Your unit for weights.
+     */
+    unit: 'kg' | 'lb';
+};
+
+/**
  * FollowOut
  */
 export type FollowOut = {
@@ -1104,6 +1182,10 @@ export type HistoryOut = {
     by_type: Array<TypeCountOut>;
     currency: CurrencyOut;
     /**
+     * Your usual exit weight; null when not set.
+     */
+    exit_weight: ExitWeightOut | null;
+    /**
      * First Jump On
      */
     first_jump_on: string | null;
@@ -1122,6 +1204,13 @@ export type HistoryOut = {
      */
     progress: LicenceProgressOut | null;
     totals: TotalsOut;
+    wing_loading: LoadingRangeOut;
+    /**
+     * Wing Loading Months
+     *
+     * The highest wing loading per month, for the latest 24 months that have one, oldest first.
+     */
+    wing_loading_months: Array<LoadingMonthOut>;
 };
 
 /**
@@ -1324,6 +1413,12 @@ export type JumpIn = {
      */
     exit_time?: string | null;
     /**
+     * Exit Weight Grams
+     *
+     * Your exit weight on this jump (body and gear) in grams, 30,000 to 250,000; omit or null to use your usual exit weight.
+     */
+    exit_weight_grams?: number | null;
+    /**
      * Freefall Seconds
      */
     freefall_seconds?: number | null;
@@ -1448,6 +1543,12 @@ export type JumpOut = {
      */
     exit_time: string | null;
     /**
+     * Exit Weight Grams
+     *
+     * This jump's own exit weight, if you entered one.
+     */
+    exit_weight_grams: number | null;
+    /**
      * Freefall Seconds
      */
     freefall_seconds: number | null;
@@ -1502,6 +1603,7 @@ export type JumpOut = {
      * Version
      */
     version: number;
+    wing_loading: WingLoadingOut;
 };
 
 /**
@@ -1554,6 +1656,7 @@ export type JumpSummaryOut = {
      */
     jumped_on: string;
     location: LocationOut;
+    wing_loading: WingLoadingOut;
 };
 
 /**
@@ -1596,6 +1699,12 @@ export type JumpUpdateIn = {
      * Local exit time as entered; needs `time_zone`.
      */
     exit_time?: string | null;
+    /**
+     * Exit Weight Grams
+     *
+     * Your exit weight on this jump (body and gear) in grams, 30,000 to 250,000; omit or null to use your usual exit weight.
+     */
+    exit_weight_grams?: number | null;
     /**
      * Freefall Seconds
      */
@@ -1772,6 +1881,88 @@ export type LicenceProgressOut = {
 };
 
 /**
+ * LoadingContextOut
+ *
+ * For the jump form: your usual exit weight and the highest wing loading among
+ * your other jumps, to compare a new one with.
+ */
+export type LoadingContextOut = {
+    /**
+     * Null when not set.
+     */
+    exit_weight: ExitWeightOut | null;
+    /**
+     * Highest
+     *
+     * The highest known wing loading of your other jumps; null when none is known.
+     */
+    highest: number | null;
+    /**
+     * Unit
+     *
+     * Your unit for weights.
+     */
+    unit: 'kg' | 'lb';
+};
+
+/**
+ * LoadingMonthOut
+ */
+export type LoadingMonthOut = {
+    /**
+     * Highest
+     *
+     * The highest wing loading jumped that month.
+     */
+    highest: number;
+    /**
+     * Jumps
+     *
+     * Entries that month with a known wing loading.
+     */
+    jumps: number;
+    /**
+     * Month
+     *
+     * YYYY-MM
+     */
+    month: string;
+};
+
+/**
+ * LoadingRangeOut
+ *
+ * Wing loading over your entries: exit weight in pounds over the main canopy's
+ * size in square feet. Not advice.
+ */
+export type LoadingRangeOut = {
+    /**
+     * Highest
+     */
+    highest: number | null;
+    /**
+     * Known
+     *
+     * Entries with a known wing loading.
+     */
+    known: number;
+    /**
+     * Lowest
+     */
+    lowest: number | null;
+    /**
+     * Missing
+     *
+     * What the unknown entries lack (an entry can lack two things).
+     */
+    missing: Array<MissingCountOut>;
+    /**
+     * Unknown
+     */
+    unknown: number;
+};
+
+/**
  * LocationCountOut
  */
 export type LocationCountOut = {
@@ -1934,6 +2125,20 @@ export type MilestonesOut = {
      * Newest first; jump counts before this logbook last. Only the five most recent first jumps at a new place.
      */
     items: Array<MilestoneOut>;
+};
+
+/**
+ * MissingCountOut
+ */
+export type MissingCountOut = {
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Missing
+     */
+    missing: 'exit_weight' | 'main_canopy' | 'canopy_size' | 'several_mains';
 };
 
 /**
@@ -4754,6 +4959,51 @@ export type ViewerOut = {
      * Session Expires At
      */
     session_expires_at: string;
+};
+
+/**
+ * WingLoadingOut
+ *
+ * Exit weight in pounds over the main canopy's size in square feet, from your
+ * own entries. Not advice: no limit or recommendation is applied.
+ */
+export type WingLoadingOut = {
+    /**
+     * Canopy Size Sqft
+     *
+     * The main canopy's size used.
+     */
+    canopy_size_sqft: number | null;
+    /**
+     * Exit Weight From Jump
+     *
+     * This jump's own exit weight, not your usual one.
+     */
+    exit_weight_from_jump: boolean;
+    /**
+     * Exit Weight Grams
+     *
+     * The exit weight used.
+     */
+    exit_weight_grams: number | null;
+    /**
+     * Missing
+     *
+     * What is missing when `value` is null: `exit_weight` (none on the jump or in your settings), `main_canopy` (none recorded on the jump), `canopy_size` (the main has no size), `several_mains` (more than one main recorded).
+     */
+    missing: Array<'exit_weight' | 'main_canopy' | 'canopy_size' | 'several_mains'>;
+    /**
+     * Unit
+     *
+     * Your unit for showing weights.
+     */
+    unit: 'kg' | 'lb';
+    /**
+     * Value
+     *
+     * Pounds per square foot, two decimals; null when unknown.
+     */
+    value: number | null;
 };
 
 /**
@@ -8430,6 +8680,66 @@ export type GetRecentAircraftResponses = {
 
 export type GetRecentAircraftResponse = GetRecentAircraftResponses[keyof GetRecentAircraftResponses];
 
+export type GetWingLoadingContextData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Exclude
+         *
+         * A jump of yours being edited, left out of `highest`.
+         */
+        exclude?: string | null;
+    };
+    url: '/api/skydiver/v1/jumps/wing-loading';
+};
+
+export type GetWingLoadingContextErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getwingloadingcontext
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetWingLoadingContextError = GetWingLoadingContextErrors[keyof GetWingLoadingContextErrors];
+
+export type GetWingLoadingContextResponses = {
+    /**
+     * Successful Response
+     */
+    200: LoadingContextOut;
+};
+
+export type GetWingLoadingContextResponse = GetWingLoadingContextResponses[keyof GetWingLoadingContextResponses];
+
 export type DeleteJumpData = {
     body?: never;
     headers?: {
@@ -8655,6 +8965,92 @@ export type GetComingUpResponses = {
 };
 
 export type GetComingUpResponse = GetComingUpResponses[keyof GetComingUpResponses];
+
+export type GetExitWeightData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/exit-weight';
+};
+
+export type GetExitWeightErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type GetExitWeightError = GetExitWeightErrors[keyof GetExitWeightErrors];
+
+export type GetExitWeightResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExitWeightSettingOut;
+};
+
+export type GetExitWeightResponse = GetExitWeightResponses[keyof GetExitWeightResponses];
+
+export type SetExitWeightData = {
+    body: ExitWeightIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/exit-weight';
+};
+
+export type SetExitWeightErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type SetExitWeightError = SetExitWeightErrors[keyof SetExitWeightErrors];
+
+export type SetExitWeightResponses = {
+    /**
+     * Successful Response
+     */
+    200: ExitWeightSettingOut;
+};
+
+export type SetExitWeightResponse = SetExitWeightResponses[keyof SetExitWeightResponses];
 
 export type GetFeedData = {
     body?: never;

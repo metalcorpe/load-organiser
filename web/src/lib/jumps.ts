@@ -53,6 +53,8 @@ export const JUMP_MESSAGES: Record<string, string> = {
 	notes_too_long: 'Use at most 2,000 characters for notes.',
 	other_gear_too_long: 'Use at most 200 characters for other equipment.',
 	aircraft_too_long: 'Use at most 60 characters for the aircraft.',
+	exit_weight_invalid:
+		'Enter the exit weight from 30 to 250 kg (67 to 551 lb), with at most one decimal, or leave it empty.',
 	too_many_links: 'Add at most five links.',
 	link_invalid: 'Links must be full http(s) addresses.',
 	too_many_components: 'Choose at most ten components.',

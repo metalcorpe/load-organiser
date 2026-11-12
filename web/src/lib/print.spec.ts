@@ -18,6 +18,15 @@ const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 		other_gear: 'borrowed helmet',
 		aircraft: 'Cessna 208',
 		notes: 'Four-way, good exit.',
+		exit_weight_grams: null,
+		wing_loading: {
+			value: 1.06,
+			exit_weight_grams: 81_600,
+			exit_weight_from_jump: false,
+			unit: 'kg',
+			canopy_size_sqft: 170,
+			missing: []
+		},
 		...over
 	}) as unknown as JumpOut;
 
@@ -85,6 +94,22 @@ describe('toRow', () => {
 			notes: '',
 			place: 'Dropzone no longer listed'
 		});
+	});
+
+	it('prints the wing loading only when asked and known', () => {
+		expect(toRow(jump(), { notes: false }).loading).toBe('');
+		expect(toRow(jump(), { notes: false, loading: true }).loading).toBe('1.06');
+		const unknown = jump({
+			wing_loading: {
+				value: null,
+				exit_weight_grams: null,
+				exit_weight_from_jump: false,
+				unit: 'kg',
+				canopy_size_sqft: null,
+				missing: ['exit_weight', 'main_canopy']
+			}
+		});
+		expect(toRow(unknown, { notes: false, loading: true }).loading).toBe('');
 	});
 });
 

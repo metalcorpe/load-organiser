@@ -63,6 +63,8 @@ class ComponentV1(_Strict):
     jump_limit_service_kind: (
         Literal["repack", "inspection", "maintenance", "aad_service", "other"] | None
     ) = None
+    # A main or reserve canopy's size in square feet; optional within v1.
+    canopy_size_sqft: Annotated[int, Field(ge=20, le=400)] | None = None
     archived_at: Instant | None = None
     created_at: Instant
     updated_at: Instant
@@ -136,6 +138,8 @@ class JumpV1(_Strict):
     updated_at: Instant
     # Added within v1 as optional, so earlier v1 files still restore (none set).
     aircraft: Annotated[str, Field(max_length=60)] | None = None
+    # The exit weight on this jump in grams; optional within v1 (none: the usual).
+    exit_weight_grams: Annotated[int, Field(ge=30_000, le=250_000)] | None = None
 
 
 JumpEventKind = Literal[
@@ -165,6 +169,13 @@ class BaselineEventV1(_Strict):
     kind: Literal["declared", "corrected", "removed", "from_export"]
     detail: dict[str, Any]
     created_at: Instant
+
+
+class ExitWeightV1(_Strict):
+    """The jumper's usual exit weight (body and gear), for wing loading."""
+
+    grams: Annotated[int, Field(ge=30_000, le=250_000)]
+    unit: Literal["kg", "lb"] = Field(description="The unit it was entered in.")
 
 
 class SavedListingV1(_Strict):
@@ -201,6 +212,9 @@ class RecordsV1(_Strict):
     # The licence the owner stated for currency guidance; absent or null: none.
     # Added within v1 as optional, so earlier v1 files still restore.
     licence: Literal["student", "a", "b", "c", "d"] | None = None
+    # The usual exit weight, a setting like the licence; absent or null: none.
+    # Added within v1 as optional, so earlier v1 files still restore.
+    exit_weight: ExitWeightV1 | None = None
 
 
 class VenueRefV1(_Strict):
