@@ -253,6 +253,26 @@ export type ColumnsOut = {
 };
 
 /**
+ * ComingUpOut
+ *
+ * Private to you: what you saved or planned, starting within 60 days.
+ */
+export type ComingUpOut = {
+    /**
+     * Items
+     *
+     * Soonest first, at most 5.
+     */
+    items: Array<UpcomingOut>;
+    /**
+     * Total
+     *
+     * All items in the window, shown or not.
+     */
+    total: number;
+};
+
+/**
  * ComponentDetailOut
  */
 export type ComponentDetailOut = {
@@ -3997,6 +4017,58 @@ export type UndoIn = {
 };
 
 /**
+ * UpcomingOut
+ *
+ * A saved listing or one of your plans, in the coming-up window.
+ */
+export type UpcomingOut = {
+    /**
+     * Country
+     */
+    country: string | null;
+    /**
+     * Ends On
+     *
+     * Inclusive; a listing's dates are in its zone.
+     */
+    ends_on: string;
+    /**
+     * Id
+     *
+     * The listing for `saved`, the plan for `plan`.
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'saved' | 'plan';
+    /**
+     * Opportunity Id
+     */
+    opportunity_id: string | null;
+    /**
+     * Place
+     *
+     * Dropzone, private place or location note.
+     */
+    place: string | null;
+    /**
+     * Starts On
+     */
+    starts_on: string;
+    /**
+     * Status
+     *
+     * The listing's state. For a plan, only when its linked listing is postponed or cancelled.
+     */
+    status: 'published' | 'postponed' | 'cancelled' | null;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
  * VenueCreateIn
  */
 export type VenueCreateIn = {
@@ -7714,6 +7786,53 @@ export type UpdateJumpResponses = {
 };
 
 export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
+
+export type GetComingUpData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/coming-up';
+};
+
+export type GetComingUpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSavesApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSavesApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSavesApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSavesApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSavesApiProblem;
+};
+
+export type GetComingUpError = GetComingUpErrors[keyof GetComingUpErrors];
+
+export type GetComingUpResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComingUpOut;
+};
+
+export type GetComingUpResponse = GetComingUpResponses[keyof GetComingUpResponses];
 
 export type GetFeedData = {
     body?: never;

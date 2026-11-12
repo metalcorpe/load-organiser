@@ -5,6 +5,7 @@
 - PUT    /saved/{opportunity_id}     idempotent save (201 new, 200 existing)
 - DELETE /saved/{opportunity_id}     idempotent removal
 - GET/POST /plans, PATCH/DELETE /plans/{id}
+- GET    /me/coming-up               saved listings and plans of the next 60 days
 
 Reads need a session; writes need a confirmed email. Nothing here is visible to
 other people, organizers or reviewers, and no response asserts registration.
@@ -13,7 +14,7 @@ other people, organizers or reviewers, and no response asserts registration.
 import uuid
 from collections.abc import Callable
 from datetime import date, datetime
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, Response, status
 from fastapi.responses import JSONResponse
@@ -26,6 +27,7 @@ from app.skydiver.directory.policy import DirectoryRuleError, VenueStatus
 from app.skydiver.opportunities.api import OpportunityOut, opportunity_out
 from app.skydiver.opportunities.service import Opportunity, Resolved
 from app.skydiver.saves.service import (
+    ComingUp,
     LimitReached,
     NotFound,
     Plan,
@@ -108,6 +110,30 @@ class PlanUpdateIn(BaseModel):
     place_id: uuid.UUID | None = None
 
 
+class UpcomingOut(BaseModel):
+    """A saved listing or one of your plans, in the coming-up window."""
+
+    kind: Literal["saved", "plan"]
+    id: uuid.UUID = Field(description="The listing for `saved`, the plan for `plan`.")
+    title: str
+    starts_on: date
+    ends_on: date = Field(description="Inclusive; a listing's dates are in its zone.")
+    place: str | None = Field(description="Dropzone, private place or location note.")
+    country: str | None
+    status: Literal["published", "postponed", "cancelled"] | None = Field(
+        description="The listing's state. For a plan, only when its linked listing"
+        " is postponed or cancelled."
+    )
+    opportunity_id: uuid.UUID | None
+
+
+class ComingUpOut(BaseModel):
+    """Private to you: what you saved or planned, starting within 60 days."""
+
+    items: list[UpcomingOut] = Field(description="Soonest first, at most 5.")
+    total: int = Field(description="All items in the window, shown or not.")
+
+
 _ERRORS: dict[int | str, dict[str, Any]] = {
     code: {"model": Problem} for code in (401, 403, 404, 409, 422)
 }
@@ -154,6 +180,26 @@ def _plan(plan: Plan) -> PlanOut:
         if place
         else None,
         updated_at=row.updated_at,
+    )
+
+
+def _coming_up(found: ComingUp) -> ComingUpOut:
+    return ComingUpOut(
+        items=[
+            UpcomingOut(
+                kind=u.kind,
+                id=u.id,
+                title=u.title,
+                starts_on=u.starts_on,
+                ends_on=u.ends_on,
+                place=u.place,
+                country=u.country,
+                status=u.status.value if u.status else None,  # type: ignore[arg-type]
+                opportunity_id=u.opportunity_id,
+            )
+            for u in found.items
+        ],
+        total=found.total,
     )
 
 
@@ -235,6 +281,19 @@ def create_router(
     def unsave_opportunity(opportunity_id: uuid.UUID, actor: Writer) -> Response:
         service().unsave(actor, opportunity_id)
         return Response(status_code=status.HTTP_204_NO_CONTENT, headers=NO_STORE)
+
+    # -- coming up ----------------------------------------------------------------
+
+    @router.get(
+        "/me/coming-up",
+        operation_id="getComingUp",
+        response_model=ComingUpOut,
+        dependencies=deps,
+    )
+    def get_coming_up(actor: Reader) -> ComingUpOut:
+        """Saved listings and plans starting within 60 days or running, soonest
+        first. Ended and cancelled listings never show."""
+        return _coming_up(service().coming_up(actor))
 
     # -- visit plans --------------------------------------------------------------
 

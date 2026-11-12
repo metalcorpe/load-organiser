@@ -411,6 +411,30 @@
         "title": "ColumnsOut",
         "type": "object"
       },
+      "ComingUpOut": {
+        "description": "Private to you: what you saved or planned, starting within 60 days.",
+        "properties": {
+          "items": {
+            "description": "Soonest first, at most 5.",
+            "items": {
+              "$ref": "#/components/schemas/UpcomingOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "total": {
+            "description": "All items in the window, shown or not.",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "ComingUpOut",
+        "type": "object"
+      },
       "ComponentDetailOut": {
         "properties": {
           "component": {
@@ -8181,6 +8205,105 @@
           "confirm"
         ],
         "title": "UndoIn",
+        "type": "object"
+      },
+      "UpcomingOut": {
+        "description": "A saved listing or one of your plans, in the coming-up window.",
+        "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "ends_on": {
+            "description": "Inclusive; a listing's dates are in its zone.",
+            "format": "date",
+            "title": "Ends On",
+            "type": "string"
+          },
+          "id": {
+            "description": "The listing for `saved`, the plan for `plan`.",
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "saved",
+              "plan"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "opportunity_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opportunity Id"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dropzone, private place or location note.",
+            "title": "Place"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "published",
+                  "postponed",
+                  "cancelled"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The listing's state. For a plan, only when its linked listing is postponed or cancelled.",
+            "title": "Status"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "starts_on",
+          "ends_on",
+          "place",
+          "country",
+          "status",
+          "opportunity_id"
+        ],
+        "title": "UpcomingOut",
         "type": "object"
       },
       "VenueCreateIn": {
@@ -16000,6 +16123,96 @@
         "summary": "Update Jump",
         "tags": [
           "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/me/coming-up": {
+      "get": {
+        "description": "Saved listings and plans starting within 60 days or running, soonest\nfirst. Ended and cancelled listings never show.",
+        "operationId": "getComingUp",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComingUpOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Coming Up",
+        "tags": [
+          "skydiver-saves"
         ]
       }
     },

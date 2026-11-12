@@ -9,7 +9,7 @@
 	import { dueSoon } from '#lib/gear.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
-	import { formatDay, formatRange } from '#lib/listings.ts';
+	import { formatDay, formatRange, statusLabel } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -188,12 +188,44 @@
 				today={data.today}
 				progress={data.summary.progress}
 			/>{/if}
-		{#if due.length > 0}
-			<!-- One calm card for what is ahead, soonest first; nothing when nothing is. -->
-			<section class="ahead" aria-labelledby="due-heading">
-				<h2 id="due-heading">Due soon</h2>
-				<DueList items={due} {today} label="Due soon" />
-				<p class="more-link"><a href="/gear">All gear dates</a></p>
+		{#if due.length > 0 || data.coming.length > 0}
+			<!-- One calm card for what is ahead, each list soonest first; nothing when nothing is. -->
+			<section
+				class="ahead"
+				aria-label={[due.length > 0 && 'Due soon', data.coming.length > 0 && 'Coming up']
+					.filter(Boolean)
+					.join(' and ')}
+			>
+				{#if due.length > 0}
+					<h2>Due soon</h2>
+					<DueList items={due} {today} label="Due soon" />
+					<p class="more-link"><a href="/gear">All gear dates</a></p>
+				{/if}
+				{#if data.coming.length > 0}
+					<h2>Coming up</h2>
+					<ol class="coming" aria-label="Coming up">
+						{#each data.coming as item (item.kind + item.id)}
+							{@const state = item.status ? statusLabel(item.status, false) : null}
+							<li>
+								<a href={item.kind === 'plan' ? `/plans#plan-${item.id}` : `/events/${item.id}`}
+									>{item.title}</a
+								>
+								<span class="meta"
+									>{item.kind === 'plan' ? 'Your plan' : 'Saved listing'} · {formatRange(
+										item.starts_on,
+										item.ends_on
+									)}{item.place ? ` · ${item.place}` : ''}</span
+								>
+								{#if state}
+									<span class="tag"
+										>{item.kind === 'plan' ? `Listing ${state.toLowerCase()}` : state}</span
+									>
+								{/if}
+							</li>
+						{/each}
+					</ol>
+					<p class="more-link"><a href="/saved">See all saved</a> · <a href="/plans">See all plans</a></p>
+				{/if}
 			</section>
 		{/if}
 	{/if}
@@ -486,6 +518,25 @@
 
 	.ahead .more-link {
 		margin: 0.4rem 0 0;
+	}
+
+	.ahead .more-link + h2 {
+		margin-top: 0.85rem;
+	}
+
+	.coming {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.coming li {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 0.5rem;
+		align-items: baseline;
 	}
 
 	.numbering {

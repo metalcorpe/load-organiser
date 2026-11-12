@@ -96,7 +96,8 @@
 	<ul class="results rows" aria-label="Your plans">
 		{#each data.plans.items as plan (plan.id)}
 			{@const item = plan.opportunity}
-			<li>
+			<!-- The Logbook's "Coming up" links here. -->
+			<li id="plan-{plan.id}">
 				<span class="title">{plan.title}</span>
 				<span class="meta">Your dates: {formatRange(plan.starts_on, plan.ends_on)}</span>
 				{#if item}

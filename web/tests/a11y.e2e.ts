@@ -107,6 +107,13 @@ async function world(): Promise<World> {
 		venue_id: venue.id
 	});
 	await apiCall('PUT', `/saved/${listing.id}`, { bearer });
+	// A plan next week: the "Coming up" list on the Logbook.
+	await created('/plans', bearer, {
+		title: 'Axe weekend',
+		starts_on: daysFromToday(7),
+		ends_on: daysFromToday(8),
+		venue_id: venue.id
+	});
 	// A stated licence: currency, the next-licence line (Logbook) and section (History).
 	await apiCall('PUT', '/me/licence', { bearer, body: { licence: 'b' } });
 

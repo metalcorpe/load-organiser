@@ -6,15 +6,16 @@ Every query goes through the owner-scoped helpers in `app.skydiver.access.sql`.
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
-from sqlalchemy import Engine, delete, func, select, update
+from sqlalchemy import Engine, and_, delete, func, or_, select, update
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
+from app.skydiver.opportunities.tables import SkydiverOpportunity
 from app.skydiver.saves.service import PlanRow, SavedRow, SavesStore, StoreFactory
 from app.skydiver.saves.tables import SkydiverSavedOpportunity, SkydiverVisitPlan
 
@@ -36,6 +37,24 @@ class SqlSavesStore:
             )
         ).scalars()
         return [_saved(row) for row in rows]
+
+    def saved_dated_between(
+        self, actor: Actor, first: date, last: date
+    ) -> list[uuid.UUID]:
+        S, L = SkydiverSavedOpportunity, SkydiverOpportunity
+        rows = self._s.execute(
+            select(col(S.opportunity_id))
+            .join(L, col(L.id) == col(S.opportunity_id))
+            .where(col(S.owner_person_id) == actor.person_id)
+            .where(
+                or_(
+                    col(L.duplicate_of_id).is_not(None),
+                    and_(col(L.starts_on) <= last, col(L.ends_on) >= first),
+                )
+            )
+            .order_by(col(S.id))
+        ).scalars()
+        return list(rows)
 
     def get_saved(self, actor: Actor, opportunity_id: uuid.UUID) -> SavedRow | None:
         row = (

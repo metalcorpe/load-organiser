@@ -6,6 +6,7 @@ export type {
 	BaselinePreviewOut,
 	ComponentDetailOut,
 	ComponentSummaryOut,
+	ComingUpOut,
 	CurrencyOut,
 	GearDueOut,
 	HealthStatus,

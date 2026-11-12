@@ -104,6 +104,8 @@ export const OPERATIONS = {
 		maxBodyBytes: 4 * 1024 * 1024
 	},
 	createPlan: { method: 'POST', path: `${BETA}/plans` },
+	// Saved listings and plans of the next 60 days, at most five: one call for the Logbook.
+	getComingUp: { method: 'GET', path: `${BETA}/me/coming-up` },
 	updatePlan: { method: 'PATCH', path: `${BETA}/plans/{id}` },
 	deletePlan: { method: 'DELETE', path: `${BETA}/plans/{id}` },
 	// Reviewer maintenance (#151); the API enforces the reviewer role.

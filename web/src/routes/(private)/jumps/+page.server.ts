@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type {
+	ComingUpOut,
 	GearDueOut,
 	HistoryOut,
 	JumpNumberingOut,
@@ -9,7 +10,7 @@ import { hasJumpFilters, jumpsQuery, parseJumpFilters } from '#lib/jump-filters.
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { numberingNotes } from '#lib/jumps.ts';
 import { isHistory } from '#lib/server/history.ts';
-import { call, isList, isPage } from '#lib/server/maintenance.ts';
+import { call, isList, isPage, isRecord } from '#lib/server/maintenance.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { PageServerLoad } from './$types';
@@ -26,9 +27,10 @@ export const load: PageServerLoad = async (event) => {
 	const filters = parseJumpFilters(event.url.searchParams);
 	const filtered = hasJumpFilters(filters);
 	const api = createRequestApi();
-	// The home extras (numbering notes, due gear) load on the first, unfiltered page only.
+	// The home extras (numbering notes, due gear, coming up) load on the first,
+	// unfiltered page only: at most five API calls per load, none per item.
 	const home = !cursor && !filtered;
-	const [page, history, numbering, due] = await Promise.all([
+	const [page, history, numbering, due, coming] = await Promise.all([
 		call<JumpPageOut>(
 			api,
 			'listJumps',
@@ -40,7 +42,16 @@ export const load: PageServerLoad = async (event) => {
 		// Gaps and repeats in the jumper's own numbering: first, unfiltered page only.
 		home ? call<JumpNumberingOut>(api, 'getJumpNumbering', { bearer: secret }) : null,
 		// Dates coming due on the jumper's gear: one owner-scoped call for all of it.
-		home ? call<GearDueOut[]>(api, 'listGearDue', { bearer: secret }, isList) : null
+		home ? call<GearDueOut[]>(api, 'listGearDue', { bearer: secret }, isList) : null,
+		// Saved listings and plans of the next 60 days: one owner-scoped call.
+		home
+			? call<ComingUpOut>(
+					api,
+					'getComingUp',
+					{ bearer: secret },
+					(body) => isRecord(body) && Array.isArray(body.items)
+				)
+			: null
 	]);
 
 	// Recent places come from the newest jumps on this page: distinct, newest first, open ones only.
@@ -88,6 +99,7 @@ export const load: PageServerLoad = async (event) => {
 		numbering: numbering?.ok ? numberingNotes(numbering.value) : { notes: [], more: null },
 		// Everything not yet "later"; the page keeps what is due within 30 days of the jumper's day.
 		due: due?.ok ? due.value.filter((d) => d.status !== 'later') : [],
+		coming: coming?.ok ? coming.value.items : [],
 		summary:
 			history.ok && totals
 				? {

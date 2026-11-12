@@ -10,14 +10,16 @@ import uuid
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from datetime import date, datetime
-from typing import Any, Protocol
+from datetime import UTC, date, datetime, timedelta
+from typing import Any, Literal, Protocol
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory import policy as directory_policy
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
 from app.skydiver.directory.service import DirectoryService, Place, Venue
 from app.skydiver.directory.service import NotFound as VenueNotFound
+from app.skydiver.opportunities.policy import OpportunityStatus
 from app.skydiver.opportunities.service import (
     Opportunity,
     OpportunityService,
@@ -30,6 +32,10 @@ MAX_PLANS = 100
 TITLE_MAX = 120
 NOTE_MAX = 500
 PLAN_SPAN_MAX_DAYS = 366
+# "Coming up" on the Logbook: starting within this many days (or running), soonest
+# first, at most COMING_UP_SHOWN.
+COMING_UP_DAYS = 60
+COMING_UP_SHOWN = 5
 
 
 class NotFound(Exception):
@@ -79,9 +85,38 @@ class Plan:
     place: Place | None
 
 
+@dataclass(frozen=True)
+class Upcoming:
+    """A saved listing or a plan in the coming-up window."""
+
+    kind: Literal["saved", "plan"]
+    id: uuid.UUID  # the listing for a saved listing, else the plan
+    title: str
+    starts_on: date
+    ends_on: date
+    place: str | None
+    country: str | None
+    # The listing's state; for a plan only when its listing is postponed or cancelled.
+    status: OpportunityStatus | None
+    opportunity_id: uuid.UUID | None
+
+
+@dataclass(frozen=True)
+class ComingUp:
+    items: list[Upcoming]  # soonest first, at most COMING_UP_SHOWN
+    total: int
+
+
 class SavesStore(Protocol):
     def lock_owner(self, actor: Actor) -> None: ...
     def list_saved(self, actor: Actor) -> list[SavedRow]: ...
+    def saved_dated_between(
+        self, actor: Actor, first: date, last: date
+    ) -> list[uuid.UUID]:
+        """Saved IDs whose listing overlaps first..last, or is a duplicate (whose
+        kept listing may). A coarse pre-filter; the service applies the rules."""
+        ...
+
     def get_saved(self, actor: Actor, opportunity_id: uuid.UUID) -> SavedRow | None: ...
     def count_saved(self, actor: Actor) -> int: ...
     def insert_saved(
@@ -167,6 +202,48 @@ class SavesService:
         """Idempotent: removing a bookmark that is not there is not an error."""
         with self._stores() as store:
             store.delete_saved(actor, opportunity_id)
+
+    # -- coming up ----------------------------------------------------------------
+
+    def coming_up(self, actor: Actor) -> ComingUp:
+        """Saved listings and plans starting within COMING_UP_DAYS, or running now.
+
+        A listing's days are its own: "today" is the date in its time zone, as on
+        the board, and an ended or cancelled listing never shows (a postponed one
+        does, with its status). Plans have no time zone: one still shows on the
+        earliest calendar date anywhere that it has not ended, and the window
+        counts from the UTC date. A plan linked to a saved listing stands for both.
+        """
+        now = self._clock()
+        utc_today = now.date()
+        with self._stores() as store:
+            # One day either side covers every time zone; the rules below decide.
+            saved_ids = store.saved_dated_between(
+                actor,
+                utc_today - timedelta(days=1),
+                utc_today + timedelta(days=COMING_UP_DAYS + 1),
+            )
+            plan_rows = store.list_plans(actor)
+        earliest = (now - timedelta(hours=12)).date()
+        last = utc_today + timedelta(days=COMING_UP_DAYS)
+        plans = self._plans(
+            actor,
+            [r for r in plan_rows if r.ends_on >= earliest and r.starts_on <= last],
+        )
+        items = [_plan_item(p) for p in plans]
+        planned = {p.opportunity.value.row.id for p in plans if p.opportunity}
+        current = (
+            self._opportunities.public_opportunities(saved_ids) if saved_ids else {}
+        )
+        for found in current.values():
+            if found is None or found.value.row.id in planned:
+                continue
+            item = _saved_item(found.value, now)
+            if item is not None:
+                planned.add(item.id)  # a saved duplicate and its kept listing: once
+                items.append(item)
+        items.sort(key=lambda u: (u.starts_on, u.ends_on, u.title.casefold(), u.id))
+        return ComingUp(items[:COMING_UP_SHOWN], len(items))
 
     # -- visit plans --------------------------------------------------------------
 
@@ -286,6 +363,59 @@ class SavesService:
             )
             for r in rows
         ]
+
+
+def _local_today(now: datetime, zone: str | None) -> date:
+    try:
+        return now.astimezone(ZoneInfo(zone) if zone else UTC).date()
+    except ZoneInfoNotFoundError:
+        return now.astimezone(UTC).date()
+
+
+def _saved_item(o: Opportunity, now: datetime) -> Upcoming | None:
+    row = o.row
+    if o.ended or row.status is OpportunityStatus.CANCELLED or row.starts_on is None:
+        return None  # postponed without new dates: nothing to place in time
+    today = _local_today(now, row.time_zone)
+    ends_on = row.ends_on or row.starts_on
+    if ends_on < today or row.starts_on > today + timedelta(days=COMING_UP_DAYS):
+        return None
+    return Upcoming(
+        kind="saved",
+        id=row.id,
+        title=row.title,
+        starts_on=row.starts_on,
+        ends_on=ends_on,
+        place=o.venue.name if o.venue else row.location_note,
+        country=row.country,
+        status=row.status,
+        opportunity_id=row.id,
+    )
+
+
+def _plan_item(plan: Plan) -> Upcoming:
+    row = plan.row
+    listing = plan.opportunity.value if plan.opportunity else None
+    place, country = None, None
+    if plan.venue:
+        place, country = plan.venue.name, plan.venue.country
+    elif plan.place:
+        place, country = plan.place.name, plan.place.country
+    elif listing:
+        place = listing.venue.name if listing.venue else listing.row.location_note
+        country = listing.row.country
+    status = listing.row.status if listing else None
+    return Upcoming(
+        kind="plan",
+        id=row.id,
+        title=row.title,
+        starts_on=row.starts_on,
+        ends_on=row.ends_on,
+        place=place,
+        country=country,
+        status=status if status is not OpportunityStatus.PUBLISHED else None,
+        opportunity_id=listing.row.id if listing else None,
+    )
 
 
 def _plan_values(raw: dict[str, Any]) -> dict[str, Any]:
