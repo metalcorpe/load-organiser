@@ -1,6 +1,7 @@
 """#161 migrations at app start-up: direct connection, advisory lock, idempotent."""
 
 import multiprocessing
+import uuid
 from concurrent.futures import ProcessPoolExecutor
 
 from alembic import command
@@ -62,22 +63,23 @@ def test_instances_starting_together_all_start_and_the_schema_is_current() -> No
     assert _current() == _head()
 
 
-def test_the_reviewer_bootstrap_grants_once_and_waits_for_the_account() -> None:
-    from app.skydiver.access.grant import set_role
-    from app.skydiver.access.policy import Role
+def test_the_reviewer_bootstrap_needs_the_address_confirmed() -> None:
+    from app.skydiver.access.grant import bootstrap_reviewer
     from app.tests.skydiver.support import Accounts
 
     accounts = Accounts.create()
-    email = f"owner-{multiprocessing.current_process().pid}-{id(accounts)}@example.com"
-    assert (
-        set_role(engine, email=email, role=Role.REVIEWER, grant=True)
-        == "no_unique_account"
-    )
-    secret = accounts.session()
-    viewer = accounts.service.current_viewer(secret=secret)
-    own = viewer.email
-    assert set_role(engine, email=own, role=Role.REVIEWER, grant=True) == "granted"
-    assert (
-        set_role(engine, email=own, role=Role.REVIEWER, grant=True) == "granted"
-    )  # again: no-op
-    assert "reviewer" in accounts.service.current_viewer(secret=secret).roles
+    missing = f"nobody-{uuid.uuid4().hex[:10]}@example.com"
+    assert bootstrap_reviewer(engine, email=missing) == "no_unique_account"
+
+    # Someone registers the owner's address first but cannot confirm it: no role.
+    squatter = accounts.session(verified=False)
+    unconfirmed = accounts.service.current_viewer(secret=squatter)
+    assert bootstrap_reviewer(engine, email=unconfirmed.email) == "not_confirmed"
+    assert "reviewer" not in accounts.service.current_viewer(secret=squatter).roles
+
+    # The confirmed owner gets it, case-insensitively, and again is a no-op.
+    owner = accounts.session(verified=True)
+    confirmed = accounts.service.current_viewer(secret=owner)
+    assert bootstrap_reviewer(engine, email=confirmed.email.upper()) == "granted"
+    assert bootstrap_reviewer(engine, email=confirmed.email) == "granted"
+    assert "reviewer" in accounts.service.current_viewer(secret=owner).roles

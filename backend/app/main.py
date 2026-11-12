@@ -262,16 +262,13 @@ if settings.SKYDIVER_MIGRATE_ON_START:
     migrate(str(settings.SQLALCHEMY_DATABASE_URI))
 
 if settings.SKYDIVER_BOOTSTRAP_REVIEWER:
-    # The owner's maintainer role without a terminal session; see the runbook.
+    # The owner's maintainer role without a terminal session, only for a confirmed
+    # address (registration may be open); see access.grant.bootstrap_reviewer.
     from app.core.db import engine as _engine
-    from app.skydiver.access.grant import set_role
-    from app.skydiver.access.policy import Role
+    from app.skydiver.access.grant import bootstrap_reviewer
 
-    _granted = set_role(
-        _engine,
-        email=str(settings.SKYDIVER_BOOTSTRAP_REVIEWER),
-        role=Role.REVIEWER,
-        grant=True,
+    _granted = bootstrap_reviewer(
+        _engine, email=str(settings.SKYDIVER_BOOTSTRAP_REVIEWER)
     )
     logging.getLogger(__name__).info("Reviewer bootstrap: %s", _granted)
 
