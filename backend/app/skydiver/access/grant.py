@@ -67,9 +67,9 @@ def bootstrap_reviewer(engine: Engine, *, email: str) -> str:
     with Session(engine) as session:
         rows = session.execute(
             select(
-                User.id,
-                SkydiverAccountState.email_verified_at,
-                SkydiverAccountState.email_verified_for,
+                col(User.id),
+                col(SkydiverAccountState.email_verified_at),
+                col(SkydiverAccountState.email_verified_for),
             )
             .join(
                 SkydiverAccountState,
