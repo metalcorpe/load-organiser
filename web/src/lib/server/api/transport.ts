@@ -197,7 +197,18 @@ export const OPERATIONS = {
 	listJumps: {
 		method: 'GET',
 		path: `${BETA}/jumps`,
-		query: ['cursor', 'limit'],
+		query: [
+			'cursor',
+			'limit',
+			'q',
+			'jump_type',
+			'venue_id',
+			'place_id',
+			'from_date',
+			'to_date',
+			'number_from',
+			'number_to'
+		],
 		maxBodyBytes: 1024 * 1024
 	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },

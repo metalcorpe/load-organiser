@@ -396,3 +396,121 @@ def test_a_lost_same_key_race_returns_the_winner(api: Api) -> None:
     again, created = late.create_jump(actor, key, fields, confirm_distinct=True)
     assert (again.view.jump.id, created) == (first.view.jump.id, False)
     assert real.list_jumps(actor).recorded_total == 1
+
+
+def _ids(page: dict[str, Any]) -> list[str]:
+    return [i["id"] for i in page["items"]]
+
+
+def test_filters_narrow_the_owners_own_jumps(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    venue = api.venue()
+    place = api.place(owner)
+
+    def jump(secret: str, **fields: Any) -> str:
+        sent = api.jump(secret, **fields)
+        assert sent.status_code == 201, sent.text
+        return str(sent.json()["jump"]["id"])
+
+    a = jump(owner, venue_id=venue["id"], jumped_on="2026-01-05", jump_type="belly",
+             jump_number=10, freefall_seconds=50, notes="Sunset 4-way")  # fmt: skip
+    b = jump(owner, venue_id=venue["id"], jumped_on="2026-02-05", jump_type="freefly",
+             jump_number=11, notes="100% fun")  # fmt: skip
+    c = jump(owner, place_id=place["id"], jumped_on="2026-03-05", jump_type="belly",
+             jump_number=12, freefall_seconds=40)  # fmt: skip
+    d = jump(owner, place_id=place["id"], jumped_on="2026-04-05", jump_type="canopy")
+    # Another jumper's matching jump never appears, whatever the filter.
+    jump(other, venue_id=venue["id"], jumped_on="2026-01-05", jump_type="belly",
+         jump_number=10, notes="Sunset 4-way")  # fmt: skip
+
+    def search(**params: Any) -> dict[str, Any]:
+        response = api.call("GET", "/jumps", owner, **params)
+        assert response.status_code == 200, response.text
+        return dict(response.json())
+
+    everything = search()
+    assert _ids(everything) == [d, c, b, a]
+    assert everything["matched"] == {
+        "jumps": 4, "freefall_seconds": 90, "freefall_recorded": 2,
+        "first_on": "2026-01-05", "last_on": "2026-04-05",
+    }  # fmt: skip
+    assert _ids(search(jump_type="belly")) == [c, a]
+    assert _ids(search(venue_id=venue["id"])) == [b, a]
+    assert _ids(search(place_id=place["id"])) == [d, c]
+    assert _ids(search(from_date="2026-02-01", to_date="2026-03-31")) == [c, b]
+    assert _ids(search(number_from=11)) == [c, b]  # unnumbered jumps drop out
+    assert _ids(search(number_from=10, number_to=10)) == [a]
+    # Text: private notes (case-insensitive, wildcards literal) and place names.
+    assert _ids(search(q="sunset")) == [a]
+    assert _ids(search(q="100%")) == [b]
+    assert _ids(search(q="%")) == [b]
+    assert _ids(search(q="farm")) == [d, c]
+    assert _ids(search(q=venue["name"][:6].lower())) == [b, a]
+    # Combined filters all apply.
+    combined = search(jump_type="belly", from_date="2026-02-01", q="farm")
+    assert _ids(combined) == [c]
+    assert combined["matched"] == {
+        "jumps": 1, "freefall_seconds": 40, "freefall_recorded": 1,
+        "first_on": "2026-03-05", "last_on": "2026-03-05",
+    }  # fmt: skip
+    assert combined["recorded_total"] == 4  # the whole logbook, unfiltered
+    none = search(jump_type="wingsuit")
+    assert none["items"] == [] and none["matched"] == {
+        "jumps": 0, "freefall_seconds": None, "freefall_recorded": 0,
+        "first_on": None, "last_on": None,
+    }  # fmt: skip
+    # Another person's place filters to nothing rather than to their jumps.
+    assert search(place_id=api.place(other)["id"])["items"] == []
+
+
+def test_filtered_pages_keep_their_order(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    ids = [
+        api.jump(owner, place_id=place["id"], jumped_on=f"2026-05-{day:02d}",
+                 jump_type=kind).json()["jump"]["id"]
+        for day, kind in ((1, "belly"), (2, "canopy"), (3, "belly"), (4, "belly"))
+    ]  # fmt: skip
+    expected = [ids[3], ids[2], ids[0]]
+    first = api.call("GET", "/jumps", owner, limit=2, jump_type="belly").json()
+    assert _ids(first) == expected[:2]
+    rest = api.call(
+        "GET", "/jumps", owner, limit=2, jump_type="belly", cursor=first["next_cursor"]
+    ).json()
+    assert _ids(rest) == expected[2:] and rest["next_cursor"] is None
+    assert first["matched"]["jumps"] == rest["matched"]["jumps"] == 3
+
+
+def test_a_merged_dropzone_filters_with_its_survivor(api: Api) -> None:
+    owner = api.accounts.session()
+    old, survivor = api.venue(), api.venue()
+    before = api.jump(owner, venue_id=old["id"]).json()["jump"]["id"]
+    api.ok(
+        "POST", f"/directory/venues/{old['id']}/merge", api.reviewer,
+        {"into": survivor["id"]},
+    )  # fmt: skip
+    after = api.jump(owner, venue_id=survivor["id"], jumped_on="2026-10-11")
+    page = api.call("GET", "/jumps", owner, venue_id=survivor["id"]).json()
+    assert _ids(page) == [after.json()["jump"]["id"], before]
+    # The old name stays searchable: it is an alias of the survivor now.
+    assert before in _ids(api.call("GET", "/jumps", owner, q=old["name"]).json())
+
+
+@pytest.mark.parametrize(
+    ("params", "expected"),
+    [
+        ({"from_date": "2026-03-01", "to_date": "2026-02-01"}, "date_range_invalid"),
+        ({"number_from": 20, "number_to": 10}, "number_range_invalid"),
+        (
+            {"venue_id": str(uuid.uuid4()), "place_id": str(uuid.uuid4())},
+            "location_filter_invalid",
+        ),
+    ],
+)
+def test_filter_validation(api: Api, params: dict[str, Any], expected: str) -> None:
+    owner = api.accounts.session()
+    response = api.call("GET", "/jumps", owner, **params)
+    assert (response.status_code, response.json()) == (422, {"detail": expected})
+    for bad in ({"jump_type": "skysurf"}, {"number_from": 0}, {"q": "x" * 101}):
+        assert api.call("GET", "/jumps", owner, **bad).status_code == 422
+    assert api.call("GET", "/jumps", None, jump_type="belly").status_code == 401

@@ -1,5 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 import type { HistoryOut, JumpPageOut } from '#lib/contracts/index.ts';
+import { hasJumpFilters, jumpsQuery, parseJumpFilters } from '#lib/jump-filters.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isHistory } from '#lib/server/history.ts';
 import { call, isPage } from '#lib/server/maintenance.ts';
@@ -7,21 +8,27 @@ import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { PageServerLoad } from './$types';
 
-/** The Logbook home (design E): totals and one-tap logging on the first page, then the list. */
+/**
+ * The Logbook home (design E): totals and one-tap logging on the first page, then the list.
+ * Search and filters are a GET form: they live in the URL and the pages keep them.
+ */
 export const load: PageServerLoad = async (event) => {
 	requireViewer(event.locals.viewer, event.url);
 	const secret = readSessionSecret(event.cookies);
 	if (!secret) redirect(303, '/sign-in');
 	const cursor = (event.url.searchParams.get('cursor') ?? '').slice(0, 200) || undefined;
+	const filters = parseJumpFilters(event.url.searchParams);
+	const filtered = hasJumpFilters(filters);
 	const api = createRequestApi();
 	const [page, history] = await Promise.all([
 		call<JumpPageOut>(
 			api,
 			'listJumps',
-			{ bearer: secret, query: { cursor, limit: '20' } },
+			{ bearer: secret, query: { cursor, limit: '20', ...jumpsQuery(filters) } },
 			(body) => isPage(body) && typeof (body as JumpPageOut).recorded_total === 'number'
 		),
-		cursor ? null : call<HistoryOut>(api, 'getHistory', { bearer: secret }, isHistory)
+		// Also the place choices of the filter form: every place with a recorded jump.
+		call<HistoryOut>(api, 'getHistory', { bearer: secret }, isHistory)
 	]);
 
 	// Recent places come from the newest jumps on this page: distinct, newest first, open ones only.
@@ -29,7 +36,7 @@ export const load: PageServerLoad = async (event) => {
 	// The newest jump, when the first recent place is its place: the main button then
 	// continues from it (gear, type, altitudes, next number), on the jumper's today.
 	let continueFrom: string | null = null;
-	if (page.ok && !cursor) {
+	if (page.ok && !cursor && !filtered) {
 		const seen = new Set<string>();
 		for (const jump of page.value.items) {
 			const loc = jump.location;
@@ -45,16 +52,27 @@ export const load: PageServerLoad = async (event) => {
 		}
 	}
 
-	const totals = history?.ok ? history.value.totals : null;
+	const places = history.ok
+		? history.value.by_location
+				.map(({ location: loc }) => ({
+					value: `${loc.kind}:${loc.id}`,
+					label: `${loc.name ?? 'Dropzone no longer listed'}${loc.kind === 'place' ? ' (private place)' : ''}`
+				}))
+				.sort((a, b) => a.label.localeCompare(b.label, 'en-GB'))
+		: [];
+	const totals = history.ok ? history.value.totals : null;
 	return {
 		page: page.ok
 			? { ok: true as const, ...page.value }
 			: { ok: false as const, reason: page.reason },
 		older: Boolean(cursor),
+		filters,
+		filtered,
+		places,
 		recent,
 		continueFrom,
 		summary:
-			history?.ok && totals
+			history.ok && totals
 				? {
 						lifetime: totals.inconsistent ? null : totals.lifetime,
 						lastJumpOn: history.value.last_jump_on

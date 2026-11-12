@@ -21,9 +21,11 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.logbook.policy import JumpType
 from app.skydiver.logbook.service import (
     JumpDeleted,
     JumpDetail,
+    JumpFilter,
     JumpView,
     KeyReused,
     LikelyDuplicate,
@@ -160,12 +162,27 @@ class JumpSummaryOut(BaseModel):
     components: list[ComponentRefOut]
 
 
+class MatchedOut(BaseModel):
+    """Totals over every jump matching the filters (all jumps when unfiltered)."""
+
+    jumps: int
+    freefall_seconds: int | None = Field(
+        description="Sum over the matching jumps that recorded a freefall time."
+    )
+    freefall_recorded: int = Field(
+        description="How many matching jumps recorded a freefall time."
+    )
+    first_on: date | None
+    last_on: date | None
+
+
 class JumpPageOut(BaseModel):
     items: list[JumpSummaryOut]
     next_cursor: str | None
     recorded_total: int = Field(
         description="Detailed entries you recorded; not a lifetime total."
     )
+    matched: MatchedOut
 
 
 class JumpEventOut(BaseModel):
@@ -306,15 +323,53 @@ def create_router(
         actor: Reader,
         cursor: Annotated[str | None, Query(max_length=200)] = None,
         limit: Annotated[int | None, Query(ge=1, le=50)] = None,
+        q: Annotated[
+            str | None,
+            Query(
+                max_length=100,
+                description="Text in the place name or your private notes.",
+            ),
+        ] = None,
+        jump_type: JumpTypeName | None = None,
+        venue_id: Annotated[
+            uuid.UUID | None, Query(description="A listed dropzone, merges included.")
+        ] = None,
+        place_id: Annotated[
+            uuid.UUID | None, Query(description="One of your private places.")
+        ] = None,
+        from_date: Annotated[date | None, Query(description="On or after.")] = None,
+        to_date: Annotated[date | None, Query(description="On or before.")] = None,
+        number_from: Annotated[int | None, Query(ge=1, le=1_000_000)] = None,
+        number_to: Annotated[int | None, Query(ge=1, le=1_000_000)] = None,
     ) -> JumpPageOut | JSONResponse:
+        search = JumpFilter(
+            text=q,
+            jump_type=JumpType(jump_type) if jump_type else None,
+            venue_id=venue_id,
+            place_id=place_id,
+            from_date=from_date,
+            to_date=to_date,
+            number_from=number_from,
+            number_to=number_to,
+        )
         try:
-            page = service().list_jumps(actor, cursor=cursor, limit=limit)
+            page = service().list_jumps(
+                actor, cursor=cursor, limit=limit, search=search
+            )
         except Errors as error:
             return _problem(error)
+        m = page.matched
         return JumpPageOut(
             items=[_summary(v) for v in page.items],
             next_cursor=page.next_cursor,
             recorded_total=page.recorded_total,
+            matched=MatchedOut(
+                jumps=m.jumps,
+                freefall_seconds=m.freefall_seconds,
+                freefall_recorded=m.freefall_recorded,
+                first_on=m.first_on,
+                last_on=m.last_on,
+            ),
         )
 
     @router.post(

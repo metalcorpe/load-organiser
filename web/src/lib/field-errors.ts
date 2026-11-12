@@ -80,6 +80,8 @@ const FIELDS: Record<string, readonly string[]> = {
 	archive_malformed: ['archive'],
 	archive_too_large: ['archive'],
 	archive_version_unsupported: ['archive'],
+	date_range_invalid: ['to'],
+	number_range_invalid: ['to_number'],
 	query_too_short: ['q', 'org_q', 'dz_q', 'merge_q'],
 	too_many_disciplines: ['disciplines'],
 	discipline_invalid: ['disciplines', 'discipline'],

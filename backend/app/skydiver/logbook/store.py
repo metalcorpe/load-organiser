@@ -6,7 +6,18 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from typing import Any
 
-from sqlalchemy import Engine, and_, delete, func, insert, or_, select, update
+from sqlalchemy import (
+    ColumnElement,
+    Engine,
+    and_,
+    delete,
+    false,
+    func,
+    insert,
+    or_,
+    select,
+    update,
+)
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
@@ -18,12 +29,14 @@ from app.skydiver.gear.tables import SkydiverComponent
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 from app.skydiver.logbook.service import (
     ComponentRef,
+    Criteria,
     Jump,
     JumpEvent,
     LogbookStore,
     PlaceRef,
     Receipt,
     StoreFactory,
+    Totals,
 )
 from app.skydiver.logbook.tables import (
     SkydiverJump,
@@ -120,9 +133,13 @@ class SqlLogbookStore:
         return self._with_components([row])[0] if row else None
 
     def page(
-        self, actor: Actor, after: tuple[date, uuid.UUID] | None, limit: int
+        self,
+        actor: Actor,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+        where: Criteria = Criteria(),
     ) -> list[Jump]:
-        query = owned(J, actor)
+        query = owned(J, actor).where(*_conditions(actor, where))
         if after is not None:
             on, last_id = after
             query = query.where(
@@ -135,6 +152,35 @@ class SqlLogbookStore:
             query.order_by(col(J.jumped_on).desc(), col(J.id).desc()).limit(limit)
         ).scalars()
         return self._with_components(list(rows))
+
+    def totals(self, actor: Actor, where: Criteria) -> Totals:
+        jumps, seconds, recorded, first, last = self._s.execute(
+            select(
+                func.count(),
+                func.sum(col(J.freefall_seconds)),
+                func.count(col(J.freefall_seconds)),
+                func.min(col(J.jumped_on)),
+                func.max(col(J.jumped_on)),
+            )
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(*_conditions(actor, where))
+        ).one()
+        return Totals(
+            jumps=int(jumps),
+            freefall_seconds=int(seconds) if seconds is not None else None,
+            freefall_recorded=int(recorded),
+            first_on=first,
+            last_on=last,
+        )
+
+    def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
+        rows = self._s.execute(
+            select(col(J.venue_id))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.venue_id).is_not(None))
+            .distinct()
+        ).scalars()
+        return [v for v in rows if v is not None]
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
         number = values.get("jump_number")
@@ -309,6 +355,42 @@ class SqlLogbookStore:
                     for c in component_ids
                 ],
             )
+
+
+def _conditions(actor: Actor, where: Criteria) -> list[ColumnElement[bool]]:
+    """Filter conditions; the caller already scopes the query to the owner."""
+    found: list[ColumnElement[bool]] = []
+    if where.text:
+        P = SkydiverProvisionalPlace
+        places = (
+            select(col(P.id))
+            .where(col(P.owner_person_id) == actor.person_id)
+            .where(col(P.name).icontains(where.text, autoescape=True))
+        )
+        matches: list[ColumnElement[bool]] = [
+            col(J.notes).icontains(where.text, autoescape=True),
+            col(J.place_id).in_(places),
+        ]
+        if where.text_venue_ids:
+            matches.append(col(J.venue_id).in_(where.text_venue_ids))
+        found.append(or_(*matches))
+    if where.jump_type is not None:
+        found.append(col(J.jump_type) == where.jump_type)
+    if where.venue_ids is not None:
+        found.append(
+            col(J.venue_id).in_(where.venue_ids) if where.venue_ids else false()
+        )
+    if where.place_id is not None:
+        found.append(col(J.place_id) == where.place_id)
+    if where.from_date is not None:
+        found.append(col(J.jumped_on) >= where.from_date)
+    if where.to_date is not None:
+        found.append(col(J.jumped_on) <= where.to_date)
+    if where.number_from is not None:
+        found.append(col(J.jump_number) >= where.number_from)
+    if where.number_to is not None:
+        found.append(col(J.jump_number) <= where.number_to)
+    return found
 
 
 def sql_logbook_store_factory(engine: Engine) -> StoreFactory:

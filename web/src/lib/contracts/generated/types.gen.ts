@@ -1007,6 +1007,7 @@ export type JumpPageOut = {
      * Items
      */
     items: Array<JumpSummaryOut>;
+    matched: MatchedOut;
     /**
      * Next Cursor
      */
@@ -1181,6 +1182,38 @@ export type LoginIn = {
      * Password
      */
     password: string;
+};
+
+/**
+ * MatchedOut
+ *
+ * Totals over every jump matching the filters (all jumps when unfiltered).
+ */
+export type MatchedOut = {
+    /**
+     * First On
+     */
+    first_on: string | null;
+    /**
+     * Freefall Recorded
+     *
+     * How many matching jumps recorded a freefall time.
+     */
+    freefall_recorded: number;
+    /**
+     * Freefall Seconds
+     *
+     * Sum over the matching jumps that recorded a freefall time.
+     */
+    freefall_seconds: number | null;
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Last On
+     */
+    last_on: string | null;
 };
 
 /**
@@ -6503,6 +6536,48 @@ export type ListJumpsData = {
          * Limit
          */
         limit?: number | null;
+        /**
+         * Q
+         *
+         * Text in the place name or your private notes.
+         */
+        q?: string | null;
+        /**
+         * Jump Type
+         */
+        jump_type?: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other' | null;
+        /**
+         * Venue Id
+         *
+         * A listed dropzone, merges included.
+         */
+        venue_id?: string | null;
+        /**
+         * Place Id
+         *
+         * One of your private places.
+         */
+        place_id?: string | null;
+        /**
+         * From Date
+         *
+         * On or after.
+         */
+        from_date?: string | null;
+        /**
+         * To Date
+         *
+         * On or before.
+         */
+        to_date?: string | null;
+        /**
+         * Number From
+         */
+        number_from?: number | null;
+        /**
+         * Number To
+         */
+        number_to?: number | null;
     };
     url: '/api/skydiver/v1/jumps';
 };

@@ -59,6 +59,9 @@ export const JUMP_MESSAGES: Record<string, string> = {
 	component_limit_reached:
 		'You have reached the limit of 50 components. Nothing was saved; untick "Add a new component" or archive one first.',
 	label_required: 'Give the new component a label.',
+	date_range_invalid: 'The "from" date must be on or before the "to" date.',
+	number_range_invalid: 'The lowest jump number must not be above the highest.',
+	location_filter_invalid: 'Choose one place to filter by.',
 	invalid_input: 'Check the details you entered.',
 	uncertain:
 		'Save not confirmed: the service did not answer in time. It may or may not have been saved. Send the form again: it will not create a second entry.',
