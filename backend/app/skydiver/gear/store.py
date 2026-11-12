@@ -70,6 +70,8 @@ def _component(row: SkydiverComponent) -> Component:
         version=row.version,
         updated_at=row.updated_at,
         fingerprint=row.fingerprint,
+        repack_interval_days=row.repack_interval_days,
+        end_of_life_on=row.end_of_life_on,
     )
 
 

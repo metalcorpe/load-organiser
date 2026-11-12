@@ -505,6 +505,19 @@
             "title": "Client Key",
             "type": "string"
           },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
+            "title": "End Of Life On"
+          },
           "kind": {
             "enum": [
               "container",
@@ -586,6 +599,20 @@
             ],
             "title": "Relation"
           },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "maximum": 730.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.",
+            "title": "Repack Interval Days"
+          },
           "serial": {
             "anyOf": [
               {
@@ -642,6 +669,18 @@
           "archived": {
             "title": "Archived",
             "type": "boolean"
+          },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Of Life On"
           },
           "id": {
             "format": "uuid",
@@ -722,6 +761,18 @@
             "title": "Relation",
             "type": "string"
           },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own reserve repack interval; null: the default of 180 days.",
+            "title": "Repack Interval Days"
+          },
           "serial": {
             "anyOf": [
               {
@@ -755,6 +806,8 @@
           "acquisition_method",
           "acquired",
           "notes",
+          "repack_interval_days",
+          "end_of_life_on",
           "archived",
           "version",
           "updated_at"
@@ -860,6 +913,19 @@
             ],
             "title": "Acquisition Method"
           },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
+            "title": "End Of Life On"
+          },
           "kind": {
             "anyOf": [
               {
@@ -954,6 +1020,20 @@
               }
             ],
             "title": "Relation"
+          },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "maximum": 730.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.",
+            "title": "Repack Interval Days"
           },
           "serial": {
             "anyOf": [
@@ -1106,6 +1186,37 @@
         "title": "DecisionIn",
         "type": "object"
       },
+      "DueComponentOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "container",
+              "main",
+              "reserve",
+              "aad",
+              "other"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "label"
+        ],
+        "title": "DueComponentOut",
+        "type": "object"
+      },
       "DuplicateIn": {
         "properties": {
           "of": {
@@ -1227,6 +1338,103 @@
           "state"
         ],
         "title": "FollowOut",
+        "type": "object"
+      },
+      "GearDueOut": {
+        "description": "A date coming due on your own gear, from your own records. Not an\nairworthiness status: your rigger and the manufacturer decide that.",
+        "properties": {
+          "basis": {
+            "description": "`entered`: your own date. `interval`: your latest repack plus `interval_days`.",
+            "enum": [
+              "entered",
+              "interval"
+            ],
+            "title": "Basis",
+            "type": "string"
+          },
+          "component": {
+            "$ref": "#/components/schemas/DueComponentOut"
+          },
+          "due_on": {
+            "description": "Still in time on this day; overdue after it.",
+            "format": "date",
+            "title": "Due On",
+            "type": "string"
+          },
+          "interval_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Days"
+          },
+          "interval_source": {
+            "anyOf": [
+              {
+                "const": "USPA / FAA 14 CFR 105.43",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Set when the default interval applies.",
+            "title": "Interval Source"
+          },
+          "kind": {
+            "enum": [
+              "reserve_repack",
+              "service",
+              "end_of_life"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service entry it comes from; null for an end of life.",
+            "title": "Service Kind"
+          },
+          "status": {
+            "description": "`soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
+            "enum": [
+              "overdue",
+              "soon",
+              "later"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "component",
+          "kind",
+          "service_kind",
+          "due_on",
+          "basis",
+          "interval_days",
+          "interval_source",
+          "status"
+        ],
+        "title": "GearDueOut",
         "type": "object"
       },
       "GearEventOut": {
@@ -12948,6 +13156,100 @@
           }
         },
         "summary": "Delete Service",
+        "tags": [
+          "skydiver-gear"
+        ]
+      }
+    },
+    "/api/skydiver/v1/gear/due": {
+      "get": {
+        "description": "Dates coming due on your current gear, soonest first (overdue included).",
+        "operationId": "listGearDue",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GearDueOut"
+                  },
+                  "title": "Response Listgeardue",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Gear Due",
         "tags": [
           "skydiver-gear"
         ]

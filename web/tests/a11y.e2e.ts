@@ -25,6 +25,11 @@ async function created(path: string, bearer: string, body: unknown): Promise<Rec
 	return (await response.json()) as Record<string, any>;
 }
 
+/** The UTC calendar day `offset` days from today, as YYYY-MM-DD. */
+function daysFromToday(offset: number): string {
+	return new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+}
+
 interface World {
 	member: string;
 	paths: { guest: string[]; member: string[]; reviewer: string[] };
@@ -76,6 +81,12 @@ async function world(): Promise<World> {
 			label: 'Axe reserve'
 		})
 	).component;
+	// A repack 175 days ago: the "due soon" states of Logbook, Gear and the component.
+	await created(`/gear/components/${component.id}/service`, bearer, {
+		client_key: randomUUID(),
+		kind: 'repack',
+		done_on: daysFromToday(-175)
+	});
 	const jump = (
 		await created('/jumps', bearer, {
 			client_key: randomUUID(),

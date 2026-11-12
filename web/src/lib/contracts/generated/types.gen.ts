@@ -295,6 +295,12 @@ export type ComponentIn = {
      */
     client_key: string;
     /**
+     * End Of Life On
+     *
+     * An end-of-life date you entered (e.g. from the label). Never estimated.
+     */
+    end_of_life_on?: string | null;
+    /**
      * Kind
      */
     kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
@@ -323,6 +329,12 @@ export type ComponentIn = {
      */
     relation?: 'owned' | 'borrowed' | 'rented' | null;
     /**
+     * Repack Interval Days
+     *
+     * A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.
+     */
+    repack_interval_days?: number | null;
+    /**
      * Serial
      *
      * Kept exactly as entered. Private.
@@ -348,6 +360,10 @@ export type ComponentOut = {
      * Archived
      */
     archived: boolean;
+    /**
+     * End Of Life On
+     */
+    end_of_life_on: string | null;
     /**
      * Id
      */
@@ -384,6 +400,12 @@ export type ComponentOut = {
      * Relation
      */
     relation: 'owned' | 'borrowed' | 'rented';
+    /**
+     * Repack Interval Days
+     *
+     * Your own reserve repack interval; null: the default of 180 days.
+     */
+    repack_interval_days: number | null;
     /**
      * Serial
      */
@@ -447,6 +469,12 @@ export type ComponentUpdateIn = {
      */
     acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
     /**
+     * End Of Life On
+     *
+     * An end-of-life date you entered (e.g. from the label). Never estimated.
+     */
+    end_of_life_on?: string | null;
+    /**
      * Kind
      */
     kind?: 'container' | 'main' | 'reserve' | 'aad' | 'other' | null;
@@ -474,6 +502,12 @@ export type ComponentUpdateIn = {
      * Relation
      */
     relation?: 'owned' | 'borrowed' | 'rented' | null;
+    /**
+     * Repack Interval Days
+     *
+     * A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.
+     */
+    repack_interval_days?: number | null;
     /**
      * Serial
      *
@@ -545,6 +579,24 @@ export type DecisionIn = {
      * Reason
      */
     reason?: string | null;
+};
+
+/**
+ * DueComponentOut
+ */
+export type DueComponentOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
+    /**
+     * Label
+     */
+    label: string;
 };
 
 /**
@@ -625,6 +677,54 @@ export type FollowOut = {
      * State
      */
     state: 'none' | 'requested' | 'following';
+};
+
+/**
+ * GearDueOut
+ *
+ * A date coming due on your own gear, from your own records. Not an
+ * airworthiness status: your rigger and the manufacturer decide that.
+ */
+export type GearDueOut = {
+    /**
+     * Basis
+     *
+     * `entered`: your own date. `interval`: your latest repack plus `interval_days`.
+     */
+    basis: 'entered' | 'interval';
+    component: DueComponentOut;
+    /**
+     * Due On
+     *
+     * Still in time on this day; overdue after it.
+     */
+    due_on: string;
+    /**
+     * Interval Days
+     */
+    interval_days: number | null;
+    /**
+     * Interval Source
+     *
+     * Set when the default interval applies.
+     */
+    interval_source: 'USPA / FAA 14 CFR 105.43' | null;
+    /**
+     * Kind
+     */
+    kind: 'reserve_repack' | 'service' | 'end_of_life';
+    /**
+     * Service Kind
+     *
+     * The service entry it comes from; null for an end of life.
+     */
+    service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
+    /**
+     * Status
+     *
+     * `soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
+     */
+    status: 'overdue' | 'soon' | 'later';
 };
 
 /**
@@ -6338,6 +6438,55 @@ export type DeleteServiceEntryResponses = {
 };
 
 export type DeleteServiceEntryResponse = DeleteServiceEntryResponses[keyof DeleteServiceEntryResponses];
+
+export type ListGearDueData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/gear/due';
+};
+
+export type ListGearDueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverGearApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverGearApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverGearApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverGearApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverGearApiProblem;
+};
+
+export type ListGearDueError = ListGearDueErrors[keyof ListGearDueErrors];
+
+export type ListGearDueResponses = {
+    /**
+     * Response Listgeardue
+     *
+     * Successful Response
+     */
+    200: Array<GearDueOut>;
+};
+
+export type ListGearDueResponse = ListGearDueResponses[keyof ListGearDueResponses];
 
 export type ListRigsData = {
     body?: never;

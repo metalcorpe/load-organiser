@@ -172,6 +172,8 @@ export const OPERATIONS = {
 		query: ['archived'],
 		maxBodyBytes: 1024 * 1024
 	},
+	// At most 50 components, each with a few dates: one call for all of them.
+	listGearDue: { method: 'GET', path: `${BETA}/gear/due`, maxBodyBytes: 1024 * 1024 },
 	createComponent: { method: 'POST', path: `${BETA}/gear/components` },
 	getComponent: {
 		method: 'GET',

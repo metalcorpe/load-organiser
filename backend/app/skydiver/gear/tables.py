@@ -72,6 +72,10 @@ class SkydiverComponent(SQLModel, table=True):
             "acquired " + _PARTIAL.format("acquired"),
             name="ck_skydiver_component_acquired",
         ),
+        CheckConstraint(
+            "repack_interval_days IS NULL OR repack_interval_days BETWEEN 1 AND 730",
+            name="ck_skydiver_component_repack_interval",
+        ),
         UniqueConstraint(
             "owner_person_id", "client_key", name="uq_skydiver_component_key"
         ),
@@ -93,6 +97,14 @@ class SkydiverComponent(SQLModel, table=True):
     acquisition_method: str | None = Field(default=None, max_length=16)
     acquired: str | None = Field(default=None, max_length=10)
     notes: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
+    # The owner's own repack interval for a reserve; NULL: the default (policy).
+    repack_interval_days: int | None = Field(
+        default=None, sa_column=Column(Integer, nullable=True)
+    )
+    # Only a date the owner entered (e.g. from an AAD's label); never estimated.
+    end_of_life_on: date | None = Field(
+        default=None, sa_column=Column(Date, nullable=True)
+    )
     archived_at: datetime | None = Field(
         default=None, sa_column=Column(DateTime(timezone=True), nullable=True)
     )

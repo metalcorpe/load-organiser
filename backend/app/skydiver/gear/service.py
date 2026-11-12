@@ -61,6 +61,8 @@ class Component:
     version: int
     updated_at: datetime
     fingerprint: str = ""
+    repack_interval_days: int | None = None
+    end_of_life_on: date | None = None
 
 
 @dataclass(frozen=True)
@@ -117,6 +119,13 @@ class ComponentDetail:
     service: list[ServiceEntry]
     events: list[GearEvent]
     same_serial: list[uuid.UUID]
+
+
+@dataclass(frozen=True)
+class DueItem:
+    component: Component
+    due: policy.Due
+    status: policy.DueStatus
 
 
 @dataclass(frozen=True)
@@ -279,6 +288,36 @@ class GearService:
         return [
             ComponentSummary(c, current.get(c.id), due.get(c.id)) for c in components
         ]
+
+    def due(self, actor: Actor) -> list[DueItem]:
+        """Every date coming due on the owner's current (not archived) gear, soonest
+        first. Two queries whatever the amount of gear. The status uses the latest
+        calendar date anywhere, so an item reads overdue no later than its owner's
+        own day (a few hours early at most, never late)."""
+        today = self._latest_local_date()
+        with self._stores() as store:
+            components = store.list_components(actor, archived=False)
+            service = store.list_service(actor, [c.id for c in components])
+        by_component: dict[uuid.UUID, list[policy.ServiceFact]] = {}
+        # Newest first from the store: a higher order is a later record.
+        for order, entry in enumerate(reversed(service)):
+            by_component.setdefault(entry.component_id, []).append(
+                policy.ServiceFact(entry.kind, entry.done_on, entry.due_on, order)
+            )
+        items = [
+            DueItem(c, due, policy.due_status(due.due_on, today))
+            for c in components
+            for due in policy.due_dates(
+                c.kind,
+                by_component.get(c.id, []),
+                repack_interval_days=c.repack_interval_days,
+                end_of_life_on=c.end_of_life_on,
+            )
+        ]
+        return sorted(
+            items,
+            key=lambda i: (i.due.due_on, i.component.label.casefold(), i.due.kind),
+        )
 
     def component(self, actor: Actor, component_id: uuid.UUID) -> ComponentDetail:
         with self._stores() as store:
@@ -664,6 +703,12 @@ class GearService:
             values["acquisition_method"] = method.value if method else None
         if "notes" in raw or not partial:
             values["notes"] = _notes(raw.get("notes"))
+        if "repack_interval_days" in raw or not partial:
+            values["repack_interval_days"] = policy.repack_interval(
+                raw.get("repack_interval_days")
+            )
+        if "end_of_life_on" in raw or not partial:
+            values["end_of_life_on"] = policy.end_of_life(raw.get("end_of_life_on"))
         if not partial:
             policy.check_acquisition(
                 Relation(values["relation"]),
@@ -690,6 +735,8 @@ def _component_values_of(component: Component) -> dict[str, Any]:
         else None,
         "acquired": component.acquired,
         "notes": component.notes,
+        "repack_interval_days": component.repack_interval_days,
+        "end_of_life_on": component.end_of_life_on,
     }
 
 

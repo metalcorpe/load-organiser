@@ -7,6 +7,7 @@ export type {
 	ComponentDetailOut,
 	ComponentSummaryOut,
 	CurrencyOut,
+	GearDueOut,
 	HealthStatus,
 	HistoryOut,
 	ImportCheckOut,

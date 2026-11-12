@@ -1,8 +1,12 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
+	import DueList from '#lib/components/DueList.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
+	import { localToday } from '#lib/currency.ts';
 	import { fieldsFor } from '#lib/field-errors.ts';
+	import { dueSoon } from '#lib/gear.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay, formatRange } from '#lib/listings.ts';
@@ -26,6 +30,13 @@
 	const freefall = $derived(
 		matched ? freefallText(matched.freefall_seconds, matched.freefall_recorded, matched.jumps) : null
 	);
+	// The server's UTC day until the browser gives the jumper's own calendar day.
+	// svelte-ignore state_referenced_locally
+	let today = $state(data.today);
+	onMount(() => {
+		today = localToday();
+	});
+	const due = $derived(dueSoon(data.due, today));
 	const described = (name: string) =>
 		invalid.has(name) ? { 'aria-invalid': 'true' as const, 'aria-describedby': 'filter-error' } : {};
 </script>
@@ -173,6 +184,14 @@
 			{/if}
 		</section>
 		{#if data.summary?.currency}<CurrencyStatus currency={data.summary.currency} today={data.today} />{/if}
+		{#if due.length > 0}
+			<!-- One calm card for what is ahead, soonest first; nothing when nothing is. -->
+			<section class="ahead" aria-labelledby="due-heading">
+				<h2 id="due-heading">Due soon</h2>
+				<DueList items={due} {today} label="Due soon" />
+				<p class="more-link"><a href="/gear">All gear dates</a></p>
+			</section>
+		{/if}
 	{/if}
 
 	{#if data.numbering.notes.length > 0}
@@ -445,6 +464,24 @@
 
 	.matched p + p {
 		margin-top: 0.25rem;
+	}
+
+	.ahead {
+		margin: 0 0 1.25rem;
+		padding: 0.75rem 0.9rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		font-size: 0.95rem;
+	}
+
+	.ahead h2 {
+		font-size: 1rem;
+		margin: 0 0 0.35rem;
+	}
+
+	.ahead .more-link {
+		margin: 0.4rem 0 0;
 	}
 
 	.numbering {

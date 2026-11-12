@@ -130,7 +130,8 @@ class Api:
             "POST", "/gear/components", secret,
             {"client_key": str(uuid.uuid4()), "kind": "main", "label": "Navigator",
              "serial": "N-0042", "relation": "owned", "acquisition_method": "purchase",
-             "acquired": "2024-05"},
+             "acquired": "2024-05", "repack_interval_days": 120,
+             "end_of_life_on": "2034-05-01"},
             201,
         )["component"]  # fmt: skip
         rig = self.ok("POST", "/gear/rigs", secret, {"client_key": str(uuid.uuid4()), "label": "Rig A"}, 201)  # fmt: skip
@@ -224,7 +225,14 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
     return {
         "places": sorted((p["name"], p["country"]) for p in r["places"]),
         "components": [
-            (c["label"], c["serial"], c["acquired"]) for c in r["components"]
+            (
+                c["label"],
+                c["serial"],
+                c["acquired"],
+                c["repack_interval_days"],
+                c["end_of_life_on"],
+            )
+            for c in r["components"]
         ],
         "rigs": [g["label"] for g in r["rigs"]],
         "stints": [(m["from_on"], m["until_on"]) for m in r["rig_stints"]],
@@ -335,6 +343,34 @@ def test_a_set_licence_is_kept_and_does_not_block_a_restore(api: Api) -> None:
     fresh = api.accounts.session()
     assert api.restore(fresh, json.dumps(old).encode()).status_code == 200
     assert api.ok("GET", "/me/licence", fresh) == {"licence": "none"}
+
+
+def test_an_earlier_file_without_gear_due_settings_restores_with_none(
+    api: Api,
+) -> None:
+    component = {
+        "id": str(uuid.uuid4()), "kind": "reserve", "label": "Reserve",
+        "relation": "owned", "created_at": "2026-10-01T10:00:00Z",
+        "updated_at": "2026-10-01T10:00:00Z",
+    }  # fmt: skip
+    target = api.accounts.session()
+    raw = json.dumps(_archive(components=[component])).encode()
+    done = api.restore(target, raw)
+    assert done.status_code == 200, done.text
+    (restored,) = json.loads(api.export(target))["records"]["components"]
+    assert (restored["repack_interval_days"], restored["end_of_life_on"]) == (
+        None,
+        None,
+    )
+    # Out-of-range settings are refused before any write.
+    bad = json.dumps(_archive(components=[component | {"repack_interval_days": 0}]))
+    response = api.send(
+        "/records/restore/check",
+        api.accounts.session(),
+        bad.encode(),
+        password=PASSWORD,
+    )
+    assert response.status_code == 422
 
 
 def test_an_exact_repeat_is_already_restored_and_writes_nothing(api: Api) -> None:

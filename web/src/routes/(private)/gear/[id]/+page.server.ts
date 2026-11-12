@@ -1,5 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import type { ComponentDetailOut, RigOut, ServiceOut } from '#lib/contracts/index.ts';
+import type { ComponentDetailOut, GearDueOut, RigOut, ServiceOut } from '#lib/contracts/index.ts';
+import { parseInterval } from '#lib/gear.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
@@ -24,11 +25,15 @@ export const load: PageServerLoad = async (event) => {
 	const id = event.params.id;
 	if (id !== 'new' && !isUuid(id)) error(404, 'Not found');
 	const api = createRequestApi();
-	const [detail, rigs] = await Promise.all([
+	const [detail, rigs, due] = await Promise.all([
 		id === 'new'
 			? Promise.resolve(null)
 			: call<ComponentDetailOut>(api, 'getComponent', { bearer: secret, id }),
-		call<RigOut[]>(api, 'listRigs', { bearer: secret }, isList)
+		call<RigOut[]>(api, 'listRigs', { bearer: secret }, isList),
+		// One owner-scoped list for all gear; this page shows this component's dates.
+		id === 'new'
+			? Promise.resolve(null)
+			: call<GearDueOut[]>(api, 'listGearDue', { bearer: secret }, isList)
 	]);
 	if (detail && !detail.ok) {
 		if (detail.reason === 'not_found') error(404, 'Not found');
@@ -38,6 +43,9 @@ export const load: PageServerLoad = async (event) => {
 		emailVerified: viewer.emailVerified,
 		detail: detail ? detail.value : null,
 		rigs: rigs.ok ? rigs.value.filter((r) => !r.archived) : [],
+		due: due?.ok ? due.value.filter((d) => d.component.id === id) : [],
+		// UTC day for the first render; the due list then uses the jumper's own day.
+		today: new Date().toISOString().slice(0, 10),
 		// One key per rendered form: resubmitting the same form is not a duplicate.
 		createKey: crypto.randomUUID(),
 		serviceKey: crypto.randomUUID()
@@ -56,7 +64,10 @@ function componentFields(data: FormData) {
 		relation: text(data, 'relation', 16) ?? 'owned',
 		acquisition_method: text(data, 'acquisition_method', 16),
 		acquired: text(data, 'acquired', 10),
-		notes: text(data, 'notes', 2000)
+		notes: text(data, 'notes', 2000),
+		// Only a reserve shows the interval field; anything else sends none (the default).
+		repack_interval_days: parseInterval(field(data, 'repack_interval_days', { max: 8 })),
+		end_of_life_on: text(data, 'end_of_life_on', 10)
 	};
 }
 
@@ -74,6 +85,10 @@ export const actions: Actions = {
 		const based = version(data);
 		if (!body.kind || !body.label)
 			return fail(400, { form: 'save', error: 'missing', values: echo(data), based });
+		if (body.repack_interval_days === 'invalid')
+			return fail(400, { form: 'save', error: 'repack_interval_invalid', values: echo(data), based });
+		if (body.end_of_life_on && !DATE.test(body.end_of_life_on))
+			return fail(400, { form: 'save', error: 'end_of_life_invalid', values: echo(data), based });
 		const api = createRequestApi();
 		if (event.params.id === 'new') {
 			const clientKey = field(data, 'client_key', { max: 64 });

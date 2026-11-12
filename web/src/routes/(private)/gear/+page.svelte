@@ -1,11 +1,20 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import DueList from '#lib/components/DueList.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
+	import { localToday } from '#lib/currency.ts';
 	import { formatDay } from '#lib/listings.ts';
 	import { KIND_LABEL, RELATION_LABEL, gearMessage } from '#lib/gear.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
+	// The server's UTC day until the browser gives the jumper's own calendar day.
+	// svelte-ignore state_referenced_locally
+	let today = $state(data.today);
+	onMount(() => {
+		today = localToday();
+	});
 	const errorFor = (name: string) =>
 		form && form.form === name && 'error' in form ? gearMessage(form.error) : undefined;
 </script>
@@ -32,6 +41,21 @@
 		<a href="/gear?archived=1">Show archived gear</a>
 	{/if}
 </p>
+
+{#if !data.archived && (data.due.length > 0 || data.dueFailed)}
+	<section class="card" aria-labelledby="due-heading">
+		<h2 id="due-heading">Due dates</h2>
+		{#if data.dueFailed}
+			<p class="form-error" role="alert">Due dates could not be loaded. Reload to try again.</p>
+		{:else}
+			<DueList items={data.due} {today} label="Due dates" detailed />
+		{/if}
+		<p class="hint">
+			From dates you entered and, for a reserve, your last recorded repack. Not an airworthiness
+			check: your rigger and the manufacturer decide that.
+		</p>
+	</section>
+{/if}
 
 <h2>{data.archived ? 'Archived components' : 'Components'}</h2>
 {#if !data.components.ok}
