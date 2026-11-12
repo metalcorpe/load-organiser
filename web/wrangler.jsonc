@@ -8,12 +8,14 @@
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
 	},
-	// No public deployment is configured for #144 (hosting proof is #161).
-	"workers_dev": false,
+	// Staging (#161): served on the free *.workers.dev address; a custom domain comes
+	// later. Pull-request preview URLs stay off: every build talks to the one API.
+	"workers_dev": true,
 	"preview_urls": false,
-	// Server-only. Local preview overrides this through `.dev.vars` or `--var`.
-	// A production origin must be https; see src/env.ts.
-	"vars": {
-		"API_ORIGIN": ""
-	}
+	// Variables are set in the Cloudflare dashboard (API_ORIGIN, APP_ORIGIN, and the
+	// secret API_PROXY_KEY); keep_vars stops a deploy from erasing them. None is
+	// declared here, so nothing in Git can overwrite them. Local preview passes them
+	// with --var (scripts/dev.sh, playwright.config.ts). See src/env.ts and
+	// docs/product/deploy-runbook.md.
+	"keep_vars": true
 }
