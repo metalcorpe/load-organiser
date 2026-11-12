@@ -9,7 +9,9 @@ logbook import removes exactly that one apostrophe again.
 
 The headings are ones the logbook import recognises, so the file imports back into
 an empty account as the same jumps. Gear used is written as text (the labels, then
-any other equipment) and comes back as "other equipment", not as gear links. Exit
+any other equipment, cut to 200 characters with an ellipsis) and comes back as
+"other equipment", not as gear links. Repeated jump numbers do not come back: the
+import keeps the first row with a number and skips the later ones. Exit
 time, time zone, altitude datum and links are not columns; the full export (JSON)
 keeps everything.
 """
@@ -50,7 +52,10 @@ TYPE_TEXT = {
     "other": "Other",
 }
 
-BOM = "﻿"
+BOM = "\ufeff"
+# The import keeps gear text as "other equipment", at most 200 characters: a longer
+# Gear cell is cut to fit with an ellipsis, so the file still imports.
+GEAR_MAX = 200
 _FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
 
 
@@ -73,7 +78,17 @@ class Row:
 def guard(value: str) -> str:
     """Text a spreadsheet would run as a formula starts with an apostrophe instead
     (and so does text already starting with one, so the import restores it exactly)."""
-    return f"'{value}" if value.startswith((*_FORMULA_START, "'")) else value
+    # Leading spaces do not stop a spreadsheet from reading a formula.
+    start = value.lstrip(" ")
+    return f"'{value}" if start.startswith((*_FORMULA_START, "'")) else value
+
+
+def gear_text(parts: list[str]) -> str:
+    """Labels and other equipment in one cell, cut to GEAR_MAX with an ellipsis."""
+    text = "; ".join(parts)
+    if len(text) <= GEAR_MAX:
+        return text
+    return text[: GEAR_MAX - 1].rstrip() + "\u2026"
 
 
 def _text(value: str | None) -> str:
@@ -102,7 +117,7 @@ def render(rows: list[Row]) -> bytes:
                 _number(r.deployment_altitude),
                 _number(r.freefall_seconds),
                 _text(r.notes),
-                _text("; ".join(r.gear)),
+                _text(gear_text(r.gear)),
             ]
         )
     return (BOM + out.getvalue()).encode("utf-8")

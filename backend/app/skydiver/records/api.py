@@ -250,8 +250,14 @@ def create_router(
         try:
             if from_on and until_on and from_on > until_on:
                 raise DirectoryRuleError("date_range_invalid")  # before the throttle
-            consume(SPREADSHEET_RULE, actor)
-            data = service().spreadsheet(actor, from_on=from_on, until_on=until_on)
+            # A slot taken just before building the file and given back if building
+            # it fails, so an error does not use up the five minutes.
+            hit = identity().reserve(rule=SPREADSHEET_RULE, key=str(actor.account_id))
+            try:
+                data = service().spreadsheet(actor, from_on=from_on, until_on=until_on)
+            except BaseException:
+                identity().refund(hit_id=hit)
+                raise
         except Errors as error:
             return _problem(error)
         day = datetime.now(UTC).date().isoformat()

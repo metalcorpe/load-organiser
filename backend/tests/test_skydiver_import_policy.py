@@ -349,6 +349,7 @@ def test_a_guarding_apostrophe_is_removed_once() -> None:
     assert policy.unguarded("''quoted") == "'quoted"
     assert policy.unguarded("'plain") == "'plain"
     assert policy.unguarded("'") == "'"
+    assert policy.unguarded("' =x") == " =x"
 
 
 def test_rows_carry_their_own_unit_country_deployment_and_gear() -> None:

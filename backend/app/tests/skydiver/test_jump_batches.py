@@ -2,6 +2,7 @@
 
 import uuid
 from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -13,6 +14,7 @@ from sqlmodel import Session, col, update
 
 from app.core.db import engine
 from app.skydiver.access.http import AccessDependencies
+from app.skydiver.access.policy import Actor
 from app.skydiver.directory.api import create_router as create_directory_router
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.directory.store import sql_directory_store_factory
@@ -22,7 +24,8 @@ from app.skydiver.gear.service import GearService
 from app.skydiver.gear.store import sql_gear_store_factory
 from app.skydiver.logbook.api import create_router
 from app.skydiver.logbook.service import LogbookService
-from app.skydiver.logbook.store import sql_logbook_store_factory
+from app.skydiver.logbook.store import SqlLogbookStore, sql_logbook_store_factory
+from app.skydiver.logbook.tables import SkydiverJump
 from app.tests.skydiver.support import Accounts
 
 NOW = datetime(2026, 11, 3, 12, 0, tzinfo=UTC)
@@ -356,3 +359,66 @@ def test_undo_checks_earlier_values_like_an_edit(api: Api) -> None:
     }
     assert api.get(owner, second["id"])["jump"]["location"]["id"] == keep
     assert api.get(owner, first[0]["id"])["jump"]["location"]["id"] == place
+
+
+def test_a_jump_saved_elsewhere_during_the_undo_is_skipped_not_fatal(api: Api) -> None:
+    owner = api.accounts.session()
+    jumps = api.jumps(owner, api.place(owner), 2)
+    batch = api.apply(owner, jumps, {"jump_type": "freefly"}).json()["batch_id"]
+    target = uuid.UUID(jumps[0]["id"])
+
+    class Racing(SqlLogbookStore):
+        """Another tab saves the first jump between the undo's read and its update."""
+
+        def update_jump(self, actor: Actor, jump_id: uuid.UUID, *args: Any, **kwargs: Any) -> None:  # fmt: skip
+            if jump_id == target:
+                with Session(engine) as other:
+                    other.execute(
+                        update(SkydiverJump)
+                        .where(col(SkydiverJump.id) == target)
+                        .values(version=SkydiverJump.version + 1)
+                    )
+                    other.commit()
+            super().update_jump(actor, jump_id, *args, **kwargs)
+
+    @contextmanager
+    def stores() -> Iterator[SqlLogbookStore]:
+        with Session(engine) as session:
+            try:
+                yield Racing(session)
+            except BaseException:
+                session.rollback()
+                raise
+            session.commit()
+
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: NOW)  # fmt: skip
+    service = LogbookService(stores=stores, clock=lambda: NOW, directory=directory)
+    viewer = api.accounts.service.current_viewer(secret=owner)
+    actor = Actor(
+        account_id=viewer.account_id, person_id=viewer.person_id,
+        email_verified=True, roles=frozenset(),
+    )  # fmt: skip
+    result = service.undo_batch(actor, uuid.UUID(batch))
+    assert result.restored == [uuid.UUID(jumps[1]["id"])]
+    assert result.skipped == [(target, "edited")]
+    assert api.get(owner, jumps[1]["id"])["jump"]["jump_type"] == "belly"
+    assert api.get(owner, jumps[0]["id"])["jump"]["jump_type"] == "freefly"
+
+
+def test_a_jump_already_holding_the_earlier_values_is_left_alone(api: Api) -> None:
+    """A merged dropzone resolves to the place the change set: nothing to put back."""
+    owner = api.accounts.session()
+    dupe, keep = api.venue(), api.venue()
+    jump = api.ok(
+        "POST", "/jumps", owner,
+        {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-20", "jump_type": "belly",
+         "venue_id": dupe},
+        201,
+    )["jump"]  # fmt: skip
+    batch = api.apply(owner, [jump], {"venue_id": keep, "place_id": None}).json()
+    api.ok("POST", f"/directory/venues/{dupe}/merge", api.reviewer, {"into": keep})
+    undo = api.undo(owner, batch["batch_id"])
+    assert undo.json() == {"restored": [], "skipped": []}
+    after = api.get(owner, jump["id"])
+    assert after["jump"]["version"] == 2  # not bumped by the undo
+    assert all("undo_of" not in e["detail"] for e in after["events"])

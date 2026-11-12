@@ -252,3 +252,41 @@ def test_importing_the_file_into_an_empty_account_gives_the_same_jumps(
     assert sorted((p["name"], p["country"]) for p in places) == [
         ("Olive grove", "GR"), ("Olive grove", "PT"),
     ]  # fmt: skip
+
+
+def test_long_gear_is_cut_to_fit_and_the_file_still_imports(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.ok("POST", "/places", owner, {"name": "Gear strip", "country": "PT"}, 201)  # fmt: skip
+    parts = []
+    for n in range(3):
+        body = {"client_key": str(uuid.uuid4()), "kind": "other", "label": f"{n}" + "x" * 79}  # fmt: skip
+        parts.append(api.ok("POST", "/gear/components", owner, body, 201)["component"]["id"])  # fmt: skip
+    api.jump(owner, place_id=place["id"], component_ids=parts)
+    raw = api.sheet(owner).content
+    gear = _rows(raw)[1][11]
+    assert len(gear) == 200 and gear.endswith("\u2026")
+    target = api.accounts.session()
+    imported = api.client.post(
+        "/api/skydiver/v1/jumps/import", content=raw,
+        headers={"authorization": f"Bearer {target}", "content-type": "text/csv"},
+    )  # fmt: skip
+    assert imported.status_code == 200, imported.text
+    assert imported.json()["item"]["counts"]["skipped"] == 0
+    (copy,) = api.jumps(target)
+    assert copy["other_gear"] == gear
+
+
+def test_a_failed_download_does_not_use_up_the_five_minutes(
+    api: Api, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    owner = api.accounts.session()
+
+    def broken(*_: Any, **__: Any) -> bytes:
+        raise RuntimeError("database went away")
+
+    monkeypatch.setattr(RecordsService, "spreadsheet", broken)
+    with pytest.raises(RuntimeError):
+        api.sheet(owner)
+    monkeypatch.undo()
+    assert api.sheet(owner).status_code == 200
+    assert api.sheet(owner).status_code == 429

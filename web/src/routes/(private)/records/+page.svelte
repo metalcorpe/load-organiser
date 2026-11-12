@@ -50,8 +50,9 @@
 	</p>
 	<p class="hint">
 		The columns are the ones the spreadsheet import reads, so the file can be imported into another
-		account. Gear used comes back as text, not as links to your gear. Exit time, time zone and links
-		are only in the full export.
+		account. Gear used comes back as text, not as links to your gear, cut to 200 characters. A jump
+		number used twice comes back only once (the import skips the repeat). Exit time, time zone and
+		links are only in the full export. If a download fails, you can try again straight away.
 	</p>
 	{#if sheetError}<p class="form-error" role="alert" id="sheet-error">{sheetError}</p>{/if}
 	<!-- novalidate: the server checks the dates and explains. -->

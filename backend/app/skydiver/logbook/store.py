@@ -146,6 +146,11 @@ class SqlLogbookStore:
         return self._with_components(list(rows))
 
     def latest_batch(self, actor: Actor) -> BatchRecord | None:
+        # The newest change of many jumps still on record. If every jump of the
+        # newest one was deleted, the one before it is found again: its undo still
+        # needs the 24 hours and puts back only jumps untouched since (compare-and-
+        # swap on the version it produced), so it never overwrites later work. No
+        # extra per-person storage is kept for that case.
         detail = type_coerce(col(E.detail), JSONB())
         latest = (
             self._s.execute(

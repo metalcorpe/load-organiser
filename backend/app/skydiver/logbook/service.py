@@ -842,14 +842,20 @@ class LogbookService:
                 links = components is not None and set(components) != set(
                     current.component_ids
                 )
-                store.update_jump(
-                    actor,
-                    jump_id,
-                    diff,
-                    components if links else None,
-                    now,
-                    expected_version=current.version,
-                )
+                if not diff and not links:
+                    continue  # already holds the earlier values: nothing to put back
+                try:
+                    store.update_jump(
+                        actor,
+                        jump_id,
+                        diff,
+                        components if links else None,
+                        now,
+                        expected_version=current.version,
+                    )
+                except EditConflict:  # saved elsewhere between the read and this update
+                    skipped.append((jump_id, "edited"))
+                    continue
                 undo: dict[str, Any] = {
                     k: {"from": _plain(before[k]), "to": _plain(diff[k])}
                     for k in sorted(diff)

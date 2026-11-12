@@ -434,7 +434,7 @@ _GUARDED = ("=", "+", "-", "@", "\t", "\r", "'")
 
 
 def unguarded(cell: str) -> str:
-    if len(cell) > 1 and cell[0] == "'" and cell[1:].startswith(_GUARDED):
+    if len(cell) > 1 and cell[0] == "'" and cell[1:].lstrip(" ").startswith(_GUARDED):
         return cell[1:]
     return cell
 

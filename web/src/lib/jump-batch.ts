@@ -76,6 +76,8 @@ export const BATCH_MESSAGES: Record<string, string> = {
 	undo_unavailable:
 		'That change can no longer be undone: a later change replaced it, or more than 24 hours have passed.',
 	already_undone: 'That change was already undone.',
+	edit_conflict:
+		'A jump changed while this was being saved (perhaps in another tab). Reload the logbook and try again.',
 	email_unverified: 'Confirm your email address before changing jumps.',
 	not_authenticated: 'Your session has ended. Sign in again.',
 	invalid_input: 'Check what you chose.',

@@ -180,6 +180,7 @@ def test_spreadsheet_guards_formula_text_and_quotes_per_rfc_4180() -> None:
         ("\rCR", "'\rCR"),
         ("'quoted", "''quoted"),
         ("Plain = fine", "Plain = fine"),
+        (" =SUM(A1)", "' =SUM(A1)"),  # a spreadsheet ignores leading spaces
     ]:
         assert spreadsheet.guard(text) == guarded, text
 

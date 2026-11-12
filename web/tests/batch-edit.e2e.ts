@@ -57,7 +57,8 @@ test.describe('changing many jumps at once', () => {
 
 		// Step 2 applied: the three are freefly, the fourth is untouched.
 		await expect(page).toHaveURL(/\/jumps\?changed=3&skipped=0&unchanged=0$/);
-		await expect(page.getByText('Changed 3 jumps.')).toBeVisible();
+		// The status line; the undo card's "It changed 3 jumps." is a different sentence.
+		await expect(page.getByText('Changed 3 jumps.', { exact: true })).toBeVisible();
 		const list = page.getByRole('list', { name: 'Jumps' });
 		await expect(list.getByRole('listitem').filter({ hasText: 'Freefly' })).toHaveCount(3);
 		await expect(list.getByRole('listitem').filter({ hasText: '#1' })).toContainText('Belly');
@@ -70,7 +71,7 @@ test.describe('changing many jumps at once', () => {
 		// One undo for the whole change.
 		await page.goto('/jumps');
 		await page.getByRole('button', { name: 'Undo this change' }).click();
-		await expect(page.getByText('Put back 3 jumps.')).toBeVisible();
+		await expect(page.getByText('Put back 3 jumps.', { exact: true })).toBeVisible();
 		await expect(page.getByRole('list', { name: 'Jumps' }).getByRole('listitem').filter({ hasText: 'Freefly' })).toHaveCount(0);
 		await expect(page.getByRole('button', { name: 'Undo this change' })).toHaveCount(0);
 	});
