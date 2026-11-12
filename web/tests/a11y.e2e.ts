@@ -116,6 +116,11 @@ async function world(): Promise<World> {
 	});
 	// A stated licence: currency, the next-licence line (Logbook) and section (History).
 	await apiCall('PUT', '/me/licence', { bearer, body: { licence: 'b' } });
+	// A prior jump count: History's milestones include ones "before you kept this logbook".
+	await apiCall('PUT', '/history/baseline', {
+		bearer,
+		body: { prior_jumps: 30, before_on: '2026-01-01' }
+	});
 
 	return {
 		member,

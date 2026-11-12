@@ -1,11 +1,12 @@
 """#154 prior-history totals and currency guidance as plain values (no database)."""
 
-from datetime import date, timedelta
+import uuid
+from datetime import date, time, timedelta
 
 import pytest
 
 from app.skydiver.directory.policy import DirectoryRuleError
-from app.skydiver.history import currency, licences, policy
+from app.skydiver.history import currency, licences, milestones, policy
 from app.skydiver.history.policy import Baseline
 
 TODAY = date(2026, 11, 4)
@@ -191,3 +192,136 @@ def test_no_licence_gives_nothing_and_d_has_no_next_step() -> None:
     assert d is not None
     assert (d.next_licence, d.requirement) == (None, None)
     assert not d.jumps_met and not d.freefall_met
+
+
+# -- milestones -------------------------------------------------------------------
+
+M = milestones.MilestoneKind
+VENUE = ("venue", uuid.UUID(int=1))
+
+
+def _entry(
+    on: str, *, n: int | None = None, at: str | None = None, kind: str = "belly",
+    freefall: int | None = None, place: tuple[str, uuid.UUID] = VENUE, i: int = 0,
+) -> milestones.Entry:  # fmt: skip
+    return milestones.Entry(
+        id=uuid.UUID(int=1000 + i), jumped_on=date.fromisoformat(on), jump_number=n,
+        exit_time=time.fromisoformat(at) if at else None, jump_type=kind,
+        freefall_seconds=freefall, place=place,
+    )  # fmt: skip
+
+
+def _days(count: int, start: date = date(2025, 1, 1)) -> list[milestones.Entry]:
+    return [_entry((start + timedelta(days=i)).isoformat(), i=i) for i in range(count)]
+
+
+def _counts(found: list[milestones.Milestone]) -> list[tuple[int | None, date | None]]:
+    return [(m.number, m.on) for m in found if m.kind is M.JUMP_COUNT]
+
+
+def test_jump_count_marks_are_fixed_then_every_thousand() -> None:
+    assert list(milestones.jump_counts(24)) == [1]
+    assert list(milestones.jump_counts(25)) == [1, 25]
+    assert list(milestones.jump_counts(3500)) == [
+        1, 25, 50, 100, 200, 250, 500, 1000, 2000, 3000,
+    ]  # fmt: skip
+
+
+def test_the_25th_entry_is_the_25th_jump_without_a_prior_count() -> None:
+    entries = _days(26)
+    found = milestones.milestones(entries, prior=None)
+    assert _counts(found) == [(25, date(2025, 1, 25)), (1, date(2025, 1, 1))]
+    assert _counts(milestones.milestones(entries[:24], prior=None)) == [(1, date(2025, 1, 1))]  # fmt: skip
+
+
+def test_counts_within_the_prior_jumps_are_undated_and_after_it_count_on() -> None:
+    # 30 declared before 2025-02-01; one entry before the cutoff is already within it.
+    entries = [_entry("2025-01-15", i=99)] + _days(21, date(2025, 2, 1))
+    prior = milestones.Prior(30, date(2025, 2, 1))
+    found = milestones.milestones(entries, prior=prior)
+    # The 50th jump is the 20th entry on or after the cutoff.
+    assert _counts(found) == [
+        (50, date(2025, 2, 20)),
+        (25, None),  # before this logbook
+        (1, None),
+    ]
+    assert [m.jump_id for m in found if m.on is None] == [None, None]
+    # An inconsistent prior count dates no jump count at all.
+    assert _counts(milestones.milestones(entries, prior=None, count_jumps=False)) == []
+
+
+def test_a_milestone_exactly_at_the_prior_count_is_before_the_logbook() -> None:
+    prior = milestones.Prior(25, date(2025, 1, 1))
+    found = milestones.milestones(_days(1), prior=prior)
+    assert _counts(found) == [(25, None), (1, None)]
+
+
+def test_same_day_entries_follow_the_jump_number_then_exit_time() -> None:
+    # Recorded out of order on one day: the jumper's numbers decide which is first.
+    second = _entry("2025-03-01", n=2, i=1, kind="freefly")
+    first = _entry("2025-03-01", n=1, i=2, kind="belly")
+    found = milestones.milestones([second, first], prior=None)
+    assert _counts(found) == [(1, date(2025, 3, 1))]
+    assert next(m for m in found if m.number == 1).jump_id == first.id
+    # Newest first: the later jump's milestone comes before the earlier one's.
+    assert [(m.kind, m.jump_id) for m in found] == [
+        (M.JUMP_TYPE, second.id),
+        (M.JUMP_COUNT, first.id),
+        (M.JUMP_TYPE, first.id),
+        (M.PLACE, first.id),
+    ]
+    # Without numbers, the exit time orders them.
+    late = _entry("2025-03-01", at="15:00", i=1)
+    early = _entry("2025-03-01", at="09:30", i=2)
+    found = milestones.milestones([late, early], prior=None)
+    assert next(m for m in found if m.number == 1).jump_id == early.id
+
+
+def test_first_of_each_type_skips_unspecified() -> None:
+    entries = [
+        _entry("2025-01-01", kind="unspecified", i=1),
+        _entry("2025-01-02", kind="belly", i=2),
+        _entry("2025-01-03", kind="belly", i=3),
+        _entry("2025-01-04", kind="wingsuit", i=4),
+    ]
+    found = milestones.milestones(entries, prior=None)
+    assert [(m.jump_type, m.on) for m in found if m.kind is M.JUMP_TYPE] == [
+        ("wingsuit", date(2025, 1, 4)),
+        ("belly", date(2025, 1, 2)),
+    ]
+
+
+def test_freefall_hours_date_the_entry_that_crossed_them() -> None:
+    start = date(2025, 1, 1)
+    # 600 s each (the logbook's per-jump maximum), one entry without a time.
+    entries = [
+        _entry((start + timedelta(days=i)).isoformat(), freefall=600, i=i)
+        for i in range(29)
+    ] + [
+        _entry("2025-03-01", i=40),  # none recorded: adds nothing
+        _entry("2025-03-02", freefall=599, i=41),  # 17,999 s: 1 s short of 5 hours
+        _entry("2025-03-03", freefall=1, i=42),
+    ]
+    found = milestones.milestones(entries, prior=None)
+    assert [(m.hours, m.on) for m in found if m.kind is M.FREEFALL] == [
+        (5, date(2025, 3, 3)),
+        (1, date(2025, 1, 6)),  # the 6th entry: exactly 3,600 s
+    ]
+
+
+def test_only_the_five_most_recent_new_places_are_listed() -> None:
+    entries = [
+        _entry(f"2025-01-{d:02d}", place=("place", uuid.UUID(int=d)), i=d)
+        for d in range(1, 8)
+    ] + [
+        _entry("2025-01-20", place=("place", uuid.UUID(int=1)), i=20)
+    ]  # a return visit
+    found = milestones.milestones(entries, prior=None)
+    places = [m.place for m in found if m.kind is M.PLACE]
+    assert places == [("place", uuid.UUID(int=d)) for d in (7, 6, 5, 4, 3)]
+
+
+def test_two_thousand_entries_in_one_pass() -> None:
+    entries = _days(2000)
+    found = milestones.milestones(entries, prior=None)
+    assert _counts(found)[0] == (2000, date(2025, 1, 1) + timedelta(days=1999))

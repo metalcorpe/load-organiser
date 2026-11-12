@@ -22,6 +22,7 @@ export type {
 	LicenceOut,
 	LicenceProgressOut,
 	LocationOut,
+	MilestonesOut,
 	OpportunityCountriesOut,
 	OpportunityDetailOut,
 	OpportunityOut,

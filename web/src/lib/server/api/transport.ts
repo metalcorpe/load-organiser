@@ -228,6 +228,8 @@ export const OPERATIONS = {
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
 	getHistory: { method: 'GET', path: `${BETA}/history`, maxBodyBytes: 1024 * 1024 },
+	// Computed on read from all entries; a few dozen lines at most.
+	getMilestones: { method: 'GET', path: `${BETA}/history/milestones`, maxBodyBytes: 256 * 1024 },
 	previewBaseline: {
 		method: 'GET',
 		path: `${BETA}/history/baseline/preview`,

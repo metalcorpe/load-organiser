@@ -1530,6 +1530,68 @@ export type MergeIn = {
 };
 
 /**
+ * MilestoneOut
+ */
+export type MilestoneOut = {
+    /**
+     * Hours
+     *
+     * `freefall`: recorded hours crossed.
+     */
+    hours: number | null;
+    /**
+     * Jump Id
+     */
+    jump_id: string | null;
+    /**
+     * Jump Type
+     *
+     * `jump_type`: the first of this type.
+     */
+    jump_type: string | null;
+    /**
+     * Kind
+     */
+    kind: 'jump_count' | 'freefall' | 'jump_type' | 'place';
+    /**
+     * `place`: the first jump here.
+     */
+    location: LocationOut | null;
+    /**
+     * Number
+     *
+     * `jump_count`: the Nth jump.
+     */
+    number: number | null;
+    /**
+     * On
+     *
+     * The entry's date; null for a jump count within your declared prior jumps (before you kept this logbook).
+     */
+    on: string | null;
+};
+
+/**
+ * MilestonesOut
+ *
+ * Private milestones derived from your own entries; never shared.
+ */
+export type MilestonesOut = {
+    /**
+     * Counted
+     *
+     * Jump counts number your entries (`entries`), continue from your declared prior jumps (`with_prior`), or are left out while that count disagrees with your entries (`unchecked`).
+     */
+    counted: 'entries' | 'with_prior' | 'unchecked';
+    /**
+     * Items
+     *
+     * Newest first; jump counts before this logbook last. Only the five most recent first jumps at a new place.
+     */
+    items: Array<MilestoneOut>;
+};
+
+/**
  * ModerationIn
  */
 export type ModerationIn = {
@@ -6988,6 +7050,49 @@ export type PreviewBaselineResponses = {
 };
 
 export type PreviewBaselineResponse = PreviewBaselineResponses[keyof PreviewBaselineResponses];
+
+export type GetMilestonesData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/history/milestones';
+};
+
+export type GetMilestonesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type GetMilestonesError = GetMilestonesErrors[keyof GetMilestonesErrors];
+
+export type GetMilestonesResponses = {
+    /**
+     * Successful Response
+     */
+    200: MilestonesOut;
+};
+
+export type GetMilestonesResponse = GetMilestonesResponses[keyof GetMilestonesResponses];
 
 export type ListJumpsData = {
     body?: never;

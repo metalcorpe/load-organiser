@@ -3045,6 +3045,132 @@
         "title": "MergeIn",
         "type": "object"
       },
+      "MilestoneOut": {
+        "properties": {
+          "hours": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`freefall`: recorded hours crossed.",
+            "title": "Hours"
+          },
+          "jump_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Id"
+          },
+          "jump_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`jump_type`: the first of this type.",
+            "title": "Jump Type"
+          },
+          "kind": {
+            "enum": [
+              "jump_count",
+              "freefall",
+              "jump_type",
+              "place"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`place`: the first jump here."
+          },
+          "number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`jump_count`: the Nth jump.",
+            "title": "Number"
+          },
+          "on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The entry's date; null for a jump count within your declared prior jumps (before you kept this logbook).",
+            "title": "On"
+          }
+        },
+        "required": [
+          "kind",
+          "on",
+          "jump_id",
+          "number",
+          "hours",
+          "jump_type",
+          "location"
+        ],
+        "title": "MilestoneOut",
+        "type": "object"
+      },
+      "MilestonesOut": {
+        "description": "Private milestones derived from your own entries; never shared.",
+        "properties": {
+          "counted": {
+            "description": "Jump counts number your entries (`entries`), continue from your declared prior jumps (`with_prior`), or are left out while that count disagrees with your entries (`unchecked`).",
+            "enum": [
+              "entries",
+              "with_prior",
+              "unchecked"
+            ],
+            "title": "Counted",
+            "type": "string"
+          },
+          "items": {
+            "description": "Newest first; jump counts before this logbook last. Only the five most recent first jumps at a new place.",
+            "items": {
+              "$ref": "#/components/schemas/MilestoneOut"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "counted"
+        ],
+        "title": "MilestonesOut",
+        "type": "object"
+      },
       "ModerationIn": {
         "properties": {
           "hidden": {
@@ -14174,6 +14300,86 @@
           }
         },
         "summary": "Preview Baseline",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history/milestones": {
+      "get": {
+        "description": "Dated milestones from your own entries, newest first. Computed on read.",
+        "operationId": "getMilestones",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MilestonesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Milestones",
         "tags": [
           "skydiver-history"
         ]

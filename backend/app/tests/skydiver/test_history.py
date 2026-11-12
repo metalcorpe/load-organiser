@@ -2,7 +2,7 @@
 
 import uuid
 from collections.abc import Iterator
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 import httpx2
@@ -363,6 +363,55 @@ def test_progress_to_the_next_licence_from_own_entries(api: Api) -> None:
         False,
         60,
     )
+
+
+def test_milestones_derive_from_own_entries_and_the_prior_count(api: Api) -> None:
+    owner = api.accounts.session()
+    empty = api.ok("GET", "/history/milestones", owner)
+    assert empty == {"items": [], "counted": "entries"}
+    venue = api.venue()
+    api.jump(owner, "2026-01-10", venue_id=venue["id"], jump_type="wingsuit", freefall_seconds=600)  # fmt: skip
+    place = api.place(owner)
+    start = date(2026, 1, 11)
+    for i in range(24):  # 11 January to 3 February
+        api.jump(owner, (start + timedelta(days=i)).isoformat(), place_id=place)
+
+    found = api.ok("GET", "/history/milestones", owner)
+    assert found["counted"] == "entries"
+    items = found["items"]
+    assert [(m["kind"], m["on"], m["number"]) for m in items if m["kind"] == "jump_count"] == [
+        ("jump_count", "2026-02-03", 25), ("jump_count", "2026-01-10", 1),
+    ]  # fmt: skip
+    assert (items[0]["kind"], items[0]["number"]) == ("jump_count", 25)  # newest first
+    assert [(m["jump_type"], m["on"]) for m in items if m["kind"] == "jump_type"] == [
+        ("belly", "2026-01-11"), ("wingsuit", "2026-01-10"),
+    ]  # fmt: skip
+    firsts = [(m["location"]["kind"], m["location"]["name"], m["on"]) for m in items if m["kind"] == "place"]  # fmt: skip
+    assert firsts == [
+        ("place", "Farm strip", "2026-01-11"), ("venue", venue["name"], "2026-01-10"),
+    ]  # fmt: skip
+    assert not [m for m in items if m["kind"] == "freefall"]  # 600 s: under an hour
+
+    # 10 declared before 15 January (5 entries before it are within them): the 25th
+    # jump is the 15th entry from 15 January; the 1st is before this logbook.
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 10, "before_on": "2026-01-15"})  # fmt: skip
+    found = api.ok("GET", "/history/milestones", owner)
+    assert found["counted"] == "with_prior"
+    assert [(m["number"], m["on"], m["jump_id"] is None) for m in found["items"] if m["kind"] == "jump_count"] == [  # fmt: skip
+        (25, "2026-01-29", False), (1, None, True),
+    ]  # fmt: skip
+
+    # A prior count below the entries before its date dates no jump count.
+    base = api.history(owner)["baseline"]
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 2, "before_on": "2026-01-15", "version": base["version"]})  # fmt: skip
+    found = api.ok("GET", "/history/milestones", owner)
+    assert found["counted"] == "unchecked"
+    assert not [m for m in found["items"] if m["kind"] == "jump_count"]
+
+    # Owner-scoped: nobody else sees any of it; no session, no answer.
+    other = api.ok("GET", "/history/milestones", api.accounts.session())
+    assert other == {"items": [], "counted": "entries"}
+    assert api.call("GET", "/history/milestones").status_code == 401
 
 
 def test_the_licence_is_owner_only_and_needs_a_confirmed_email(api: Api) -> None:

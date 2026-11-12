@@ -7,6 +7,7 @@ declares. A correction carries the `version` it was based on (409 `edit_conflict
 a first declaration carries none. Nothing here is shared, verified or a credential.
 """
 
+import uuid
 from collections.abc import Callable
 from datetime import date, datetime
 from typing import Annotated, Any, Literal
@@ -23,8 +24,9 @@ from app.skydiver.history import licences
 from app.skydiver.history.currency import SOURCE, Currency, Licence
 from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Totals
-from app.skydiver.history.service import HistoryService, Summary
+from app.skydiver.history.service import HistoryService, MilestoneList, Summary
 from app.skydiver.logbook.api import ComponentRefOut, LocationOut
+from app.skydiver.logbook.service import Location
 
 PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
@@ -166,6 +168,33 @@ class HistoryOut(BaseModel):
     progress: LicenceProgressOut | None = Field(description="Null without a licence.")
 
 
+class MilestoneOut(BaseModel):
+    kind: Literal["jump_count", "freefall", "jump_type", "place"]
+    on: date | None = Field(
+        description="The entry's date; null for a jump count within your declared"
+        " prior jumps (before you kept this logbook)."
+    )
+    jump_id: uuid.UUID | None
+    number: int | None = Field(description="`jump_count`: the Nth jump.")
+    hours: int | None = Field(description="`freefall`: recorded hours crossed.")
+    jump_type: str | None = Field(description="`jump_type`: the first of this type.")
+    location: LocationOut | None = Field(description="`place`: the first jump here.")
+
+
+class MilestonesOut(BaseModel):
+    """Private milestones derived from your own entries; never shared."""
+
+    items: list[MilestoneOut] = Field(
+        description="Newest first; jump counts before this logbook last. Only the"
+        " five most recent first jumps at a new place."
+    )
+    counted: Literal["entries", "with_prior", "unchecked"] = Field(
+        description="Jump counts number your entries (`entries`), continue from your"
+        " declared prior jumps (`with_prior`), or are left out while that count"
+        " disagrees with your entries (`unchecked`)."
+    )
+
+
 class BaselinePreviewOut(BaseModel):
     current: TotalsOut
     proposed: TotalsOut
@@ -214,6 +243,34 @@ def _progress(p: Progress | None) -> LicenceProgressOut | None:
     )
 
 
+def _location(loc: Location) -> LocationOut:
+    return LocationOut(
+        kind="venue" if loc.kind == "venue" else "place",
+        id=loc.id,
+        name=loc.name,
+        country=loc.country,
+        closed=loc.closed,
+    )
+
+
+def _milestones(found: MilestoneList) -> MilestonesOut:
+    return MilestonesOut(
+        items=[
+            MilestoneOut(
+                kind=v.milestone.kind.value,
+                on=v.milestone.on,
+                jump_id=v.milestone.jump_id,
+                number=v.milestone.number,
+                hours=v.milestone.hours,
+                jump_type=v.milestone.jump_type,
+                location=_location(v.location) if v.location else None,
+            )
+            for v in found.items
+        ],
+        counted=found.counted,
+    )
+
+
 def _history(s: Summary) -> HistoryOut:
     return HistoryOut(
         totals=_totals(s.totals),
@@ -231,16 +288,7 @@ def _history(s: Summary) -> HistoryOut:
         months=[MonthOut(month=m, jumps=n) for m, n in s.months],
         by_type=[TypeCountOut(jump_type=k, jumps=n) for k, n in s.by_type],
         by_location=[
-            LocationCountOut(
-                location=LocationOut(
-                    kind="venue" if loc.kind == "venue" else "place",
-                    id=loc.id,
-                    name=loc.name,
-                    country=loc.country,
-                    closed=loc.closed,
-                ),
-                jumps=n,
-            )
+            LocationCountOut(location=_location(loc), jumps=n)
             for loc, n in s.by_location
         ],
         by_component=[
@@ -302,6 +350,16 @@ def create_router(
     )
     def get_history(actor: Reader) -> HistoryOut:
         return _history(service().summary(actor))
+
+    @router.get(
+        "/history/milestones",
+        operation_id="getMilestones",
+        response_model=MilestonesOut,
+        dependencies=deps,
+    )
+    def get_milestones(actor: Reader) -> MilestonesOut:
+        """Dated milestones from your own entries, newest first. Computed on read."""
+        return _milestones(service().milestones(actor))
 
     @router.get(
         "/history/baseline/preview",
