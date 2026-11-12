@@ -1,7 +1,8 @@
 import { redirect } from '@sveltejs/kit';
-import type { HistoryOut, JumpPageOut } from '#lib/contracts/index.ts';
+import type { HistoryOut, JumpNumberingOut, JumpPageOut } from '#lib/contracts/index.ts';
 import { hasJumpFilters, jumpsQuery, parseJumpFilters } from '#lib/jump-filters.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
+import { numberingNotes } from '#lib/jumps.ts';
 import { isHistory } from '#lib/server/history.ts';
 import { call, isPage } from '#lib/server/maintenance.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
@@ -20,7 +21,7 @@ export const load: PageServerLoad = async (event) => {
 	const filters = parseJumpFilters(event.url.searchParams);
 	const filtered = hasJumpFilters(filters);
 	const api = createRequestApi();
-	const [page, history] = await Promise.all([
+	const [page, history, numbering] = await Promise.all([
 		call<JumpPageOut>(
 			api,
 			'listJumps',
@@ -28,7 +29,11 @@ export const load: PageServerLoad = async (event) => {
 			(body) => isPage(body) && typeof (body as JumpPageOut).recorded_total === 'number'
 		),
 		// Also the place choices of the filter form: every place with a recorded jump.
-		call<HistoryOut>(api, 'getHistory', { bearer: secret }, isHistory)
+		call<HistoryOut>(api, 'getHistory', { bearer: secret }, isHistory),
+		// Gaps and repeats in the jumper's own numbering: first, unfiltered page only.
+		cursor || filtered
+			? null
+			: call<JumpNumberingOut>(api, 'getJumpNumbering', { bearer: secret })
 	]);
 
 	// Recent places come from the newest jumps on this page: distinct, newest first, open ones only.
@@ -71,6 +76,7 @@ export const load: PageServerLoad = async (event) => {
 		places,
 		recent,
 		continueFrom,
+		numbering: numbering?.ok ? numberingNotes(numbering.value) : { notes: [], more: null },
 		summary:
 			history.ok && totals
 				? {

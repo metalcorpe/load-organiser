@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { ComponentDetailOut, JumpDetailOut } from '#lib/contracts/index.ts';
+import type { ComponentDetailOut, JumpDetailOut, JumpNumberingOut } from '#lib/contracts/index.ts';
 import { isCountryCode } from '#lib/countries.ts';
-import { nextJumpValues } from '#lib/jumps.ts';
+import { nextJumpValues, numberHint, proposedNumber } from '#lib/jumps.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { createPlace } from '#lib/server/directory.ts';
@@ -42,6 +42,15 @@ export const load: PageServerLoad = async (event) => {
 			: null;
 	const sameDay = event.url.searchParams.get('day') === 'same';
 	const prefill = source?.ok ? nextJumpValues(source.value.jump, { sameDay }) : null;
+	// Without "Log the next jump", propose one after the highest number recorded (editable).
+	// A jumper who never numbered a jump gets no proposal; a failed read just gives none.
+	const numbering =
+		chosen && !prefill
+			? await call<JumpNumberingOut>(api, 'getJumpNumbering', { bearer: secret })
+			: null;
+	const highest = numbering?.ok ? numbering.value.highest : null;
+	const next = proposedNumber(highest);
+	const suggestion = next === null ? null : { number: String(next), hint: numberHint(highest) };
 	return {
 		emailVerified: viewer.emailVerified,
 		placesOk: places !== null,
@@ -51,6 +60,7 @@ export const load: PageServerLoad = async (event) => {
 		recent: chosen ? [] : await recentLocations(api, secret),
 		gear: chosen ? await gearFor(api, secret) : { ok: true, items: [] },
 		prefill,
+		suggestion,
 		// One key per rendered form; a refused or unconfirmed send reuses it.
 		keys: { jump: crypto.randomUUID(), component: crypto.randomUUID() }
 	};

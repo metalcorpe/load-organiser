@@ -212,6 +212,7 @@ export const OPERATIONS = {
 		maxBodyBytes: 1024 * 1024
 	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
+	getJumpNumbering: { method: 'GET', path: `${BETA}/jumps/numbering` },
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },

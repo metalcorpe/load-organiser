@@ -33,6 +33,7 @@ from app.skydiver.logbook.service import (
     Jump,
     JumpEvent,
     LogbookStore,
+    NumberedRef,
     PlaceRef,
     Receipt,
     StoreFactory,
@@ -181,6 +182,15 @@ class SqlLogbookStore:
             .distinct()
         ).scalars()
         return [v for v in rows if v is not None]
+
+    def numbered(self, actor: Actor) -> list[NumberedRef]:
+        rows = self._s.execute(
+            select(col(J.id), col(J.jumped_on), col(J.jump_number))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.jump_number).is_not(None))
+            .order_by(col(J.jump_number), col(J.jumped_on), col(J.id))
+        )
+        return [NumberedRef(i, on, int(n)) for i, on, n in rows.all()]
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
         number = values.get("jump_number")

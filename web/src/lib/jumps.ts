@@ -1,5 +1,5 @@
 /** Labels and messages for the private jump logbook (#153). Client-safe. */
-import type { JumpOut } from './contracts/index.ts';
+import type { JumpNumberingOut, JumpOut } from './contracts/index.ts';
 
 export const JUMP_TYPE_LABEL: Record<string, string> = {
 	unspecified: 'Not specified',
@@ -110,4 +110,54 @@ export function nextJumpValues(
 		},
 		selected: jump.components.filter((c) => !c.archived).map((c) => c.id)
 	};
+}
+
+const MAX_JUMP_NUMBER = 1_000_000;
+
+/** The number to propose for a new jump: one after the highest, or none if never numbered. */
+export function proposedNumber(highest: number | null | undefined): number | null {
+	return typeof highest === 'number' && highest >= 1 && highest < MAX_JUMP_NUMBER ? highest + 1 : null;
+}
+
+/** The hint shown beside a proposed number. */
+export function numberHint(highest: number | null | undefined): string | null {
+	return proposedNumber(highest) === null ? null : `Your last numbered jump is #${highest}.`;
+}
+
+const TIMES = ['', 'once', 'twice', 'three times'];
+
+export type NumberingNote =
+	| { kind: 'gap'; text: string; before: { id: string; number: number }; after: { id: string; number: number } }
+	| { kind: 'repeat'; text: string; jumps: { id: string; jumped_on: string }[] };
+
+/** Brief notes on gaps and repeats in the jumper's own numbering; empty when all is in order. */
+export function numberingNotes(numbering: JumpNumberingOut): { notes: NumberingNote[]; more: string | null } {
+	const n = (value: number) => value.toLocaleString('en-GB');
+	const notes: NumberingNote[] = [
+		...numbering.gaps.map(
+			(gap): NumberingNote => ({
+				kind: 'gap',
+				text:
+					gap.first === gap.last
+						? `Number ${n(gap.first)} is missing`
+						: `Numbers ${n(gap.first)}–${n(gap.last)} are missing`,
+				before: { id: gap.before.id, number: gap.before.jump_number },
+				after: { id: gap.after.id, number: gap.after.jump_number }
+			})
+		),
+		...numbering.repeats.map(
+			(repeat): NumberingNote => ({
+				kind: 'repeat',
+				text: `#${n(repeat.jump_number)} is used ${TIMES[repeat.uses] ?? `${repeat.uses} times`}`,
+				jumps: repeat.jumps.map((j) => ({ id: j.id, jumped_on: j.jumped_on }))
+			})
+		)
+	];
+	const extraGaps = numbering.gap_count - numbering.gaps.length;
+	const extraRepeats = numbering.repeat_count - numbering.repeats.length;
+	const parts = [
+		extraGaps > 0 ? `${extraGaps} more ${extraGaps === 1 ? 'gap' : 'gaps'}` : '',
+		extraRepeats > 0 ? `${extraRepeats} more repeated ${extraRepeats === 1 ? 'number' : 'numbers'}` : ''
+	].filter(Boolean);
+	return { notes, more: parts.length ? `And ${parts.join(' and ')}.` : null };
 }

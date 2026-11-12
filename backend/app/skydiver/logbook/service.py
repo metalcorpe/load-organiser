@@ -182,6 +182,13 @@ class JumpPage:
     matched: Totals
 
 
+@dataclass(frozen=True)
+class NumberedRef:
+    id: uuid.UUID
+    jumped_on: date
+    number: int
+
+
 class LogbookStore(Protocol):
     def lock_owner(self, actor: Actor) -> None:
         """Serialise this person's jump-limit checks (manual creates and imports)."""
@@ -203,6 +210,9 @@ class LogbookStore(Protocol):
     def totals(self, actor: Actor, where: Criteria) -> Totals: ...
     def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
         """The distinct venues of the owner's jumps, as stored (before merges)."""
+
+    def numbered(self, actor: Actor) -> list[NumberedRef]:
+        """The owner's numbered jumps by number, then date and id (bounded by the limit)."""
         ...
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
@@ -379,6 +389,12 @@ class LogbookService:
             number_from=search.number_from,
             number_to=search.number_to,
         )
+
+    def numbering(self, actor: Actor) -> policy.Numbering[NumberedRef]:
+        """Highest jump number, gaps and repeats in the owner's own numbering."""
+        with self._stores() as store:
+            rows = store.numbered(actor)
+        return policy.numbering([policy.Numbered(r.number, r) for r in rows])
 
     def jump(self, actor: Actor, jump_id: uuid.UUID) -> JumpDetail:
         with self._stores() as store:

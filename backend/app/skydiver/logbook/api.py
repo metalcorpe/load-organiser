@@ -32,6 +32,7 @@ from app.skydiver.logbook.service import (
     LimitReached,
     LogbookService,
     NotFound,
+    NumberedRef,
 )
 
 PREFIX = "/api/skydiver/v1"
@@ -185,6 +186,35 @@ class JumpPageOut(BaseModel):
     matched: MatchedOut
 
 
+class NumberedJumpOut(BaseModel):
+    id: uuid.UUID
+    jumped_on: date
+    jump_number: int
+
+
+class NumberGapOut(BaseModel):
+    first: int = Field(description="The first missing number.")
+    last: int = Field(description="The last missing number.")
+    before: NumberedJumpOut
+    after: NumberedJumpOut
+
+
+class NumberRepeatOut(BaseModel):
+    jump_number: int
+    uses: int
+    jumps: list[NumberedJumpOut] = Field(description="At most five of them.")
+
+
+class JumpNumberingOut(BaseModel):
+    """Your own numbering, to suggest the next number and note slips."""
+
+    highest: int | None = Field(description="Null when no jump has a number.")
+    gaps: list[NumberGapOut] = Field(description="The first few, lowest first.")
+    gap_count: int
+    repeats: list[NumberRepeatOut] = Field(description="The first few, lowest first.")
+    repeat_count: int
+
+
 class JumpEventOut(BaseModel):
     kind: str
     detail: dict[str, Any]
@@ -270,6 +300,10 @@ def _detail(d: JumpDetail) -> JumpDetailOut:
         ],
         same_number=d.same_number,
     )
+
+
+def _numbered(ref: NumberedRef) -> NumberedJumpOut:
+    return NumberedJumpOut(id=ref.id, jumped_on=ref.jumped_on, jump_number=ref.number)
 
 
 def _problem(error: Exception) -> JSONResponse:
@@ -370,6 +404,38 @@ def create_router(
                 first_on=m.first_on,
                 last_on=m.last_on,
             ),
+        )
+
+    # Before /jumps/{jump_id}, which would otherwise take "numbering" as an id.
+    @router.get(
+        "/jumps/numbering",
+        operation_id="getJumpNumbering",
+        response_model=JumpNumberingOut,
+        dependencies=deps,
+    )
+    def get_numbering(actor: Reader) -> JumpNumberingOut:
+        found = service().numbering(actor)
+        return JumpNumberingOut(
+            highest=found.highest,
+            gaps=[
+                NumberGapOut(
+                    first=g.first,
+                    last=g.last,
+                    before=_numbered(g.before),
+                    after=_numbered(g.after),
+                )
+                for g in found.gaps
+            ],
+            gap_count=found.gap_count,
+            repeats=[
+                NumberRepeatOut(
+                    jump_number=r.number,
+                    uses=r.uses,
+                    jumps=[_numbered(j) for j in r.refs],
+                )
+                for r in found.repeats
+            ],
+            repeat_count=found.repeat_count,
         )
 
     @router.post(
