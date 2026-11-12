@@ -19,7 +19,7 @@ from sqlmodel import Session, col
 
 from app.models import User
 from app.skydiver.access.policy import Role
-from app.skydiver.identity.tables import SkydiverRoleGrant
+from app.skydiver.identity.tables import SkydiverAccountState, SkydiverRoleGrant
 
 
 def set_role(engine: Engine, *, email: str, role: Role, grant: bool) -> str:
@@ -53,6 +53,36 @@ def set_role(engine: Engine, *, email: str, role: Role, grant: bool) -> str:
             )
         session.commit()
     return "granted" if grant else "revoked"
+
+
+def bootstrap_reviewer(engine: Engine, *, email: str) -> str:
+    """The configured owner's reviewer role, only once that address is confirmed.
+
+    Registration may be open while this runs at start-up, so anyone could create an
+    account with the owner's address first; holding the address is not enough. The
+    account's current email must be the configured one and that same address must
+    have been confirmed (`email_verified_for`), or nothing is granted.
+    """
+    address = email.strip().lower()
+    with Session(engine) as session:
+        rows = session.execute(
+            select(
+                col(User.id),
+                col(SkydiverAccountState.email_verified_at),
+                col(SkydiverAccountState.email_verified_for),
+            )
+            .join(
+                SkydiverAccountState,
+                col(SkydiverAccountState.account_id) == col(User.id),
+            )
+            .where(func.lower(col(User.email)) == address)
+        ).all()
+    if len(rows) != 1:
+        return "no_unique_account"
+    _, verified_at, verified_for = rows[0]
+    if verified_at is None or (verified_for or "").lower() != address:
+        return "not_confirmed"
+    return set_role(engine, email=address, role=Role.REVIEWER, grant=True)
 
 
 def main(argv: Sequence[str] | None = None) -> int:

@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 import sentry_sdk
@@ -253,5 +254,22 @@ def create_app(*, include_legacy: bool) -> FastAPI:
         application.include_router(api_router, prefix=settings.API_V1_STR)
     return application
 
+
+if settings.SKYDIVER_MIGRATE_ON_START:
+    # Hosted deploys only; see app/skydiver/migrate.py. Runs once per process start.
+    from app.skydiver.migrate import migrate
+
+    migrate(str(settings.SQLALCHEMY_DATABASE_URI))
+
+if settings.SKYDIVER_BOOTSTRAP_REVIEWER:
+    # The owner's maintainer role without a terminal session, only for a confirmed
+    # address (registration may be open); see access.grant.bootstrap_reviewer.
+    from app.core.db import engine as _engine
+    from app.skydiver.access.grant import bootstrap_reviewer
+
+    _granted = bootstrap_reviewer(
+        _engine, email=str(settings.SKYDIVER_BOOTSTRAP_REVIEWER)
+    )
+    logging.getLogger(__name__).info("Reviewer bootstrap: %s", _granted)
 
 app = create_app(include_legacy=settings.LEGACY_API_ENABLED)
