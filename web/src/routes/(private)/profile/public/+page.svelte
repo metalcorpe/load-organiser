@@ -23,6 +23,8 @@
 	const error = $derived(
 		form && form.form === 'save' && 'error' in form ? socialMessage(form.error) : undefined
 	);
+	// From someone's profile: saving goes back there (the server checks it is a local path).
+	const returnTo = $derived(page.url.searchParams.get('returnTo'));
 </script>
 
 <svelte:head>
@@ -54,11 +56,12 @@
 		<div class="field">
 			<label for="q">Find your home dropzone (optional)</label>
 			<input id="q" name="q" type="search" maxlength="80" defaultValue={data.q} />
+			{#if returnTo}<input type="hidden" name="returnTo" value={returnTo} />{/if}
 		</div>
 		<div class="form-actions"><button class="button secondary" type="submit">Search</button></div>
 	</form>
 
-	<form method="POST" action="?/save" class="form" novalidate>
+	<form method="POST" action={returnTo ? `?returnTo=${encodeURIComponent(returnTo)}&/save` : '?/save'} class="form" novalidate>
 		{#if error}<p class="form-error" role="alert">{error}</p>{/if}
 		{#if based}<input type="hidden" name="version" value={based} />{/if}
 		<div class="field">

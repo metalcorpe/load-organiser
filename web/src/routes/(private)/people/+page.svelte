@@ -1,4 +1,5 @@
 <script lang="ts">
+	import InviteLink from '#lib/components/InviteLink.svelte';
 	import { page } from '$app/state';
 	import type { PersonOut } from '#lib/contracts/index.ts';
 	import { socialMessage } from '#lib/social.ts';
@@ -38,6 +39,18 @@
 			You are <a href="/people/{data.profile.handle}">@{data.profile.handle}</a>
 			({data.profile.discoverable ? 'discoverable' : 'not discoverable: only approved followers see your profile'}).
 		</p>
+		{#if data.profile.discoverable}
+			<p>Send your profile link to the people you jump with, so they can ask to follow you.</p>
+			<InviteLink
+				url="{page.url.origin}/people/{data.profile.handle}"
+				name={data.profile.display_name}
+			/>
+		{:else}
+			<p class="hint">
+				To invite people with a link, turn on "Let people find my profile": until you approve
+				them, others cannot open a private profile.
+			</p>
+		{/if}
 		<a class="button secondary" href="/profile/public">Edit profile</a>
 	</section>
 {/if}

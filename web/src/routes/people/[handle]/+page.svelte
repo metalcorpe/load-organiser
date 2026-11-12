@@ -61,7 +61,30 @@
 {#if p.is_self}
 	<p role="status">This is your profile as others see it. <a href="/profile/public">Edit</a></p>
 {:else if !data.signedIn}
-	<p><a href={signIn}>Sign in</a> to ask to follow, block or report.</p>
+	<section class="card join" aria-labelledby="join-heading">
+		<h2 id="join-heading">Follow {p.display_name}</h2>
+		<p>
+			Follow to see the jumps they share with followers. Your own logbook stays private: you
+			choose what, if anything, to share.
+		</p>
+		<p class="actions">
+			<a class="button" href="/register?returnTo={encodeURIComponent(page.url.pathname)}">Join to follow</a>
+			<a class="button secondary" href={signIn} data-sign-in>Sign in</a>
+		</p>
+	</section>
+{:else if !data.hasProfile}
+	<section class="card join" aria-labelledby="join-heading">
+		<h2 id="join-heading">Follow {p.display_name}</h2>
+		<p>
+			People approve followers by handle, so following needs a public profile of your own. It
+			shows only what you enter; your logbook stays private.
+		</p>
+		<p class="actions">
+			<a class="button" href="/profile/public?returnTo={encodeURIComponent(page.url.pathname)}"
+				>Create your profile</a
+			>
+		</p>
+	</section>
 {:else}
 	<section aria-labelledby="follow-heading">
 		<h2 id="follow-heading">Follow</h2>
@@ -136,6 +159,13 @@
 {/if}
 
 <style>
+	.join .actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-bottom: 0;
+	}
+
 	.bio {
 		white-space: pre-line;
 	}

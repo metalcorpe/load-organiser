@@ -1,5 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
-import type { PostPageOut, ProfileViewOut } from '#lib/contracts/index.ts';
+import type { OwnProfileOut, PostPageOut, ProfileViewOut } from '#lib/contracts/index.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isHandle, isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
@@ -27,13 +27,17 @@ export const load: PageServerLoad = async (event) => {
 	const api = createRequestApi();
 	const bearer = optionalSecret(event);
 	const before = event.url.searchParams.get('before') ?? '';
-	const [person, posts] = await Promise.all([
+	const [person, posts, own] = await Promise.all([
 		call<ProfileViewOut>(api, 'getPerson', { bearer, handle }),
 		call<PostPageOut>(api, 'listPersonPosts', {
 			bearer,
 			handle,
 			query: { before: isUuid(before) ? before : undefined }
-		})
+		}),
+		// Following needs your own profile: say so before the button, not after it.
+		bearer
+			? call<OwnProfileOut | null>(api, 'getOwnProfile', { bearer }, () => true)
+			: Promise.resolve(null)
 	]);
 	if (!person.ok) {
 		// One answer for missing, hidden, blocked and not discoverable.
@@ -46,6 +50,8 @@ export const load: PageServerLoad = async (event) => {
 		posts: posts.ok ? posts.value : null,
 		older: isUuid(before),
 		signedIn: Boolean(event.locals.viewer),
+		// Unknown (the check failed) counts as having one: the follow form then answers.
+		hasProfile: own === null || !own.ok || own.value !== null,
 		emailVerified: event.locals.viewer?.emailVerified ?? false
 	};
 };
