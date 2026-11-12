@@ -10,6 +10,7 @@ import { call, failStatus, isList, isRecord } from '#lib/server/maintenance.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
+import { intakePaused } from '#lib/intake.ts';
 
 const KINDS = ['suggest_venue', 'suggest_listing', 'correction', 'report', 'feedback'] as const;
 const TARGETS = ['venue', 'provider', 'opportunity'] as const;
@@ -43,8 +44,7 @@ export const load: PageServerLoad = async (event) => {
 	]);
 	return {
 		emailVerified: viewer.emailVerified,
-		// Unknown when the check fails: the form stays, and sending reports a pause.
-		paused: intake.ok && !intake.value.open,
+		paused: intakePaused(intake),
 		kind: pick(params.get('kind'), KINDS) ?? 'suggest_listing',
 		target: targetKind && isUuid(targetId) ? { kind: targetKind, id: targetId } : null,
 		title: (params.get('title') ?? '').slice(0, 160),

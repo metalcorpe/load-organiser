@@ -13,6 +13,7 @@
 # ENVIRONMENT=local, so the dev listings loader is allowed here and nowhere else.
 # Web: http://127.0.0.1:5180   API: http://127.0.0.1:8150
 set -euo pipefail
+SWITCHES='export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_SUBMISSIONS_OPEN=true SKYDIVER_PUBLISHING_OPEN=true SKYDIVER_MAX_ACCOUNTS=20'
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 B="$ROOT/backend"
@@ -42,7 +43,6 @@ export ENVIRONMENT=local PROJECT_NAME=dev SECRET_KEY=$(secret 32)
 export POSTGRES_SERVER=127.0.0.1 POSTGRES_PORT=$PG_PORT POSTGRES_USER=dev
 export POSTGRES_PASSWORD='$pg_password' POSTGRES_DB=dev
 export FIRST_SUPERUSER=admin@example.com FIRST_SUPERUSER_PASSWORD=$(secret 16)
-export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_SUBMISSIONS_OPEN=true SKYDIVER_PUBLISHING_OPEN=true SKYDIVER_MAX_ACCOUNTS=20
 export SKYDIVER_WEB_ORIGIN=$WEB_ORIGIN SKYDIVER_WEB_PROXY_KEY=$(secret 24)
 export SKYDIVER_MAIL_OUTBOX_DIR='$DEV/outbox'
 EOF
@@ -65,7 +65,9 @@ with psycopg.connect(host='127.0.0.1', port=os.environ['POSTGRES_PORT'], user='d
 }
 
 in_backend() {
-  (cd "$DEV/empty" && env -i PATH="$PATH" HOME="$HOME" bash -c ". '$DEV/env.sh'; $*")
+  # The switches are set on every run, not stored in env.sh (created once), so a new
+  # switch reaches an existing .dev without recreating it.
+  (cd "$DEV/empty" && env -i PATH="$PATH" HOME="$HOME" bash -c ". '$DEV/env.sh'; $SWITCHES; $*")
 }
 
 start() {

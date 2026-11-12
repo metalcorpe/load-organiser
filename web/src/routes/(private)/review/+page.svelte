@@ -23,9 +23,11 @@
 	<a class="button" href="/review/listings/new">New listing</a>
 	<a class="button secondary" href="/review/organizers/new">New organizer</a>
 	<a class="button secondary" href="/review/dropzones/new">New dropzone</a>
+</p>
+<nav class="queues" aria-label="Review queues">
 	<a href="/review/submissions">Submissions</a>
 	<a href="/review/social">Profile reports</a>
-</p>
+</nav>
 
 <form method="GET" class="form search" role="search">
 	<div class="field">
@@ -140,6 +142,20 @@
 		flex-wrap: wrap;
 		gap: 0.75rem;
 		align-items: center;
+	}
+
+	.queues {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.25rem;
+		margin: 0.75rem 0 1rem;
+	}
+
+	.queues a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-weight: 600;
 	}
 
 	.meta {

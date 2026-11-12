@@ -61,3 +61,24 @@ export function postEventText(kind: string, detail: Record<string, unknown>): st
 			return null;
 	}
 }
+
+export type ShareBlock =
+	| 'publishing_paused'
+	| 'profile_required'
+	| 'profile_hidden'
+	| 'publishing_restricted';
+
+/**
+ * Why a new post cannot be made from the share page, or null when it can. The owner's
+ * pause comes first: it applies to everyone, whatever their profile.
+ */
+export function shareBlock(sharing: {
+	publishing_open: boolean;
+	profile: { hidden: boolean; publishing_restricted: boolean } | null;
+}): ShareBlock | null {
+	if (!sharing.publishing_open) return 'publishing_paused';
+	if (!sharing.profile) return 'profile_required';
+	if (sharing.profile.hidden) return 'profile_hidden';
+	if (sharing.profile.publishing_restricted) return 'publishing_restricted';
+	return null;
+}

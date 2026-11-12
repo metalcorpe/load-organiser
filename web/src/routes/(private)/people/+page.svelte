@@ -25,19 +25,24 @@
 {#if !data.profileOk}
 	<p class="form-error" role="alert">{socialMessage('unavailable')}</p>
 {:else if !data.profile}
-	<p class="hint">
-		You have no public profile, so no one can find you and you cannot ask to follow people.
-		<a href="/profile/public">Create a profile</a> when you want to.
-	</p>
+	<section class="card you">
+		<p>
+			You have no public profile, so no one can find you and you cannot ask to follow people.
+			Your logbook stays private either way.
+		</p>
+		<a class="button" href="/profile/public">Create a profile</a>
+	</section>
 {:else}
-	<p>
-		You are <a href="/people/{data.profile.handle}">@{data.profile.handle}</a>
-		({data.profile.discoverable ? 'discoverable' : 'not discoverable: only approved followers see your profile'}).
-		<a href="/profile/public">Edit profile</a>
-	</p>
+	<section class="card you">
+		<p>
+			You are <a href="/people/{data.profile.handle}">@{data.profile.handle}</a>
+			({data.profile.discoverable ? 'discoverable' : 'not discoverable: only approved followers see your profile'}).
+		</p>
+		<a class="button secondary" href="/profile/public">Edit profile</a>
+	</section>
 {/if}
 
-<form method="GET" class="form search" role="search">
+<form method="GET" class="form search card" role="search">
 	<div class="field">
 		<label for="q">Find people by handle or name</label>
 		<input id="q" name="q" type="search" maxlength="40" defaultValue={data.q} />
@@ -80,6 +85,7 @@
 
 {#if errorFor('people')}<p class="form-error" role="alert">{errorFor('people')}</p>{/if}
 
+<section class="card">
 <h2>Follow requests</h2>
 {#if errorFor('requests')}<p class="form-error" role="alert">{errorFor('requests')}</p>{/if}
 {#if data.requests === null}
@@ -104,7 +110,9 @@
 		{/each}
 	</ul>
 {/if}
+</section>
 
+<section class="card">
 <h2>Followers</h2>
 {#if errorFor('followers')}<p class="form-error" role="alert">{errorFor('followers')}</p>{/if}
 {#if data.followers === null}
@@ -125,7 +133,9 @@
 		{/each}
 	</ul>
 {/if}
+</section>
 
+<section class="card">
 <h2>Following</h2>
 {#if data.following === null}
 	<p class="form-error" role="alert">{socialMessage('unavailable')}</p>
@@ -138,7 +148,9 @@
 		{/each}
 	</ul>
 {/if}
+</section>
 
+<section class="card">
 <h2>Blocked</h2>
 {#if errorFor('blocked')}<p class="form-error" role="alert">{errorFor('blocked')}</p>{/if}
 {#if data.blocked === null}
@@ -159,8 +171,17 @@
 	</ul>
 	<p class="hint">Unblocking does not restore earlier follows.</p>
 {/if}
+</section>
 
 <style>
+	.you p {
+		margin-top: 0;
+	}
+
+	.search {
+		margin: 1rem 0;
+	}
+
 	.inline {
 		display: flex;
 		gap: 0.5rem;

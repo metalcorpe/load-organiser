@@ -1,10 +1,11 @@
 <script lang="ts">
+	import Notice from '#lib/components/Notice.svelte';
 	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
 	import JumpCard from '#lib/components/JumpCard.svelte';
 	import type { PostOut } from '#lib/contracts/index.ts';
 	import { formatDay } from '#lib/listings.ts';
-	import { AUDIENCE_LABEL, SHARE_PARTS, postMessage } from '#lib/posts.ts';
+	import { AUDIENCE_LABEL, SHARE_PARTS, postMessage, shareBlock } from '#lib/posts.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -29,17 +30,7 @@
 		altitude: jump.exit_altitude !== null,
 		freefall: jump.freefall_seconds !== null
 	});
-	const blocked = $derived(
-		!s.publishing_open
-			? 'publishing_paused'
-			: !profile
-				? 'profile_required'
-				: profile.hidden
-					? 'profile_hidden'
-					: profile.publishing_restricted
-						? 'publishing_restricted'
-						: null
-	);
+	const blocked = $derived(shareBlock(s));
 	const preview: PostOut | null = $derived(
 		previewing && profile
 			? {
@@ -125,8 +116,24 @@
 		</div>
 	</form>
 {:else if blocked}
-	<p class="form-error" role="alert">{postMessage(blocked)}</p>
-	{#if blocked === 'profile_required'}<p><a href="/profile/public">Create your public profile</a></p>{/if}
+	<!-- A condition with a next step, not a failed action: a notice, not an error. -->
+	<Notice
+		title={blocked === 'profile_required'
+			? 'Create a public profile first'
+			: blocked === 'publishing_paused'
+				? 'Sharing is paused'
+				: 'You cannot publish right now'}
+		tone={blocked === 'profile_required' ? 'info' : 'warn'}
+	>
+		<p>
+			{blocked === 'profile_required'
+				? "Posts appear under your profile's handle. Your logbook stays private."
+				: postMessage(blocked)}
+		</p>
+		{#if blocked === 'profile_required'}
+			<a class="button" href="/profile/public">Create your public profile</a>
+		{/if}
+	</Notice>
 {:else}
 	{#if !data.emailVerified}
 		<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to publish.</p>
