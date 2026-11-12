@@ -190,10 +190,17 @@ test.describe('private logbook', () => {
 		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
 		await page.goto('/jumps/new');
 		await expect(page.getByLabel('Place name')).toBeHidden();
-		// The Logbook home offers the same place as its one-tap main action.
+		// The Logbook home continues from the newest jump as its one-tap main action:
+		// same place and type, but the date is the jumper's own today, not the old day.
 		await page.goto('/jumps');
-		await page.getByRole('link', { name: `Log a jump at ${name}` }).click();
+		await page.getByRole('link', { name: `Log the next jump at ${name}` }).click();
 		await expect(page.getByText(name, { exact: true })).toBeVisible();
+		await expect(page.getByLabel('Type', { exact: true })).toHaveValue('unspecified');
+		const today = await page.evaluate(() => {
+			const d = new Date();
+			return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+		});
+		await expect(page.getByLabel('Date', { exact: true })).toHaveValue(today);
 		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
 	});
 

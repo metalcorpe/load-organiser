@@ -40,7 +40,8 @@ export const load: PageServerLoad = async (event) => {
 		chosen && isUuid(from)
 			? await call<JumpDetailOut>(api, 'getJump', { bearer: secret, id: from })
 			: null;
-	const prefill = source?.ok ? nextJumpValues(source.value.jump) : null;
+	const sameDay = event.url.searchParams.get('day') === 'same';
+	const prefill = source?.ok ? nextJumpValues(source.value.jump, { sameDay }) : null;
 	return {
 		emailVerified: viewer.emailVerified,
 		placesOk: places !== null,

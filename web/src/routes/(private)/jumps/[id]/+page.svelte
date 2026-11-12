@@ -125,7 +125,7 @@
 	{/if}
 </dl>
 <!-- The next load of the same day: same place, type, gear and altitudes, next number. -->
-<a class="button next" href="/jumps/new?{jump.location.kind}={jump.location.id}&from={jump.id}">Log the next jump</a>
+<a class="button next" href="/jumps/new?{jump.location.kind}={jump.location.id}&from={jump.id}&day=same">Log the next jump</a>
 </section>
 
 <section class="card" aria-labelledby="sharing-heading">
