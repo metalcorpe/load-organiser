@@ -111,7 +111,12 @@ class RecordsStore(Protocol):
         """Bulk insert; raises ArchiveInvalid when a database rule refuses a row."""
         ...
 
-    def insert_receipt(self, actor: Actor, receipt: Receipt, version: int) -> bool: ...
+    def next_receipt_sequence(self, actor: Actor) -> int: ...
+    def insert_receipt(
+        self, actor: Actor, receipt: Receipt, version: int, sequence: int
+    ) -> bool:
+        """False when a concurrent restore already took this file or this sequence."""
+        ...
 
 
 StoreFactory = Callable[[], AbstractContextManager[RecordsStore]]
@@ -119,7 +124,7 @@ Clock = Callable[[], datetime]
 
 
 class _LostRace(Exception):
-    """The same file's receipt was committed concurrently."""
+    """Another restore committed first: the same file, or a different one."""
 
 
 def parse(raw: bytes) -> tuple[v1.ArchiveV1, str]:
@@ -246,6 +251,9 @@ class RecordsService:
                     return Outcome(
                         "already_restored", digest, done.counts, done.restored_at
                     )
+                # Read before the emptiness check: a restore committing after this
+                # read either shows up in that check or holds the same sequence.
+                sequence = store.next_receipt_sequence(actor)
                 if any(store.managed_counts(actor).values()):
                     raise RecordsNotEmpty()
                 rows = _rows(actor, archive, plan, now)
@@ -265,12 +273,13 @@ class RecordsService:
                     "saved_not_restorable": len(plan.detached.saved_not_restorable),
                 }
                 receipt = Receipt(digest, counts, now)
-                if not store.insert_receipt(actor, receipt, archive.version):
+                if not store.insert_receipt(actor, receipt, archive.version, sequence):
                     raise _LostRace()
         except _LostRace:
             with self._stores() as store:
                 done = store.receipt(actor, digest)
-            assert done is not None
+            if done is None:  # a different file won: these records are no longer empty
+                raise RecordsNotEmpty() from None
             return Outcome("already_restored", digest, done.counts, done.restored_at)
         return Outcome("restored", digest, counts, now)
 

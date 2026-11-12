@@ -1,24 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
+import { PRIVATE_PATHS } from './support/paths.ts';
 
-const PRIVATE_PATHS = [
-	'/activity',
-	'/jumps',
-	'/jumps/new',
-	'/jumps/01900000-0000-7000-8000-000000000000/share',
-	'/history',
-	'/history/baseline',
-	'/profile/data',
-	'/profile/public',
-	'/people',
-	'/review/social',
-	'/records',
-	'/profile',
-	'/places',
-	'/gear',
-	'/gear/new',
-	'/saved',
-	'/plans'
-];
 const API_HOST = new URL(process.env.E2E_API_ORIGIN ?? 'http://127.0.0.1:8144').host;
 
 function trackConsoleErrors(page: Page): string[] {

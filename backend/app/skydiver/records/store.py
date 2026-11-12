@@ -269,8 +269,19 @@ class SqlRecordsStore:
             # A rule the archive check did not catch; the whole restore rolls back.
             raise ArchiveInvalid(f"{table}.constraint") from None
 
-    def insert_receipt(self, actor: Actor, receipt: Receipt, version: int) -> bool:
-        """False when the same file's receipt already exists (a concurrent restore)."""
+    def next_receipt_sequence(self, actor: Actor) -> int:
+        T = SkydiverRestoreReceipt
+        latest = self._s.execute(
+            select(func.max(col(T.sequence))).where(
+                col(T.owner_person_id) == actor.person_id
+            )
+        ).scalar_one()
+        return int(latest or 0) + 1
+
+    def insert_receipt(
+        self, actor: Actor, receipt: Receipt, version: int, sequence: int
+    ) -> bool:
+        """False when a concurrent restore already took this file or this sequence."""
         T = SkydiverRestoreReceipt
         result = self._s.execute(
             pg_insert(T)
@@ -278,11 +289,12 @@ class SqlRecordsStore:
                 id=uuid.uuid7(),
                 owner_person_id=actor.person_id,
                 fingerprint=receipt.fingerprint,
+                sequence=sequence,
                 format_version=version,
                 counts=receipt.counts,
                 created_at=receipt.restored_at,
             )
-            .on_conflict_do_nothing(constraint="uq_skydiver_restore_receipt")
+            .on_conflict_do_nothing()
             .returning(col(T.id))
         )
         return result.first() is not None
