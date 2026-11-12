@@ -34,6 +34,46 @@ async function logJump(page: Page): Promise<string> {
 }
 
 test.describe('private logbook', () => {
+	test('an offline save sends nothing and keeps what was typed', async ({ page, context }) => {
+		await signIn(page, await createAccount({ label: 'offline' }));
+		await startAtNewPlace(page);
+		await page.getByLabel('Date', { exact: true }).fill('2026-10-11');
+		await page.getByLabel('Type', { exact: true }).selectOption('belly');
+		await page.getByLabel('Notes (optional, private)').fill('Typed with no signal.');
+		const form = page.url();
+
+		await context.setOffline(true);
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByRole('alert')).toContainText('You are offline, so nothing was sent.');
+		expect(page.url()).toBe(form);
+		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('Typed with no signal.');
+		// A second try while still offline shows the same single notice.
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.locator('[data-offline-notice]')).toHaveCount(1);
+
+		await context.setOffline(false);
+		await expect(page.locator('[data-offline-notice]')).toHaveCount(0);
+		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('Typed with no signal.');
+	});
+
+	test('an unconfirmed account can ask for a new link from any private page', async ({ page }) => {
+		const email = await createAccount({ label: 'unconfirmed', verified: false });
+		await signIn(page, email);
+		const banner = page.getByRole('region', { name: 'Confirm your email' });
+		await expect(banner).toContainText(`Use the link we sent to ${email}.`);
+		// A long address never squeezes the Preview badge onto two lines.
+		const badge = page.locator('header .badge');
+		if (await badge.isVisible()) expect((await badge.boundingBox())!.height).toBeLessThan(30);
+		await expect(page.locator('header .avatar')).toHaveText('U');
+
+		await banner.getByRole('button', { name: 'Send a new link' }).click();
+		await expect(page.getByText('We sent a new confirmation link.')).toBeVisible();
+		// Profile has its own resend button, so the banner is not repeated there.
+		await expect(page.getByRole('region', { name: 'Confirm your email' })).toHaveCount(0);
+	});
+
 	test('log a jump at an unlisted place with a new component, without gear setup', async ({
 		page
 	}) => {
