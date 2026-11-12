@@ -22,6 +22,7 @@
 		"types:check": "node -e \"require('node:fs').rmSync('.svelte-kit/cloudflare',{recursive:true,force:true})\" && wrangler types --strict-vars=false --check"
 	},
 	"devDependencies": {
+		"@axe-core/playwright": "4.14.0",
 		"@fontsource/figtree": "5.3.0",
 		"@fontsource/outfit": "5.3.0",
 		"@hey-api/openapi-ts": "0.99.0",

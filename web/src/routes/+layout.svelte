@@ -13,7 +13,7 @@
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
-	import OfflineGuard from '#lib/components/OfflineGuard.svelte';
+	import FormGuard from '#lib/components/FormGuard.svelte';
 	import SignInSheet from '#lib/components/SignInSheet.svelte';
 	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
@@ -50,7 +50,7 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 <NavigationStatus />
-<OfflineGuard />
+<FormGuard />
 
 <header>
 	<a class="brand" href="/">Load Organiser</a>
