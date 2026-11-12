@@ -5,7 +5,7 @@
 	import JumpCard from '#lib/components/JumpCard.svelte';
 	import type { PostOut } from '#lib/contracts/index.ts';
 	import { formatDay } from '#lib/listings.ts';
-	import { AUDIENCE_LABEL, SHARE_PARTS, postMessage } from '#lib/posts.ts';
+	import { AUDIENCE_LABEL, SHARE_PARTS, postMessage, shareBlock } from '#lib/posts.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -30,17 +30,7 @@
 		altitude: jump.exit_altitude !== null,
 		freefall: jump.freefall_seconds !== null
 	});
-	const blocked = $derived(
-		!s.publishing_open
-			? 'publishing_paused'
-			: !profile
-				? 'profile_required'
-				: profile.hidden
-					? 'profile_hidden'
-					: profile.publishing_restricted
-						? 'publishing_restricted'
-						: null
-	);
+	const blocked = $derived(shareBlock(s));
 	const preview: PostOut | null = $derived(
 		previewing && profile
 			? {

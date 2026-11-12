@@ -177,7 +177,7 @@ Web `/support` (public, linked from the footer); data in `web/src/lib/support.ts
 - A trigger sets `skydiver_submission.author_removed_at` when the author link is cleared, which happens through the person foreign key on every account deletion path. A check keeps exactly one of author and removal time. Rows already without an author got the migration time, so none is purged before 30 days from the migration.
 - `python -m app.skydiver.moderation.retention purge [DAYS]` deletes those submissions once the time is more than DAYS (default 30, the architecture's target) in the past, reviewed or not. It is not scheduled: it runs with the backups once hosting exists (`recovery-runbook.md`).
 - `GET /submissions/intake` tells a signed-in person whether new submissions are taken; `/submit` shows "Sending is paused" in place of the form when they are not. If that check fails the form is shown and sending reports the pause as before.
-- Tested: `test_account_deletion.py` (deleting the account sets the removal time), `test_submission_retention.py` (only rows past the period are deleted; author and time cannot both be missing), `test_moderation.py` (intake reports open, then paused; needs a session). Not tested in a browser: the paused notice, because the end-to-end server runs with submissions open.
+- Tested: `test_account_deletion.py` (deleting the account sets the removal time), `test_submission_retention.py` (only rows past the period are deleted; author and time cannot both be missing), `test_moderation.py` (intake reports open, then paused; needs a session). The decision is `intakePaused` in `web/src/lib/intake.ts` (unit tested: a failed check is not a pause). Not tested in a browser: the rendered notice, because the end-to-end server runs with submissions open.
 
 #### Publishing pause (implemented, #162)
 
@@ -185,7 +185,7 @@ The maintenance routine (item 4 below) and mobile journey 5 let the owner pause 
 
 - Paused: publishing a jump and widening a post to public answer 409 `publishing_paused`; a paused publish spends no rate-limit slot. Narrowing, unpublishing, reading posts, the feed, private logging and export are unaffected.
 - `GET /me/jumps/{id}/sharing` carries `publishing_open`; the share page shows "Sharing new jumps is paused for now" in place of the form, and keeps the narrow and unpublish controls for an existing post.
-- Tested: `test_posts.py` `test_a_publishing_pause_stops_new_disclosure_only`. Not tested in a browser: the paused notice, because the end-to-end server runs with publishing open.
+- Tested: `test_posts.py` `test_a_publishing_pause_stops_new_disclosure_only`; the page's choice of notice is `shareBlock` in `web/src/lib/posts.ts` (unit tested, the pause first). Not tested in a browser: the rendered notice, because the end-to-end server runs with publishing open.
 - To pause on a host: set `SKYDIVER_PUBLISHING_OPEN=false` and restart the API. Hosting is not decided (#161).
 
 #### Erasure ledger (implemented, architecture A9)
