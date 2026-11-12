@@ -30,6 +30,7 @@ from app.skydiver.logbook.service import (
     LimitReached,
     LogbookService,
     NotFound,
+    PrintPage,
 )
 
 PREFIX = "/api/skydiver/v1"
@@ -168,6 +169,21 @@ class JumpPageOut(BaseModel):
     )
 
 
+class BroughtForwardOut(BaseModel):
+    jumps: int = Field(description="Your entries dated before `from_on`.")
+    freefall_seconds: int = Field(
+        description="Their recorded freefall time; entries without one add nothing."
+    )
+
+
+class PrintPageOut(BaseModel):
+    """Full entries, oldest first, for printing your own logbook."""
+
+    items: list[JumpOut]
+    next_cursor: str | None
+    brought_forward: BroughtForwardOut
+
+
 class JumpEventOut(BaseModel):
     kind: str
     detail: dict[str, Any]
@@ -241,6 +257,16 @@ def _summary(view: JumpView) -> JumpSummaryOut:
         jump_type=j.jump_type.value,
         jump_number=j.jump_number,
         components=_components(view),
+    )
+
+
+def _print_page(page: PrintPage) -> PrintPageOut:
+    return PrintPageOut(
+        items=[_jump(v) for v in page.items],
+        next_cursor=page.next_cursor,
+        brought_forward=BroughtForwardOut(
+            jumps=page.before_jumps, freefall_seconds=page.before_freefall_seconds
+        ),
     )
 
 
@@ -338,6 +364,28 @@ def create_router(
             return _problem(error)
         response.status_code = 201 if created else 200
         return _detail(detail)
+
+    # Before `/jumps/{jump_id}`, which would otherwise read "in-order" as an id.
+    @router.get(
+        "/jumps/in-order",
+        operation_id="listJumpsInOrder",
+        response_model=PrintPageOut,
+        dependencies=deps,
+    )
+    def list_jumps_in_order(
+        actor: Reader,
+        from_on: date | None = None,
+        until_on: date | None = None,
+        cursor: Annotated[str | None, Query(max_length=200)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=200)] = None,
+    ) -> PrintPageOut | JSONResponse:
+        try:
+            page = service().in_order(
+                actor, from_on=from_on, until_on=until_on, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return _print_page(page)
 
     @router.get(
         "/jumps/{jump_id}",

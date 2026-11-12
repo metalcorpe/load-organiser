@@ -349,6 +349,62 @@ def test_pages_newest_activity_first(api: Api) -> None:
     assert bad.status_code == 422
 
 
+def test_in_order_reads_full_entries_oldest_first_within_dates(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    gear = api.component(owner, "Sabre 170")
+    made = {
+        day: api.jump(
+            owner,
+            place_id=place["id"],
+            jumped_on=day,
+            freefall_seconds=seconds,
+            notes=f"note {day}",
+            component_ids=[gear["id"]],
+        ).json()["jump"]["id"]  # fmt: skip
+        for day, seconds in (
+            ("2026-01-01", 40),
+            ("2026-02-01", None),
+            ("2026-03-01", 55),
+            ("2026-04-01", 60),
+        )  # fmt: skip
+    }
+    first = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-02-01", until_on="2026-04-01",
+        limit=2,
+    ).json()  # fmt: skip
+    assert [i["id"] for i in first["items"]] == [
+        made["2026-02-01"],
+        made["2026-03-01"],
+    ]
+    item = first["items"][1]
+    assert (item["notes"], item["freefall_seconds"]) == ("note 2026-03-01", 55)
+    assert [c["label"] for c in item["components"]] == ["Sabre 170"]
+    assert item["location"]["name"] == "Farm strip"
+    # Entries before the range carry forward as a count and freefall time.
+    assert first["brought_forward"] == {"jumps": 1, "freefall_seconds": 40}
+    rest = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-02-01", until_on="2026-04-01",
+        limit=2, cursor=first["next_cursor"],
+    ).json()  # fmt: skip
+    assert [i["id"] for i in rest["items"]] == [made["2026-04-01"]]
+    assert rest["next_cursor"] is None
+
+    everything = api.ok("GET", "/jumps/in-order", owner)
+    assert [i["id"] for i in everything["items"]] == list(made.values())
+    assert everything["brought_forward"] == {"jumps": 0, "freefall_seconds": 0}
+
+    backwards = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-04-01", until_on="2026-01-01"
+    )
+    assert backwards.json() == {"detail": "date_range_invalid"}
+    assert api.call("GET", "/jumps/in-order", owner, limit=201).status_code == 422
+    # Owner-only: another person reads nothing, anonymous is refused.
+    other = api.accounts.session()
+    assert api.ok("GET", "/jumps/in-order", other)["items"] == []
+    assert api.call("GET", "/jumps/in-order").status_code == 401
+
+
 class _LateStore(SqlLogbookStore):
     """Misses the first receipt read, as a request racing a same-key retry would."""
 

@@ -200,6 +200,13 @@ export const OPERATIONS = {
 		query: ['cursor', 'limit'],
 		maxBodyBytes: 1024 * 1024
 	},
+	// Full entries for printing, at most 200 a page (notes and links make a page large).
+	listJumpsInOrder: {
+		method: 'GET',
+		path: `${BETA}/jumps/in-order`,
+		query: ['from_on', 'until_on', 'cursor', 'limit'],
+		maxBodyBytes: 8 * 1024 * 1024
+	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },

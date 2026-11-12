@@ -299,6 +299,26 @@
         "title": "BaselinePreviewOut",
         "type": "object"
       },
+      "BroughtForwardOut": {
+        "properties": {
+          "freefall_seconds": {
+            "description": "Their recorded freefall time; entries without one add nothing.",
+            "title": "Freefall Seconds",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "Your entries dated before `from_on`.",
+            "title": "Jumps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jumps",
+          "freefall_seconds"
+        ],
+        "title": "BroughtForwardOut",
+        "type": "object"
+      },
       "ColumnsOut": {
         "properties": {
           "altitude": {
@@ -4392,6 +4412,39 @@
           "country"
         ],
         "title": "PostVenueOut",
+        "type": "object"
+      },
+      "PrintPageOut": {
+        "description": "Full entries, oldest first, for printing your own logbook.",
+        "properties": {
+          "brought_forward": {
+            "$ref": "#/components/schemas/BroughtForwardOut"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/JumpOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "brought_forward"
+        ],
+        "title": "PrintPageOut",
         "type": "object"
       },
       "ProfileIn": {
@@ -14412,6 +14465,182 @@
         "summary": "Undo Import",
         "tags": [
           "skydiver-imports"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/in-order": {
+      "get": {
+        "operationId": "listJumpsInOrder",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From On"
+            }
+          },
+          {
+            "in": "query",
+            "name": "until_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Until On"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 200,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrintPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Listjumpsinorder"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Jumps In Order",
+        "tags": [
+          "skydiver-logbook"
         ]
       }
     },

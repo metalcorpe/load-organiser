@@ -102,6 +102,7 @@
 			</tbody>
 		</table>
 		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
+		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
 		</section>
 
 		<section class="card">

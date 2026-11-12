@@ -29,6 +29,7 @@ export type {
 	PlanOut,
 	PostOut,
 	PostPageOut,
+	PrintPageOut,
 	ProfileViewOut,
 	ProviderDetailOut,
 	ProviderOut,
