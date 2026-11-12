@@ -21,6 +21,7 @@ from typing import Any
 from fastapi.testclient import TestClient
 from sqlalchemy import text
 
+from app.core.config import settings
 from app.core.db import engine
 from app.main import create_app
 from app.tests.skydiver.support import PASSWORD, Accounts
@@ -43,6 +44,7 @@ def _ok(client: TestClient, method: str, path: str, secret: str | None, body: An
 
 def seed(manifest: Path) -> None:
     """One of each kind of record, a follow, a post, a report, a revocation, a deletion."""
+    settings.SKYDIVER_PUBLISHING_OPEN = True  # this drill process only; it seeds a post
     accounts = Accounts.create()
     with TestClient(create_app(include_legacy=False)) as c:
         owner, follower, stranger = (accounts.session() for _ in range(3))

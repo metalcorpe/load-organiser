@@ -142,6 +142,7 @@ post_service = PostService(
     clock=utc_now,
     directory=directory_service,
     social=social_service,
+    is_open=lambda: settings.SKYDIVER_PUBLISHING_OPEN,
 )
 
 records_service = RecordsService(

@@ -151,3 +151,21 @@ anything that fails.
    sheet (opens, Escape or Back closes it), a jump form, and a listing card.
 9. **Export and restore:** export on the phone, then restore the file into a new empty
    account from the phone's file picker.
+
+# Beta content, moderation and feedback (#162)
+
+Status recorded 2026-11-12. "Built" means implemented and tested; it says nothing about
+real use. Nothing here has been run with real listings or real users.
+
+| Criterion | Status | Evidence, or what is needed |
+| --- | --- | --- |
+| Real listing coverage | **Owner** | The researched Greece, Bulgaria, Spain and Portugal records are development data only (`scripts/dev.sh seed`, beta decisions 2026-11-09). Before beta the owner publishes a reviewed subset on the real host (#161) and records country/category coverage, gaps and time spent (release brief, "Maintenance cadence"). |
+| Maintainer ownership | Decided | The owner is the only maintainer and report reviewer (beta decisions). The reviewer role is granted by an operator command, not a screen. |
+| Stale content | Built | Ended listings leave upcoming results by their own time zone (`test_opportunities.py`). Maintenance shows listings, organisers and dropzones due a check on the weekly/60-day routine (e2e `maintenance`). Undated profiles are not published in this beta (#206), so the 90-day recheck label has nothing to apply to yet. |
+| Abuse reports | Built | Reports on posts and profiles, reviewer decisions with hide/restrict (`test_social.py`, `test_posts.py`, e2e `social`); reports on listings, organisers and dropzones through `/submit` (`test_moderation.py`). |
+| Feedback route | Built | `/submit` "Feedback about the beta"; the sender sees status and the reviewer's note. |
+| Pausing when the queue outgrows the owner | Built | Submissions: `SKYDIVER_SUBMISSIONS_OPEN`. Publishing: `SKYDIVER_PUBLISHING_OPEN` (added 2026-11-12, `test_posts.py` `test_a_publishing_pause_stops_new_disclosure_only`); narrowing, unpublishing, logging and export stay available. Registration: `SKYDIVER_REGISTRATION_OPEN` and `SKYDIVER_MAX_ACCOUNTS`. All closed by default. |
+| Privacy, sharing and retention expectations; known limits; export and recovery instructions | Built | `/privacy` sections "What you can share", "Deleting your account", "Export and restore", "Backups and recovery" and "Known limits". The backup schedule it describes depends on hosting (#161). |
+| Optional support link; costs disclosed; no invented funding account | Built, **owner** | `/support` links the owner-supplied Ko-fi page and lists running costs (none yet, `web/src/lib/support.ts`). The owner is checking with an accountant before the link is used publicly. |
+| Bounded cohort; repeat activity observed; feedback recorded | **Owner** | Cohort: the owner alone (beta decisions 2026-11-09). Observation and feedback need real use on a host; no success metric or launch date is set. |
+| A real review cycle and its actual time | **Owner** | Not done. Needs published listings and a week of the routine. |

@@ -108,6 +108,9 @@ class SharingOut(BaseModel):
     jump: SourceOut
     profile: SharingProfileOut | None
     post: PostOut | None
+    publishing_open: bool = Field(
+        description="False while new posts and widening to public are paused."
+    )
 
 
 class PublishIn(BaseModel):
@@ -224,6 +227,7 @@ def create_router(
             if profile
             else None,
             post=_post(found.post) if found.post else None,
+            publishing_open=service().publishing_open(),
         )
 
     @router.post(
@@ -237,6 +241,8 @@ def create_router(
         jump_id: uuid.UUID, body: PublishIn, actor: Writer
     ) -> PostOut | JSONResponse:
         try:
+            if not service().publishing_open():  # paused: spend no rate-limit slot
+                raise SocialRefused("publishing_paused")
             consume(PUBLISH_RULE, actor)
             card = service().publish(
                 actor,

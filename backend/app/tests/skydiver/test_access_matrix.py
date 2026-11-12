@@ -20,6 +20,7 @@ import httpx2
 import pytest
 from fastapi.testclient import TestClient
 
+from app.core.config import settings
 from app.main import create_app
 from app.tests.skydiver.support import Accounts
 
@@ -58,7 +59,11 @@ class World:
 @pytest.fixture(scope="module")
 def world() -> Iterator[tuple[World, dict[str, str], str]]:
     accounts = Accounts.create()
-    with TestClient(create_app(include_legacy=False)) as client:
+    with (
+        pytest.MonkeyPatch.context() as patch,
+        TestClient(create_app(include_legacy=False)) as client,
+    ):
+        patch.setattr(settings, "SKYDIVER_PUBLISHING_OPEN", True)
         w = World(client, accounts)
         owner = accounts.session()
         reviewer = accounts.session(reviewer=True)

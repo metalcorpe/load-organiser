@@ -6747,12 +6747,18 @@
                 "type": "null"
               }
             ]
+          },
+          "publishing_open": {
+            "description": "False while new posts and widening to public are paused.",
+            "title": "Publishing Open",
+            "type": "boolean"
           }
         },
         "required": [
           "jump",
           "profile",
-          "post"
+          "post",
+          "publishing_open"
         ],
         "title": "SharingOut",
         "type": "object"

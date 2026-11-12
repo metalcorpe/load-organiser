@@ -3214,6 +3214,12 @@ export type SharingOut = {
     jump: SourceOut;
     post: PostOut | null;
     profile: SharingProfileOut | null;
+    /**
+     * Publishing Open
+     *
+     * False while new posts and widening to public are paused.
+     */
+    publishing_open: boolean;
 };
 
 /**

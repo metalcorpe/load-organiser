@@ -76,13 +76,17 @@ class Api(SocialApi):
         return dict(self.ok("PATCH", f"/jumps/{jump_id}", secret, body)["jump"])
 
 
+# The owner's publishing switch (SKYDIVER_PUBLISHING_OPEN), flipped by one test.
+PUBLISHING = {"open": True}
+
+
 @pytest.fixture(scope="module")
 def api() -> Iterator[Api]:
     accounts = Accounts.create()
     directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: NOW)  # fmt: skip
     social = SocialService(stores=sql_social_store_factory(engine), clock=lambda: NOW, directory=directory)  # fmt: skip
     logbook = LogbookService(stores=sql_logbook_store_factory(engine), clock=lambda: NOW, directory=directory)  # fmt: skip
-    posts = PostService(stores=sql_post_store_factory(engine), clock=lambda: NOW, directory=directory, social=social)  # fmt: skip
+    posts = PostService(stores=sql_post_store_factory(engine), clock=lambda: NOW, directory=directory, social=social, is_open=lambda: PUBLISHING["open"])  # fmt: skip
     access = AccessDependencies(lambda: accounts.service)
     app = FastAPI()
     app.include_router(create_social_router(service=lambda: social, identity=lambda: accounts.service, access=access))  # fmt: skip
@@ -463,3 +467,37 @@ def test_a_jump_that_was_shared_still_exports_and_restores(api: Api) -> None:
     assert copy["post"] is None
     copy_kinds = [e["kind"] for e in api.events(target, restored[0]["id"])]
     assert copy_kinds[-1] == "from_export" and "post_published" in copy_kinds
+
+
+def test_a_publishing_pause_stops_new_disclosure_only(api: Api) -> None:
+    """The owner can pause publishing; people can still take things back (#162)."""
+    owner, _ = api.person(name="Paused Jumper")
+    shared, widened, waiting = (api.jump(owner) for _ in range(3))
+    public = api.published(owner, shared)
+    followers = api.published(owner, widened, audience="followers")
+    PUBLISHING["open"] = False
+    try:
+        sharing = api.ok("GET", f"/me/jumps/{waiting['id']}/sharing", owner)
+        assert sharing["publishing_open"] is False
+
+        refused = api.publish(owner, waiting)
+        assert (refused.status_code, refused.json()) == (409, {"detail": "publishing_paused"})  # fmt: skip
+        wider = api.call(
+            "PUT", f"/me/posts/{followers['id']}/audience", owner,
+            {"audience": "public", "version": followers["version"]},
+        )  # fmt: skip
+        assert (wider.status_code, wider.json()) == (409, {"detail": "publishing_paused"})  # fmt: skip
+
+        # Narrowing and unpublishing never wait for the owner.
+        narrower = api.call(
+            "PUT", f"/me/posts/{public['id']}/audience", owner,
+            {"audience": "followers", "version": public["version"]},
+        )  # fmt: skip
+        assert narrower.status_code == 204, narrower.text
+        gone = api.call("DELETE", f"/me/posts/{followers['id']}", owner)
+        assert gone.status_code == 204, gone.text
+        # Private logging is unaffected.
+        waiting = api.edit(owner, waiting["id"], notes="still private")
+    finally:
+        PUBLISHING["open"] = True
+    assert api.published(owner, waiting)["audience"] == "public"

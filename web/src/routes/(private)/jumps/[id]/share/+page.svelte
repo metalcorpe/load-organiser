@@ -30,13 +30,15 @@
 		freefall: jump.freefall_seconds !== null
 	});
 	const blocked = $derived(
-		!profile
-			? 'profile_required'
-			: profile.hidden
-				? 'profile_hidden'
-				: profile.publishing_restricted
-					? 'publishing_restricted'
-					: null
+		!s.publishing_open
+			? 'publishing_paused'
+			: !profile
+				? 'profile_required'
+				: profile.hidden
+					? 'profile_hidden'
+					: profile.publishing_restricted
+						? 'publishing_restricted'
+						: null
 	);
 	const preview: PostOut | null = $derived(
 		previewing && profile
