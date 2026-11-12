@@ -42,14 +42,14 @@
 		<form method="GET" class="options" aria-label="What to print">
 			<div class="field">
 				<label for="print-from">From</label>
-				<input id="print-from" name="from" type="date" value={o.from} />
+				<input id="print-from" name="from" type="date" defaultValue={o.from} />
 			</div>
 			<div class="field">
 				<label for="print-until">Until</label>
-				<input id="print-until" name="until" type="date" value={o.until} />
+				<input id="print-until" name="until" type="date" defaultValue={o.until} />
 			</div>
 			<label class="choice">
-				<input type="checkbox" name="notes" value="yes" checked={o.notes} />
+				<input type="checkbox" name="notes" value="yes" defaultChecked={o.notes} />
 				Include notes (shortened)
 			</label>
 			<button class="button secondary" type="submit">Show</button>
