@@ -6,9 +6,11 @@ title, servicing or airworthiness, and a serial is never a lookup key.
 
 import re
 import unicodedata
+from collections.abc import Iterable
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, timedelta
 from enum import StrEnum
+from typing import Literal
 
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
 
@@ -21,6 +23,17 @@ PERFORMED_BY_MAX = 120
 MAX_COMPONENTS = 50
 MAX_RIGS = 20
 MAX_SERVICE_ENTRIES = 100  # per component
+
+# The one interval table. Source: FAA 14 CFR 105.43(a), which USPA follows: a
+# reserve parachute must have been packed within the preceding 180 days. Checked
+# 2026-11-12. Other countries set their own rule, so the owner can set a different
+# interval per reserve. No AAD interval is listed: manufacturers set those, and only
+# dates the owner entered are used for an AAD.
+REPACK_SOURCE: Literal["USPA / FAA 14 CFR 105.43"] = "USPA / FAA 14 CFR 105.43"
+REPACK_INTERVAL_DAYS = 180
+REPACK_INTERVAL_MAX = 730
+# "Due soon": due within this many days, or overdue.
+DUE_SOON_DAYS = 30
 
 
 class ComponentKind(StrEnum):
@@ -127,3 +140,107 @@ def check_membership(starts_on: date, not_before: date | None, today: date) -> N
         raise RuleError("rig_date_in_future")
     if not_before is not None and starts_on < not_before:
         raise RuleError("rig_date_before_current")
+
+
+def repack_interval(value: int | None) -> int | None:
+    """The owner's own reserve repack interval in days; None: the default."""
+    if value is None:
+        return None
+    if not 1 <= value <= REPACK_INTERVAL_MAX:
+        raise RuleError("repack_interval_invalid")
+    return value
+
+
+def end_of_life(value: date | None) -> date | None:
+    """A date the owner entered (e.g. from the label); never estimated here."""
+    if value is None:
+        return None
+    if not 1900 <= value.year <= 2100:
+        raise RuleError("end_of_life_invalid")
+    return value
+
+
+# -- due dates ------------------------------------------------------------------------
+
+
+class DueKind(StrEnum):
+    RESERVE_REPACK = "reserve_repack"  # a reserve's latest repack
+    SERVICE = "service"  # any other service entry's own due date
+    END_OF_LIFE = "end_of_life"  # the date the owner entered
+
+
+class DueStatus(StrEnum):
+    OVERDUE = "overdue"  # the due date has passed
+    SOON = "soon"  # due today or within DUE_SOON_DAYS
+    LATER = "later"
+
+
+@dataclass(frozen=True)
+class ServiceFact:
+    kind: ServiceKind
+    done_on: date
+    due_on: date | None
+    order: int  # higher: recorded later (breaks ties on the same day)
+
+
+@dataclass(frozen=True)
+class Due:
+    kind: DueKind
+    due_on: date
+    service_kind: ServiceKind | None = None
+    # "entered": the owner's own date; "interval": the latest repack plus an interval.
+    basis: Literal["entered", "interval"] = "entered"
+    interval_days: int | None = None
+    interval_is_default: bool = False
+
+
+def due_dates(
+    kind: ComponentKind,
+    service: Iterable[ServiceFact],
+    *,
+    repack_interval_days: int | None,
+    end_of_life_on: date | None,
+) -> list[Due]:
+    """What one component has coming due, from its own records only.
+
+    Only the latest entry of each service kind counts: a newer repack replaces the
+    due date of an older one. A reserve's latest repack without an entered due date
+    is due its interval later (the owner's, else REPACK_INTERVAL_DAYS). Nothing is
+    estimated for any other kind, and an end of life is only ever the owner's date.
+    """
+    latest: dict[ServiceKind, ServiceFact] = {}
+    for fact in service:
+        held = latest.get(fact.kind)
+        if held is None or (fact.done_on, fact.order) > (held.done_on, held.order):
+            latest[fact.kind] = fact
+    found: list[Due] = []
+    for service_kind, fact in latest.items():
+        if kind is ComponentKind.RESERVE and service_kind is ServiceKind.REPACK:
+            if fact.due_on is not None:
+                found.append(Due(DueKind.RESERVE_REPACK, fact.due_on, service_kind))
+            else:
+                days = repack_interval_days or REPACK_INTERVAL_DAYS
+                found.append(
+                    Due(
+                        DueKind.RESERVE_REPACK,
+                        fact.done_on + timedelta(days=days),
+                        service_kind,
+                        basis="interval",
+                        interval_days=days,
+                        interval_is_default=repack_interval_days is None,
+                    )
+                )
+        elif fact.due_on is not None:
+            found.append(Due(DueKind.SERVICE, fact.due_on, service_kind))
+    if end_of_life_on is not None:
+        found.append(Due(DueKind.END_OF_LIFE, end_of_life_on))
+    return sorted(found, key=lambda d: (d.due_on, d.kind.value))
+
+
+def due_status(due_on: date, today: date) -> DueStatus:
+    """Due on `due_on` means still in time that day; overdue from the day after."""
+    if due_on < today:
+        return DueStatus.OVERDUE
+    if due_on <= today + timedelta(days=DUE_SOON_DAYS):
+        return DueStatus.SOON
+    return DueStatus.LATER

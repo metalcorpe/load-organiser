@@ -104,6 +104,8 @@ export const OPERATIONS = {
 		maxBodyBytes: 4 * 1024 * 1024
 	},
 	createPlan: { method: 'POST', path: `${BETA}/plans` },
+	// Saved listings and plans of the next 60 days, at most five: one call for the Logbook.
+	getComingUp: { method: 'GET', path: `${BETA}/me/coming-up` },
 	updatePlan: { method: 'PATCH', path: `${BETA}/plans/{id}` },
 	deletePlan: { method: 'DELETE', path: `${BETA}/plans/{id}` },
 	// Reviewer maintenance (#151); the API enforces the reviewer role.
@@ -172,6 +174,8 @@ export const OPERATIONS = {
 		query: ['archived'],
 		maxBodyBytes: 1024 * 1024
 	},
+	// At most 50 components, each with a few dates: one call for all of them.
+	listGearDue: { method: 'GET', path: `${BETA}/gear/due`, maxBodyBytes: 1024 * 1024 },
 	createComponent: { method: 'POST', path: `${BETA}/gear/components` },
 	getComponent: {
 		method: 'GET',
@@ -224,6 +228,8 @@ export const OPERATIONS = {
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
 	getHistory: { method: 'GET', path: `${BETA}/history`, maxBodyBytes: 1024 * 1024 },
+	// Computed on read from all entries; a few dozen lines at most.
+	getMilestones: { method: 'GET', path: `${BETA}/history/milestones`, maxBodyBytes: 256 * 1024 },
 	previewBaseline: {
 		method: 'GET',
 		path: `${BETA}/history/baseline/preview`,

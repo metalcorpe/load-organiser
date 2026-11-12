@@ -31,3 +31,54 @@ export function formatMonth(month: string): string {
 export function count(n: number, one = 'jump', many = 'jumps'): string {
 	return `${n.toLocaleString('en-GB')} ${n === 1 ? one : many}`;
 }
+
+// -- milestones ---------------------------------------------------------------------
+
+/** 1st, 2nd, 3rd, 4th, 11th, 21st, 1,000th. */
+export function ordinal(n: number): string {
+	const tens = n % 100;
+	const suffix =
+		tens >= 11 && tens <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] ?? 'th');
+	return `${n.toLocaleString('en-GB')}${suffix}`;
+}
+
+/** Jump types as they read inside a sentence ("First wingsuit jump"). */
+const TYPE_IN_SENTENCE: Record<string, string> = {
+	belly: 'belly / formation',
+	freefly: 'freefly',
+	angle: 'angle / tracking',
+	wingsuit: 'wingsuit',
+	canopy: 'canopy piloting',
+	crw: 'canopy formation (CRW)',
+	accuracy: 'accuracy',
+	hop_and_pop: 'hop and pop',
+	tandem: 'tandem',
+	training: 'training / coached'
+};
+
+/** The fields of MilestoneOut the wording needs. */
+export interface MilestoneIn {
+	kind: 'jump_count' | 'freefall' | 'jump_type' | 'place';
+	number: number | null;
+	hours: number | null;
+	jump_type: string | null;
+	location: { kind: 'venue' | 'place'; name: string | null } | null;
+}
+
+export function milestoneText(m: MilestoneIn): string {
+	switch (m.kind) {
+		case 'jump_count':
+			return `${ordinal(m.number ?? 0)} jump`;
+		case 'freefall':
+			return `${count(m.hours ?? 0, 'hour', 'hours')} of recorded freefall`;
+		case 'jump_type': {
+			const type = TYPE_IN_SENTENCE[m.jump_type ?? ''];
+			return type ? `First ${type} jump` : 'First jump of the type "Other"';
+		}
+		case 'place': {
+			const loc = m.location;
+			const name = loc?.name ?? (loc?.kind === 'venue' ? 'a dropzone no longer listed' : 'a private place');
+			return `First jump at ${name}`;
+		}
+	}
+}

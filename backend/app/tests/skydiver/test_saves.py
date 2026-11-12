@@ -302,3 +302,90 @@ def test_plan_limit(api: Api, monkeypatch: pytest.MonkeyPatch) -> None:
     api.ok("POST", "/plans", owner, body, 201)
     over = api.call("POST", "/plans", owner, body)
     assert over.status_code == 409 and over.json() == {"detail": "plan_limit_reached"}
+
+
+def test_coming_up_window_in_each_listings_own_time_zone(api: Api) -> None:
+    # NOW is 2026-11-03 12:00 UTC: 3 November in Madrid, 4 November in Kiritimati.
+    owner = api.accounts.session()
+    tag = name()
+
+    def saved(title: str, start: str | None, end: str | None, **extra: Any) -> dict[str, Any]:  # fmt: skip
+        item = api.listing(f"{tag} {title}", starts_on=start, ends_on=end, **extra)
+        api.ok("PUT", f"/saved/{item['id']}", owner, status=201)
+        return item
+
+    saved("starts today", "2026-11-03", "2026-11-03")
+    saved("running", "2026-11-01", "2026-11-05")  # started, not ended: still ahead
+    day60 = saved("day 60", "2027-01-02", "2027-01-02")
+    saved("day 61", "2027-01-03", "2027-01-03")
+    saved("ended", "2026-11-01", "2026-11-02")
+    saved("kiritimati", "2027-01-03", "2027-01-03", time_zone="Pacific/Kiritimati")
+    cancelled = saved("cancelled", "2026-11-10", "2026-11-11")
+    api.status(cancelled["id"], "cancelled")
+    postponed = saved("postponed", "2026-11-20", "2026-11-21")
+    api.status(postponed["id"], "postponed")  # clears the dates; new ones follow
+    api.ok(
+        "PATCH", f"/directory/opportunities/{postponed['id']}", api.reviewer,
+        {"starts_on": "2026-12-10", "ends_on": "2026-12-11", "time_zone": "Europe/Madrid"},
+    )  # fmt: skip
+
+    def plan(title: str, start: str, end: str, **extra: Any) -> None:
+        body = {"title": f"{tag} {title}", "starts_on": start, "ends_on": end, **extra}
+        api.ok("POST", "/plans", owner, body, 201)
+
+    plan("plan today", "2026-11-03", "2026-11-03")
+    plan("plan day 61", "2027-01-04", "2027-01-05")  # from 4 November, UTC+14
+    plan("plan ended", "2026-11-01", "2026-11-02")
+    # A plan for a saved listing stands for both: the listing is not listed twice.
+    plan("plan for day 60", "2027-01-02", "2027-01-02", opportunity_id=day60["id"])
+
+    found = api.ok("GET", "/me/coming-up", owner)
+    rows = [(i["kind"], i["title"].removeprefix(f"{tag} "), i["starts_on"], i["status"]) for i in found["items"]]  # fmt: skip
+    assert rows == [
+        ("saved", "running", "2026-11-01", "published"),
+        ("plan", "plan today", "2026-11-03", None),
+        ("saved", "starts today", "2026-11-03", "published"),
+        ("saved", "postponed", "2026-12-10", "postponed"),
+        ("plan", "plan for day 60", "2027-01-02", None),
+    ]
+    # Sixth and last: day 61 in Madrid is out, but in Kiritimati it is day 60.
+    assert found["total"] == 6
+    first = found["items"][0]
+    assert (first["place"], first["country"]) == ("Airfield", "ES")
+    assert found["items"][0]["id"] == found["items"][0]["opportunity_id"]
+
+    # Owner-scoped: nobody else sees any of it; no session, no answer.
+    assert api.ok("GET", "/me/coming-up", api.accounts.session()) == {
+        "items": [],
+        "total": 0,
+    }
+    assert api.call("GET", "/me/coming-up").status_code == 401
+
+
+def test_coming_up_is_capped_at_five_soonest(api: Api) -> None:
+    owner = api.accounts.session()
+    for day in range(10, 17):
+        body = {"title": f"Trip {day}", "starts_on": f"2026-11-{day}", "ends_on": f"2026-11-{day}"}  # fmt: skip
+        api.ok("POST", "/plans", owner, body, 201)
+    found = api.ok("GET", "/me/coming-up", owner)
+    assert [i["title"] for i in found["items"]] == [f"Trip {d}" for d in range(10, 15)]
+    assert found["total"] == 7
+
+
+def test_a_plans_window_ends_60_days_after_the_latest_date_anywhere(api: Api) -> None:
+    # NOW is 2026-11-03 12:00 UTC; the latest calendar date anywhere (UTC+14) is
+    # 4 November, so day 60 is 3 January and day 61 is 4 January.
+    owner = api.accounts.session()
+    for title, start in (("day 60", "2027-01-03"), ("day 61", "2027-01-04")):
+        body = {"title": title, "starts_on": start, "ends_on": start}
+        api.ok("POST", "/plans", owner, body, 201)
+    found = api.ok("GET", "/me/coming-up", owner)
+    assert [i["title"] for i in found["items"]] == ["day 60"]
+
+
+def test_an_unknown_or_malformed_zone_falls_back_to_the_utc_date() -> None:
+    late = datetime(2026, 11, 3, 23, 0, tzinfo=UTC)
+    kiritimati = saves_service._local_today(late, "Pacific/Kiritimati")
+    assert kiritimati.isoformat() == "2026-11-04"
+    for zone in ("Nowhere/Atlantis", "../etc/passwd", "Europe//Madrid"):
+        assert saves_service._local_today(late, zone).isoformat() == "2026-11-03", zone

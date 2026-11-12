@@ -411,6 +411,30 @@
         "title": "ColumnsOut",
         "type": "object"
       },
+      "ComingUpOut": {
+        "description": "Private to you: what you saved or planned, starting within 60 days.",
+        "properties": {
+          "items": {
+            "description": "Soonest first, at most 5.",
+            "items": {
+              "$ref": "#/components/schemas/UpcomingOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "total": {
+            "description": "All items in the window, shown or not.",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "ComingUpOut",
+        "type": "object"
+      },
       "ComponentDetailOut": {
         "properties": {
           "component": {
@@ -505,6 +529,19 @@
             "title": "Client Key",
             "type": "string"
           },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
+            "title": "End Of Life On"
+          },
           "kind": {
             "enum": [
               "container",
@@ -586,6 +623,20 @@
             ],
             "title": "Relation"
           },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "maximum": 730.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.",
+            "title": "Repack Interval Days"
+          },
           "serial": {
             "anyOf": [
               {
@@ -642,6 +693,18 @@
           "archived": {
             "title": "Archived",
             "type": "boolean"
+          },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Of Life On"
           },
           "id": {
             "format": "uuid",
@@ -722,6 +785,18 @@
             "title": "Relation",
             "type": "string"
           },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own reserve repack interval; null: the default of 180 days.",
+            "title": "Repack Interval Days"
+          },
           "serial": {
             "anyOf": [
               {
@@ -755,6 +830,8 @@
           "acquisition_method",
           "acquired",
           "notes",
+          "repack_interval_days",
+          "end_of_life_on",
           "archived",
           "version",
           "updated_at"
@@ -860,6 +937,19 @@
             ],
             "title": "Acquisition Method"
           },
+          "end_of_life_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
+            "title": "End Of Life On"
+          },
           "kind": {
             "anyOf": [
               {
@@ -954,6 +1044,20 @@
               }
             ],
             "title": "Relation"
+          },
+          "repack_interval_days": {
+            "anyOf": [
+              {
+                "maximum": 730.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.",
+            "title": "Repack Interval Days"
           },
           "serial": {
             "anyOf": [
@@ -1106,6 +1210,37 @@
         "title": "DecisionIn",
         "type": "object"
       },
+      "DueComponentOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "container",
+              "main",
+              "reserve",
+              "aad",
+              "other"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "label"
+        ],
+        "title": "DueComponentOut",
+        "type": "object"
+      },
       "DuplicateIn": {
         "properties": {
           "of": {
@@ -1227,6 +1362,103 @@
           "state"
         ],
         "title": "FollowOut",
+        "type": "object"
+      },
+      "GearDueOut": {
+        "description": "A date coming due on your own gear, from your own records. Not an\nairworthiness status: your rigger and the manufacturer decide that.",
+        "properties": {
+          "basis": {
+            "description": "`entered`: your own date. `interval`: your latest repack plus `interval_days`.",
+            "enum": [
+              "entered",
+              "interval"
+            ],
+            "title": "Basis",
+            "type": "string"
+          },
+          "component": {
+            "$ref": "#/components/schemas/DueComponentOut"
+          },
+          "due_on": {
+            "description": "Still in time on this day; overdue after it.",
+            "format": "date",
+            "title": "Due On",
+            "type": "string"
+          },
+          "interval_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interval Days"
+          },
+          "interval_source": {
+            "anyOf": [
+              {
+                "const": "USPA / FAA 14 CFR 105.43",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Set when the default interval applies.",
+            "title": "Interval Source"
+          },
+          "kind": {
+            "enum": [
+              "reserve_repack",
+              "service",
+              "end_of_life"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service entry it comes from; null for an end of life.",
+            "title": "Service Kind"
+          },
+          "status": {
+            "description": "`soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
+            "enum": [
+              "overdue",
+              "soon",
+              "later"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "component",
+          "kind",
+          "service_kind",
+          "due_on",
+          "basis",
+          "interval_days",
+          "interval_source",
+          "status"
+        ],
+        "title": "GearDueOut",
         "type": "object"
       },
       "GearEventOut": {
@@ -1366,6 +1598,17 @@
             "title": "Months",
             "type": "array"
           },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LicenceProgressOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null without a licence."
+          },
           "totals": {
             "$ref": "#/components/schemas/TotalsOut"
           }
@@ -1380,7 +1623,8 @@
           "by_location",
           "by_component",
           "baseline_events",
-          "currency"
+          "currency",
+          "progress"
         ],
         "title": "HistoryOut",
         "type": "object"
@@ -2521,6 +2765,107 @@
         "title": "LicenceOut",
         "type": "object"
       },
+      "LicenceProgressOut": {
+        "description": "Progress toward the next USPA licence from your own entries. Guidance only:\nUSPA and your instructors check every requirement, including the ones this app\ndoes not count (skills, proficiency card, landing accuracy, endorsements).",
+        "properties": {
+          "entries_with_freefall": {
+            "title": "Entries With Freefall",
+            "type": "integer"
+          },
+          "entries_without_freefall": {
+            "description": "These add no freefall time.",
+            "title": "Entries Without Freefall",
+            "type": "integer"
+          },
+          "freefall_required_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when the next licence lists no freefall time.",
+            "title": "Freefall Required Seconds"
+          },
+          "freefall_seconds": {
+            "description": "Recorded entries only; prior jumps have no freefall time.",
+            "title": "Freefall Seconds",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "The reported total, else the recorded entries.",
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "jumps_include_prior": {
+            "description": "Your declared prior jump count is part of `jumps`.",
+            "title": "Jumps Include Prior",
+            "type": "boolean"
+          },
+          "jumps_required": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jumps Required"
+          },
+          "licence": {
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          },
+          "next_licence": {
+            "anyOf": [
+              {
+                "enum": [
+                  "a",
+                  "b",
+                  "c",
+                  "d"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null for a D licence: there is no next one.",
+            "title": "Next Licence"
+          },
+          "source": {
+            "const": "USPA SIM 3-1",
+            "default": "USPA SIM 3-1",
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence",
+          "next_licence",
+          "jumps",
+          "jumps_required",
+          "jumps_include_prior",
+          "freefall_seconds",
+          "freefall_required_seconds",
+          "entries_with_freefall",
+          "entries_without_freefall"
+        ],
+        "title": "LicenceProgressOut",
+        "type": "object"
+      },
       "LocationCountOut": {
         "properties": {
           "jumps": {
@@ -2698,6 +3043,132 @@
           "into"
         ],
         "title": "MergeIn",
+        "type": "object"
+      },
+      "MilestoneOut": {
+        "properties": {
+          "hours": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`freefall`: recorded hours crossed.",
+            "title": "Hours"
+          },
+          "jump_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Id"
+          },
+          "jump_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`jump_type`: the first of this type.",
+            "title": "Jump Type"
+          },
+          "kind": {
+            "enum": [
+              "jump_count",
+              "freefall",
+              "jump_type",
+              "place"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`place`: the first jump here."
+          },
+          "number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "`jump_count`: the Nth jump.",
+            "title": "Number"
+          },
+          "on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The entry's date; null for a jump count within your declared prior jumps (before you kept this logbook).",
+            "title": "On"
+          }
+        },
+        "required": [
+          "kind",
+          "on",
+          "jump_id",
+          "number",
+          "hours",
+          "jump_type",
+          "location"
+        ],
+        "title": "MilestoneOut",
+        "type": "object"
+      },
+      "MilestonesOut": {
+        "description": "Private milestones derived from your own entries; never shared.",
+        "properties": {
+          "counted": {
+            "description": "Jump counts number your entries (`entries`), continue from your declared prior jumps (`with_prior`), or are left out while that count disagrees with your entries (`unchecked`).",
+            "enum": [
+              "entries",
+              "with_prior",
+              "unchecked"
+            ],
+            "title": "Counted",
+            "type": "string"
+          },
+          "items": {
+            "description": "Newest first; jump counts before this logbook last. Only the five most recent first jumps at a new place.",
+            "items": {
+              "$ref": "#/components/schemas/MilestoneOut"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items",
+          "counted"
+        ],
+        "title": "MilestonesOut",
         "type": "object"
       },
       "ModerationIn": {
@@ -7862,6 +8333,105 @@
         "title": "UndoIn",
         "type": "object"
       },
+      "UpcomingOut": {
+        "description": "A saved listing or one of your plans, in the coming-up window.",
+        "properties": {
+          "country": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
+          "ends_on": {
+            "description": "Inclusive; a listing's dates are in its zone.",
+            "format": "date",
+            "title": "Ends On",
+            "type": "string"
+          },
+          "id": {
+            "description": "The listing for `saved`, the plan for `plan`.",
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "saved",
+              "plan"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "opportunity_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Opportunity Id"
+          },
+          "place": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dropzone, private place or location note.",
+            "title": "Place"
+          },
+          "starts_on": {
+            "format": "date",
+            "title": "Starts On",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "published",
+                  "postponed",
+                  "cancelled"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The listing's state. For a plan, only when its linked listing is postponed or cancelled.",
+            "title": "Status"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "starts_on",
+          "ends_on",
+          "place",
+          "country",
+          "status",
+          "opportunity_id"
+        ],
+        "title": "UpcomingOut",
+        "type": "object"
+      },
       "VenueCreateIn": {
         "properties": {
           "checked_on": {
@@ -12953,6 +13523,100 @@
         ]
       }
     },
+    "/api/skydiver/v1/gear/due": {
+      "get": {
+        "description": "Dates coming due on your current gear, soonest first (overdue included).",
+        "operationId": "listGearDue",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/GearDueOut"
+                  },
+                  "title": "Response Listgeardue",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__gear__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Gear Due",
+        "tags": [
+          "skydiver-gear"
+        ]
+      }
+    },
     "/api/skydiver/v1/gear/rigs": {
       "get": {
         "operationId": "listRigs",
@@ -13636,6 +14300,86 @@
           }
         },
         "summary": "Preview Baseline",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history/milestones": {
+      "get": {
+        "description": "Dated milestones from your own entries, newest first. Computed on read.",
+        "operationId": "getMilestones",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MilestonesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Milestones",
         "tags": [
           "skydiver-history"
         ]
@@ -15585,6 +16329,96 @@
         "summary": "Update Jump",
         "tags": [
           "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/me/coming-up": {
+      "get": {
+        "description": "Saved listings and plans starting within 60 days or running, soonest\nfirst. Ended and cancelled listings never show.",
+        "operationId": "getComingUp",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComingUpOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__saves__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Coming Up",
+        "tags": [
+          "skydiver-saves"
         ]
       }
     },

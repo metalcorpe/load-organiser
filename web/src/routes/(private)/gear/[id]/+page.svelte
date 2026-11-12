@@ -1,8 +1,18 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import TextArea from '#lib/components/TextArea.svelte';
 	import { page } from '$app/state';
+	import DueList from '#lib/components/DueList.svelte';
 	import ReviewHistory from '#lib/components/ReviewHistory.svelte';
-	import { KIND_LABEL, METHOD_LABEL, RELATION_LABEL, SERVICE_LABEL, gearMessage } from '#lib/gear.ts';
+	import { localToday } from '#lib/currency.ts';
+	import {
+		KIND_LABEL,
+		METHOD_LABEL,
+		RELATION_LABEL,
+		REPACK_INTERVAL_LABEL,
+		SERVICE_LABEL,
+		gearMessage
+	} from '#lib/gear.ts';
 	import { formatDay } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
@@ -18,6 +28,21 @@
 		form && form.form === name && 'error' in form ? gearMessage(form.error) : undefined;
 	// Writable derived: follows the record or the echoed form, and the radios.
 	let relation = $derived(v('relation', c?.relation ?? 'owned') || 'owned');
+	// Only a reserve has a repack interval; the field follows the chosen type.
+	// The saved or echoed type is the server-rendered state (`selected` on each option,
+	// so a choice made before hydration is not overwritten); `chosen` follows changes.
+	const savedKind = $derived(v('kind', c?.kind ?? 'main') || 'main');
+	let chosen = $state<string | null>(null);
+	const kind = $derived(chosen ?? savedKind);
+	// Shown when the record is a reserve (works without JS after a save) or when the
+	// type is changed to reserve in the browser.
+	const showInterval = $derived(savedKind === 'reserve' || kind === 'reserve');
+	// The server's UTC day until the browser gives the jumper's own calendar day.
+	// svelte-ignore state_referenced_locally
+	let today = $state(data.today);
+	onMount(() => {
+		today = localToday();
+	});
 	const PRECISION: Record<number, string> = { 4: 'year only', 7: 'month only', 10: 'exact day' };
 </script>
 
@@ -59,9 +84,14 @@
 	{#if !c}<input type="hidden" name="client_key" value={echoed?.client_key || data.createKey} />{/if}
 	<div class="field">
 		<label for="kind">Type</label>
-		<select id="kind" name="kind" required>
+		<select
+			id="kind"
+			name="kind"
+			required
+			onchange={(event) => (chosen = event.currentTarget.value)}
+		>
 			{#each Object.entries(KIND_LABEL) as [value, label] (value)}
-				<option {value} selected={v('kind', c?.kind ?? 'main') === value}>{label}</option>
+				<option {value} selected={savedKind === value}>{label}</option>
 			{/each}
 		</select>
 	</div>
@@ -116,6 +146,37 @@
 			</div>
 		</div>
 	{/if}
+	{#if showInterval}
+		<div class="field">
+			<label for="repack_interval_days">Repack interval in days (optional)</label>
+			<input
+				id="repack_interval_days"
+				name="repack_interval_days"
+				inputmode="numeric"
+				maxlength="3"
+				aria-describedby="repack-interval-hint"
+				defaultValue={v('repack_interval_days', c?.repack_interval_days?.toString())}
+			/>
+			<p class="hint" id="repack-interval-hint">
+				Empty: {REPACK_INTERVAL_LABEL}. The next repack is counted from your last recorded repack,
+				unless you entered a due date with it.
+			</p>
+		</div>
+	{/if}
+	<div class="field">
+		<label for="end_of_life_on">End of life (optional)</label>
+		<input
+			id="end_of_life_on"
+			name="end_of_life_on"
+			type="date"
+			aria-describedby="end-of-life-hint"
+			defaultValue={v('end_of_life_on', c?.end_of_life_on)}
+		/>
+		<p class="hint" id="end-of-life-hint">
+			Only a date from the label or the manufacturer's documents, for example an AAD's end of life.
+			The app never estimates it.
+		</p>
+	</div>
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
 		<TextArea id="notes" name="notes" maxlength={1000} rows={3} initial={v('notes', c?.notes)} />
@@ -165,6 +226,13 @@
 				</li>
 			{/each}
 		</ul>
+	{/if}
+
+	{#if data.due.length > 0}
+		<section aria-labelledby="due-heading">
+			<h2 id="due-heading">Due dates</h2>
+			<DueList items={data.due} {today} label="Due dates" detailed />
+		</section>
 	{/if}
 
 	<h2>Service you recorded</h2>

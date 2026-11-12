@@ -2,16 +2,18 @@
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
+	import LicenceProgress from '#lib/components/LicenceProgress.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { KIND_LABEL } from '#lib/gear.ts';
-	import { count, formatMonth, historyMessage } from '#lib/history.ts';
+	import { count, formatMonth, historyMessage, milestoneText } from '#lib/history.ts';
 	import { JUMP_TYPE_LABEL } from '#lib/jumps.ts';
 	import { formatDay } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const h = $derived(data.history);
+	const ms = $derived(data.milestones);
 	// Bar lengths for the month table, relative to the busiest month (at least 1 to avoid /0).
 	const peak = $derived(h.ok ? Math.max(1, ...h.months.map((m) => m.jumps)) : 1);
 </script>
@@ -81,6 +83,9 @@
 	</section>
 
 	{#if h.currency}<CurrencyStatus currency={h.currency} today={data.today} />{/if}
+	{#if h.progress}
+		<LicenceProgress progress={h.progress} priorInconsistent={Boolean(h.baseline && t.inconsistent)} />
+	{/if}
 
 	{#if t.recorded === 0}
 		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>
@@ -106,6 +111,36 @@
 		</table>
 		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
 		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
+		</section>
+
+		<section class="card" aria-labelledby="milestones-heading">
+			<h2 id="milestones-heading">Milestones</h2>
+			{#if !ms.ok}
+				<p class="form-error" role="alert">{historyMessage(ms.reason)}</p>
+			{:else if ms.items.length === 0}
+				<p class="hint">Milestones appear here as you log jumps.</p>
+			{:else}
+				<ul class="milestones" aria-label="Milestones">
+					{#each ms.items as m, i (i)}
+						<li>
+							<span class="when">{m.on ? formatDay(m.on) : 'No date'}</span>
+							<span>{milestoneText(m)}{m.on ? '' : ', before you kept this logbook'}</span>
+						</li>
+					{/each}
+				</ul>
+				<p class="hint">
+					From your own entries, newest first; private to you.
+					{#if ms.counted === 'with_prior'}
+						Jump counts continue from your declared prior jump count; firsts and freefall hours
+						count only the jumps recorded here.
+					{:else if ms.counted === 'unchecked'}
+						Jump counts are left out until your prior jump count agrees with your entries.
+					{:else}
+						Jump counts number your entries in date order.
+					{/if}
+					Only your five most recent first jumps at a new place are listed.
+				</p>
+			{/if}
 		</section>
 
 		<section class="card">
@@ -195,6 +230,26 @@
 		font-size: 3.4rem;
 		line-height: 0.95;
 		color: var(--highlight);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.milestones {
+		list-style: none;
+		margin: 0.25rem 0 0.5rem;
+		padding: 0;
+		display: grid;
+		gap: 0.3rem;
+	}
+
+	.milestones li {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 0.75rem;
+	}
+
+	.milestones .when {
+		min-width: 11rem;
+		color: var(--muted);
 		font-variant-numeric: tabular-nums;
 	}
 

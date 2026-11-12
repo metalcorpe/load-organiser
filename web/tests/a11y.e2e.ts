@@ -25,6 +25,11 @@ async function created(path: string, bearer: string, body: unknown): Promise<Rec
 	return (await response.json()) as Record<string, any>;
 }
 
+/** The UTC calendar day `offset` days from today, as YYYY-MM-DD. */
+function daysFromToday(offset: number): string {
+	return new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+}
+
 interface World {
 	member: string;
 	paths: { guest: string[]; member: string[]; reviewer: string[] };
@@ -76,6 +81,12 @@ async function world(): Promise<World> {
 			label: 'Axe reserve'
 		})
 	).component;
+	// A repack 175 days ago: the "due soon" states of Logbook, Gear and the component.
+	await created(`/gear/components/${component.id}/service`, bearer, {
+		client_key: randomUUID(),
+		kind: 'repack',
+		done_on: daysFromToday(-175)
+	});
 	const jump = (
 		await created('/jumps', bearer, {
 			client_key: randomUUID(),
@@ -96,6 +107,20 @@ async function world(): Promise<World> {
 		venue_id: venue.id
 	});
 	await apiCall('PUT', `/saved/${listing.id}`, { bearer });
+	// A plan next week: the "Coming up" list on the Logbook.
+	await created('/plans', bearer, {
+		title: 'Axe weekend',
+		starts_on: daysFromToday(7),
+		ends_on: daysFromToday(8),
+		venue_id: venue.id
+	});
+	// A stated licence: currency, the next-licence line (Logbook) and section (History).
+	await apiCall('PUT', '/me/licence', { bearer, body: { licence: 'b' } });
+	// A prior jump count: History's milestones include ones "before you kept this logbook".
+	await apiCall('PUT', '/history/baseline', {
+		bearer,
+		body: { prior_jumps: 30, before_on: '2026-01-01' }
+	});
 
 	return {
 		member,
@@ -187,6 +212,8 @@ test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 	// The page set is the same on every device; two engines cover layout differences.
 	test.beforeEach(({}, info) => {
 		test.skip(info.project.name === 'pixel-7', 'chromium-320 covers Chromium');
+		// Each test scans about twenty pages; WebKit needs more than the default 30 s.
+		test.slow();
 	});
 	test.beforeAll(async () => {
 		shared ??= await world();

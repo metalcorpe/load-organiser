@@ -12,13 +12,15 @@ import uuid
 from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
-from typing import Any, Protocol
+from datetime import date, datetime, time, timedelta
+from typing import Any, Literal, Protocol
 
 from app.skydiver.access.policy import Actor
-from app.skydiver.directory.service import DirectoryService, EditConflict
-from app.skydiver.history import currency, policy
+from app.skydiver.directory.service import DirectoryService, EditConflict, Venue
+from app.skydiver.history import currency, licences, milestones, policy
 from app.skydiver.history.currency import Currency, Licence
+from app.skydiver.history.licences import Progress
+from app.skydiver.history.milestones import Milestone
 from app.skydiver.history.policy import Baseline, Totals
 from app.skydiver.logbook.service import ComponentRef, Location, PlaceRef
 
@@ -60,6 +62,35 @@ class Summary:
     by_component: list[ComponentUse]
     baseline_events: list[BaselineEvent]
     currency: Currency
+    progress: Progress | None = None  # None without a licence
+
+
+@dataclass(frozen=True)
+class EntryRow:
+    """What milestones need of one detailed entry."""
+
+    id: uuid.UUID
+    jumped_on: date
+    jump_number: int | None
+    exit_time: time | None
+    jump_type: str
+    freefall_seconds: int | None
+    venue_id: uuid.UUID | None
+    place_id: uuid.UUID | None
+
+
+@dataclass(frozen=True)
+class MilestoneView:
+    milestone: Milestone
+    location: Location | None  # for a first jump at a place
+
+
+@dataclass(frozen=True)
+class MilestoneList:
+    items: list[MilestoneView]
+    # How jump counts are numbered: entries only, after the declared prior jumps,
+    # or not at all while the prior count disagrees with the entries.
+    counted: Literal["entries", "with_prior", "unchecked"]
 
 
 @dataclass(frozen=True)
@@ -101,6 +132,14 @@ class HistoryStore(Protocol):
         ...
 
     def count_jumps(self, actor: Actor) -> int: ...
+    def entries(self, actor: Actor) -> list[EntryRow]:
+        """Every detailed entry of the owner (at most MAX_JUMPS), in no order."""
+        ...
+
+    def freefall(self, actor: Actor) -> tuple[int, int, int]:
+        """(seconds, entries with a freefall time, entries without one)."""
+        ...
+
     def count_before(self, actor: Actor, on: date) -> int: ...
     def date_range(self, actor: Actor) -> tuple[date | None, date | None]: ...
     def per_day_since(self, actor: Actor, start: date) -> dict[date, int]: ...
@@ -153,6 +192,7 @@ class HistoryService:
             places = {p.id: p for p in store.places(actor, place_ids)}
             events = store.events(actor, EVENTS_SHOWN)
             licence = store.licence(actor)
+            seconds, with_time, without_time = store.freefall(actor)
         per_month = dict.fromkeys(months, 0)
         for day, jumps in per_day.items():
             key = f"{day.year:04d}-{day.month:02d}"
@@ -173,6 +213,16 @@ class HistoryService:
             baseline_events=events,
             # Only dated entries: a prior jump count adds no currency.
             currency=currency.currency(licence, last),
+            # The reported total when it holds (prior jumps included), else the
+            # entries; freefall time from entries only.
+            progress=licences.progress(
+                licence,
+                jumps=totals.recorded if totals.lifetime is None else totals.lifetime,
+                jumps_include_prior=totals.lifetime is not None,
+                freefall_seconds=seconds,
+                entries_with_freefall=with_time,
+                entries_without_freefall=without_time,
+            ),
         )
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:
@@ -189,6 +239,48 @@ class HistoryService:
     def licence(self, actor: Actor) -> Licence:
         with self._stores() as store:
             return store.licence(actor)
+
+    def milestones(self, actor: Actor) -> MilestoneList:
+        """Derived on read: one query for the entries, one for their private
+        places, one directory lookup for their dropzones. Nothing is stored."""
+        with self._stores() as store:
+            store.snapshot()
+            state = store.baseline(actor)
+            totals = self._totals(store, actor, state)
+            rows = store.entries(actor)
+            place_ids = sorted({r.place_id for r in rows if r.place_id is not None})
+            places = {p.id: p for p in store.places(actor, place_ids)}
+        venue_ids = sorted({r.venue_id for r in rows if r.venue_id is not None})
+        venues = self._directory.public_venues(venue_ids) if venue_ids else {}
+        found: dict[tuple[str, uuid.UUID], Location] = {}
+        entries: list[milestones.Entry] = []
+        for r in rows:
+            loc = _location(r.venue_id, r.place_id, venues, places)
+            found[(loc.kind, loc.id)] = loc
+            entries.append(
+                milestones.Entry(
+                    id=r.id,
+                    jumped_on=r.jumped_on,
+                    jump_number=r.jump_number,
+                    exit_time=r.exit_time,
+                    jump_type=r.jump_type,
+                    freefall_seconds=r.freefall_seconds,
+                    place=(loc.kind, loc.id),
+                )
+            )
+        unchecked = totals.inconsistent
+        prior = (
+            milestones.Prior(state.prior_jumps, state.before_on)
+            if state is not None and not unchecked
+            else None
+        )
+        items = milestones.milestones(entries, prior=prior, count_jumps=not unchecked)
+        return MilestoneList(
+            items=[
+                MilestoneView(m, found.get(m.place) if m.place else None) for m in items
+            ],
+            counted="unchecked" if unchecked else "with_prior" if prior else "entries",
+        )
 
     # -- writes -----------------------------------------------------------------------
 
@@ -267,25 +359,7 @@ class HistoryService:
         counts: dict[tuple[str, uuid.UUID], int] = {}
         found: dict[tuple[str, uuid.UUID], Location] = {}
         for venue_id, place_id, jumps in located:
-            if venue_id is not None:
-                venue = venues.get(venue_id)
-                # Venues merged since are counted under the venue they resolve to.
-                loc = Location(
-                    "venue",
-                    venue.id if venue else venue_id,
-                    venue.name if venue else None,
-                    venue.country if venue else None,
-                    closed=bool(venue and venue.status.value == "closed"),
-                )
-            else:
-                assert place_id is not None
-                place = places.get(place_id)
-                loc = Location(
-                    "place",
-                    place_id,
-                    place.name if place else None,
-                    place.country if place else None,
-                )
+            loc = _location(venue_id, place_id, venues, places)
             key = (loc.kind, loc.id)
             found[key] = loc
             counts[key] = counts.get(key, 0) + jumps
@@ -293,3 +367,29 @@ class HistoryService:
             ((found[k], n) for k, n in counts.items()),
             key=lambda item: (-item[1], (item[0].name or "").casefold()),
         )
+
+
+def _location(
+    venue_id: uuid.UUID | None,
+    place_id: uuid.UUID | None,
+    venues: dict[uuid.UUID, Venue],
+    places: dict[uuid.UUID, PlaceRef],
+) -> Location:
+    if venue_id is not None:
+        venue = venues.get(venue_id)
+        # Venues merged since are counted under the venue they resolve to.
+        return Location(
+            "venue",
+            venue.id if venue else venue_id,
+            venue.name if venue else None,
+            venue.country if venue else None,
+            closed=bool(venue and venue.status.value == "closed"),
+        )
+    assert place_id is not None
+    place = places.get(place_id)
+    return Location(
+        "place",
+        place_id,
+        place.name if place else None,
+        place.country if place else None,
+    )

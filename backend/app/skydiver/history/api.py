@@ -7,6 +7,7 @@ declares. A correction carries the `version` it was based on (409 `edit_conflict
 a first declaration carries none. Nothing here is shared, verified or a credential.
 """
 
+import uuid
 from collections.abc import Callable
 from datetime import date, datetime
 from typing import Annotated, Any, Literal
@@ -19,10 +20,13 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.history import licences
 from app.skydiver.history.currency import SOURCE, Currency, Licence
+from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Totals
-from app.skydiver.history.service import HistoryService, Summary
+from app.skydiver.history.service import HistoryService, MilestoneList, Summary
 from app.skydiver.logbook.api import ComponentRefOut, LocationOut
+from app.skydiver.logbook.service import Location
 
 PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
@@ -119,6 +123,31 @@ class CurrencyOut(BaseModel):
     source: Literal["USPA SIM 5-2"] = SOURCE
 
 
+class LicenceProgressOut(BaseModel):
+    """Progress toward the next USPA licence from your own entries. Guidance only:
+    USPA and your instructors check every requirement, including the ones this app
+    does not count (skills, proficiency card, landing accuracy, endorsements)."""
+
+    licence: LicenceName
+    next_licence: Literal["a", "b", "c", "d"] | None = Field(
+        description="Null for a D licence: there is no next one."
+    )
+    jumps: int = Field(description="The reported total, else the recorded entries.")
+    jumps_required: int | None
+    jumps_include_prior: bool = Field(
+        description="Your declared prior jump count is part of `jumps`."
+    )
+    freefall_seconds: int = Field(
+        description="Recorded entries only; prior jumps have no freefall time."
+    )
+    freefall_required_seconds: int | None = Field(
+        description="Null when the next licence lists no freefall time."
+    )
+    entries_with_freefall: int
+    entries_without_freefall: int = Field(description="These add no freefall time.")
+    source: Literal["USPA SIM 3-1"] = licences.SOURCE
+
+
 class HistoryOut(BaseModel):
     totals: TotalsOut
     baseline: BaselineOut | None
@@ -136,6 +165,34 @@ class HistoryOut(BaseModel):
         description="Private provenance, newest last (at most 50)."
     )
     currency: CurrencyOut
+    progress: LicenceProgressOut | None = Field(description="Null without a licence.")
+
+
+class MilestoneOut(BaseModel):
+    kind: Literal["jump_count", "freefall", "jump_type", "place"]
+    on: date | None = Field(
+        description="The entry's date; null for a jump count within your declared"
+        " prior jumps (before you kept this logbook)."
+    )
+    jump_id: uuid.UUID | None
+    number: int | None = Field(description="`jump_count`: the Nth jump.")
+    hours: int | None = Field(description="`freefall`: recorded hours crossed.")
+    jump_type: str | None = Field(description="`jump_type`: the first of this type.")
+    location: LocationOut | None = Field(description="`place`: the first jump here.")
+
+
+class MilestonesOut(BaseModel):
+    """Private milestones derived from your own entries; never shared."""
+
+    items: list[MilestoneOut] = Field(
+        description="Newest first; jump counts before this logbook last. Only the"
+        " five most recent first jumps at a new place."
+    )
+    counted: Literal["entries", "with_prior", "unchecked"] = Field(
+        description="Jump counts number your entries (`entries`), continue from your"
+        " declared prior jumps (`with_prior`), or are left out while that count"
+        " disagrees with your entries (`unchecked`)."
+    )
 
 
 class BaselinePreviewOut(BaseModel):
@@ -169,6 +226,51 @@ def _currency(c: Currency) -> CurrencyOut:
     )
 
 
+def _progress(p: Progress | None) -> LicenceProgressOut | None:
+    if p is None:
+        return None
+    req = p.requirement
+    return LicenceProgressOut(
+        licence=p.licence.value,
+        next_licence=p.next_licence.value if p.next_licence else None,  # type: ignore[arg-type]
+        jumps=p.jumps,
+        jumps_required=req.jumps if req else None,
+        jumps_include_prior=p.jumps_include_prior,
+        freefall_seconds=p.freefall_seconds,
+        freefall_required_seconds=(req.freefall_seconds or None) if req else None,
+        entries_with_freefall=p.entries_with_freefall,
+        entries_without_freefall=p.entries_without_freefall,
+    )
+
+
+def _location(loc: Location) -> LocationOut:
+    return LocationOut(
+        kind="venue" if loc.kind == "venue" else "place",
+        id=loc.id,
+        name=loc.name,
+        country=loc.country,
+        closed=loc.closed,
+    )
+
+
+def _milestones(found: MilestoneList) -> MilestonesOut:
+    return MilestonesOut(
+        items=[
+            MilestoneOut(
+                kind=v.milestone.kind.value,
+                on=v.milestone.on,
+                jump_id=v.milestone.jump_id,
+                number=v.milestone.number,
+                hours=v.milestone.hours,
+                jump_type=v.milestone.jump_type,
+                location=_location(v.location) if v.location else None,
+            )
+            for v in found.items
+        ],
+        counted=found.counted,
+    )
+
+
 def _history(s: Summary) -> HistoryOut:
     return HistoryOut(
         totals=_totals(s.totals),
@@ -186,16 +288,7 @@ def _history(s: Summary) -> HistoryOut:
         months=[MonthOut(month=m, jumps=n) for m, n in s.months],
         by_type=[TypeCountOut(jump_type=k, jumps=n) for k, n in s.by_type],
         by_location=[
-            LocationCountOut(
-                location=LocationOut(
-                    kind="venue" if loc.kind == "venue" else "place",
-                    id=loc.id,
-                    name=loc.name,
-                    country=loc.country,
-                    closed=loc.closed,
-                ),
-                jumps=n,
-            )
+            LocationCountOut(location=_location(loc), jumps=n)
             for loc, n in s.by_location
         ],
         by_component=[
@@ -220,6 +313,7 @@ def _history(s: Summary) -> HistoryOut:
             for e in s.baseline_events
         ],
         currency=_currency(s.currency),
+        progress=_progress(s.progress),
     )
 
 
@@ -256,6 +350,16 @@ def create_router(
     )
     def get_history(actor: Reader) -> HistoryOut:
         return _history(service().summary(actor))
+
+    @router.get(
+        "/history/milestones",
+        operation_id="getMilestones",
+        response_model=MilestonesOut,
+        dependencies=deps,
+    )
+    def get_milestones(actor: Reader) -> MilestonesOut:
+        """Dated milestones from your own entries, newest first. Computed on read."""
+        return _milestones(service().milestones(actor))
 
     @router.get(
         "/history/baseline/preview",

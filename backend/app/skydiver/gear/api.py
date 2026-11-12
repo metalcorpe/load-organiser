@@ -19,10 +19,12 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.gear.policy import REPACK_SOURCE
 from app.skydiver.gear.service import (
     Component,
     ComponentDetail,
     ComponentSummary,
+    DueItem,
     GearService,
     KeyReused,
     LimitReached,
@@ -66,6 +68,17 @@ class ComponentDetails(BaseModel):
     acquisition_method: Method | None = None
     acquired: PartialDateText | None = None
     notes: Notes | None = None
+    repack_interval_days: Annotated[int, Field(ge=1, le=730)] | None = Field(
+        default=None,
+        description=(
+            "A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR"
+            " 105.43). Your country's rule may differ."
+        ),
+    )
+    end_of_life_on: date | None = Field(
+        default=None,
+        description="An end-of-life date you entered (e.g. from the label). Never estimated.",
+    )
 
 
 class ComponentIn(ComponentDetails):
@@ -125,6 +138,10 @@ class ComponentOut(BaseModel):
     acquisition_method: Method | None
     acquired: str | None
     notes: str | None
+    repack_interval_days: int | None = Field(
+        description="Your own reserve repack interval; null: the default of 180 days."
+    )
+    end_of_life_on: date | None
     archived: bool
     provenance: Literal["self_reported"] = "self_reported"
     version: int
@@ -174,6 +191,36 @@ class ComponentDetailOut(BaseModel):
     )
 
 
+class DueComponentOut(BaseModel):
+    id: uuid.UUID
+    kind: Kind
+    label: str
+
+
+class GearDueOut(BaseModel):
+    """A date coming due on your own gear, from your own records. Not an
+    airworthiness status: your rigger and the manufacturer decide that."""
+
+    component: DueComponentOut
+    kind: Literal["reserve_repack", "service", "end_of_life"]
+    service_kind: ServiceKindName | None = Field(
+        description="The service entry it comes from; null for an end of life."
+    )
+    due_on: date = Field(description="Still in time on this day; overdue after it.")
+    basis: Literal["entered", "interval"] = Field(
+        description="`entered`: your own date. `interval`: your latest repack plus"
+        " `interval_days`."
+    )
+    interval_days: int | None
+    interval_source: Literal["USPA / FAA 14 CFR 105.43"] | None = Field(
+        description="Set when the default interval applies."
+    )
+    status: Literal["overdue", "soon", "later"] = Field(
+        description="`soon`: due within 30 days. Judged on the latest calendar date"
+        " anywhere; compare `due_on` with your own day for the exact count."
+    )
+
+
 class RigMemberOut(BaseModel):
     id: uuid.UUID
     kind: Kind
@@ -207,6 +254,8 @@ def _component(c: Component) -> ComponentOut:
         acquisition_method=c.acquisition_method.value if c.acquisition_method else None,
         acquired=c.acquired,
         notes=c.notes,
+        repack_interval_days=c.repack_interval_days,
+        end_of_life_on=c.end_of_life_on,
         archived=c.archived_at is not None,
         version=c.version,
         updated_at=c.updated_at,
@@ -250,6 +299,20 @@ def _detail(d: ComponentDetail) -> ComponentDetailOut:
             for e in d.events
         ],
         same_serial=d.same_serial,
+    )
+
+
+def _due(item: DueItem) -> GearDueOut:
+    c, due = item.component, item.due
+    return GearDueOut(
+        component=DueComponentOut(id=c.id, kind=c.kind.value, label=c.label),
+        kind=due.kind.value,
+        service_kind=due.service_kind.value if due.service_kind else None,
+        due_on=due.due_on,
+        basis=due.basis,
+        interval_days=due.interval_days,
+        interval_source=REPACK_SOURCE if due.interval_is_default else None,
+        status=item.status.value,
     )
 
 
@@ -309,6 +372,16 @@ def create_router(
         return [
             _summary(s) for s in service().list_components(actor, archived=archived)
         ]
+
+    @router.get(
+        "/gear/due",
+        operation_id="listGearDue",
+        response_model=list[GearDueOut],
+        dependencies=deps,
+    )
+    def list_gear_due(actor: Reader) -> list[GearDueOut]:
+        """Dates coming due on your current gear, soonest first (overdue included)."""
+        return [_due(item) for item in service().due(actor)]
 
     @router.post(
         "/gear/components",

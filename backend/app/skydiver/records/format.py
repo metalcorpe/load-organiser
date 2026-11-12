@@ -54,6 +54,9 @@ class ComponentV1(_Strict):
     )
     acquired: Partial | None = None
     notes: Annotated[str, Field(max_length=1000)] | None = None
+    # Added within v1 as optional, so earlier v1 files still restore (none set).
+    repack_interval_days: Annotated[int, Field(ge=1, le=730)] | None = None
+    end_of_life_on: date | None = None
     archived_at: Instant | None = None
     created_at: Instant
     updated_at: Instant

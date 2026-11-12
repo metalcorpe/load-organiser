@@ -20,6 +20,7 @@ from app.skydiver.history.policy import Baseline
 from app.skydiver.history.service import (
     BaselineEvent,
     BaselineState,
+    EntryRow,
     HistoryStore,
     StoreFactory,
 )
@@ -149,6 +150,32 @@ class SqlHistoryStore:
                 set_={"licence": licence.value, "updated_at": now},
             )
         )
+
+    def entries(self, actor: Actor) -> list[EntryRow]:
+        rows = self._s.execute(
+            select(
+                col(J.id),
+                col(J.jumped_on),
+                col(J.jump_number),
+                col(J.exit_time),
+                col(J.jump_type),
+                col(J.freefall_seconds),
+                col(J.venue_id),
+                col(J.place_id),
+            ).where(col(J.owner_person_id) == actor.person_id)
+        )
+        return [EntryRow(*row) for row in rows.all()]
+
+    def freefall(self, actor: Actor) -> tuple[int, int, int]:
+        """(seconds, entries with a freefall time, entries without one)."""
+        seconds, with_time, total = self._s.execute(
+            select(
+                func.coalesce(func.sum(col(J.freefall_seconds)), 0),
+                func.count(col(J.freefall_seconds)),
+                func.count(),
+            ).where(col(J.owner_person_id) == actor.person_id)
+        ).one()
+        return int(seconds), int(with_time), int(total) - int(with_time)
 
     def date_range(self, actor: Actor) -> tuple[date | None, date | None]:
         first, last = self._s.execute(

@@ -117,6 +117,8 @@ class SqlRecordsStore:
                     "acquisition_method",
                     "acquired",
                     "notes",
+                    "repack_interval_days",
+                    "end_of_life_on",
                     "archived_at",
                     *stamps,
                 )  # fmt: skip

@@ -215,6 +215,57 @@ def test_service_entries_are_self_reported_with_due_dates(api: Api) -> None:
     assert gone.status_code == 204
 
 
+def test_due_dates_come_from_the_owners_own_records(api: Api) -> None:
+    # NOW is 2026-11-03 12:00 UTC: the latest calendar date anywhere is 4 November.
+    owner = api.accounts.session()
+
+    def service(component: dict[str, Any], kind: str, done_on: str, due_on: str | None = None) -> None:  # fmt: skip
+        body = {"client_key": str(uuid.uuid4()), "kind": kind, "done_on": done_on, "due_on": due_on}  # fmt: skip
+        api.ok("POST", f"/gear/components/{component['id']}/service", owner, body, 201)
+
+    reserve = api.component(owner, kind="reserve", label="Reserve")["component"]
+    service(reserve, "repack", "2026-05-13")  # + 180 days = 9 November
+    aad = api.component(owner, kind="aad", label="Cypres", end_of_life_on="2026-12-04")["component"]  # fmt: skip
+    service(aad, "aad_service", "2022-11-03", "2026-11-03")  # overdue by one day
+    later = api.component(owner, kind="aad", label="Spare AAD", end_of_life_on="2026-12-05")  # fmt: skip
+    archived = api.component(owner, kind="reserve", label="Old reserve")["component"]
+    service(archived, "repack", "2026-10-01")
+    api.ok("POST", f"/gear/components/{archived['id']}/archive", owner, {"archived": True})  # fmt: skip
+
+    due = api.ok("GET", "/gear/due", owner)
+    assert [(d["component"]["label"], d["kind"], d["due_on"], d["status"]) for d in due] == [
+        ("Cypres", "service", "2026-11-03", "overdue"),
+        ("Reserve", "reserve_repack", "2026-11-09", "soon"),
+        ("Cypres", "end_of_life", "2026-12-04", "soon"),  # the 30th day
+        ("Spare AAD", "end_of_life", "2026-12-05", "later"),
+    ]  # fmt: skip
+    repack = due[1]
+    assert (repack["basis"], repack["interval_days"], repack["interval_source"]) == (
+        "interval", 180, "USPA / FAA 14 CFR 105.43",
+    )  # fmt: skip
+    assert due[0]["service_kind"] == "aad_service" and due[0]["basis"] == "entered"
+    assert later["component"]["end_of_life_on"] == "2026-12-05"
+
+    # The owner's own interval replaces the default.
+    patched = api.ok(
+        "PATCH", f"/gear/components/{reserve['id']}", owner,
+        {"repack_interval_days": 120, "version": reserve["version"]},
+    )["component"]  # fmt: skip
+    assert patched["repack_interval_days"] == 120
+    mine = next(d for d in api.ok("GET", "/gear/due", owner) if d["kind"] == "reserve_repack")  # fmt: skip
+    assert (mine["due_on"], mine["interval_days"], mine["interval_source"]) == ("2026-09-10", 120, None)  # fmt: skip
+    assert mine["status"] == "overdue"
+    bad = api.call(
+        "PATCH", f"/gear/components/{reserve['id']}", owner,
+        {"repack_interval_days": 0, "version": patched["version"]},
+    )  # fmt: skip
+    assert bad.status_code == 422
+
+    # Owner-scoped: nobody else sees any of it; no session, no answer.
+    assert api.ok("GET", "/gear/due", api.accounts.session()) == []
+    assert api.call("GET", "/gear/due").status_code == 401
+
+
 def test_writes_need_a_confirmed_email_and_limits_apply(
     api: Api, monkeypatch: pytest.MonkeyPatch
 ) -> None:

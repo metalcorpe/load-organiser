@@ -253,6 +253,26 @@ export type ColumnsOut = {
 };
 
 /**
+ * ComingUpOut
+ *
+ * Private to you: what you saved or planned, starting within 60 days.
+ */
+export type ComingUpOut = {
+    /**
+     * Items
+     *
+     * Soonest first, at most 5.
+     */
+    items: Array<UpcomingOut>;
+    /**
+     * Total
+     *
+     * All items in the window, shown or not.
+     */
+    total: number;
+};
+
+/**
  * ComponentDetailOut
  */
 export type ComponentDetailOut = {
@@ -295,6 +315,12 @@ export type ComponentIn = {
      */
     client_key: string;
     /**
+     * End Of Life On
+     *
+     * An end-of-life date you entered (e.g. from the label). Never estimated.
+     */
+    end_of_life_on?: string | null;
+    /**
      * Kind
      */
     kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
@@ -323,6 +349,12 @@ export type ComponentIn = {
      */
     relation?: 'owned' | 'borrowed' | 'rented' | null;
     /**
+     * Repack Interval Days
+     *
+     * A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.
+     */
+    repack_interval_days?: number | null;
+    /**
      * Serial
      *
      * Kept exactly as entered. Private.
@@ -348,6 +380,10 @@ export type ComponentOut = {
      * Archived
      */
     archived: boolean;
+    /**
+     * End Of Life On
+     */
+    end_of_life_on: string | null;
     /**
      * Id
      */
@@ -384,6 +420,12 @@ export type ComponentOut = {
      * Relation
      */
     relation: 'owned' | 'borrowed' | 'rented';
+    /**
+     * Repack Interval Days
+     *
+     * Your own reserve repack interval; null: the default of 180 days.
+     */
+    repack_interval_days: number | null;
     /**
      * Serial
      */
@@ -447,6 +489,12 @@ export type ComponentUpdateIn = {
      */
     acquisition_method?: 'purchase' | 'gift' | 'inheritance' | 'other' | null;
     /**
+     * End Of Life On
+     *
+     * An end-of-life date you entered (e.g. from the label). Never estimated.
+     */
+    end_of_life_on?: string | null;
+    /**
      * Kind
      */
     kind?: 'container' | 'main' | 'reserve' | 'aad' | 'other' | null;
@@ -474,6 +522,12 @@ export type ComponentUpdateIn = {
      * Relation
      */
     relation?: 'owned' | 'borrowed' | 'rented' | null;
+    /**
+     * Repack Interval Days
+     *
+     * A reserve's repack interval in days; null: 180 (USPA / FAA 14 CFR 105.43). Your country's rule may differ.
+     */
+    repack_interval_days?: number | null;
     /**
      * Serial
      *
@@ -545,6 +599,24 @@ export type DecisionIn = {
      * Reason
      */
     reason?: string | null;
+};
+
+/**
+ * DueComponentOut
+ */
+export type DueComponentOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
+    /**
+     * Label
+     */
+    label: string;
 };
 
 /**
@@ -625,6 +697,54 @@ export type FollowOut = {
      * State
      */
     state: 'none' | 'requested' | 'following';
+};
+
+/**
+ * GearDueOut
+ *
+ * A date coming due on your own gear, from your own records. Not an
+ * airworthiness status: your rigger and the manufacturer decide that.
+ */
+export type GearDueOut = {
+    /**
+     * Basis
+     *
+     * `entered`: your own date. `interval`: your latest repack plus `interval_days`.
+     */
+    basis: 'entered' | 'interval';
+    component: DueComponentOut;
+    /**
+     * Due On
+     *
+     * Still in time on this day; overdue after it.
+     */
+    due_on: string;
+    /**
+     * Interval Days
+     */
+    interval_days: number | null;
+    /**
+     * Interval Source
+     *
+     * Set when the default interval applies.
+     */
+    interval_source: 'USPA / FAA 14 CFR 105.43' | null;
+    /**
+     * Kind
+     */
+    kind: 'reserve_repack' | 'service' | 'end_of_life';
+    /**
+     * Service Kind
+     *
+     * The service entry it comes from; null for an end of life.
+     */
+    service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
+    /**
+     * Status
+     *
+     * `soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
+     */
+    status: 'overdue' | 'soon' | 'later';
 };
 
 /**
@@ -711,6 +831,10 @@ export type HistoryOut = {
      * The last 12 calendar months, oldest first.
      */
     months: Array<MonthOut>;
+    /**
+     * Null without a licence.
+     */
+    progress: LicenceProgressOut | null;
     totals: TotalsOut;
 };
 
@@ -1241,6 +1365,68 @@ export type LicenceOut = {
 };
 
 /**
+ * LicenceProgressOut
+ *
+ * Progress toward the next USPA licence from your own entries. Guidance only:
+ * USPA and your instructors check every requirement, including the ones this app
+ * does not count (skills, proficiency card, landing accuracy, endorsements).
+ */
+export type LicenceProgressOut = {
+    /**
+     * Entries With Freefall
+     */
+    entries_with_freefall: number;
+    /**
+     * Entries Without Freefall
+     *
+     * These add no freefall time.
+     */
+    entries_without_freefall: number;
+    /**
+     * Freefall Required Seconds
+     *
+     * Null when the next licence lists no freefall time.
+     */
+    freefall_required_seconds: number | null;
+    /**
+     * Freefall Seconds
+     *
+     * Recorded entries only; prior jumps have no freefall time.
+     */
+    freefall_seconds: number;
+    /**
+     * Jumps
+     *
+     * The reported total, else the recorded entries.
+     */
+    jumps: number;
+    /**
+     * Jumps Include Prior
+     *
+     * Your declared prior jump count is part of `jumps`.
+     */
+    jumps_include_prior: boolean;
+    /**
+     * Jumps Required
+     */
+    jumps_required: number | null;
+    /**
+     * Licence
+     */
+    licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
+    /**
+     * Next Licence
+     *
+     * Null for a D licence: there is no next one.
+     */
+    next_licence: 'a' | 'b' | 'c' | 'd' | null;
+    /**
+     * Source
+     */
+    source?: 'USPA SIM 3-1';
+};
+
+/**
  * LocationCountOut
  */
 export type LocationCountOut = {
@@ -1341,6 +1527,68 @@ export type MergeIn = {
      * The `version` this change is based on. A different current version answers 409 `edit_conflict`; omit only for last-writer-wins.
      */
     version?: number | null;
+};
+
+/**
+ * MilestoneOut
+ */
+export type MilestoneOut = {
+    /**
+     * Hours
+     *
+     * `freefall`: recorded hours crossed.
+     */
+    hours: number | null;
+    /**
+     * Jump Id
+     */
+    jump_id: string | null;
+    /**
+     * Jump Type
+     *
+     * `jump_type`: the first of this type.
+     */
+    jump_type: string | null;
+    /**
+     * Kind
+     */
+    kind: 'jump_count' | 'freefall' | 'jump_type' | 'place';
+    /**
+     * `place`: the first jump here.
+     */
+    location: LocationOut | null;
+    /**
+     * Number
+     *
+     * `jump_count`: the Nth jump.
+     */
+    number: number | null;
+    /**
+     * On
+     *
+     * The entry's date; null for a jump count within your declared prior jumps (before you kept this logbook).
+     */
+    on: string | null;
+};
+
+/**
+ * MilestonesOut
+ *
+ * Private milestones derived from your own entries; never shared.
+ */
+export type MilestonesOut = {
+    /**
+     * Counted
+     *
+     * Jump counts number your entries (`entries`), continue from your declared prior jumps (`with_prior`), or are left out while that count disagrees with your entries (`unchecked`).
+     */
+    counted: 'entries' | 'with_prior' | 'unchecked';
+    /**
+     * Items
+     *
+     * Newest first; jump counts before this logbook last. Only the five most recent first jumps at a new place.
+     */
+    items: Array<MilestoneOut>;
 };
 
 /**
@@ -3828,6 +4076,58 @@ export type UndoIn = {
      * Must be true: every jump of the import is deleted, even if edited.
      */
     confirm: boolean;
+};
+
+/**
+ * UpcomingOut
+ *
+ * A saved listing or one of your plans, in the coming-up window.
+ */
+export type UpcomingOut = {
+    /**
+     * Country
+     */
+    country: string | null;
+    /**
+     * Ends On
+     *
+     * Inclusive; a listing's dates are in its zone.
+     */
+    ends_on: string;
+    /**
+     * Id
+     *
+     * The listing for `saved`, the plan for `plan`.
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'saved' | 'plan';
+    /**
+     * Opportunity Id
+     */
+    opportunity_id: string | null;
+    /**
+     * Place
+     *
+     * Dropzone, private place or location note.
+     */
+    place: string | null;
+    /**
+     * Starts On
+     */
+    starts_on: string;
+    /**
+     * Status
+     *
+     * The listing's state. For a plan, only when its linked listing is postponed or cancelled.
+     */
+    status: 'published' | 'postponed' | 'cancelled' | null;
+    /**
+     * Title
+     */
+    title: string;
 };
 
 /**
@@ -6339,6 +6639,55 @@ export type DeleteServiceEntryResponses = {
 
 export type DeleteServiceEntryResponse = DeleteServiceEntryResponses[keyof DeleteServiceEntryResponses];
 
+export type ListGearDueData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/gear/due';
+};
+
+export type ListGearDueErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverGearApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverGearApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverGearApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverGearApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverGearApiProblem;
+};
+
+export type ListGearDueError = ListGearDueErrors[keyof ListGearDueErrors];
+
+export type ListGearDueResponses = {
+    /**
+     * Response Listgeardue
+     *
+     * Successful Response
+     */
+    200: Array<GearDueOut>;
+};
+
+export type ListGearDueResponse = ListGearDueResponses[keyof ListGearDueResponses];
+
 export type ListRigsData = {
     body?: never;
     headers?: {
@@ -6701,6 +7050,49 @@ export type PreviewBaselineResponses = {
 };
 
 export type PreviewBaselineResponse = PreviewBaselineResponses[keyof PreviewBaselineResponses];
+
+export type GetMilestonesData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/history/milestones';
+};
+
+export type GetMilestonesErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type GetMilestonesError = GetMilestonesErrors[keyof GetMilestonesErrors];
+
+export type GetMilestonesResponses = {
+    /**
+     * Successful Response
+     */
+    200: MilestonesOut;
+};
+
+export type GetMilestonesResponse = GetMilestonesResponses[keyof GetMilestonesResponses];
 
 export type ListJumpsData = {
     body?: never;
@@ -7499,6 +7891,53 @@ export type UpdateJumpResponses = {
 };
 
 export type UpdateJumpResponse = UpdateJumpResponses[keyof UpdateJumpResponses];
+
+export type GetComingUpData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/coming-up';
+};
+
+export type GetComingUpErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverSavesApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverSavesApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverSavesApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverSavesApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverSavesApiProblem;
+};
+
+export type GetComingUpError = GetComingUpErrors[keyof GetComingUpErrors];
+
+export type GetComingUpResponses = {
+    /**
+     * Successful Response
+     */
+    200: ComingUpOut;
+};
+
+export type GetComingUpResponse = GetComingUpResponses[keyof GetComingUpResponses];
 
 export type GetFeedData = {
     body?: never;

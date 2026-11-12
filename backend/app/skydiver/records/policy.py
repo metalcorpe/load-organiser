@@ -140,6 +140,8 @@ def check(archive: ArchiveV1, today: date) -> None:
                 Relation(c.relation), m, a
             ),
         )
+        _rule(where, lambda c=c: gear.repack_interval(c.repack_interval_days))
+        _rule(where, lambda c=c: gear.end_of_life(c.end_of_life_on))
 
     per_component: dict[uuid.UUID, int] = defaultdict(int)
     for i, g in enumerate(r.rigs):

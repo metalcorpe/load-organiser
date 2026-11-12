@@ -33,7 +33,7 @@ Every object rejects unknown keys and every list is bounded, so a valid file can
 | Key | Contents (limit) |
 | --- | --- |
 | `places` | Private places: name, country, optional link to a public venue (200) |
-| `components` | Gear: kind, label, manufacturer, model, serial as entered, partial dates, relation, acquisition, notes, archived time (50) |
+| `components` | Gear: kind, label, manufacturer, model, serial as entered, partial dates, relation, acquisition, notes, your reserve repack interval (`repack_interval_days`, 1–730, optional) and end-of-life date (`end_of_life_on`, optional), archived time (50). Files without the two optional keys restore with neither set |
 | `rigs` | Rig label and archived time (20) |
 | `rig_stints` | Which component was in which rig, `from_on`/`until_on` (never overlapping per component) |
 | `service_entries` | Kind, done/due dates, performed by, notes (100 per component) |

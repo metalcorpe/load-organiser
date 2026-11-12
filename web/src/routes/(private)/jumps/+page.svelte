@@ -1,11 +1,15 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
+	import DueList from '#lib/components/DueList.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
+	import { localToday } from '#lib/currency.ts';
 	import { fieldsFor } from '#lib/field-errors.ts';
+	import { dueSoon } from '#lib/gear.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
-	import { formatDay, formatRange } from '#lib/listings.ts';
+	import { formatDay, formatRange, statusLabel } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -26,6 +30,13 @@
 	const freefall = $derived(
 		matched ? freefallText(matched.freefall_seconds, matched.freefall_recorded, matched.jumps) : null
 	);
+	// The server's UTC day until the browser gives the jumper's own calendar day.
+	// svelte-ignore state_referenced_locally
+	let today = $state(data.today);
+	onMount(() => {
+		today = localToday();
+	});
+	const due = $derived(dueSoon(data.due, today));
 	const described = (name: string) =>
 		invalid.has(name) ? { 'aria-invalid': 'true' as const, 'aria-describedby': 'filter-error' } : {};
 </script>
@@ -172,7 +183,51 @@
 				<a class="button log" href="/jumps/new">Log your first jump</a>
 			{/if}
 		</section>
-		{#if data.summary?.currency}<CurrencyStatus currency={data.summary.currency} today={data.today} />{/if}
+		{#if data.summary?.currency}<CurrencyStatus
+				currency={data.summary.currency}
+				today={data.today}
+				progress={data.summary.progress}
+			/>{/if}
+		{#if due.length > 0 || data.coming.length > 0}
+			<!-- One calm card for what is ahead, each list soonest first; nothing when nothing is. -->
+			<section
+				class="ahead"
+				aria-label={[due.length > 0 && 'Due soon', data.coming.length > 0 && 'Coming up']
+					.filter(Boolean)
+					.join(' and ')}
+			>
+				{#if due.length > 0}
+					<h2>Due soon</h2>
+					<DueList items={due} {today} label="Due soon" />
+					<p class="more-link"><a href="/gear">All gear dates</a></p>
+				{/if}
+				{#if data.coming.length > 0}
+					<h2>Coming up</h2>
+					<ol class="coming" aria-label="Coming up">
+						{#each data.coming as item (item.kind + item.id)}
+							{@const state = item.status ? statusLabel(item.status, false) : null}
+							<li>
+								<a href={item.kind === 'plan' ? `/plans#plan-${item.id}` : `/events/${item.id}`}
+									>{item.title}</a
+								>
+								<span class="meta"
+									>{item.kind === 'plan' ? 'Your plan' : 'Saved listing'} · {formatRange(
+										item.starts_on,
+										item.ends_on
+									)}{item.place ? ` · ${item.place}` : ''}</span
+								>
+								{#if state}
+									<span class="tag"
+										>{item.kind === 'plan' ? `Listing ${state.toLowerCase()}` : state}</span
+									>
+								{/if}
+							</li>
+						{/each}
+					</ol>
+					<p class="more-link"><a href="/saved">See all saved</a> · <a href="/plans">See all plans</a></p>
+				{/if}
+			</section>
+		{/if}
 	{/if}
 
 	{#if data.numbering.notes.length > 0}
@@ -445,6 +500,43 @@
 
 	.matched p + p {
 		margin-top: 0.25rem;
+	}
+
+	.ahead {
+		margin: 0 0 1.25rem;
+		padding: 0.75rem 0.9rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+		font-size: 0.95rem;
+	}
+
+	.ahead h2 {
+		font-size: 1rem;
+		margin: 0 0 0.35rem;
+	}
+
+	.ahead .more-link {
+		margin: 0.4rem 0 0;
+	}
+
+	.ahead .more-link + h2 {
+		margin-top: 0.85rem;
+	}
+
+	.coming {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.coming li {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 0.5rem;
+		align-items: baseline;
 	}
 
 	.numbering {
