@@ -17,6 +17,7 @@ const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 		notes: 'private note',
 		links: ['https://video.example/1'],
 		other_gear: 'borrowed helmet',
+		aircraft: 'Cessna 208 SX-ABC',
 		components: [
 			{ id: 'main', archived: false },
 			{ id: 'old', archived: true }
@@ -25,7 +26,7 @@ const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 	}) as unknown as JumpOut;
 
 describe('nextJumpValues', () => {
-	it('keeps the day, type, altitudes and gear, and counts on', () => {
+	it('keeps the day, type, altitudes, aircraft and gear, and counts on', () => {
 		const next = nextJumpValues(jump(), { sameDay: true });
 		expect(next.values).toEqual({
 			jumped_on: '2026-11-08',
@@ -35,7 +36,8 @@ describe('nextJumpValues', () => {
 			exit_altitude: '4000',
 			deployment_altitude: '1000',
 			altitude_unit: 'm',
-			altitude_datum: 'agl'
+			altitude_datum: 'agl',
+			aircraft: 'Cessna 208 SX-ABC'
 		});
 		expect(next.selected).toEqual(['main']); // archived gear is not preselected
 	});
@@ -45,6 +47,10 @@ describe('nextJumpValues', () => {
 		for (const name of ['notes', 'links', 'other_gear', 'exit_time', 'freefall_seconds']) {
 			expect(values).not.toHaveProperty(name);
 		}
+	});
+
+	it('leaves the aircraft empty when the jump had none', () => {
+		expect(nextJumpValues(jump({ aircraft: null }), { sameDay: false }).values.aircraft).toBe('');
 	});
 
 	it('leaves the number empty when the jump had none', () => {

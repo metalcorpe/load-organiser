@@ -37,6 +37,7 @@ export type {
 	PostOut,
 	PostPageOut,
 	PrintPageOut,
+	RecentAircraftOut,
 	ProfileViewOut,
 	ProviderDetailOut,
 	ProviderOut,

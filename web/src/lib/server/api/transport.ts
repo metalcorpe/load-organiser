@@ -41,7 +41,8 @@ const IMPORT_QUERY = [
 	'col_type',
 	'col_altitude',
 	'col_freefall',
-	'col_notes'
+	'col_notes',
+	'col_aircraft'
 ] as const;
 
 export const OPERATIONS = {
@@ -224,6 +225,12 @@ export const OPERATIONS = {
 	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
 	getJumpNumbering: { method: 'GET', path: `${BETA}/jumps/numbering` },
+	// The aircraft of the newest jump at one place: a starting value for a new entry.
+	getRecentAircraft: {
+		method: 'GET',
+		path: `${BETA}/jumps/recent-aircraft`,
+		query: ['venue_id', 'place_id']
+	},
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },

@@ -109,6 +109,7 @@ class SampleRow:
     altitude_unit: str | None
     freefall_seconds: int | None
     notes: str | None
+    aircraft: str | None = None
 
 
 @dataclass(frozen=True)
@@ -367,6 +368,7 @@ class ImportService:
                         "altitude_datum": "unspecified",
                         "freefall_seconds": draft.freefall_seconds,
                         "other_gear": None,
+                        "aircraft": draft.aircraft,
                         "notes": draft.notes,
                         "links": [],
                         "source": "imported",
@@ -512,4 +514,5 @@ def _sample(draft: Draft, target: _Target) -> SampleRow:
         altitude_unit=draft.altitude_unit.value if draft.altitude_unit else None,
         freefall_seconds=draft.freefall_seconds,
         notes=draft.notes,
+        aircraft=draft.aircraft,
     )

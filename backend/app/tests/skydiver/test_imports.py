@@ -186,7 +186,8 @@ def test_check_previews_every_rule_without_writing(api: Api) -> None:
     assert preview.headers["cache-control"] == "no-store"
     p = preview.json()
     assert p["encoding"] == "utf-8"
-    assert p["columns"] == {
+    # Fields the file has no column for (e.g. aircraft) are null.
+    assert {k: v for k, v in p["columns"].items() if v is not None} == {
         "date": 0, "number": 1, "place": 2, "type": 3, "altitude": 4, "freefall": 5,
         "notes": 6,
     }  # fmt: skip
@@ -676,3 +677,25 @@ def test_import_requests_are_throttled_before_the_file_is_read(api: Api) -> None
     valid = api.run(owner, _csv("2024-03-12,1,Late field,,,,"), country="PT")
     assert (valid.status_code, valid.json()["detail"]) == (429, "too_many_attempts")
     assert api.jumps(owner) == []
+
+
+def test_an_aircraft_column_is_imported_as_written(api: Api) -> None:
+    owner = api.accounts.session()
+    raw = _csv(
+        "2024-03-12,Olive grove,Cessna 208 SX-ABC",
+        "2024-03-13,Olive grove,",
+        f"2024-03-14,Olive grove,{'x' * 61}",
+        heading="Date,Place,Αεροσκάφος",
+    )
+    checked = api.check(owner, raw, country="GR").json()
+    assert checked["columns"]["aircraft"] == 2
+    assert [s["aircraft"] for s in checked["sample"]] == ["Cessna 208 SX-ABC", None]
+    assert checked["problems"] == [{"row": 3, "code": "aircraft_too_long"}]
+    assert api.run(owner, raw, country="GR").status_code == 200
+    by_day = {j["jumped_on"]: j["aircraft"] for j in api.jumps(owner)}
+    assert by_day == {"2024-03-12": "Cessna 208 SX-ABC", "2024-03-13": None}
+    # "none" leaves a detected aircraft column out.
+    other = api.accounts.session()
+    unread = api.check(other, raw, country="GR", col_aircraft="none").json()
+    assert unread["columns"]["aircraft"] is None
+    assert unread["problems"] == []

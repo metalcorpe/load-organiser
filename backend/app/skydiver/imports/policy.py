@@ -34,7 +34,12 @@ HEADING_MAX = 80
 PROBLEMS_SHOWN = 50
 SAMPLE_ROWS = 10
 
-FIELDS = ("date", "number", "place", "type", "altitude", "freefall", "notes")
+FIELDS = (
+    "date", "number", "place", "type", "altitude", "freefall", "notes", "aircraft",
+)  # fmt: skip
+# The fields of the first version: a later field enters the fingerprint only when a
+# column is used for it, so a file imported before it existed keeps its fingerprint.
+_FIRST_FIELDS = FIELDS[:7]
 
 
 class ImportRefused(Exception):
@@ -80,6 +85,7 @@ class Draft:
     altitude_unit: AltitudeUnit | None
     freefall_seconds: int | None
     notes: str | None
+    aircraft: str | None = None
 
 
 @dataclass(frozen=True)
@@ -206,6 +212,11 @@ _SYNONYMS: dict[str, tuple[str, ...]] = {
         "nota", "comentarios", "comentario", "observaciones", "observacoes",
         "σχολια", "σημειωσεις", "παρατηρησεις",
     ),
+    "aircraft": (
+        "aircraft", "plane", "airplane", "aeroplane", "jump plane", "jumpship",
+        "jump ship", "aircraft type", "avion", "aeronave", "aviao", "αεροσκαφος",
+        "αεροπλανο",
+    ),
 }  # fmt: skip
 # Compared in the same normalised form as headings (Greek final sigma included).
 _KEYS = {
@@ -278,7 +289,11 @@ def fingerprint(raw: bytes, options: Options, columns: dict[str, int | None]) ->
             "date_order": options.date_order.value,
             "unit": options.unit.value,
             "country": options.country,
-            "columns": {name: columns.get(name) for name in FIELDS},
+            "columns": {
+                name: columns.get(name)
+                for name in FIELDS
+                if name in _FIRST_FIELDS or columns.get(name) is not None
+            },
         },
         sort_keys=True,
         separators=(",", ":"),
@@ -468,6 +483,7 @@ def drafts(
             altitude = parse_altitude(cell(row, "altitude"), options.unit)
             freefall = parse_freefall(cell(row, "freefall"))
             notes = logbook.notes(cell(row, "notes"))
+            aircraft = logbook.aircraft(cell(row, "aircraft"))
         except RuleError as error:
             problems.append(Problem(position, error.code))
             continue
@@ -482,6 +498,7 @@ def drafts(
                 altitude_unit=options.unit if altitude is not None else None,
                 freefall_seconds=freefall,
                 notes=notes,
+                aircraft=aircraft,
             )
         )
     return ok, problems

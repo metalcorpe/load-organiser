@@ -652,3 +652,78 @@ def test_numbering_is_the_owners_own(api: Api) -> None:
     ]  # fmt: skip
     assert api.ok("GET", "/jumps/numbering", other)["highest"] == 999
     assert api.call("GET", "/jumps/numbering").status_code == 401
+
+
+def test_aircraft_is_saved_corrected_and_searchable(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    sent = api.jump(owner, place_id=place["id"], aircraft="  Cessna 208   SX-ABC ")
+    assert sent.status_code == 201, sent.text
+    jump = sent.json()["jump"]
+    assert jump["aircraft"] == "Cessna 208 SX-ABC"  # trimmed, spaces collapsed
+    listed = api.ok("GET", "/jumps", owner)["items"]
+    assert [i["aircraft"] for i in listed] == ["Cessna 208 SX-ABC"]
+
+    # Not part of the duplicate rule: the same jump with another aircraft is caught.
+    again = api.jump(owner, place_id=place["id"], aircraft="Twin Otter")
+    assert again.json()["detail"] == "likely_duplicate"
+
+    edited = api.ok(
+        "PATCH", f"/jumps/{jump['id']}", owner,
+        {"aircraft": "PAC 750XL", "version": jump["version"]},
+    )  # fmt: skip
+    assert edited["jump"]["aircraft"] == "PAC 750XL"
+    assert edited["events"][-1]["detail"] == {
+        "aircraft": {"from": "Cessna 208 SX-ABC", "to": "PAC 750XL"}
+    }
+    too_long = api.call(
+        "PATCH", f"/jumps/{jump['id']}", owner,
+        {"aircraft": "x" * 61, "version": edited["jump"]["version"]},
+    )  # fmt: skip
+    assert too_long.json() == {"detail": "aircraft_too_long"}
+
+    # The logbook text filter finds the aircraft, case-insensitively.
+    found = api.call("GET", "/jumps", owner, q="750xl").json()
+    assert [i["id"] for i in found["items"]] == [jump["id"]]
+    assert api.call("GET", "/jumps", owner, q="Otter").json()["items"] == []
+
+    cleared = api.ok(
+        "PATCH", f"/jumps/{jump['id']}", owner,
+        {"aircraft": " ", "version": edited["jump"]["version"]},
+    )  # fmt: skip
+    assert cleared["jump"]["aircraft"] is None
+
+
+def test_recent_aircraft_comes_from_the_owners_newest_jump_at_that_place(
+    api: Api,
+) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    venue = api.venue()
+    path = "/jumps/recent-aircraft"
+    assert api.call("GET", path, owner, place_id=place["id"]).json() == {
+        "aircraft": None
+    }
+    api.jump(owner, place_id=place["id"], jumped_on="2026-10-01", aircraft="Old plane")
+    api.jump(owner, place_id=place["id"], jumped_on="2026-10-05", aircraft="Cessna 208")
+    # An older entry made later does not win; a newer jump without one is skipped.
+    api.jump(owner, place_id=place["id"], jumped_on="2026-10-02", aircraft="Islander")
+    api.jump(owner, place_id=place["id"], jumped_on="2026-10-06", jump_type="angle")
+    api.jump(owner, venue_id=venue["id"], jumped_on="2026-10-07", aircraft="Skyvan")
+
+    at_place = api.call("GET", path, owner, place_id=place["id"]).json()
+    assert at_place == {"aircraft": "Cessna 208"}
+    at_venue = api.call("GET", path, owner, venue_id=venue["id"]).json()
+    assert at_venue == {"aircraft": "Skyvan"}
+
+    # Another person's jumps at the same dropzone are never a source.
+    other = api.accounts.session()
+    assert api.call("GET", path, other, venue_id=venue["id"]).json() == {
+        "aircraft": None
+    }
+    assert api.call("GET", path, other, place_id=place["id"]).json() == {
+        "aircraft": None
+    }
+    both = api.call("GET", path, owner, venue_id=venue["id"], place_id=place["id"])
+    assert both.json() == {"detail": "location_required"}
+    assert api.call("GET", path).status_code == 401

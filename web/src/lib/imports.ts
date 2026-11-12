@@ -7,7 +7,8 @@ export const IMPORT_FIELDS = [
 	'type',
 	'altitude',
 	'freefall',
-	'notes'
+	'notes',
+	'aircraft'
 ] as const;
 
 export type ImportField = (typeof IMPORT_FIELDS)[number];
@@ -19,7 +20,8 @@ export const FIELD_LABEL: Record<ImportField, string> = {
 	type: 'Type',
 	altitude: 'Exit altitude',
 	freefall: 'Freefall (seconds)',
-	notes: 'Notes'
+	notes: 'Notes',
+	aircraft: 'Aircraft'
 };
 
 export const DATE_ORDER_LABEL: Record<string, string> = {
@@ -47,6 +49,7 @@ export const ROW_PROBLEMS: Record<string, string> = {
 	altitude_invalid: 'the altitude is not a whole number in the chosen unit, or is too high',
 	freefall_invalid: 'the freefall time is not between 0 and 600 seconds',
 	notes_too_long: 'the notes are longer than 2,000 characters',
+	aircraft_too_long: 'the aircraft is longer than 60 characters',
 	likely_duplicate: 'it looks like a jump already in your logbook',
 	repeated_in_file: 'its jump number is used by an earlier row of the file'
 };

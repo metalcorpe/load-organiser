@@ -23,7 +23,8 @@
 		submitLabel,
 		confirmDistinct = false,
 		disabled = false,
-		numberHint = null
+		numberHint = null,
+		aircraftHint = null
 	}: {
 		action: string;
 		values: Record<string, string>;
@@ -37,6 +38,8 @@
 		disabled?: boolean;
 		/** Why the jump number is filled in, e.g. "Your last numbered jump is #120." */
 		numberHint?: string | null;
+		/** Why the aircraft is filled in, e.g. "From your last jump at this place." */
+		aircraftHint?: string | null;
 	} = $props();
 
 	let dateInput: HTMLInputElement | undefined = $state();
@@ -145,6 +148,20 @@
 			</select>
 		</div>
 	</details>
+
+	<div class="field">
+		<label for="aircraft">Aircraft (optional)</label>
+		<input
+			id="aircraft"
+			name="aircraft"
+			maxlength="60"
+			autocomplete="off"
+			placeholder="e.g. Cessna 208 SX-ABC"
+			defaultValue={v('aircraft')}
+			aria-describedby={aircraftHint ? 'aircraft_hint' : undefined}
+		/>
+		{#if aircraftHint}<p class="hint" id="aircraft_hint">{aircraftHint} Change it if needed.</p>{/if}
+	</div>
 
 	<fieldset class="field">
 		<legend>Equipment used (optional)</legend>

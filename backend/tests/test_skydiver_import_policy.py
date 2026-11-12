@@ -135,6 +135,22 @@ def test_limits_and_unreadable_files_refuse_the_whole_file() -> None:
             {"date": 0, "number": 1, "place": 2, "type": 3, "altitude": 4, "freefall": 5, "notes": 6},
         ),
         (
+            ["Date", "Place", "Aircraft"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Ημερομηνία", "Τοποθεσία", "Αεροσκάφος"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Fecha", "Lugar", "Avión"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Date", "Location", "Plane"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
             ["Date", "Location", "Something else"],
             {"date": 0, "number": None, "place": 1, "type": None, "altitude": None, "freefall": None, "notes": None},
         ),
@@ -143,7 +159,8 @@ def test_limits_and_unreadable_files_refuse_the_whole_file() -> None:
 def test_columns_are_detected_by_heading_synonyms(
     headings: list[str], expected: dict[str, int | None]
 ) -> None:
-    assert policy.mapping(headings, {}) == expected
+    # Fields a file does not have are None, whatever fields later versions add.
+    assert policy.mapping(headings, {}) == dict.fromkeys(policy.FIELDS) | expected
 
 
 def test_overrides_replace_or_remove_detected_columns() -> None:
@@ -183,6 +200,10 @@ def test_the_fingerprint_covers_bytes_options_and_columns() -> None:
     assert base != policy.fingerprint(raw, Options(unit=AltitudeUnit.M), columns)
     assert base != policy.fingerprint(raw, Options(country="PT"), columns)
     assert base != policy.fingerprint(raw, Options(), columns | {"notes": 1})
+    # A field added later changes it only when a column is used for it, so a file
+    # imported before the field existed keeps its fingerprint.
+    assert base == policy.fingerprint(raw, Options(), columns | {"aircraft": None})
+    assert base != policy.fingerprint(raw, Options(), columns | {"aircraft": 1})
 
 
 # -- values -----------------------------------------------------------------------

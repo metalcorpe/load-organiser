@@ -62,13 +62,13 @@
      submit silently on a date field it considers half-filled. -->
 <form method="GET" action="/jumps" class="jump-search" role="search" novalidate>
 		<div class="search-row">
-			<label class="visually-hidden" for="q">Place or notes</label>
+			<label class="visually-hidden" for="q">Place, aircraft or notes</label>
 			<input
 				id="q"
 				name="q"
 				type="search"
 				maxlength="100"
-				placeholder="Search places and notes"
+				placeholder="Search places, aircraft and notes"
 				defaultValue={f.q}
 				autocomplete="off"
 			/>
@@ -278,7 +278,7 @@
 							>{JUMP_TYPE_LABEL[jump.jump_type]} · {jump.location.name ?? 'Dropzone no longer listed'}{jump
 								.location.kind === 'place'
 								? ' (private place)'
-								: ''}</span
+								: ''}{jump.aircraft ? ` · ${jump.aircraft}` : ''}</span
 						>
 						{#if jump.components.length > 0}
 							<span class="meta">Gear: {jump.components.map((c) => c.label).join(', ')}</span>

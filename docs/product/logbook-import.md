@@ -34,6 +34,7 @@ Columns are found by heading, ignoring case and accents, with a few words per la
 | Exit altitude | Altitude, Exit altitude, Altitud, Altura, Ύψος |
 | Freefall seconds | Freefall, Delay, Caída libre, Queda livre, Ελεύθερη πτώση |
 | Notes | Notes, Comments, Remarks, Observaciones, Σχόλια |
+| Aircraft | Aircraft, Plane, Jump plane, Avión, Aeronave, Αεροσκάφος |
 
 A trailing unit word in a heading ("Altitude (ft)") is ignored. Other columns are not read.
 
@@ -53,6 +54,7 @@ A trailing unit word in a heading ("Altitude (ft)") is ignored. Other columns ar
 | Exit altitude | Optional, as for a jump entered by hand (up to 45,000 ft or 13,700 m) | `altitude_invalid` |
 | Freefall | Optional, 0–600 seconds; `45`, `45 s` and `1:05` are accepted | `freefall_invalid` |
 | Notes | Optional, at most 2,000 characters | `notes_too_long` |
+| Aircraft | Optional free text, at most 60 characters, kept as written | `aircraft_too_long` |
 
 **Type** is read from the words written: belly, RW, FS, formation → belly; freefly, FF, head down, sit → freefly; angle, tracking → angle; wingsuit, WS → wingsuit; canopy, swoop, CP → canopy piloting; CRW, canopy formation → CRW; accuracy → accuracy; hop, hop and pop → hop and pop; tandem → tandem; AFF, training, coach, student → training. Anything else, or nothing, is "not specified".
 

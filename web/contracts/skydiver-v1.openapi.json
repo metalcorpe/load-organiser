@@ -321,6 +321,17 @@
       },
       "ColumnsOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude": {
             "anyOf": [
               {
@@ -406,7 +417,8 @@
           "type",
           "altitude",
           "freefall",
-          "notes"
+          "notes",
+          "aircraft"
         ],
         "title": "ColumnsOut",
         "type": "object"
@@ -1868,6 +1880,19 @@
       },
       "JumpIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The aircraft as you write it, e.g. \"Cessna 208 SX-ABC\" (60 at most).",
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "anyOf": [
               {
@@ -2159,6 +2184,17 @@
       "JumpOut": {
         "description": "The owner's own record. `provenance` is always self-reported.",
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "enum": [
               "unspecified",
@@ -2363,6 +2399,7 @@
           "freefall_seconds",
           "components",
           "other_gear",
+          "aircraft",
           "notes",
           "links",
           "source",
@@ -2413,6 +2450,17 @@
       },
       "JumpSummaryOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "components": {
             "items": {
               "$ref": "#/components/schemas/ComponentRefOut"
@@ -2469,13 +2517,27 @@
           "location",
           "jump_type",
           "jump_number",
-          "components"
+          "components",
+          "aircraft"
         ],
         "title": "JumpSummaryOut",
         "type": "object"
       },
       "JumpUpdateIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The aircraft as you write it, e.g. \"Cessna 208 SX-ABC\" (60 at most).",
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "anyOf": [
               {
@@ -5869,6 +5931,27 @@
         "title": "ReceiptOut",
         "type": "object"
       },
+      "RecentAircraftOut": {
+        "description": "A starting value for a new entry at this place; null when none is recorded.",
+        "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          }
+        },
+        "required": [
+          "aircraft"
+        ],
+        "title": "RecentAircraftOut",
+        "type": "object"
+      },
       "RecordsOut": {
         "properties": {
           "counts": {
@@ -7601,6 +7684,17 @@
       },
       "SampleRowOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude_unit": {
             "anyOf": [
               {
@@ -7711,7 +7805,8 @@
           "exit_altitude",
           "altitude_unit",
           "freefall_seconds",
-          "notes"
+          "notes",
+          "aircraft"
         ],
         "title": "SampleRowOut",
         "type": "object"
@@ -14425,7 +14520,7 @@
             }
           },
           {
-            "description": "Text in the place name or your private notes.",
+            "description": "Text in the place name, aircraft or your private notes.",
             "in": "query",
             "name": "q",
             "required": false,
@@ -14439,7 +14534,7 @@
                   "type": "null"
                 }
               ],
-              "description": "Text in the place name or your private notes.",
+              "description": "Text in the place name, aircraft or your private notes.",
               "title": "Q"
             }
           },
@@ -15000,6 +15095,23 @@
             }
           },
           {
+            "in": "query",
+            "name": "col_aircraft",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Aircraft"
+            }
+          },
+          {
             "in": "header",
             "name": "authorization",
             "required": false,
@@ -15292,6 +15404,23 @@
                 }
               ],
               "title": "Col Notes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_aircraft",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Aircraft"
             }
           },
           {
@@ -15960,6 +16089,152 @@
           }
         },
         "summary": "Get Numbering",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/recent-aircraft": {
+      "get": {
+        "description": "The aircraft of your newest jump at this place that recorded one.",
+        "operationId": "getRecentAircraft",
+        "parameters": [
+          {
+            "description": "A listed dropzone, merges included.",
+            "in": "query",
+            "name": "venue_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A listed dropzone, merges included.",
+              "title": "Venue Id"
+            }
+          },
+          {
+            "description": "One of your private places.",
+            "in": "query",
+            "name": "place_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "One of your private places.",
+              "title": "Place Id"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecentAircraftOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getrecentaircraft"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Recent Aircraft",
         "tags": [
           "skydiver-logbook"
         ]

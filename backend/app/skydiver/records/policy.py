@@ -253,6 +253,7 @@ def _check_jump(
         raise ArchiveInvalid(f"{where}.altitudes_incomplete")
     _rule(where, lambda: logbook.freefall_seconds(j.freefall_seconds))
     _rule(where, lambda: logbook.other_gear(j.other_gear))
+    _text(where, "aircraft", j.aircraft, logbook.AIRCRAFT_MAX)
     _rule(where, lambda: logbook.notes(j.notes))
     if _rule(where, lambda: logbook.links(list(j.links))) != list(j.links):
         raise ArchiveInvalid(f"{where}.link_invalid")

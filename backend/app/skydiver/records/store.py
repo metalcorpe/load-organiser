@@ -167,6 +167,7 @@ class SqlRecordsStore:
                     "altitude_datum",
                     "freefall_seconds",
                     "other_gear",
+                    "aircraft",
                     "notes",
                     "source",
                     *stamps,

@@ -150,7 +150,8 @@ class Api:
              "jump_type": "freefly", "venue_id": venue, "jump_number": 120,
              "exit_time": "14:05", "time_zone": "Europe/Madrid", "exit_altitude": 4000,
              "altitude_unit": "m", "altitude_datum": "agl", "notes": "Private note.",
-             "links": ["https://example.org/video"], "component_ids": [main["id"]]},
+             "links": ["https://example.org/video"], "component_ids": [main["id"]],
+             "aircraft": "Cessna 208 SX-ABC"},
             201,
         )["jump"]  # fmt: skip
         self.ok(
@@ -250,6 +251,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 j["notes"],
                 j["links"],
                 len(j["component_ids"]),
+                j["aircraft"],
             )
             for j in r["jumps"]
         ],  # fmt: skip
@@ -287,6 +289,7 @@ def test_round_trip_into_an_empty_account(api: Api) -> None:
     ):
         assert absent not in text, absent
     assert archive["records"]["jumps"][-1]["notes"] == "Private note."
+    assert archive["records"]["jumps"][-1]["aircraft"] == "Cessna 208 SX-ABC"
     # Instants are UTC whatever the database session's time zone.
     stamps = [archive["exported_at"]] + [
         item["created_at"] for section in ("places", "jumps", "jump_events")
@@ -677,3 +680,19 @@ def test_two_different_files_restored_at_once_never_merge(api: Api) -> None:
     assert results == ["not_empty", "restored"]
     assert _places(actor) == 1
     assert _receipts(actor) == 1
+
+
+def test_an_earlier_file_without_aircraft_restores_with_none(api: Api) -> None:
+    place = _place()
+    target = api.accounts.session()
+    raw = json.dumps(_archive(places=[place], jumps=[_jump(place_id=place["id"])]))
+    done = api.restore(target, raw.encode())
+    assert done.status_code == 200, done.text
+    (restored,) = json.loads(api.export(target))["records"]["jumps"]
+    assert restored["aircraft"] is None
+    # An aircraft the API would not store is refused before any write.
+    jump = _jump(place_id=place["id"], aircraft=" x ")
+    bad = json.dumps(_archive(places=[place], jumps=[jump])).encode()
+    response = api.send("/records/restore/check", api.accounts.session(), bad)
+    assert response.status_code == 422
+    assert response.json()["problem"] == "jumps[0].aircraft_invalid"

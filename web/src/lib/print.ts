@@ -20,6 +20,7 @@ export interface PrintRow {
 	date: string;
 	place: string;
 	type: string;
+	aircraft: string;
 	exit: string;
 	freefall: string;
 	equipment: string;
@@ -84,6 +85,7 @@ export function toRow(jump: JumpOut, { notes }: { notes: boolean }): PrintRow {
 		date: shortDay(jump.jumped_on),
 		place: placeName(jump.location),
 		type: JUMP_TYPE_LABEL[jump.jump_type] ?? jump.jump_type,
+		aircraft: jump.aircraft ?? '',
 		exit: exitText(jump),
 		freefall: jump.freefall_seconds === null ? '' : formatFreefall(jump.freefall_seconds),
 		equipment: equipmentText(jump),

@@ -85,6 +85,7 @@ class Jump:
     version: int
     created_at: datetime
     updated_at: datetime
+    aircraft: str | None = None
 
 
 @dataclass(frozen=True)
@@ -219,6 +220,10 @@ class LogbookStore(Protocol):
         ...
 
     def totals(self, actor: Actor, where: Criteria) -> Totals: ...
+    def latest_aircraft(self, actor: Actor, where: Criteria) -> str | None:
+        """The aircraft of the newest matching jump that recorded one."""
+        ...
+
     def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
         """The distinct venues of the owner's jumps, as stored (before merges)."""
 
@@ -316,6 +321,7 @@ _FACTS = (
     "altitude_unit",
     "altitude_datum",
     "freefall_seconds",
+    "aircraft",
 )
 _PRIVATE_TEXT = ("other_gear", "notes", "links")
 
@@ -414,6 +420,24 @@ class LogbookService:
             number_from=search.number_from,
             number_to=search.number_to,
         )
+
+    def recent_aircraft(
+        self,
+        actor: Actor,
+        *,
+        venue_id: uuid.UUID | None = None,
+        place_id: uuid.UUID | None = None,
+    ) -> str | None:
+        """The aircraft last recorded at this place, to start a new entry from.
+
+        The newest jump at the venue (merges included) or private place that has an
+        aircraft; None when none has. A suggestion only: the form keeps it editable.
+        """
+        if (venue_id is None) == (place_id is None):
+            raise RuleError("location_required")
+        search = JumpFilter(venue_id=venue_id, place_id=place_id)
+        with self._stores() as store:
+            return store.latest_aircraft(actor, self._criteria(store, actor, search))
 
     def numbering(self, actor: Actor) -> policy.Numbering[NumberedRef]:
         """Highest jump number, gaps and repeats in the owner's own numbering."""
@@ -646,6 +670,8 @@ class LogbookService:
             )
         if given("other_gear"):
             values["other_gear"] = policy.other_gear(raw.get("other_gear"))
+        if given("aircraft"):
+            values["aircraft"] = policy.aircraft(raw.get("aircraft"))
         if given("notes"):
             values["notes"] = policy.notes(raw.get("notes"))
         if given("links"):
@@ -744,6 +770,7 @@ def _values_of(jump: Jump) -> dict[str, Any]:
         "altitude_datum": jump.altitude_datum.value,
         "freefall_seconds": jump.freefall_seconds,
         "other_gear": jump.other_gear,
+        "aircraft": jump.aircraft,
         "notes": jump.notes,
         "links": list(jump.links),
     }

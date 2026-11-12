@@ -128,6 +128,8 @@ class JumpV1(_Strict):
     source: Literal["manual", "restored", "imported"]
     created_at: Instant
     updated_at: Instant
+    # Added within v1 as optional, so earlier v1 files still restore (none set).
+    aircraft: Annotated[str, Field(max_length=60)] | None = None
 
 
 JumpEventKind = Literal[

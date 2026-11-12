@@ -57,6 +57,7 @@ test.describe('printable logbook', () => {
 
 		const first = page.getByRole('table', { name: 'Sheet 1 of 2' });
 		await expect(first.getByRole('columnheader', { name: 'Signature' })).toBeVisible();
+		await expect(first.getByRole('columnheader', { name: 'Aircraft' })).toBeVisible();
 		await expect(first.getByRole('columnheader', { name: 'Notes' })).toHaveCount(0);
 		await expect(first.locator('tbody tr')).toHaveCount(12);
 		await expect(first.locator('tbody tr').first()).toContainText('1 Oct 2026');

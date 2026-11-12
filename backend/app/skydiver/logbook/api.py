@@ -80,6 +80,10 @@ class JumpFields(BaseModel):
     other_gear: Annotated[str, Field(max_length=400)] | None = Field(
         default=None, description="Borrowed, rented or unrecorded equipment."
     )
+    aircraft: Annotated[str, Field(max_length=120)] | None = Field(
+        default=None,
+        description='The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).',
+    )
     notes: Annotated[str, Field(max_length=4000)] | None = None
     links: (
         Annotated[list[Annotated[str, Field(max_length=2100)]], Field(max_length=10)]
@@ -141,6 +145,7 @@ class JumpOut(BaseModel):
     freefall_seconds: int | None
     components: list[ComponentRefOut]
     other_gear: str | None
+    aircraft: str | None
     notes: str | None
     links: list[str]
     source: Source = Field(
@@ -162,6 +167,7 @@ class JumpSummaryOut(BaseModel):
     jump_type: JumpTypeName
     jump_number: int | None
     components: list[ComponentRefOut]
+    aircraft: str | None
 
 
 class MatchedOut(BaseModel):
@@ -231,6 +237,12 @@ class PrintPageOut(BaseModel):
     brought_forward: BroughtForwardOut
 
 
+class RecentAircraftOut(BaseModel):
+    """A starting value for a new entry at this place; null when none is recorded."""
+
+    aircraft: str | None
+
+
 class JumpEventOut(BaseModel):
     kind: str
     detail: dict[str, Any]
@@ -286,6 +298,7 @@ def _jump(view: JumpView) -> JumpOut:
         freefall_seconds=j.freefall_seconds,
         components=_components(view),
         other_gear=j.other_gear,
+        aircraft=j.aircraft,
         notes=j.notes,
         links=list(j.links),
         source=_SOURCES.get(j.source, "manual"),
@@ -304,6 +317,7 @@ def _summary(view: JumpView) -> JumpSummaryOut:
         jump_type=j.jump_type.value,
         jump_number=j.jump_number,
         components=_components(view),
+        aircraft=j.aircraft,
     )
 
 
@@ -387,7 +401,7 @@ def create_router(
             str | None,
             Query(
                 max_length=100,
-                description="Text in the place name or your private notes.",
+                description="Text in the place name, aircraft or your private notes.",
             ),
         ] = None,
         jump_type: JumpTypeName | None = None,
@@ -463,6 +477,31 @@ def create_router(
             ],
             repeat_count=found.repeat_count,
         )
+
+    # Before /jumps/{jump_id}, which would otherwise take "recent-aircraft" as an id.
+    @router.get(
+        "/jumps/recent-aircraft",
+        operation_id="getRecentAircraft",
+        response_model=RecentAircraftOut,
+        dependencies=deps,
+    )
+    def get_recent_aircraft(
+        actor: Reader,
+        venue_id: Annotated[
+            uuid.UUID | None, Query(description="A listed dropzone, merges included.")
+        ] = None,
+        place_id: Annotated[
+            uuid.UUID | None, Query(description="One of your private places.")
+        ] = None,
+    ) -> RecentAircraftOut | JSONResponse:
+        """The aircraft of your newest jump at this place that recorded one."""
+        try:
+            found = service().recent_aircraft(
+                actor, venue_id=venue_id, place_id=place_id
+            )
+        except Errors as error:
+            return _problem(error)
+        return RecentAircraftOut(aircraft=found)
 
     @router.post(
         "/jumps",

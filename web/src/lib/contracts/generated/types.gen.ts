@@ -223,6 +223,10 @@ export type BroughtForwardOut = {
  */
 export type ColumnsOut = {
     /**
+     * Aircraft
+     */
+    aircraft: number | null;
+    /**
      * Altitude
      */
     altitude: number | null;
@@ -992,6 +996,12 @@ export type JumpEventOut = {
  */
 export type JumpIn = {
     /**
+     * Aircraft
+     *
+     * The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).
+     */
+    aircraft?: string | null;
+    /**
      * Altitude Datum
      */
     altitude_datum?: 'unspecified' | 'agl' | 'msl' | null;
@@ -1124,6 +1134,10 @@ export type JumpNumberingOut = {
  */
 export type JumpOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Altitude Datum
      */
     altitude_datum: 'unspecified' | 'agl' | 'msl';
@@ -1234,6 +1248,10 @@ export type JumpPageOut = {
  */
 export type JumpSummaryOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Components
      */
     components: Array<ComponentRefOut>;
@@ -1260,6 +1278,12 @@ export type JumpSummaryOut = {
  * JumpUpdateIn
  */
 export type JumpUpdateIn = {
+    /**
+     * Aircraft
+     *
+     * The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).
+     */
+    aircraft?: string | null;
     /**
      * Altitude Datum
      */
@@ -2836,6 +2860,18 @@ export type ReceiptOut = {
 };
 
 /**
+ * RecentAircraftOut
+ *
+ * A starting value for a new entry at this place; null when none is recorded.
+ */
+export type RecentAircraftOut = {
+    /**
+     * Aircraft
+     */
+    aircraft: string | null;
+};
+
+/**
  * RecordsOut
  */
 export type RecordsOut = {
@@ -3697,6 +3733,10 @@ export type RowProblemOut = {
  * SampleRowOut
  */
 export type SampleRowOut = {
+    /**
+     * Aircraft
+     */
+    aircraft: string | null;
     /**
      * Altitude Unit
      */
@@ -7115,7 +7155,7 @@ export type ListJumpsData = {
         /**
          * Q
          *
-         * Text in the place name or your private notes.
+         * Text in the place name, aircraft or your private notes.
          */
         q?: string | null;
         /**
@@ -7312,6 +7352,10 @@ export type ImportJumpsData = {
          * Col Notes
          */
         col_notes?: string | null;
+        /**
+         * Col Aircraft
+         */
+        col_aircraft?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import';
 };
@@ -7415,6 +7459,10 @@ export type CheckJumpImportData = {
          * Col Notes
          */
         col_notes?: string | null;
+        /**
+         * Col Aircraft
+         */
+        col_aircraft?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import/check';
 };
@@ -7712,6 +7760,72 @@ export type GetJumpNumberingResponses = {
 };
 
 export type GetJumpNumberingResponse = GetJumpNumberingResponses[keyof GetJumpNumberingResponses];
+
+export type GetRecentAircraftData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Venue Id
+         *
+         * A listed dropzone, merges included.
+         */
+        venue_id?: string | null;
+        /**
+         * Place Id
+         *
+         * One of your private places.
+         */
+        place_id?: string | null;
+    };
+    url: '/api/skydiver/v1/jumps/recent-aircraft';
+};
+
+export type GetRecentAircraftErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getrecentaircraft
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetRecentAircraftError = GetRecentAircraftErrors[keyof GetRecentAircraftErrors];
+
+export type GetRecentAircraftResponses = {
+    /**
+     * Successful Response
+     */
+    200: RecentAircraftOut;
+};
+
+export type GetRecentAircraftResponse = GetRecentAircraftResponses[keyof GetRecentAircraftResponses];
 
 export type DeleteJumpData = {
     body?: never;

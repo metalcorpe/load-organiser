@@ -92,7 +92,8 @@ async function world(): Promise<World> {
 			client_key: randomUUID(),
 			jumped_on: '2026-10-10',
 			jump_type: 'belly',
-			venue_id: venue.id
+			venue_id: venue.id,
+			aircraft: 'Axe Caravan'
 		})
 	).jump;
 	const post = await created(`/me/jumps/${jump.id}/post`, bearer, {
@@ -145,6 +146,8 @@ async function world(): Promise<World> {
 				'/jumps?type=belly&from=2026-01-01',
 				'/jumps?type=wingsuit',
 				'/jumps/new',
+				// The form at a place with a recorded aircraft: prefilled, with its hint.
+				`/jumps/new?venue=${venue.id}`,
 				`/dz/${venue.id}`,
 				`/jumps/${jump.id}`,
 				`/jumps/${jump.id}/share`,

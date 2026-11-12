@@ -80,6 +80,7 @@ def _jump(row: SkydiverJump, component_ids: list[uuid.UUID]) -> Jump:
         altitude_datum=AltitudeDatum(row.altitude_datum),
         freefall_seconds=row.freefall_seconds,
         other_gear=row.other_gear,
+        aircraft=row.aircraft,
         notes=row.notes,
         links=tuple(row.links or ()),
         component_ids=tuple(component_ids),
@@ -173,6 +174,17 @@ class SqlLogbookStore:
             first_on=first,
             last_on=last,
         )
+
+    def latest_aircraft(self, actor: Actor, where: Criteria) -> str | None:
+        found = self._s.execute(
+            select(col(J.aircraft))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.aircraft).is_not(None))
+            .where(*_conditions(actor, where))
+            .order_by(col(J.jumped_on).desc(), col(J.id).desc())
+            .limit(1)
+        ).scalar()
+        return str(found) if found is not None else None
 
     def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
         rows = self._s.execute(
@@ -415,6 +427,7 @@ def _conditions(actor: Actor, where: Criteria) -> list[ColumnElement[bool]]:
         )
         matches: list[ColumnElement[bool]] = [
             col(J.notes).icontains(where.text, autoescape=True),
+            col(J.aircraft).icontains(where.text, autoescape=True),
             col(J.place_id).in_(places),
         ]
         if where.text_venue_ids:

@@ -81,7 +81,7 @@
 	</p>
 	<p class="hint">
 		A date and a dropzone or place are needed on every row. Jump number, type, exit altitude,
-		freefall seconds and notes are read when present. Nothing is saved until you import.
+		freefall seconds, notes and aircraft are read when present. Nothing is saved until you import.
 	</p>
 	<form method="POST" action="?/check" class="form" enctype="multipart/form-data" novalidate>
 		{#if errorFor('check')}
@@ -210,6 +210,7 @@
 										: ''}</span
 								>
 							{/if}
+							{#if row.aircraft}<span class="meta">Aircraft: {row.aircraft}</span>{/if}
 							{#if row.notes}<span class="meta notes">{row.notes}</span>{/if}
 						</li>
 					{/each}

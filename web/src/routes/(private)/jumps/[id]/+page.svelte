@@ -28,6 +28,7 @@
 		altitude_datum: jump.altitude_datum,
 		freefall_seconds: jump.freefall_seconds?.toString() ?? '',
 		other_gear: jump.other_gear ?? '',
+		aircraft: jump.aircraft ?? '',
 		notes: jump.notes ?? '',
 		links: jump.links.join('\n')
 	});
@@ -71,6 +72,7 @@
 		altitude_datum: 'Altitude measured from',
 		freefall_seconds: 'Freefall',
 		other_gear: 'Other equipment',
+		aircraft: 'Aircraft',
 		notes: 'Notes',
 		links: 'Links',
 		equipment: 'Equipment used'
@@ -114,6 +116,7 @@
 	{#if jump.exit_time}<dt>Exit time</dt><dd>{jump.exit_time.slice(0, 5)} ({jump.time_zone})</dd>{/if}
 	{#if heights}<dt>Altitudes</dt><dd>{heights}{jump.altitude_datum === 'unspecified' ? ' (reference not stated)' : ''}</dd>{/if}
 	{#if jump.freefall_seconds !== null}<dt>Freefall</dt><dd>{jump.freefall_seconds} s</dd>{/if}
+	{#if jump.aircraft}<dt>Aircraft</dt><dd>{jump.aircraft}</dd>{/if}
 	<dt>Equipment</dt>
 	<dd>
 		{#if jump.components.length === 0 && !jump.other_gear}Not recorded{/if}
@@ -126,7 +129,7 @@
 		</dd>
 	{/if}
 </dl>
-<!-- The next load of the same day: same place, type, gear and altitudes, next number. -->
+<!-- The next load of the same day: same place, type, gear, aircraft and altitudes, next number. -->
 <a class="button next" href="/jumps/new?{jump.location.kind}={jump.location.id}&from={jump.id}&day=same">Log the next jump</a>
 </section>
 

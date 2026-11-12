@@ -146,6 +146,8 @@ class SkydiverJump(SQLModel, table=True):
     altitude_datum: str = Field(default="unspecified", max_length=12)
     freefall_seconds: int | None = Field(default=None, sa_column=Column(Integer))
     other_gear: str | None = Field(default=None, max_length=200)
+    # Free text as the jumper writes it, e.g. "Cessna 208 SX-ABC". Private.
+    aircraft: str | None = Field(default=None, max_length=60)
     notes: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
     links: list = Field(  # type: ignore[type-arg]
         default_factory=list, sa_column=Column(_JSON, nullable=False)
