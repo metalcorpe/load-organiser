@@ -299,6 +299,26 @@
         "title": "BaselinePreviewOut",
         "type": "object"
       },
+      "BroughtForwardOut": {
+        "properties": {
+          "freefall_seconds": {
+            "description": "Their recorded freefall time; entries without one add nothing.",
+            "title": "Freefall Seconds",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "Your entries dated before `from_on`.",
+            "title": "Jumps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jumps",
+          "freefall_seconds"
+        ],
+        "title": "BroughtForwardOut",
+        "type": "object"
+      },
       "ColumnsOut": {
         "properties": {
           "altitude": {
@@ -987,6 +1007,74 @@
         "title": "ComponentUseOut",
         "type": "object"
       },
+      "CurrencyOut": {
+        "description": "Guidance computed from your own dated entries; not a verified status.",
+        "properties": {
+          "current_until": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last calendar day counted as current; null without a licence or jumps. Compare with the jumper's own local date.",
+            "title": "Current Until"
+          },
+          "last_jump_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Jump On"
+          },
+          "licence": {
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          },
+          "source": {
+            "const": "USPA SIM 5-2",
+            "default": "USPA SIM 5-2",
+            "title": "Source",
+            "type": "string"
+          },
+          "threshold_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Days after the last jump the guidance allows; null without a licence.",
+            "title": "Threshold Days"
+          }
+        },
+        "required": [
+          "licence",
+          "threshold_days",
+          "last_jump_on",
+          "current_until"
+        ],
+        "title": "CurrencyOut",
+        "type": "object"
+      },
       "DecisionIn": {
         "properties": {
           "decision": {
@@ -1243,6 +1331,9 @@
             "title": "By Type",
             "type": "array"
           },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyOut"
+          },
           "first_jump_on": {
             "anyOf": [
               {
@@ -1288,7 +1379,8 @@
           "by_type",
           "by_location",
           "by_component",
-          "baseline_events"
+          "baseline_events",
+          "currency"
         ],
         "title": "HistoryOut",
         "type": "object"
@@ -1770,6 +1862,56 @@
         "title": "JumpIn",
         "type": "object"
       },
+      "JumpNumberingOut": {
+        "description": "Your own numbering, to suggest the next number and note slips.",
+        "properties": {
+          "gap_count": {
+            "title": "Gap Count",
+            "type": "integer"
+          },
+          "gaps": {
+            "description": "The first few, lowest first.",
+            "items": {
+              "$ref": "#/components/schemas/NumberGapOut"
+            },
+            "title": "Gaps",
+            "type": "array"
+          },
+          "highest": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when no jump has a number.",
+            "title": "Highest"
+          },
+          "repeat_count": {
+            "title": "Repeat Count",
+            "type": "integer"
+          },
+          "repeats": {
+            "description": "The first few, lowest first.",
+            "items": {
+              "$ref": "#/components/schemas/NumberRepeatOut"
+            },
+            "title": "Repeats",
+            "type": "array"
+          }
+        },
+        "required": [
+          "highest",
+          "gaps",
+          "gap_count",
+          "repeats",
+          "repeat_count"
+        ],
+        "title": "JumpNumberingOut",
+        "type": "object"
+      },
       "JumpOut": {
         "description": "The owner's own record. `provenance` is always self-reported.",
         "properties": {
@@ -1996,6 +2138,9 @@
             "title": "Items",
             "type": "array"
           },
+          "matched": {
+            "$ref": "#/components/schemas/MatchedOut"
+          },
           "next_cursor": {
             "anyOf": [
               {
@@ -2016,7 +2161,8 @@
         "required": [
           "items",
           "next_cursor",
-          "recorded_total"
+          "recorded_total",
+          "matched"
         ],
         "title": "JumpPageOut",
         "type": "object"
@@ -2331,6 +2477,50 @@
         "title": "JumpUpdateIn",
         "type": "object"
       },
+      "LicenceIn": {
+        "properties": {
+          "licence": {
+            "description": "The licence you hold; `none` to clear.",
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence"
+        ],
+        "title": "LicenceIn",
+        "type": "object"
+      },
+      "LicenceOut": {
+        "properties": {
+          "licence": {
+            "description": "Self-stated and private; never verified.",
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence"
+        ],
+        "title": "LicenceOut",
+        "type": "object"
+      },
       "LocationCountOut": {
         "properties": {
           "jumps": {
@@ -2423,6 +2613,65 @@
         "title": "LoginIn",
         "type": "object"
       },
+      "MatchedOut": {
+        "description": "Totals over every jump matching the filters (all jumps when unfiltered).",
+        "properties": {
+          "first_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First On"
+          },
+          "freefall_recorded": {
+            "description": "How many matching jumps recorded a freefall time.",
+            "title": "Freefall Recorded",
+            "type": "integer"
+          },
+          "freefall_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sum over the matching jumps that recorded a freefall time.",
+            "title": "Freefall Seconds"
+          },
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "last_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last On"
+          }
+        },
+        "required": [
+          "jumps",
+          "freefall_seconds",
+          "freefall_recorded",
+          "first_on",
+          "last_on"
+        ],
+        "title": "MatchedOut",
+        "type": "object"
+      },
       "MergeIn": {
         "properties": {
           "into": {
@@ -2492,6 +2741,86 @@
           "jumps"
         ],
         "title": "MonthOut",
+        "type": "object"
+      },
+      "NumberGapOut": {
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/NumberedJumpOut"
+          },
+          "before": {
+            "$ref": "#/components/schemas/NumberedJumpOut"
+          },
+          "first": {
+            "description": "The first missing number.",
+            "title": "First",
+            "type": "integer"
+          },
+          "last": {
+            "description": "The last missing number.",
+            "title": "Last",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "before",
+          "after"
+        ],
+        "title": "NumberGapOut",
+        "type": "object"
+      },
+      "NumberRepeatOut": {
+        "properties": {
+          "jump_number": {
+            "title": "Jump Number",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "At most five of them.",
+            "items": {
+              "$ref": "#/components/schemas/NumberedJumpOut"
+            },
+            "title": "Jumps",
+            "type": "array"
+          },
+          "uses": {
+            "title": "Uses",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jump_number",
+          "uses",
+          "jumps"
+        ],
+        "title": "NumberRepeatOut",
+        "type": "object"
+      },
+      "NumberedJumpOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "jump_number": {
+            "title": "Jump Number",
+            "type": "integer"
+          },
+          "jumped_on": {
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "jumped_on",
+          "jump_number"
+        ],
+        "title": "NumberedJumpOut",
         "type": "object"
       },
       "OpportunityCountriesOut": {
@@ -4392,6 +4721,39 @@
           "country"
         ],
         "title": "PostVenueOut",
+        "type": "object"
+      },
+      "PrintPageOut": {
+        "description": "Full entries, oldest first, for printing your own logbook.",
+        "properties": {
+          "brought_forward": {
+            "$ref": "#/components/schemas/BroughtForwardOut"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/JumpOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          }
+        },
+        "required": [
+          "items",
+          "next_cursor",
+          "brought_forward"
+        ],
+        "title": "PrintPageOut",
         "type": "object"
       },
       "ProfileIn": {
@@ -13319,6 +13681,167 @@
             }
           },
           {
+            "description": "Text in the place name or your private notes.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Text in the place name or your private notes.",
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "jump_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "unspecified",
+                    "belly",
+                    "freefly",
+                    "angle",
+                    "wingsuit",
+                    "canopy",
+                    "crw",
+                    "accuracy",
+                    "hop_and_pop",
+                    "tandem",
+                    "training",
+                    "other"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Jump Type"
+            }
+          },
+          {
+            "description": "A listed dropzone, merges included.",
+            "in": "query",
+            "name": "venue_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A listed dropzone, merges included.",
+              "title": "Venue Id"
+            }
+          },
+          {
+            "description": "One of your private places.",
+            "in": "query",
+            "name": "place_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "One of your private places.",
+              "title": "Place Id"
+            }
+          },
+          {
+            "description": "On or after.",
+            "in": "query",
+            "name": "from_date",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or after.",
+              "title": "From Date"
+            }
+          },
+          {
+            "description": "On or before.",
+            "in": "query",
+            "name": "to_date",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or before.",
+              "title": "To Date"
+            }
+          },
+          {
+            "in": "query",
+            "name": "number_from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1000000,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Number From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "number_to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 1000000,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Number To"
+            }
+          },
+          {
             "in": "header",
             "name": "authorization",
             "required": false,
@@ -14415,6 +14938,289 @@
         ]
       }
     },
+    "/api/skydiver/v1/jumps/in-order": {
+      "get": {
+        "operationId": "listJumpsInOrder",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From On"
+            }
+          },
+          {
+            "in": "query",
+            "name": "until_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Until On"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 200,
+                  "minimum": 1,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PrintPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Listjumpsinorder"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "List Jumps In Order",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/numbering": {
+      "get": {
+        "operationId": "getJumpNumbering",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpNumberingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getjumpnumbering"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Numbering",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
     "/api/skydiver/v1/jumps/{jump_id}": {
       "delete": {
         "operationId": "deleteJump",
@@ -15123,6 +15929,172 @@
         "summary": "Get Sharing",
         "tags": [
           "skydiver-posts"
+        ]
+      }
+    },
+    "/api/skydiver/v1/me/licence": {
+      "get": {
+        "operationId": "getLicence",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LicenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Licence",
+        "tags": [
+          "skydiver-history"
+        ]
+      },
+      "put": {
+        "operationId": "setLicence",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LicenceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LicenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Set Licence",
+        "tags": [
+          "skydiver-history"
         ]
       }
     },

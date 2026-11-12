@@ -117,7 +117,10 @@ async function world(): Promise<World> {
 			],
 			member: [
 				'/jumps',
+				'/jumps?type=belly&from=2026-01-01',
+				'/jumps?type=wingsuit',
 				'/jumps/new',
+				`/dz/${venue.id}`,
 				`/jumps/${jump.id}`,
 				`/jumps/${jump.id}/share`,
 				'/history',
@@ -129,6 +132,7 @@ async function world(): Promise<World> {
 				'/profile/data',
 				'/records',
 				'/records/import',
+				'/records/print',
 				'/gear',
 				`/gear/${component.id}`,
 				'/places',

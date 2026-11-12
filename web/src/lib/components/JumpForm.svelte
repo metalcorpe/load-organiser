@@ -22,7 +22,8 @@
 		version = null,
 		submitLabel,
 		confirmDistinct = false,
-		disabled = false
+		disabled = false,
+		numberHint = null
 	}: {
 		action: string;
 		values: Record<string, string>;
@@ -34,6 +35,8 @@
 		submitLabel: string;
 		confirmDistinct?: boolean;
 		disabled?: boolean;
+		/** Why the jump number is filled in, e.g. "Your last numbered jump is #120." */
+		numberHint?: string | null;
 	} = $props();
 
 	let dateInput: HTMLInputElement | undefined = $state();
@@ -92,7 +95,15 @@
 		<div class="pair">
 			<div class="field">
 				<label for="jump_number">Your jump number</label>
-				<input id="jump_number" name="jump_number" inputmode="numeric" maxlength="8" defaultValue={v('jump_number')} />
+				<input
+					id="jump_number"
+					name="jump_number"
+					inputmode="numeric"
+					maxlength="8"
+					defaultValue={v('jump_number')}
+					aria-describedby={numberHint ? 'jump_number_hint' : undefined}
+				/>
+				{#if numberHint}<p class="hint" id="jump_number_hint">{numberHint} Change it if needed.</p>{/if}
 			</div>
 			<div class="field">
 				<label for="freefall_seconds">Freefall (seconds)</label>

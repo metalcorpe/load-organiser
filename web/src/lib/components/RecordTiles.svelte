@@ -7,6 +7,11 @@
 			items: [
 				{ href: '/jumps', name: 'Logbook', text: 'Every jump you logged, wherever you jumped.' },
 				{ href: '/history', name: 'History', text: 'Totals, recent months and gear use.' },
+				{
+					href: '/records/print',
+					name: 'Printable logbook',
+					text: 'Your jumps on paper or as a PDF, with a column for signatures.'
+				},
 				{ href: '/gear', name: 'Gear', text: 'Containers, canopies, AADs, rigs and service dates.' }
 			]
 		},

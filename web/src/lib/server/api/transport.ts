@@ -197,10 +197,29 @@ export const OPERATIONS = {
 	listJumps: {
 		method: 'GET',
 		path: `${BETA}/jumps`,
-		query: ['cursor', 'limit'],
+		query: [
+			'cursor',
+			'limit',
+			'q',
+			'jump_type',
+			'venue_id',
+			'place_id',
+			'from_date',
+			'to_date',
+			'number_from',
+			'number_to'
+		],
 		maxBodyBytes: 1024 * 1024
 	},
+	// Full entries for printing, at most 200 a page (notes and links make a page large).
+	listJumpsInOrder: {
+		method: 'GET',
+		path: `${BETA}/jumps/in-order`,
+		query: ['from_on', 'until_on', 'cursor', 'limit'],
+		maxBodyBytes: 8 * 1024 * 1024
+	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
+	getJumpNumbering: { method: 'GET', path: `${BETA}/jumps/numbering` },
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
@@ -212,6 +231,8 @@ export const OPERATIONS = {
 	},
 	setBaseline: { method: 'PUT', path: `${BETA}/history/baseline` },
 	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] },
+	getLicence: { method: 'GET', path: `${BETA}/me/licence` },
+	setLicence: { method: 'PUT', path: `${BETA}/me/licence` },
 	getRecords: { method: 'GET', path: `${BETA}/records` },
 	exportRecords: {
 		method: 'GET',

@@ -17,7 +17,8 @@ from typing import Any, Protocol
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.service import DirectoryService, EditConflict
-from app.skydiver.history import policy
+from app.skydiver.history import currency, policy
+from app.skydiver.history.currency import Currency, Licence
 from app.skydiver.history.policy import Baseline, Totals
 from app.skydiver.logbook.service import ComponentRef, Location, PlaceRef
 
@@ -58,6 +59,7 @@ class Summary:
     by_location: list[tuple[Location, int]]
     by_component: list[ComponentUse]
     baseline_events: list[BaselineEvent]
+    currency: Currency
 
 
 @dataclass(frozen=True)
@@ -88,6 +90,14 @@ class HistoryStore(Protocol):
     ) -> None: ...
     def events(self, actor: Actor, limit: int) -> list[BaselineEvent]:
         """Newest last."""
+        ...
+
+    def licence(self, actor: Actor) -> Licence:
+        """The owner's stated licence; NONE when never set."""
+        ...
+
+    def set_licence(self, actor: Actor, licence: Licence, now: datetime) -> None:
+        """Last write wins; NONE removes the setting."""
         ...
 
     def count_jumps(self, actor: Actor) -> int: ...
@@ -142,6 +152,7 @@ class HistoryService:
             place_ids = [p for _, p, _ in located if p is not None]
             places = {p.id: p for p in store.places(actor, place_ids)}
             events = store.events(actor, EVENTS_SHOWN)
+            licence = store.licence(actor)
         per_month = dict.fromkeys(months, 0)
         for day, jumps in per_day.items():
             key = f"{day.year:04d}-{day.month:02d}"
@@ -160,6 +171,8 @@ class HistoryService:
                 key=lambda u: (-u.jumps, u.component.label.casefold()),
             ),
             baseline_events=events,
+            # Only dated entries: a prior jump count adds no currency.
+            currency=currency.currency(licence, last),
         )
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:
@@ -173,7 +186,18 @@ class HistoryService:
             before = store.count_before(actor, proposed.before_on)
         return Preview(current, policy.totals(recorded, before, proposed))
 
+    def licence(self, actor: Actor) -> Licence:
+        with self._stores() as store:
+            return store.licence(actor)
+
     # -- writes -----------------------------------------------------------------------
+
+    def set_licence(self, actor: Actor, licence: Licence) -> Licence:
+        """A private self-statement for currency guidance; never verified."""
+        now = self._clock()
+        with self._stores() as store:
+            store.set_licence(actor, licence, now)
+        return licence
 
     def set_baseline(
         self,

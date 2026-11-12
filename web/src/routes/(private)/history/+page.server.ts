@@ -18,6 +18,8 @@ export const load: PageServerLoad = async (event) => {
 		isHistory
 	);
 	return {
+		// UTC day for the first render; the currency status then uses the jumper's own day.
+		today: new Date().toISOString().slice(0, 10),
 		history: history.ok
 			? { ok: true as const, ...history.value }
 			: { ok: false as const, reason: history.reason }

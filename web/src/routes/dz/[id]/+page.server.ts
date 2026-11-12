@@ -1,9 +1,9 @@
 import { error, redirect } from '@sveltejs/kit';
-import type { PostPageOut } from '#lib/contracts/index.ts';
+import type { JumpPageOut, PostPageOut } from '#lib/contracts/index.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { getVenue } from '#lib/server/directory.ts';
-import { call } from '#lib/server/maintenance.ts';
+import { call, isPage } from '#lib/server/maintenance.ts';
 import { searchOpportunities } from '#lib/server/opportunities.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
 import type { PageServerLoad } from './$types';
@@ -23,13 +23,23 @@ export const load: PageServerLoad = async ({ params, locals, cookies, url }) => 
 	// guests see public posts only.
 	const bearer = locals.viewer ? (readSessionSecret(cookies) ?? undefined) : undefined;
 	const before = url.searchParams.get('before') ?? '';
-	const [listings, posts] = await Promise.all([
+	const [listings, posts, mine] = await Promise.all([
 		searchOpportunities(api, { venue: venue.id, limit: 20 }),
 		call<PostPageOut>(api, 'listVenuePosts', {
 			bearer,
 			id: venue.id,
 			query: { before: isUuid(before) ? before : undefined }
-		})
+		}),
+		// The reader's own jumps here (merged listings included), for their eyes only.
+		// Asked only with a session: a guest's page data never carries it.
+		bearer
+			? call<JumpPageOut>(
+					api,
+					'listJumps',
+					{ bearer, query: { venue_id: venue.id, limit: '1' } },
+					(body) => isPage(body) && typeof (body as JumpPageOut).matched?.jumps === 'number'
+				)
+			: null
 	]);
 	return {
 		venue,
@@ -41,6 +51,7 @@ export const load: PageServerLoad = async ({ params, locals, cookies, url }) => 
 				}
 			: { ok: false as const, reason: listings.reason },
 		posts: posts.ok ? posts.value : null,
-		olderPosts: isUuid(before)
+		olderPosts: isUuid(before),
+		mine: mine?.ok ? { count: mine.value.matched.jumps, lastOn: mine.value.matched.last_on } : null
 	};
 };

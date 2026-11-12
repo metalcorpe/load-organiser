@@ -32,6 +32,8 @@ from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 
 DEFAULT_PAGE = 20
 MAX_PAGE = 50
+# Printing reads the whole logbook (at most MAX_JUMPS) in few requests.
+MAX_PRINT_PAGE = 200
 
 
 class NotFound(Exception):
@@ -137,10 +139,65 @@ class JumpDetail:
 
 
 @dataclass(frozen=True)
+class JumpFilter:
+    """The owner's own search over their logbook; every field narrows the set."""
+
+    text: str | None = None
+    jump_type: JumpType | None = None
+    venue_id: uuid.UUID | None = None
+    place_id: uuid.UUID | None = None
+    from_date: date | None = None
+    to_date: date | None = None
+    number_from: int | None = None
+    number_to: int | None = None
+
+
+@dataclass(frozen=True)
+class Criteria:
+    """A JumpFilter resolved for the store: venues are expanded through merges."""
+
+    text: str | None = None
+    text_venue_ids: frozenset[uuid.UUID] = frozenset()
+    jump_type: str | None = None
+    venue_ids: frozenset[uuid.UUID] | None = None
+    place_id: uuid.UUID | None = None
+    from_date: date | None = None
+    to_date: date | None = None
+    number_from: int | None = None
+    number_to: int | None = None
+
+
+@dataclass(frozen=True)
+class Totals:
+    jumps: int
+    freefall_seconds: int | None  # sum over the jumps that recorded it
+    freefall_recorded: int
+    first_on: date | None
+    last_on: date | None
+
+
+@dataclass(frozen=True)
 class JumpPage:
     items: list[JumpView]
     next_cursor: str | None
     recorded_total: int
+    matched: Totals
+
+
+@dataclass(frozen=True)
+class NumberedRef:
+    id: uuid.UUID
+    jumped_on: date
+    number: int
+
+
+@dataclass(frozen=True)
+class PrintPage:
+    items: list[JumpView]
+    next_cursor: str | None
+    # Entries dated before the range and their recorded freefall time.
+    before_jumps: int
+    before_freefall_seconds: int
 
 
 class LogbookStore(Protocol):
@@ -152,9 +209,35 @@ class LogbookStore(Protocol):
     def receipt(self, actor: Actor, client_key: uuid.UUID) -> Receipt | None: ...
     def get_jump(self, actor: Actor, jump_id: uuid.UUID) -> Jump | None: ...
     def page(
-        self, actor: Actor, after: tuple[date, uuid.UUID] | None, limit: int
+        self,
+        actor: Actor,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+        where: Criteria = Criteria(),
     ) -> list[Jump]:
         """Newest activity date first, then newest entry."""
+        ...
+
+    def totals(self, actor: Actor, where: Criteria) -> Totals: ...
+    def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
+        """The distinct venues of the owner's jumps, as stored (before merges)."""
+
+    def numbered(self, actor: Actor) -> list[NumberedRef]:
+        """The owner's numbered jumps by number, then date and id (bounded by the limit)."""
+
+    def in_order(
+        self,
+        actor: Actor,
+        from_on: date | None,
+        until_on: date | None,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+    ) -> list[Jump]:
+        """Oldest activity date first, then oldest entry; dates inclusive."""
+        ...
+
+    def totals_before(self, actor: Actor, on: date) -> tuple[int, int]:
+        """(entries, recorded freefall seconds) dated before `on`."""
         ...
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
@@ -267,19 +350,76 @@ class LogbookService:
     # -- reads ------------------------------------------------------------------------
 
     def list_jumps(
-        self, actor: Actor, *, cursor: str | None = None, limit: int | None = None
+        self,
+        actor: Actor,
+        *,
+        cursor: str | None = None,
+        limit: int | None = None,
+        search: JumpFilter | None = None,
     ) -> JumpPage:
+        """One page of the owner's jumps, optionally filtered.
+
+        The cursor is the last (date, id) seen; filters only add conditions to the
+        same order, so a page stays stable while the filters stay the same.
+        """
         size = min(max(limit or DEFAULT_PAGE, 1), MAX_PAGE)
         after = _after(cursor) if cursor else None
+        _check_filter(search or JumpFilter())
         with self._stores() as store:
-            rows = store.page(actor, after, size + 1)
+            where = self._criteria(store, actor, search or JumpFilter())
+            rows = store.page(actor, after, size + 1, where)
             total = store.count_jumps(actor)
+            matched = store.totals(actor, where)
             views = self._views(store, actor, rows[:size])
         next_cursor = None
         if len(rows) > size:
             last = rows[size - 1]
             next_cursor = encode_cursor(last.jumped_on.isoformat(), last.id)
-        return JumpPage(views, next_cursor, total)
+        return JumpPage(views, next_cursor, total, matched)
+
+    def _criteria(
+        self, store: LogbookStore, actor: Actor, search: JumpFilter
+    ) -> Criteria:
+        text = search.text.strip() if search.text else None
+        venue_ids: frozenset[uuid.UUID] | None = None
+        text_venue_ids: frozenset[uuid.UUID] = frozenset()
+        if search.venue_id is not None or text:
+            # Bounded by the owner's distinct venues; merged venues count under
+            # the venue they resolve to, as on the history page.
+            stored = store.venue_ids(actor)
+            resolved = self._directory.public_venues(stored) if stored else {}
+            if search.venue_id is not None:
+                target = resolved.get(search.venue_id)
+                wanted = target.id if target else search.venue_id
+                venue_ids = frozenset(
+                    {search.venue_id}
+                    | {v for v, venue in resolved.items() if venue.id == wanted}
+                )
+            if text:
+                needle = text.casefold()
+                text_venue_ids = frozenset(
+                    v
+                    for v, venue in resolved.items()
+                    if needle in venue.name.casefold()
+                    or any(needle in a.name.casefold() for a in venue.aliases)
+                )
+        return Criteria(
+            text=text or None,
+            text_venue_ids=text_venue_ids,
+            jump_type=search.jump_type.value if search.jump_type else None,
+            venue_ids=venue_ids,
+            place_id=search.place_id,
+            from_date=search.from_date,
+            to_date=search.to_date,
+            number_from=search.number_from,
+            number_to=search.number_to,
+        )
+
+    def numbering(self, actor: Actor) -> policy.Numbering[NumberedRef]:
+        """Highest jump number, gaps and repeats in the owner's own numbering."""
+        with self._stores() as store:
+            rows = store.numbered(actor)
+        return policy.numbering([policy.Numbered(r.number, r) for r in rows])
 
     def jump(self, actor: Actor, jump_id: uuid.UUID) -> JumpDetail:
         with self._stores() as store:
@@ -293,6 +433,30 @@ class LogbookService:
                 if row.jump_number
                 else [],
             )
+
+    def in_order(
+        self,
+        actor: Actor,
+        *,
+        from_on: date | None = None,
+        until_on: date | None = None,
+        cursor: str | None = None,
+        limit: int | None = None,
+    ) -> PrintPage:
+        """Full entries oldest first, for a printed logbook. Dates are inclusive."""
+        if from_on is not None and until_on is not None and from_on > until_on:
+            raise RuleError("date_range_invalid")
+        size = min(max(limit or MAX_PRINT_PAGE, 1), MAX_PRINT_PAGE)
+        after = _after(cursor) if cursor else None
+        with self._stores() as store:
+            rows = store.in_order(actor, from_on, until_on, after, size + 1)
+            before = store.totals_before(actor, from_on) if from_on else (0, 0)
+            views = self._views(store, actor, rows[:size])
+        next_cursor = None
+        if len(rows) > size:
+            last = rows[size - 1]
+            next_cursor = encode_cursor(last.jumped_on.isoformat(), last.id)
+        return PrintPage(views, next_cursor, before[0], before[1])
 
     # -- writes -----------------------------------------------------------------------
 
@@ -583,6 +747,16 @@ def _values_of(jump: Jump) -> dict[str, Any]:
         "notes": jump.notes,
         "links": list(jump.links),
     }
+
+
+def _check_filter(search: JumpFilter) -> None:
+    if search.venue_id is not None and search.place_id is not None:
+        raise RuleError("location_filter_invalid")
+    if search.from_date and search.to_date and search.from_date > search.to_date:
+        raise RuleError("date_range_invalid")
+    low, high = search.number_from, search.number_to
+    if low is not None and high is not None and low > high:
+        raise RuleError("number_range_invalid")
 
 
 def _after(cursor: str) -> tuple[date, uuid.UUID]:

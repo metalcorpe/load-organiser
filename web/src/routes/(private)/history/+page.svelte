@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
+	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { KIND_LABEL } from '#lib/gear.ts';
@@ -79,6 +80,8 @@
 	{/if}
 	</section>
 
+	{#if h.currency}<CurrencyStatus currency={h.currency} today={data.today} />{/if}
+
 	{#if t.recorded === 0}
 		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>
 	{:else}
@@ -102,6 +105,7 @@
 			</tbody>
 		</table>
 		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
+		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
 		</section>
 
 		<section class="card">

@@ -21,15 +21,19 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.logbook.policy import JumpType
 from app.skydiver.logbook.service import (
     JumpDeleted,
     JumpDetail,
+    JumpFilter,
     JumpView,
     KeyReused,
     LikelyDuplicate,
     LimitReached,
     LogbookService,
     NotFound,
+    NumberedRef,
+    PrintPage,
 )
 
 PREFIX = "/api/skydiver/v1"
@@ -160,12 +164,71 @@ class JumpSummaryOut(BaseModel):
     components: list[ComponentRefOut]
 
 
+class MatchedOut(BaseModel):
+    """Totals over every jump matching the filters (all jumps when unfiltered)."""
+
+    jumps: int
+    freefall_seconds: int | None = Field(
+        description="Sum over the matching jumps that recorded a freefall time."
+    )
+    freefall_recorded: int = Field(
+        description="How many matching jumps recorded a freefall time."
+    )
+    first_on: date | None
+    last_on: date | None
+
+
 class JumpPageOut(BaseModel):
     items: list[JumpSummaryOut]
     next_cursor: str | None
     recorded_total: int = Field(
         description="Detailed entries you recorded; not a lifetime total."
     )
+    matched: MatchedOut
+
+
+class NumberedJumpOut(BaseModel):
+    id: uuid.UUID
+    jumped_on: date
+    jump_number: int
+
+
+class NumberGapOut(BaseModel):
+    first: int = Field(description="The first missing number.")
+    last: int = Field(description="The last missing number.")
+    before: NumberedJumpOut
+    after: NumberedJumpOut
+
+
+class NumberRepeatOut(BaseModel):
+    jump_number: int
+    uses: int
+    jumps: list[NumberedJumpOut] = Field(description="At most five of them.")
+
+
+class JumpNumberingOut(BaseModel):
+    """Your own numbering, to suggest the next number and note slips."""
+
+    highest: int | None = Field(description="Null when no jump has a number.")
+    gaps: list[NumberGapOut] = Field(description="The first few, lowest first.")
+    gap_count: int
+    repeats: list[NumberRepeatOut] = Field(description="The first few, lowest first.")
+    repeat_count: int
+
+
+class BroughtForwardOut(BaseModel):
+    jumps: int = Field(description="Your entries dated before `from_on`.")
+    freefall_seconds: int = Field(
+        description="Their recorded freefall time; entries without one add nothing."
+    )
+
+
+class PrintPageOut(BaseModel):
+    """Full entries, oldest first, for printing your own logbook."""
+
+    items: list[JumpOut]
+    next_cursor: str | None
+    brought_forward: BroughtForwardOut
 
 
 class JumpEventOut(BaseModel):
@@ -244,6 +307,16 @@ def _summary(view: JumpView) -> JumpSummaryOut:
     )
 
 
+def _print_page(page: PrintPage) -> PrintPageOut:
+    return PrintPageOut(
+        items=[_jump(v) for v in page.items],
+        next_cursor=page.next_cursor,
+        brought_forward=BroughtForwardOut(
+            jumps=page.before_jumps, freefall_seconds=page.before_freefall_seconds
+        ),
+    )
+
+
 def _detail(d: JumpDetail) -> JumpDetailOut:
     return JumpDetailOut(
         jump=_jump(d.view),
@@ -253,6 +326,10 @@ def _detail(d: JumpDetail) -> JumpDetailOut:
         ],
         same_number=d.same_number,
     )
+
+
+def _numbered(ref: NumberedRef) -> NumberedJumpOut:
+    return NumberedJumpOut(id=ref.id, jumped_on=ref.jumped_on, jump_number=ref.number)
 
 
 def _problem(error: Exception) -> JSONResponse:
@@ -306,15 +383,85 @@ def create_router(
         actor: Reader,
         cursor: Annotated[str | None, Query(max_length=200)] = None,
         limit: Annotated[int | None, Query(ge=1, le=50)] = None,
+        q: Annotated[
+            str | None,
+            Query(
+                max_length=100,
+                description="Text in the place name or your private notes.",
+            ),
+        ] = None,
+        jump_type: JumpTypeName | None = None,
+        venue_id: Annotated[
+            uuid.UUID | None, Query(description="A listed dropzone, merges included.")
+        ] = None,
+        place_id: Annotated[
+            uuid.UUID | None, Query(description="One of your private places.")
+        ] = None,
+        from_date: Annotated[date | None, Query(description="On or after.")] = None,
+        to_date: Annotated[date | None, Query(description="On or before.")] = None,
+        number_from: Annotated[int | None, Query(ge=1, le=1_000_000)] = None,
+        number_to: Annotated[int | None, Query(ge=1, le=1_000_000)] = None,
     ) -> JumpPageOut | JSONResponse:
+        search = JumpFilter(
+            text=q,
+            jump_type=JumpType(jump_type) if jump_type else None,
+            venue_id=venue_id,
+            place_id=place_id,
+            from_date=from_date,
+            to_date=to_date,
+            number_from=number_from,
+            number_to=number_to,
+        )
         try:
-            page = service().list_jumps(actor, cursor=cursor, limit=limit)
+            page = service().list_jumps(
+                actor, cursor=cursor, limit=limit, search=search
+            )
         except Errors as error:
             return _problem(error)
+        m = page.matched
         return JumpPageOut(
             items=[_summary(v) for v in page.items],
             next_cursor=page.next_cursor,
             recorded_total=page.recorded_total,
+            matched=MatchedOut(
+                jumps=m.jumps,
+                freefall_seconds=m.freefall_seconds,
+                freefall_recorded=m.freefall_recorded,
+                first_on=m.first_on,
+                last_on=m.last_on,
+            ),
+        )
+
+    # Before /jumps/{jump_id}, which would otherwise take "numbering" as an id.
+    @router.get(
+        "/jumps/numbering",
+        operation_id="getJumpNumbering",
+        response_model=JumpNumberingOut,
+        dependencies=deps,
+    )
+    def get_numbering(actor: Reader) -> JumpNumberingOut:
+        found = service().numbering(actor)
+        return JumpNumberingOut(
+            highest=found.highest,
+            gaps=[
+                NumberGapOut(
+                    first=g.first,
+                    last=g.last,
+                    before=_numbered(g.before),
+                    after=_numbered(g.after),
+                )
+                for g in found.gaps
+            ],
+            gap_count=found.gap_count,
+            repeats=[
+                NumberRepeatOut(
+                    jump_number=r.number,
+                    uses=r.uses,
+                    jumps=[_numbered(j) for j in r.refs],
+                )
+                for r in found.repeats
+            ],
+            repeat_count=found.repeat_count,
         )
 
     @router.post(
@@ -338,6 +485,28 @@ def create_router(
             return _problem(error)
         response.status_code = 201 if created else 200
         return _detail(detail)
+
+    # Before `/jumps/{jump_id}`, which would otherwise read "in-order" as an id.
+    @router.get(
+        "/jumps/in-order",
+        operation_id="listJumpsInOrder",
+        response_model=PrintPageOut,
+        dependencies=deps,
+    )
+    def list_jumps_in_order(
+        actor: Reader,
+        from_on: date | None = None,
+        until_on: date | None = None,
+        cursor: Annotated[str | None, Query(max_length=200)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=200)] = None,
+    ) -> PrintPageOut | JSONResponse:
+        try:
+            page = service().in_order(
+                actor, from_on=from_on, until_on=until_on, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return _print_page(page)
 
     @router.get(
         "/jumps/{jump_id}",

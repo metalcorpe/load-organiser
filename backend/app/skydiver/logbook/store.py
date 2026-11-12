@@ -6,7 +6,18 @@ from contextlib import contextmanager
 from datetime import date, datetime
 from typing import Any
 
-from sqlalchemy import Engine, and_, delete, func, insert, or_, select, update
+from sqlalchemy import (
+    ColumnElement,
+    Engine,
+    and_,
+    delete,
+    false,
+    func,
+    insert,
+    or_,
+    select,
+    update,
+)
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
@@ -18,12 +29,15 @@ from app.skydiver.gear.tables import SkydiverComponent
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 from app.skydiver.logbook.service import (
     ComponentRef,
+    Criteria,
     Jump,
     JumpEvent,
     LogbookStore,
+    NumberedRef,
     PlaceRef,
     Receipt,
     StoreFactory,
+    Totals,
 )
 from app.skydiver.logbook.tables import (
     SkydiverJump,
@@ -120,9 +134,13 @@ class SqlLogbookStore:
         return self._with_components([row])[0] if row else None
 
     def page(
-        self, actor: Actor, after: tuple[date, uuid.UUID] | None, limit: int
+        self,
+        actor: Actor,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+        where: Criteria = Criteria(),
     ) -> list[Jump]:
-        query = owned(J, actor)
+        query = owned(J, actor).where(*_conditions(actor, where))
         if after is not None:
             on, last_id = after
             query = query.where(
@@ -136,6 +154,44 @@ class SqlLogbookStore:
         ).scalars()
         return self._with_components(list(rows))
 
+    def totals(self, actor: Actor, where: Criteria) -> Totals:
+        jumps, seconds, recorded, first, last = self._s.execute(
+            select(
+                func.count(),
+                func.sum(col(J.freefall_seconds)),
+                func.count(col(J.freefall_seconds)),
+                func.min(col(J.jumped_on)),
+                func.max(col(J.jumped_on)),
+            )
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(*_conditions(actor, where))
+        ).one()
+        return Totals(
+            jumps=int(jumps),
+            freefall_seconds=int(seconds) if seconds is not None else None,
+            freefall_recorded=int(recorded),
+            first_on=first,
+            last_on=last,
+        )
+
+    def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
+        rows = self._s.execute(
+            select(col(J.venue_id))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.venue_id).is_not(None))
+            .distinct()
+        ).scalars()
+        return [v for v in rows if v is not None]
+
+    def numbered(self, actor: Actor) -> list[NumberedRef]:
+        rows = self._s.execute(
+            select(col(J.id), col(J.jumped_on), col(J.jump_number))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.jump_number).is_not(None))
+            .order_by(col(J.jump_number), col(J.jumped_on), col(J.id))
+        )
+        return [NumberedRef(i, on, int(n)) for i, on, n in rows.all()]
+
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
         number = values.get("jump_number")
         if number is not None:
@@ -147,8 +203,10 @@ class SqlLogbookStore:
             column = col(getattr(J, name))
             value = values.get(name)
             query = query.where(column.is_(None) if value is None else column == value)
-        if number is None:
-            query = query.where(col(J.jump_number).is_(None))
+        # Same facts only count against a jump without a number: one with a different
+        # number is the jumper's own word that it is another jump (the same number is
+        # caught above). An unnumbered match may be this jump entered again, numbered.
+        query = query.where(col(J.jump_number).is_(None))
         row = self._s.execute(query.order_by(col(J.id)).limit(1)).scalars().first()
         return row.id if row else None
 
@@ -193,6 +251,40 @@ class SqlLogbookStore:
             owned(E, actor).where(col(E.jump_id) == jump_id).order_by(col(E.id))
         ).scalars()
         return [JumpEvent(r.kind, dict(r.detail), r.created_at) for r in rows]
+
+    def in_order(
+        self,
+        actor: Actor,
+        from_on: date | None,
+        until_on: date | None,
+        after: tuple[date, uuid.UUID] | None,
+        limit: int,
+    ) -> list[Jump]:
+        query = owned(J, actor)
+        if from_on is not None:
+            query = query.where(col(J.jumped_on) >= from_on)
+        if until_on is not None:
+            query = query.where(col(J.jumped_on) <= until_on)
+        if after is not None:
+            on, last_id = after
+            query = query.where(
+                or_(
+                    col(J.jumped_on) > on,
+                    and_(col(J.jumped_on) == on, col(J.id) > last_id),
+                )
+            )
+        rows = self._s.execute(
+            query.order_by(col(J.jumped_on), col(J.id)).limit(limit)
+        ).scalars()
+        return self._with_components(list(rows))
+
+    def totals_before(self, actor: Actor, on: date) -> tuple[int, int]:
+        count, freefall = self._s.execute(
+            select(func.count(), func.coalesce(func.sum(col(J.freefall_seconds)), 0))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.jumped_on) < on)
+        ).one()
+        return int(count), int(freefall)
 
     # writes ----------------------------------------------------------------------
 
@@ -309,6 +401,42 @@ class SqlLogbookStore:
                     for c in component_ids
                 ],
             )
+
+
+def _conditions(actor: Actor, where: Criteria) -> list[ColumnElement[bool]]:
+    """Filter conditions; the caller already scopes the query to the owner."""
+    found: list[ColumnElement[bool]] = []
+    if where.text:
+        P = SkydiverProvisionalPlace
+        places = (
+            select(col(P.id))
+            .where(col(P.owner_person_id) == actor.person_id)
+            .where(col(P.name).icontains(where.text, autoescape=True))
+        )
+        matches: list[ColumnElement[bool]] = [
+            col(J.notes).icontains(where.text, autoescape=True),
+            col(J.place_id).in_(places),
+        ]
+        if where.text_venue_ids:
+            matches.append(col(J.venue_id).in_(where.text_venue_ids))
+        found.append(or_(*matches))
+    if where.jump_type is not None:
+        found.append(col(J.jump_type) == where.jump_type)
+    if where.venue_ids is not None:
+        found.append(
+            col(J.venue_id).in_(where.venue_ids) if where.venue_ids else false()
+        )
+    if where.place_id is not None:
+        found.append(col(J.place_id) == where.place_id)
+    if where.from_date is not None:
+        found.append(col(J.jumped_on) >= where.from_date)
+    if where.to_date is not None:
+        found.append(col(J.jumped_on) <= where.to_date)
+    if where.number_from is not None:
+        found.append(col(J.jump_number) >= where.number_from)
+    if where.number_to is not None:
+        found.append(col(J.jump_number) <= where.number_to)
+    return found
 
 
 def sql_logbook_store_factory(engine: Engine) -> StoreFactory:

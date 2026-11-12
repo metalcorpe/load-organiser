@@ -172,3 +172,82 @@ def component_ids[T](values: list[T] | None) -> list[T]:
     if len(unique) > COMPONENTS_MAX:
         raise RuleError("too_many_components")
     return unique
+
+
+# Numbering notes stay brief: the first few of each kind, plus how many there are.
+NUMBERING_ISSUES_MAX = 5
+REPEAT_JUMPS_MAX = 5
+
+
+@dataclass(frozen=True)
+class Numbered[T]:
+    number: int
+    ref: T  # the jump, opaque here
+
+
+@dataclass(frozen=True)
+class Gap[T]:
+    first: int  # the first missing number
+    last: int  # the last missing number
+    before: T  # a jump numbered first - 1
+    after: T  # a jump numbered last + 1
+
+
+@dataclass(frozen=True)
+class Repeat[T]:
+    number: int
+    uses: int
+    refs: list[T]  # at most REPEAT_JUMPS_MAX
+
+
+@dataclass(frozen=True)
+class Numbering[T]:
+    highest: int | None
+    gaps: list[Gap[T]]
+    gap_count: int
+    repeats: list[Repeat[T]]
+    repeat_count: int
+
+
+def numbering[T](jumps: list[Numbered[T]]) -> Numbering[T]:
+    """Highest number, gaps between the lowest and highest, and repeated numbers.
+
+    `jumps` are the owner's numbered jumps sorted by number (then a stable order).
+    One pass, linear in their count, which the jump limit bounds. Numbers below the
+    lowest are not gaps: a logbook may start mid-career.
+    """
+    gaps: list[Gap[T]] = []
+    repeats: list[Repeat[T]] = []
+    gap_count = repeat_count = 0
+    previous: Numbered[T] | None = None
+    i = 0
+    while i < len(jumps):
+        end = i + 1
+        while end < len(jumps) and jumps[end].number == jumps[i].number:
+            end += 1
+        current = jumps[i]
+        if previous is not None and current.number > previous.number + 1:
+            gap_count += 1
+            if len(gaps) < NUMBERING_ISSUES_MAX:
+                gaps.append(
+                    Gap(
+                        previous.number + 1,
+                        current.number - 1,
+                        previous.ref,
+                        current.ref,
+                    )
+                )
+        if end - i > 1:
+            repeat_count += 1
+            if len(repeats) < NUMBERING_ISSUES_MAX:
+                refs = [j.ref for j in jumps[i : min(end, i + REPEAT_JUMPS_MAX)]]
+                repeats.append(Repeat(current.number, end - i, refs))
+        previous = current
+        i = end
+    return Numbering(
+        highest=jumps[-1].number if jumps else None,
+        gaps=gaps,
+        gap_count=gap_count,
+        repeats=repeats,
+        repeat_count=repeat_count,
+    )

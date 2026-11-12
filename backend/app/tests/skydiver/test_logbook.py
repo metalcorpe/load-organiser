@@ -281,6 +281,22 @@ def test_likely_duplicates_warn_and_two_real_jumps_save(api: Api) -> None:
     assert api.ok("GET", "/jumps", owner)["recorded_total"] == 5
 
 
+def test_a_different_jump_number_is_another_jump_not_a_duplicate(api: Api) -> None:
+    """The next numbered load of the same day, place and type saves (#160 next jump)."""
+    owner = api.accounts.session()
+    place = api.place(owner)
+    on = {"place_id": place["id"], "jumped_on": "2026-10-13", "jump_type": "belly"}
+    first = api.jump(owner, jump_number=122, **on).json()["jump"]
+    second = api.jump(owner, jump_number=123, **on)
+    assert second.status_code == 201, second.text
+    # The same number is still caught, and so is an unnumbered entry of the same jump.
+    again = api.jump(owner, jump_number=122, **on)
+    assert again.json()["duplicate_of"] == first["id"]
+    unnumbered = api.jump(owner, **{**on, "jumped_on": "2026-10-14"}).json()["jump"]
+    renumbered = api.jump(owner, jump_number=200, **{**on, "jumped_on": "2026-10-14"})
+    assert renumbered.json()["duplicate_of"] == unnumbered["id"]
+
+
 def test_edits_compare_and_swap_and_keep_corrections(api: Api) -> None:
     owner = api.accounts.session()
     place = api.place(owner)
@@ -349,6 +365,62 @@ def test_pages_newest_activity_first(api: Api) -> None:
     assert bad.status_code == 422
 
 
+def test_in_order_reads_full_entries_oldest_first_within_dates(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    gear = api.component(owner, "Sabre 170")
+    made = {
+        day: api.jump(
+            owner,
+            place_id=place["id"],
+            jumped_on=day,
+            freefall_seconds=seconds,
+            notes=f"note {day}",
+            component_ids=[gear["id"]],
+        ).json()["jump"]["id"]  # fmt: skip
+        for day, seconds in (
+            ("2026-01-01", 40),
+            ("2026-02-01", None),
+            ("2026-03-01", 55),
+            ("2026-04-01", 60),
+        )  # fmt: skip
+    }
+    first = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-02-01", until_on="2026-04-01",
+        limit=2,
+    ).json()  # fmt: skip
+    assert [i["id"] for i in first["items"]] == [
+        made["2026-02-01"],
+        made["2026-03-01"],
+    ]
+    item = first["items"][1]
+    assert (item["notes"], item["freefall_seconds"]) == ("note 2026-03-01", 55)
+    assert [c["label"] for c in item["components"]] == ["Sabre 170"]
+    assert item["location"]["name"] == "Farm strip"
+    # Entries before the range carry forward as a count and freefall time.
+    assert first["brought_forward"] == {"jumps": 1, "freefall_seconds": 40}
+    rest = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-02-01", until_on="2026-04-01",
+        limit=2, cursor=first["next_cursor"],
+    ).json()  # fmt: skip
+    assert [i["id"] for i in rest["items"]] == [made["2026-04-01"]]
+    assert rest["next_cursor"] is None
+
+    everything = api.ok("GET", "/jumps/in-order", owner)
+    assert [i["id"] for i in everything["items"]] == list(made.values())
+    assert everything["brought_forward"] == {"jumps": 0, "freefall_seconds": 0}
+
+    backwards = api.call(
+        "GET", "/jumps/in-order", owner, from_on="2026-04-01", until_on="2026-01-01"
+    )
+    assert backwards.json() == {"detail": "date_range_invalid"}
+    assert api.call("GET", "/jumps/in-order", owner, limit=201).status_code == 422
+    # Owner-only: another person reads nothing, anonymous is refused.
+    other = api.accounts.session()
+    assert api.ok("GET", "/jumps/in-order", other)["items"] == []
+    assert api.call("GET", "/jumps/in-order").status_code == 401
+
+
 class _LateStore(SqlLogbookStore):
     """Misses the first receipt read, as a request racing a same-key retry would."""
 
@@ -396,3 +468,187 @@ def test_a_lost_same_key_race_returns_the_winner(api: Api) -> None:
     again, created = late.create_jump(actor, key, fields, confirm_distinct=True)
     assert (again.view.jump.id, created) == (first.view.jump.id, False)
     assert real.list_jumps(actor).recorded_total == 1
+
+
+def _ids(page: dict[str, Any]) -> list[str]:
+    return [i["id"] for i in page["items"]]
+
+
+def test_filters_narrow_the_owners_own_jumps(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    venue = api.venue()
+    place = api.place(owner)
+
+    def jump(secret: str, **fields: Any) -> str:
+        sent = api.jump(secret, **fields)
+        assert sent.status_code == 201, sent.text
+        return str(sent.json()["jump"]["id"])
+
+    a = jump(owner, venue_id=venue["id"], jumped_on="2026-01-05", jump_type="belly",
+             jump_number=10, freefall_seconds=50, notes="Sunset 4-way")  # fmt: skip
+    b = jump(owner, venue_id=venue["id"], jumped_on="2026-02-05", jump_type="freefly",
+             jump_number=11, notes="100% fun")  # fmt: skip
+    c = jump(owner, place_id=place["id"], jumped_on="2026-03-05", jump_type="belly",
+             jump_number=12, freefall_seconds=40)  # fmt: skip
+    d = jump(owner, place_id=place["id"], jumped_on="2026-04-05", jump_type="canopy")
+    # Another jumper's matching jump never appears, whatever the filter.
+    jump(other, venue_id=venue["id"], jumped_on="2026-01-05", jump_type="belly",
+         jump_number=10, notes="Sunset 4-way")  # fmt: skip
+
+    def search(**params: Any) -> dict[str, Any]:
+        response = api.call("GET", "/jumps", owner, **params)
+        assert response.status_code == 200, response.text
+        return dict(response.json())
+
+    everything = search()
+    assert _ids(everything) == [d, c, b, a]
+    assert everything["matched"] == {
+        "jumps": 4, "freefall_seconds": 90, "freefall_recorded": 2,
+        "first_on": "2026-01-05", "last_on": "2026-04-05",
+    }  # fmt: skip
+    assert _ids(search(jump_type="belly")) == [c, a]
+    assert _ids(search(venue_id=venue["id"])) == [b, a]
+    assert _ids(search(place_id=place["id"])) == [d, c]
+    assert _ids(search(from_date="2026-02-01", to_date="2026-03-31")) == [c, b]
+    assert _ids(search(number_from=11)) == [c, b]  # unnumbered jumps drop out
+    assert _ids(search(number_from=10, number_to=10)) == [a]
+    # Text: private notes (case-insensitive, wildcards literal) and place names.
+    assert _ids(search(q="sunset")) == [a]
+    assert _ids(search(q="100%")) == [b]
+    assert _ids(search(q="%")) == [b]
+    assert _ids(search(q="farm")) == [d, c]
+    assert _ids(search(q=venue["name"][:6].lower())) == [b, a]
+    # Combined filters all apply.
+    combined = search(jump_type="belly", from_date="2026-02-01", q="farm")
+    assert _ids(combined) == [c]
+    assert combined["matched"] == {
+        "jumps": 1, "freefall_seconds": 40, "freefall_recorded": 1,
+        "first_on": "2026-03-05", "last_on": "2026-03-05",
+    }  # fmt: skip
+    assert combined["recorded_total"] == 4  # the whole logbook, unfiltered
+    none = search(jump_type="wingsuit")
+    assert none["items"] == [] and none["matched"] == {
+        "jumps": 0, "freefall_seconds": None, "freefall_recorded": 0,
+        "first_on": None, "last_on": None,
+    }  # fmt: skip
+    # Another person's place filters to nothing rather than to their jumps.
+    assert search(place_id=api.place(other)["id"])["items"] == []
+
+
+def test_filtered_pages_keep_their_order(api: Api) -> None:
+    owner = api.accounts.session()
+    place = api.place(owner)
+    ids = [
+        api.jump(owner, place_id=place["id"], jumped_on=f"2026-05-{day:02d}",
+                 jump_type=kind).json()["jump"]["id"]
+        for day, kind in ((1, "belly"), (2, "canopy"), (3, "belly"), (4, "belly"))
+    ]  # fmt: skip
+    expected = [ids[3], ids[2], ids[0]]
+    first = api.call("GET", "/jumps", owner, limit=2, jump_type="belly").json()
+    assert _ids(first) == expected[:2]
+    rest = api.call(
+        "GET", "/jumps", owner, limit=2, jump_type="belly", cursor=first["next_cursor"]
+    ).json()
+    assert _ids(rest) == expected[2:] and rest["next_cursor"] is None
+    assert first["matched"]["jumps"] == rest["matched"]["jumps"] == 3
+
+
+def test_a_merged_dropzone_filters_with_its_survivor(api: Api) -> None:
+    owner = api.accounts.session()
+    old, survivor = api.venue(), api.venue()
+    before = api.jump(owner, venue_id=old["id"]).json()["jump"]["id"]
+    api.ok(
+        "POST", f"/directory/venues/{old['id']}/merge", api.reviewer,
+        {"into": survivor["id"]},
+    )  # fmt: skip
+    after = api.jump(owner, venue_id=survivor["id"], jumped_on="2026-10-11")
+    page = api.call("GET", "/jumps", owner, venue_id=survivor["id"]).json()
+    assert _ids(page) == [after.json()["jump"]["id"], before]
+    # The old name stays searchable: it is an alias of the survivor now.
+    assert before in _ids(api.call("GET", "/jumps", owner, q=old["name"]).json())
+
+
+@pytest.mark.parametrize(
+    ("params", "expected"),
+    [
+        ({"from_date": "2026-03-01", "to_date": "2026-02-01"}, "date_range_invalid"),
+        ({"number_from": 20, "number_to": 10}, "number_range_invalid"),
+        (
+            {"venue_id": str(uuid.uuid4()), "place_id": str(uuid.uuid4())},
+            "location_filter_invalid",
+        ),
+    ],
+)
+def test_filter_validation(api: Api, params: dict[str, Any], expected: str) -> None:
+    owner = api.accounts.session()
+    response = api.call("GET", "/jumps", owner, **params)
+    assert (response.status_code, response.json()) == (422, {"detail": expected})
+    for bad in ({"jump_type": "skysurf"}, {"number_from": 0}, {"q": "x" * 101}):
+        assert api.call("GET", "/jumps", owner, **bad).status_code == 422
+    assert api.call("GET", "/jumps", None, jump_type="belly").status_code == 401
+
+
+def test_jumps_at_one_dropzone_count_only_the_readers_own(api: Api) -> None:
+    """What a dropzone page shows a signed-in reader: their own count and last date."""
+    owner, other, newcomer = (api.accounts.session() for _ in range(3))
+    venue, elsewhere = api.venue(), api.venue()
+    for day in ("2026-03-01", "2026-06-15"):
+        assert api.jump(owner, venue_id=venue["id"], jumped_on=day).status_code == 201
+    assert api.jump(owner, venue_id=elsewhere["id"], jumped_on="2026-07-01").status_code == 201  # fmt: skip
+    assert api.jump(other, venue_id=venue["id"], jumped_on="2026-09-09").status_code == 201  # fmt: skip
+
+    def here(secret: str | None) -> httpx2.Response:
+        return api.call("GET", "/jumps", secret, venue_id=venue["id"], limit=1)
+
+    mine = here(owner).json()["matched"]
+    assert (mine["jumps"], mine["last_on"]) == (2, "2026-06-15")
+    theirs = here(other).json()["matched"]
+    assert (theirs["jumps"], theirs["last_on"]) == (1, "2026-09-09")
+    none = here(newcomer).json()
+    assert (none["matched"]["jumps"], none["matched"]["last_on"], none["items"]) == (
+        0, None, [],
+    )  # fmt: skip
+    assert here(None).status_code == 401  # guests get nothing
+
+
+def test_numbering_is_the_owners_own(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    assert api.ok("GET", "/jumps/numbering", owner) == {
+        "highest": None, "gaps": [], "gap_count": 0, "repeats": [], "repeat_count": 0,
+    }  # fmt: skip
+    place = api.place(owner)
+
+    def jump(number: int | None, day: str) -> str:
+        sent = api.jump(
+            owner, place_id=place["id"], jumped_on=day, jump_number=number,
+            confirm_distinct=True,
+        )  # fmt: skip
+        assert sent.status_code == 201, sent.text
+        return str(sent.json()["jump"]["id"])
+
+    j120 = jump(120, "2026-10-01")
+    j125 = jump(125, "2026-10-02")
+    first130 = jump(130, "2026-10-03")
+    second130 = jump(130, "2026-10-04")
+    jump(None, "2026-10-05")  # unnumbered jumps are ignored
+    # Another jumper's higher number changes nothing here.
+    api.jump(other, place_id=api.place(other)["id"], jump_number=999)
+
+    found = api.ok("GET", "/jumps/numbering", owner)
+    assert found["highest"] == 130
+    assert [(g["first"], g["last"]) for g in found["gaps"]] == [(121, 124), (126, 129)]
+    assert found["gaps"][0]["before"] == {
+        "id": j120, "jumped_on": "2026-10-01", "jump_number": 120,
+    }  # fmt: skip
+    assert found["gaps"][0]["after"]["id"] == j125
+    assert found["repeats"] == [
+        {
+            "jump_number": 130, "uses": 2,
+            "jumps": [
+                {"id": first130, "jumped_on": "2026-10-03", "jump_number": 130},
+                {"id": second130, "jumped_on": "2026-10-04", "jump_number": 130},
+            ],
+        }
+    ]  # fmt: skip
+    assert api.ok("GET", "/jumps/numbering", other)["highest"] == 999
+    assert api.call("GET", "/jumps/numbering").status_code == 401

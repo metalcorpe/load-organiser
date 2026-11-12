@@ -1,7 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { statusFor } from '#lib/auth-messages.ts';
+import type { LicenceOut } from '#lib/contracts/index.ts';
+import { isLicence } from '#lib/currency.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { field } from '#lib/server/forms.ts';
+import { call, failStatus, isRecord } from '#lib/server/maintenance.ts';
 import {
 	changePassword,
 	deleteAccount,
@@ -12,9 +15,17 @@ import { clearSession, readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = ({ locals, url }) => {
+const isLicenceOut = (body: unknown) => isRecord(body) && isLicence(body.licence);
+
+export const load: PageServerLoad = async ({ locals, url, cookies }) => {
 	const viewer = requireViewer(locals.viewer, url);
+	const secret = readSessionSecret(cookies);
+	// Without an answer the licence form still shows; only the current value is unknown.
+	const licence = secret
+		? await call<LicenceOut>(createRequestApi(), 'getLicence', { bearer: secret }, isLicenceOut)
+		: null;
 	return {
+		licence: licence?.ok ? licence.value.licence : null,
 		account: {
 			email: viewer.email,
 			displayName: viewer.displayName,
@@ -37,6 +48,20 @@ export const actions: Actions = {
 		const outcome = await resendVerification(createRequestApi(), secret);
 		if (!outcome.ok) return fail(statusFor(outcome.reason), { form: 'resend', error: outcome.reason });
 		return { form: 'resend', done: true };
+	},
+
+	licence: async ({ locals, url, cookies, request }) => {
+		const secret = secretOrSignIn(locals, url, cookies);
+		const value = field(await request.formData(), 'licence', { max: 8 });
+		if (!isLicence(value)) return fail(400, { form: 'licence', error: 'missing' });
+		const outcome = await call<LicenceOut>(
+			createRequestApi(),
+			'setLicence',
+			{ bearer: secret, body: { licence: value } },
+			isLicenceOut
+		);
+		if (!outcome.ok) return fail(failStatus(outcome), { form: 'licence', error: outcome.reason });
+		return { form: 'licence', done: true };
 	},
 
 	password: async ({ locals, url, cookies, request, getClientAddress }) => {

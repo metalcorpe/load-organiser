@@ -52,7 +52,7 @@ class Replay:
     detach: tuple[tuple[str, str], ...] = ()
 
 
-# Must match the triggers of migration d4f9b6a2e8c1 (checked by the tests).
+# Must match the triggers of migration d4f9b6a2e8c1 and later ones (checked by the tests).
 REPLAY: dict[str, Replay] = {
     "user": Replay(("id",), ("is_active",)),
     "skydiver_jump": Replay(("id",)),
@@ -77,6 +77,7 @@ REPLAY: dict[str, Replay] = {
     "skydiver_visit_plan": Replay(("id",)),
     "skydiver_saved_opportunity": Replay(("id",)),
     "skydiver_jump_baseline": Replay(("owner_person_id",)),
+    "skydiver_jumper_licence": Replay(("owner_person_id",)),  # migration a3f6c9e2d7b4
     "skydiver_role_grant": Replay(("id",)),
 }
 

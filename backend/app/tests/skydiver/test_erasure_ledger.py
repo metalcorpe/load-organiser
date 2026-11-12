@@ -94,6 +94,24 @@ def test_triggers_match_the_replay_map() -> None:
     assert found == expected
 
 
+def test_clearing_a_licence_records_its_owner_key_only(api: Api) -> None:
+    owner = api.accounts.session()
+    person = api.ok("GET", "/auth/session", owner)["person_id"]
+    start = _now()
+    api.ok("PUT", "/me/licence", owner, {"licence": "b"})
+    api.ok("PUT", "/me/licence", owner, {"licence": "c"})
+    assert _mine(_since(start), person) == []  # setting or changing records nothing
+    api.ok("PUT", "/me/licence", owner, {"licence": "none"})
+    assert _mine(_since(start), person) == [
+        {
+            "action": "delete",
+            "table": "skydiver_jumper_licence",
+            "key": {"owner_person_id": person},
+            "values": None,
+        }
+    ]
+
+
 def test_deletions_record_keys_without_content(api: Api) -> None:
     owner = api.accounts.session()
     start = _now()
