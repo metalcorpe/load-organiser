@@ -281,6 +281,22 @@ def test_likely_duplicates_warn_and_two_real_jumps_save(api: Api) -> None:
     assert api.ok("GET", "/jumps", owner)["recorded_total"] == 5
 
 
+def test_a_different_jump_number_is_another_jump_not_a_duplicate(api: Api) -> None:
+    """The next numbered load of the same day, place and type saves (#160 next jump)."""
+    owner = api.accounts.session()
+    place = api.place(owner)
+    on = {"place_id": place["id"], "jumped_on": "2026-10-13", "jump_type": "belly"}
+    first = api.jump(owner, jump_number=122, **on).json()["jump"]
+    second = api.jump(owner, jump_number=123, **on)
+    assert second.status_code == 201, second.text
+    # The same number is still caught, and so is an unnumbered entry of the same jump.
+    again = api.jump(owner, jump_number=122, **on)
+    assert again.json()["duplicate_of"] == first["id"]
+    unnumbered = api.jump(owner, **{**on, "jumped_on": "2026-10-14"}).json()["jump"]
+    renumbered = api.jump(owner, jump_number=200, **{**on, "jumped_on": "2026-10-14"})
+    assert renumbered.json()["duplicate_of"] == unnumbered["id"]
+
+
 def test_edits_compare_and_swap_and_keep_corrections(api: Api) -> None:
     owner = api.accounts.session()
     place = api.place(owner)

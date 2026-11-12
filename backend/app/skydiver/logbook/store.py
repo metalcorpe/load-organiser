@@ -203,8 +203,10 @@ class SqlLogbookStore:
             column = col(getattr(J, name))
             value = values.get(name)
             query = query.where(column.is_(None) if value is None else column == value)
-        if number is None:
-            query = query.where(col(J.jump_number).is_(None))
+        # Same facts only count against a jump without a number: one with a different
+        # number is the jumper's own word that it is another jump (the same number is
+        # caught above). An unnumbered match may be this jump entered again, numbered.
+        query = query.where(col(J.jump_number).is_(None))
         row = self._s.execute(query.order_by(col(J.id)).limit(1)).scalars().first()
         return row.id if row else None
 

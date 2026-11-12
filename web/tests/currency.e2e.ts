@@ -38,7 +38,7 @@ async function logJump(email: string, on: string) {
 
 async function setLicence(page: Page, label: string) {
 	await page.goto('/profile');
-	await page.getByLabel('Licence', { exact: true }).selectOption({ label });
+	await page.getByRole('combobox', { name: 'Licence' }).selectOption({ label });
 	await page.getByRole('button', { name: 'Save licence' }).click();
 	await expect(page.getByText('Licence saved.')).toBeVisible();
 }
