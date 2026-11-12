@@ -118,10 +118,19 @@ class Settings(BaseSettings):
     # Hosted deploys: at start-up, grant the reviewer role to this account if it
     # exists (the owner, after registering on the site). Idempotent; empty: nothing.
     SKYDIVER_BOOTSTRAP_REVIEWER: EmailStr | None = None
+    # Closed beta (#161): answer only requests carrying SKYDIVER_WEB_PROXY_KEY, i.e.
+    # coming through the web server; others get a plain 404. The health check stays open.
+    SKYDIVER_REQUIRE_PROXY_KEY: bool = False
     # Shared secret proving that the forwarded client IP comes from the web server.
     SKYDIVER_WEB_PROXY_KEY: str | None = None
     # Local/test only: write identity mail as JSON files instead of sending it.
     SKYDIVER_MAIL_OUTBOX_DIR: str | None = None
+
+    @model_validator(mode="after")
+    def _required_proxy_key_is_set(self) -> Self:
+        if self.SKYDIVER_REQUIRE_PROXY_KEY and not self.SKYDIVER_WEB_PROXY_KEY:
+            raise ValueError("SKYDIVER_REQUIRE_PROXY_KEY needs SKYDIVER_WEB_PROXY_KEY")
+        return self
 
     @model_validator(mode="after")
     def _proxy_key_outside_local(self) -> Self:

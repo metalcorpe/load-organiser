@@ -228,6 +228,14 @@ describe('createApiTransport', () => {
 		expect(headers.has('cookie')).toBe(false);
 	});
 
+	it('sends the proxy key on every call, with or without a client address', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
+		await createApiTransport({ fetch, origin: ORIGIN, proxyKey: 'k'.repeat(32) }).request('getHealth');
+		const headers = new Headers(fetch.mock.calls[0][1].headers);
+		expect(headers.get('x-organiser-proxy-key')).toBe('k'.repeat(32));
+		expect(headers.has('x-organiser-client-ip')).toBe(false);
+	});
+
 	it('omits the client address without a proxy key', async () => {
 		const fetch = vi.fn<FetchLike>(async () => json(200, {}));
 		await createApiTransport({ fetch, origin: ORIGIN }).request('getSession', {
