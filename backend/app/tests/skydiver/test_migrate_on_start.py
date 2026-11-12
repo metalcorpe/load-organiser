@@ -4,10 +4,11 @@ import multiprocessing
 import uuid
 from concurrent.futures import ProcessPoolExecutor
 
-from alembic import command
 from alembic.config import Config
 from alembic.script import ScriptDirectory
-from sqlalchemy import text
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import make_url
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 from app.core.db import engine
@@ -47,20 +48,36 @@ def _current() -> str:
 
 
 def test_instances_starting_together_all_start_and_the_schema_is_current() -> None:
-    url = str(settings.SQLALCHEMY_DATABASE_URI)
-    config = Config()
-    config.set_main_option("script_location", str(ALEMBIC_DIR))
-    with engine.begin() as connection:  # one step back, so there is work to race for
-        config.attributes["connection"] = connection
-        command.downgrade(config, "-1")
-    assert _current() != _head()
-    # Separate processes, like instances on the host (Alembic's context is per process).
-    spawn = multiprocessing.get_context("spawn")
-    with ProcessPoolExecutor(max_workers=3, mp_context=spawn) as pool:
-        list(pool.map(migrate, [url] * 3))  # none of them raises
-    assert _current() == _head()
-    migrate(url)  # already current: nothing to do
-    assert _current() == _head()
+    """Three processes race the whole chain on a fresh, empty database (a first deploy).
+
+    A database of its own: the shared test database holds data that some downgrades
+    rightly refuse to drop (imported jumps), so it is never stepped back.
+    """
+    name = f"verify_migrate_{uuid.uuid4().hex[:10]}"
+    url = make_url(str(settings.SQLALCHEMY_DATABASE_URI))
+    admin = create_engine(url.set(database="postgres"), isolation_level="AUTOCOMMIT")
+    with admin.connect() as connection:
+        connection.execute(text(f'CREATE DATABASE "{name}"'))
+    fresh = url.set(database=name).render_as_string(hide_password=False)
+    try:
+        # Separate processes, like instances on the host (Alembic's context is per process).
+        spawn = multiprocessing.get_context("spawn")
+        with ProcessPoolExecutor(max_workers=3, mp_context=spawn) as pool:
+            list(pool.map(migrate, [fresh] * 3))  # none of them raises
+        own = create_engine(fresh, poolclass=NullPool)
+        try:
+            with own.connect() as connection:
+                current = connection.execute(
+                    text("SELECT version_num FROM alembic_version")
+                ).scalar_one()
+        finally:
+            own.dispose()
+        assert current == _head()
+        migrate(fresh)  # already current: nothing to do
+    finally:
+        with admin.connect() as connection:
+            connection.execute(text(f'DROP DATABASE IF EXISTS "{name}" WITH (FORCE)'))
+        admin.dispose()
 
 
 def test_the_reviewer_bootstrap_needs_the_address_confirmed() -> None:
