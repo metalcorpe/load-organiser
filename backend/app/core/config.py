@@ -28,6 +28,9 @@ class Settings(BaseSettings):
         env_file="../.env",
         env_ignore_empty=True,
         extra="ignore",
+        # A settings error at startup must not print the values it received: they
+        # include secrets (database URL, SMTP password) and would land in host logs.
+        hide_input_in_errors=True,
     )
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
