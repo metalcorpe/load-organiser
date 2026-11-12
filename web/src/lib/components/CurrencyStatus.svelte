@@ -3,8 +3,19 @@
 	import { onMount } from 'svelte';
 	import type { CurrencyOut } from '#lib/contracts/index.ts';
 	import { currencyState, localToday } from '#lib/currency.ts';
+	import { progressSummary, type ProgressIn } from '#lib/licence-progress.ts';
 
-	let { currency, today: serverToday }: { currency: CurrencyOut; today: string } = $props();
+	let {
+		currency,
+		today: serverToday,
+		progress = null
+	}: {
+		currency: CurrencyOut;
+		today: string;
+		/** The Logbook's compact next-licence line (History shows the full section instead). */
+		progress?: ProgressIn | null;
+	} = $props();
+	const nextLicence = $derived(progress ? progressSummary(progress) : null);
 	// The server's UTC day until the browser gives the jumper's own calendar day.
 	// svelte-ignore state_referenced_locally
 	let today = $state(serverToday);
@@ -23,6 +34,11 @@
 		<p>No jumps recorded yet, so there is no currency to show.</p>
 	{:else}
 		<p data-testid="currency-status"><strong>{status.text}</strong></p>
+	{/if}
+	{#if nextLicence}
+		<p data-testid="licence-progress">
+			{nextLicence} <a href="/history#next-licence">Next licence details</a>
+		</p>
 	{/if}
 	<p class="hint">
 		Guidance computed from your own entries, not a verified status (USPA SIM 5-2).

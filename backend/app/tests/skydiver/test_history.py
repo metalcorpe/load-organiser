@@ -324,6 +324,47 @@ def test_currency_guidance_from_the_stated_licence_and_dated_entries(
     assert bad.status_code == 422
 
 
+def test_progress_to_the_next_licence_from_own_entries(api: Api) -> None:
+    owner = api.accounts.session()
+    assert (
+        api.history(owner)["progress"] is None
+    )  # no licence: nothing beyond the prompt
+    api.ok("PUT", "/me/licence", owner, {"licence": "b"})
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 40, "before_on": "2026-01-01"})  # fmt: skip
+    api.jump(owner, "2025-12-01", freefall_seconds=600)  # within the prior count
+    api.jump(owner, "2026-02-01", freefall_seconds=500)
+    api.jump(owner, "2026-03-01")  # no freefall time recorded
+    assert api.history(owner)["progress"] == {
+        "licence": "b", "next_licence": "c",
+        # The prior count is in the jump total (40 + 2 since the cutoff) ...
+        "jumps": 42, "jumps_required": 200, "jumps_include_prior": True,
+        # ... but freefall time comes only from entries that record one.
+        "freefall_seconds": 1100, "freefall_required_seconds": 3600,
+        "entries_with_freefall": 2, "entries_without_freefall": 1,
+        "source": "USPA SIM 3-1",
+    }  # fmt: skip
+
+    # Student to A lists no freefall time; D has no next licence.
+    api.ok("PUT", "/me/licence", owner, {"licence": "student"})
+    student = api.history(owner)["progress"]
+    assert (student["next_licence"], student["jumps_required"], student["freefall_required_seconds"]) == ("a", 25, None)  # fmt: skip
+    api.ok("PUT", "/me/licence", owner, {"licence": "d"})
+    d = api.history(owner)["progress"]
+    assert (d["next_licence"], d["jumps_required"], d["freefall_required_seconds"]) == (None, None, None)  # fmt: skip
+
+    # An inconsistent prior count is left out: only the entries count.
+    other = api.accounts.session()
+    api.ok("PUT", "/me/licence", other, {"licence": "a"})
+    api.ok("PUT", "/history/baseline", other, {"prior_jumps": 0, "before_on": "2026-06-01"})  # fmt: skip
+    api.jump(other, "2026-05-01", freefall_seconds=60)
+    p = api.history(other)["progress"]
+    assert (p["jumps"], p["jumps_include_prior"], p["freefall_seconds"]) == (
+        1,
+        False,
+        60,
+    )
+
+
 def test_the_licence_is_owner_only_and_needs_a_confirmed_email(api: Api) -> None:
     owner, other = api.accounts.session(), api.accounts.session()
     api.ok("PUT", "/me/licence", owner, {"licence": "c"})

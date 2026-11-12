@@ -19,6 +19,7 @@ export type {
 	JumpPageOut,
 	JumpSummaryOut,
 	LicenceOut,
+	LicenceProgressOut,
 	LocationOut,
 	OpportunityCountriesOut,
 	OpportunityDetailOut,

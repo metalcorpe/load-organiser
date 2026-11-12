@@ -93,7 +93,8 @@ export const load: PageServerLoad = async (event) => {
 				? {
 						lifetime: totals.inconsistent ? null : totals.lifetime,
 						lastJumpOn: history.value.last_jump_on,
-						currency: history.value.currency
+						currency: history.value.currency,
+						progress: history.value.progress ?? null
 					}
 				: null
 	};

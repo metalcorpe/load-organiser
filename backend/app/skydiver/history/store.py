@@ -150,6 +150,17 @@ class SqlHistoryStore:
             )
         )
 
+    def freefall(self, actor: Actor) -> tuple[int, int, int]:
+        """(seconds, entries with a freefall time, entries without one)."""
+        seconds, with_time, total = self._s.execute(
+            select(
+                func.coalesce(func.sum(col(J.freefall_seconds)), 0),
+                func.count(col(J.freefall_seconds)),
+                func.count(),
+            ).where(col(J.owner_person_id) == actor.person_id)
+        ).one()
+        return int(seconds), int(with_time), int(total) - int(with_time)
+
     def date_range(self, actor: Actor) -> tuple[date | None, date | None]:
         first, last = self._s.execute(
             select(func.min(col(J.jumped_on)), func.max(col(J.jumped_on))).where(

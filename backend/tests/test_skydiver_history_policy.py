@@ -5,7 +5,7 @@ from datetime import date, timedelta
 import pytest
 
 from app.skydiver.directory.policy import DirectoryRuleError
-from app.skydiver.history import currency, policy
+from app.skydiver.history import currency, licences, policy
 from app.skydiver.history.policy import Baseline
 
 TODAY = date(2026, 11, 4)
@@ -128,3 +128,66 @@ def test_the_policy_table_covers_every_licence() -> None:
     assert set(currency.RECURRENCY_DAYS) == set(currency.Licence) - {
         currency.Licence.NONE
     }
+
+
+# -- progress toward the next licence (USPA SIM 3-1) ------------------------------
+
+L = currency.Licence
+
+
+def _progress(
+    licence: currency.Licence, jumps: int, minutes: int, *, without: int = 0,
+    prior: bool = False,
+) -> licences.Progress | None:  # fmt: skip
+    return licences.progress(
+        licence, jumps=jumps, jumps_include_prior=prior,
+        freefall_seconds=minutes * 60, entries_with_freefall=jumps - without,
+        entries_without_freefall=without,
+    )  # fmt: skip
+
+
+def test_the_licence_table_follows_uspa_sim_3_1() -> None:
+    assert licences.SOURCE == "USPA SIM 3-1"
+    table = {k: (v[0], v[1].jumps, v[1].freefall_seconds) for k, v in licences.NEXT_LICENCE.items()}  # fmt: skip
+    assert table == {
+        L.STUDENT: (L.A, 25, 0),
+        L.A: (L.B, 50, 30 * 60),
+        L.B: (L.C, 200, 60 * 60),
+        L.C: (L.D, 500, 3 * 60 * 60),
+    }
+
+
+@pytest.mark.parametrize(
+    ("licence", "jumps", "minutes"),
+    [(L.STUDENT, 25, 0), (L.A, 50, 30), (L.B, 200, 60), (L.C, 500, 180)],
+)
+def test_exactly_at_each_threshold_is_met_and_one_below_is_not(
+    licence: currency.Licence, jumps: int, minutes: int
+) -> None:
+    at = _progress(licence, jumps, minutes)
+    assert at is not None and at.jumps_met and at.freefall_met
+    fewer = _progress(licence, jumps - 1, minutes)
+    assert fewer is not None and not fewer.jumps_met and fewer.freefall_met
+    if minutes:
+        short = licences.progress(
+            licence, jumps=jumps, jumps_include_prior=False,
+            freefall_seconds=minutes * 60 - 1, entries_with_freefall=jumps,
+            entries_without_freefall=0,
+        )  # fmt: skip
+        assert short is not None and short.jumps_met and not short.freefall_met
+
+
+def test_a_b_licence_with_60_jumps_and_40_minutes_is_on_the_way_to_c() -> None:
+    p = _progress(L.B, 60, 40, without=3)
+    assert p is not None
+    assert (p.next_licence, p.requirement) == (L.C, licences.Requirement(200, 3600))
+    assert (p.jumps, p.freefall_seconds, p.entries_without_freefall) == (60, 2400, 3)
+    assert not p.jumps_met and not p.freefall_met
+
+
+def test_no_licence_gives_nothing_and_d_has_no_next_step() -> None:
+    assert _progress(L.NONE, 10, 10) is None
+    d = _progress(L.D, 900, 600)
+    assert d is not None
+    assert (d.next_licence, d.requirement) == (None, None)
+    assert not d.jumps_met and not d.freefall_met

@@ -183,7 +183,11 @@
 				<a class="button log" href="/jumps/new">Log your first jump</a>
 			{/if}
 		</section>
-		{#if data.summary?.currency}<CurrencyStatus currency={data.summary.currency} today={data.today} />{/if}
+		{#if data.summary?.currency}<CurrencyStatus
+				currency={data.summary.currency}
+				today={data.today}
+				progress={data.summary.progress}
+			/>{/if}
 		{#if due.length > 0}
 			<!-- One calm card for what is ahead, soonest first; nothing when nothing is. -->
 			<section class="ahead" aria-labelledby="due-heading">

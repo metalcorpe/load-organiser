@@ -2,6 +2,7 @@
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
+	import LicenceProgress from '#lib/components/LicenceProgress.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { KIND_LABEL } from '#lib/gear.ts';
@@ -81,6 +82,9 @@
 	</section>
 
 	{#if h.currency}<CurrencyStatus currency={h.currency} today={data.today} />{/if}
+	{#if h.progress}
+		<LicenceProgress progress={h.progress} priorInconsistent={Boolean(h.baseline && t.inconsistent)} />
+	{/if}
 
 	{#if t.recorded === 0}
 		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>

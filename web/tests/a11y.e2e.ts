@@ -107,6 +107,8 @@ async function world(): Promise<World> {
 		venue_id: venue.id
 	});
 	await apiCall('PUT', `/saved/${listing.id}`, { bearer });
+	// A stated licence: currency, the next-licence line (Logbook) and section (History).
+	await apiCall('PUT', '/me/licence', { bearer, body: { licence: 'b' } });
 
 	return {
 		member,

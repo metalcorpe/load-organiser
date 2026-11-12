@@ -19,7 +19,9 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.history import licences
 from app.skydiver.history.currency import SOURCE, Currency, Licence
+from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Totals
 from app.skydiver.history.service import HistoryService, Summary
 from app.skydiver.logbook.api import ComponentRefOut, LocationOut
@@ -119,6 +121,31 @@ class CurrencyOut(BaseModel):
     source: Literal["USPA SIM 5-2"] = SOURCE
 
 
+class LicenceProgressOut(BaseModel):
+    """Progress toward the next USPA licence from your own entries. Guidance only:
+    USPA and your instructors check every requirement, including the ones this app
+    does not count (skills, proficiency card, landing accuracy, endorsements)."""
+
+    licence: LicenceName
+    next_licence: Literal["a", "b", "c", "d"] | None = Field(
+        description="Null for a D licence: there is no next one."
+    )
+    jumps: int = Field(description="The reported total, else the recorded entries.")
+    jumps_required: int | None
+    jumps_include_prior: bool = Field(
+        description="Your declared prior jump count is part of `jumps`."
+    )
+    freefall_seconds: int = Field(
+        description="Recorded entries only; prior jumps have no freefall time."
+    )
+    freefall_required_seconds: int | None = Field(
+        description="Null when the next licence lists no freefall time."
+    )
+    entries_with_freefall: int
+    entries_without_freefall: int = Field(description="These add no freefall time.")
+    source: Literal["USPA SIM 3-1"] = licences.SOURCE
+
+
 class HistoryOut(BaseModel):
     totals: TotalsOut
     baseline: BaselineOut | None
@@ -136,6 +163,7 @@ class HistoryOut(BaseModel):
         description="Private provenance, newest last (at most 50)."
     )
     currency: CurrencyOut
+    progress: LicenceProgressOut | None = Field(description="Null without a licence.")
 
 
 class BaselinePreviewOut(BaseModel):
@@ -166,6 +194,23 @@ def _currency(c: Currency) -> CurrencyOut:
         threshold_days=c.days,
         last_jump_on=c.last_jump_on,
         current_until=c.current_until,
+    )
+
+
+def _progress(p: Progress | None) -> LicenceProgressOut | None:
+    if p is None:
+        return None
+    req = p.requirement
+    return LicenceProgressOut(
+        licence=p.licence.value,
+        next_licence=p.next_licence.value if p.next_licence else None,  # type: ignore[arg-type]
+        jumps=p.jumps,
+        jumps_required=req.jumps if req else None,
+        jumps_include_prior=p.jumps_include_prior,
+        freefall_seconds=p.freefall_seconds,
+        freefall_required_seconds=(req.freefall_seconds or None) if req else None,
+        entries_with_freefall=p.entries_with_freefall,
+        entries_without_freefall=p.entries_without_freefall,
     )
 
 
@@ -220,6 +265,7 @@ def _history(s: Summary) -> HistoryOut:
             for e in s.baseline_events
         ],
         currency=_currency(s.currency),
+        progress=_progress(s.progress),
     )
 
 

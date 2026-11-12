@@ -1574,6 +1574,17 @@
             "title": "Months",
             "type": "array"
           },
+          "progress": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LicenceProgressOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null without a licence."
+          },
           "totals": {
             "$ref": "#/components/schemas/TotalsOut"
           }
@@ -1588,7 +1599,8 @@
           "by_location",
           "by_component",
           "baseline_events",
-          "currency"
+          "currency",
+          "progress"
         ],
         "title": "HistoryOut",
         "type": "object"
@@ -2727,6 +2739,107 @@
           "licence"
         ],
         "title": "LicenceOut",
+        "type": "object"
+      },
+      "LicenceProgressOut": {
+        "description": "Progress toward the next USPA licence from your own entries. Guidance only:\nUSPA and your instructors check every requirement, including the ones this app\ndoes not count (skills, proficiency card, landing accuracy, endorsements).",
+        "properties": {
+          "entries_with_freefall": {
+            "title": "Entries With Freefall",
+            "type": "integer"
+          },
+          "entries_without_freefall": {
+            "description": "These add no freefall time.",
+            "title": "Entries Without Freefall",
+            "type": "integer"
+          },
+          "freefall_required_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when the next licence lists no freefall time.",
+            "title": "Freefall Required Seconds"
+          },
+          "freefall_seconds": {
+            "description": "Recorded entries only; prior jumps have no freefall time.",
+            "title": "Freefall Seconds",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "The reported total, else the recorded entries.",
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "jumps_include_prior": {
+            "description": "Your declared prior jump count is part of `jumps`.",
+            "title": "Jumps Include Prior",
+            "type": "boolean"
+          },
+          "jumps_required": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jumps Required"
+          },
+          "licence": {
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          },
+          "next_licence": {
+            "anyOf": [
+              {
+                "enum": [
+                  "a",
+                  "b",
+                  "c",
+                  "d"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null for a D licence: there is no next one.",
+            "title": "Next Licence"
+          },
+          "source": {
+            "const": "USPA SIM 3-1",
+            "default": "USPA SIM 3-1",
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence",
+          "next_licence",
+          "jumps",
+          "jumps_required",
+          "jumps_include_prior",
+          "freefall_seconds",
+          "freefall_required_seconds",
+          "entries_with_freefall",
+          "entries_without_freefall"
+        ],
+        "title": "LicenceProgressOut",
         "type": "object"
       },
       "LocationCountOut": {

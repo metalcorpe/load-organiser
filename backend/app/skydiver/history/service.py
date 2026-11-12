@@ -17,8 +17,9 @@ from typing import Any, Protocol
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.service import DirectoryService, EditConflict
-from app.skydiver.history import currency, policy
+from app.skydiver.history import currency, licences, policy
 from app.skydiver.history.currency import Currency, Licence
+from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Baseline, Totals
 from app.skydiver.logbook.service import ComponentRef, Location, PlaceRef
 
@@ -60,6 +61,7 @@ class Summary:
     by_component: list[ComponentUse]
     baseline_events: list[BaselineEvent]
     currency: Currency
+    progress: Progress | None = None  # None without a licence
 
 
 @dataclass(frozen=True)
@@ -101,6 +103,10 @@ class HistoryStore(Protocol):
         ...
 
     def count_jumps(self, actor: Actor) -> int: ...
+    def freefall(self, actor: Actor) -> tuple[int, int, int]:
+        """(seconds, entries with a freefall time, entries without one)."""
+        ...
+
     def count_before(self, actor: Actor, on: date) -> int: ...
     def date_range(self, actor: Actor) -> tuple[date | None, date | None]: ...
     def per_day_since(self, actor: Actor, start: date) -> dict[date, int]: ...
@@ -153,6 +159,7 @@ class HistoryService:
             places = {p.id: p for p in store.places(actor, place_ids)}
             events = store.events(actor, EVENTS_SHOWN)
             licence = store.licence(actor)
+            seconds, with_time, without_time = store.freefall(actor)
         per_month = dict.fromkeys(months, 0)
         for day, jumps in per_day.items():
             key = f"{day.year:04d}-{day.month:02d}"
@@ -173,6 +180,16 @@ class HistoryService:
             baseline_events=events,
             # Only dated entries: a prior jump count adds no currency.
             currency=currency.currency(licence, last),
+            # The reported total when it holds (prior jumps included), else the
+            # entries; freefall time from entries only.
+            progress=licences.progress(
+                licence,
+                jumps=totals.recorded if totals.lifetime is None else totals.lifetime,
+                jumps_include_prior=totals.lifetime is not None,
+                freefall_seconds=seconds,
+                entries_with_freefall=with_time,
+                entries_without_freefall=without_time,
+            ),
         )
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:

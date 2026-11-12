@@ -811,6 +811,10 @@ export type HistoryOut = {
      * The last 12 calendar months, oldest first.
      */
     months: Array<MonthOut>;
+    /**
+     * Null without a licence.
+     */
+    progress: LicenceProgressOut | null;
     totals: TotalsOut;
 };
 
@@ -1338,6 +1342,68 @@ export type LicenceOut = {
      * Self-stated and private; never verified.
      */
     licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
+};
+
+/**
+ * LicenceProgressOut
+ *
+ * Progress toward the next USPA licence from your own entries. Guidance only:
+ * USPA and your instructors check every requirement, including the ones this app
+ * does not count (skills, proficiency card, landing accuracy, endorsements).
+ */
+export type LicenceProgressOut = {
+    /**
+     * Entries With Freefall
+     */
+    entries_with_freefall: number;
+    /**
+     * Entries Without Freefall
+     *
+     * These add no freefall time.
+     */
+    entries_without_freefall: number;
+    /**
+     * Freefall Required Seconds
+     *
+     * Null when the next licence lists no freefall time.
+     */
+    freefall_required_seconds: number | null;
+    /**
+     * Freefall Seconds
+     *
+     * Recorded entries only; prior jumps have no freefall time.
+     */
+    freefall_seconds: number;
+    /**
+     * Jumps
+     *
+     * The reported total, else the recorded entries.
+     */
+    jumps: number;
+    /**
+     * Jumps Include Prior
+     *
+     * Your declared prior jump count is part of `jumps`.
+     */
+    jumps_include_prior: boolean;
+    /**
+     * Jumps Required
+     */
+    jumps_required: number | null;
+    /**
+     * Licence
+     */
+    licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
+    /**
+     * Next Licence
+     *
+     * Null for a D licence: there is no next one.
+     */
+    next_licence: 'a' | 'b' | 'c' | 'd' | null;
+    /**
+     * Source
+     */
+    source?: 'USPA SIM 3-1';
 };
 
 /**
