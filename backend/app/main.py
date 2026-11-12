@@ -31,6 +31,9 @@ from app.skydiver.identity.api import create_router as create_identity_router
 from app.skydiver.identity.mail import FileOutboxMailer, SmtpMailer
 from app.skydiver.identity.service import IdentityConfig, IdentityService, Mailer
 from app.skydiver.identity.store import sql_store_factory
+from app.skydiver.imports.api import create_router as create_import_router
+from app.skydiver.imports.service import ImportService
+from app.skydiver.imports.store import sql_import_store_factory
 from app.skydiver.logbook.api import create_router as create_logbook_router
 from app.skydiver.logbook.service import LogbookService
 from app.skydiver.logbook.store import sql_logbook_store_factory
@@ -125,6 +128,8 @@ logbook_service = LogbookService(
     directory=directory_service,
 )
 
+import_service = ImportService(stores=sql_import_store_factory(engine), clock=utc_now)
+
 history_service = HistoryService(
     stores=sql_history_store_factory(engine),
     clock=utc_now,
@@ -190,6 +195,14 @@ def create_app(*, include_legacy: bool) -> FastAPI:
     application.include_router(
         create_gear_router(
             service=lambda: gear_service,
+            access=AccessDependencies(lambda: identity_service),
+        )
+    )
+    # Before the logbook: `/jumps/imports` must not be read as `/jumps/{jump_id}`.
+    application.include_router(
+        create_import_router(
+            service=lambda: import_service,
+            identity=lambda: identity_service,
             access=AccessDependencies(lambda: identity_service),
         )
     )

@@ -42,6 +42,8 @@ JumpTypeName = Literal[
 Unit = Literal["ft", "m"]
 Datum = Literal["unspecified", "agl", "msl"]
 Version = Annotated[int, Field(ge=1)]
+Source = Literal["manual", "restored", "imported"]
+_SOURCES: dict[str, Source] = {"restored": "restored", "imported": "imported"}
 
 
 class Problem(BaseModel):
@@ -137,8 +139,11 @@ class JumpOut(BaseModel):
     other_gear: str | None
     notes: str | None
     links: list[str]
-    source: Literal["manual", "restored"] = Field(
-        description="`restored`: re-created from the owner's own export."
+    source: Source = Field(
+        description=(
+            "`restored`: re-created from the owner's own export; `imported`: from"
+            " the owner's own spreadsheet."
+        )
     )
     provenance: Literal["self_reported"] = "self_reported"
     version: int
@@ -220,7 +225,7 @@ def _jump(view: JumpView) -> JumpOut:
         other_gear=j.other_gear,
         notes=j.notes,
         links=list(j.links),
-        source="restored" if j.source == "restored" else "manual",
+        source=_SOURCES.get(j.source, "manual"),
         version=j.version,
         created_at=j.created_at,
         updated_at=j.updated_at,

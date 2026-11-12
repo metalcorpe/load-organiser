@@ -76,6 +76,13 @@ def world() -> Iterator[tuple[World, dict[str, str], str]]:
         entry = w.ok("POST", f"/gear/components/{component['id']}/service", owner, {"client_key": str(uuid.uuid4()), "kind": "repack", "done_on": "2026-10-01", "performed_by": SECRET})  # fmt: skip
         rig = w.ok("POST", "/gear/rigs", owner, {"client_key": str(uuid.uuid4()), "label": SECRET})  # fmt: skip
         jump = w.ok("POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-10", "jump_type": "belly", "venue_id": venue["id"], "notes": SECRET})["jump"]  # fmt: skip
+        imported = w.client.post(
+            PREFIX + "/jumps/import",
+            content=f"Date,Place,Notes\n2026-10-11,{SECRET},{SECRET}\n".encode(),
+            params={"country": "PT"},
+            headers={"authorization": f"Bearer {owner}", "content-type": "text/csv"},
+        )
+        assert imported.status_code == 200, imported.text
         plan = w.ok("POST", "/plans", owner, {"title": SECRET, "starts_on": "2026-12-03", "ends_on": "2026-12-04", "venue_id": venue["id"]})  # fmt: skip
         post = w.ok("POST", f"/me/jumps/{jump['id']}/post", owner, {"jump_version": jump["version"], "audience": "followers", "caption": SECRET})  # fmt: skip
         ids = {
@@ -86,6 +93,7 @@ def world() -> Iterator[tuple[World, dict[str, str], str]]:
             "jump_id": jump["id"],
             "plan_id": plan["id"],
             "post_id": post["id"],
+            "import_id": imported.json()["item"]["id"],
             "handle": handle,
             # Reviewer-tool ids: the role check comes before any lookup, so any id
             # shows that members and guests are refused.
@@ -148,6 +156,7 @@ def _body(method: str, path: str, ids: dict[str, str]) -> dict[str, Any] | None:
         },  # fmt: skip
         ("PATCH", "/gear/rigs/{rig_id}"): {"label": "Changed", "version": v["v_rig"]},
         ("PATCH", "/jumps/{jump_id}"): {"notes": "changed", "version": v["v_jump"]},
+        ("POST", "/jumps/imports/{import_id}/undo"): {"confirm": True},
         ("POST", "/me/jumps/{jump_id}/post"): {
             "jump_version": v["v_jump"],
             "audience": "followers",
@@ -262,6 +271,9 @@ def test_the_owners_records_are_unchanged(
     reports = w.ok("GET", "/social/reports", reviewer)
     assert all(r["target"]["handle"] != ids["handle"] for r in reports)
     assert json.dumps(jump).count(SECRET) == 1
+    # The import was not undone by anyone else.
+    (item,) = w.ok("GET", "/jumps/imports", owner)
+    assert item["id"] == ids["import_id"] and item["undone_at"] is None
 
 
 # Routes without an id that anyone may call: sign-in and recovery entry points,

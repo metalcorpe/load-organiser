@@ -37,7 +37,7 @@ _UNIQUE_VIOLATION = "23505"
 J, L, R, E = SkydiverJump, SkydiverJumpComponent, SkydiverJumpReceipt, SkydiverJumpEvent
 
 # Facts compared for the likely-duplicate warning (besides the jump number).
-_CORE = (
+CORE = (
     "jumped_on",
     "venue_id",
     "place_id",
@@ -140,7 +140,7 @@ class SqlLogbookStore:
             if found:
                 return found[0]
         query = owned(J, actor)
-        for name in _CORE:
+        for name in CORE:
             column = col(getattr(J, name))
             value = values.get(name)
             query = query.where(column.is_(None) if value is None else column == value)
