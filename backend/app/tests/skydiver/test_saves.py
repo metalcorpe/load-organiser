@@ -334,7 +334,7 @@ def test_coming_up_window_in_each_listings_own_time_zone(api: Api) -> None:
         api.ok("POST", "/plans", owner, body, 201)
 
     plan("plan today", "2026-11-03", "2026-11-03")
-    plan("plan day 61", "2027-01-03", "2027-01-04")
+    plan("plan day 61", "2027-01-04", "2027-01-05")  # from 4 November, UTC+14
     plan("plan ended", "2026-11-01", "2026-11-02")
     # A plan for a saved listing stands for both: the listing is not listed twice.
     plan("plan for day 60", "2027-01-02", "2027-01-02", opportunity_id=day60["id"])
@@ -370,3 +370,22 @@ def test_coming_up_is_capped_at_five_soonest(api: Api) -> None:
     found = api.ok("GET", "/me/coming-up", owner)
     assert [i["title"] for i in found["items"]] == [f"Trip {d}" for d in range(10, 15)]
     assert found["total"] == 7
+
+
+def test_a_plans_window_ends_60_days_after_the_latest_date_anywhere(api: Api) -> None:
+    # NOW is 2026-11-03 12:00 UTC; the latest calendar date anywhere (UTC+14) is
+    # 4 November, so day 60 is 3 January and day 61 is 4 January.
+    owner = api.accounts.session()
+    for title, start in (("day 60", "2027-01-03"), ("day 61", "2027-01-04")):
+        body = {"title": title, "starts_on": start, "ends_on": start}
+        api.ok("POST", "/plans", owner, body, 201)
+    found = api.ok("GET", "/me/coming-up", owner)
+    assert [i["title"] for i in found["items"]] == ["day 60"]
+
+
+def test_an_unknown_or_malformed_zone_falls_back_to_the_utc_date() -> None:
+    late = datetime(2026, 11, 3, 23, 0, tzinfo=UTC)
+    kiritimati = saves_service._local_today(late, "Pacific/Kiritimati")
+    assert kiritimati.isoformat() == "2026-11-04"
+    for zone in ("Nowhere/Atlantis", "../etc/passwd", "Europe//Madrid"):
+        assert saves_service._local_today(late, zone).isoformat() == "2026-11-03", zone

@@ -210,9 +210,13 @@ class SavesService:
 
         A listing's days are its own: "today" is the date in its time zone, as on
         the board, and an ended or cancelled listing never shows (a postponed one
-        does, with its status). Plans have no time zone: one still shows on the
-        earliest calendar date anywhere that it has not ended, and the window
-        counts from the UTC date. A plan linked to a saved listing stands for both.
+        does, with its status). Its window is its own date to that date + 60 days.
+
+        Plans have no time zone, so both edges are generous, never early: a plan
+        shows until it has ended on the earliest calendar date anywhere (UTC-12),
+        and from 60 days before its start on the latest calendar date anywhere
+        (UTC+14), the same rule as a listing in the furthest-ahead zone. A plan
+        linked to a saved listing stands for both.
         """
         now = self._clock()
         utc_today = now.date()
@@ -225,7 +229,7 @@ class SavesService:
             )
             plan_rows = store.list_plans(actor)
         earliest = (now - timedelta(hours=12)).date()
-        last = utc_today + timedelta(days=COMING_UP_DAYS)
+        last = (now + timedelta(hours=14)).date() + timedelta(days=COMING_UP_DAYS)
         plans = self._plans(
             actor,
             [r for r in plan_rows if r.ends_on >= earliest and r.starts_on <= last],
@@ -368,7 +372,7 @@ class SavesService:
 def _local_today(now: datetime, zone: str | None) -> date:
     try:
         return now.astimezone(ZoneInfo(zone) if zone else UTC).date()
-    except ZoneInfoNotFoundError:
+    except ZoneInfoNotFoundError, ValueError:  # unknown or malformed key
         return now.astimezone(UTC).date()
 
 

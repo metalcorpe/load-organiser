@@ -2,8 +2,9 @@
 
 Computed on read from the owner's detailed entries (at most 2,000; one pass), never
 stored, shared or shown as badges. Entries are taken in logbook order: by date, then
-on the same day by the jumper's own jump number, then exit time, then the order
-they were recorded.
+on the same day by the jumper's own jump number (numbered entries first), then exit
+time (timed entries first), and last by entry id. Entry ids are uuid7, so the last
+tie-break is the order the entries were inserted (an import inserts in file order).
 
 - Jump counts 1, 25, 50, 100, 200, 250, 500, 1000, then every 1000: the Nth jump
   counts the declared prior jumps first (personal history policy: entries before

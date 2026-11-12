@@ -29,7 +29,14 @@
 	// Writable derived: follows the record or the echoed form, and the radios.
 	let relation = $derived(v('relation', c?.relation ?? 'owned') || 'owned');
 	// Only a reserve has a repack interval; the field follows the chosen type.
-	let kind = $derived(v('kind', c?.kind ?? 'main') || 'main');
+	// The saved or echoed type is the server-rendered state (`selected` on each option,
+	// so a choice made before hydration is not overwritten); `chosen` follows changes.
+	const savedKind = $derived(v('kind', c?.kind ?? 'main') || 'main');
+	let chosen = $state<string | null>(null);
+	const kind = $derived(chosen ?? savedKind);
+	// Shown when the record is a reserve (works without JS after a save) or when the
+	// type is changed to reserve in the browser.
+	const showInterval = $derived(savedKind === 'reserve' || kind === 'reserve');
 	// The server's UTC day until the browser gives the jumper's own calendar day.
 	// svelte-ignore state_referenced_locally
 	let today = $state(data.today);
@@ -77,9 +84,14 @@
 	{#if !c}<input type="hidden" name="client_key" value={echoed?.client_key || data.createKey} />{/if}
 	<div class="field">
 		<label for="kind">Type</label>
-		<select id="kind" name="kind" required bind:value={kind}>
+		<select
+			id="kind"
+			name="kind"
+			required
+			onchange={(event) => (chosen = event.currentTarget.value)}
+		>
 			{#each Object.entries(KIND_LABEL) as [value, label] (value)}
-				<option {value}>{label}</option>
+				<option {value} selected={savedKind === value}>{label}</option>
 			{/each}
 		</select>
 	</div>
@@ -134,7 +146,7 @@
 			</div>
 		</div>
 	{/if}
-	{#if kind === 'reserve'}
+	{#if showInterval}
 		<div class="field">
 			<label for="repack_interval_days">Repack interval in days (optional)</label>
 			<input

@@ -42,7 +42,9 @@ export const load: PageServerLoad = async (event) => {
 			? { ok: true as const, items: rigs.value }
 			: { ok: false as const, reason: rigs.reason },
 		due: due?.ok ? due.value : [],
-		dueFailed: due ? !due.ok : false,
+		// not_found: an API without due dates yet (the Worker deployed first during a
+		// rollover). Like the Logbook, that is an empty list, not a failure.
+		dueFailed: due ? !due.ok && due.reason !== 'not_found' : false,
 		// UTC day for the first render; the due list then uses the jumper's own day.
 		today: new Date().toISOString().slice(0, 10)
 	};
