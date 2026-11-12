@@ -2,12 +2,14 @@
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import RecordTiles from '#lib/components/RecordTiles.svelte';
 	import { formatDay } from '#lib/listings.ts';
+	import { spreadsheetMessage } from '#lib/records.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const s = $derived(data.summary);
 	const n = (value: number) => value.toLocaleString('en-GB');
 	const jumps = (value: number) => `${n(value)} ${value === 1 ? 'jump' : 'jumps'}`;
+	const sheetError = $derived(spreadsheetMessage(data.sheet.error));
 
 </script>
 
@@ -40,6 +42,47 @@
 
 <RecordTiles />
 
+<section class="sheet" aria-labelledby="sheet-heading">
+	<h2 id="sheet-heading">Download as spreadsheet (CSV)</h2>
+	<p>
+		Your jumps in one file for Excel, Numbers or Google Sheets: date, jump number, place, country,
+		type, aircraft, altitudes and unit, freefall seconds, notes and gear used.
+	</p>
+	<p class="hint">
+		The columns are the ones the spreadsheet import reads, so the file can be imported into another
+		account. Gear used comes back as text, not as links to your gear. Exit time, time zone and links
+		are only in the full export.
+	</p>
+	{#if sheetError}<p class="form-error" role="alert" id="sheet-error">{sheetError}</p>{/if}
+	<!-- novalidate: the server checks the dates and explains. -->
+	<form method="POST" action="/records/spreadsheet" class="form sheet-form" novalidate>
+		<div class="field">
+			<label for="sheet-from">From (optional)</label>
+			<input
+				id="sheet-from"
+				name="from"
+				type="date"
+				defaultValue={data.sheet.from}
+				aria-describedby={sheetError ? 'sheet-error' : undefined}
+			/>
+		</div>
+		<div class="field">
+			<label for="sheet-until">Until (optional)</label>
+			<input
+				id="sheet-until"
+				name="until"
+				type="date"
+				defaultValue={data.sheet.until}
+				aria-describedby={sheetError ? 'sheet-error' : undefined}
+			/>
+		</div>
+		<div class="form-actions">
+			<button class="button secondary" type="submit">Download as spreadsheet (CSV)</button>
+		</div>
+	</form>
+	<p class="hint">Leave the dates empty for every jump. One download every five minutes.</p>
+</section>
+
 <style>
 	.summary {
 		margin: 0.5rem 0 1.25rem;
@@ -54,6 +97,32 @@
 
 	.total strong {
 		font-size: 1.35rem;
+	}
+
+	.sheet {
+		margin: 1.5rem 0 0;
+		padding: 0.85rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.sheet h2 {
+		font-size: 1rem;
+		margin: 0 0 0.5rem;
+	}
+
+	.sheet p {
+		margin: 0 0 0.5rem;
+	}
+
+	.sheet-form {
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+		align-items: end;
+	}
+
+	.sheet-form .form-actions {
+		grid-column: 1 / -1;
 	}
 
 </style>

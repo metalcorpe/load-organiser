@@ -26,6 +26,8 @@ interface Operation {
 	readonly timeoutMs?: number;
 	/** Return the JSON response as text, unparsed (export files are passed through). */
 	readonly raw?: boolean;
+	/** A successful response of this media type instead of JSON (with `raw`); errors stay JSON. */
+	readonly accept?: 'text/csv';
 	/** Media type of a raw body other than JSON (a spreadsheet import sends CSV). */
 	readonly contentType?: 'text/csv';
 }
@@ -42,7 +44,11 @@ const IMPORT_QUERY = [
 	'col_altitude',
 	'col_freefall',
 	'col_notes',
-	'col_aircraft'
+	'col_aircraft',
+	'col_country',
+	'col_unit',
+	'col_deployment',
+	'col_gear'
 ] as const;
 
 export const OPERATIONS = {
@@ -282,6 +288,16 @@ export const OPERATIONS = {
 		timeoutMs: 60_000
 	},
 	listJumpImports: { method: 'GET', path: `${BETA}/jumps/imports` },
+	// The logbook as CSV in one call (2,000 jumps at most; notes make it a few MB).
+	exportSpreadsheet: {
+		method: 'GET',
+		path: `${BETA}/records/spreadsheet`,
+		query: ['from_on', 'until_on'],
+		raw: true,
+		accept: 'text/csv',
+		maxBodyBytes: 16 * 1024 * 1024,
+		timeoutMs: 30_000
+	},
 	undoJumpImport: { method: 'POST', path: `${BETA}/jumps/imports/{id}/undo`, timeoutMs: 30_000 },
 	getOwnProfile: { method: 'GET', path: `${BETA}/me/profile` },
 	saveOwnProfile: { method: 'PUT', path: `${BETA}/me/profile` },
@@ -413,7 +429,9 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			const payload =
 				call.rawBody ?? (call.body === undefined ? undefined : JSON.stringify(call.body));
 
-			const headers: Record<string, string> = { accept: 'application/json' };
+			const headers: Record<string, string> = {
+				accept: spec.accept ? `${spec.accept}, application/json` : 'application/json'
+			};
 			if (payload !== undefined) headers['content-type'] = spec.contentType ?? 'application/json';
 			if (call.confirmPassword) headers['x-organiser-confirm-password'] = call.confirmPassword;
 			if (call.bearer) headers.authorization = `Bearer ${call.bearer}`;
@@ -449,7 +467,10 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 
 			const retryAfter = parseRetryAfter(response.headers.get('retry-after'));
 			const contentType = response.headers.get('content-type') ?? '';
-			if (!contentType.includes('application/json')) {
+			const expected =
+				contentType.includes('application/json') ||
+				(spec.accept !== undefined && response.ok && contentType.includes(spec.accept));
+			if (!expected) {
 				return response.ok
 					? { kind: 'invalid_response' }
 					: { kind: 'upstream_error', status: response.status };

@@ -419,13 +419,25 @@ export type ColumnsOut = {
      */
     altitude: number | null;
     /**
+     * Country
+     */
+    country: number | null;
+    /**
      * Date
      */
     date: number | null;
     /**
+     * Deployment
+     */
+    deployment: number | null;
+    /**
      * Freefall
      */
     freefall: number | null;
+    /**
+     * Gear
+     */
+    gear: number | null;
     /**
      * Notes
      */
@@ -442,6 +454,10 @@ export type ColumnsOut = {
      * Type
      */
     type: number | null;
+    /**
+     * Unit
+     */
+    unit: number | null;
 };
 
 /**
@@ -3969,6 +3985,10 @@ export type SampleRowOut = {
      */
     altitude_unit: 'ft' | 'm' | null;
     /**
+     * Deployment Altitude
+     */
+    deployment_altitude: number | null;
+    /**
      * Exit Altitude
      */
     exit_altitude: number | null;
@@ -3992,6 +4012,10 @@ export type SampleRowOut = {
      * Notes
      */
     notes: string | null;
+    /**
+     * Other Gear
+     */
+    other_gear: string | null;
     /**
      * Place
      */
@@ -7825,6 +7849,22 @@ export type ImportJumpsData = {
          * Col Aircraft
          */
         col_aircraft?: string | null;
+        /**
+         * Col Country
+         */
+        col_country?: string | null;
+        /**
+         * Col Unit
+         */
+        col_unit?: string | null;
+        /**
+         * Col Deployment
+         */
+        col_deployment?: string | null;
+        /**
+         * Col Gear
+         */
+        col_gear?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import';
 };
@@ -7932,6 +7972,22 @@ export type CheckJumpImportData = {
          * Col Aircraft
          */
         col_aircraft?: string | null;
+        /**
+         * Col Country
+         */
+        col_country?: string | null;
+        /**
+         * Col Unit
+         */
+        col_unit?: string | null;
+        /**
+         * Col Deployment
+         */
+        col_deployment?: string | null;
+        /**
+         * Col Gear
+         */
+        col_gear?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import/check';
 };
@@ -10640,6 +10696,72 @@ export type CheckRestoreResponses = {
 };
 
 export type CheckRestoreResponse = CheckRestoreResponses[keyof CheckRestoreResponses];
+
+export type ExportSpreadsheetData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * From On
+         *
+         * On or after.
+         */
+        from_on?: string | null;
+        /**
+         * Until On
+         *
+         * On or before.
+         */
+        until_on?: string | null;
+    };
+    url: '/api/skydiver/v1/records/spreadsheet';
+};
+
+export type ExportSpreadsheetErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type ExportSpreadsheetError = ExportSpreadsheetErrors[keyof ExportSpreadsheetErrors];
+
+export type ExportSpreadsheetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
 
 export type ListSavedData = {
     body?: never;

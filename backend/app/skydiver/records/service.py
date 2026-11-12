@@ -32,12 +32,13 @@ from typing import Any, Protocol
 from pydantic import ValidationError
 
 from app.skydiver.access.policy import Actor
+from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.gear import policy as gear_policy
 from app.skydiver.gear.service import fingerprint as gear_fingerprint
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.records import format as v1
-from app.skydiver.records import policy
+from app.skydiver.records import policy, spreadsheet
 from app.skydiver.records.policy import ArchiveInvalid, Counts
 
 
@@ -99,9 +100,38 @@ class Outcome:
     restored_at: datetime
 
 
+@dataclass(frozen=True)
+class SheetJump:
+    """One jump as the spreadsheet needs it."""
+
+    jumped_on: date
+    venue_id: uuid.UUID | None
+    place_id: uuid.UUID | None
+    jump_type: str
+    jump_number: int | None
+    aircraft: str | None
+    exit_altitude: int | None
+    deployment_altitude: int | None
+    altitude_unit: str | None
+    freefall_seconds: int | None
+    notes: str | None
+    other_gear: str | None
+    gear: list[str]  # labels of the components used
+
+
 class RecordsStore(Protocol):
     def snapshot(self) -> None: ...
     def export_records(self, actor: Actor) -> v1.RecordsV1: ...
+    def sheet_jumps(
+        self, actor: Actor, from_on: date | None, until_on: date | None
+    ) -> list[SheetJump]:
+        """Oldest first; dates inclusive. Bounded by the jump limit."""
+        ...
+
+    def place_names(self, actor: Actor) -> dict[uuid.UUID, tuple[str, str]]:
+        """The owner's private places: name and country."""
+        ...
+
     def venue_refs(self, venue_ids: list[uuid.UUID]) -> list[v1.VenueRefV1]: ...
     def listing_refs(self, listing_ids: list[uuid.UUID]) -> list[v1.ListingRefV1]: ...
     def managed_counts(self, actor: Actor) -> dict[str, int]: ...
@@ -206,6 +236,51 @@ class RecordsService:
             references=references,
         )
         return archive.model_dump_json().encode()
+
+    def spreadsheet(
+        self, actor: Actor, *, from_on: date | None = None, until_on: date | None = None
+    ) -> bytes:
+        """The owner's jumps as CSV (see records/spreadsheet.py), oldest first, from
+        one snapshot. Dates are inclusive; both are optional."""
+        if from_on is not None and until_on is not None and from_on > until_on:
+            raise DirectoryRuleError("date_range_invalid")
+        with self._stores() as store:
+            store.snapshot()
+            jumps = store.sheet_jumps(actor, from_on, until_on)
+            places = store.place_names(actor)
+            venue_ids = sorted({j.venue_id for j in jumps if j.venue_id})
+            stored = {v.id: v for v in store.venue_refs(venue_ids)}
+        # The dropzone's current name (merges followed), else its name as stored.
+        current = self._directory.public_venues(venue_ids) if venue_ids else {}
+        rows = []
+        for j in jumps:
+            name, country = "", None
+            if j.venue_id is not None:
+                venue = current.get(j.venue_id)
+                ref = stored.get(j.venue_id)
+                if venue is not None:
+                    name, country = venue.name, venue.country
+                elif ref is not None:
+                    name, country = ref.name, ref.country
+            elif j.place_id is not None and j.place_id in places:
+                name, country = places[j.place_id]
+            rows.append(
+                spreadsheet.Row(
+                    jumped_on=j.jumped_on,
+                    jump_number=j.jump_number,
+                    place=name,
+                    country=country,
+                    jump_type=j.jump_type,
+                    aircraft=j.aircraft,
+                    exit_altitude=j.exit_altitude,
+                    altitude_unit=j.altitude_unit,
+                    deployment_altitude=j.deployment_altitude,
+                    freefall_seconds=j.freefall_seconds,
+                    notes=j.notes,
+                    gear=[*j.gear, *([j.other_gear] if j.other_gear else [])],
+                )
+            )
+        return spreadsheet.render(rows)
 
     def check(self, actor: Actor, raw: bytes) -> Check:
         """Validate and preview without writing. Advisory: restore rechecks all."""

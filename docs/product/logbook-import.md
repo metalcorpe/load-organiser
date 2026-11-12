@@ -35,6 +35,10 @@ Columns are found by heading, ignoring case and accents, with a few words per la
 | Freefall seconds | Freefall, Delay, Caída libre, Queda livre, Ελεύθερη πτώση |
 | Notes | Notes, Comments, Remarks, Observaciones, Σχόλια |
 | Aircraft | Aircraft, Plane, Jump plane, Avión, Aeronave, Αεροσκάφος |
+| Deployment altitude | Deployment altitude, Opening altitude, Pull altitude, Altitud de apertura, Ύψος ανοίγματος |
+| Altitude unit (per row) | Altitude unit, Unit, Unidad, Μονάδα |
+| Country (per row) | Country, Country code, País, Χώρα |
+| Gear (as text) | Gear, Gear used, Equipment, Rig, Equipo, Εξοπλισμός |
 
 A trailing unit word in a heading ("Altitude (ft)") is ignored. Other columns are not read.
 
@@ -55,8 +59,20 @@ A trailing unit word in a heading ("Altitude (ft)") is ignored. Other columns ar
 | Freefall | Optional, 0–600 seconds; `45`, `45 s` and `1:05` are accepted | `freefall_invalid` |
 | Notes | Optional, at most 2,000 characters | `notes_too_long` |
 | Aircraft | Optional free text, at most 60 characters, kept as written | `aircraft_too_long` |
+| Deployment altitude | Optional, as for a jump entered by hand; not above the exit altitude | `altitude_invalid`, `deployment_above_exit` |
+| Altitude unit | Optional `ft` or `m` (feet, metres...) for this row; empty uses the chosen unit | `altitude_unit_invalid` |
+| Country | Optional two-letter code for this row; empty uses the chosen country. It picks among dropzones of the same name and is the country of a new private place; same-named places in different countries stay apart | `country_invalid` |
+| Gear | Optional text, at most 200 characters, saved as "other equipment" (never linked to your gear) | `other_gear_too_long` |
 
-**Type** is read from the words written: belly, RW, FS, formation → belly; freefly, FF, head down, sit → freefly; angle, tracking → angle; wingsuit, WS → wingsuit; canopy, swoop, CP → canopy piloting; CRW, canopy formation → CRW; accuracy → accuracy; hop, hop and pop → hop and pop; tandem → tandem; AFF, training, coach, student → training. Anything else, or nothing, is "not specified".
+A cell starting with an apostrophe followed by `=`, `+`, `-`, `@`, a tab, a carriage return or another apostrophe loses that one apostrophe (spreadsheets, and the spreadsheet download below, add it so the cell is not run as a formula). "Other" as a type is read as "other".
+
+## Spreadsheet download
+
+Records → "Download as spreadsheet (CSV)" (`GET /api/skydiver/v1/records/spreadsheet`, optional `from_on`/`until_on`, inclusive) gives every jump oldest first with the headings Date, Jump number, Place, Country, Type, Aircraft, Exit altitude, Altitude unit, Deployment altitude, Freefall seconds, Notes, Gear. UTF-8 with a byte-order mark, comma-separated, CRLF line ends, RFC 4180 quoting; a text cell starting with `=`, `+`, `-`, `@`, a tab, a carriage return or an apostrophe gets a leading apostrophe. One download per account every five minutes (separate from the JSON export).
+
+Imported into an empty account the file gives the same jumps (date, number, place, country, type, aircraft, altitudes and unit, freefall, notes), except: gear used comes back as text in "other equipment" (labels, then other equipment, joined by "; "; over 200 characters the row is skipped as `other_gear_too_long`), and exit time, time zone, altitude datum and links are not columns (the JSON export keeps them). A private place named exactly like a listed dropzone is read as that dropzone.
+
+**Type** is read from the words written: belly, RW, FS, formation → belly; freefly, FF, head down, sit → freefly; angle, tracking → angle; wingsuit, WS → wingsuit; canopy, swoop, CP → canopy piloting; CRW, canopy formation → CRW; accuracy → accuracy; hop, hop and pop → hop and pop; tandem → tandem; AFF, training, coach, student → training; other → other. Anything else, or nothing, is "not specified".
 
 **Place**, in this order:
 

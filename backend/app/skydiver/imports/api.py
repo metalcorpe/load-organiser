@@ -83,6 +83,10 @@ class ColumnsOut(BaseModel):
     freefall: int | None
     notes: int | None
     aircraft: int | None
+    country: int | None
+    unit: int | None
+    deployment: int | None
+    gear: int | None
 
 
 class RowProblemOut(BaseModel):
@@ -102,6 +106,8 @@ class SampleRowOut(BaseModel):
     freefall_seconds: int | None
     notes: str | None
     aircraft: str | None
+    deployment_altitude: int | None
+    other_gear: str | None
 
 
 class ImportCheckOut(BaseModel):
@@ -288,11 +294,16 @@ def create_router(
         col_freefall: Column = None,
         col_notes: Column = None,
         col_aircraft: Column = None,
+        col_country: Column = None,
+        col_unit: Column = None,
+        col_deployment: Column = None,
+        col_gear: Column = None,
     ) -> Options:
         given = {
             "date": col_date, "number": col_number, "place": col_place,
             "type": col_type, "altitude": col_altitude, "freefall": col_freefall,
-            "notes": col_notes, "aircraft": col_aircraft,
+            "notes": col_notes, "aircraft": col_aircraft, "country": col_country,
+            "unit": col_unit, "deployment": col_deployment, "gear": col_gear,
         }  # fmt: skip
         return Options(
             date_order=DateOrder(date_order),

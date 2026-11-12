@@ -170,6 +170,8 @@ async function world(): Promise<World> {
 				'/records',
 				'/records/import',
 				'/records/print',
+				// The spreadsheet download refused (dates out of order), with its message.
+				'/records?spreadsheet=date_range_invalid&from=2026-10-02&until=2026-10-01',
 				'/gear',
 				`/gear/${component.id}`,
 				'/places',

@@ -36,6 +36,7 @@ SAMPLE_ROWS = 10
 
 FIELDS = (
     "date", "number", "place", "type", "altitude", "freefall", "notes", "aircraft",
+    "country", "unit", "deployment", "gear",
 )  # fmt: skip
 # The fields of the first version: a later field enters the fingerprint only when a
 # column is used for it, so a file imported before it existed keeps its fingerprint.
@@ -86,6 +87,9 @@ class Draft:
     freefall_seconds: int | None
     notes: str | None
     aircraft: str | None = None
+    deployment_altitude: int | None = None
+    other_gear: str | None = None
+    country: str | None = None  # this row's own country, when the file has one
 
 
 @dataclass(frozen=True)
@@ -216,6 +220,22 @@ _SYNONYMS: dict[str, tuple[str, ...]] = {
         "aircraft", "plane", "airplane", "aeroplane", "jump plane", "jumpship",
         "jump ship", "aircraft type", "avion", "aeronave", "aviao", "αεροσκαφος",
         "αεροπλανο",
+    ),
+    "country": (
+        "country", "country code", "pais", "codigo de pais", "χωρα",
+    ),
+    "unit": (
+        "unit", "units", "altitude unit", "altitude units", "unidad", "unidade",
+        "μοναδα", "μοναδα υψους",
+    ),
+    "deployment": (
+        "deployment altitude", "deployment", "deploy altitude", "opening altitude",
+        "pull altitude", "altitud de apertura", "altura de abertura",
+        "υψος ανοιγματος",
+    ),
+    "gear": (
+        "gear", "gear used", "equipment", "equipment used", "rig", "equipo",
+        "equipamento", "εξοπλισμος",
     ),
 }  # fmt: skip
 # Compared in the same normalised form as headings (Greek final sigma included).
@@ -385,6 +405,40 @@ def parse_altitude(text: str, unit: AltitudeUnit) -> int | None:
     return logbook.altitudes(height, None, unit, None).exit
 
 
+_UNITS = {
+    "ft": AltitudeUnit.FT, "feet": AltitudeUnit.FT, "foot": AltitudeUnit.FT,
+    "m": AltitudeUnit.M, "meters": AltitudeUnit.M, "metres": AltitudeUnit.M,
+    "meter": AltitudeUnit.M, "metre": AltitudeUnit.M,
+}  # fmt: skip
+
+
+def parse_unit(text: str) -> AltitudeUnit | None:
+    """A row's own altitude unit (ft or m); empty uses the chosen unit."""
+    value = text.strip().rstrip(".").casefold()
+    if not value:
+        return None
+    if value not in _UNITS:
+        raise RuleError("altitude_unit_invalid")
+    return _UNITS[value]
+
+
+def parse_country(text: str) -> str | None:
+    """A row's own country as a two-letter code; empty uses the chosen country."""
+    return directory.country_code(text) if text.strip() else None
+
+
+# Spreadsheets (and the spreadsheet export) put an apostrophe before a cell that
+# would otherwise start a formula, or that starts with an apostrophe itself; that
+# one apostrophe is not part of the value.
+_GUARDED = ("=", "+", "-", "@", "\t", "\r", "'")
+
+
+def unguarded(cell: str) -> str:
+    if len(cell) > 1 and cell[0] == "'" and cell[1:].startswith(_GUARDED):
+        return cell[1:]
+    return cell
+
+
 _CLOCK = re.compile(r"^(\d{1,2}):(\d{2})$")
 _SECONDS = re.compile(r"^(.*?)\s*(s|sec|secs|seconds|seg|segundos|δ)\.?$", re.I)
 
@@ -428,6 +482,7 @@ _WORDS: tuple[tuple[frozenset[str], JumpType], ...] = (
         JumpType.FREEFLY,
     ),
     (frozenset({"belly", "rw", "fs", "formation", "flat"}), JumpType.BELLY),
+    (frozenset({"other"}), JumpType.OTHER),
 )  # fmt: skip
 
 
@@ -471,7 +526,7 @@ def drafts(
 
     def cell(row: list[str], name: str) -> str:
         index = columns.get(name)
-        return row[index] if index is not None and index < len(row) else ""
+        return unguarded(row[index]) if index is not None and index < len(row) else ""
 
     for position, row in enumerate(table.rows, start=1):
         if not row:
@@ -480,10 +535,18 @@ def drafts(
             jumped_on = parse_date(cell(row, "date"), options.date_order, today)
             place = place_name(cell(row, "place"))
             number = parse_number(cell(row, "number"))
-            altitude = parse_altitude(cell(row, "altitude"), options.unit)
+            unit = parse_unit(cell(row, "unit")) or options.unit
+            altitude = parse_altitude(cell(row, "altitude"), unit)
+            deployment = parse_altitude(cell(row, "deployment"), unit)
+            if altitude is not None or deployment is not None:
+                logbook.altitudes(
+                    altitude, deployment, unit, None
+                )  # deployment <= exit
             freefall = parse_freefall(cell(row, "freefall"))
             notes = logbook.notes(cell(row, "notes"))
             aircraft = logbook.aircraft(cell(row, "aircraft"))
+            gear = logbook.other_gear(cell(row, "gear"))
+            country = parse_country(cell(row, "country"))
         except RuleError as error:
             problems.append(Problem(position, error.code))
             continue
@@ -495,10 +558,15 @@ def drafts(
                 place=place,
                 jump_type=jump_type(cell(row, "type")),
                 exit_altitude=altitude,
-                altitude_unit=options.unit if altitude is not None else None,
+                altitude_unit=unit
+                if altitude is not None or deployment is not None
+                else None,
                 freefall_seconds=freefall,
                 notes=notes,
                 aircraft=aircraft,
+                deployment_altitude=deployment,
+                other_gear=gear,
+                country=country,
             )
         )
     return ok, problems

@@ -705,6 +705,17 @@
             ],
             "title": "Altitude"
           },
+          "country": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
+          },
           "date": {
             "anyOf": [
               {
@@ -716,6 +727,17 @@
             ],
             "title": "Date"
           },
+          "deployment": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment"
+          },
           "freefall": {
             "anyOf": [
               {
@@ -726,6 +748,17 @@
               }
             ],
             "title": "Freefall"
+          },
+          "gear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gear"
           },
           "notes": {
             "anyOf": [
@@ -770,6 +803,17 @@
               }
             ],
             "title": "Type"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
           }
         },
         "required": [
@@ -780,7 +824,11 @@
           "altitude",
           "freefall",
           "notes",
-          "aircraft"
+          "aircraft",
+          "country",
+          "unit",
+          "deployment",
+          "gear"
         ],
         "title": "ColumnsOut",
         "type": "object"
@@ -8133,6 +8181,17 @@
             ],
             "title": "Altitude Unit"
           },
+          "deployment_altitude": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Altitude"
+          },
           "exit_altitude": {
             "anyOf": [
               {
@@ -8200,6 +8259,17 @@
             ],
             "title": "Notes"
           },
+          "other_gear": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Gear"
+          },
           "place": {
             "title": "Place",
             "type": "string"
@@ -8229,7 +8299,9 @@
           "altitude_unit",
           "freefall_seconds",
           "notes",
-          "aircraft"
+          "aircraft",
+          "deployment_altitude",
+          "other_gear"
         ],
         "title": "SampleRowOut",
         "type": "object"
@@ -16047,6 +16119,74 @@
             }
           },
           {
+            "in": "query",
+            "name": "col_country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_unit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Unit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_deployment",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Deployment"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_gear",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Gear"
+            }
+          },
+          {
             "in": "header",
             "name": "authorization",
             "required": false,
@@ -16356,6 +16496,74 @@
                 }
               ],
               "title": "Col Aircraft"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_unit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Unit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_deployment",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Deployment"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_gear",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Gear"
             }
           },
           {
@@ -21859,6 +22067,153 @@
           }
         },
         "summary": "Check Restore",
+        "tags": [
+          "skydiver-records"
+        ]
+      }
+    },
+    "/api/skydiver/v1/records/spreadsheet": {
+      "get": {
+        "description": "Your jumps as a spreadsheet (CSV, UTF-8 with a byte-order mark), oldest\nfirst, with the columns the logbook import reads.",
+        "operationId": "exportSpreadsheet",
+        "parameters": [
+          {
+            "description": "On or after.",
+            "in": "query",
+            "name": "from_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or after.",
+              "title": "From On"
+            }
+          },
+          {
+            "description": "On or before.",
+            "in": "query",
+            "name": "until_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or before.",
+              "title": "Until On"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          }
+        },
+        "summary": "Export Spreadsheet",
         "tags": [
           "skydiver-records"
         ]
