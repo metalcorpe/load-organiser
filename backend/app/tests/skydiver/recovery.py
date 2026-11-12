@@ -210,6 +210,7 @@ def erase(manifest: Path) -> None:
         _ok(c, "DELETE", f"/gear/components/{m['component']}?version={component['version']}", owner)  # fmt: skip
         _ok(c, "DELETE", f"/places/{m['place']}", owner)
         _ok(c, "DELETE", f"/plans/{m['plan']}", owner)
+        _ok(c, "PUT", "/me/licence", owner, {"licence": "none"})  # deletes its row
         profile = _ok(c, "GET", "/me/profile", owner)
         _ok(c, "PUT", "/me/profile", owner, {"handle": profile["handle"], "display_name": profile["display_name"], "discoverable": False, "version": profile["version"]})  # fmt: skip
         _ok(c, "POST", "/auth/password", owner, {"current_password": PASSWORD, "new_password": NEW_PASSWORD})  # fmt: skip
@@ -248,6 +249,8 @@ def replayed(manifest: Path) -> None:
             assert (
                 _scalar(f"SELECT count(*) FROM {table} WHERE id = :id", id=m[key]) == 0
             ), table  # noqa: S608
+        # The licence (set before the backup) was cleared after it: it stays cleared.
+        assert _scalar("SELECT count(*) FROM skydiver_jumper_licence WHERE owner_person_id = :p", p=m["owner_person"]) == 0  # fmt: skip
         assert _scalar("SELECT discoverable FROM skydiver_profile WHERE person_id = :p", p=m["owner_person"]) is False  # fmt: skip
         # Moderation after the backup, both ways: set and cleared.
         assert _scalar("SELECT hidden_at IS NULL FROM skydiver_profile WHERE person_id = :p", p=m["stranger_person"]) is True  # fmt: skip
