@@ -47,7 +47,9 @@
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
 {#key page.url.search}
-	<form method="GET" action="/jumps" class="jump-search" role="search">
+	<!-- novalidate: the server checks the dates and explains; WebKit otherwise blocks the
+     submit silently on a date field it considers half-filled. -->
+<form method="GET" action="/jumps" class="jump-search" role="search" novalidate>
 		<div class="search-row">
 			<label class="visually-hidden" for="q">Place or notes</label>
 			<input
@@ -432,7 +434,9 @@
 		margin: 0 0 1rem;
 		padding: 0.75rem 0.9rem;
 		border-radius: var(--radius);
-		background: var(--surface-soft);
+		/* The plain surface: accent links on --surface-soft fail WCAG contrast. */
+		background: var(--surface);
+		box-shadow: 0 0 0 1px var(--border);
 	}
 
 	.matched p {

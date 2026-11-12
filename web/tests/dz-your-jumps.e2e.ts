@@ -59,8 +59,8 @@ test.describe('your jumps at a dropzone', () => {
 		await signIn(page, owner);
 		await page.goto(`/dz/${venueId}`);
 		const mine = page.getByRole('region', { name: 'Your jumps here' });
-		// "Sep" or "Sept" depending on the runtime's locale data.
-		await expect(mine).toContainText(/You logged 2 jumps here, last on 14 Sept? 2026\./);
+		// "Sep", "Sept" or "September", depending on the format and locale data.
+		await expect(mine).toContainText(/You logged 2 jumps here, last on 14 Sep(?:t|tember)? 2026\./);
 		await expect(mine.getByRole('link', { name: 'Log a jump here' })).toHaveAttribute(
 			'href',
 			`/jumps/new?venue=${venueId}`

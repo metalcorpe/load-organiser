@@ -190,7 +190,10 @@ test.describe('sessions', () => {
 
 		await page.goto('/sign-in?returnTo=%2Fjumps');
 		await signIn(page, first);
-		await expect(page.getByText(`${secret} place`).first()).toBeVisible();
+		// In the list: the filter form's place menu also holds the name, in a hidden option.
+		await expect(
+			page.getByRole('list', { name: 'Jumps' }).getByText(`${secret} place`).first()
+		).toBeVisible();
 		await page.goto('/profile');
 		await page.getByRole('button', { name: 'Sign out', exact: true }).click();
 		await signIn(page, second);
