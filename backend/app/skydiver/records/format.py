@@ -122,7 +122,7 @@ class JumpV1(_Strict):
     notes: Annotated[str, Field(max_length=2000)] | None = None
     links: Annotated[list[Annotated[str, Field(max_length=2048)]], Field(max_length=5)]
     component_ids: Annotated[list[uuid.UUID], Field(max_length=10)]
-    source: Literal["manual", "restored"]
+    source: Literal["manual", "restored", "imported"]
     created_at: Instant
     updated_at: Instant
 

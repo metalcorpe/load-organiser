@@ -24,6 +24,11 @@
 			heading: 'Your data',
 			items: [
 				{ href: '/profile/data', name: 'Export or restore', text: 'A copy of all your records as a file.' },
+				{
+					href: '/records/import',
+					name: 'Import from a spreadsheet',
+					text: 'Bring the jumps you already logged in from a CSV file.'
+				},
 				{ href: '/submit', name: 'Suggestions and reports', text: 'What you sent and what happened to it.' }
 			]
 		}

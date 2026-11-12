@@ -26,7 +26,23 @@ interface Operation {
 	readonly timeoutMs?: number;
 	/** Return the JSON response as text, unparsed (export files are passed through). */
 	readonly raw?: boolean;
+	/** Media type of a raw body other than JSON (a spreadsheet import sends CSV). */
+	readonly contentType?: 'text/csv';
 }
+
+// Import options and column choices travel in the query; the body is the exact file.
+const IMPORT_QUERY = [
+	'date_order',
+	'unit',
+	'country',
+	'col_date',
+	'col_number',
+	'col_place',
+	'col_type',
+	'col_altitude',
+	'col_freefall',
+	'col_notes'
+] as const;
 
 export const OPERATIONS = {
 	getHealth: { method: 'GET', path: '/api/skydiver/v1/health' },
@@ -206,6 +222,24 @@ export const OPERATIONS = {
 	},
 	checkRestore: { method: 'POST', path: `${BETA}/records/restore/check`, timeoutMs: 30_000 },
 	restoreRecords: { method: 'POST', path: `${BETA}/records/restore`, timeoutMs: 60_000 },
+	// Logbook import from a spreadsheet: up to 50 problems and 10 sample rows.
+	checkJumpImport: {
+		method: 'POST',
+		path: `${BETA}/jumps/import/check`,
+		query: IMPORT_QUERY,
+		contentType: 'text/csv',
+		maxBodyBytes: 256 * 1024,
+		timeoutMs: 30_000
+	},
+	importJumps: {
+		method: 'POST',
+		path: `${BETA}/jumps/import`,
+		query: [...IMPORT_QUERY, 'expected'],
+		contentType: 'text/csv',
+		timeoutMs: 60_000
+	},
+	listJumpImports: { method: 'GET', path: `${BETA}/jumps/imports` },
+	undoJumpImport: { method: 'POST', path: `${BETA}/jumps/imports/{id}/undo`, timeoutMs: 30_000 },
 	getOwnProfile: { method: 'GET', path: `${BETA}/me/profile` },
 	saveOwnProfile: { method: 'PUT', path: `${BETA}/me/profile` },
 	listFollowRequests: { method: 'GET', path: `${BETA}/me/people/requests`, maxBodyBytes: 512 * 1024 },
@@ -271,7 +305,7 @@ export function isUuid(value: unknown): value is string {
 export interface RequestOptions {
 	/** JSON body for POST operations. */
 	body?: unknown;
-	/** Exact JSON bytes to send instead of `body` (a restore file, fingerprinted upstream). */
+	/** Exact bytes to send instead of `body` (a restore or import file, fingerprinted upstream). */
 	rawBody?: Uint8Array<ArrayBuffer>;
 	/** Fresh password for an operation that requires it; sent only to the API. */
 	confirmPassword?: string;
@@ -337,7 +371,7 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 				call.rawBody ?? (call.body === undefined ? undefined : JSON.stringify(call.body));
 
 			const headers: Record<string, string> = { accept: 'application/json' };
-			if (payload !== undefined) headers['content-type'] = 'application/json';
+			if (payload !== undefined) headers['content-type'] = spec.contentType ?? 'application/json';
 			if (call.confirmPassword) headers['x-organiser-confirm-password'] = call.confirmPassword;
 			if (call.bearer) headers.authorization = `Bearer ${call.bearer}`;
 			if (call.clientIp && options.proxyKey) {

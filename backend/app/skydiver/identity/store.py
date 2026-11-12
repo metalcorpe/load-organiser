@@ -7,7 +7,7 @@ from datetime import datetime
 
 from sqlalchemy import Engine, delete, func, select, text, update
 from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlmodel import Session, col
 
 from app.models import User
@@ -15,6 +15,7 @@ from app.skydiver.identity.service import (
     Account,
     CommitThen,
     ConsumedToken,
+    Contended,
     IdentityStore,
     Profile,
     StoredSession,
@@ -398,11 +399,32 @@ class SqlIdentityStore:
             ).scalar_one()
         )
 
-    def throttle_record(self, *, bucket: str, key_hash: str, now: datetime) -> None:
-        self._s.add(
-            SkydiverThrottleEvent(bucket=bucket, key_hash=key_hash, created_at=now)
-        )
+    def throttle_record(
+        self, *, bucket: str, key_hash: str, now: datetime
+    ) -> uuid.UUID:
+        row = SkydiverThrottleEvent(bucket=bucket, key_hash=key_hash, created_at=now)
+        self._s.add(row)
         self._s.flush()
+        return row.id
+
+    def throttle_forget(self, *, hit_id: uuid.UUID) -> None:
+        self._s.execute(
+            delete(SkydiverThrottleEvent).where(col(SkydiverThrottleEvent.id) == hit_id)
+        )
+
+    def serializable(self) -> None:
+        # Must precede every query of the unit of work.
+        self._s.connection(execution_options={"isolation_level": "SERIALIZABLE"})
+
+
+_SERIALIZATION_FAILURE = "40001"
+
+
+def _contended(error: BaseException) -> bool:
+    return (
+        isinstance(error, DBAPIError)
+        and getattr(error.orig, "sqlstate", None) == _SERIALIZATION_FAILURE
+    )
 
 
 def sql_store_factory(engine: Engine) -> StoreFactory:
@@ -416,9 +438,17 @@ def sql_store_factory(engine: Engine) -> StoreFactory:
             except CommitThen as pending:
                 session.commit()
                 raise pending.error from None
-            except BaseException:
+            except BaseException as error:
                 session.rollback()
+                if _contended(error):
+                    raise Contended() from error
                 raise
-            session.commit()
+            try:
+                session.commit()
+            except DBAPIError as error:
+                session.rollback()
+                if _contended(error):
+                    raise Contended() from error
+                raise
 
     return stores

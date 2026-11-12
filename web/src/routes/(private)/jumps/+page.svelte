@@ -64,6 +64,9 @@
 		<p class="hint">
 			{data.older ? 'No older entries.' : 'No jumps yet. Only the date, place and type are needed.'}
 		</p>
+		{#if !data.older}
+			<p>Have a logbook already? <a href="/records/import">Import a spreadsheet</a></p>
+		{/if}
 	{:else}
 		<h2>{data.older ? 'Older jumps' : 'Recent jumps'}</h2>
 		<ul class="jumps" aria-label="Jumps">

@@ -50,6 +50,26 @@ describe('createApiTransport', () => {
 		expect(headers.get('x-organiser-confirm-password')).toBe('pass phrase');
 	});
 
+	it('sends an import file as CSV with its choices in the allowlisted query only', async () => {
+		const fetch = vi.fn<FetchLike>(async () => json(200, { outcome: 'imported' }));
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		const raw = new TextEncoder().encode('Date,Place\n2024-03-12,Farm\n');
+		await api.request('importJumps', {
+			bearer: 'secret',
+			rawBody: raw,
+			query: { country: 'PT', col_notes: 'none', expected: 'a'.repeat(64) }
+		});
+		const [url, init] = fetch.mock.calls[0];
+		expect(url).toBe(
+			`https://api.example.org/api/skydiver/v1/jumps/import?country=PT&col_notes=none&expected=${'a'.repeat(64)}`
+		);
+		expect(init.body).toBe(raw);
+		expect(new Headers(init.headers).get('content-type')).toBe('text/csv');
+		expect(
+			await api.request('checkJumpImport', { rawBody: raw, query: { expected: 'x' } })
+		).toEqual({ kind: 'invalid_request' });
+	});
+
 	it('passes an export through as text without parsing it', async () => {
 		const file = '{"format":"load-organiser.personal-records","version":1}';
 		const fetch = vi.fn<FetchLike>(

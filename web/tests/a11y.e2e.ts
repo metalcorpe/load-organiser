@@ -128,6 +128,7 @@ async function world(): Promise<World> {
 				'/profile/public',
 				'/profile/data',
 				'/records',
+				'/records/import',
 				'/gear',
 				`/gear/${component.id}`,
 				'/places',

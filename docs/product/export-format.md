@@ -38,7 +38,7 @@ Every object rejects unknown keys and every list is bounded, so a valid file can
 | `rig_stints` | Which component was in which rig, `from_on`/`until_on` (never overlapping per component) |
 | `service_entries` | Kind, done/due dates, performed by, notes (100 per component) |
 | `gear_events` | Gear history: kind, detail, time |
-| `jumps` | Every jump field, its `links` (5), `component_ids` actually used (10) and `source` (`manual`/`restored`) (2,000) |
+| `jumps` | Every jump field, its `links` (5), `component_ids` actually used (10) and `source` (`manual`/`restored`/`imported`) (2,000) |
 | `jump_events` | Jump history: `created`, `corrected` (earlier and new facts; notes/links only "changed"), `from_export`, and sharing: `post_published`, `post_audience`, `post_unpublished`. Restore copies sharing entries as history only and never republishes a post |
 | `baseline` | Prior jump count: `prior_jumps` before `before_on`, `source`; or `null` |
 | `baseline_events` | `declared`, `corrected` (from/to), `removed`, `from_export` |

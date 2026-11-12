@@ -11,6 +11,7 @@ export const PRIVATE_PATHS = [
 	'/people',
 	'/review/social',
 	'/records',
+	'/records/import',
 	'/profile',
 	'/places',
 	'/gear',

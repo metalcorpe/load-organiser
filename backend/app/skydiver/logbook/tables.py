@@ -38,6 +38,41 @@ def _owner() -> Column:  # type: ignore[type-arg]
     )
 
 
+class SkydiverJumpImport(SQLModel, table=True):
+    """One spreadsheet import of the owner's own logbook, and whether it was undone.
+
+    The unique (owner, fingerprint) pair makes a repeated import answer "already
+    imported"; the unique (owner, sequence) pair lets only one of two simultaneous
+    imports commit, so together they cannot pass the jump limit (compare-and-swap).
+    """
+
+    __tablename__ = "skydiver_jump_import"
+    __table_args__ = (
+        UniqueConstraint(
+            "owner_person_id", "fingerprint", name="uq_skydiver_jump_import"
+        ),
+        UniqueConstraint(
+            "owner_person_id", "sequence", name="uq_skydiver_jump_import_sequence"
+        ),
+    )
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid7, primary_key=True)
+    owner_person_id: uuid.UUID = Field(sa_column=_owner())
+    fingerprint: str = Field(sa_column=Column(String(64), nullable=False))
+    sequence: int = Field(sa_column=Column(Integer, nullable=False))
+    counts: dict = Field(  # type: ignore[type-arg]
+        default_factory=dict, sa_column=Column(_JSON, nullable=False)
+    )
+    # Private places this import created; undo removes those no longer used.
+    place_ids: list = Field(  # type: ignore[type-arg]
+        default_factory=list, sa_column=Column(_JSON, nullable=False)
+    )
+    created_at: datetime = Field(sa_column=_instant())
+    undone_at: datetime | None = Field(
+        default=None, sa_column=Column(DateTime(timezone=True), nullable=True)
+    )
+
+
 class SkydiverJump(SQLModel, table=True):
     """One completed jump as the jumper records it. Activity date is a DATE."""
 
@@ -79,7 +114,8 @@ class SkydiverJump(SQLModel, table=True):
             name="ck_skydiver_jump_freefall",
         ),
         CheckConstraint(
-            "source IN ('manual', 'restored')", name="ck_skydiver_jump_source"
+            "source IN ('manual', 'restored', 'imported')",
+            name="ck_skydiver_jump_source",
         ),
         Index("ix_skydiver_jump_owner_date", "owner_person_id", "jumped_on", "id"),
         Index("ix_skydiver_jump_owner_number", "owner_person_id", "jump_number"),
@@ -115,6 +151,15 @@ class SkydiverJump(SQLModel, table=True):
         default_factory=list, sa_column=Column(_JSON, nullable=False)
     )
     source: str = Field(default="manual", max_length=16)
+    # The spreadsheet import that created this jump; kept while the jump exists.
+    import_id: uuid.UUID | None = Field(
+        default=None,
+        sa_column=Column(
+            ForeignKey("skydiver_jump_import.id", ondelete="SET NULL"),
+            nullable=True,
+            index=True,
+        ),
+    )
     version: int = Field(
         default=1, sa_column=Column(Integer, nullable=False, server_default="1")
     )

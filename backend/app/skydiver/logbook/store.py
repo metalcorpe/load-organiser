@@ -11,7 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
-from app.skydiver.access.sql import get_owned, owned
+from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
@@ -37,7 +37,7 @@ _UNIQUE_VIOLATION = "23505"
 J, L, R, E = SkydiverJump, SkydiverJumpComponent, SkydiverJumpReceipt, SkydiverJumpEvent
 
 # Facts compared for the likely-duplicate warning (besides the jump number).
-_CORE = (
+CORE = (
     "jumped_on",
     "venue_id",
     "place_id",
@@ -95,6 +95,9 @@ class SqlLogbookStore:
 
     # reads -----------------------------------------------------------------------
 
+    def lock_owner(self, actor: Actor) -> None:
+        lock_owner(self._s, actor)
+
     def count_jumps(self, actor: Actor) -> int:
         return int(
             self._s.execute(
@@ -140,7 +143,7 @@ class SqlLogbookStore:
             if found:
                 return found[0]
         query = owned(J, actor)
-        for name in _CORE:
+        for name in CORE:
             column = col(getattr(J, name))
             value = values.get(name)
             query = query.where(column.is_(None) if value is None else column == value)
