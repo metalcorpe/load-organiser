@@ -2,6 +2,8 @@
 // (web/contracts/skydiver-v1.openapi.json). Regenerate with `npm run contracts:generate`.
 export type {
 	AliasOut,
+	BatchPreviewOut,
+	BatchResultOut,
 	BaselineOut,
 	BaselinePreviewOut,
 	ComponentDetailOut,
@@ -19,6 +21,7 @@ export type {
 	JumpNumberingOut,
 	JumpPageOut,
 	JumpSummaryOut,
+	LatestBatchStateOut,
 	LicenceOut,
 	LicenceProgressOut,
 	LocationOut,
@@ -37,6 +40,7 @@ export type {
 	PostOut,
 	PostPageOut,
 	PrintPageOut,
+	RecentAircraftOut,
 	ProfileViewOut,
 	ProviderDetailOut,
 	ProviderOut,
@@ -58,6 +62,7 @@ export type {
 	SavedStateOut,
 	ServiceOut,
 	SessionOut,
+	UndoResultOut,
 	SharingOut,
 	SubmissionIntakeOut,
 	TotalsOut,

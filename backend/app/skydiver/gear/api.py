@@ -79,6 +79,19 @@ class ComponentDetails(BaseModel):
         default=None,
         description="An end-of-life date you entered (e.g. from the label). Never estimated.",
     )
+    jump_limit: Annotated[int, Field(ge=1, le=100_000)] | None = Field(
+        default=None,
+        description="Your own jump-count limit (e.g. 500 before a reline). None is"
+        " suggested; null with a null label clears it.",
+    )
+    jump_limit_label: Short | None = Field(
+        default=None, description='What is due at the limit, e.g. "Reline".'
+    )
+    jump_limit_service_kind: ServiceKindName | None = Field(
+        default=None,
+        description="The service whose latest entry restarts the count; default"
+        " maintenance.",
+    )
 
 
 class ComponentIn(ComponentDetails):
@@ -142,6 +155,9 @@ class ComponentOut(BaseModel):
         description="Your own reserve repack interval; null: the default of 180 days."
     )
     end_of_life_on: date | None
+    jump_limit: int | None
+    jump_limit_label: str | None
+    jump_limit_service_kind: ServiceKindName | None
     archived: bool
     provenance: Literal["self_reported"] = "self_reported"
     version: int
@@ -202,11 +218,14 @@ class GearDueOut(BaseModel):
     airworthiness status: your rigger and the manufacturer decide that."""
 
     component: DueComponentOut
-    kind: Literal["reserve_repack", "service", "end_of_life"]
+    kind: Literal["reserve_repack", "service", "end_of_life", "jump_limit"]
     service_kind: ServiceKindName | None = Field(
-        description="The service entry it comes from; null for an end of life."
+        description="The service entry it comes from (for a jump limit: the one that"
+        " restarts the count); null for an end of life."
     )
-    due_on: date = Field(description="Still in time on this day; overdue after it.")
+    due_on: date | None = Field(
+        description="Still in time on this day; overdue after it. Null for a jump limit."
+    )
     basis: Literal["entered", "interval"] = Field(
         description="`entered`: your own date. `interval`: your latest repack plus"
         " `interval_days`."
@@ -216,8 +235,25 @@ class GearDueOut(BaseModel):
         description="Set when the default interval applies."
     )
     status: Literal["overdue", "soon", "later"] = Field(
-        description="`soon`: due within 30 days. Judged on the latest calendar date"
-        " anywhere; compare `due_on` with your own day for the exact count."
+        description="`soon`: due within 30 days, or for a jump limit within 10% of it"
+        " or 25 jumps (whichever is fewer) or at it. Dates are judged on the latest"
+        " calendar date anywhere; compare `due_on` with your own day for the exact"
+        " count."
+    )
+    label: str | None = Field(
+        default=None, description="A jump limit's own label, e.g. Reline."
+    )
+    jump_limit: int | None = Field(default=None, description="The limit in jumps.")
+    jumps_used: int | None = Field(
+        default=None,
+        description="Jumps that used it since the latest service of `service_kind`"
+        " (after that day), or all its jumps when there is none.",
+    )
+    jumps_left: int | None = Field(
+        default=None, description="Negative when over the limit."
+    )
+    counted_since: date | None = Field(
+        default=None, description="The day of that service; null: all its jumps."
     )
 
 
@@ -256,6 +292,11 @@ def _component(c: Component) -> ComponentOut:
         notes=c.notes,
         repack_interval_days=c.repack_interval_days,
         end_of_life_on=c.end_of_life_on,
+        jump_limit=c.jump_limit,
+        jump_limit_label=c.jump_limit_label,
+        jump_limit_service_kind=c.jump_limit_service_kind.value
+        if c.jump_limit_service_kind
+        else None,
         archived=c.archived_at is not None,
         version=c.version,
         updated_at=c.updated_at,
@@ -303,7 +344,24 @@ def _detail(d: ComponentDetail) -> ComponentDetailOut:
 
 
 def _due(item: DueItem) -> GearDueOut:
-    c, due = item.component, item.due
+    c, due, jumps = item.component, item.due, item.jumps
+    if due is None:
+        assert jumps is not None
+        return GearDueOut(
+            component=DueComponentOut(id=c.id, kind=c.kind.value, label=c.label),
+            kind="jump_limit",
+            service_kind=jumps.service_kind.value,
+            due_on=None,
+            basis="entered",
+            interval_days=None,
+            interval_source=None,
+            status=item.status.value,
+            label=jumps.label,
+            jump_limit=jumps.limit,
+            jumps_used=jumps.used,
+            jumps_left=jumps.limit - jumps.used,
+            counted_since=jumps.since,
+        )
     return GearDueOut(
         component=DueComponentOut(id=c.id, kind=c.kind.value, label=c.label),
         kind=due.kind.value,

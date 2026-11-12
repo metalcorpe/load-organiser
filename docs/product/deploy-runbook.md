@@ -111,6 +111,12 @@ against Resend until the first deploy: send yourself a password reset to check.
    on. A failed migration stops the new instances; the running ones keep serving. A
    migration must work with the code that is still running (FastAPI Cloud replaces
    instances gradually): add before using; stop using before removing.
+   Export files are checked strictly (`backend/app/skydiver/records/format.py`: unknown
+   keys are refused). A file exported by new code with a new optional key (e.g.
+   `jumps[].aircraft`, `components[].jump_limit`) is refused by an instance still on the
+   old code, with nothing written. So restore is not safe in the middle of a rollover:
+   wait until every instance runs the new code before restoring a new file. Older files
+   restore on new code.
    `scripts/staging.sh` stays available for status checks and manual runs.
 2. Merge to `main`: FastAPI Cloud and Cloudflare each build and deploy from it.
 3. Check the API health address, then the web address.

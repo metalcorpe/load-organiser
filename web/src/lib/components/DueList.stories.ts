@@ -27,6 +27,21 @@ const items: GearDueOut[] = [
 		status: 'soon'
 	},
 	{
+		component: { id: '00000000-0000-4000-8000-000000000013', kind: 'main', label: 'Sabre 170' },
+		kind: 'jump_limit',
+		service_kind: 'maintenance',
+		due_on: null,
+		basis: 'entered',
+		interval_days: null,
+		interval_source: null,
+		status: 'soon',
+		label: 'Reline',
+		jump_limit: 500,
+		jumps_used: 488,
+		jumps_left: 12,
+		counted_since: '2025-06-01'
+	},
+	{
 		component: aad,
 		kind: 'end_of_life',
 		service_kind: null,
@@ -42,7 +57,7 @@ const meta = {
 	title: 'Records/Due list',
 	component: DueList,
 	tags: ['autodocs'],
-	args: { items: items.slice(0, 2), today: '2026-11-12', label: 'Due soon' },
+	args: { items: items.slice(0, 3), today: '2026-11-12', label: 'Due soon' },
 	parameters: {
 		docs: {
 			description: {

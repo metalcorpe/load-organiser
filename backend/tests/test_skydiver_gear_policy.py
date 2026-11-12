@@ -162,3 +162,55 @@ def test_interval_and_end_of_life_validation() -> None:
     with pytest.raises(DirectoryRuleError) as error:
         policy.end_of_life(date(2200, 1, 1))
     assert error.value.code == "end_of_life_invalid"
+
+
+# -- jump-count limits -----------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("limit", "used", "status"),
+    [
+        (500, 474, "later"),  # 26 left: more than 25
+        (500, 475, "soon"),  # 25 left: the 25-jump threshold, exactly
+        (100, 89, "later"),  # 11 left: more than 10%
+        (100, 90, "soon"),  # 10 left: 10%, exactly
+        (10, 9, "soon"),  # 1 left
+        (10, 8, "later"),  # 2 left: 20%
+        (5, 5, "soon"),  # at the limit
+        (500, 503, "overdue"),  # over by 3
+    ],
+)
+def test_a_jump_limit_is_soon_within_10_percent_or_25_jumps(
+    limit: int, used: int, status: str
+) -> None:
+    assert policy.jump_limit_status(limit, used).value == status
+
+
+def test_a_jump_limit_is_the_owners_own_and_complete() -> None:
+    assert policy.jump_limit(None, None, None) is None
+    assert policy.jump_limit(None, "  ", "repack") is None
+    found = policy.jump_limit(500, "  Reline   main lines ", None)
+    assert found == policy.JumpLimit(
+        500, "Reline main lines", policy.ServiceKind.MAINTENANCE
+    )
+    for args, code in [
+        ((None, "Reline", None), "jump_limit_required"),
+        ((500, None, None), "jump_limit_label_required"),
+        ((0, "Reline", None), "jump_limit_invalid"),
+        ((100_001, "Reline", None), "jump_limit_invalid"),
+        ((10, "x" * 81, None), "jump_limit_label_too_long"),
+        ((10, "Reline", "polish"), "jump_limit_service_kind_invalid"),
+    ]:
+        with pytest.raises(DirectoryRuleError) as raised:
+            policy.jump_limit(*args)
+        assert raised.value.code == code, args
+
+
+def test_the_count_restarts_at_the_latest_service_of_the_matching_kind() -> None:
+    facts = [
+        policy.ServiceFact(policy.ServiceKind.MAINTENANCE, date(2026, 3, 1), None, 0),
+        policy.ServiceFact(policy.ServiceKind.MAINTENANCE, date(2026, 6, 1), None, 1),
+        policy.ServiceFact(policy.ServiceKind.REPACK, date(2026, 9, 1), None, 2),
+    ]
+    assert policy.latest_service_on(facts, policy.ServiceKind.MAINTENANCE) == date(2026, 6, 1)  # fmt: skip
+    assert policy.latest_service_on(facts, policy.ServiceKind.INSPECTION) is None

@@ -161,3 +161,39 @@ def test_text_must_be_what_the_api_would_store() -> None:
     )
     rig = _rig() | {"label": "\tRig"}
     assert _problem(_archive(rigs=[rig])) == "rigs[0].label_invalid"
+
+
+# -- spreadsheet (CSV) ------------------------------------------------------------
+
+
+def test_spreadsheet_guards_formula_text_and_quotes_per_rfc_4180() -> None:
+    from datetime import date
+
+    from app.skydiver.records import spreadsheet
+
+    for text, guarded in [
+        ("=SUM(A1)", "'=SUM(A1)"),
+        ("+31 6", "'+31 6"),
+        ("-x", "'-x"),
+        ("@here", "'@here"),
+        ("\tTab", "'\tTab"),
+        ("\rCR", "'\rCR"),
+        ("'quoted", "''quoted"),
+        ("Plain = fine", "Plain = fine"),
+        (" =SUM(A1)", "' =SUM(A1)"),  # a spreadsheet ignores leading spaces
+    ]:
+        assert spreadsheet.guard(text) == guarded, text
+
+    row = spreadsheet.Row(
+        jumped_on=date(2026, 10, 10), jump_number=None, place='A "B", C',
+        country=None, jump_type="unspecified", aircraft=None, exit_altitude=None,
+        altitude_unit=None, deployment_altitude=None, freefall_seconds=None,
+        notes="two\nlines", gear=["Sabre", "=x"],
+    )  # fmt: skip
+    raw = spreadsheet.render([row])
+    assert raw.startswith(b"\xef\xbb\xbf")  # UTF-8 byte-order mark
+    text = raw.decode("utf-8-sig")
+    assert text == (
+        ",".join(spreadsheet.HEADINGS) + "\r\n"
+        + '2026-10-10,,"A ""B"", C",,,,,,,,"two\nlines",Sabre; =x\r\n'
+    )  # fmt: skip

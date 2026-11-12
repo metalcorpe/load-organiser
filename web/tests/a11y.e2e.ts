@@ -78,7 +78,10 @@ async function world(): Promise<World> {
 		await created('/gear/components', bearer, {
 			client_key: randomUUID(),
 			kind: 'reserve',
-			label: 'Axe reserve'
+			label: 'Axe reserve',
+			// A jump-count limit: its line in the due lists and its fields on the form.
+			jump_limit: 100,
+			jump_limit_label: 'Axe check'
 		})
 	).component;
 	// A repack 175 days ago: the "due soon" states of Logbook, Gear and the component.
@@ -92,11 +95,18 @@ async function world(): Promise<World> {
 			client_key: randomUUID(),
 			jumped_on: '2026-10-10',
 			jump_type: 'belly',
-			venue_id: venue.id
+			venue_id: venue.id,
+			aircraft: 'Axe Caravan'
 		})
 	).jump;
+	// A change of many jumps: the Logbook's "Undo this change" card.
+	const batch = await created('/jumps/batch', bearer, {
+		jumps: [{ id: jump.id, version: jump.version }],
+		changes: { aircraft: 'Axe Otter' }
+	});
+	expect(batch.changed).toEqual([jump.id]);
 	const post = await created(`/me/jumps/${jump.id}/post`, bearer, {
-		jump_version: jump.version,
+		jump_version: jump.version + 1,
 		audience: 'public',
 		shares: ['type', 'venue']
 	});
@@ -144,7 +154,12 @@ async function world(): Promise<World> {
 				'/jumps',
 				'/jumps?type=belly&from=2026-01-01',
 				'/jumps?type=wingsuit',
+				// Select mode: ticks on the rows and what to change.
+				'/jumps?select=1',
+				'/jumps?select=1&type=belly',
 				'/jumps/new',
+				// The form at a place with a recorded aircraft: prefilled, with its hint.
+				`/jumps/new?venue=${venue.id}`,
 				`/dz/${venue.id}`,
 				`/jumps/${jump.id}`,
 				`/jumps/${jump.id}/share`,
@@ -158,6 +173,8 @@ async function world(): Promise<World> {
 				'/records',
 				'/records/import',
 				'/records/print',
+				// The spreadsheet download refused (dates out of order), with its message.
+				'/records?spreadsheet=date_range_invalid&from=2026-10-02&until=2026-10-01',
 				'/gear',
 				`/gear/${component.id}`,
 				'/places',

@@ -3,7 +3,7 @@
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 from sqlalchemy import Engine, func, insert, select
@@ -34,7 +34,12 @@ from app.skydiver.logbook.tables import (
 from app.skydiver.opportunities.tables import SkydiverOpportunity
 from app.skydiver.records import format as v1
 from app.skydiver.records.policy import ArchiveInvalid
-from app.skydiver.records.service import Receipt, RecordsStore, StoreFactory
+from app.skydiver.records.service import (
+    Receipt,
+    RecordsStore,
+    SheetJump,
+    StoreFactory,
+)
 from app.skydiver.records.tables import SkydiverRestoreReceipt
 from app.skydiver.saves.tables import SkydiverSavedOpportunity, SkydiverVisitPlan
 
@@ -119,6 +124,9 @@ class SqlRecordsStore:
                     "notes",
                     "repack_interval_days",
                     "end_of_life_on",
+                    "jump_limit",
+                    "jump_limit_label",
+                    "jump_limit_service_kind",
                     "archived_at",
                     *stamps,
                 )  # fmt: skip
@@ -167,6 +175,7 @@ class SqlRecordsStore:
                     "altitude_datum",
                     "freefall_seconds",
                     "other_gear",
+                    "aircraft",
                     "notes",
                     "source",
                     *stamps,
@@ -206,6 +215,53 @@ class SqlRecordsStore:
             "licence": licence.licence if licence else None,
         }
         return v1.RecordsV1.model_validate(records)
+
+    def sheet_jumps(
+        self, actor: Actor, from_on: date | None, until_on: date | None
+    ) -> list[SheetJump]:
+        J, JC, C = SkydiverJump, SkydiverJumpComponent, SkydiverComponent
+        query = owned(J, actor)
+        if from_on is not None:
+            query = query.where(col(J.jumped_on) >= from_on)
+        if until_on is not None:
+            query = query.where(col(J.jumped_on) <= until_on)
+        jumps = list(
+            self._s.execute(query.order_by(col(J.jumped_on), col(J.id))).scalars()
+        )
+        labels: dict[uuid.UUID, list[str]] = {}
+        if jumps:
+            used = self._s.execute(
+                select(col(JC.jump_id), col(C.label))
+                .join(C, col(C.id) == col(JC.component_id))
+                .where(col(JC.owner_person_id) == actor.person_id)
+                .where(col(JC.jump_id).in_([j.id for j in jumps]))
+                .order_by(col(JC.jump_id), col(C.label), col(C.id))
+            )
+            for jump_id, label in used.all():
+                labels.setdefault(jump_id, []).append(label)
+        return [
+            SheetJump(
+                jumped_on=j.jumped_on,
+                venue_id=j.venue_id,
+                place_id=j.place_id,
+                jump_type=j.jump_type,
+                jump_number=j.jump_number,
+                aircraft=j.aircraft,
+                exit_altitude=j.exit_altitude,
+                deployment_altitude=j.deployment_altitude,
+                altitude_unit=j.altitude_unit,
+                freefall_seconds=j.freefall_seconds,
+                notes=j.notes,
+                other_gear=j.other_gear,
+                gear=labels.get(j.id, []),
+            )
+            for j in jumps
+        ]
+
+    def place_names(self, actor: Actor) -> dict[uuid.UUID, tuple[str, str]]:
+        P = SkydiverProvisionalPlace
+        rows = self._s.execute(owned(P, actor)).scalars()
+        return {p.id: (p.name, p.country) for p in rows}
 
     def venue_refs(self, venue_ids: list[uuid.UUID]) -> list[v1.VenueRefV1]:
         """Name and country of public venues as stored; public data, no owner."""

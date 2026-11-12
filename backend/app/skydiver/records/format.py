@@ -57,6 +57,12 @@ class ComponentV1(_Strict):
     # Added within v1 as optional, so earlier v1 files still restore (none set).
     repack_interval_days: Annotated[int, Field(ge=1, le=730)] | None = None
     end_of_life_on: date | None = None
+    # The owner's one jump-count limit, also optional within v1: all three or none.
+    jump_limit: Annotated[int, Field(ge=1, le=100_000)] | None = None
+    jump_limit_label: Annotated[str, Field(max_length=80)] | None = None
+    jump_limit_service_kind: (
+        Literal["repack", "inspection", "maintenance", "aad_service", "other"] | None
+    ) = None
     archived_at: Instant | None = None
     created_at: Instant
     updated_at: Instant
@@ -128,6 +134,8 @@ class JumpV1(_Strict):
     source: Literal["manual", "restored", "imported"]
     created_at: Instant
     updated_at: Instant
+    # Added within v1 as optional, so earlier v1 files still restore (none set).
+    aircraft: Annotated[str, Field(max_length=60)] | None = None
 
 
 JumpEventKind = Literal[

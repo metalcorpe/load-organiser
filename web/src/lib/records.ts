@@ -47,3 +47,14 @@ export const RECORDS_MESSAGES: Record<string, string> = {
 export function recordsMessage(code: string | undefined): string | undefined {
 	return code ? (RECORDS_MESSAGES[code] ?? RECORDS_MESSAGES.invalid_input) : undefined;
 }
+
+export const SPREADSHEET_MESSAGES: Record<string, string> = {
+	date_range_invalid: 'The "from" date must be on or before the "until" date.',
+	too_many_attempts: 'You downloaded a spreadsheet a moment ago. Wait five minutes and try again.',
+	uncertain: 'The service did not answer in time. Try again in a moment.',
+	unavailable: 'The service is unavailable right now. Try again later.'
+};
+
+export function spreadsheetMessage(code: string | null): string | undefined {
+	return code ? (SPREADSHEET_MESSAGES[code] ?? SPREADSHEET_MESSAGES.unavailable) : undefined;
+}

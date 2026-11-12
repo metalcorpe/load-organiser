@@ -26,6 +26,8 @@ interface Operation {
 	readonly timeoutMs?: number;
 	/** Return the JSON response as text, unparsed (export files are passed through). */
 	readonly raw?: boolean;
+	/** A successful response of this media type instead of JSON (with `raw`); errors stay JSON. */
+	readonly accept?: 'text/csv';
 	/** Media type of a raw body other than JSON (a spreadsheet import sends CSV). */
 	readonly contentType?: 'text/csv';
 }
@@ -41,7 +43,12 @@ const IMPORT_QUERY = [
 	'col_type',
 	'col_altitude',
 	'col_freefall',
-	'col_notes'
+	'col_notes',
+	'col_aircraft',
+	'col_country',
+	'col_unit',
+	'col_deployment',
+	'col_gear'
 ] as const;
 
 export const OPERATIONS = {
@@ -223,7 +230,22 @@ export const OPERATIONS = {
 		maxBodyBytes: 8 * 1024 * 1024
 	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
+	// Many jumps at once: one call for up to 200, never one per jump.
+	previewJumpBatch: {
+		method: 'POST',
+		path: `${BETA}/jumps/batch/preview`,
+		maxBodyBytes: 1024 * 1024
+	},
+	applyJumpBatch: { method: 'POST', path: `${BETA}/jumps/batch`, timeoutMs: 30_000 },
+	getLatestJumpBatch: { method: 'GET', path: `${BETA}/jumps/batch/latest` },
+	undoJumpBatch: { method: 'POST', path: `${BETA}/jumps/batch/undo`, timeoutMs: 30_000 },
 	getJumpNumbering: { method: 'GET', path: `${BETA}/jumps/numbering` },
+	// The aircraft of the newest jump at one place: a starting value for a new entry.
+	getRecentAircraft: {
+		method: 'GET',
+		path: `${BETA}/jumps/recent-aircraft`,
+		query: ['venue_id', 'place_id']
+	},
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
@@ -266,6 +288,16 @@ export const OPERATIONS = {
 		timeoutMs: 60_000
 	},
 	listJumpImports: { method: 'GET', path: `${BETA}/jumps/imports` },
+	// The logbook as CSV in one call (2,000 jumps at most; notes make it a few MB).
+	exportSpreadsheet: {
+		method: 'GET',
+		path: `${BETA}/records/spreadsheet`,
+		query: ['from_on', 'until_on'],
+		raw: true,
+		accept: 'text/csv',
+		maxBodyBytes: 16 * 1024 * 1024,
+		timeoutMs: 30_000
+	},
 	undoJumpImport: { method: 'POST', path: `${BETA}/jumps/imports/{id}/undo`, timeoutMs: 30_000 },
 	getOwnProfile: { method: 'GET', path: `${BETA}/me/profile` },
 	saveOwnProfile: { method: 'PUT', path: `${BETA}/me/profile` },
@@ -397,7 +429,9 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			const payload =
 				call.rawBody ?? (call.body === undefined ? undefined : JSON.stringify(call.body));
 
-			const headers: Record<string, string> = { accept: 'application/json' };
+			const headers: Record<string, string> = {
+				accept: spec.accept ? `${spec.accept}, application/json` : 'application/json'
+			};
 			if (payload !== undefined) headers['content-type'] = spec.contentType ?? 'application/json';
 			if (call.confirmPassword) headers['x-organiser-confirm-password'] = call.confirmPassword;
 			if (call.bearer) headers.authorization = `Bearer ${call.bearer}`;
@@ -433,7 +467,10 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 
 			const retryAfter = parseRetryAfter(response.headers.get('retry-after'));
 			const contentType = response.headers.get('content-type') ?? '';
-			if (!contentType.includes('application/json')) {
+			const expected =
+				contentType.includes('application/json') ||
+				(spec.accept !== undefined && response.ok && contentType.includes(spec.accept));
+			if (!expected) {
 				return response.ok
 					? { kind: 'invalid_response' }
 					: { kind: 'upstream_error', status: response.status };

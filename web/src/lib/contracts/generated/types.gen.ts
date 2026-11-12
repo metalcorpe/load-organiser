@@ -201,6 +201,194 @@ export type BaselinePreviewOut = {
 };
 
 /**
+ * BatchApplyIn
+ */
+export type BatchApplyIn = {
+    changes: BatchChangesIn;
+    /**
+     * Jumps
+     *
+     * At most 200; a jump changed since its version is skipped.
+     */
+    jumps: Array<BatchJumpIn>;
+};
+
+/**
+ * BatchChangesIn
+ *
+ * What every chosen jump gets. Leave a key out to keep each jump's own value;
+ * `aircraft: null` clears it and `component_ids: []` clears the gear used.
+ */
+export type BatchChangesIn = {
+    /**
+     * Aircraft
+     */
+    aircraft?: string | null;
+    /**
+     * Component Ids
+     *
+     * Replaces the set of your own components used.
+     */
+    component_ids?: Array<string> | null;
+    /**
+     * Jump Type
+     */
+    jump_type?: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other' | null;
+    /**
+     * Place Id
+     *
+     * One of your private places.
+     */
+    place_id?: string | null;
+    /**
+     * Venue Id
+     *
+     * A listed dropzone.
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * BatchItemOut
+ */
+export type BatchItemOut = {
+    /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
+     * Components
+     */
+    components: Array<ComponentRefOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Number
+     */
+    jump_number: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    location: LocationOut;
+    /**
+     * Version
+     */
+    version: number;
+    /**
+     * Will Change
+     *
+     * False when it already has these values.
+     */
+    will_change: boolean;
+};
+
+/**
+ * BatchJumpIn
+ */
+export type BatchJumpIn = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Version
+     *
+     * The version the preview showed.
+     */
+    version: number;
+};
+
+/**
+ * BatchPreviewIn
+ */
+export type BatchPreviewIn = {
+    changes: BatchChangesIn;
+    /**
+     * Jump Ids
+     *
+     * Your jumps to change, at most 200.
+     */
+    jump_ids: Array<string>;
+};
+
+/**
+ * BatchPreviewOut
+ *
+ * What the change would do. Nothing is written.
+ */
+export type BatchPreviewOut = {
+    /**
+     * Changing
+     *
+     * Jumps that would change.
+     */
+    changing: number;
+    /**
+     * Components
+     *
+     * The new gear used, if it changes.
+     */
+    components: Array<ComponentRefOut> | null;
+    /**
+     * Items
+     */
+    items: Array<BatchItemOut>;
+    /**
+     * The new place, if it changes.
+     */
+    location: LocationOut | null;
+    /**
+     * Missing
+     *
+     * Chosen jumps that are not in your logbook.
+     */
+    missing: number;
+};
+
+/**
+ * BatchResultOut
+ */
+export type BatchResultOut = {
+    /**
+     * Batch Id
+     *
+     * Null when no jump changed.
+     */
+    batch_id: string | null;
+    /**
+     * Changed
+     */
+    changed: Array<string>;
+    /**
+     * Skipped
+     */
+    skipped: Array<SkippedOut>;
+    /**
+     * Unchanged
+     *
+     * Already had these values.
+     */
+    unchanged: Array<string>;
+};
+
+/**
+ * BatchUndoIn
+ */
+export type BatchUndoIn = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+};
+
+/**
  * BroughtForwardOut
  */
 export type BroughtForwardOut = {
@@ -223,17 +411,33 @@ export type BroughtForwardOut = {
  */
 export type ColumnsOut = {
     /**
+     * Aircraft
+     */
+    aircraft: number | null;
+    /**
      * Altitude
      */
     altitude: number | null;
+    /**
+     * Country
+     */
+    country: number | null;
     /**
      * Date
      */
     date: number | null;
     /**
+     * Deployment
+     */
+    deployment: number | null;
+    /**
      * Freefall
      */
     freefall: number | null;
+    /**
+     * Gear
+     */
+    gear: number | null;
     /**
      * Notes
      */
@@ -250,6 +454,10 @@ export type ColumnsOut = {
      * Type
      */
     type: number | null;
+    /**
+     * Unit
+     */
+    unit: number | null;
 };
 
 /**
@@ -321,6 +529,24 @@ export type ComponentIn = {
      */
     end_of_life_on?: string | null;
     /**
+     * Jump Limit
+     *
+     * Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jump Limit Label
+     *
+     * What is due at the limit, e.g. "Reline".
+     */
+    jump_limit_label?: string | null;
+    /**
+     * Jump Limit Service Kind
+     *
+     * The service whose latest entry restarts the count; default maintenance.
+     */
+    jump_limit_service_kind?: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
+    /**
      * Kind
      */
     kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
@@ -388,6 +614,18 @@ export type ComponentOut = {
      * Id
      */
     id: string;
+    /**
+     * Jump Limit
+     */
+    jump_limit: number | null;
+    /**
+     * Jump Limit Label
+     */
+    jump_limit_label: string | null;
+    /**
+     * Jump Limit Service Kind
+     */
+    jump_limit_service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Kind
      */
@@ -494,6 +732,24 @@ export type ComponentUpdateIn = {
      * An end-of-life date you entered (e.g. from the label). Never estimated.
      */
     end_of_life_on?: string | null;
+    /**
+     * Jump Limit
+     *
+     * Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jump Limit Label
+     *
+     * What is due at the limit, e.g. "Reline".
+     */
+    jump_limit_label?: string | null;
+    /**
+     * Jump Limit Service Kind
+     *
+     * The service whose latest entry restarts the count; default maintenance.
+     */
+    jump_limit_service_kind?: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Kind
      */
@@ -714,11 +970,17 @@ export type GearDueOut = {
     basis: 'entered' | 'interval';
     component: DueComponentOut;
     /**
+     * Counted Since
+     *
+     * The day of that service; null: all its jumps.
+     */
+    counted_since?: string | null;
+    /**
      * Due On
      *
-     * Still in time on this day; overdue after it.
+     * Still in time on this day; overdue after it. Null for a jump limit.
      */
-    due_on: string;
+    due_on: string | null;
     /**
      * Interval Days
      */
@@ -730,19 +992,43 @@ export type GearDueOut = {
      */
     interval_source: 'USPA / FAA 14 CFR 105.43' | null;
     /**
+     * Jump Limit
+     *
+     * The limit in jumps.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jumps Left
+     *
+     * Negative when over the limit.
+     */
+    jumps_left?: number | null;
+    /**
+     * Jumps Used
+     *
+     * Jumps that used it since the latest service of `service_kind` (after that day), or all its jumps when there is none.
+     */
+    jumps_used?: number | null;
+    /**
      * Kind
      */
-    kind: 'reserve_repack' | 'service' | 'end_of_life';
+    kind: 'reserve_repack' | 'service' | 'end_of_life' | 'jump_limit';
+    /**
+     * Label
+     *
+     * A jump limit's own label, e.g. Reline.
+     */
+    label?: string | null;
     /**
      * Service Kind
      *
-     * The service entry it comes from; null for an end of life.
+     * The service entry it comes from (for a jump limit: the one that restarts the count); null for an end of life.
      */
     service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Status
      *
-     * `soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
+     * `soon`: due within 30 days, or for a jump limit within 10% of it or 25 jumps (whichever is fewer) or at it. Dates are judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
      */
     status: 'overdue' | 'soon' | 'later';
 };
@@ -992,6 +1278,12 @@ export type JumpEventOut = {
  */
 export type JumpIn = {
     /**
+     * Aircraft
+     *
+     * The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).
+     */
+    aircraft?: string | null;
+    /**
      * Altitude Datum
      */
     altitude_datum?: 'unspecified' | 'agl' | 'msl' | null;
@@ -1124,6 +1416,10 @@ export type JumpNumberingOut = {
  */
 export type JumpOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Altitude Datum
      */
     altitude_datum: 'unspecified' | 'agl' | 'msl';
@@ -1234,6 +1530,10 @@ export type JumpPageOut = {
  */
 export type JumpSummaryOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Components
      */
     components: Array<ComponentRefOut>;
@@ -1260,6 +1560,12 @@ export type JumpSummaryOut = {
  * JumpUpdateIn
  */
 export type JumpUpdateIn = {
+    /**
+     * Aircraft
+     *
+     * The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).
+     */
+    aircraft?: string | null;
     /**
      * Altitude Datum
      */
@@ -1338,6 +1644,45 @@ export type JumpUpdateIn = {
      * Version
      */
     version?: number | null;
+};
+
+/**
+ * LatestBatchOut
+ *
+ * Your latest change of many jumps; it can be undone once, for 24 hours.
+ */
+export type LatestBatchOut = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+    /**
+     * Can Undo
+     */
+    can_undo: boolean;
+    /**
+     * Changed
+     */
+    changed: number;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Undo Until
+     */
+    undo_until: string;
+    /**
+     * Undone
+     */
+    undone: boolean;
+};
+
+/**
+ * LatestBatchStateOut
+ */
+export type LatestBatchStateOut = {
+    latest: LatestBatchOut | null;
 };
 
 /**
@@ -2836,6 +3181,18 @@ export type ReceiptOut = {
 };
 
 /**
+ * RecentAircraftOut
+ *
+ * A starting value for a new entry at this place; null when none is recorded.
+ */
+export type RecentAircraftOut = {
+    /**
+     * Aircraft
+     */
+    aircraft: string | null;
+};
+
+/**
  * RecordsOut
  */
 export type RecordsOut = {
@@ -3698,9 +4055,17 @@ export type RowProblemOut = {
  */
 export type SampleRowOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Altitude Unit
      */
     altitude_unit: 'ft' | 'm' | null;
+    /**
+     * Deployment Altitude
+     */
+    deployment_altitude: number | null;
     /**
      * Exit Altitude
      */
@@ -3725,6 +4090,10 @@ export type SampleRowOut = {
      * Notes
      */
     notes: string | null;
+    /**
+     * Other Gear
+     */
+    other_gear: string | null;
     /**
      * Place
      */
@@ -3897,6 +4266,22 @@ export type SharingProfileOut = {
      * Publishing Restricted
      */
     publishing_restricted: boolean;
+};
+
+/**
+ * SkippedOut
+ */
+export type SkippedOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Reason
+     *
+     * `edited`: changed since it was shown; `not_found`/`gone`: no longer there, or its earlier place or gear was deleted; `invalid`: an earlier value is no longer accepted (e.g. its dropzone is no longer listed).
+     */
+    reason: 'edited' | 'not_found' | 'gone' | 'invalid';
 };
 
 /**
@@ -4076,6 +4461,20 @@ export type UndoIn = {
      * Must be true: every jump of the import is deleted, even if edited.
      */
     confirm: boolean;
+};
+
+/**
+ * UndoResultOut
+ */
+export type UndoResultOut = {
+    /**
+     * Restored
+     */
+    restored: Array<string>;
+    /**
+     * Skipped
+     */
+    skipped: Array<SkippedOut>;
 };
 
 /**
@@ -7115,7 +7514,7 @@ export type ListJumpsData = {
         /**
          * Q
          *
-         * Text in the place name or your private notes.
+         * Text in the place name, aircraft or your private notes.
          */
         q?: string | null;
         /**
@@ -7255,6 +7654,218 @@ export type CreateJumpResponses = {
 
 export type CreateJumpResponse = CreateJumpResponses[keyof CreateJumpResponses];
 
+export type ApplyJumpBatchData = {
+    body: BatchApplyIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch';
+};
+
+export type ApplyJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Applyjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type ApplyJumpBatchError = ApplyJumpBatchErrors[keyof ApplyJumpBatchErrors];
+
+export type ApplyJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: BatchResultOut;
+};
+
+export type ApplyJumpBatchResponse = ApplyJumpBatchResponses[keyof ApplyJumpBatchResponses];
+
+export type GetLatestJumpBatchData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/latest';
+};
+
+export type GetLatestJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getlatestjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetLatestJumpBatchError = GetLatestJumpBatchErrors[keyof GetLatestJumpBatchErrors];
+
+export type GetLatestJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: LatestBatchStateOut;
+};
+
+export type GetLatestJumpBatchResponse = GetLatestJumpBatchResponses[keyof GetLatestJumpBatchResponses];
+
+export type PreviewJumpBatchData = {
+    body: BatchPreviewIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/preview';
+};
+
+export type PreviewJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Previewjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type PreviewJumpBatchError = PreviewJumpBatchErrors[keyof PreviewJumpBatchErrors];
+
+export type PreviewJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: BatchPreviewOut;
+};
+
+export type PreviewJumpBatchResponse = PreviewJumpBatchResponses[keyof PreviewJumpBatchResponses];
+
+export type UndoJumpBatchData = {
+    body: BatchUndoIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/undo';
+};
+
+export type UndoJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Undojumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type UndoJumpBatchError = UndoJumpBatchErrors[keyof UndoJumpBatchErrors];
+
+export type UndoJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: UndoResultOut;
+};
+
+export type UndoJumpBatchResponse = UndoJumpBatchResponses[keyof UndoJumpBatchResponses];
+
 export type ImportJumpsData = {
     /**
      * The raw spreadsheet file (CSV), at most 1 MiB.
@@ -7312,6 +7923,26 @@ export type ImportJumpsData = {
          * Col Notes
          */
         col_notes?: string | null;
+        /**
+         * Col Aircraft
+         */
+        col_aircraft?: string | null;
+        /**
+         * Col Country
+         */
+        col_country?: string | null;
+        /**
+         * Col Unit
+         */
+        col_unit?: string | null;
+        /**
+         * Col Deployment
+         */
+        col_deployment?: string | null;
+        /**
+         * Col Gear
+         */
+        col_gear?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import';
 };
@@ -7415,6 +8046,26 @@ export type CheckJumpImportData = {
          * Col Notes
          */
         col_notes?: string | null;
+        /**
+         * Col Aircraft
+         */
+        col_aircraft?: string | null;
+        /**
+         * Col Country
+         */
+        col_country?: string | null;
+        /**
+         * Col Unit
+         */
+        col_unit?: string | null;
+        /**
+         * Col Deployment
+         */
+        col_deployment?: string | null;
+        /**
+         * Col Gear
+         */
+        col_gear?: string | null;
     };
     url: '/api/skydiver/v1/jumps/import/check';
 };
@@ -7712,6 +8363,72 @@ export type GetJumpNumberingResponses = {
 };
 
 export type GetJumpNumberingResponse = GetJumpNumberingResponses[keyof GetJumpNumberingResponses];
+
+export type GetRecentAircraftData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Venue Id
+         *
+         * A listed dropzone, merges included.
+         */
+        venue_id?: string | null;
+        /**
+         * Place Id
+         *
+         * One of your private places.
+         */
+        place_id?: string | null;
+    };
+    url: '/api/skydiver/v1/jumps/recent-aircraft';
+};
+
+export type GetRecentAircraftErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getrecentaircraft
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetRecentAircraftError = GetRecentAircraftErrors[keyof GetRecentAircraftErrors];
+
+export type GetRecentAircraftResponses = {
+    /**
+     * Successful Response
+     */
+    200: RecentAircraftOut;
+};
+
+export type GetRecentAircraftResponse = GetRecentAircraftResponses[keyof GetRecentAircraftResponses];
 
 export type DeleteJumpData = {
     body?: never;
@@ -10057,6 +10774,72 @@ export type CheckRestoreResponses = {
 };
 
 export type CheckRestoreResponse = CheckRestoreResponses[keyof CheckRestoreResponses];
+
+export type ExportSpreadsheetData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * From On
+         *
+         * On or after.
+         */
+        from_on?: string | null;
+        /**
+         * Until On
+         *
+         * On or before.
+         */
+        until_on?: string | null;
+    };
+    url: '/api/skydiver/v1/records/spreadsheet';
+};
+
+export type ExportSpreadsheetErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverRecordsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverRecordsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverRecordsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverRecordsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverRecordsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverRecordsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverRecordsApiProblem;
+};
+
+export type ExportSpreadsheetError = ExportSpreadsheetErrors[keyof ExportSpreadsheetErrors];
+
+export type ExportSpreadsheetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};
 
 export type ListSavedData = {
     body?: never;

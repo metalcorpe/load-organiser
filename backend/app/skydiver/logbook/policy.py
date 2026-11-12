@@ -21,7 +21,12 @@ NOTES_MAX = 2000
 LINKS_MAX = 5
 LINK_MAX = 2048
 OTHER_GEAR_MAX = 200
+AIRCRAFT_MAX = 60
 COMPONENTS_MAX = 10  # per jump
+# Changing many jumps at once: at most this many per change, and its undo stays
+# open until the next such change or for this long.
+BATCH_MAX = 200
+BATCH_UNDO_HOURS = 24
 JUMP_NUMBER_MAX = 1_000_000
 FREEFALL_MAX_SECONDS = 600
 ALTITUDE_MAX = {"ft": 45_000, "m": 13_700}
@@ -165,6 +170,11 @@ def other_gear(value: str | None) -> str | None:
     return directory_policy.optional_text(
         value, field="other_gear", maximum=OTHER_GEAR_MAX
     )
+
+
+def aircraft(value: str | None) -> str | None:
+    """The aircraft as the jumper writes it (type, registration or both). Never looked up."""
+    return directory_policy.optional_text(value, field="aircraft", maximum=AIRCRAFT_MAX)
 
 
 def component_ids[T](values: list[T] | None) -> list[T]:

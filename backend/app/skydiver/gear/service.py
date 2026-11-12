@@ -63,6 +63,9 @@ class Component:
     fingerprint: str = ""
     repack_interval_days: int | None = None
     end_of_life_on: date | None = None
+    jump_limit: int | None = None
+    jump_limit_label: str | None = None
+    jump_limit_service_kind: ServiceKind | None = None
 
 
 @dataclass(frozen=True)
@@ -122,10 +125,22 @@ class ComponentDetail:
 
 
 @dataclass(frozen=True)
+class JumpsDue:
+    """A jump-count limit: how many jumps used the component since its count began."""
+
+    limit: int
+    used: int
+    label: str
+    service_kind: ServiceKind
+    since: date | None  # the latest service of that kind; None: every linked jump
+
+
+@dataclass(frozen=True)
 class DueItem:
     component: Component
-    due: policy.Due
+    due: policy.Due | None  # None for a jump-count limit
     status: policy.DueStatus
+    jumps: JumpsDue | None = None
 
 
 @dataclass(frozen=True)
@@ -200,6 +215,12 @@ class GearStore(Protocol):
     def open_membership(
         self, actor: Actor, rig_id: uuid.UUID, component_id: uuid.UUID, on: date
     ) -> None: ...
+
+    def jumps_by_day(
+        self, actor: Actor, component_ids: list[uuid.UUID]
+    ) -> list[tuple[uuid.UUID, date, int]]:
+        """(component, jump date, jumps that day) for the owner's jumps using them."""
+        ...
 
     def count_service(self, actor: Actor, component_id: uuid.UUID) -> int: ...
     def service_by_key(
@@ -290,14 +311,17 @@ class GearService:
         ]
 
     def due(self, actor: Actor) -> list[DueItem]:
-        """Every date coming due on the owner's current (not archived) gear, soonest
-        first. Two queries whatever the amount of gear. The status uses the latest
+        """Every date coming due on the owner's current (not archived) gear, and
+        every jump-count limit, overdue first, then soon, then later; dates soonest
+        first. Three queries whatever the amount of gear. The status uses the latest
         calendar date anywhere, so an item reads overdue no later than its owner's
         own day (a few hours early at most, never late)."""
         today = self._latest_local_date()
         with self._stores() as store:
             components = store.list_components(actor, archived=False)
             service = store.list_service(actor, [c.id for c in components])
+            limited = [c.id for c in components if c.jump_limit is not None]
+            by_day = store.jumps_by_day(actor, limited) if limited else []
         by_component: dict[uuid.UUID, list[policy.ServiceFact]] = {}
         # Newest first from the store: a higher order is a later record.
         for order, entry in enumerate(reversed(service)):
@@ -314,9 +338,42 @@ class GearService:
                 end_of_life_on=c.end_of_life_on,
             )
         ]
+        for c in components:
+            if c.jump_limit is None or c.jump_limit_service_kind is None:
+                continue
+            since = policy.latest_service_on(
+                by_component.get(c.id, []), c.jump_limit_service_kind
+            )
+            # Jumps after the day of that service; without one, every linked jump.
+            used = sum(
+                n
+                for component_id, on, n in by_day
+                if component_id == c.id and (since is None or on > since)
+            )
+            items.append(
+                DueItem(
+                    c,
+                    None,
+                    policy.jump_limit_status(c.jump_limit, used),
+                    JumpsDue(
+                        c.jump_limit,
+                        used,
+                        c.jump_limit_label or "",
+                        c.jump_limit_service_kind,
+                        since,
+                    ),
+                )
+            )
+        rank = {policy.DueStatus.OVERDUE: 0, policy.DueStatus.SOON: 1}
         return sorted(
             items,
-            key=lambda i: (i.due.due_on, i.component.label.casefold(), i.due.kind),
+            key=lambda i: (
+                rank.get(i.status, 2),
+                i.due.due_on if i.due else date.max,
+                -(i.jumps.used - i.jumps.limit) if i.jumps else 0,
+                i.component.label.casefold(),
+                i.due.kind if i.due else policy.DueKind.JUMP_LIMIT,
+            ),
         )
 
     def component(self, actor: Actor, component_id: uuid.UUID) -> ComponentDetail:
@@ -709,6 +766,18 @@ class GearService:
             )
         if "end_of_life_on" in raw or not partial:
             values["end_of_life_on"] = policy.end_of_life(raw.get("end_of_life_on"))
+        names = ("jump_limit", "jump_limit_label", "jump_limit_service_kind")
+        if any(n in raw for n in names) or not partial:
+            limit_set = policy.jump_limit(
+                raw.get("jump_limit"),
+                raw.get("jump_limit_label"),
+                raw.get("jump_limit_service_kind"),
+            )
+            values["jump_limit"] = limit_set.limit if limit_set else None
+            values["jump_limit_label"] = limit_set.label if limit_set else None
+            values["jump_limit_service_kind"] = (
+                limit_set.service_kind.value if limit_set else None
+            )
         if not partial:
             policy.check_acquisition(
                 Relation(values["relation"]),
@@ -737,6 +806,11 @@ def _component_values_of(component: Component) -> dict[str, Any]:
         "notes": component.notes,
         "repack_interval_days": component.repack_interval_days,
         "end_of_life_on": component.end_of_life_on,
+        "jump_limit": component.jump_limit,
+        "jump_limit_label": component.jump_limit_label,
+        "jump_limit_service_kind": component.jump_limit_service_kind.value
+        if component.jump_limit_service_kind
+        else None,
     }
 
 

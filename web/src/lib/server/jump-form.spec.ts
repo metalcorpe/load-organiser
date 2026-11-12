@@ -28,6 +28,7 @@ describe('jumpBody', () => {
 				altitude_unit: null,
 				altitude_datum: 'unspecified',
 				freefall_seconds: null,
+				aircraft: null,
 				component_ids: [],
 				links: []
 			})
@@ -46,6 +47,7 @@ describe('jumpBody', () => {
 				altitude_datum: 'agl',
 				freefall_seconds: '0',
 				component_ids: [GEAR, 'not-a-uuid'],
+				aircraft: ' Cessna 208 SX-ABC ',
 				links: 'https://a.example/1\r\n\r\n https://a.example/2 '
 			})
 		);
@@ -59,6 +61,7 @@ describe('jumpBody', () => {
 				altitude_datum: 'agl',
 				freefall_seconds: 0,
 				component_ids: [GEAR],
+				aircraft: 'Cessna 208 SX-ABC',
 				links: ['https://a.example/1', 'https://a.example/2']
 			})
 		});

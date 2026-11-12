@@ -34,6 +34,32 @@ describe('createApiTransport', () => {
 		expect([...headers.keys()]).toEqual(['accept']);
 	});
 
+	it('reads a spreadsheet as text only where the operation expects CSV; errors stay JSON', async () => {
+		const csv = () =>
+			new Response('\ufeffDate,Place\r\n2026-10-10,Farm\r\n', {
+				status: 200,
+				headers: { 'content-type': 'text/csv; charset=utf-8' }
+			});
+		const fetch = vi.fn<FetchLike>(async () => csv());
+		const api = createApiTransport({ fetch, origin: ORIGIN });
+		const sheet = await api.request('exportSpreadsheet', { query: { from_on: '2026-10-01' } });
+		expect(sheet).toEqual({ kind: 'response', status: 200, body: 'Date,Place\r\n2026-10-10,Farm\r\n' });
+		const [url, init] = fetch.mock.calls[0];
+		expect(url).toBe('https://api.example.org/api/skydiver/v1/records/spreadsheet?from_on=2026-10-01');
+		expect(new Headers(init.headers).get('accept')).toBe('text/csv, application/json');
+		// Any other operation refuses a CSV answer.
+		expect(await api.request('getHealth')).toEqual({ kind: 'invalid_response' });
+		fetch.mockImplementationOnce(async () =>
+			json(429, { detail: 'too_many_attempts' }, { 'retry-after': '300' })
+		);
+		expect(await api.request('exportSpreadsheet')).toEqual({
+			kind: 'response',
+			status: 429,
+			body: { detail: 'too_many_attempts' },
+			retryAfter: 300
+		});
+	});
+
 	it('sends a restore file byte for byte with the confirmation header', async () => {
 		const fetch = vi.fn<FetchLike>(async () => json(200, { outcome: 'restored' }));
 		const raw = new TextEncoder().encode('{ "format" : 1 }');

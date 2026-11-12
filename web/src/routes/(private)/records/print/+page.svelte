@@ -10,8 +10,8 @@
 	const r = $derived(data.result);
 	const pages = $derived(r.ok ? paginate(r.jumps, { notes: o.notes, before: r.before }) : []);
 	const last = $derived(pages.at(-1) ?? null);
-	// Number, date, place, type, exit, freefall, equipment, [notes], signature.
-	const columns = $derived(o.notes ? 9 : 8);
+	// Number, date, place, type, aircraft, exit, freefall, equipment, [notes], signature.
+	const columns = $derived(o.notes ? 10 : 9);
 	const range = $derived(
 		o.from && o.until
 			? `${formatDay(o.from)} to ${formatDay(o.until)}`
@@ -104,6 +104,7 @@
 								<th scope="col" class="date">Date</th>
 								<th scope="col">Place</th>
 								<th scope="col">Type</th>
+								<th scope="col">Aircraft</th>
 								<th scope="col" class="num">Exit altitude</th>
 								<th scope="col" class="num">Freefall</th>
 								<th scope="col">Equipment</th>
@@ -118,6 +119,7 @@
 									<td class="date">{row.date}</td>
 									<td>{row.place}</td>
 									<td>{row.type}</td>
+									<td>{row.aircraft}</td>
 									<td class="num">{row.exit}</td>
 									<td class="num">{row.freefall}</td>
 									<td>{row.equipment}</td>

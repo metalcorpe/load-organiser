@@ -80,8 +80,9 @@
 		first row. Up to 2,000 rows and 1 MB.
 	</p>
 	<p class="hint">
-		A date and a dropzone or place are needed on every row. Jump number, type, exit altitude,
-		freefall seconds and notes are read when present. Nothing is saved until you import.
+		A date and a dropzone or place are needed on every row. Jump number, type, exit and deployment
+		altitudes, freefall seconds, notes, aircraft and gear (as text) are read when present, and a
+		country or altitude unit for each row. Nothing is saved until you import.
 	</p>
 	<form method="POST" action="?/check" class="form" enctype="multipart/form-data" novalidate>
 		{#if errorFor('check')}
@@ -210,6 +211,11 @@
 										: ''}</span
 								>
 							{/if}
+							{#if row.aircraft}<span class="meta">Aircraft: {row.aircraft}</span>{/if}
+							{#if row.deployment_altitude !== null}<span class="meta"
+									>Deployment {n(row.deployment_altitude)} {row.altitude_unit}</span
+								>{/if}
+							{#if row.other_gear}<span class="meta">Gear: {row.other_gear}</span>{/if}
 							{#if row.notes}<span class="meta notes">{row.notes}</span>{/if}
 						</li>
 					{/each}

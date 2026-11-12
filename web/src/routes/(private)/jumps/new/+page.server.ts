@@ -1,5 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
-import type { ComponentDetailOut, JumpDetailOut, JumpNumberingOut } from '#lib/contracts/index.ts';
+import type {
+	ComponentDetailOut,
+	JumpDetailOut,
+	JumpNumberingOut,
+	RecentAircraftOut
+} from '#lib/contracts/index.ts';
 import { isCountryCode } from '#lib/countries.ts';
 import { nextJumpValues, numberHint, proposedNumber } from '#lib/jumps.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
@@ -49,6 +54,19 @@ export const load: PageServerLoad = async (event) => {
 			? await call<JumpNumberingOut>(api, 'getJumpNumbering', { bearer: secret })
 			: null;
 	const highest = numbering?.ok ? numbering.value.highest : null;
+	// Without "Log the next jump", the aircraft of the newest jump at this place that
+	// recorded one (editable). One call; a failed read just leaves the field empty.
+	const recent =
+		chosen && !prefill
+			? await call<RecentAircraftOut>(api, 'getRecentAircraft', {
+					bearer: secret,
+					query: {
+						venue_id: chosen.venueId ?? undefined,
+						place_id: chosen.placeId ?? undefined
+					}
+				})
+			: null;
+	const aircraft = recent?.ok ? recent.value.aircraft : null;
 	const next = proposedNumber(highest);
 	const suggestion = next === null ? null : { number: String(next), hint: numberHint(highest) };
 	return {
@@ -61,6 +79,7 @@ export const load: PageServerLoad = async (event) => {
 		gear: chosen ? await gearFor(api, secret) : { ok: true, items: [] },
 		prefill,
 		suggestion,
+		aircraft,
 		// One key per rendered form; a refused or unconfirmed send reuses it.
 		keys: { jump: crypto.randomUUID(), component: crypto.randomUUID() }
 	};

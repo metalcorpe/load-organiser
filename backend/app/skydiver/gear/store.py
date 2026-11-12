@@ -37,6 +37,7 @@ from app.skydiver.gear.tables import (
     SkydiverRigMembership,
     SkydiverServiceEntry,
 )
+from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpComponent
 
 _UNIQUE_VIOLATION = "23505"
 _FOREIGN_KEY_VIOLATION = "23503"
@@ -72,6 +73,11 @@ def _component(row: SkydiverComponent) -> Component:
         fingerprint=row.fingerprint,
         repack_interval_days=row.repack_interval_days,
         end_of_life_on=row.end_of_life_on,
+        jump_limit=row.jump_limit,
+        jump_limit_label=row.jump_limit_label,
+        jump_limit_service_kind=ServiceKind(row.jump_limit_service_kind)
+        if row.jump_limit_service_kind
+        else None,
     )
 
 
@@ -313,6 +319,20 @@ class SqlGearStore:
         self._s.flush()
 
     # service ------------------------------------------------------------------------
+
+    def jumps_by_day(
+        self, actor: Actor, component_ids: list[uuid.UUID]
+    ) -> list[tuple[uuid.UUID, date, int]]:
+        JC, J = SkydiverJumpComponent, SkydiverJump
+        rows = self._s.execute(
+            select(col(JC.component_id), col(J.jumped_on), func.count())
+            .join(J, col(J.id) == col(JC.jump_id))
+            .where(col(JC.owner_person_id) == actor.person_id)
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(JC.component_id).in_(component_ids))
+            .group_by(col(JC.component_id), col(J.jumped_on))
+        )
+        return [(c, on, int(n)) for c, on, n in rows.all()]
 
     def count_service(self, actor: Actor, component_id: uuid.UUID) -> int:
         return self._count(owned(S, actor).where(col(S.component_id) == component_id))

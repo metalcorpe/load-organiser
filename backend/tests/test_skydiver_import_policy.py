@@ -135,6 +135,22 @@ def test_limits_and_unreadable_files_refuse_the_whole_file() -> None:
             {"date": 0, "number": 1, "place": 2, "type": 3, "altitude": 4, "freefall": 5, "notes": 6},
         ),
         (
+            ["Date", "Place", "Aircraft"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Ημερομηνία", "Τοποθεσία", "Αεροσκάφος"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Fecha", "Lugar", "Avión"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
+            ["Date", "Location", "Plane"],
+            {"date": 0, "place": 1, "aircraft": 2},
+        ),
+        (
             ["Date", "Location", "Something else"],
             {"date": 0, "number": None, "place": 1, "type": None, "altitude": None, "freefall": None, "notes": None},
         ),
@@ -143,7 +159,8 @@ def test_limits_and_unreadable_files_refuse_the_whole_file() -> None:
 def test_columns_are_detected_by_heading_synonyms(
     headings: list[str], expected: dict[str, int | None]
 ) -> None:
-    assert policy.mapping(headings, {}) == expected
+    # Fields a file does not have are None, whatever fields later versions add.
+    assert policy.mapping(headings, {}) == dict.fromkeys(policy.FIELDS) | expected
 
 
 def test_overrides_replace_or_remove_detected_columns() -> None:
@@ -183,6 +200,10 @@ def test_the_fingerprint_covers_bytes_options_and_columns() -> None:
     assert base != policy.fingerprint(raw, Options(unit=AltitudeUnit.M), columns)
     assert base != policy.fingerprint(raw, Options(country="PT"), columns)
     assert base != policy.fingerprint(raw, Options(), columns | {"notes": 1})
+    # A field added later changes it only when a column is used for it, so a file
+    # imported before the field existed keeps its fingerprint.
+    assert base == policy.fingerprint(raw, Options(), columns | {"aircraft": None})
+    assert base != policy.fingerprint(raw, Options(), columns | {"aircraft": 1})
 
 
 # -- values -----------------------------------------------------------------------
@@ -259,7 +280,7 @@ def test_numbers_altitudes_and_freefall_accept_common_spreadsheet_forms() -> Non
         ("hop_and_pop", JumpType.HOP_AND_POP), ("Tandem", JumpType.TANDEM),
         ("AFF level 3", JumpType.TRAINING), ("coach jump", JumpType.TRAINING),
         ("student", JumpType.TRAINING), ("", JumpType.UNSPECIFIED),
-        ("demo", JumpType.UNSPECIFIED), ("other", JumpType.UNSPECIFIED),
+        ("demo", JumpType.UNSPECIFIED), ("other", JumpType.OTHER),
     ],
 )  # fmt: skip
 def test_jump_types_come_from_the_words_written(text: str, expected: JumpType) -> None:
@@ -307,3 +328,52 @@ def test_short_rows_read_missing_cells_as_empty() -> None:
 def test_place_keys_compare_exactly_but_ignore_case_and_spacing() -> None:
     assert policy.place_key("Skydive  Spain") == policy.place_key("SKYDIVE SPAIN")
     assert policy.place_key("Skydive Spain") != policy.place_key("Skydive Spáin")
+
+
+# -- columns for a spreadsheet export's round trip ---------------------------------
+
+
+def test_the_spreadsheet_export_headings_are_all_recognised() -> None:
+    from app.skydiver.records.spreadsheet import HEADINGS
+
+    found = policy.mapping(list(HEADINGS), {})
+    assert found == {
+        "date": 0, "number": 1, "place": 2, "country": 3, "type": 4, "aircraft": 5,
+        "altitude": 6, "unit": 7, "deployment": 8, "freefall": 9, "notes": 10,
+        "gear": 11,
+    }  # fmt: skip
+
+
+def test_a_guarding_apostrophe_is_removed_once() -> None:
+    assert policy.unguarded("'=1+1") == "=1+1"
+    assert policy.unguarded("''quoted") == "'quoted"
+    assert policy.unguarded("'plain") == "'plain"
+    assert policy.unguarded("'") == "'"
+    assert policy.unguarded("' =x") == " =x"
+
+
+def test_rows_carry_their_own_unit_country_deployment_and_gear() -> None:
+    heading = (
+        "Date,Place,Country,Altitude unit,Exit altitude,Deployment altitude,Gear,Type"
+    )
+    table = policy.read_table(
+        (
+            heading + "\n"
+            "2024-03-12,A,pt,m,4000,1200,Sabre; helmet,Other\n"
+            "2024-03-13,A,,,13500,,,\n"
+            "2024-03-14,A,XX,,,,,\n"
+            "2024-03-15,A,,yards,1000,,,\n"
+            "2024-03-16,A,,m,1000,1500,,\n"
+        ).encode()
+    )
+    columns = policy.mapping(table.headings, {})
+    ok, problems = policy.drafts(table, columns, Options(), date(2026, 1, 1))
+    first, second = ok
+    assert (first.country, first.altitude_unit, first.exit_altitude) == ("PT", AltitudeUnit.M, 4000)  # fmt: skip
+    assert (first.deployment_altitude, first.other_gear) == (1200, "Sabre; helmet")
+    assert first.jump_type.value == "other"
+    # An empty cell uses the chosen unit and country.
+    assert (second.country, second.altitude_unit) == (None, AltitudeUnit.FT)
+    assert [(p.row, p.code) for p in problems] == [
+        (3, "country_invalid"), (4, "altitude_unit_invalid"), (5, "deployment_above_exit"),
+    ]  # fmt: skip

@@ -80,6 +80,7 @@ class VenueName:
 class PlaceName:
     id: uuid.UUID
     name: str
+    country: str = ""
 
 
 @dataclass(frozen=True)
@@ -109,6 +110,9 @@ class SampleRow:
     altitude_unit: str | None
     freefall_seconds: int | None
     notes: str | None
+    aircraft: str | None = None
+    deployment_altitude: int | None = None
+    other_gear: str | None = None
 
 
 @dataclass(frozen=True)
@@ -186,6 +190,11 @@ class _Target:
     kind: str  # venue | place | new_place
     id: uuid.UUID | None  # None for a new place until it is written
     name: str
+    country: str | None = None  # a new place's country
+
+
+# A place name as written, and the row's own country (None: the chosen one).
+_PlaceKey = tuple[str, str | None]
 
 
 @dataclass(frozen=True)
@@ -195,7 +204,7 @@ class _Plan:
     columns: dict[str, int | None]
     rows: list[tuple[Draft, _Target]]
     problems: list[Problem]
-    new_places: dict[str, str]  # place key -> name as first written
+    new_places: dict[_PlaceKey, _Target]  # name and country -> as first written
     existing_jumps: int
 
 
@@ -208,7 +217,7 @@ def _core(draft: Draft, target: _Target) -> tuple[Any, ...]:
         draft.jump_type.value,
         None,  # exit time: not imported
         draft.exit_altitude,
-        None,  # deployment altitude: not imported
+        draft.deployment_altitude,
         draft.freefall_seconds,
         draft.notes,
     )
@@ -243,7 +252,7 @@ class ImportService:
             columns=columns,
             rows_total=sum(1 for r in table.rows if r),
             rows_ok=len(ok),
-            new_places=list(plan.new_places.values()),
+            new_places=[t.name for t in plan.new_places.values()],
             problems=plan.problems[: policy.PROBLEMS_SHOWN],
             problems_total=len(plan.problems),
             sample=[_sample(d, t) for d, t in ok[: policy.SAMPLE_ROWS]],
@@ -330,20 +339,20 @@ class ImportService:
                     {
                         "id": place_ids[key],
                         "owner_person_id": owner,
-                        "name": name,
-                        "country": options.country,
+                        "name": target.name,
+                        "country": target.country,
                         "venue_id": None,
                         "created_at": now,
                         "updated_at": now,
                     }  # fmt: skip
-                    for key, name in plan.new_places.items()
+                    for key, target in plan.new_places.items()
                 ],
             )
             jumps, events = [], []
             for draft, target in plan.rows:
                 jump_id = uuid.uuid7()
                 if target.kind == "new_place":
-                    venue_id, place_id = None, place_ids[policy.place_key(target.name)]
+                    venue_id, place_id = None, place_ids[_new_key(target)]
                 elif target.kind == "venue":
                     venue_id, place_id = target.id, None
                 else:
@@ -360,13 +369,14 @@ class ImportService:
                         "exit_time": None,
                         "time_zone": None,
                         "exit_altitude": draft.exit_altitude,
-                        "deployment_altitude": None,
+                        "deployment_altitude": draft.deployment_altitude,
                         "altitude_unit": draft.altitude_unit.value
                         if draft.altitude_unit
                         else None,
                         "altitude_datum": "unspecified",
                         "freefall_seconds": draft.freefall_seconds,
-                        "other_gear": None,
+                        "other_gear": draft.other_gear,
+                        "aircraft": draft.aircraft,
                         "notes": draft.notes,
                         "links": [],
                         "source": "imported",
@@ -438,32 +448,37 @@ class ImportService:
         for venue in store.venues_named(search) if search else []:
             for key in {policy.place_key(n) for n in venue.names}:
                 venues.setdefault(key, []).append(venue)
-        places: dict[str, PlaceName] = {}
+        places: dict[_PlaceKey, PlaceName] = {}
         for place in store.own_places(actor):  # oldest first: the first name wins
-            places.setdefault(policy.place_key(place.name), place)
+            name = policy.place_key(place.name)
+            places.setdefault((name, None), place)
+            places.setdefault((name, place.country), place)
 
-        targets: dict[str, _Target | str] = {}
+        # A row's own country (a Country column) picks among dropzones of the same
+        # name and keeps same-named places in different countries apart.
+        targets: dict[_PlaceKey, _Target | str] = {}
         for draft in drafts:
-            key = policy.place_key(draft.place)
-            if key in targets:
+            spot = (policy.place_key(draft.place), draft.country)
+            if spot in targets:
                 continue
-            found = venues.get(key, [])
-            if len(found) > 1 and options.country:
-                found = [v for v in found if v.country == options.country]
+            country = draft.country or options.country
+            found = venues.get(spot[0], [])
+            if len(found) > 1 and country:
+                found = [v for v in found if v.country == country]
             if len(found) == 1:
-                targets[key] = _Target("venue", found[0].id, found[0].names[0])
+                targets[spot] = _Target("venue", found[0].id, found[0].names[0])
             elif len(found) > 1:
-                targets[key] = "place_ambiguous"
-            elif key in places:
-                targets[key] = _Target("place", places[key].id, places[key].name)
+                targets[spot] = "place_ambiguous"
+            elif spot in places:
+                targets[spot] = _Target("place", places[spot].id, places[spot].name)
             else:
-                targets[key] = _Target("new_place", None, draft.place)
+                targets[spot] = _Target("new_place", None, draft.place, country)
 
         existing = store.existing(actor)
         seen: set[int] = set()
         rows: list[tuple[Draft, _Target]] = []
         for draft in drafts:
-            target = targets[policy.place_key(draft.place)]
+            target = targets[(policy.place_key(draft.place), draft.country)]
             if isinstance(target, str):
                 problems.append(Problem(draft.row, target))
             elif draft.jump_number is not None:
@@ -479,12 +494,13 @@ class ImportService:
             else:
                 rows.append((draft, target))
         # Only places that a row to be saved needs; named as first written.
-        new_places: dict[str, str] = {}
+        new_places: dict[_PlaceKey, _Target] = {}
         for _, target in rows:
             if target.kind == "new_place":
-                new_places.setdefault(policy.place_key(target.name), target.name)
-        if new_places and not options.country:
-            raise ImportRefused("country_required", names=list(new_places.values()))
+                new_places.setdefault(_new_key(target), target)
+        unplaced = [t.name for t in new_places.values() if t.country is None]
+        if unplaced:
+            raise ImportRefused("country_required", names=unplaced)
         if new_places and (
             store.count_places(actor) + len(new_places) > MAX_PLACES_PER_PERSON
         ):
@@ -500,6 +516,10 @@ class ImportService:
         )
 
 
+def _new_key(target: _Target) -> _PlaceKey:
+    return (policy.place_key(target.name), target.country)
+
+
 def _sample(draft: Draft, target: _Target) -> SampleRow:
     return SampleRow(
         row=draft.row,
@@ -512,4 +532,7 @@ def _sample(draft: Draft, target: _Target) -> SampleRow:
         altitude_unit=draft.altitude_unit.value if draft.altitude_unit else None,
         freefall_seconds=draft.freefall_seconds,
         notes=draft.notes,
+        aircraft=draft.aircraft,
+        deployment_altitude=draft.deployment_altitude,
+        other_gear=draft.other_gear,
     )

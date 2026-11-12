@@ -1,9 +1,9 @@
 <script lang="ts">
 	/**
-	 * Dates coming due on the owner's own gear, each linked to its component.
-	 * Shown compactly on the Logbook (due within 30 days or overdue) and in full on Gear.
+	 * Dates and jump-count limits coming due on the owner's own gear, each linked to its
+	 * component. Shown compactly on the Logbook (due soon or overdue) and in full on Gear.
 	 */
-	import { dueBasis, dueState, dueText, type DueIn } from '#lib/gear.ts';
+	import { dueBasis, dueText, itemState, type DueIn } from '#lib/gear.ts';
 
 	let {
 		items,
@@ -15,7 +15,7 @@
 
 <ul class="due" aria-label={label}>
 	{#each items as item (item.component.id + item.kind + (item.service_kind ?? ''))}
-		{@const state = dueState(item.due_on, today)}
+		{@const state = itemState(item, today)}
 		<li class={state}>
 			{#if state === 'overdue'}<strong>{dueText(item, today)}</strong>{:else}<span
 					>{dueText(item, today)}</span

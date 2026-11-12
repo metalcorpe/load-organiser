@@ -76,6 +76,14 @@ class SkydiverComponent(SQLModel, table=True):
             "repack_interval_days IS NULL OR repack_interval_days BETWEEN 1 AND 730",
             name="ck_skydiver_component_repack_interval",
         ),
+        CheckConstraint(
+            "(jump_limit IS NULL AND jump_limit_label IS NULL"
+            " AND jump_limit_service_kind IS NULL)"
+            " OR (jump_limit BETWEEN 1 AND 100000 AND jump_limit_label IS NOT NULL"
+            " AND jump_limit_service_kind IN"
+            " ('repack', 'inspection', 'maintenance', 'aad_service', 'other'))",
+            name="ck_skydiver_component_jump_limit",
+        ),
         UniqueConstraint(
             "owner_person_id", "client_key", name="uq_skydiver_component_key"
         ),
@@ -105,6 +113,14 @@ class SkydiverComponent(SQLModel, table=True):
     end_of_life_on: date | None = Field(
         default=None, sa_column=Column(Date, nullable=True)
     )
+    # One jump-count limit the owner sets (e.g. "Reline" after 500 jumps), counted
+    # from the jumps using it since the latest service entry of the kind named.
+    # All three empty, or all set; never a manufacturer number filled in for them.
+    jump_limit: int | None = Field(
+        default=None, sa_column=Column(Integer, nullable=True)
+    )
+    jump_limit_label: str | None = Field(default=None, max_length=80)
+    jump_limit_service_kind: str | None = Field(default=None, max_length=16)
     archived_at: datetime | None = Field(
         default=None, sa_column=Column(DateTime(timezone=True), nullable=True)
     )

@@ -12,12 +12,18 @@
 	const echoed = $derived(saveForm && 'values' in saveForm ? saveForm.values : null);
 	// A refusal re-shows what was sent; otherwise "Log the next jump" starts from the last one.
 	// With neither, the next number after the highest recorded is proposed, with a hint.
+	// The aircraft of the last jump at this place starts the field too (editable).
 	const values = $derived(
 		echoed ??
-			data.prefill?.values ??
-			(data.suggestion ? { jump_number: data.suggestion.number } : ({} as Record<string, string>))
+			data.prefill?.values ?? {
+				...(data.suggestion ? { jump_number: data.suggestion.number } : {}),
+				...(data.aircraft ? { aircraft: data.aircraft } : {})
+			}
 	);
 	const numberHint = $derived(!echoed && !data.prefill ? (data.suggestion?.hint ?? null) : null);
+	const aircraftHint = $derived(
+		!echoed && !data.prefill && data.aircraft ? 'From your last jump here.' : null
+	);
 	// Without jump numbers, the next load at the same place, day, type and altitude matches
 	// the duplicate check exactly. Choosing "Log the next jump" already says it is another
 	// jump; a resend of the same form is still recognised by its key.
@@ -73,6 +79,7 @@
 		submitLabel={duplicateOf ? 'Save as a distinct jump' : 'Save private jump'}
 		confirmDistinct={Boolean(duplicateOf) || nextWithoutNumber}
 		{numberHint}
+		{aircraftHint}
 	/>
 	{#if !data.gear.ok}<p class="hint">Your gear could not be loaded; you can still save the jump.</p>{/if}
 {:else}

@@ -52,6 +52,7 @@ export const JUMP_MESSAGES: Record<string, string> = {
 	freefall_invalid: 'Freefall time must be between 0 and 600 seconds.',
 	notes_too_long: 'Use at most 2,000 characters for notes.',
 	other_gear_too_long: 'Use at most 200 characters for other equipment.',
+	aircraft_too_long: 'Use at most 60 characters for the aircraft.',
 	too_many_links: 'Add at most five links.',
 	link_invalid: 'Links must be full http(s) addresses.',
 	too_many_components: 'Choose at most ten components.',
@@ -88,8 +89,9 @@ export function altitudeText(
 
 /**
  * Form values for the next jump after `jump`: same place, type, gear and altitudes,
- * the next jump number, and the same day when `sameDay` (catching up on one day's
- * loads); otherwise the date starts empty and the form fills in the jumper's own today.
+ * the next jump number and the aircraft, and the same day when `sameDay` (catching up
+ * on one day's loads); otherwise the date starts empty and the form fills in the
+ * jumper's own today.
  * Notes, links, other gear, exit time and freefall time describe one jump only and
  * start empty. Archived gear is not preselected.
  */
@@ -106,7 +108,8 @@ export function nextJumpValues(
 			exit_altitude: jump.exit_altitude?.toString() ?? '',
 			deployment_altitude: jump.deployment_altitude?.toString() ?? '',
 			altitude_unit: jump.altitude_unit ?? '',
-			altitude_datum: jump.altitude_datum
+			altitude_datum: jump.altitude_datum,
+			aircraft: jump.aircraft ?? ''
 		},
 		selected: jump.components.filter((c) => !c.archived).map((c) => c.id)
 	};

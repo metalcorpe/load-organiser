@@ -64,7 +64,7 @@ test.describe('logbook search and filters', () => {
 		await expect(page.getByLabel('From date')).toHaveValue('2026-02-01');
 
 		// Text search covers the owner's private notes.
-		await page.getByLabel('Place or notes').fill('sunset');
+		await page.getByLabel('Place, aircraft or notes').fill('sunset');
 		await page.getByLabel('From date').fill('');
 		await page.getByLabel('To date').fill('');
 		await page.getByRole('button', { name: 'Search' }).click();

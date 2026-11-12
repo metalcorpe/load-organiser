@@ -131,7 +131,8 @@ class Api:
             {"client_key": str(uuid.uuid4()), "kind": "main", "label": "Navigator",
              "serial": "N-0042", "relation": "owned", "acquisition_method": "purchase",
              "acquired": "2024-05", "repack_interval_days": 120,
-             "end_of_life_on": "2034-05-01"},
+             "end_of_life_on": "2034-05-01", "jump_limit": 500,
+             "jump_limit_label": "Reline", "jump_limit_service_kind": "maintenance"},
             201,
         )["component"]  # fmt: skip
         rig = self.ok("POST", "/gear/rigs", secret, {"client_key": str(uuid.uuid4()), "label": "Rig A"}, 201)  # fmt: skip
@@ -150,7 +151,8 @@ class Api:
              "jump_type": "freefly", "venue_id": venue, "jump_number": 120,
              "exit_time": "14:05", "time_zone": "Europe/Madrid", "exit_altitude": 4000,
              "altitude_unit": "m", "altitude_datum": "agl", "notes": "Private note.",
-             "links": ["https://example.org/video"], "component_ids": [main["id"]]},
+             "links": ["https://example.org/video"], "component_ids": [main["id"]],
+             "aircraft": "Cessna 208 SX-ABC"},
             201,
         )["jump"]  # fmt: skip
         self.ok(
@@ -231,6 +233,9 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 c["acquired"],
                 c["repack_interval_days"],
                 c["end_of_life_on"],
+                c["jump_limit"],
+                c["jump_limit_label"],
+                c["jump_limit_service_kind"],
             )
             for c in r["components"]
         ],
@@ -250,6 +255,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 j["notes"],
                 j["links"],
                 len(j["component_ids"]),
+                j["aircraft"],
             )
             for j in r["jumps"]
         ],  # fmt: skip
@@ -287,6 +293,7 @@ def test_round_trip_into_an_empty_account(api: Api) -> None:
     ):
         assert absent not in text, absent
     assert archive["records"]["jumps"][-1]["notes"] == "Private note."
+    assert archive["records"]["jumps"][-1]["aircraft"] == "Cessna 208 SX-ABC"
     # Instants are UTC whatever the database session's time zone.
     stamps = [archive["exported_at"]] + [
         item["created_at"] for section in ("places", "jumps", "jump_events")
@@ -362,6 +369,7 @@ def test_an_earlier_file_without_gear_due_settings_restores_with_none(
         None,
         None,
     )
+    assert (restored["jump_limit"], restored["jump_limit_label"]) == (None, None)
     # Out-of-range settings are refused before any write.
     bad = json.dumps(_archive(components=[component | {"repack_interval_days": 0}]))
     response = api.send(
@@ -677,3 +685,62 @@ def test_two_different_files_restored_at_once_never_merge(api: Api) -> None:
     assert results == ["not_empty", "restored"]
     assert _places(actor) == 1
     assert _receipts(actor) == 1
+
+
+def test_an_earlier_file_without_aircraft_restores_with_none(api: Api) -> None:
+    place = _place()
+    target = api.accounts.session()
+    raw = json.dumps(_archive(places=[place], jumps=[_jump(place_id=place["id"])]))
+    done = api.restore(target, raw.encode())
+    assert done.status_code == 200, done.text
+    (restored,) = json.loads(api.export(target))["records"]["jumps"]
+    assert restored["aircraft"] is None
+    # An aircraft the API would not store is refused before any write.
+    jump = _jump(place_id=place["id"], aircraft=" x ")
+    bad = json.dumps(_archive(places=[place], jumps=[jump])).encode()
+    response = api.send("/records/restore/check", api.accounts.session(), bad)
+    assert response.status_code == 422
+    assert response.json()["problem"] == "jumps[0].aircraft_invalid"
+
+
+def test_a_restored_history_never_carries_undo_markers(api: Api) -> None:
+    """Undo reads only what the service wrote: markers planted in a file are dropped."""
+    place = _place()
+    jump = _jump(place_id=place["id"], jump_type="belly")
+    batch = str(uuid.uuid4())
+    forged = {
+        "jump_id": jump["id"], "kind": "corrected", "created_at": "2026-11-03T11:00:00Z",
+        "detail": {
+            "jump_type": {"from": "wingsuit", "to": "belly"},
+            "aircraft": {"from": "x" * 500, "to": None},
+            "batch": {"id": batch, "version": 1},
+            "undo_of": str(uuid.uuid4()),
+        },
+    }  # fmt: skip
+    target = api.accounts.session()
+    raw = json.dumps(_archive(places=[place], jumps=[jump], jump_events=[forged]))
+    assert api.restore(target, raw.encode()).status_code == 200
+    assert api.ok("GET", "/jumps/batch/latest", target) == {"latest": None}
+    undo = api.call("POST", "/jumps/batch/undo", target, {"batch_id": batch})
+    assert (undo.status_code, undo.json()) == (409, {"detail": "undo_unavailable"})
+    records = json.loads(api.export(target))["records"]
+    (event,) = [e for e in records["jump_events"] if e["kind"] == "corrected"]
+    # The earlier and new values stay as history; the markers do not.
+    assert event["detail"] == {
+        "jump_type": {"from": "wingsuit", "to": "belly"},
+        "aircraft": {"from": "x" * 500, "to": None},
+    }
+    (restored,) = records["jumps"]
+    assert restored["jump_type"] == "belly"
+
+
+def test_a_jump_limit_in_a_file_must_be_complete(api: Api) -> None:
+    component = {
+        "id": str(uuid.uuid4()), "kind": "main", "label": "Main", "relation": "owned",
+        "created_at": "2026-10-01T10:00:00Z", "updated_at": "2026-10-01T10:00:00Z",
+        "jump_limit": 500,
+    }  # fmt: skip
+    bad = json.dumps(_archive(components=[component])).encode()
+    response = api.send("/records/restore/check", api.accounts.session(), bad)
+    assert response.status_code == 422
+    assert response.json()["problem"] == "components[0].jump_limit_label_required"

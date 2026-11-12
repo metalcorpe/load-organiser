@@ -122,7 +122,7 @@ class SqlImportStore:
         rows = self._s.execute(
             owned(P, actor).order_by(col(P.created_at), col(P.id))
         ).scalars()
-        return [PlaceName(r.id, r.name) for r in rows]
+        return [PlaceName(r.id, r.name, r.country) for r in rows]
 
     def existing(self, actor: Actor) -> Existing:
         numbers = self._s.execute(

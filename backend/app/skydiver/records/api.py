@@ -13,16 +13,17 @@ Errors: 400 `archive_malformed` / `archive_version_unsupported`, 413
 """
 
 from collections.abc import Callable
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from typing import Annotated, Any, Literal
 
-from fastapi import APIRouter, Depends, Request, Response, status
+from fastapi import APIRouter, Depends, Query, Request, Response, status
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from app.skydiver.access.http import AccessDependencies, bearer_secret
 from app.skydiver.access.policy import Actor
+from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.identity.policy import ThrottleRule
 from app.skydiver.identity.service import (
     ConfirmationFailed,
@@ -44,6 +45,7 @@ NO_STORE = {"cache-control": "no-store"}
 PASSWORD_HEADER = "x-organiser-confirm-password"
 
 EXPORT_RULE = ThrottleRule("records_export", 1, timedelta(minutes=5))
+SPREADSHEET_RULE = ThrottleRule("records_spreadsheet", 1, timedelta(minutes=5))
 CHECK_RULE = ThrottleRule("records_check", 10, timedelta(hours=1))
 RESTORE_RULE = ThrottleRule("records_restore", 3, timedelta(days=1))
 
@@ -141,7 +143,7 @@ def _problem(error: Exception) -> JSONResponse:
         code, body = status.HTTP_413_CONTENT_TOO_LARGE, {"detail": "archive_too_large"}
     elif isinstance(error, ArchiveInvalid):
         code, body["problem"] = status.HTTP_422_UNPROCESSABLE_CONTENT, error.problem
-    elif isinstance(error, ConfirmationFailed):
+    elif isinstance(error, ConfirmationFailed | DirectoryRuleError):
         code = status.HTTP_422_UNPROCESSABLE_CONTENT
     elif isinstance(error, RecordsNotEmpty):
         code = status.HTTP_409_CONFLICT
@@ -180,6 +182,7 @@ def create_router(
         RecordsNotEmpty,
         NotAuthenticated,
         Throttled,
+        DirectoryRuleError,
     )
 
     def consume(rule: ThrottleRule, actor: Actor) -> None:
@@ -227,6 +230,44 @@ def create_router(
                 **NO_STORE,
                 "content-disposition": (
                     f'attachment; filename="load-organiser-records-{day}.json"'
+                ),
+                "x-content-type-options": "nosniff",
+            },
+        )
+
+    @router.get(
+        "/records/spreadsheet",
+        operation_id="exportSpreadsheet",
+        responses={200: {"content": {"text/csv": {}}}},
+    )
+    def export_spreadsheet(
+        actor: Reader,
+        from_on: Annotated[date | None, Query(description="On or after.")] = None,
+        until_on: Annotated[date | None, Query(description="On or before.")] = None,
+    ) -> Response:
+        """Your jumps as a spreadsheet (CSV, UTF-8 with a byte-order mark), oldest
+        first, with the columns the logbook import reads."""
+        try:
+            if from_on and until_on and from_on > until_on:
+                raise DirectoryRuleError("date_range_invalid")  # before the throttle
+            # A slot taken just before building the file and given back if building
+            # it fails, so an error does not use up the five minutes.
+            hit = identity().reserve(rule=SPREADSHEET_RULE, key=str(actor.account_id))
+            try:
+                data = service().spreadsheet(actor, from_on=from_on, until_on=until_on)
+            except BaseException:
+                identity().refund(hit_id=hit)
+                raise
+        except Errors as error:
+            return _problem(error)
+        day = datetime.now(UTC).date().isoformat()
+        return Response(
+            content=data,
+            media_type="text/csv; charset=utf-8",
+            headers={
+                **NO_STORE,
+                "content-disposition": (
+                    f'attachment; filename="load-organiser-logbook-{day}.csv"'
                 ),
                 "x-content-type-options": "nosniff",
             },

@@ -16,6 +16,7 @@ const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 		freefall_seconds: 50,
 		components: [{ id: 'c1', kind: 'main', label: 'Sabre 170', archived: false }],
 		other_gear: 'borrowed helmet',
+		aircraft: 'Cessna 208',
 		notes: 'Four-way, good exit.',
 		...over
 	}) as unknown as JumpOut;
@@ -53,6 +54,7 @@ describe('toRow', () => {
 			date: '10 Oct 2026',
 			place: 'Farm strip',
 			type: 'Belly / formation',
+			aircraft: 'Cessna 208',
 			exit: '4,000 m AGL',
 			freefall: '50 s',
 			equipment: 'Sabre 170, borrowed helmet',
@@ -69,12 +71,14 @@ describe('toRow', () => {
 				freefall_seconds: null,
 				components: [],
 				other_gear: null,
+				aircraft: null,
 				location: { kind: 'venue', id: 'v', name: null, country: null, closed: false }
 			}),
 			{ notes: false }
 		);
 		expect(row).toMatchObject({
 			number: '',
+			aircraft: '',
 			exit: '',
 			freefall: '',
 			equipment: '',

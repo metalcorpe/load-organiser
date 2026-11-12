@@ -69,6 +69,7 @@ export function jumpBody(data: FormData): { body: JumpBody } | { error: string }
 			freefall_seconds: numbers.freefall_seconds,
 			component_ids: components,
 			other_gear: text(data, 'other_gear', 400),
+			aircraft: text(data, 'aircraft', 120),
 			notes: text(data, 'notes', 4000),
 			links
 		}

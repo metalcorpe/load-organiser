@@ -68,6 +68,11 @@ export const GEAR_MESSAGES: Record<string, string> = {
 	repack_interval_invalid:
 		'Enter a repack interval in whole days from 1 to 730, or leave it empty for 180 days.',
 	end_of_life_invalid: 'Check the end-of-life date.',
+	jump_limit_required: 'Enter the number of jumps for the limit, or clear its label.',
+	jump_limit_invalid: 'Enter a jump limit in whole jumps from 1 to 100,000.',
+	jump_limit_label_required: 'Say what is due at the limit, e.g. "Reline".',
+	jump_limit_label_too_long: 'Use at most 80 characters for what is due at the limit.',
+	jump_limit_service_kind_invalid: 'Choose which service restarts the count.',
 	invalid_input: 'Check the details you entered.',
 	uncertain:
 		'The service did not answer in time. The change may or may not have been saved; reload to check before trying again.',
@@ -90,12 +95,20 @@ export const DUE_SOON_DAYS = 30;
 /** The fields of a due date the wording needs (GearDueOut). */
 export interface DueIn {
 	component: { id: string; kind: string; label: string };
-	kind: 'reserve_repack' | 'service' | 'end_of_life';
+	kind: 'reserve_repack' | 'service' | 'end_of_life' | 'jump_limit';
 	service_kind: string | null;
-	due_on: string;
+	/** Null for a jump limit. */
+	due_on: string | null;
 	basis: 'entered' | 'interval';
 	interval_days: number | null;
 	interval_source: string | null;
+	/** The API's own status; a jump limit's does not depend on the day. */
+	status?: 'overdue' | 'soon' | 'later';
+	label?: string | null;
+	jump_limit?: number | null;
+	jumps_used?: number | null;
+	jumps_left?: number | null;
+	counted_since?: string | null;
 }
 
 const SERVICE_DUE: Record<string, string> = {
@@ -107,7 +120,10 @@ const SERVICE_DUE: Record<string, string> = {
 };
 
 /** What is due, as a sentence start: "Reserve repack", "AAD end of life". */
-export function dueWhat(item: Pick<DueIn, 'component' | 'kind' | 'service_kind'>): string {
+export function dueWhat(
+	item: Pick<DueIn, 'component' | 'kind' | 'service_kind'> & { label?: string | null }
+): string {
+	if (item.kind === 'jump_limit') return item.label || 'Jump limit';
 	if (item.kind === 'reserve_repack') return 'Reserve repack';
 	if (item.kind === 'end_of_life')
 		return item.component.kind === 'aad' ? 'AAD end of life' : 'End of service life';
@@ -144,9 +160,26 @@ export function dueState(dueOn: string, today: string): DueState {
 	return days <= DUE_SOON_DAYS ? 'soon' : 'later';
 }
 
-/** "Reserve repack due in 5 days (17 November)", "AAD maintenance overdue since 3 November". */
+/** A date's state from the jumper's own day; a jump limit's from the API. */
+export function itemState(item: DueIn, today: string): DueState {
+	if (item.kind === 'jump_limit' || item.due_on === null) return item.status ?? 'later';
+	return dueState(item.due_on, today);
+}
+
+const jumpCount = (n: number) => `${n.toLocaleString('en-GB')} ${n === 1 ? 'jump' : 'jumps'}`;
+
+/**
+ * "Reserve repack due in 5 days (17 November)", "AAD maintenance overdue since 3 November",
+ * "Reline due in 12 jumps", "Reline overdue by 3 jumps".
+ */
 export function dueText(item: DueIn, today: string): string {
 	const what = dueWhat(item);
+	if (item.kind === 'jump_limit' || item.due_on === null) {
+		const left = item.jumps_left ?? 0;
+		if (left < 0) return `${what} overdue by ${jumpCount(-left)}`;
+		if (left === 0) return `${what} due now`;
+		return `${what} due in ${jumpCount(left)}`;
+	}
 	const days = daysUntil(item.due_on, today);
 	if (days < 0) {
 		const since = new Date(utc(item.due_on) + DAY_MS).toISOString().slice(0, 10);
@@ -157,8 +190,14 @@ export function dueText(item: DueIn, today: string): string {
 	return `${what} due in ${days} days (${shortDay(item.due_on, today)})`;
 }
 
-/** Where a date comes from, in plain words. */
+/** Where a date or a jump count comes from, in plain words. */
 export function dueBasis(item: DueIn): string {
+	if (item.kind === 'jump_limit') {
+		const counted = item.counted_since
+			? `since your last ${(SERVICE_LABEL[item.service_kind ?? 'other'] ?? 'service').toLowerCase()} on ${FULL_DAY.format(new Date(utc(item.counted_since)))}`
+			: `since you added it (no ${(SERVICE_LABEL[item.service_kind ?? 'other'] ?? 'service').toLowerCase()} recorded)`;
+		return `Your limit of ${jumpCount(item.jump_limit ?? 0)}: ${jumpCount(item.jumps_used ?? 0)} logged with it ${counted}.`;
+	}
 	if (item.kind === 'end_of_life') return 'The end-of-life date you entered.';
 	if (item.basis === 'interval') {
 		return item.interval_source
@@ -170,7 +209,16 @@ export function dueBasis(item: DueIn): string {
 
 /** Overdue or due within 30 days of `today`, in the given (soonest first) order. */
 export function dueSoon<T extends DueIn>(items: T[], today: string): T[] {
-	return items.filter((item) => dueState(item.due_on, today) !== 'later');
+	return items.filter((item) => itemState(item, today) !== 'later');
+}
+
+/** The optional jump limit: empty, or whole jumps from 1 to 100,000. */
+export function parseJumpLimit(raw: string): number | null | 'invalid' {
+	const text = raw.trim().replace(/[\s,]/g, '');
+	if (!text) return null;
+	if (!/^\d{1,6}$/.test(text)) return 'invalid';
+	const jumps = Number(text);
+	return jumps >= 1 && jumps <= 100_000 ? jumps : 'invalid';
 }
 
 /** The optional repack interval field: empty, or whole days from 1 to 730. */

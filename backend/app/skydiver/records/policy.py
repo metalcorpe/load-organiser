@@ -142,6 +142,19 @@ def check(archive: ArchiveV1, today: date) -> None:
         )
         _rule(where, lambda c=c: gear.repack_interval(c.repack_interval_days))
         _rule(where, lambda c=c: gear.end_of_life(c.end_of_life_on))
+        limit = _rule(
+            where,
+            lambda c=c: gear.jump_limit(
+                c.jump_limit, c.jump_limit_label, c.jump_limit_service_kind
+            ),
+        )
+        stored = (
+            (limit.limit, limit.label, limit.service_kind.value)
+            if limit
+            else (None, None, None)
+        )
+        if stored != (c.jump_limit, c.jump_limit_label, c.jump_limit_service_kind):
+            raise ArchiveInvalid(f"{where}.jump_limit_incomplete")
 
     per_component: dict[uuid.UUID, int] = defaultdict(int)
     for i, g in enumerate(r.rigs):
@@ -253,6 +266,7 @@ def _check_jump(
         raise ArchiveInvalid(f"{where}.altitudes_incomplete")
     _rule(where, lambda: logbook.freefall_seconds(j.freefall_seconds))
     _rule(where, lambda: logbook.other_gear(j.other_gear))
+    _text(where, "aircraft", j.aircraft, logbook.AIRCRAFT_MAX)
     _rule(where, lambda: logbook.notes(j.notes))
     if _rule(where, lambda: logbook.links(list(j.links))) != list(j.links):
         raise ArchiveInvalid(f"{where}.link_invalid")
@@ -260,6 +274,18 @@ def _check_jump(
         raise ArchiveInvalid(f"{where}.duplicate_component")
     if any(c not in components for c in j.component_ids):
         raise ArchiveInvalid(f"{where}.component_unknown")
+
+
+# Markers the logbook writes on a jump's history to undo a change of many jumps
+# (logbook/service.py). An archive is outside data: a restore keeps the earlier and
+# new values but never these markers, so an undo only reads entries the service
+# itself wrote, never values planted in a file.
+SERVICE_ONLY_KEYS = frozenset({"batch", "undo_of"})
+
+
+def jump_history(detail: dict[str, Any], ids: dict[str, str]) -> dict[str, Any]:
+    """A restored jump history detail: IDs remapped, service-only markers dropped."""
+    return {k: remap(v, ids) for k, v in detail.items() if k not in SERVICE_ONLY_KEYS}
 
 
 def remap(value: Any, ids: dict[str, str]) -> Any:

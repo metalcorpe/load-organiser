@@ -16,8 +16,10 @@ from sqlalchemy import (
     insert,
     or_,
     select,
+    type_coerce,
     update,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
@@ -28,6 +30,7 @@ from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 from app.skydiver.logbook.service import (
+    BatchRecord,
     ComponentRef,
     Criteria,
     Jump,
@@ -80,6 +83,7 @@ def _jump(row: SkydiverJump, component_ids: list[uuid.UUID]) -> Jump:
         altitude_datum=AltitudeDatum(row.altitude_datum),
         freefall_seconds=row.freefall_seconds,
         other_gear=row.other_gear,
+        aircraft=row.aircraft,
         notes=row.notes,
         links=tuple(row.links or ()),
         component_ids=tuple(component_ids),
@@ -133,6 +137,52 @@ class SqlLogbookStore:
         row = get_owned(self._s, J, jump_id, actor)
         return self._with_components([row])[0] if row else None
 
+    def jumps_by_ids(self, actor: Actor, jump_ids: list[uuid.UUID]) -> list[Jump]:
+        if not jump_ids:
+            return []
+        rows = self._s.execute(
+            owned(J, actor).where(col(J.id).in_(jump_ids)).order_by(col(J.id))
+        ).scalars()
+        return self._with_components(list(rows))
+
+    def latest_batch(self, actor: Actor) -> BatchRecord | None:
+        # The newest change of many jumps still on record. If every jump of the
+        # newest one was deleted, the one before it is found again: its undo still
+        # needs the 24 hours and puts back only jumps untouched since (compare-and-
+        # swap on the version it produced), so it never overwrites later work. No
+        # extra per-person storage is kept for that case.
+        detail = type_coerce(col(E.detail), JSONB())
+        latest = (
+            self._s.execute(
+                owned(E, actor)
+                .where(detail.has_key("batch"))
+                .order_by(col(E.id).desc())
+                .limit(1)
+            )
+            .scalars()
+            .first()
+        )
+        if latest is None:
+            return None
+        batch_id = str(latest.detail["batch"]["id"])
+        entries = self._s.execute(
+            owned(E, actor)
+            .where(detail["batch"]["id"].astext == batch_id)
+            .order_by(col(E.id))
+        ).scalars()
+        undone = self._s.execute(
+            select(func.count())
+            .select_from(E)
+            .where(col(E.owner_person_id) == actor.person_id)
+            .where(detail["undo_of"].astext == batch_id)
+        ).scalar_one()
+        return BatchRecord(
+            id=uuid.UUID(batch_id),
+            created_at=latest.created_at,
+            entries=[(e.jump_id, dict(e.detail)) for e in entries],
+            undone=bool(undone),
+        )
+
     def page(
         self,
         actor: Actor,
@@ -173,6 +223,17 @@ class SqlLogbookStore:
             first_on=first,
             last_on=last,
         )
+
+    def latest_aircraft(self, actor: Actor, where: Criteria) -> str | None:
+        found = self._s.execute(
+            select(col(J.aircraft))
+            .where(col(J.owner_person_id) == actor.person_id)
+            .where(col(J.aircraft).is_not(None))
+            .where(*_conditions(actor, where))
+            .order_by(col(J.jumped_on).desc(), col(J.id).desc())
+            .limit(1)
+        ).scalar()
+        return str(found) if found is not None else None
 
     def venue_ids(self, actor: Actor) -> list[uuid.UUID]:
         rows = self._s.execute(
@@ -415,6 +476,7 @@ def _conditions(actor: Actor, where: Criteria) -> list[ColumnElement[bool]]:
         )
         matches: list[ColumnElement[bool]] = [
             col(J.notes).icontains(where.text, autoescape=True),
+            col(J.aircraft).icontains(where.text, autoescape=True),
             col(J.place_id).in_(places),
         ]
         if where.text_venue_ids:

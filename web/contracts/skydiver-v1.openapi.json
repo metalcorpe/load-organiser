@@ -299,6 +299,368 @@
         "title": "BaselinePreviewOut",
         "type": "object"
       },
+      "BatchApplyIn": {
+        "properties": {
+          "changes": {
+            "$ref": "#/components/schemas/BatchChangesIn"
+          },
+          "jumps": {
+            "description": "At most 200; a jump changed since its version is skipped.",
+            "items": {
+              "$ref": "#/components/schemas/BatchJumpIn"
+            },
+            "maxItems": 400,
+            "minItems": 1,
+            "title": "Jumps",
+            "type": "array"
+          }
+        },
+        "required": [
+          "jumps",
+          "changes"
+        ],
+        "title": "BatchApplyIn",
+        "type": "object"
+      },
+      "BatchChangesIn": {
+        "additionalProperties": false,
+        "description": "What every chosen jump gets. Leave a key out to keep each jump's own value;\n`aircraft: null` clears it and `component_ids: []` clears the gear used.",
+        "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
+          "component_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "maxItems": 20,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Replaces the set of your own components used.",
+            "title": "Component Ids"
+          },
+          "jump_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "unspecified",
+                  "belly",
+                  "freefly",
+                  "angle",
+                  "wingsuit",
+                  "canopy",
+                  "crw",
+                  "accuracy",
+                  "hop_and_pop",
+                  "tandem",
+                  "training",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Type"
+          },
+          "place_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "One of your private places.",
+            "title": "Place Id"
+          },
+          "venue_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A listed dropzone.",
+            "title": "Venue Id"
+          }
+        },
+        "title": "BatchChangesIn",
+        "type": "object"
+      },
+      "BatchItemOut": {
+        "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
+          "components": {
+            "items": {
+              "$ref": "#/components/schemas/ComponentRefOut"
+            },
+            "title": "Components",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "jump_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Number"
+          },
+          "jump_type": {
+            "enum": [
+              "unspecified",
+              "belly",
+              "freefly",
+              "angle",
+              "wingsuit",
+              "canopy",
+              "crw",
+              "accuracy",
+              "hop_and_pop",
+              "tandem",
+              "training",
+              "other"
+            ],
+            "title": "Jump Type",
+            "type": "string"
+          },
+          "jumped_on": {
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          },
+          "will_change": {
+            "description": "False when it already has these values.",
+            "title": "Will Change",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "jumped_on",
+          "location",
+          "jump_type",
+          "jump_number",
+          "components",
+          "aircraft",
+          "version",
+          "will_change"
+        ],
+        "title": "BatchItemOut",
+        "type": "object"
+      },
+      "BatchJumpIn": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "version": {
+            "description": "The version the preview showed.",
+            "minimum": 1.0,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "title": "BatchJumpIn",
+        "type": "object"
+      },
+      "BatchPreviewIn": {
+        "properties": {
+          "changes": {
+            "$ref": "#/components/schemas/BatchChangesIn"
+          },
+          "jump_ids": {
+            "description": "Your jumps to change, at most 200.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 400,
+            "minItems": 1,
+            "title": "Jump Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "jump_ids",
+          "changes"
+        ],
+        "title": "BatchPreviewIn",
+        "type": "object"
+      },
+      "BatchPreviewOut": {
+        "description": "What the change would do. Nothing is written.",
+        "properties": {
+          "changing": {
+            "description": "Jumps that would change.",
+            "title": "Changing",
+            "type": "integer"
+          },
+          "components": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ComponentRefOut"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The new gear used, if it changes.",
+            "title": "Components"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BatchItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LocationOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The new place, if it changes."
+          },
+          "missing": {
+            "description": "Chosen jumps that are not in your logbook.",
+            "title": "Missing",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "missing",
+          "changing",
+          "location",
+          "components"
+        ],
+        "title": "BatchPreviewOut",
+        "type": "object"
+      },
+      "BatchResultOut": {
+        "properties": {
+          "batch_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when no jump changed.",
+            "title": "Batch Id"
+          },
+          "changed": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Changed",
+            "type": "array"
+          },
+          "skipped": {
+            "items": {
+              "$ref": "#/components/schemas/SkippedOut"
+            },
+            "title": "Skipped",
+            "type": "array"
+          },
+          "unchanged": {
+            "description": "Already had these values.",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Unchanged",
+            "type": "array"
+          }
+        },
+        "required": [
+          "batch_id",
+          "changed",
+          "unchanged",
+          "skipped"
+        ],
+        "title": "BatchResultOut",
+        "type": "object"
+      },
+      "BatchUndoIn": {
+        "properties": {
+          "batch_id": {
+            "format": "uuid",
+            "title": "Batch Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "batch_id"
+        ],
+        "title": "BatchUndoIn",
+        "type": "object"
+      },
       "BroughtForwardOut": {
         "properties": {
           "freefall_seconds": {
@@ -321,6 +683,17 @@
       },
       "ColumnsOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude": {
             "anyOf": [
               {
@@ -331,6 +704,17 @@
               }
             ],
             "title": "Altitude"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Country"
           },
           "date": {
             "anyOf": [
@@ -343,6 +727,17 @@
             ],
             "title": "Date"
           },
+          "deployment": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment"
+          },
           "freefall": {
             "anyOf": [
               {
@@ -353,6 +748,17 @@
               }
             ],
             "title": "Freefall"
+          },
+          "gear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gear"
           },
           "notes": {
             "anyOf": [
@@ -397,6 +803,17 @@
               }
             ],
             "title": "Type"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
           }
         },
         "required": [
@@ -406,7 +823,12 @@
           "type",
           "altitude",
           "freefall",
-          "notes"
+          "notes",
+          "aircraft",
+          "country",
+          "unit",
+          "deployment",
+          "gear"
         ],
         "title": "ColumnsOut",
         "type": "object"
@@ -541,6 +963,52 @@
             ],
             "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
             "title": "End Of Life On"
+          },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.",
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What is due at the limit, e.g. \"Reline\".",
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service whose latest entry restarts the count; default maintenance.",
+            "title": "Jump Limit Service Kind"
           },
           "kind": {
             "enum": [
@@ -711,6 +1179,46 @@
             "title": "Id",
             "type": "string"
           },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit Service Kind"
+          },
           "kind": {
             "enum": [
               "container",
@@ -832,6 +1340,9 @@
           "notes",
           "repack_interval_days",
           "end_of_life_on",
+          "jump_limit",
+          "jump_limit_label",
+          "jump_limit_service_kind",
           "archived",
           "version",
           "updated_at"
@@ -949,6 +1460,52 @@
             ],
             "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
             "title": "End Of Life On"
+          },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.",
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What is due at the limit, e.g. \"Reline\".",
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service whose latest entry restarts the count; default maintenance.",
+            "title": "Jump Limit Service Kind"
           },
           "kind": {
             "anyOf": [
@@ -1379,11 +1936,31 @@
           "component": {
             "$ref": "#/components/schemas/DueComponentOut"
           },
+          "counted_since": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The day of that service; null: all its jumps.",
+            "title": "Counted Since"
+          },
           "due_on": {
-            "description": "Still in time on this day; overdue after it.",
-            "format": "date",
-            "title": "Due On",
-            "type": "string"
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Still in time on this day; overdue after it. Null for a jump limit.",
+            "title": "Due On"
           },
           "interval_days": {
             "anyOf": [
@@ -1409,14 +1986,63 @@
             "description": "Set when the default interval applies.",
             "title": "Interval Source"
           },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The limit in jumps.",
+            "title": "Jump Limit"
+          },
+          "jumps_left": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Negative when over the limit.",
+            "title": "Jumps Left"
+          },
+          "jumps_used": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Jumps that used it since the latest service of `service_kind` (after that day), or all its jumps when there is none.",
+            "title": "Jumps Used"
+          },
           "kind": {
             "enum": [
               "reserve_repack",
               "service",
-              "end_of_life"
+              "end_of_life",
+              "jump_limit"
             ],
             "title": "Kind",
             "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A jump limit's own label, e.g. Reline.",
+            "title": "Label"
           },
           "service_kind": {
             "anyOf": [
@@ -1434,11 +2060,11 @@
                 "type": "null"
               }
             ],
-            "description": "The service entry it comes from; null for an end of life.",
+            "description": "The service entry it comes from (for a jump limit: the one that restarts the count); null for an end of life.",
             "title": "Service Kind"
           },
           "status": {
-            "description": "`soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
+            "description": "`soon`: due within 30 days, or for a jump limit within 10% of it or 25 jumps (whichever is fewer) or at it. Dates are judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
             "enum": [
               "overdue",
               "soon",
@@ -1868,6 +2494,19 @@
       },
       "JumpIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The aircraft as you write it, e.g. \"Cessna 208 SX-ABC\" (60 at most).",
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "anyOf": [
               {
@@ -2159,6 +2798,17 @@
       "JumpOut": {
         "description": "The owner's own record. `provenance` is always self-reported.",
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "enum": [
               "unspecified",
@@ -2363,6 +3013,7 @@
           "freefall_seconds",
           "components",
           "other_gear",
+          "aircraft",
           "notes",
           "links",
           "source",
@@ -2413,6 +3064,17 @@
       },
       "JumpSummaryOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "components": {
             "items": {
               "$ref": "#/components/schemas/ComponentRefOut"
@@ -2469,13 +3131,27 @@
           "location",
           "jump_type",
           "jump_number",
-          "components"
+          "components",
+          "aircraft"
         ],
         "title": "JumpSummaryOut",
         "type": "object"
       },
       "JumpUpdateIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The aircraft as you write it, e.g. \"Cessna 208 SX-ABC\" (60 at most).",
+            "title": "Aircraft"
+          },
           "altitude_datum": {
             "anyOf": [
               {
@@ -2719,6 +3395,67 @@
           }
         },
         "title": "JumpUpdateIn",
+        "type": "object"
+      },
+      "LatestBatchOut": {
+        "description": "Your latest change of many jumps; it can be undone once, for 24 hours.",
+        "properties": {
+          "batch_id": {
+            "format": "uuid",
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "can_undo": {
+            "title": "Can Undo",
+            "type": "boolean"
+          },
+          "changed": {
+            "title": "Changed",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "undo_until": {
+            "format": "date-time",
+            "title": "Undo Until",
+            "type": "string"
+          },
+          "undone": {
+            "title": "Undone",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "batch_id",
+          "created_at",
+          "changed",
+          "undo_until",
+          "undone",
+          "can_undo"
+        ],
+        "title": "LatestBatchOut",
+        "type": "object"
+      },
+      "LatestBatchStateOut": {
+        "properties": {
+          "latest": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LatestBatchOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "latest"
+        ],
+        "title": "LatestBatchStateOut",
         "type": "object"
       },
       "LicenceIn": {
@@ -5869,6 +6606,27 @@
         "title": "ReceiptOut",
         "type": "object"
       },
+      "RecentAircraftOut": {
+        "description": "A starting value for a new entry at this place; null when none is recorded.",
+        "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          }
+        },
+        "required": [
+          "aircraft"
+        ],
+        "title": "RecentAircraftOut",
+        "type": "object"
+      },
       "RecordsOut": {
         "properties": {
           "counts": {
@@ -7601,6 +8359,17 @@
       },
       "SampleRowOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "altitude_unit": {
             "anyOf": [
               {
@@ -7615,6 +8384,17 @@
               }
             ],
             "title": "Altitude Unit"
+          },
+          "deployment_altitude": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deployment Altitude"
           },
           "exit_altitude": {
             "anyOf": [
@@ -7683,6 +8463,17 @@
             ],
             "title": "Notes"
           },
+          "other_gear": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Gear"
+          },
           "place": {
             "title": "Place",
             "type": "string"
@@ -7711,7 +8502,10 @@
           "exit_altitude",
           "altitude_unit",
           "freefall_seconds",
-          "notes"
+          "notes",
+          "aircraft",
+          "deployment_altitude",
+          "other_gear"
         ],
         "title": "SampleRowOut",
         "type": "object"
@@ -8009,6 +8803,32 @@
           "publishing_restricted"
         ],
         "title": "SharingProfileOut",
+        "type": "object"
+      },
+      "SkippedOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "reason": {
+            "description": "`edited`: changed since it was shown; `not_found`/`gone`: no longer there, or its earlier place or gear was deleted; `invalid`: an earlier value is no longer accepted (e.g. its dropzone is no longer listed).",
+            "enum": [
+              "edited",
+              "not_found",
+              "gone",
+              "invalid"
+            ],
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "reason"
+        ],
+        "title": "SkippedOut",
         "type": "object"
       },
       "SourceOut": {
@@ -8331,6 +9151,31 @@
           "confirm"
         ],
         "title": "UndoIn",
+        "type": "object"
+      },
+      "UndoResultOut": {
+        "properties": {
+          "restored": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Restored",
+            "type": "array"
+          },
+          "skipped": {
+            "items": {
+              "$ref": "#/components/schemas/SkippedOut"
+            },
+            "title": "Skipped",
+            "type": "array"
+          }
+        },
+        "required": [
+          "restored",
+          "skipped"
+        ],
+        "title": "UndoResultOut",
         "type": "object"
       },
       "UpcomingOut": {
@@ -14425,7 +15270,7 @@
             }
           },
           {
-            "description": "Text in the place name or your private notes.",
+            "description": "Text in the place name, aircraft or your private notes.",
             "in": "query",
             "name": "q",
             "required": false,
@@ -14439,7 +15284,7 @@
                   "type": "null"
                 }
               ],
-              "description": "Text in the place name or your private notes.",
+              "description": "Text in the place name, aircraft or your private notes.",
               "title": "Q"
             }
           },
@@ -14813,6 +15658,467 @@
         ]
       }
     },
+    "/api/skydiver/v1/jumps/batch": {
+      "post": {
+        "description": "Set these values on these jumps, each compare-and-swap on its version.",
+        "operationId": "applyJumpBatch",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchApplyIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchResultOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Applyjumpbatch"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Apply Batch",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/batch/latest": {
+      "get": {
+        "operationId": "getLatestJumpBatch",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LatestBatchStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getlatestjumpbatch"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Latest Batch",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/batch/preview": {
+      "post": {
+        "description": "What setting these values on these jumps would change. Writes nothing.",
+        "operationId": "previewJumpBatch",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchPreviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchPreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Previewjumpbatch"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Preview Batch",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/batch/undo": {
+      "post": {
+        "description": "Put back what your latest change of many jumps replaced, where untouched since.",
+        "operationId": "undoJumpBatch",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchUndoIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UndoResultOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Undojumpbatch"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Undo Batch",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
     "/api/skydiver/v1/jumps/import": {
       "post": {
         "operationId": "importJumps",
@@ -14997,6 +16303,91 @@
                 }
               ],
               "title": "Col Notes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_aircraft",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Aircraft"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_unit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Unit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_deployment",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Deployment"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_gear",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Gear"
             }
           },
           {
@@ -15292,6 +16683,91 @@
                 }
               ],
               "title": "Col Notes"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_aircraft",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Aircraft"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_country",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Country"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_unit",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Unit"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_deployment",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Deployment"
+            }
+          },
+          {
+            "in": "query",
+            "name": "col_gear",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "pattern": "^(none|\\d{1,3})$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Col Gear"
             }
           },
           {
@@ -15960,6 +17436,152 @@
           }
         },
         "summary": "Get Numbering",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/recent-aircraft": {
+      "get": {
+        "description": "The aircraft of your newest jump at this place that recorded one.",
+        "operationId": "getRecentAircraft",
+        "parameters": [
+          {
+            "description": "A listed dropzone, merges included.",
+            "in": "query",
+            "name": "venue_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A listed dropzone, merges included.",
+              "title": "Venue Id"
+            }
+          },
+          {
+            "description": "One of your private places.",
+            "in": "query",
+            "name": "place_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "One of your private places.",
+              "title": "Place Id"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecentAircraftOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getrecentaircraft"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Recent Aircraft",
         "tags": [
           "skydiver-logbook"
         ]
@@ -20649,6 +22271,153 @@
           }
         },
         "summary": "Check Restore",
+        "tags": [
+          "skydiver-records"
+        ]
+      }
+    },
+    "/api/skydiver/v1/records/spreadsheet": {
+      "get": {
+        "description": "Your jumps as a spreadsheet (CSV, UTF-8 with a byte-order mark), oldest\nfirst, with the columns the logbook import reads.",
+        "operationId": "exportSpreadsheet",
+        "parameters": [
+          {
+            "description": "On or after.",
+            "in": "query",
+            "name": "from_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or after.",
+              "title": "From On"
+            }
+          },
+          {
+            "description": "On or before.",
+            "in": "query",
+            "name": "until_on",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "On or before.",
+              "title": "Until On"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Content Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__records__api__Problem"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          }
+        },
+        "summary": "Export Spreadsheet",
         "tags": [
           "skydiver-records"
         ]

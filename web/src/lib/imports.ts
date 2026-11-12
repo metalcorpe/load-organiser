@@ -7,7 +7,12 @@ export const IMPORT_FIELDS = [
 	'type',
 	'altitude',
 	'freefall',
-	'notes'
+	'notes',
+	'aircraft',
+	'country',
+	'unit',
+	'deployment',
+	'gear'
 ] as const;
 
 export type ImportField = (typeof IMPORT_FIELDS)[number];
@@ -19,7 +24,12 @@ export const FIELD_LABEL: Record<ImportField, string> = {
 	type: 'Type',
 	altitude: 'Exit altitude',
 	freefall: 'Freefall (seconds)',
-	notes: 'Notes'
+	notes: 'Notes',
+	aircraft: 'Aircraft',
+	country: 'Country (for each row)',
+	unit: 'Altitude unit (for each row)',
+	deployment: 'Deployment altitude',
+	gear: 'Gear used (as text)'
 };
 
 export const DATE_ORDER_LABEL: Record<string, string> = {
@@ -47,6 +57,11 @@ export const ROW_PROBLEMS: Record<string, string> = {
 	altitude_invalid: 'the altitude is not a whole number in the chosen unit, or is too high',
 	freefall_invalid: 'the freefall time is not between 0 and 600 seconds',
 	notes_too_long: 'the notes are longer than 2,000 characters',
+	aircraft_too_long: 'the aircraft is longer than 60 characters',
+	country_invalid: 'the country is not a two-letter country code such as PT',
+	altitude_unit_invalid: 'the altitude unit is not ft or m',
+	deployment_above_exit: 'the deployment altitude is above the exit altitude',
+	other_gear_too_long: 'the gear text is longer than 200 characters',
 	likely_duplicate: 'it looks like a jump already in your logbook',
 	repeated_in_file: 'its jump number is used by an earlier row of the file'
 };
