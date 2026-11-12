@@ -195,10 +195,14 @@
 								? 'Logged'
 								: event.kind === 'from_export'
 									? 'Restored from your export'
-									: 'Corrected')} on {formatDay(event.created_at.slice(0, 10))}</span
+									: 'batch' in event.detail
+										? 'Changed together with other jumps'
+										: 'undo_of' in event.detail
+											? 'A change of many jumps undone'
+											: 'Corrected')} on {formatDay(event.created_at.slice(0, 10))}</span
 					>
 				{#if event.kind === 'corrected'}
-					{#each Object.entries(event.detail) as [name, change] (name)}
+					{#each Object.entries(event.detail).filter(([name]) => name !== 'batch' && name !== 'undo_of') as [name, change] (name)}
 						<span class="meta"
 							>{FIELD[name] ?? name}: {typeof change === 'object' && change !== null && !name.endsWith('_id')
 								? `${(change as { from: unknown }).from ?? 'none'} → ${(change as { to: unknown }).to ?? 'none'}`

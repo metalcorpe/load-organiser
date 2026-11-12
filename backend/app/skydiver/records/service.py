@@ -503,7 +503,7 @@ def _rows(
             "owner_person_id": owner,
             "jump_id": ids[e.jump_id],
             "kind": e.kind,
-            "detail": policy.remap(e.detail, text_ids),
+            "detail": policy.jump_history(e.detail, text_ids),
             "created_at": e.created_at,
         }  # fmt: skip
         for e in r.jump_events

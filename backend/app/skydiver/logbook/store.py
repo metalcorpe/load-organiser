@@ -16,8 +16,10 @@ from sqlalchemy import (
     insert,
     or_,
     select,
+    type_coerce,
     update,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
@@ -28,6 +30,7 @@ from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 from app.skydiver.logbook.service import (
+    BatchRecord,
     ComponentRef,
     Criteria,
     Jump,
@@ -133,6 +136,47 @@ class SqlLogbookStore:
     def get_jump(self, actor: Actor, jump_id: uuid.UUID) -> Jump | None:
         row = get_owned(self._s, J, jump_id, actor)
         return self._with_components([row])[0] if row else None
+
+    def jumps_by_ids(self, actor: Actor, jump_ids: list[uuid.UUID]) -> list[Jump]:
+        if not jump_ids:
+            return []
+        rows = self._s.execute(
+            owned(J, actor).where(col(J.id).in_(jump_ids)).order_by(col(J.id))
+        ).scalars()
+        return self._with_components(list(rows))
+
+    def latest_batch(self, actor: Actor) -> BatchRecord | None:
+        detail = type_coerce(col(E.detail), JSONB())
+        latest = (
+            self._s.execute(
+                owned(E, actor)
+                .where(detail.has_key("batch"))
+                .order_by(col(E.id).desc())
+                .limit(1)
+            )
+            .scalars()
+            .first()
+        )
+        if latest is None:
+            return None
+        batch_id = str(latest.detail["batch"]["id"])
+        entries = self._s.execute(
+            owned(E, actor)
+            .where(detail["batch"]["id"].astext == batch_id)
+            .order_by(col(E.id))
+        ).scalars()
+        undone = self._s.execute(
+            select(func.count())
+            .select_from(E)
+            .where(col(E.owner_person_id) == actor.person_id)
+            .where(detail["undo_of"].astext == batch_id)
+        ).scalar_one()
+        return BatchRecord(
+            id=uuid.UUID(batch_id),
+            created_at=latest.created_at,
+            entries=[(e.jump_id, dict(e.detail)) for e in entries],
+            undone=bool(undone),
+        )
 
     def page(
         self,

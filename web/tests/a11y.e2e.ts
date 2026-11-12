@@ -96,8 +96,14 @@ async function world(): Promise<World> {
 			aircraft: 'Axe Caravan'
 		})
 	).jump;
+	// A change of many jumps: the Logbook's "Undo this change" card.
+	const batch = await created('/jumps/batch', bearer, {
+		jumps: [{ id: jump.id, version: jump.version }],
+		changes: { aircraft: 'Axe Otter' }
+	});
+	expect(batch.changed).toEqual([jump.id]);
 	const post = await created(`/me/jumps/${jump.id}/post`, bearer, {
-		jump_version: jump.version,
+		jump_version: jump.version + 1,
 		audience: 'public',
 		shares: ['type', 'venue']
 	});
@@ -145,6 +151,9 @@ async function world(): Promise<World> {
 				'/jumps',
 				'/jumps?type=belly&from=2026-01-01',
 				'/jumps?type=wingsuit',
+				// Select mode: ticks on the rows and what to change.
+				'/jumps?select=1',
+				'/jumps?select=1&type=belly',
 				'/jumps/new',
 				// The form at a place with a recorded aircraft: prefilled, with its hint.
 				`/jumps/new?venue=${venue.id}`,

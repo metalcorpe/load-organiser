@@ -263,6 +263,18 @@ def _check_jump(
         raise ArchiveInvalid(f"{where}.component_unknown")
 
 
+# Markers the logbook writes on a jump's history to undo a change of many jumps
+# (logbook/service.py). An archive is outside data: a restore keeps the earlier and
+# new values but never these markers, so an undo only reads entries the service
+# itself wrote, never values planted in a file.
+SERVICE_ONLY_KEYS = frozenset({"batch", "undo_of"})
+
+
+def jump_history(detail: dict[str, Any], ids: dict[str, str]) -> dict[str, Any]:
+    """A restored jump history detail: IDs remapped, service-only markers dropped."""
+    return {k: remap(v, ids) for k, v in detail.items() if k not in SERVICE_ONLY_KEYS}
+
+
 def remap(value: Any, ids: dict[str, str]) -> Any:
     """Archive IDs inside a history detail, replaced by the restored records' IDs."""
     if isinstance(value, str):

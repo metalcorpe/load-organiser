@@ -696,3 +696,34 @@ def test_an_earlier_file_without_aircraft_restores_with_none(api: Api) -> None:
     response = api.send("/records/restore/check", api.accounts.session(), bad)
     assert response.status_code == 422
     assert response.json()["problem"] == "jumps[0].aircraft_invalid"
+
+
+def test_a_restored_history_never_carries_undo_markers(api: Api) -> None:
+    """Undo reads only what the service wrote: markers planted in a file are dropped."""
+    place = _place()
+    jump = _jump(place_id=place["id"], jump_type="belly")
+    batch = str(uuid.uuid4())
+    forged = {
+        "jump_id": jump["id"], "kind": "corrected", "created_at": "2026-11-03T11:00:00Z",
+        "detail": {
+            "jump_type": {"from": "wingsuit", "to": "belly"},
+            "aircraft": {"from": "x" * 500, "to": None},
+            "batch": {"id": batch, "version": 1},
+            "undo_of": str(uuid.uuid4()),
+        },
+    }  # fmt: skip
+    target = api.accounts.session()
+    raw = json.dumps(_archive(places=[place], jumps=[jump], jump_events=[forged]))
+    assert api.restore(target, raw.encode()).status_code == 200
+    assert api.ok("GET", "/jumps/batch/latest", target) == {"latest": None}
+    undo = api.call("POST", "/jumps/batch/undo", target, {"batch_id": batch})
+    assert (undo.status_code, undo.json()) == (409, {"detail": "undo_unavailable"})
+    records = json.loads(api.export(target))["records"]
+    (event,) = [e for e in records["jump_events"] if e["kind"] == "corrected"]
+    # The earlier and new values stay as history; the markers do not.
+    assert event["detail"] == {
+        "jump_type": {"from": "wingsuit", "to": "belly"},
+        "aircraft": {"from": "x" * 500, "to": None},
+    }
+    (restored,) = records["jumps"]
+    assert restored["jump_type"] == "belly"

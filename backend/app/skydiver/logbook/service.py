@@ -54,6 +54,16 @@ class JumpDeleted(Exception):
     code = "jump_deleted"
 
 
+class UndoUnavailable(Exception):
+    """Not the owner's latest change of many jumps, or older than the undo window."""
+
+    code = "undo_unavailable"
+
+
+class AlreadyUndone(Exception):
+    code = "already_undone"
+
+
 class LikelyDuplicate(Exception):
     code = "likely_duplicate"
 
@@ -201,6 +211,49 @@ class PrintPage:
     before_freefall_seconds: int
 
 
+@dataclass(frozen=True)
+class BatchPreview:
+    items: list[tuple[JumpView, bool]]  # each found jump, and whether it would change
+    missing: int  # asked for but not the owner's (absent and foreign alike)
+    location: Location | None  # the new place, when the place changes
+    components: list[ComponentRef] | None  # the new gear set, when gear changes
+
+
+@dataclass(frozen=True)
+class BatchResult:
+    batch_id: uuid.UUID | None  # None when no jump changed
+    changed: list[uuid.UUID]
+    unchanged: list[uuid.UUID]  # already held these values
+    skipped: list[tuple[uuid.UUID, str]]  # (jump, "edited" | "not_found")
+
+
+@dataclass(frozen=True)
+class BatchRecord:
+    """One change of many jumps, read back from the jumps' own history."""
+
+    id: uuid.UUID
+    created_at: datetime
+    # (jump, the `corrected` detail recorded on it) for every jump it changed.
+    entries: list[tuple[uuid.UUID, dict[str, Any]]]
+    undone: bool
+
+
+@dataclass(frozen=True)
+class LatestBatch:
+    id: uuid.UUID
+    created_at: datetime
+    changed: int
+    undo_until: datetime
+    undone: bool
+    can_undo: bool
+
+
+@dataclass(frozen=True)
+class UndoResult:
+    restored: list[uuid.UUID]
+    skipped: list[tuple[uuid.UUID, str]]  # (jump, "edited" | "gone" | "invalid")
+
+
 class LogbookStore(Protocol):
     def lock_owner(self, actor: Actor) -> None:
         """Serialise this person's jump-limit checks (manual creates and imports)."""
@@ -209,6 +262,14 @@ class LogbookStore(Protocol):
     def count_jumps(self, actor: Actor) -> int: ...
     def receipt(self, actor: Actor, client_key: uuid.UUID) -> Receipt | None: ...
     def get_jump(self, actor: Actor, jump_id: uuid.UUID) -> Jump | None: ...
+    def jumps_by_ids(self, actor: Actor, jump_ids: list[uuid.UUID]) -> list[Jump]:
+        """The owner's own jumps among these IDs; others are omitted."""
+        ...
+
+    def latest_batch(self, actor: Actor) -> BatchRecord | None:
+        """The owner's newest change of many jumps, from the jumps' history."""
+        ...
+
     def page(
         self,
         actor: Actor,
@@ -619,6 +680,227 @@ class LogbookService:
                 raise EditConflict()
             store.delete_jump(actor, jump_id, expected_version=current.version)
 
+    # -- many jumps at once ---------------------------------------------------------
+
+    def preview_batch(
+        self, actor: Actor, jump_ids: list[uuid.UUID], fields: dict[str, Any]
+    ) -> BatchPreview:
+        """What a change of many jumps would do; writes nothing."""
+        ids = _batch_ids(jump_ids)
+        values, component_ids = self._batch_values(fields)
+        values = self._located(actor, values)
+        with self._stores() as store:
+            self._check_place(store, actor, values.get("place_id"))
+            self._check_components(store, actor, component_ids)
+            rows = store.jumps_by_ids(actor, ids)
+            views = self._views(store, actor, rows)
+            location = self._location_of(store, actor, values)
+            components = (
+                store.components(actor, component_ids)
+                if component_ids is not None
+                else None
+            )
+        found = {v.jump.id: v for v in views}
+        items = [
+            (found[i], _batch_change(found[i].jump, values, component_ids)[2])
+            for i in ids
+            if i in found
+        ]
+        return BatchPreview(items, len(ids) - len(items), location, components)
+
+    def apply_batch(
+        self, actor: Actor, versions: dict[uuid.UUID, int], fields: dict[str, Any]
+    ) -> BatchResult:
+        """Change many jumps, each compare-and-swap on the version it was shown with.
+
+        A jump edited (or deleted) since is skipped, never overwritten. Each change
+        is a `corrected` entry in that jump's own history, like a single edit, with
+        the batch ID and the version it produced: the undo reads them back from there.
+        """
+        ids = _batch_ids(list(versions))
+        values, component_ids = self._batch_values(fields)
+        values = self._located(actor, values)
+        batch_id = uuid.uuid7()
+        now = self._clock()
+        changed: list[uuid.UUID] = []
+        unchanged: list[uuid.UUID] = []
+        skipped: list[tuple[uuid.UUID, str]] = []
+        with self._stores() as store:
+            self._check_place(store, actor, values.get("place_id"))
+            self._check_components(store, actor, component_ids)
+            found = {j.id: j for j in store.jumps_by_ids(actor, ids)}
+            for jump_id in ids:
+                current = found.get(jump_id)
+                if current is None:
+                    skipped.append((jump_id, "not_found"))
+                    continue
+                if current.version != versions[jump_id]:
+                    skipped.append((jump_id, "edited"))
+                    continue
+                diff, links, any_change = _batch_change(current, values, component_ids)
+                if not any_change:
+                    unchanged.append(jump_id)
+                    continue
+                try:
+                    store.update_jump(
+                        actor,
+                        jump_id,
+                        diff,
+                        component_ids if links else None,
+                        now,
+                        expected_version=current.version,
+                    )
+                except EditConflict:  # edited between the read and this update
+                    skipped.append((jump_id, "edited"))
+                    continue
+                before = _values_of(current)
+                detail: dict[str, Any] = {
+                    k: {"from": _plain(before[k]), "to": _plain(diff[k])}
+                    for k in sorted(diff)
+                }
+                batch: dict[str, Any] = {
+                    "id": str(batch_id),
+                    "version": current.version + 1,
+                }
+                if links:
+                    detail["equipment"] = "changed"
+                    batch["components"] = sorted(map(str, current.component_ids))
+                detail["batch"] = batch
+                store.record(actor, jump_id, "corrected", detail, now)
+                if store.withdraw_post(actor, jump_id, set(diff)):
+                    store.record(
+                        actor,
+                        jump_id,
+                        "post_withdrawn",
+                        {"reason": "shared_field_changed"},
+                        now,
+                    )
+                changed.append(jump_id)
+        return BatchResult(batch_id if changed else None, changed, unchanged, skipped)
+
+    def latest_batch(self, actor: Actor) -> LatestBatch | None:
+        with self._stores() as store:
+            found = store.latest_batch(actor)
+        if found is None:
+            return None
+        until = found.created_at + timedelta(hours=policy.BATCH_UNDO_HOURS)
+        return LatestBatch(
+            id=found.id,
+            created_at=found.created_at,
+            changed=len(found.entries),
+            undo_until=until,
+            undone=found.undone,
+            can_undo=not found.undone and self._clock() < until,
+        )
+
+    def undo_batch(self, actor: Actor, batch_id: uuid.UUID) -> UndoResult:
+        """Put back the earlier values, only on jumps not edited since the change.
+
+        Only the owner's latest change of many jumps, within BATCH_UNDO_HOURS, and
+        once. Each jump is compare-and-swap on the version the change produced, and
+        the undo is a `corrected` entry in its history like any edit.
+        """
+        now = self._clock()
+        restored: list[uuid.UUID] = []
+        skipped: list[tuple[uuid.UUID, str]] = []
+        with self._stores() as store:
+            found = store.latest_batch(actor)
+            if found is None or found.id != batch_id:
+                raise UndoUnavailable()  # another person's, older or absent alike
+            if found.undone:
+                raise AlreadyUndone()
+            if now >= found.created_at + timedelta(hours=policy.BATCH_UNDO_HOURS):
+                raise UndoUnavailable()
+            rows = {
+                j.id: j
+                for j in store.jumps_by_ids(
+                    actor, [jump_id for jump_id, _ in found.entries]
+                )
+            }
+            for jump_id, detail in found.entries:
+                current = rows.get(jump_id)
+                if current is None:
+                    skipped.append((jump_id, "gone"))
+                    continue
+                if current.version != detail["batch"]["version"]:
+                    skipped.append((jump_id, "edited"))
+                    continue
+                # The earlier values pass the same checks as an edit: a dropzone
+                # resolves through merges and must still be listed, a private place
+                # and the gear must still be the owner's, every value must be valid.
+                try:
+                    earlier, components = self._values(_earlier(detail), partial=True)
+                    earlier = self._located(actor, earlier)
+                    self._check_place(store, actor, earlier.get("place_id"))
+                    self._check_components(store, actor, components)
+                except RuleError as error:
+                    gone = error.code in ("place_unknown", "component_unknown")
+                    skipped.append((jump_id, "gone" if gone else "invalid"))
+                    continue
+                before = _values_of(current)
+                diff = {k: v for k, v in earlier.items() if before.get(k) != v}
+                links = components is not None and set(components) != set(
+                    current.component_ids
+                )
+                store.update_jump(
+                    actor,
+                    jump_id,
+                    diff,
+                    components if links else None,
+                    now,
+                    expected_version=current.version,
+                )
+                undo: dict[str, Any] = {
+                    k: {"from": _plain(before[k]), "to": _plain(diff[k])}
+                    for k in sorted(diff)
+                }
+                if links:
+                    undo["equipment"] = "changed"
+                undo["undo_of"] = str(batch_id)
+                store.record(actor, jump_id, "corrected", undo, now)
+                if store.withdraw_post(actor, jump_id, set(diff)):
+                    store.record(
+                        actor,
+                        jump_id,
+                        "post_withdrawn",
+                        {"reason": "shared_field_changed"},
+                        now,
+                    )
+                restored.append(jump_id)
+        return UndoResult(restored, skipped)
+
+    def _batch_values(
+        self, raw: dict[str, Any]
+    ) -> tuple[dict[str, Any], list[uuid.UUID] | None]:
+        """The values every chosen jump gets: type, place, aircraft and gear only."""
+        allowed = {"jump_type", "venue_id", "place_id", "aircraft", "component_ids"}
+        if set(raw) - allowed:
+            raise RuleError("batch_field_invalid")
+        if "jump_type" in raw and raw["jump_type"] is None:
+            raise RuleError("jump_type_invalid")
+        values, component_ids = self._values(raw, partial=True)
+        if not values and component_ids is None:
+            raise RuleError("nothing_to_change")
+        return values, component_ids
+
+    def _location_of(
+        self, store: LogbookStore, actor: Actor, values: dict[str, Any]
+    ) -> Location | None:
+        """The place a change of many jumps sets, named; None when it keeps places."""
+        venue_id, place_id = values.get("venue_id"), values.get("place_id")
+        if venue_id is not None:
+            venue = self._directory.public_venues([venue_id]).get(venue_id)
+            if venue is None:
+                return None
+            closed = venue.status.value == "closed"
+            return Location("venue", venue.id, venue.name, venue.country, closed)
+        if place_id is not None:
+            place = next(iter(store.places(actor, [place_id])), None)
+            if place is None:
+                return None
+            return Location("place", place.id, place.name, place.country)
+        return None
+
     # -- helpers ----------------------------------------------------------------------
 
     def _values(
@@ -774,6 +1056,49 @@ def _values_of(jump: Jump) -> dict[str, Any]:
         "notes": jump.notes,
         "links": list(jump.links),
     }
+
+
+def _batch_ids(jump_ids: list[uuid.UUID]) -> list[uuid.UUID]:
+    ids = list(dict.fromkeys(jump_ids))
+    if not ids:
+        raise RuleError("jumps_required")
+    if len(ids) > policy.BATCH_MAX:
+        raise RuleError("too_many_jumps")
+    return ids
+
+
+def _batch_change(
+    jump: Jump, values: dict[str, Any], component_ids: list[uuid.UUID] | None
+) -> tuple[dict[str, Any], bool, bool]:
+    """The values that differ on this jump, whether its gear changes, and either."""
+    before = _values_of(jump)
+    diff = {k: v for k, v in values.items() if before.get(k) != v}
+    links = component_ids is not None and set(component_ids) != set(jump.component_ids)
+    return diff, links, bool(diff) or links
+
+
+_UUID_FACTS = ("venue_id", "place_id")
+
+
+def _earlier(detail: dict[str, Any]) -> dict[str, Any]:
+    """The values a change of many jumps replaced, from its history entry, as raw
+    fields for `_values` (which checks them like any edit)."""
+    out: dict[str, Any] = {}
+    try:
+        for name in ("jump_type", "venue_id", "place_id", "aircraft"):
+            change = detail.get(name)
+            if isinstance(change, dict) and "from" in change:
+                value = change["from"]
+                out[name] = (
+                    uuid.UUID(value)
+                    if name in _UUID_FACTS and value is not None
+                    else value
+                )
+        if "components" in detail["batch"]:
+            out["component_ids"] = [uuid.UUID(c) for c in detail["batch"]["components"]]
+    except TypeError, ValueError, AttributeError:
+        raise RuleError("batch_entry_invalid") from None
+    return out
 
 
 def _check_filter(search: JumpFilter) -> None:

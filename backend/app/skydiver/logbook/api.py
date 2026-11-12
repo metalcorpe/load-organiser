@@ -15,7 +15,7 @@ from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, Query, Response, status
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
@@ -23,6 +23,9 @@ from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.logbook.policy import JumpType
 from app.skydiver.logbook.service import (
+    AlreadyUndone,
+    BatchPreview,
+    BatchResult,
     JumpDeleted,
     JumpDetail,
     JumpFilter,
@@ -34,6 +37,8 @@ from app.skydiver.logbook.service import (
     NotFound,
     NumberedRef,
     PrintPage,
+    UndoResult,
+    UndoUnavailable,
 )
 
 PREFIX = "/api/skydiver/v1"
@@ -243,6 +248,99 @@ class RecentAircraftOut(BaseModel):
     aircraft: str | None
 
 
+class BatchChangesIn(BaseModel):
+    """What every chosen jump gets. Leave a key out to keep each jump's own value;
+    `aircraft: null` clears it and `component_ids: []` clears the gear used."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    jump_type: JumpTypeName | None = None
+    venue_id: uuid.UUID | None = Field(default=None, description="A listed dropzone.")
+    place_id: uuid.UUID | None = Field(
+        default=None, description="One of your private places."
+    )
+    aircraft: Annotated[str, Field(max_length=120)] | None = None
+    component_ids: Annotated[list[uuid.UUID], Field(max_length=20)] | None = Field(
+        default=None, description="Replaces the set of your own components used."
+    )
+
+
+class BatchPreviewIn(BaseModel):
+    jump_ids: Annotated[list[uuid.UUID], Field(min_length=1, max_length=400)] = Field(
+        description="Your jumps to change, at most 200."
+    )
+    changes: BatchChangesIn
+
+
+class BatchJumpIn(BaseModel):
+    id: uuid.UUID
+    version: Version = Field(description="The version the preview showed.")
+
+
+class BatchApplyIn(BaseModel):
+    jumps: Annotated[list[BatchJumpIn], Field(min_length=1, max_length=400)] = Field(
+        description="At most 200; a jump changed since its version is skipped."
+    )
+    changes: BatchChangesIn
+
+
+class BatchUndoIn(BaseModel):
+    batch_id: uuid.UUID
+
+
+class BatchItemOut(JumpSummaryOut):
+    version: int
+    will_change: bool = Field(description="False when it already has these values.")
+
+
+class BatchPreviewOut(BaseModel):
+    """What the change would do. Nothing is written."""
+
+    items: list[BatchItemOut]
+    missing: int = Field(description="Chosen jumps that are not in your logbook.")
+    changing: int = Field(description="Jumps that would change.")
+    location: LocationOut | None = Field(description="The new place, if it changes.")
+    components: list[ComponentRefOut] | None = Field(
+        description="The new gear used, if it changes."
+    )
+
+
+class SkippedOut(BaseModel):
+    id: uuid.UUID
+    reason: Literal["edited", "not_found", "gone", "invalid"] = Field(
+        description="`edited`: changed since it was shown; `not_found`/`gone`: no longer"
+        " there, or its earlier place or gear was deleted; `invalid`: an earlier value"
+        " is no longer accepted (e.g. its dropzone is no longer listed)."
+    )
+
+
+class BatchResultOut(BaseModel):
+    batch_id: uuid.UUID | None = Field(description="Null when no jump changed.")
+    changed: list[uuid.UUID]
+    unchanged: list[uuid.UUID] = Field(description="Already had these values.")
+    skipped: list[SkippedOut]
+
+
+class LatestBatchOut(BaseModel):
+    """Your latest change of many jumps; it can be undone once, for 24 hours."""
+
+    batch_id: uuid.UUID
+    created_at: datetime
+    changed: int
+    undo_until: datetime
+    undone: bool
+    can_undo: bool
+
+
+class LatestBatchStateOut(BaseModel):
+    latest: LatestBatchOut | None
+
+
+class UndoResultOut(BaseModel):
+    restored: list[uuid.UUID]
+    skipped: list[SkippedOut]
+
+
 class JumpEventOut(BaseModel):
     kind: str
     detail: dict[str, Any]
@@ -321,6 +419,53 @@ def _summary(view: JumpView) -> JumpSummaryOut:
     )
 
 
+def _batch_preview(preview: BatchPreview) -> BatchPreviewOut:
+    items = [
+        BatchItemOut(
+            **_summary(view).model_dump(), version=view.jump.version, will_change=change
+        )
+        for view, change in preview.items
+    ]
+    loc = preview.location
+    return BatchPreviewOut(
+        items=items,
+        missing=preview.missing,
+        changing=sum(1 for i in items if i.will_change),
+        location=LocationOut(
+            kind="venue" if loc.kind == "venue" else "place",
+            id=loc.id,
+            name=loc.name,
+            country=loc.country,
+            closed=loc.closed,
+        )
+        if loc
+        else None,
+        components=[
+            ComponentRefOut(id=c.id, kind=c.kind, label=c.label, archived=c.archived)
+            for c in preview.components
+        ]
+        if preview.components is not None
+        else None,
+    )
+
+
+def _skipped(items: list[tuple[uuid.UUID, str]]) -> list[SkippedOut]:
+    return [SkippedOut(id=i, reason=r) for i, r in items]  # type: ignore[arg-type]
+
+
+def _batch_result(result: BatchResult) -> BatchResultOut:
+    return BatchResultOut(
+        batch_id=result.batch_id,
+        changed=result.changed,
+        unchanged=result.unchanged,
+        skipped=_skipped(result.skipped),
+    )
+
+
+def _undo_result(result: UndoResult) -> UndoResultOut:
+    return UndoResultOut(restored=result.restored, skipped=_skipped(result.skipped))
+
+
 def _print_page(page: PrintPage) -> PrintPageOut:
     return PrintPageOut(
         items=[_jump(v) for v in page.items],
@@ -353,7 +498,9 @@ def _problem(error: Exception) -> JSONResponse:
     elif isinstance(error, LikelyDuplicate):
         code = status.HTTP_409_CONFLICT
         body = {"detail": error.code, "duplicate_of": str(error.duplicate_of)}
-    elif isinstance(error, LimitReached | KeyReused | EditConflict):
+    elif isinstance(
+        error, LimitReached | KeyReused | EditConflict | UndoUnavailable | AlreadyUndone
+    ):
         code, body = status.HTTP_409_CONFLICT, {"detail": error.code}
     elif isinstance(error, JumpDeleted):
         code, body = status.HTTP_410_GONE, {"detail": error.code}
@@ -385,6 +532,8 @@ def create_router(
         EditConflict,
         JumpDeleted,
         DirectoryRuleError,
+        UndoUnavailable,
+        AlreadyUndone,
     )
 
     @router.get(
@@ -502,6 +651,79 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return RecentAircraftOut(aircraft=found)
+
+    # -- many jumps at once (before /jumps/{jump_id}) ------------------------------
+
+    @router.post(
+        "/jumps/batch/preview",
+        operation_id="previewJumpBatch",
+        response_model=BatchPreviewOut,
+        dependencies=deps,
+    )
+    def preview_batch(
+        body: BatchPreviewIn, actor: Reader
+    ) -> BatchPreviewOut | JSONResponse:
+        """What setting these values on these jumps would change. Writes nothing."""
+        try:
+            preview = service().preview_batch(
+                actor, body.jump_ids, body.changes.model_dump(exclude_unset=True)
+            )
+        except Errors as error:
+            return _problem(error)
+        return _batch_preview(preview)
+
+    @router.post(
+        "/jumps/batch",
+        operation_id="applyJumpBatch",
+        response_model=BatchResultOut,
+        dependencies=deps,
+    )
+    def apply_batch(body: BatchApplyIn, actor: Writer) -> BatchResultOut | JSONResponse:
+        """Set these values on these jumps, each compare-and-swap on its version."""
+        versions: dict[uuid.UUID, int] = {}
+        for item in body.jumps:
+            versions.setdefault(item.id, item.version)
+        try:
+            result = service().apply_batch(
+                actor, versions, body.changes.model_dump(exclude_unset=True)
+            )
+        except Errors as error:
+            return _problem(error)
+        return _batch_result(result)
+
+    @router.get(
+        "/jumps/batch/latest",
+        operation_id="getLatestJumpBatch",
+        response_model=LatestBatchStateOut,
+        dependencies=deps,
+    )
+    def latest_batch(actor: Reader) -> LatestBatchStateOut:
+        found = service().latest_batch(actor)
+        return LatestBatchStateOut(
+            latest=LatestBatchOut(
+                batch_id=found.id,
+                created_at=found.created_at,
+                changed=found.changed,
+                undo_until=found.undo_until,
+                undone=found.undone,
+                can_undo=found.can_undo,
+            )
+            if found
+            else None
+        )
+
+    @router.post(
+        "/jumps/batch/undo",
+        operation_id="undoJumpBatch",
+        response_model=UndoResultOut,
+        dependencies=deps,
+    )
+    def undo_batch(body: BatchUndoIn, actor: Writer) -> UndoResultOut | JSONResponse:
+        """Put back what your latest change of many jumps replaced, where untouched since."""
+        try:
+            return _undo_result(service().undo_batch(actor, body.batch_id))
+        except Errors as error:
+            return _problem(error)
 
     @router.post(
         "/jumps",

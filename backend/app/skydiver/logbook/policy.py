@@ -23,6 +23,10 @@ LINK_MAX = 2048
 OTHER_GEAR_MAX = 200
 AIRCRAFT_MAX = 60
 COMPONENTS_MAX = 10  # per jump
+# Changing many jumps at once: at most this many per change, and its undo stays
+# open until the next such change or for this long.
+BATCH_MAX = 200
+BATCH_UNDO_HOURS = 24
 JUMP_NUMBER_MAX = 1_000_000
 FREEFALL_MAX_SECONDS = 600
 ALTITUDE_MAX = {"ft": 45_000, "m": 13_700}

@@ -201,6 +201,194 @@ export type BaselinePreviewOut = {
 };
 
 /**
+ * BatchApplyIn
+ */
+export type BatchApplyIn = {
+    changes: BatchChangesIn;
+    /**
+     * Jumps
+     *
+     * At most 200; a jump changed since its version is skipped.
+     */
+    jumps: Array<BatchJumpIn>;
+};
+
+/**
+ * BatchChangesIn
+ *
+ * What every chosen jump gets. Leave a key out to keep each jump's own value;
+ * `aircraft: null` clears it and `component_ids: []` clears the gear used.
+ */
+export type BatchChangesIn = {
+    /**
+     * Aircraft
+     */
+    aircraft?: string | null;
+    /**
+     * Component Ids
+     *
+     * Replaces the set of your own components used.
+     */
+    component_ids?: Array<string> | null;
+    /**
+     * Jump Type
+     */
+    jump_type?: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other' | null;
+    /**
+     * Place Id
+     *
+     * One of your private places.
+     */
+    place_id?: string | null;
+    /**
+     * Venue Id
+     *
+     * A listed dropzone.
+     */
+    venue_id?: string | null;
+};
+
+/**
+ * BatchItemOut
+ */
+export type BatchItemOut = {
+    /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
+     * Components
+     */
+    components: Array<ComponentRefOut>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Number
+     */
+    jump_number: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    location: LocationOut;
+    /**
+     * Version
+     */
+    version: number;
+    /**
+     * Will Change
+     *
+     * False when it already has these values.
+     */
+    will_change: boolean;
+};
+
+/**
+ * BatchJumpIn
+ */
+export type BatchJumpIn = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Version
+     *
+     * The version the preview showed.
+     */
+    version: number;
+};
+
+/**
+ * BatchPreviewIn
+ */
+export type BatchPreviewIn = {
+    changes: BatchChangesIn;
+    /**
+     * Jump Ids
+     *
+     * Your jumps to change, at most 200.
+     */
+    jump_ids: Array<string>;
+};
+
+/**
+ * BatchPreviewOut
+ *
+ * What the change would do. Nothing is written.
+ */
+export type BatchPreviewOut = {
+    /**
+     * Changing
+     *
+     * Jumps that would change.
+     */
+    changing: number;
+    /**
+     * Components
+     *
+     * The new gear used, if it changes.
+     */
+    components: Array<ComponentRefOut> | null;
+    /**
+     * Items
+     */
+    items: Array<BatchItemOut>;
+    /**
+     * The new place, if it changes.
+     */
+    location: LocationOut | null;
+    /**
+     * Missing
+     *
+     * Chosen jumps that are not in your logbook.
+     */
+    missing: number;
+};
+
+/**
+ * BatchResultOut
+ */
+export type BatchResultOut = {
+    /**
+     * Batch Id
+     *
+     * Null when no jump changed.
+     */
+    batch_id: string | null;
+    /**
+     * Changed
+     */
+    changed: Array<string>;
+    /**
+     * Skipped
+     */
+    skipped: Array<SkippedOut>;
+    /**
+     * Unchanged
+     *
+     * Already had these values.
+     */
+    unchanged: Array<string>;
+};
+
+/**
+ * BatchUndoIn
+ */
+export type BatchUndoIn = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+};
+
+/**
  * BroughtForwardOut
  */
 export type BroughtForwardOut = {
@@ -1362,6 +1550,45 @@ export type JumpUpdateIn = {
      * Version
      */
     version?: number | null;
+};
+
+/**
+ * LatestBatchOut
+ *
+ * Your latest change of many jumps; it can be undone once, for 24 hours.
+ */
+export type LatestBatchOut = {
+    /**
+     * Batch Id
+     */
+    batch_id: string;
+    /**
+     * Can Undo
+     */
+    can_undo: boolean;
+    /**
+     * Changed
+     */
+    changed: number;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Undo Until
+     */
+    undo_until: string;
+    /**
+     * Undone
+     */
+    undone: boolean;
+};
+
+/**
+ * LatestBatchStateOut
+ */
+export type LatestBatchStateOut = {
+    latest: LatestBatchOut | null;
 };
 
 /**
@@ -3940,6 +4167,22 @@ export type SharingProfileOut = {
 };
 
 /**
+ * SkippedOut
+ */
+export type SkippedOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Reason
+     *
+     * `edited`: changed since it was shown; `not_found`/`gone`: no longer there, or its earlier place or gear was deleted; `invalid`: an earlier value is no longer accepted (e.g. its dropzone is no longer listed).
+     */
+    reason: 'edited' | 'not_found' | 'gone' | 'invalid';
+};
+
+/**
  * SourceOut
  *
  * The shareable values of the jump now; preview them before publishing.
@@ -4116,6 +4359,20 @@ export type UndoIn = {
      * Must be true: every jump of the import is deleted, even if edited.
      */
     confirm: boolean;
+};
+
+/**
+ * UndoResultOut
+ */
+export type UndoResultOut = {
+    /**
+     * Restored
+     */
+    restored: Array<string>;
+    /**
+     * Skipped
+     */
+    skipped: Array<SkippedOut>;
 };
 
 /**
@@ -7294,6 +7551,218 @@ export type CreateJumpResponses = {
 };
 
 export type CreateJumpResponse = CreateJumpResponses[keyof CreateJumpResponses];
+
+export type ApplyJumpBatchData = {
+    body: BatchApplyIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch';
+};
+
+export type ApplyJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Applyjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type ApplyJumpBatchError = ApplyJumpBatchErrors[keyof ApplyJumpBatchErrors];
+
+export type ApplyJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: BatchResultOut;
+};
+
+export type ApplyJumpBatchResponse = ApplyJumpBatchResponses[keyof ApplyJumpBatchResponses];
+
+export type GetLatestJumpBatchData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/latest';
+};
+
+export type GetLatestJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getlatestjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetLatestJumpBatchError = GetLatestJumpBatchErrors[keyof GetLatestJumpBatchErrors];
+
+export type GetLatestJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: LatestBatchStateOut;
+};
+
+export type GetLatestJumpBatchResponse = GetLatestJumpBatchResponses[keyof GetLatestJumpBatchResponses];
+
+export type PreviewJumpBatchData = {
+    body: BatchPreviewIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/preview';
+};
+
+export type PreviewJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Previewjumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type PreviewJumpBatchError = PreviewJumpBatchErrors[keyof PreviewJumpBatchErrors];
+
+export type PreviewJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: BatchPreviewOut;
+};
+
+export type PreviewJumpBatchResponse = PreviewJumpBatchResponses[keyof PreviewJumpBatchResponses];
+
+export type UndoJumpBatchData = {
+    body: BatchUndoIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/batch/undo';
+};
+
+export type UndoJumpBatchErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Undojumpbatch
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type UndoJumpBatchError = UndoJumpBatchErrors[keyof UndoJumpBatchErrors];
+
+export type UndoJumpBatchResponses = {
+    /**
+     * Successful Response
+     */
+    200: UndoResultOut;
+};
+
+export type UndoJumpBatchResponse = UndoJumpBatchResponses[keyof UndoJumpBatchResponses];
 
 export type ImportJumpsData = {
     /**

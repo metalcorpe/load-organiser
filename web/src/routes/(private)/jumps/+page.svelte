@@ -7,12 +7,14 @@
 	import { localToday } from '#lib/currency.ts';
 	import { fieldsFor } from '#lib/field-errors.ts';
 	import { dueSoon } from '#lib/gear.ts';
+	import { KIND_LABEL } from '#lib/gear.ts';
+	import { appliedText, batchHeading, batchMessage, undoneText } from '#lib/jump-batch.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay, formatRange, statusLabel } from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
-	let { data }: PageProps = $props();
+	let { data, form }: PageProps = $props();
 	const n = (value: number) => value.toLocaleString('en-GB');
 	const pick = (loc: { kind: 'venue' | 'place'; id: string }) => `/jumps/new?${loc.kind}=${loc.id}`;
 	const first = $derived(data.recent[0] ?? null);
@@ -37,6 +39,48 @@
 		today = localToday();
 	});
 	const due = $derived(dueSoon(data.due, today));
+	// "Select" mode keeps the filters; leaving it keeps them too.
+	const selectHref = (cursor?: string) => {
+		const href = jumpsHref(data.filters, cursor);
+		return `${href}${href.includes('?') ? '&' : '?'}select=1`;
+	};
+	const actionQuery = $derived(selectHref().replace(/^\/jumps\?/, ''));
+	const batchForm = $derived(form && form.form === 'batch' ? form : null);
+	const preview = $derived(batchForm && 'preview' in batchForm ? batchForm.preview : null);
+	const choice = $derived(batchForm?.choice ?? null);
+	const picked = $derived(new Set(batchForm?.ids ?? []));
+	const pickedGear = $derived(new Set(choice?.component_ids ?? []));
+	const batchError = $derived(
+		form && 'error' in form && (form.form === 'batch' || form.form === 'apply' || form.form === 'undo')
+			? batchMessage(form.error)
+			: undefined
+	);
+	const changing = $derived(preview ? preview.items.filter((i) => i.will_change) : []);
+	const heading = $derived(
+		preview && choice
+			? batchHeading(preview.changing, {
+					jumpType: choice.jump_type || undefined,
+					place: choice.at
+						? (preview.location?.name ?? 'the chosen place') +
+							(preview.location?.kind === 'place' ? ' (private place)' : '')
+						: undefined,
+					aircraft: choice.set_aircraft ? choice.aircraft || null : undefined,
+					gear: choice.set_gear ? (preview.components ?? []).map((c) => c.label) : undefined
+				})
+			: ''
+	);
+	const params = $derived(page.url.searchParams);
+	const count = (name: string) => Number(params.get(name) ?? '0') || 0;
+	const applied = $derived(
+		params.has('changed') ? appliedText(count('changed'), count('skipped'), count('unchanged')) : null
+	);
+	const undone = $derived(
+		params.has('restored') ? undoneText(count('restored'), count('not_restored')) : null
+	);
+	const undoUntil = (instant: string) =>
+		new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' }).format(
+			new Date(instant)
+		);
 	const described = (name: string) =>
 		invalid.has(name) ? { 'aria-invalid': 'true' as const, 'aria-describedby': 'filter-error' } : {};
 </script>
@@ -54,6 +98,24 @@
 
 {#if filterError}
 	<p class="form-error" role="alert" id="filter-error">{jumpMessage(filterError)}</p>
+{/if}
+{#if applied}<p class="ok" role="status">{applied}</p>{/if}
+{#if undone}<p class="ok" role="status">{undone}</p>{/if}
+{#if data.latestBatch}
+	<section class="undo" aria-labelledby="undo-heading">
+		<h2 id="undo-heading">Your last change of many jumps</h2>
+		<p>
+			It changed {data.latestBatch.changed}
+			{data.latestBatch.changed === 1 ? 'jump' : 'jumps'}. You can undo it until
+			{undoUntil(data.latestBatch.undo_until)}, or until your next change of many jumps. Jumps you
+			edited since are left as they are.
+		</p>
+		{#if form && form.form === 'undo' && batchError}<p class="form-error" role="alert">{batchError}</p>{/if}
+		<form method="POST" action="?/undo">
+			<input type="hidden" name="batch_id" value={data.latestBatch.batch_id} />
+			<button class="button secondary" type="submit">Undo this change</button>
+		</form>
+	</section>
 {/if}
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
@@ -149,7 +211,7 @@
 			{#if data.page.items.length > 0}<p><a href="/jumps">Clear filters</a></p>{/if}
 		</section>
 	{/if}
-	{#if !data.older && !data.filtered}
+	{#if !data.older && !data.filtered && !data.select}
 		<!-- The screen's one navy card: totals and the main action. -->
 		<section class="card" aria-label="Totals and log a jump">
 			<div class="totals">
@@ -264,8 +326,173 @@
 		{#if !data.older}
 			<p>Have a logbook already? <a href="/records/import">Import a spreadsheet</a></p>
 		{/if}
+	{:else if data.select}
+		<section class="batch" aria-labelledby="batch-heading">
+			<h2 id="batch-heading">Change many jumps</h2>
+			<p class="hint">
+				Tick the jumps on this page, or filter the logbook and choose all matching jumps (up to
+				200). Then choose what they all get. You see the change before anything is saved.
+			</p>
+			{#if batchError && form?.form !== 'undo'}<p class="form-error" role="alert">{batchError}</p>{/if}
+			{#if preview && choice}
+				<section class="confirm" aria-labelledby="confirm-heading">
+					<h3 id="confirm-heading">{heading}</h3>
+					{#if changing.length > 0}
+						<ul class="affected" aria-label="Jumps to change">
+							{#each changing as item (item.id)}
+								<li>
+									{formatDay(item.jumped_on)}{item.jump_number ? ` · #${item.jump_number}` : ''} ·
+									{JUMP_TYPE_LABEL[item.jump_type]} · {item.location.name ?? 'Dropzone no longer listed'}{item.aircraft
+										? ` · ${item.aircraft}`
+										: ''}
+								</li>
+							{/each}
+						</ul>
+					{/if}
+					{#if preview.items.length > changing.length}
+						<p class="hint">
+							{preview.items.length - changing.length} of the chosen jumps already have these values.
+						</p>
+					{/if}
+					{#if preview.missing > 0}
+						<p class="hint">{preview.missing} of the chosen jumps are no longer in your logbook.</p>
+					{/if}
+					{#if changing.length > 0}
+						<form method="POST" action="?{actionQuery}&/apply" class="form">
+							{#each changing as item (item.id)}
+								<input type="hidden" name="jump" value="{item.id}:{item.version}" />
+							{/each}
+							{#if choice.jump_type}<input type="hidden" name="jump_type" value={choice.jump_type} />{/if}
+							{#if choice.at}<input type="hidden" name="at" value={choice.at} />{/if}
+							{#if choice.set_aircraft}
+								<input type="hidden" name="set_aircraft" value="1" />
+								<input type="hidden" name="aircraft" value={choice.aircraft} />
+							{/if}
+							{#if choice.set_gear}
+								<input type="hidden" name="set_gear" value="1" />
+								{#each choice.component_ids as id (id)}<input type="hidden" name="component_ids" value={id} />{/each}
+							{/if}
+							<p class="hint">
+								Each change is kept in that jump's private history. A jump edited after this check is
+								left as it is.
+							</p>
+							<div class="form-actions">
+								<button class="button" type="submit"
+									>Change {changing.length} {changing.length === 1 ? 'jump' : 'jumps'}</button
+								>
+								<a href={selectHref()}>Choose again</a>
+							</div>
+						</form>
+					{:else}
+						<p>Nothing to change. <a href={selectHref()}>Choose again</a></p>
+					{/if}
+				</section>
+			{/if}
+			<form method="POST" action="?{actionQuery}&/preview" class="form batch-form">
+				{#if data.filtered && matched && matched.jumps > 0}
+					<label class="choice all"
+						><input type="checkbox" name="all" value="1" defaultChecked={batchForm?.all ?? false} />
+						All {n(matched.jumps)} matching {matched.jumps === 1 ? 'jump' : 'jumps'}{matched.jumps > 200
+							? ' (more than 200: filter further)'
+							: ''}</label
+					>
+				{/if}
+				<fieldset class="pick-list">
+					<legend>Jumps on this page</legend>
+					<ul class="jumps" aria-label="Jumps">
+						{#each data.page.items as jump (jump.id)}
+							<li class="pick">
+								<input
+									type="checkbox"
+									id="pick-{jump.id}"
+									name="id"
+									value={jump.id}
+									defaultChecked={picked.has(jump.id)}
+								/>
+								<label class="text" for="pick-{jump.id}">
+									<span class="title-text"
+										>{formatDay(jump.jumped_on)}{jump.jump_number ? ` · #${jump.jump_number}` : ''}</span
+									>
+									<span class="meta"
+										>{JUMP_TYPE_LABEL[jump.jump_type]} · {jump.location.name ??
+											'Dropzone no longer listed'}{jump.location.kind === 'place'
+											? ' (private place)'
+											: ''}{jump.aircraft ? ` · ${jump.aircraft}` : ''}</span
+									>
+								</label>
+							</li>
+						{/each}
+					</ul>
+				</fieldset>
+				<fieldset class="changes">
+					<legend>What they all get</legend>
+					<div class="field">
+						<label for="batch_type">Type</label>
+						<select id="batch_type" name="jump_type">
+							<option value="" selected={!choice?.jump_type}>Keep each jump's type</option>
+							{#each Object.entries(JUMP_TYPE_LABEL) as [value, label] (value)}
+								<option {value} selected={choice?.jump_type === value}>{label}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="field">
+						<label for="batch_at">Place</label>
+						<select id="batch_at" name="at">
+							<option value="" selected={!choice?.at}>Keep each jump's place</option>
+							{#each data.placeOptions as option (option.value)}
+								<option value={option.value} selected={choice?.at === option.value}>{option.label}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="field">
+						<label class="choice"
+							><input
+								type="checkbox"
+								name="set_aircraft"
+								value="1"
+								defaultChecked={choice?.set_aircraft ?? false}
+							/> Change the aircraft</label
+						>
+						<label for="batch_aircraft">Aircraft (leave empty to clear it)</label>
+						<input
+							id="batch_aircraft"
+							name="aircraft"
+							maxlength="60"
+							autocomplete="off"
+							defaultValue={choice?.aircraft ?? ''}
+						/>
+					</div>
+					<fieldset class="field">
+						<legend>Gear used</legend>
+						<label class="choice"
+							><input type="checkbox" name="set_gear" value="1" defaultChecked={choice?.set_gear ?? false} />
+							Replace the gear used with the items ticked here (none ticked: no gear)</label
+						>
+						{#each data.gear as item (item.id)}
+							<label class="choice"
+								><input
+									type="checkbox"
+									name="component_ids"
+									value={item.id}
+									defaultChecked={pickedGear.has(item.id)}
+								/>
+								{item.label} <span class="meta">({KIND_LABEL[item.kind] ?? item.kind})</span></label
+							>
+						{/each}
+						{#if !data.gearOk}<p class="hint">Your gear could not be loaded right now.</p>{/if}
+					</fieldset>
+				</fieldset>
+				<div class="form-actions">
+					<button class="button" type="submit">Check the change</button>
+					<a href={jumpsHref(data.filters)}>Cancel</a>
+				</div>
+			</form>
+		</section>
 	{:else}
-		<h2>{data.filtered ? 'Matching jumps' : data.older ? 'Older jumps' : 'Recent jumps'}</h2>
+		<div class="list-head">
+			<h2>{data.filtered ? 'Matching jumps' : data.older ? 'Older jumps' : 'Recent jumps'}</h2>
+			<a href={selectHref()}>Select jumps to change</a>
+		</div>
 		<ul class="jumps" aria-label="Jumps">
 			{#each data.page.items as jump (jump.id)}
 				<li>
@@ -289,9 +516,14 @@
 		</ul>
 	{/if}
 	<p class="pager">
-		{#if data.older}<a href={jumpsHref(data.filters)}>Newest</a>{/if}
+		{#if data.older}<a href={data.select ? selectHref() : jumpsHref(data.filters)}>Newest</a>{/if}
 		{#if data.page.next_cursor}
-			<a href={jumpsHref(data.filters, data.page.next_cursor)} rel="next">Older jumps</a>
+			<a
+				href={data.select
+					? selectHref(data.page.next_cursor)
+					: jumpsHref(data.filters, data.page.next_cursor)}
+				rel="next">Older jumps</a
+			>
 		{/if}
 	</p>
 {/if}
@@ -444,6 +676,81 @@
 	.pager {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.list-head {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: baseline;
+		column-gap: 1rem;
+	}
+
+	.undo,
+	.batch,
+	.confirm {
+		margin: 0 0 1.25rem;
+		padding: 0.75rem 0.9rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.undo h2,
+	.batch h2 {
+		font-size: 1rem;
+	}
+
+	.confirm h3 {
+		font-size: 1rem;
+		margin: 0 0 0.5rem;
+	}
+
+	.undo p,
+	.confirm p {
+		margin: 0 0 0.5rem;
+	}
+
+	.affected {
+		margin: 0 0 0.5rem;
+		padding-left: 1.1rem;
+		max-height: 16rem;
+		overflow: auto;
+	}
+
+	.batch-form fieldset {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		min-width: 0;
+	}
+
+	.batch-form legend {
+		font-weight: 600;
+		margin-bottom: 0.4rem;
+	}
+
+	.batch-form .changes {
+		display: grid;
+		gap: 0.75rem;
+	}
+
+	.jumps li.pick {
+		grid-template-columns: auto 1fr;
+	}
+
+	.pick input[type='checkbox'] {
+		width: 1.4rem;
+		height: 1.4rem;
+		margin: 0;
+	}
+
+	.pick .text {
+		cursor: pointer;
+	}
+
+	.title-text {
+		font-weight: 600;
 	}
 
 	.jump-search {

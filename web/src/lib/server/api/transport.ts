@@ -224,6 +224,15 @@ export const OPERATIONS = {
 		maxBodyBytes: 8 * 1024 * 1024
 	},
 	createJump: { method: 'POST', path: `${BETA}/jumps` },
+	// Many jumps at once: one call for up to 200, never one per jump.
+	previewJumpBatch: {
+		method: 'POST',
+		path: `${BETA}/jumps/batch/preview`,
+		maxBodyBytes: 1024 * 1024
+	},
+	applyJumpBatch: { method: 'POST', path: `${BETA}/jumps/batch`, timeoutMs: 30_000 },
+	getLatestJumpBatch: { method: 'GET', path: `${BETA}/jumps/batch/latest` },
+	undoJumpBatch: { method: 'POST', path: `${BETA}/jumps/batch/undo`, timeoutMs: 30_000 },
 	getJumpNumbering: { method: 'GET', path: `${BETA}/jumps/numbering` },
 	// The aircraft of the newest jump at one place: a starting value for a new entry.
 	getRecentAircraft: {
