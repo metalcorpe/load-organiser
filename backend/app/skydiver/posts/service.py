@@ -169,11 +169,21 @@ class PostService:
         clock: Clock,
         directory: DirectoryService,
         social: SocialService,
+        is_open: Callable[[], bool] = lambda: True,
     ) -> None:
         self._stores = stores
         self._clock = clock
         self._directory = directory
         self._social = social
+        self._is_open = is_open
+
+    def publishing_open(self) -> bool:
+        """False while the owner has paused new posts and widening to public."""
+        return self._is_open()
+
+    def _require_open(self) -> None:
+        if not self._is_open():
+            raise SocialRefused("publishing_paused")
 
     # -- owner ------------------------------------------------------------------------
 
@@ -206,6 +216,7 @@ class PostService:
         link: str | None,
         audience: str,
     ) -> Card:
+        self._require_open()
         chosen = policy.shares(shares)
         reach = _audience(audience)
         values: dict[str, Any] = {
@@ -268,6 +279,8 @@ class PostService:
                 return
             if reach is Audience.PUBLIC:
                 # Widening is a new disclosure: the same checks as publishing.
+                # Narrowing and unpublishing stay available while publishing is paused.
+                self._require_open()
                 _may_publish(store.profile(actor.person_id), reach)
                 if not store.admit_profile(actor.person_id, reach):
                     raise EditConflict()

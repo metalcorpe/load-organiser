@@ -179,6 +179,15 @@ Web `/support` (public, linked from the footer); data in `web/src/lib/support.ts
 - `GET /submissions/intake` tells a signed-in person whether new submissions are taken; `/submit` shows "Sending is paused" in place of the form when they are not. If that check fails the form is shown and sending reports the pause as before.
 - Tested: `test_account_deletion.py` (deleting the account sets the removal time), `test_submission_retention.py` (only rows past the period are deleted; author and time cannot both be missing), `test_moderation.py` (intake reports open, then paused; needs a session). Not tested in a browser: the paused notice, because the end-to-end server runs with submissions open.
 
+#### Publishing pause (implemented, #162)
+
+The maintenance routine (item 4 below) and mobile journey 5 let the owner pause social publishing independently of private logging. `SKYDIVER_PUBLISHING_OPEN` (closed by default, like registration and submissions; the dev and verify scripts open it).
+
+- Paused: publishing a jump and widening a post to public answer 409 `publishing_paused`; a paused publish spends no rate-limit slot. Narrowing, unpublishing, reading posts, the feed, private logging and export are unaffected.
+- `GET /me/jumps/{id}/sharing` carries `publishing_open`; the share page shows "Sharing new jumps is paused for now" in place of the form, and keeps the narrow and unpublish controls for an existing post.
+- Tested: `test_posts.py` `test_a_publishing_pause_stops_new_disclosure_only`. Not tested in a browser: the paused notice, because the end-to-end server runs with publishing open.
+- To pause on a host: set `SKYDIVER_PUBLISHING_OPEN=false` and restart the API. Hosting is not decided (#161).
+
 #### Erasure ledger (implemented, architecture A9)
 
 `app/skydiver/recovery/ledger.py`, migration `d4f9b6a2e8c1`; operator commands only, no API or screen.

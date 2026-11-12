@@ -21,6 +21,8 @@ const POST_MESSAGES: Record<string, string> = {
 	public_needs_discoverable:
 		'A public post needs a discoverable profile. Turn on "Let people find my profile" or share with approved followers.',
 	publishing_restricted: 'A reviewer has restricted publishing on your profile.',
+	publishing_paused:
+		'Sharing new jumps is paused for now. Your logbook works as usual, and you can still narrow or unpublish existing posts.',
 	profile_hidden: 'Your profile is hidden by a reviewer, so you cannot publish.',
 	profile_required: 'Create your public profile first; posts appear under its handle.',
 	type_not_recorded: 'This jump has no type recorded, so there is none to share.',

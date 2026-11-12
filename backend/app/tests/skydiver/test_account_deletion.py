@@ -109,6 +109,7 @@ def test_deleting_an_account_removes_everything_it_owned(
     api: Api, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     monkeypatch.setattr(settings, "SKYDIVER_SUBMISSIONS_OPEN", True)
+    monkeypatch.setattr(settings, "SKYDIVER_PUBLISHING_OPEN", True)
     email = f"leaving-{uuid.uuid4().hex[:10]}@example.com"
     me = api.signed_up(email)
     friend = api.accounts.session()

@@ -95,6 +95,9 @@ class Settings(BaseSettings):
     SKYDIVER_MAX_ACCOUNTS: int = 25
     # Suggestions/corrections/reports intake; closed by default, like registration.
     SKYDIVER_SUBMISSIONS_OPEN: bool = False
+    # New posts and widening a post to public; closed by default. Unpublishing,
+    # narrowing and private logging never depend on it.
+    SKYDIVER_PUBLISHING_OPEN: bool = False
     # Shared secret proving that the forwarded client IP comes from the web server.
     SKYDIVER_WEB_PROXY_KEY: str | None = None
     # Local/test only: write identity mail as JSON files instead of sending it.
