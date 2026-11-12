@@ -89,6 +89,11 @@ export async function apiSession(email: string, password = PASSWORD): Promise<st
 	return ((await response.json()) as { session_secret: string }).session_secret;
 }
 
+/** Email and password of the reviewer account that scripts/verify.sh granted the role to. */
+export function reviewerCredentials(): { email: string; password: string } {
+	return { email: required('E2E_REVIEWER_EMAIL'), password: required('E2E_REVIEWER_PASSWORD') };
+}
+
 /** Session of the reviewer account that scripts/verify.sh granted the role to. */
 export async function reviewerSession(): Promise<string> {
 	return apiSession(required('E2E_REVIEWER_EMAIL'), required('E2E_REVIEWER_PASSWORD'));

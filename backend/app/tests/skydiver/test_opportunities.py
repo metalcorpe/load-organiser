@@ -284,6 +284,30 @@ def test_ended_listings_leave_upcoming_results_by_their_own_time_zone(
     assert ended["opportunity"]["ended"] is True
 
 
+def test_a_one_day_listing_is_upcoming_all_of_its_own_day(api: Api) -> None:
+    """Starting today is upcoming until that day ends where the listing is (#160)."""
+    base = token()
+    provider = api.provider(f"{base} Org")
+    api.listed(
+        f"{base} Madrid one day", provider["id"],
+        starts_on="2026-11-03", ends_on="2026-11-03", time_zone="Europe/Madrid",
+    )  # fmt: skip
+    api.listed(
+        f"{base} Tomorrow", provider["id"],
+        starts_on="2026-11-04", ends_on="2026-11-04", time_zone="Europe/Madrid",
+    )  # fmt: skip
+
+    # 00:30 in Madrid on the day itself (23:30 UTC the day before): already upcoming.
+    api.clock.now = datetime(2026, 11, 2, 23, 30, tzinfo=UTC)
+    assert api.titles(q=base) == [f"{base} Madrid one day", f"{base} Tomorrow"]
+    # 23:59 in Madrid: still the same day, still listed.
+    api.clock.now = datetime(2026, 11, 3, 22, 59, tzinfo=UTC)
+    assert api.titles(q=base) == [f"{base} Madrid one day", f"{base} Tomorrow"]
+    # Midnight in Madrid: the day is over.
+    api.clock.now = datetime(2026, 11, 3, 23, 0, tzinfo=UTC)
+    assert api.titles(q=base) == [f"{base} Tomorrow"]
+
+
 def test_postponed_without_dates_stays_public_and_cancelled_shows_status(
     api: Api,
 ) -> None:

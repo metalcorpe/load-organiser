@@ -104,10 +104,26 @@ request for the full gate).
 Still covered by backend tests only, judged lower risk because pages are rendered per
 request and `no-store`: blocking's effect on posts and the feed, and turning
 discoverability off. Not added: null or absent Origin on authenticated form actions
-other than sign-in (one central check, unit tested), a "starts today" listing case, a
+other than sign-in (one central check, unit tested), a "starts today" listing case (added 2026-11-12: `test_opportunities.py`
+`test_a_one_day_listing_is_upcoming_all_of_its_own_day`, from 00:30 to 23:59 local), a
 private save while the API is down (an offline submit is now stopped with the input kept;
 added 2026-11-12), a dedicated first-use test of `/people`, `/plans`,
-`/gear` and `/records`, and automated accessibility (axe) checks.
+`/gear` and `/records`.
+
+Accessibility, added 2026-11-12: e2e `a11y` runs axe 4.14 (WCAG 2.0/2.1 A and AA, 2.2 AA
+rules) on 38 pages in light and dark, in Chromium at 320 px and WebKit (iPhone 13): every
+public page signed out (with a real listing, organiser, dropzone, profile and post), the
+open sign-in sheet, every member page with records in it, and the maintenance pages as
+the reviewer. It found no violations; a control test with a planted image without alt text
+must report it, so the checks can fail. axe covers only part of WCAG. After a POST that comes back to the same
+page, focus moves to the error of the form that was sent (e2e `auth`); search forms
+and ordinary visits never move it (e2e `social`), because an alert already present at page
+load is often not announced. When the error code concerns one field
+(`web/src/lib/field-errors.ts`, 74 codes), that field is marked `aria-invalid`, described
+by the error and focused instead (e2e `social`). This needs JavaScript; without it the
+error is still shown and names the field. Codes about the whole form (conflicts, limits,
+availability) focus the error itself. Not
+checked by a person: screen readers (see the owner checklist).
 
 ## Not yet verified (needs people or devices)
 
