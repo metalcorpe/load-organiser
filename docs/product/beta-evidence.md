@@ -116,8 +116,11 @@ open sign-in sheet, every member page with records in it, and the maintenance pa
 the reviewer. It found no violations; a planted image without alt text was reported, so
 the rules run. axe covers only part of WCAG. After a form submit, the returned page now
 moves focus to its first error (e2e `auth`), because an alert already present at page
-load is often not announced. Errors are per form, not per field: most inputs carry no
-`aria-invalid` or `aria-describedby`, and the message names the field instead. Not
+load is often not announced. When the error code concerns one field
+(`web/src/lib/field-errors.ts`, 74 codes), that field is marked `aria-invalid`, described
+by the error and focused instead (e2e `social`). This needs JavaScript; without it the
+error is still shown and names the field. Codes about the whole form (conflicts, limits,
+availability) focus the error itself. Not
 checked by a person: screen readers (see the owner checklist).
 
 ## Not yet verified (needs people or devices)

@@ -34,6 +34,29 @@ async function createProfile(page: Page, name: string, discoverable: boolean): P
 }
 
 test.describe('profiles and follows', () => {
+	test('a refused field is marked invalid, described by the error and focused', async ({ browser }) => {
+		const { context, page } = await newPerson(browser, 'fielderror');
+		await page.goto('/profile/public');
+		await page.getByLabel('Handle').fill('Not valid!');
+		await page.getByLabel('Display name').fill('Field Error');
+		await page.getByRole('button', { name: 'Create profile' }).click();
+
+		const alert = page.getByRole('alert');
+		await expect(alert).toBeVisible();
+		const handle = page.getByLabel('Handle');
+		await expect(handle).toBeFocused();
+		await expect(handle).toHaveAttribute('aria-invalid', 'true');
+		const id = await alert.getAttribute('id');
+		expect(id).toBeTruthy();
+		await expect(handle).toHaveAttribute('aria-describedby', new RegExp(`(^| )${id}( |$)`));
+		// The accessible description is the error text itself.
+		await expect(handle).toHaveAccessibleDescription(new RegExp((await alert.textContent())!.trim().slice(0, 20)));
+		// Typing a new value clears the invalid mark.
+		await handle.fill('better_handle');
+		await expect(handle).not.toHaveAttribute('aria-invalid', 'true');
+		await context.close();
+	});
+
 	test('find, ask to follow, approve, then block', async ({ browser }) => {
 		const tag = randomBytes(3).toString('hex');
 		const alex = await newPerson(browser, 'alex');
