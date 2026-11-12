@@ -63,6 +63,8 @@ Owner decisions recorded 2026-11-09 (#162):
 - Later the same day: the researched candidate records are **development data only**, loaded into local databases for testing and never published in production (`scripts/dev.sh seed`). Facebook pages may be used as sources. The beta cohort is the owner alone for now.
 - Undated courses (ongoing AFF, static line, packing, canopy) stay unpublished. The beta lists dated opportunities only; an undated course would be a school profile, and standalone school/coach listings are later work (release brief, "Discovery" and "Inventory sources"). A course gets listed when its provider publishes dates. Decided 2026-11-09 under the owner's delegation.
 
+Owner decision recorded 2026-11-12: experienced jumpers can import an existing logbook from a spreadsheet (CSV), so they do not retype hundreds of jumps. Paper logbooks and FlySight, GPX, FIT or other device files stay out of scope. Imported jumps are self-reported like any other entry and show as imported by you, not verified. Rules and limits: [logbook import](logbook-import.md).
+
 #151/#162 must perform a real inventory/review exercise before launch: collect permitted records for the enabled categories, walk the discovery query, check changes/expiry and record effort and gaps. Limit published inventory or pause expansion if maintenance is not sustainable. No numerical inventory target, time budget, acquisition/retention result or volunteer capacity is invented.
 
 #160 owns representative mobile/user validation after implementation, including independent discovery/logging value, no-friends first use, history totals, save reliability, private/public access, account switching and recovery. Closing planning issues does not mark those release checks complete.

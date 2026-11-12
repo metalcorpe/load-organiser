@@ -201,6 +201,40 @@ export type BaselinePreviewOut = {
 };
 
 /**
+ * ColumnsOut
+ */
+export type ColumnsOut = {
+    /**
+     * Altitude
+     */
+    altitude: number | null;
+    /**
+     * Date
+     */
+    date: number | null;
+    /**
+     * Freefall
+     */
+    freefall: number | null;
+    /**
+     * Notes
+     */
+    notes: number | null;
+    /**
+     * Number
+     */
+    number: number | null;
+    /**
+     * Place
+     */
+    place: number | null;
+    /**
+     * Type
+     */
+    type: number | null;
+};
+
+/**
  * ComponentDetailOut
  */
 export type ComponentDetailOut = {
@@ -648,6 +682,100 @@ export type HomeVenueOut = {
 };
 
 /**
+ * ImportCheckOut
+ */
+export type ImportCheckOut = {
+    /**
+     * Already Imported At
+     */
+    already_imported_at: string | null;
+    columns: ColumnsOut;
+    /**
+     * Encoding
+     */
+    encoding: 'utf-8' | 'utf-16' | 'windows-1252';
+    /**
+     * Fingerprint
+     *
+     * Of the exact file and the choices used.
+     */
+    fingerprint: string;
+    /**
+     * Headings
+     */
+    headings: Array<string>;
+    /**
+     * New Places
+     */
+    new_places: Array<string>;
+    /**
+     * Problems
+     *
+     * The first 50, by row.
+     */
+    problems: Array<RowProblemOut>;
+    /**
+     * Problems Total
+     */
+    problems_total: number;
+    /**
+     * Room
+     *
+     * Jumps that still fit under the 2,000 limit.
+     */
+    room: number;
+    /**
+     * Rows Ok
+     */
+    rows_ok: number;
+    /**
+     * Rows Total
+     */
+    rows_total: number;
+    /**
+     * Sample
+     *
+     * The first 10 rows to be saved.
+     */
+    sample: Array<SampleRowOut>;
+};
+
+/**
+ * ImportOut
+ */
+export type ImportOut = {
+    /**
+     * Counts
+     */
+    counts: {
+        [key: string]: number;
+    };
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Undone At
+     */
+    undone_at: string | null;
+};
+
+/**
+ * ImportResultOut
+ */
+export type ImportResultOut = {
+    item: ImportOut;
+    /**
+     * Outcome
+     */
+    outcome: 'imported' | 'already_imported';
+};
+
+/**
  * JumpDetailOut
  */
 export type JumpDetailOut = {
@@ -854,9 +982,9 @@ export type JumpOut = {
     /**
      * Source
      *
-     * `restored`: re-created from the owner's own export.
+     * `restored`: re-created from the owner's own export; `imported`: from the owner's own spreadsheet.
      */
-    source: 'manual' | 'restored';
+    source: 'manual' | 'restored' | 'imported';
     /**
      * Time Zone
      */
@@ -3085,6 +3213,68 @@ export type RigUpdateIn = {
 };
 
 /**
+ * RowProblemOut
+ */
+export type RowProblemOut = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * Row
+     *
+     * 1-based data row (the row under the headings is 1).
+     */
+    row: number;
+};
+
+/**
+ * SampleRowOut
+ */
+export type SampleRowOut = {
+    /**
+     * Altitude Unit
+     */
+    altitude_unit: 'ft' | 'm' | null;
+    /**
+     * Exit Altitude
+     */
+    exit_altitude: number | null;
+    /**
+     * Freefall Seconds
+     */
+    freefall_seconds: number | null;
+    /**
+     * Jump Number
+     */
+    jump_number: number | null;
+    /**
+     * Jump Type
+     */
+    jump_type: 'unspecified' | 'belly' | 'freefly' | 'angle' | 'wingsuit' | 'canopy' | 'crw' | 'accuracy' | 'hop_and_pop' | 'tandem' | 'training' | 'other';
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
+    /**
+     * Notes
+     */
+    notes: string | null;
+    /**
+     * Place
+     */
+    place: string;
+    /**
+     * Place Kind
+     */
+    place_kind: 'venue' | 'place' | 'new_place';
+    /**
+     * Row
+     */
+    row: number;
+};
+
+/**
  * SavedOut
  *
  * A private bookmark. Saving is not registration, attendance or interest.
@@ -3412,6 +3602,18 @@ export type TypeCountOut = {
 };
 
 /**
+ * UndoIn
+ */
+export type UndoIn = {
+    /**
+     * Confirm
+     *
+     * Must be true: every jump of the import is deleted, even if edited.
+     */
+    confirm: boolean;
+};
+
+/**
  * VenueCreateIn
  */
 export type VenueCreateIn = {
@@ -3676,6 +3878,22 @@ export type AppSkydiverIdentityApiProblem = {
      * Detail
      */
     detail: string;
+};
+
+/**
+ * Problem
+ */
+export type AppSkydiverImportsApiProblem = {
+    /**
+     * Detail
+     */
+    detail: string;
+    /**
+     * Names
+     *
+     * For country_required: the place names not in the directory.
+     */
+    names?: Array<string> | null;
 };
 
 /**
@@ -6385,6 +6603,341 @@ export type CreateJumpResponses = {
 };
 
 export type CreateJumpResponse = CreateJumpResponses[keyof CreateJumpResponses];
+
+export type ImportJumpsData = {
+    /**
+     * The raw spreadsheet file (CSV), at most 1 MiB.
+     */
+    body: string;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Expected
+         */
+        expected?: string | null;
+        /**
+         * Date Order
+         */
+        date_order?: 'dmy' | 'mdy' | 'ymd';
+        /**
+         * Unit
+         */
+        unit?: 'ft' | 'm';
+        /**
+         * Country
+         */
+        country?: string | null;
+        /**
+         * Col Date
+         */
+        col_date?: string | null;
+        /**
+         * Col Number
+         */
+        col_number?: string | null;
+        /**
+         * Col Place
+         */
+        col_place?: string | null;
+        /**
+         * Col Type
+         */
+        col_type?: string | null;
+        /**
+         * Col Altitude
+         */
+        col_altitude?: string | null;
+        /**
+         * Col Freefall
+         */
+        col_freefall?: string | null;
+        /**
+         * Col Notes
+         */
+        col_notes?: string | null;
+    };
+    url: '/api/skydiver/v1/jumps/import';
+};
+
+export type ImportJumpsErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverImportsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverImportsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverImportsApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverImportsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverImportsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverImportsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverImportsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverImportsApiProblem;
+};
+
+export type ImportJumpsError = ImportJumpsErrors[keyof ImportJumpsErrors];
+
+export type ImportJumpsResponses = {
+    /**
+     * Successful Response
+     */
+    200: ImportResultOut;
+};
+
+export type ImportJumpsResponse = ImportJumpsResponses[keyof ImportJumpsResponses];
+
+export type CheckJumpImportData = {
+    /**
+     * The raw spreadsheet file (CSV), at most 1 MiB.
+     */
+    body: string;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Date Order
+         */
+        date_order?: 'dmy' | 'mdy' | 'ymd';
+        /**
+         * Unit
+         */
+        unit?: 'ft' | 'm';
+        /**
+         * Country
+         */
+        country?: string | null;
+        /**
+         * Col Date
+         */
+        col_date?: string | null;
+        /**
+         * Col Number
+         */
+        col_number?: string | null;
+        /**
+         * Col Place
+         */
+        col_place?: string | null;
+        /**
+         * Col Type
+         */
+        col_type?: string | null;
+        /**
+         * Col Altitude
+         */
+        col_altitude?: string | null;
+        /**
+         * Col Freefall
+         */
+        col_freefall?: string | null;
+        /**
+         * Col Notes
+         */
+        col_notes?: string | null;
+    };
+    url: '/api/skydiver/v1/jumps/import/check';
+};
+
+export type CheckJumpImportErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverImportsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverImportsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverImportsApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverImportsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverImportsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverImportsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverImportsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverImportsApiProblem;
+};
+
+export type CheckJumpImportError = CheckJumpImportErrors[keyof CheckJumpImportErrors];
+
+export type CheckJumpImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: ImportCheckOut;
+};
+
+export type CheckJumpImportResponse = CheckJumpImportResponses[keyof CheckJumpImportResponses];
+
+export type ListJumpImportsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/imports';
+};
+
+export type ListJumpImportsErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverImportsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverImportsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverImportsApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverImportsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverImportsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverImportsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverImportsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverImportsApiProblem;
+};
+
+export type ListJumpImportsError = ListJumpImportsErrors[keyof ListJumpImportsErrors];
+
+export type ListJumpImportsResponses = {
+    /**
+     * Response Listjumpimports
+     *
+     * Successful Response
+     */
+    200: Array<ImportOut>;
+};
+
+export type ListJumpImportsResponse = ListJumpImportsResponses[keyof ListJumpImportsResponses];
+
+export type UndoJumpImportData = {
+    body: UndoIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path: {
+        /**
+         * Import Id
+         */
+        import_id: string;
+    };
+    query?: never;
+    url: '/api/skydiver/v1/jumps/imports/{import_id}/undo';
+};
+
+export type UndoJumpImportErrors = {
+    /**
+     * Bad Request
+     */
+    400: AppSkydiverImportsApiProblem;
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverImportsApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverImportsApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverImportsApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverImportsApiProblem;
+    /**
+     * Content Too Large
+     */
+    413: AppSkydiverImportsApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverImportsApiProblem;
+    /**
+     * Too Many Requests
+     */
+    429: AppSkydiverImportsApiProblem;
+};
+
+export type UndoJumpImportError = UndoJumpImportErrors[keyof UndoJumpImportErrors];
+
+export type UndoJumpImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: ImportOut;
+};
+
+export type UndoJumpImportResponse = UndoJumpImportResponses[keyof UndoJumpImportResponses];
 
 export type DeleteJumpData = {
     body?: never;

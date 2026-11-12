@@ -103,7 +103,9 @@
 <p class="lede">
 	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'
 		? 'restored from your export'
-		: 'entered by you'}, not verified
+		: jump.source === 'imported'
+			? 'imported by you'
+			: 'entered by you'}, not verified
 </p>
 <dl class="facts">
 	<dt>Where</dt>
