@@ -212,6 +212,8 @@ test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 	// The page set is the same on every device; two engines cover layout differences.
 	test.beforeEach(({}, info) => {
 		test.skip(info.project.name === 'pixel-7', 'chromium-320 covers Chromium');
+		// Each test scans about twenty pages; WebKit needs more than the default 30 s.
+		test.slow();
 	});
 	test.beforeAll(async () => {
 		shared ??= await world();
