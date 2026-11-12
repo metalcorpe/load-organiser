@@ -1,4 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
+import { safeReturnPath } from '#lib/safe-return.ts';
 import type { OwnProfileOut } from '#lib/contracts/index.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
@@ -66,6 +67,8 @@ export const actions: Actions = {
 		if (!result.ok) {
 			return fail(failStatus(result), { form: 'save', error: result.reason, values, based });
 		}
-		redirect(303, '/profile/public?saved=1');
+		// Arriving from someone's profile ("Create your profile" to follow them) goes back there.
+		const back = safeReturnPath(event.url.searchParams.get('returnTo'));
+		redirect(303, back ?? '/profile/public?saved=1');
 	}
 };

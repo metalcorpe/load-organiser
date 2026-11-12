@@ -34,6 +34,40 @@ async function createProfile(page: Page, name: string, discoverable: boolean): P
 }
 
 test.describe('profiles and follows', () => {
+	test('invite a jump buddy: link, join, create a profile, back to follow', async ({ browser }) => {
+		const inviter = await newPerson(browser, 'inviter');
+		const handle = await createProfile(inviter.page, 'Invite Sender', true);
+		await inviter.page.goto('/people');
+		const link = `${ORIGIN}/people/${handle}`;
+		await expect(inviter.page.getByRole('link', { name: link })).toBeVisible();
+		await expect(inviter.page.getByRole('button', { name: 'Invite jump buddies' })).toBeVisible();
+
+		// A guest opening the link is offered to join, and comes back to this profile.
+		const guest = await browser.newContext({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
+		const guestPage = await guest.newPage();
+		await guestPage.goto(link);
+		await expect(guestPage.getByRole('heading', { name: 'Follow Invite Sender' })).toBeVisible();
+		await expect(guestPage.getByRole('link', { name: 'Join to follow' })).toHaveAttribute(
+			'href',
+			`/register?returnTo=${encodeURIComponent(`/people/${handle}`)}`
+		);
+		await guest.close();
+
+		// A member without a profile creates one and lands back here, ready to follow.
+		const friend = await newPerson(browser, 'invitee');
+		await friend.page.goto(`/people/${handle}`);
+		await friend.page.getByRole('link', { name: 'Create your profile' }).click();
+		await friend.page.getByLabel('Handle').fill(`f${randomBytes(5).toString('hex')}`);
+		await friend.page.getByLabel('Display name').fill('Invited Friend');
+		await friend.page.getByRole('button', { name: 'Create profile' }).click();
+		await expect(friend.page).toHaveURL(`${ORIGIN}/people/${handle}`);
+		await friend.page.getByRole('button', { name: 'Ask to follow' }).click();
+		await expect(friend.page.getByText('Requested; waiting for approval.')).toBeVisible();
+
+		await inviter.context.close();
+		await friend.context.close();
+	});
+
 	test('a search refusal never moves focus, then or on a later load', async ({ browser }) => {
 		const { context, page } = await newPerson(browser, 'searchfocus');
 		await page.goto('/people');
@@ -121,7 +155,7 @@ test.describe('profiles and follows', () => {
 		const anonymous = await browser.newContext({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 		const visitor = await anonymous.newPage();
 		await visitor.goto(`/people/${alexHandle}`);
-		await expect(visitor.getByRole('heading', { name: `Alex ${tag}` })).toBeVisible();
+		await expect(visitor.getByRole('heading', { name: `Alex ${tag}`, exact: true })).toBeVisible();
 		await expect(visitor.locator('#main').getByRole('link', { name: 'Sign in' })).toBeVisible();
 		// A profile that is not discoverable is unavailable to visitors.
 		expect((await visitor.goto(`/people/${samHandle}`))?.status()).toBe(404);
