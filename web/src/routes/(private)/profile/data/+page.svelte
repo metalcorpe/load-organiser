@@ -39,7 +39,7 @@
 	<h2 id="export-heading">Export</h2>
 	<p>
 		One JSON file (format version 1) with your jumps and their history, gear with rigs and service
-		entries, your prior jump count, private places, saved listings and visit plans, plus the names of
+		entries, your prior jump count, licence, private places, saved listings and visit plans, plus the names of
 		the public dropzones and listings they point to.
 	</p>
 	<p class="hint">

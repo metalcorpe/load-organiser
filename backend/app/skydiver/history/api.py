@@ -19,6 +19,7 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.history.currency import SOURCE, Currency, Licence
 from app.skydiver.history.policy import Totals
 from app.skydiver.history.service import HistoryService, Summary
 from app.skydiver.logbook.api import ComponentRefOut, LocationOut
@@ -90,6 +91,34 @@ class BaselineEventOut(BaseModel):
     created_at: datetime
 
 
+LicenceName = Literal["none", "student", "a", "b", "c", "d"]
+
+
+class LicenceIn(BaseModel):
+    licence: LicenceName = Field(description="The licence you hold; `none` to clear.")
+
+
+class LicenceOut(BaseModel):
+    licence: LicenceName = Field(description="Self-stated and private; never verified.")
+
+
+class CurrencyOut(BaseModel):
+    """Guidance computed from your own dated entries; not a verified status."""
+
+    licence: LicenceName
+    threshold_days: int | None = Field(
+        description="Days after the last jump the guidance allows; null without a licence."
+    )
+    last_jump_on: date | None
+    current_until: date | None = Field(
+        description=(
+            "The last calendar day counted as current; null without a licence or"
+            " jumps. Compare with the jumper's own local date."
+        )
+    )
+    source: Literal["USPA SIM 5-2"] = SOURCE
+
+
 class HistoryOut(BaseModel):
     totals: TotalsOut
     baseline: BaselineOut | None
@@ -106,6 +135,7 @@ class HistoryOut(BaseModel):
     baseline_events: list[BaselineEventOut] = Field(
         description="Private provenance, newest last (at most 50)."
     )
+    currency: CurrencyOut
 
 
 class BaselinePreviewOut(BaseModel):
@@ -127,6 +157,15 @@ def _totals(t: Totals) -> TotalsOut:
         recorded_since=t.recorded_since,
         lifetime=t.lifetime,
         inconsistent=t.inconsistent,
+    )
+
+
+def _currency(c: Currency) -> CurrencyOut:
+    return CurrencyOut(
+        licence=c.licence.value,
+        threshold_days=c.days,
+        last_jump_on=c.last_jump_on,
+        current_until=c.current_until,
     )
 
 
@@ -180,6 +219,7 @@ def _history(s: Summary) -> HistoryOut:
             )
             for e in s.baseline_events
         ],
+        currency=_currency(s.currency),
     )
 
 
@@ -265,5 +305,24 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return Response(status_code=status.HTTP_204_NO_CONTENT, headers=NO_STORE)
+
+    @router.get(
+        "/me/licence",
+        operation_id="getLicence",
+        response_model=LicenceOut,
+        dependencies=deps,
+    )
+    def get_licence(actor: Reader) -> LicenceOut:
+        return LicenceOut(licence=service().licence(actor).value)
+
+    @router.put(
+        "/me/licence",
+        operation_id="setLicence",
+        response_model=LicenceOut,
+        dependencies=deps,
+    )
+    def set_licence(body: LicenceIn, actor: Writer) -> LicenceOut:
+        saved = service().set_licence(actor, Licence(body.licence))
+        return LicenceOut(licence=saved.value)
 
     return router

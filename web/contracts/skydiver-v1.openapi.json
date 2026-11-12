@@ -1007,6 +1007,74 @@
         "title": "ComponentUseOut",
         "type": "object"
       },
+      "CurrencyOut": {
+        "description": "Guidance computed from your own dated entries; not a verified status.",
+        "properties": {
+          "current_until": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last calendar day counted as current; null without a licence or jumps. Compare with the jumper's own local date.",
+            "title": "Current Until"
+          },
+          "last_jump_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Jump On"
+          },
+          "licence": {
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          },
+          "source": {
+            "const": "USPA SIM 5-2",
+            "default": "USPA SIM 5-2",
+            "title": "Source",
+            "type": "string"
+          },
+          "threshold_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Days after the last jump the guidance allows; null without a licence.",
+            "title": "Threshold Days"
+          }
+        },
+        "required": [
+          "licence",
+          "threshold_days",
+          "last_jump_on",
+          "current_until"
+        ],
+        "title": "CurrencyOut",
+        "type": "object"
+      },
       "DecisionIn": {
         "properties": {
           "decision": {
@@ -1263,6 +1331,9 @@
             "title": "By Type",
             "type": "array"
           },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyOut"
+          },
           "first_jump_on": {
             "anyOf": [
               {
@@ -1308,7 +1379,8 @@
           "by_type",
           "by_location",
           "by_component",
-          "baseline_events"
+          "baseline_events",
+          "currency"
         ],
         "title": "HistoryOut",
         "type": "object"
@@ -2403,6 +2475,50 @@
           }
         },
         "title": "JumpUpdateIn",
+        "type": "object"
+      },
+      "LicenceIn": {
+        "properties": {
+          "licence": {
+            "description": "The licence you hold; `none` to clear.",
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence"
+        ],
+        "title": "LicenceIn",
+        "type": "object"
+      },
+      "LicenceOut": {
+        "properties": {
+          "licence": {
+            "description": "Self-stated and private; never verified.",
+            "enum": [
+              "none",
+              "student",
+              "a",
+              "b",
+              "c",
+              "d"
+            ],
+            "title": "Licence",
+            "type": "string"
+          }
+        },
+        "required": [
+          "licence"
+        ],
+        "title": "LicenceOut",
         "type": "object"
       },
       "LocationCountOut": {
@@ -15813,6 +15929,172 @@
         "summary": "Get Sharing",
         "tags": [
           "skydiver-posts"
+        ]
+      }
+    },
+    "/api/skydiver/v1/me/licence": {
+      "get": {
+        "operationId": "getLicence",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LicenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Licence",
+        "tags": [
+          "skydiver-history"
+        ]
+      },
+      "put": {
+        "operationId": "setLicence",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LicenceIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LicenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Set Licence",
+        "tags": [
+          "skydiver-history"
         ]
       }
     },

@@ -21,7 +21,11 @@ from app.skydiver.gear.tables import (
     SkydiverRigMembership,
     SkydiverServiceEntry,
 )
-from app.skydiver.history.tables import SkydiverJumpBaseline, SkydiverJumpBaselineEvent
+from app.skydiver.history.tables import (
+    SkydiverJumpBaseline,
+    SkydiverJumpBaselineEvent,
+    SkydiverJumperLicence,
+)
 from app.skydiver.logbook.tables import (
     SkydiverJump,
     SkydiverJumpComponent,
@@ -54,6 +58,8 @@ TABLES: dict[str, type[SQLModel]] = {
     "jump_components": SkydiverJumpComponent,
     "jump_events": SkydiverJumpEvent,
     "baseline_events": SkydiverJumpBaselineEvent,
+    # A setting, not a record: restored only where none is set (see insert_rows).
+    "licence": SkydiverJumperLicence,
 }
 
 
@@ -89,6 +95,7 @@ class SqlRecordsStore:
         for link in self._rows(JC, actor, col(JC.jump_id), col(JC.component_id)):
             used.setdefault(link.jump_id, []).append(link.component_id)
         baseline = self._s.execute(owned(B, actor)).scalars().first()
+        licence = self._s.execute(owned(SkydiverJumperLicence, actor)).scalars().first()
         stamps = ("created_at", "updated_at")
         event = ("kind", "created_at")
         records = {
@@ -194,6 +201,7 @@ class SqlRecordsStore:
                 )  # fmt: skip
                 for p in self._rows(VP, actor, col(VP.starts_on), col(VP.id))
             ],
+            "licence": licence.licence if licence else None,
         }
         return v1.RecordsV1.model_validate(records)
 
@@ -262,6 +270,12 @@ class SqlRecordsStore:
 
     def insert_rows(self, table: str, rows: list[dict[str, Any]]) -> None:
         if not rows:
+            return
+        if table == "licence":
+            # The account's own current setting wins over the archive's.
+            self._s.execute(
+                pg_insert(SkydiverJumperLicence).values(rows).on_conflict_do_nothing()
+            )
             return
         try:
             self._s.execute(insert(TABLES[table]), rows)

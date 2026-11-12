@@ -290,6 +290,54 @@ def test_owner_only_and_writes_need_a_confirmed_email(api: Api) -> None:
     assert api.call("GET", "/history").status_code == 401
 
 
+def test_currency_guidance_from_the_stated_licence_and_dated_entries(
+    api: Api,
+) -> None:
+    owner = api.accounts.session()
+    assert api.ok("GET", "/me/licence", owner) == {"licence": "none"}
+    # No licence, no jumps: nothing to judge.
+    assert api.history(owner)["currency"] == {
+        "licence": "none", "threshold_days": None, "last_jump_on": None,
+        "current_until": None, "source": "USPA SIM 5-2",
+    }  # fmt: skip
+
+    assert api.ok("PUT", "/me/licence", owner, {"licence": "b"}) == {"licence": "b"}
+    no_jumps = api.history(owner)["currency"]
+    assert (no_jumps["threshold_days"], no_jumps["current_until"]) == (90, None)
+
+    # A prior jump count has no dates: it adds no currency.
+    api.ok("PUT", "/history/baseline", owner, {"prior_jumps": 300, "before_on": "2026-10-01"})  # fmt: skip
+    assert api.history(owner)["currency"]["current_until"] is None
+
+    api.jump(owner, "2026-08-01")
+    api.jump(owner, "2026-10-10", jump_type="tandem")  # every type counts
+    c = api.history(owner)["currency"]
+    assert (c["last_jump_on"], c["current_until"]) == ("2026-10-10", "2027-01-08")
+
+    api.ok("PUT", "/me/licence", owner, {"licence": "a"})
+    assert api.history(owner)["currency"]["current_until"] == "2026-12-09"
+    api.ok("PUT", "/me/licence", owner, {"licence": "none"})
+    assert api.ok("GET", "/me/licence", owner) == {"licence": "none"}
+    assert api.history(owner)["currency"]["threshold_days"] is None
+
+    bad = api.call("PUT", "/me/licence", owner, {"licence": "e"})
+    assert bad.status_code == 422
+
+
+def test_the_licence_is_owner_only_and_needs_a_confirmed_email(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    api.ok("PUT", "/me/licence", owner, {"licence": "c"})
+    assert api.ok("GET", "/me/licence", other) == {"licence": "none"}
+    assert api.history(other)["currency"]["licence"] == "none"
+    unverified = api.accounts.session(verified=False)
+    assert api.ok("GET", "/me/licence", unverified) == {"licence": "none"}
+    refused = api.call("PUT", "/me/licence", unverified, {"licence": "a"})
+    assert refused.status_code == 403
+    assert api.call("GET", "/me/licence").status_code == 401
+    assert api.call("PUT", "/me/licence", None, {"licence": "a"}).status_code == 401
+    assert api.ok("GET", "/me/licence", owner) == {"licence": "c"}
+
+
 def test_summaries_read_one_snapshot_and_the_pool_is_left_as_it_was() -> None:
     stores = sql_history_store_factory(engine)
     with stores() as store:

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { fieldsFor } from '#lib/field-errors.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
@@ -169,6 +170,7 @@
 				<a class="button log" href="/jumps/new">Log your first jump</a>
 			{/if}
 		</section>
+		{#if data.summary?.currency}<CurrencyStatus currency={data.summary.currency} today={data.today} />{/if}
 	{/if}
 
 	{#if data.numbering.notes.length > 0}

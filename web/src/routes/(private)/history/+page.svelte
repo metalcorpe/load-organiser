@@ -1,6 +1,7 @@
 <script lang="ts">
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
+	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { KIND_LABEL } from '#lib/gear.ts';
@@ -78,6 +79,8 @@
 		<p><a href="/history/baseline">Change prior jump count</a></p>
 	{/if}
 	</section>
+
+	{#if h.currency}<CurrencyStatus currency={h.currency} today={data.today} />{/if}
 
 	{#if t.recorded === 0}
 		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>

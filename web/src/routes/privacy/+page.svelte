@@ -107,7 +107,7 @@
 	<h2 id="data">Export and restore</h2>
 	<p>
 		From <a href="/profile/data">Your data</a> you can download your records as one JSON file at any
-		time: jumps and their history, gear, prior jump count, private places, saved listings and plans.
+		time: jumps and their history, gear, prior jump count, licence, private places, saved listings and plans.
 		It contains your private notes and serial numbers, so keep it safe. It does not include your
 		password, email address, profile, posts or anyone else's records.
 	</p>

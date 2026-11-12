@@ -187,6 +187,9 @@ class RecordsV1(_Strict):
     baseline_events: Annotated[list[BaselineEventV1], Field(max_length=1_000)]
     saved_listings: Annotated[list[SavedListingV1], Field(max_length=200)]
     plans: Annotated[list[PlanV1], Field(max_length=100)]
+    # The licence the owner stated for currency guidance; absent or null: none.
+    # Added within v1 as optional, so earlier v1 files still restore.
+    licence: Literal["student", "a", "b", "c", "d"] | None = None
 
 
 class VenueRefV1(_Strict):

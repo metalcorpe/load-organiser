@@ -74,6 +74,8 @@ export const load: PageServerLoad = async (event) => {
 		filters,
 		filtered,
 		places,
+		// UTC day for the first render; the currency status then uses the jumper's own day.
+		today: new Date().toISOString().slice(0, 10),
 		recent,
 		continueFrom,
 		numbering: numbering?.ok ? numberingNotes(numbering.value) : { notes: [], more: null },
@@ -81,7 +83,8 @@ export const load: PageServerLoad = async (event) => {
 			history.ok && totals
 				? {
 						lifetime: totals.inconsistent ? null : totals.lifetime,
-						lastJumpOn: history.value.last_jump_on
+						lastJumpOn: history.value.last_jump_on,
+						currency: history.value.currency
 					}
 				: null
 	};

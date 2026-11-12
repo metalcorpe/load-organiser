@@ -44,6 +44,7 @@ Every object rejects unknown keys and every list is bounded, so a valid file can
 | `baseline_events` | `declared`, `corrected` (from/to), `removed`, `from_export` |
 | `saved_listings` | Listing ID and the title as saved (200) |
 | `plans` | Title, dates, note, at most one link to a listing, venue or private place (100) |
+| `licence` | The licence you stated for currency guidance: `student`, `a`, `b`, `c`, `d`, or `null`. Optional (files without it restore with none). A restore sets it only when the account has none set; it does not make the records non-empty |
 
 ## `references`
 

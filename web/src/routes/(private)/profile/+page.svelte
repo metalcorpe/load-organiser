@@ -2,6 +2,7 @@
 	import Notice from '#lib/components/Notice.svelte';
 	import RecordTiles from '#lib/components/RecordTiles.svelte';
 	import { authMessage } from '#lib/auth-messages.ts';
+	import { LICENCES, LICENCE_LABEL, licenceMessage } from '#lib/currency.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -61,6 +62,35 @@
 
 	<form method="POST" action="/sign-out" class="inline-form">
 		<button class="button secondary" type="submit">Sign out</button>
+	</form>
+</section>
+
+<section class="card" aria-labelledby="licence-heading">
+	<h2 id="licence-heading">Licence</h2>
+	<p>
+		Private to you. Used only to show your jump currency on your Logbook and History, from USPA
+		guidance (USPA SIM 5-2). It is not checked and not a verified status.
+	</p>
+	<form method="POST" action="?/licence" class="form" novalidate>
+		{#if doneFor('licence')}
+			<p role="status" class="ok">Licence saved.</p>
+		{:else if form && form.form === 'licence' && 'error' in form}
+			<p class="form-error" role="alert">{licenceMessage(form.error)}</p>
+		{/if}
+		{#if data.licence === null}
+			<p class="hint">Your current licence could not be loaded. Saving sets it again.</p>
+		{/if}
+		<div class="field">
+			<label for="licence">Licence</label>
+			<select id="licence" name="licence">
+				{#each LICENCES as value (value)}
+					<option {value} selected={(data.licence ?? 'none') === value}>{LICENCE_LABEL[value]}</option>
+				{/each}
+			</select>
+		</div>
+		<div class="form-actions">
+			<button class="button" type="submit">Save licence</button>
+		</div>
 	</form>
 </section>
 
@@ -188,7 +218,7 @@
 	<h2 id="data-heading">Your data</h2>
 	<p>
 		<a href="/profile/data">Export or restore your records</a>: a file with your logbook, gear,
-		prior jump count, private places, saved listings and plans.
+		prior jump count, licence, private places, saved listings and plans.
 	</p>
 </section>
 
