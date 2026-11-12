@@ -964,6 +964,52 @@
             "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
             "title": "End Of Life On"
           },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.",
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What is due at the limit, e.g. \"Reline\".",
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service whose latest entry restarts the count; default maintenance.",
+            "title": "Jump Limit Service Kind"
+          },
           "kind": {
             "enum": [
               "container",
@@ -1133,6 +1179,46 @@
             "title": "Id",
             "type": "string"
           },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jump Limit Service Kind"
+          },
           "kind": {
             "enum": [
               "container",
@@ -1254,6 +1340,9 @@
           "notes",
           "repack_interval_days",
           "end_of_life_on",
+          "jump_limit",
+          "jump_limit_label",
+          "jump_limit_service_kind",
           "archived",
           "version",
           "updated_at"
@@ -1371,6 +1460,52 @@
             ],
             "description": "An end-of-life date you entered (e.g. from the label). Never estimated.",
             "title": "End Of Life On"
+          },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "maximum": 100000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.",
+            "title": "Jump Limit"
+          },
+          "jump_limit_label": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "What is due at the limit, e.g. \"Reline\".",
+            "title": "Jump Limit Label"
+          },
+          "jump_limit_service_kind": {
+            "anyOf": [
+              {
+                "enum": [
+                  "repack",
+                  "inspection",
+                  "maintenance",
+                  "aad_service",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The service whose latest entry restarts the count; default maintenance.",
+            "title": "Jump Limit Service Kind"
           },
           "kind": {
             "anyOf": [
@@ -1801,11 +1936,31 @@
           "component": {
             "$ref": "#/components/schemas/DueComponentOut"
           },
+          "counted_since": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The day of that service; null: all its jumps.",
+            "title": "Counted Since"
+          },
           "due_on": {
-            "description": "Still in time on this day; overdue after it.",
-            "format": "date",
-            "title": "Due On",
-            "type": "string"
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Still in time on this day; overdue after it. Null for a jump limit.",
+            "title": "Due On"
           },
           "interval_days": {
             "anyOf": [
@@ -1831,14 +1986,63 @@
             "description": "Set when the default interval applies.",
             "title": "Interval Source"
           },
+          "jump_limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The limit in jumps.",
+            "title": "Jump Limit"
+          },
+          "jumps_left": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Negative when over the limit.",
+            "title": "Jumps Left"
+          },
+          "jumps_used": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Jumps that used it since the latest service of `service_kind` (after that day), or all its jumps when there is none.",
+            "title": "Jumps Used"
+          },
           "kind": {
             "enum": [
               "reserve_repack",
               "service",
-              "end_of_life"
+              "end_of_life",
+              "jump_limit"
             ],
             "title": "Kind",
             "type": "string"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A jump limit's own label, e.g. Reline.",
+            "title": "Label"
           },
           "service_kind": {
             "anyOf": [
@@ -1856,11 +2060,11 @@
                 "type": "null"
               }
             ],
-            "description": "The service entry it comes from; null for an end of life.",
+            "description": "The service entry it comes from (for a jump limit: the one that restarts the count); null for an end of life.",
             "title": "Service Kind"
           },
           "status": {
-            "description": "`soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
+            "description": "`soon`: due within 30 days, or for a jump limit within 10% of it or 25 jumps (whichever is fewer) or at it. Dates are judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.",
             "enum": [
               "overdue",
               "soon",

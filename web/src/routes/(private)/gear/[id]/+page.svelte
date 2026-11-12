@@ -177,6 +177,49 @@
 			The app never estimates it.
 		</p>
 	</div>
+	<fieldset class="field">
+		<legend>Jump limit (optional)</legend>
+		<p class="hint" id="jump-limit-hint">
+			Your own number, for example a reline after a number of jumps. Nothing is filled in for you:
+			use the manufacturer's or your rigger's figure. It counts the jumps logged with this item since
+			its latest service of the kind chosen below, or all of them when there is none.
+		</p>
+		<div class="pair">
+			<div class="field">
+				<label for="jump_limit">Limit in jumps</label>
+				<input
+					id="jump_limit"
+					name="jump_limit"
+					inputmode="numeric"
+					maxlength="7"
+					aria-describedby="jump-limit-hint"
+					defaultValue={v('jump_limit', c?.jump_limit?.toString())}
+				/>
+			</div>
+			<div class="field">
+				<label for="jump_limit_label">What is due then</label>
+				<input
+					id="jump_limit_label"
+					name="jump_limit_label"
+					maxlength="80"
+					placeholder="e.g. Reline"
+					defaultValue={v('jump_limit_label', c?.jump_limit_label)}
+				/>
+			</div>
+		</div>
+		<div class="field">
+			<label for="jump_limit_service_kind">Count restarts after</label>
+			<select id="jump_limit_service_kind" name="jump_limit_service_kind">
+				{#each Object.entries(SERVICE_LABEL) as [value, label] (value)}
+					<option
+						{value}
+						selected={(v('jump_limit_service_kind', c?.jump_limit_service_kind) || 'maintenance') === value}
+						>{label}</option
+					>
+				{/each}
+			</select>
+		</div>
+	</fieldset>
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>
 		<TextArea id="notes" name="notes" maxlength={1000} rows={3} initial={v('notes', c?.notes)} />

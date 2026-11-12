@@ -142,6 +142,19 @@ def check(archive: ArchiveV1, today: date) -> None:
         )
         _rule(where, lambda c=c: gear.repack_interval(c.repack_interval_days))
         _rule(where, lambda c=c: gear.end_of_life(c.end_of_life_on))
+        limit = _rule(
+            where,
+            lambda c=c: gear.jump_limit(
+                c.jump_limit, c.jump_limit_label, c.jump_limit_service_kind
+            ),
+        )
+        stored = (
+            (limit.limit, limit.label, limit.service_kind.value)
+            if limit
+            else (None, None, None)
+        )
+        if stored != (c.jump_limit, c.jump_limit_label, c.jump_limit_service_kind):
+            raise ArchiveInvalid(f"{where}.jump_limit_incomplete")
 
     per_component: dict[uuid.UUID, int] = defaultdict(int)
     for i, g in enumerate(r.rigs):

@@ -6,7 +6,9 @@ import {
 	dueState,
 	dueText,
 	dueWhat,
+	itemState,
 	parseInterval,
+	parseJumpLimit,
 	shortDay,
 	type DueIn
 } from './gear.ts';
@@ -100,5 +102,55 @@ describe('parseInterval', () => {
 		for (const bad of ['0', '731', '1.5', '-3', 'abc', '1000']) {
 			expect(parseInterval(bad)).toBe('invalid');
 		}
+	});
+});
+
+describe('jump limits', () => {
+	const limit = (over: Partial<DueIn> = {}): DueIn => ({
+		component: { id: 'm1', kind: 'main', label: 'Main canopy' },
+		kind: 'jump_limit',
+		service_kind: 'maintenance',
+		due_on: null,
+		basis: 'entered',
+		interval_days: null,
+		interval_source: null,
+		status: 'soon',
+		label: 'Reline',
+		jump_limit: 500,
+		jumps_used: 488,
+		jumps_left: 12,
+		counted_since: '2026-03-01',
+		...over
+	});
+
+	it('says how many jumps are left or over', () => {
+		expect(dueText(limit(), TODAY)).toBe('Reline due in 12 jumps');
+		expect(dueText(limit({ jumps_left: 1 }), TODAY)).toBe('Reline due in 1 jump');
+		expect(dueText(limit({ jumps_left: 0 }), TODAY)).toBe('Reline due now');
+		expect(dueText(limit({ jumps_left: -3, status: 'overdue' }), TODAY)).toBe(
+			'Reline overdue by 3 jumps'
+		);
+	});
+
+	it('takes its state from the API, not the day', () => {
+		expect(itemState(limit({ status: 'later' }), TODAY)).toBe('later');
+		expect(dueSoon([limit(), limit({ status: 'later' }), due()], TODAY)).toHaveLength(2);
+	});
+
+	it('explains what is counted', () => {
+		expect(dueBasis(limit())).toBe(
+			'Your limit of 500 jumps: 488 jumps logged with it since your last maintenance / repair on 1 March 2026.'
+		);
+		expect(dueBasis(limit({ counted_since: null, jumps_used: 1 }))).toBe(
+			'Your limit of 500 jumps: 1 jump logged with it since you added it (no maintenance / repair recorded).'
+		);
+	});
+
+	it('reads the optional limit', () => {
+		expect(parseJumpLimit('')).toBeNull();
+		expect(parseJumpLimit(' 1,000 ')).toBe(1000);
+		expect(parseJumpLimit('0')).toBe('invalid');
+		expect(parseJumpLimit('100001')).toBe('invalid');
+		expect(parseJumpLimit('ten')).toBe('invalid');
 	});
 });

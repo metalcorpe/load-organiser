@@ -529,6 +529,24 @@ export type ComponentIn = {
      */
     end_of_life_on?: string | null;
     /**
+     * Jump Limit
+     *
+     * Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jump Limit Label
+     *
+     * What is due at the limit, e.g. "Reline".
+     */
+    jump_limit_label?: string | null;
+    /**
+     * Jump Limit Service Kind
+     *
+     * The service whose latest entry restarts the count; default maintenance.
+     */
+    jump_limit_service_kind?: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
+    /**
      * Kind
      */
     kind: 'container' | 'main' | 'reserve' | 'aad' | 'other';
@@ -596,6 +614,18 @@ export type ComponentOut = {
      * Id
      */
     id: string;
+    /**
+     * Jump Limit
+     */
+    jump_limit: number | null;
+    /**
+     * Jump Limit Label
+     */
+    jump_limit_label: string | null;
+    /**
+     * Jump Limit Service Kind
+     */
+    jump_limit_service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Kind
      */
@@ -702,6 +732,24 @@ export type ComponentUpdateIn = {
      * An end-of-life date you entered (e.g. from the label). Never estimated.
      */
     end_of_life_on?: string | null;
+    /**
+     * Jump Limit
+     *
+     * Your own jump-count limit (e.g. 500 before a reline). None is suggested; null with a null label clears it.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jump Limit Label
+     *
+     * What is due at the limit, e.g. "Reline".
+     */
+    jump_limit_label?: string | null;
+    /**
+     * Jump Limit Service Kind
+     *
+     * The service whose latest entry restarts the count; default maintenance.
+     */
+    jump_limit_service_kind?: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Kind
      */
@@ -922,11 +970,17 @@ export type GearDueOut = {
     basis: 'entered' | 'interval';
     component: DueComponentOut;
     /**
+     * Counted Since
+     *
+     * The day of that service; null: all its jumps.
+     */
+    counted_since?: string | null;
+    /**
      * Due On
      *
-     * Still in time on this day; overdue after it.
+     * Still in time on this day; overdue after it. Null for a jump limit.
      */
-    due_on: string;
+    due_on: string | null;
     /**
      * Interval Days
      */
@@ -938,19 +992,43 @@ export type GearDueOut = {
      */
     interval_source: 'USPA / FAA 14 CFR 105.43' | null;
     /**
+     * Jump Limit
+     *
+     * The limit in jumps.
+     */
+    jump_limit?: number | null;
+    /**
+     * Jumps Left
+     *
+     * Negative when over the limit.
+     */
+    jumps_left?: number | null;
+    /**
+     * Jumps Used
+     *
+     * Jumps that used it since the latest service of `service_kind` (after that day), or all its jumps when there is none.
+     */
+    jumps_used?: number | null;
+    /**
      * Kind
      */
-    kind: 'reserve_repack' | 'service' | 'end_of_life';
+    kind: 'reserve_repack' | 'service' | 'end_of_life' | 'jump_limit';
+    /**
+     * Label
+     *
+     * A jump limit's own label, e.g. Reline.
+     */
+    label?: string | null;
     /**
      * Service Kind
      *
-     * The service entry it comes from; null for an end of life.
+     * The service entry it comes from (for a jump limit: the one that restarts the count); null for an end of life.
      */
     service_kind: 'repack' | 'inspection' | 'maintenance' | 'aad_service' | 'other' | null;
     /**
      * Status
      *
-     * `soon`: due within 30 days. Judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
+     * `soon`: due within 30 days, or for a jump limit within 10% of it or 25 jumps (whichever is fewer) or at it. Dates are judged on the latest calendar date anywhere; compare `due_on` with your own day for the exact count.
      */
     status: 'overdue' | 'soon' | 'later';
 };

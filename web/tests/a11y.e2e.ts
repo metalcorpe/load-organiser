@@ -78,7 +78,10 @@ async function world(): Promise<World> {
 		await created('/gear/components', bearer, {
 			client_key: randomUUID(),
 			kind: 'reserve',
-			label: 'Axe reserve'
+			label: 'Axe reserve',
+			// A jump-count limit: its line in the due lists and its fields on the form.
+			jump_limit: 100,
+			jump_limit_label: 'Axe check'
 		})
 	).component;
 	// A repack 175 days ago: the "due soon" states of Logbook, Gear and the component.

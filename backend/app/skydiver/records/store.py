@@ -124,6 +124,9 @@ class SqlRecordsStore:
                     "notes",
                     "repack_interval_days",
                     "end_of_life_on",
+                    "jump_limit",
+                    "jump_limit_label",
+                    "jump_limit_service_kind",
                     "archived_at",
                     *stamps,
                 )  # fmt: skip

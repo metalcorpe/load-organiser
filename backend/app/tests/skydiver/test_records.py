@@ -131,7 +131,8 @@ class Api:
             {"client_key": str(uuid.uuid4()), "kind": "main", "label": "Navigator",
              "serial": "N-0042", "relation": "owned", "acquisition_method": "purchase",
              "acquired": "2024-05", "repack_interval_days": 120,
-             "end_of_life_on": "2034-05-01"},
+             "end_of_life_on": "2034-05-01", "jump_limit": 500,
+             "jump_limit_label": "Reline", "jump_limit_service_kind": "maintenance"},
             201,
         )["component"]  # fmt: skip
         rig = self.ok("POST", "/gear/rigs", secret, {"client_key": str(uuid.uuid4()), "label": "Rig A"}, 201)  # fmt: skip
@@ -232,6 +233,9 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 c["acquired"],
                 c["repack_interval_days"],
                 c["end_of_life_on"],
+                c["jump_limit"],
+                c["jump_limit_label"],
+                c["jump_limit_service_kind"],
             )
             for c in r["components"]
         ],
@@ -365,6 +369,7 @@ def test_an_earlier_file_without_gear_due_settings_restores_with_none(
         None,
         None,
     )
+    assert (restored["jump_limit"], restored["jump_limit_label"]) == (None, None)
     # Out-of-range settings are refused before any write.
     bad = json.dumps(_archive(components=[component | {"repack_interval_days": 0}]))
     response = api.send(
@@ -727,3 +732,15 @@ def test_a_restored_history_never_carries_undo_markers(api: Api) -> None:
     }
     (restored,) = records["jumps"]
     assert restored["jump_type"] == "belly"
+
+
+def test_a_jump_limit_in_a_file_must_be_complete(api: Api) -> None:
+    component = {
+        "id": str(uuid.uuid4()), "kind": "main", "label": "Main", "relation": "owned",
+        "created_at": "2026-10-01T10:00:00Z", "updated_at": "2026-10-01T10:00:00Z",
+        "jump_limit": 500,
+    }  # fmt: skip
+    bad = json.dumps(_archive(components=[component])).encode()
+    response = api.send("/records/restore/check", api.accounts.session(), bad)
+    assert response.status_code == 422
+    assert response.json()["problem"] == "components[0].jump_limit_label_required"

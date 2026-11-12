@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { ComponentDetailOut, GearDueOut, RigOut, ServiceOut } from '#lib/contracts/index.ts';
-import { parseInterval } from '#lib/gear.ts';
+import { parseInterval, parseJumpLimit } from '#lib/gear.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
@@ -67,7 +67,11 @@ function componentFields(data: FormData) {
 		notes: text(data, 'notes', 2000),
 		// Only a reserve shows the interval field; anything else sends none (the default).
 		repack_interval_days: parseInterval(field(data, 'repack_interval_days', { max: 8 })),
-		end_of_life_on: text(data, 'end_of_life_on', 10)
+		end_of_life_on: text(data, 'end_of_life_on', 10),
+		// All three together; empty number and label clear the limit.
+		jump_limit: parseJumpLimit(field(data, 'jump_limit', { max: 12 })),
+		jump_limit_label: text(data, 'jump_limit_label', 200),
+		jump_limit_service_kind: text(data, 'jump_limit_service_kind', 16)
 	};
 }
 
@@ -87,6 +91,9 @@ export const actions: Actions = {
 			return fail(400, { form: 'save', error: 'missing', values: echo(data), based });
 		if (body.repack_interval_days === 'invalid')
 			return fail(400, { form: 'save', error: 'repack_interval_invalid', values: echo(data), based });
+		if (body.jump_limit === 'invalid')
+			return fail(400, { form: 'save', error: 'jump_limit_invalid', values: echo(data), based });
+		if (body.jump_limit === null && !body.jump_limit_label) body.jump_limit_service_kind = null;
 		if (body.end_of_life_on && !DATE.test(body.end_of_life_on))
 			return fail(400, { form: 'save', error: 'end_of_life_invalid', values: echo(data), based });
 		const api = createRequestApi();
