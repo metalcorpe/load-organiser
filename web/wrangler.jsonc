@@ -12,10 +12,15 @@
 	// later. Pull-request preview URLs stay off: every build talks to the one API.
 	"workers_dev": true,
 	"preview_urls": false,
-	// Variables are set in the Cloudflare dashboard (API_ORIGIN, APP_ORIGIN, and the
-	// secret API_PROXY_KEY); keep_vars stops a deploy from erasing them. None is
-	// declared here, so nothing in Git can overwrite them. Local preview passes them
-	// with --var (scripts/dev.sh, playwright.config.ts). See src/env.ts and
-	// docs/product/deploy-runbook.md.
+	// The staging origins are not secrets, so every deploy sets them from here (the
+	// dashboard refused variables while the Worker still looked assets-only). Local
+	// preview and the tests override them with --var (scripts/dev.sh,
+	// playwright.config.ts). The one secret, API_PROXY_KEY, is set with
+	// `npx wrangler secret put API_PROXY_KEY` and kept across deploys (keep_vars).
+	// See src/env.ts and docs/product/deploy-runbook.md.
+	"vars": {
+		"APP_ORIGIN": "https://load-organiser.metalcorpe.workers.dev",
+		"API_ORIGIN": "https://load-organiser.fastapicloud.dev"
+	},
 	"keep_vars": true
 }
