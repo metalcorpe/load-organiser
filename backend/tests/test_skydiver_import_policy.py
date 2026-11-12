@@ -1,5 +1,6 @@
 """Logbook import from a spreadsheet: reading and row rules as plain values (no database)."""
 
+import time
 from datetime import date
 
 import pytest
@@ -38,6 +39,36 @@ def test_comma_semicolon_and_tab_files_read_the_same(delimiter: str) -> None:
     assert table.delimiter == delimiter
     assert table.headings == ["Date", "Dropzone", "Notes"]
     assert table.rows == [["12/03/2024", "Empuriabrava", "a, b; c"]]
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        (
+            "Date;Place;Notes\n1,2,3,4,5,6\n",
+            ";",
+        ),  # the heading line decides, not the data
+        ("\n\n  \nDate\tPlace\n", "\t"),  # the first non-empty line
+        ("Date,Place;Notes\n", ","),  # a tie goes to the comma
+        ("Date;Place\tNotes\n", ";"),  # then to the semicolon
+        ("Date\n2024-01-01\n", ","),  # one column
+        ("", ","),
+    ],
+)
+def test_the_delimiter_is_the_one_used_most_in_the_heading_line(
+    text: str, expected: str
+) -> None:
+    assert policy.delimiter(text) == expected
+
+
+def test_a_hostile_one_line_file_is_read_quickly() -> None:
+    hostile = ('"' + "a,;\t'\"" * 170_000)[: policy.RAW_MAX_BYTES].encode()
+    started = time.perf_counter()
+    try:
+        policy.read_table(hostile)
+    except ImportRefused:
+        pass
+    assert time.perf_counter() - started < 2
 
 
 def test_a_byte_order_mark_is_not_part_of_the_first_heading() -> None:

@@ -2,11 +2,12 @@
 
 import json
 import threading
+import time
 import uuid
 from collections.abc import Iterator
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 from typing import Any
 
 import httpx2
@@ -20,6 +21,7 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.api import create_router as create_directory_router
 from app.skydiver.directory.service import DirectoryService
+from app.skydiver.directory.service import LimitReached as PlaceLimitReached
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.imports.api import create_router
@@ -27,6 +29,7 @@ from app.skydiver.imports.policy import Options
 from app.skydiver.imports.service import ImportService, LimitReached
 from app.skydiver.imports.store import SqlImportStore, sql_import_store_factory
 from app.skydiver.logbook.api import create_router as create_logbook_router
+from app.skydiver.logbook.service import LimitReached as JumpLimitReached
 from app.skydiver.logbook.service import LogbookService
 from app.skydiver.logbook.store import sql_logbook_store_factory
 from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpImport
@@ -415,7 +418,7 @@ def _service(store_type: type[SqlImportStore]) -> ImportService:
 
 
 def test_two_imports_at_once_never_pass_the_jump_limit_together(api: Api) -> None:
-    """Both imports count the jumps before either commits; only one may commit."""
+    """Both imports start counting at once; only one may pass the limit."""
     owner = api.accounts.session()
     actor = _actor(api, owner)
     api.run(owner, _bulk(1990), country="PT")
@@ -425,14 +428,13 @@ def test_two_imports_at_once_never_pass_the_jump_limit_together(api: Api) -> Non
     waits = [0]
 
     class Simultaneous(SqlImportStore):
-        def count_jumps(self, actor: Actor) -> int:
-            count = super().count_jumps(actor)
+        def lock_owner(self, actor: Actor) -> None:
             with lock:
                 first_two = waits[0] < 2
                 waits[0] += 1
-            if first_two:  # the first attempt of each import, not the retry
+            if first_two:  # both imports reach the per-person gate together
                 both_counted.wait()
-            return count
+            super().lock_owner(actor)
 
     service = _service(Simultaneous)
 
@@ -459,14 +461,13 @@ def test_the_same_file_imported_twice_at_once_is_written_once(api: Api) -> None:
     waits = [0]
 
     class Simultaneous(SqlImportStore):
-        def count_jumps(self, actor: Actor) -> int:
-            count = super().count_jumps(actor)
+        def lock_owner(self, actor: Actor) -> None:
             with lock:
                 first_two = waits[0] < 2
                 waits[0] += 1
-            if first_two:
+            if first_two:  # both imports reach the per-person gate together
                 both_counted.wait()
-            return count
+            super().lock_owner(actor)
 
     service = _service(Simultaneous)
     options = Options(country="PT")
@@ -484,3 +485,87 @@ def test_the_same_file_imported_twice_at_once_is_written_once(api: Api) -> None:
     assert results == ["already_imported", "imported"]
     assert _count(SkydiverJump, actor) == 5
     assert _count(SkydiverProvisionalPlace, actor) == 1
+
+
+def test_an_import_and_a_jump_logged_meanwhile_never_pass_the_jump_limit(
+    api: Api,
+) -> None:
+    owner = api.accounts.session()
+    actor = _actor(api, owner)
+    api.run(owner, _bulk(1995), country="PT")
+    place = uuid.UUID(api.ok("GET", "/places", owner)[0]["id"])
+    counted = threading.Event()
+
+    class Slow(SqlImportStore):
+        def count_jumps(self, actor: Actor) -> int:
+            count = super().count_jumps(actor)
+            counted.set()
+            time.sleep(0.5)  # a jump logged by hand starts while this import counts
+            return count
+
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: NOW)  # fmt: skip
+    logbook = LogbookService(stores=sql_logbook_store_factory(engine), clock=lambda: NOW, directory=directory)  # fmt: skip
+    fields = {"jumped_on": date(2024, 1, 1), "place_id": place, "jump_type": "belly"}
+
+    def by_hand() -> str:
+        assert counted.wait(10)
+        try:
+            logbook.create_jump(actor, uuid.uuid4(), fields, confirm_distinct=True)
+        except JumpLimitReached as error:
+            return error.code
+        return "created"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        imported = pool.submit(
+            lambda: _service(Slow).run(
+                actor, _bulk(5, first=9000), Options(country="PT"),
+                expected=None, before_write=lambda: None,
+            ).outcome
+        )  # fmt: skip
+        manual = pool.submit(by_hand)
+        assert (imported.result(), manual.result()) == (
+            "imported",
+            "jump_limit_reached",
+        )
+    assert _count(SkydiverJump, actor) == 2000
+
+
+def test_an_import_and_a_place_added_meanwhile_never_pass_the_place_limit(
+    api: Api,
+) -> None:
+    owner = api.accounts.session()
+    actor = _actor(api, owner)
+    many = _csv(*(f"2020-01-01,{n},Field {n},,,," for n in range(1, 200)))
+    assert api.run(owner, many, country="PT").json()["item"]["counts"]["new_places"] == 199  # fmt: skip
+    counted = threading.Event()
+
+    class Slow(SqlImportStore):
+        def count_places(self, actor: Actor) -> int:
+            count = super().count_places(actor)
+            counted.set()
+            time.sleep(0.5)  # a place added by hand starts while this import counts
+            return count
+
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: NOW)  # fmt: skip
+
+    def by_hand() -> str:
+        assert counted.wait(10)
+        try:
+            directory.create_place(actor, name="Added by hand", country="PT")
+        except PlaceLimitReached as error:
+            return error.code
+        return "created"
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        imported = pool.submit(
+            lambda: _service(Slow).run(
+                actor, _csv("2020-02-02,500,Last field,,,,"), Options(country="PT"),
+                expected=None, before_write=lambda: None,
+            ).outcome
+        )  # fmt: skip
+        manual = pool.submit(by_hand)
+        assert (imported.result(), manual.result()) == (
+            "imported",
+            "place_limit_reached",
+        )
+    assert _count(SkydiverProvisionalPlace, actor) == 200

@@ -11,7 +11,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col
 
 from app.skydiver.access.policy import Actor
-from app.skydiver.access.sql import get_owned, owned
+from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
@@ -94,6 +94,9 @@ class SqlLogbookStore:
         return [_jump(r, used[r.id]) for r in rows]
 
     # reads -----------------------------------------------------------------------
+
+    def lock_owner(self, actor: Actor) -> None:
+        lock_owner(self._s, actor)
 
     def count_jumps(self, actor: Actor) -> int:
         return int(

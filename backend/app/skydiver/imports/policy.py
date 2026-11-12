@@ -2,7 +2,7 @@
 
 Reading: at most 1 MiB; UTF-8 with or without a byte-order mark, UTF-16 with a
 byte-order mark, otherwise Windows-1252. The delimiter (comma, semicolon or tab)
-is sniffed. The first non-empty row holds the column headings; at most 2,000
+is the one used most in the heading line. The first non-empty row holds the column headings; at most 2,000
 data rows follow. Columns are recognised by their heading (a few English, Greek,
 Spanish and Portuguese words) and the caller may override each one.
 
@@ -110,31 +110,33 @@ def decode(raw: bytes) -> tuple[str, str]:
         raise ImportRefused("file_unreadable") from None
 
 
-_DELIMITERS = ",;\t"
+# Ties go to the earlier one: comma, then semicolon, then tab.
+DELIMITERS = (",", ";", "\t")
 
 
-def _delimiter(text: str) -> str:
-    sample = text[:65536]
-    first = next((line for line in sample.splitlines() if line.strip()), "")
-    try:
-        sniffed = csv.Sniffer().sniff(sample, delimiters=_DELIMITERS).delimiter
-    except csv.Error:
-        sniffed = ""
-    if sniffed in _DELIMITERS and sniffed and sniffed in first:
-        return sniffed
-    # The heading row decides when sniffing is unsure (one row, quoted notes...).
-    counts = {d: first.count(d) for d in _DELIMITERS}
-    best = max(counts, key=lambda d: counts[d])
-    return best if counts[best] else ","
+def delimiter(text: str) -> str:
+    """The delimiter used most in the heading line (the first non-empty line).
+
+    Deliberately simple and linear: no sniffing of the whole sample (csv.Sniffer
+    runs backtracking regular expressions over untrusted text and guesses).
+    """
+    heading = ""
+    for line in text.splitlines():
+        if line.strip():
+            heading = line
+            break
+    counts = [heading.count(d) for d in DELIMITERS]
+    best = max(range(len(DELIMITERS)), key=lambda i: (counts[i], -i))
+    return DELIMITERS[best] if counts[best] else ","
 
 
 def read_table(raw: bytes) -> Table:
     text, encoding = decode(raw)
     if "\x00" in text:
         raise ImportRefused("file_unreadable")
-    delimiter = _delimiter(text)
+    sep = delimiter(text)
     try:
-        rows = list(csv.reader(io.StringIO(text, newline=""), delimiter=delimiter))
+        rows = list(csv.reader(io.StringIO(text, newline=""), delimiter=sep))
     except csv.Error:
         raise ImportRefused("file_unreadable") from None
     cleaned = [[cell.strip() for cell in row] for row in rows]
@@ -153,7 +155,7 @@ def read_table(raw: bytes) -> Table:
         headings=[" ".join(h.split())[:HEADING_MAX] for h in headings],
         rows=data,
         encoding=encoding,
-        delimiter=delimiter,
+        delimiter=sep,
     )
 
 

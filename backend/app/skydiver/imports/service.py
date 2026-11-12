@@ -14,9 +14,11 @@ Check and import run the same steps; check writes nothing.
    `imported`) and one `created` event per jump. The import row first claims the
    person's next import sequence (read before anything is counted) and the file's
    fingerprint, both unique per person: of two simultaneous imports only one can
-   commit, and the other starts again on what the first wrote (compare-and-swap,
-   no lock). So two imports cannot both pass the jump limit, and the same file
-   twice answers "already imported" without writing.
+   commit, and the other starts again on what the first wrote, so the same file
+   twice answers "already imported" without writing. The limits are counted
+   behind the per-person gate (`lock_owner`) that manual place and jump creation
+   take too, so neither a second import nor a hand-made place or jump can pass
+   the same check at the same time.
 5. Undo removes every jump still linked to the import (edited or not) and the
    places it created that nothing uses any more, once: the undo time is set only
    where it is still empty.
@@ -132,6 +134,10 @@ class Outcome:
 
 
 class ImportStore(Protocol):
+    def lock_owner(self, actor: Actor) -> None:
+        """The per-person gate that manual place and jump creation also take."""
+        ...
+
     def next_sequence(self, actor: Actor) -> int: ...
     def count_jumps(self, actor: Actor) -> int: ...
     def count_places(self, actor: Actor) -> int: ...
@@ -284,6 +290,10 @@ class ImportService:
     ) -> Outcome:
         now = self._clock()
         with self._stores() as store:
+            # The same per-person gate as creating a place or a jump by hand, so
+            # the place and jump limits below cannot be passed by a create (or an
+            # import of the same file) that lands while this import is counting.
+            store.lock_owner(actor)
             done = store.by_fingerprint(actor, digest)
             if done is not None and done.undone_at is None:
                 return Outcome("already_imported", done)

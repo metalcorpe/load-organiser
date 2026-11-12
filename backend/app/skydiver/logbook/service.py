@@ -144,6 +144,10 @@ class JumpPage:
 
 
 class LogbookStore(Protocol):
+    def lock_owner(self, actor: Actor) -> None:
+        """Serialise this person's jump-limit checks (manual creates and imports)."""
+        ...
+
     def count_jumps(self, actor: Actor) -> int: ...
     def receipt(self, actor: Actor, client_key: uuid.UUID) -> Receipt | None: ...
     def get_jump(self, actor: Actor, jump_id: uuid.UUID) -> Jump | None: ...
@@ -312,6 +316,7 @@ class LogbookService:
         with self._stores() as store:
             receipt = store.receipt(actor, client_key)
             if receipt is None:
+                store.lock_owner(actor)
                 self._check_components(store, actor, component_ids)
                 self._check_place(store, actor, values.get("place_id"))
                 refusal: Exception | None = None

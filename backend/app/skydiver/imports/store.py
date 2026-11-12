@@ -11,7 +11,7 @@ from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlmodel import Session, SQLModel, col
 
 from app.skydiver.access.policy import Actor
-from app.skydiver.access.sql import get_owned, owned
+from app.skydiver.access.sql import get_owned, lock_owner, owned
 from app.skydiver.directory.policy import PUBLIC_STATUSES
 from app.skydiver.directory.tables import (
     SkydiverProvisionalPlace,
@@ -71,6 +71,9 @@ class SqlImportStore:
                 select(func.count()).select_from(model).where(owner == actor.person_id)
             ).scalar_one()
         )
+
+    def lock_owner(self, actor: Actor) -> None:
+        lock_owner(self._s, actor)
 
     def next_sequence(self, actor: Actor) -> int:
         latest = self._s.execute(
