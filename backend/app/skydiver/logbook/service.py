@@ -143,6 +143,13 @@ class JumpPage:
     recorded_total: int
 
 
+@dataclass(frozen=True)
+class NumberedRef:
+    id: uuid.UUID
+    jumped_on: date
+    number: int
+
+
 class LogbookStore(Protocol):
     def lock_owner(self, actor: Actor) -> None:
         """Serialise this person's jump-limit checks (manual creates and imports)."""
@@ -155,6 +162,10 @@ class LogbookStore(Protocol):
         self, actor: Actor, after: tuple[date, uuid.UUID] | None, limit: int
     ) -> list[Jump]:
         """Newest activity date first, then newest entry."""
+        ...
+
+    def numbered(self, actor: Actor) -> list[NumberedRef]:
+        """The owner's numbered jumps by number, then date and id (bounded by the limit)."""
         ...
 
     def find_same(self, actor: Actor, values: dict[str, Any]) -> uuid.UUID | None:
@@ -280,6 +291,12 @@ class LogbookService:
             last = rows[size - 1]
             next_cursor = encode_cursor(last.jumped_on.isoformat(), last.id)
         return JumpPage(views, next_cursor, total)
+
+    def numbering(self, actor: Actor) -> policy.Numbering[NumberedRef]:
+        """Highest jump number, gaps and repeats in the owner's own numbering."""
+        with self._stores() as store:
+            rows = store.numbered(actor)
+        return policy.numbering([policy.Numbered(r.number, r) for r in rows])
 
     def jump(self, actor: Actor, jump_id: uuid.UUID) -> JumpDetail:
         with self._stores() as store:

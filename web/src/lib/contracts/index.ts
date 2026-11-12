@@ -13,6 +13,7 @@ export type {
 	ImportResultOut,
 	JumpDetailOut,
 	JumpOut,
+	JumpNumberingOut,
 	JumpPageOut,
 	JumpSummaryOut,
 	LocationOut,

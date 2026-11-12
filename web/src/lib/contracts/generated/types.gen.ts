@@ -909,6 +909,40 @@ export type JumpIn = {
 };
 
 /**
+ * JumpNumberingOut
+ *
+ * Your own numbering, to suggest the next number and note slips.
+ */
+export type JumpNumberingOut = {
+    /**
+     * Gap Count
+     */
+    gap_count: number;
+    /**
+     * Gaps
+     *
+     * The first few, lowest first.
+     */
+    gaps: Array<NumberGapOut>;
+    /**
+     * Highest
+     *
+     * Null when no jump has a number.
+     */
+    highest: number | null;
+    /**
+     * Repeat Count
+     */
+    repeat_count: number;
+    /**
+     * Repeats
+     *
+     * The first few, lowest first.
+     */
+    repeats: Array<NumberRepeatOut>;
+};
+
+/**
  * JumpOut
  *
  * The owner's own record. `provenance` is always self-reported.
@@ -1233,6 +1267,64 @@ export type MonthOut = {
      * YYYY-MM
      */
     month: string;
+};
+
+/**
+ * NumberGapOut
+ */
+export type NumberGapOut = {
+    after: NumberedJumpOut;
+    before: NumberedJumpOut;
+    /**
+     * First
+     *
+     * The first missing number.
+     */
+    first: number;
+    /**
+     * Last
+     *
+     * The last missing number.
+     */
+    last: number;
+};
+
+/**
+ * NumberRepeatOut
+ */
+export type NumberRepeatOut = {
+    /**
+     * Jump Number
+     */
+    jump_number: number;
+    /**
+     * Jumps
+     *
+     * At most five of them.
+     */
+    jumps: Array<NumberedJumpOut>;
+    /**
+     * Uses
+     */
+    uses: number;
+};
+
+/**
+ * NumberedJumpOut
+ */
+export type NumberedJumpOut = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Jump Number
+     */
+    jump_number: number;
+    /**
+     * Jumped On
+     */
+    jumped_on: string;
 };
 
 /**
@@ -6938,6 +7030,59 @@ export type UndoJumpImportResponses = {
 };
 
 export type UndoJumpImportResponse = UndoJumpImportResponses[keyof UndoJumpImportResponses];
+
+export type GetJumpNumberingData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/jumps/numbering';
+};
+
+export type GetJumpNumberingErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverLogbookApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverLogbookApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverLogbookApiProblem;
+    /**
+     * Response 409 Getjumpnumbering
+     *
+     * Conflict
+     */
+    409: AppSkydiverLogbookApiProblem | DuplicateProblem;
+    /**
+     * Gone
+     */
+    410: AppSkydiverLogbookApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverLogbookApiProblem;
+};
+
+export type GetJumpNumberingError = GetJumpNumberingErrors[keyof GetJumpNumberingErrors];
+
+export type GetJumpNumberingResponses = {
+    /**
+     * Successful Response
+     */
+    200: JumpNumberingOut;
+};
+
+export type GetJumpNumberingResponse = GetJumpNumberingResponses[keyof GetJumpNumberingResponses];
 
 export type DeleteJumpData = {
     body?: never;

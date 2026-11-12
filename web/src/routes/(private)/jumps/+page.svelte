@@ -60,6 +60,28 @@
 		</section>
 	{/if}
 
+	{#if data.numbering.notes.length > 0}
+		<section class="numbering" aria-labelledby="numbering-heading">
+			<h2 id="numbering-heading">Jump numbers to check</h2>
+			<ul>
+				{#each data.numbering.notes as note (note.text)}
+					<li>
+						{#if note.kind === 'gap'}
+							{note.text}, between <a href="/jumps/{note.before.id}">#{note.before.number}</a> and
+							<a href="/jumps/{note.after.id}">#{note.after.number}</a>.
+						{:else}
+							{note.text}:
+							{#each note.jumps as jump, i (jump.id)}{i > 0 ? ', ' : ''}<a href="/jumps/{jump.id}"
+									>{formatDay(jump.jumped_on)}</a
+								>{/each}.
+						{/if}
+					</li>
+				{/each}
+			</ul>
+			{#if data.numbering.more}<p>{data.numbering.more}</p>{/if}
+		</section>
+	{/if}
+
 	{#if data.page.items.length === 0}
 		<p class="hint">
 			{data.older ? 'No older entries.' : 'No jumps yet. Only the date, place and type are needed.'}
@@ -247,5 +269,27 @@
 	.pager {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.numbering {
+		margin: 0 0 1.25rem;
+		padding: 0.75rem 0.9rem;
+		border-radius: var(--radius);
+		background: var(--surface-soft);
+		font-size: 0.95rem;
+	}
+
+	.numbering h2 {
+		font-size: 1rem;
+		margin: 0 0 0.25rem;
+	}
+
+	.numbering ul {
+		margin: 0;
+		padding-left: 1.1rem;
+	}
+
+	.numbering p {
+		margin: 0.25rem 0 0;
 	}
 </style>

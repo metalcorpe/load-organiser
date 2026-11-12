@@ -396,3 +396,46 @@ def test_a_lost_same_key_race_returns_the_winner(api: Api) -> None:
     again, created = late.create_jump(actor, key, fields, confirm_distinct=True)
     assert (again.view.jump.id, created) == (first.view.jump.id, False)
     assert real.list_jumps(actor).recorded_total == 1
+
+
+def test_numbering_is_the_owners_own(api: Api) -> None:
+    owner, other = api.accounts.session(), api.accounts.session()
+    assert api.ok("GET", "/jumps/numbering", owner) == {
+        "highest": None, "gaps": [], "gap_count": 0, "repeats": [], "repeat_count": 0,
+    }  # fmt: skip
+    place = api.place(owner)
+
+    def jump(number: int | None, day: str) -> str:
+        sent = api.jump(
+            owner, place_id=place["id"], jumped_on=day, jump_number=number,
+            confirm_distinct=True,
+        )  # fmt: skip
+        assert sent.status_code == 201, sent.text
+        return str(sent.json()["jump"]["id"])
+
+    j120 = jump(120, "2026-10-01")
+    j125 = jump(125, "2026-10-02")
+    first130 = jump(130, "2026-10-03")
+    second130 = jump(130, "2026-10-04")
+    jump(None, "2026-10-05")  # unnumbered jumps are ignored
+    # Another jumper's higher number changes nothing here.
+    api.jump(other, place_id=api.place(other)["id"], jump_number=999)
+
+    found = api.ok("GET", "/jumps/numbering", owner)
+    assert found["highest"] == 130
+    assert [(g["first"], g["last"]) for g in found["gaps"]] == [(121, 124), (126, 129)]
+    assert found["gaps"][0]["before"] == {
+        "id": j120, "jumped_on": "2026-10-01", "jump_number": 120,
+    }  # fmt: skip
+    assert found["gaps"][0]["after"]["id"] == j125
+    assert found["repeats"] == [
+        {
+            "jump_number": 130, "uses": 2,
+            "jumps": [
+                {"id": first130, "jumped_on": "2026-10-03", "jump_number": 130},
+                {"id": second130, "jumped_on": "2026-10-04", "jump_number": 130},
+            ],
+        }
+    ]  # fmt: skip
+    assert api.ok("GET", "/jumps/numbering", other)["highest"] == 999
+    assert api.call("GET", "/jumps/numbering").status_code == 401

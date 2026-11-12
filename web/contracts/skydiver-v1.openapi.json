@@ -1770,6 +1770,56 @@
         "title": "JumpIn",
         "type": "object"
       },
+      "JumpNumberingOut": {
+        "description": "Your own numbering, to suggest the next number and note slips.",
+        "properties": {
+          "gap_count": {
+            "title": "Gap Count",
+            "type": "integer"
+          },
+          "gaps": {
+            "description": "The first few, lowest first.",
+            "items": {
+              "$ref": "#/components/schemas/NumberGapOut"
+            },
+            "title": "Gaps",
+            "type": "array"
+          },
+          "highest": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when no jump has a number.",
+            "title": "Highest"
+          },
+          "repeat_count": {
+            "title": "Repeat Count",
+            "type": "integer"
+          },
+          "repeats": {
+            "description": "The first few, lowest first.",
+            "items": {
+              "$ref": "#/components/schemas/NumberRepeatOut"
+            },
+            "title": "Repeats",
+            "type": "array"
+          }
+        },
+        "required": [
+          "highest",
+          "gaps",
+          "gap_count",
+          "repeats",
+          "repeat_count"
+        ],
+        "title": "JumpNumberingOut",
+        "type": "object"
+      },
       "JumpOut": {
         "description": "The owner's own record. `provenance` is always self-reported.",
         "properties": {
@@ -2492,6 +2542,86 @@
           "jumps"
         ],
         "title": "MonthOut",
+        "type": "object"
+      },
+      "NumberGapOut": {
+        "properties": {
+          "after": {
+            "$ref": "#/components/schemas/NumberedJumpOut"
+          },
+          "before": {
+            "$ref": "#/components/schemas/NumberedJumpOut"
+          },
+          "first": {
+            "description": "The first missing number.",
+            "title": "First",
+            "type": "integer"
+          },
+          "last": {
+            "description": "The last missing number.",
+            "title": "Last",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "first",
+          "last",
+          "before",
+          "after"
+        ],
+        "title": "NumberGapOut",
+        "type": "object"
+      },
+      "NumberRepeatOut": {
+        "properties": {
+          "jump_number": {
+            "title": "Jump Number",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "At most five of them.",
+            "items": {
+              "$ref": "#/components/schemas/NumberedJumpOut"
+            },
+            "title": "Jumps",
+            "type": "array"
+          },
+          "uses": {
+            "title": "Uses",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jump_number",
+          "uses",
+          "jumps"
+        ],
+        "title": "NumberRepeatOut",
+        "type": "object"
+      },
+      "NumberedJumpOut": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "jump_number": {
+            "title": "Jump Number",
+            "type": "integer"
+          },
+          "jumped_on": {
+            "format": "date",
+            "title": "Jumped On",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "jumped_on",
+          "jump_number"
+        ],
+        "title": "NumberedJumpOut",
         "type": "object"
       },
       "OpportunityCountriesOut": {
@@ -14412,6 +14542,113 @@
         "summary": "Undo Import",
         "tags": [
           "skydiver-imports"
+        ]
+      }
+    },
+    "/api/skydiver/v1/jumps/numbering": {
+      "get": {
+        "operationId": "getJumpNumbering",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JumpNumberingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getjumpnumbering"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Numbering",
+        "tags": [
+          "skydiver-logbook"
         ]
       }
     },
