@@ -124,6 +124,8 @@
 		</dd>
 	{/if}
 </dl>
+<!-- The next load of the same day: same place, type, gear and altitudes, next number. -->
+<a class="button next" href="/jumps/new?{jump.location.kind}={jump.location.id}&from={jump.id}">Log the next jump</a>
 </section>
 
 <section class="card" aria-labelledby="sharing-heading">
@@ -239,6 +241,15 @@
 
 	.hero :global(a) {
 		color: var(--brand-fg);
+	}
+
+	.hero .next {
+		width: 100%;
+		margin-top: 0.75rem;
+		border-radius: 999px;
+		min-height: 52px;
+		color: var(--accent-fg);
+		text-decoration: none;
 	}
 
 	.number {

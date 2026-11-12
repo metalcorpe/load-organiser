@@ -9,13 +9,20 @@
 
 	let { data, form }: PageProps = $props();
 	const saveForm = $derived(form && form.form === 'save' ? form : null);
-	const values = $derived(
-		(saveForm && 'values' in saveForm ? saveForm.values : null) ?? ({} as Record<string, string>)
+	const echoed = $derived(saveForm && 'values' in saveForm ? saveForm.values : null);
+	// A refusal re-shows what was sent; otherwise "Log the next jump" starts from the last one.
+	const values = $derived(echoed ?? data.prefill?.values ?? ({} as Record<string, string>));
+	// Without jump numbers, the next load at the same place, day, type and altitude matches
+	// the duplicate check exactly. Choosing "Log the next jump" already says it is another
+	// jump; a resend of the same form is still recognised by its key.
+	const nextWithoutNumber = $derived(Boolean(data.prefill) && !values.jump_number);
+	const selected = $derived(
+		echoed ? (echoed.component_ids ?? '').split(',').filter(Boolean) : (data.prefill?.selected ?? [])
 	);
 	const duplicateOf = $derived(saveForm && 'duplicateOf' in saveForm ? saveForm.duplicateOf : null);
 	// Keep the search and chosen place in the action URL so a refusal re-renders here.
 	const query = $derived(
-		[...page.url.searchParams].filter(([k]) => k === 'venue' || k === 'place').map(([k, val]) => `${k}=${encodeURIComponent(val)}`).join('&')
+		[...page.url.searchParams].filter(([k]) => k === 'venue' || k === 'place' || k === 'from').map(([k, val]) => `${k}=${encodeURIComponent(val)}`).join('&')
 	);
 </script>
 
@@ -52,13 +59,13 @@
 		{values}
 		location={{ ...data.chosen, changeHref: '/jumps/new' }}
 		gear={data.gear.items}
-		selected={(values.component_ids ?? '').split(',').filter(Boolean)}
+		{selected}
 		keys={{
 			jump: values.client_key || data.keys.jump,
 			component: values.new_component_key || data.keys.component
 		}}
 		submitLabel={duplicateOf ? 'Save as a distinct jump' : 'Save private jump'}
-		confirmDistinct={Boolean(duplicateOf)}
+		confirmDistinct={Boolean(duplicateOf) || nextWithoutNumber}
 	/>
 	{#if !data.gear.ok}<p class="hint">Your gear could not be loaded; you can still save the jump.</p>{/if}
 {:else}
