@@ -13,6 +13,7 @@
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
+	import OfflineGuard from '#lib/components/OfflineGuard.svelte';
 	import SignInSheet from '#lib/components/SignInSheet.svelte';
 	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
@@ -29,13 +30,17 @@
 			? '/sign-in'
 			: `/sign-in?returnTo=${encodeURIComponent(page.url.pathname + page.url.search)}`
 	);
+	// Two initials from a display name; from an email address only its first letter
+	// ("firstuse-1794@…" is not "F1").
 	const initials = $derived(
-		(data.viewer?.displayName ?? data.viewer?.email ?? '')
-			.split(/[\s@._-]+/)
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((part) => Array.from(part)[0]?.toUpperCase() ?? '')
-			.join('')
+		data.viewer?.displayName
+			? data.viewer.displayName
+					.split(/\s+/)
+					.filter(Boolean)
+					.slice(0, 2)
+					.map((part) => Array.from(part)[0]?.toUpperCase() ?? '')
+					.join('')
+			: (Array.from(data.viewer?.email ?? '')[0]?.toUpperCase() ?? '')
 	);
 </script>
 
@@ -45,6 +50,7 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 <NavigationStatus />
+<OfflineGuard />
 
 <header>
 	<a class="brand" href="/">Load Organiser</a>
@@ -128,6 +134,7 @@
 	}
 
 	.me {
+		min-width: 0;
 		gap: 0.5rem;
 		color: var(--fg);
 		text-decoration: none;
@@ -177,6 +184,8 @@
 	}
 
 	.badge {
+		flex: none;
+		white-space: nowrap;
 		border-radius: 5px;
 		background: var(--accent-soft);
 		color: var(--fg);

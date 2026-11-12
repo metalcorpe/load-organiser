@@ -105,7 +105,8 @@ Still covered by backend tests only, judged lower risk because pages are rendere
 request and `no-store`: blocking's effect on posts and the feed, and turning
 discoverability off. Not added: null or absent Origin on authenticated form actions
 other than sign-in (one central check, unit tested), a "starts today" listing case, a
-private save while the API is down, a dedicated first-use test of `/people`, `/plans`,
+private save while the API is down (an offline submit is now stopped with the input kept;
+added 2026-11-12), a dedicated first-use test of `/people`, `/plans`,
 `/gear` and `/records`, and automated accessibility (axe) checks.
 
 ## Not yet verified (needs people or devices)
@@ -137,8 +138,9 @@ anything that fails.
    empty page should say what to do next.
 3. **Log a jump** at a place that is not listed, with gear you have not set up. Turn on
    airplane mode before pressing save and note what happens. Expected: what you typed
-   is kept and the page says the jump was not saved. Untested: no automated test
-   covers a save while offline.
+   is kept and the page says nothing was sent. Tested in emulation (e2e `logbook` "an
+   offline save sends nothing and keeps what was typed", 2026-11-12). Not covered: a
+   connection that drops while the save is being sent.
 4. **Text size:** set the largest system text size and repeat step 3. Nothing should be
    cut off or need sideways scrolling.
 5. **Autofill and keyboard:** sign in with the password manager. On iPhone with a
