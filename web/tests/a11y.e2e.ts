@@ -120,6 +120,7 @@ async function world(): Promise<World> {
 				'/jumps?type=belly&from=2026-01-01',
 				'/jumps?type=wingsuit',
 				'/jumps/new',
+				`/dz/${venue.id}`,
 				`/jumps/${jump.id}`,
 				`/jumps/${jump.id}/share`,
 				'/history',

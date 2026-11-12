@@ -2,7 +2,8 @@
 	import JumpCard from '#lib/components/JumpCard.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
 	import Notice from '#lib/components/Notice.svelte';
-	import { listingMessage } from '#lib/listings.ts';
+	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
+	import { formatDay, listingMessage } from '#lib/listings.ts';
 	import { countryName } from '#lib/countries.ts';
 	import type { PageProps } from './$types';
 
@@ -35,6 +36,24 @@
 	<Notice title="Closed" tone="warn">
 		<p>Kept as a historical listing so past records stay meaningful.</p>
 	</Notice>
+{/if}
+
+{#if data.mine}
+	<!-- The signed-in reader's own logbook; never computed for guests. -->
+	<section class="mine" aria-label="Your jumps here">
+		<PrivacyLabel text="Only you can see this" />
+		<p>
+			{#if data.mine.count > 0}
+				You logged <a href="/jumps?at=venue:{venue.id}"
+					>{data.mine.count.toLocaleString('en-GB')} {data.mine.count === 1 ? 'jump' : 'jumps'}</a
+				>
+				here{#if data.mine.lastOn}, last on {formatDay(data.mine.lastOn)}{/if}.
+			{:else}
+				You have not logged a jump here yet.
+			{/if}
+		</p>
+		<a class="button" href="/jumps/new?venue={venue.id}">Log a jump here</a>
+	</section>
 {/if}
 
 <dl>
@@ -112,6 +131,18 @@
 {/if}
 
 <style>
+	.mine {
+		margin: 0.75rem 0 1rem;
+		padding: 0.9rem 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.mine p {
+		margin: 0.5rem 0 0.75rem;
+	}
+
 	dl {
 		display: grid;
 		grid-template-columns: max-content 1fr;

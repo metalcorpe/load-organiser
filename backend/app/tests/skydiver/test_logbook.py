@@ -514,3 +514,26 @@ def test_filter_validation(api: Api, params: dict[str, Any], expected: str) -> N
     for bad in ({"jump_type": "skysurf"}, {"number_from": 0}, {"q": "x" * 101}):
         assert api.call("GET", "/jumps", owner, **bad).status_code == 422
     assert api.call("GET", "/jumps", None, jump_type="belly").status_code == 401
+
+
+def test_jumps_at_one_dropzone_count_only_the_readers_own(api: Api) -> None:
+    """What a dropzone page shows a signed-in reader: their own count and last date."""
+    owner, other, newcomer = (api.accounts.session() for _ in range(3))
+    venue, elsewhere = api.venue(), api.venue()
+    for day in ("2026-03-01", "2026-06-15"):
+        assert api.jump(owner, venue_id=venue["id"], jumped_on=day).status_code == 201
+    assert api.jump(owner, venue_id=elsewhere["id"], jumped_on="2026-07-01").status_code == 201  # fmt: skip
+    assert api.jump(other, venue_id=venue["id"], jumped_on="2026-09-09").status_code == 201  # fmt: skip
+
+    def here(secret: str | None) -> httpx2.Response:
+        return api.call("GET", "/jumps", secret, venue_id=venue["id"], limit=1)
+
+    mine = here(owner).json()["matched"]
+    assert (mine["jumps"], mine["last_on"]) == (2, "2026-06-15")
+    theirs = here(other).json()["matched"]
+    assert (theirs["jumps"], theirs["last_on"]) == (1, "2026-09-09")
+    none = here(newcomer).json()
+    assert (none["matched"]["jumps"], none["matched"]["last_on"], none["items"]) == (
+        0, None, [],
+    )  # fmt: skip
+    assert here(None).status_code == 401  # guests get nothing
