@@ -51,13 +51,16 @@ export const load: PageServerLoad = async (event) => {
 			? { ok: true as const, ...page.value }
 			: { ok: false as const, reason: page.reason },
 		older: Boolean(cursor),
+		// UTC day for the first render; the currency status then uses the jumper's own day.
+		today: new Date().toISOString().slice(0, 10),
 		recent,
 		continueFrom,
 		summary:
 			history?.ok && totals
 				? {
 						lifetime: totals.inconsistent ? null : totals.lifetime,
-						lastJumpOn: history.value.last_jump_on
+						lastJumpOn: history.value.last_jump_on,
+						currency: history.value.currency
 					}
 				: null
 	};

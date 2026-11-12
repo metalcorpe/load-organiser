@@ -68,6 +68,7 @@ def seed(manifest: Path) -> None:
         first = _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
         _ok(c, "DELETE", f"/history/baseline?version={first['baseline']['version']}", owner)  # fmt: skip
         _ok(c, "PUT", "/history/baseline", owner, {"prior_jumps": 150, "before_on": "2026-01-01"})  # fmt: skip
+        _ok(c, "PUT", "/me/licence", owner, {"licence": "b"})
         later = _ok(c, "POST", "/jumps", owner, {"client_key": str(uuid.uuid4()), "jumped_on": "2026-10-13", "jump_type": "belly", "venue_id": venue["id"]})["jump"]  # fmt: skip
         plan = _ok(c, "POST", "/plans", owner, {"title": "Recovery trip", "starts_on": "2026-12-03", "ends_on": "2026-12-04", "venue_id": venue["id"]})  # fmt: skip
         post = _ok(c, "POST", f"/me/jumps/{kept['id']}/post", owner, {"jump_version": kept["version"], "audience": "followers", "shares": ["venue"], "caption": "Recovery caption"})  # fmt: skip
@@ -151,6 +152,7 @@ SEEDED = (
     "skydiver_social_report",
     "skydiver_component",
     "skydiver_jump_baseline",
+    "skydiver_jumper_licence",
 )
 
 
@@ -173,6 +175,7 @@ def check(manifest: Path) -> None:
         assert _call(c, "GET", "/me/profile", m["revoked"]).status_code == 401
         history = _ok(c, "GET", "/history", m["owner"])
         assert history["baseline"]["prior_jumps"] == 150
+        assert history["currency"]["licence"] == "b"
         # Audience and follow state survive: the follower reads, a stranger does not.
         assert _ok(c, "GET", f"/posts/{m['post']}", m["follower"])["caption"] == "Recovery caption"  # fmt: skip
         assert _call(c, "GET", f"/posts/{m['post']}", m["stranger"]).status_code == 404

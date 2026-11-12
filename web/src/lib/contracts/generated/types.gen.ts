@@ -484,6 +484,38 @@ export type ComponentUseOut = {
 };
 
 /**
+ * CurrencyOut
+ *
+ * Guidance computed from your own dated entries; not a verified status.
+ */
+export type CurrencyOut = {
+    /**
+     * Current Until
+     *
+     * The last calendar day counted as current; null without a licence or jumps. Compare with the jumper's own local date.
+     */
+    current_until: string | null;
+    /**
+     * Last Jump On
+     */
+    last_jump_on: string | null;
+    /**
+     * Licence
+     */
+    licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
+    /**
+     * Source
+     */
+    source?: 'USPA SIM 5-2';
+    /**
+     * Threshold Days
+     *
+     * Days after the last jump the guidance allows; null without a licence.
+     */
+    threshold_days: number | null;
+};
+
+/**
  * DecisionIn
  */
 export type DecisionIn = {
@@ -646,6 +678,7 @@ export type HistoryOut = {
      * By Type
      */
     by_type: Array<TypeCountOut>;
+    currency: CurrencyOut;
     /**
      * First Jump On
      */
@@ -1128,6 +1161,30 @@ export type JumpUpdateIn = {
      * Version
      */
     version?: number | null;
+};
+
+/**
+ * LicenceIn
+ */
+export type LicenceIn = {
+    /**
+     * Licence
+     *
+     * The licence you hold; `none` to clear.
+     */
+    licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
+};
+
+/**
+ * LicenceOut
+ */
+export type LicenceOut = {
+    /**
+     * Licence
+     *
+     * Self-stated and private; never verified.
+     */
+    licence: 'none' | 'student' | 'a' | 'b' | 'c' | 'd';
 };
 
 /**
@@ -7285,6 +7342,92 @@ export type GetJumpSharingResponses = {
 };
 
 export type GetJumpSharingResponse = GetJumpSharingResponses[keyof GetJumpSharingResponses];
+
+export type GetLicenceData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/licence';
+};
+
+export type GetLicenceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type GetLicenceError = GetLicenceErrors[keyof GetLicenceErrors];
+
+export type GetLicenceResponses = {
+    /**
+     * Successful Response
+     */
+    200: LicenceOut;
+};
+
+export type GetLicenceResponse = GetLicenceResponses[keyof GetLicenceResponses];
+
+export type SetLicenceData = {
+    body: LicenceIn;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/skydiver/v1/me/licence';
+};
+
+export type SetLicenceErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type SetLicenceError = SetLicenceErrors[keyof SetLicenceErrors];
+
+export type SetLicenceResponses = {
+    /**
+     * Successful Response
+     */
+    200: LicenceOut;
+};
+
+export type SetLicenceResponse = SetLicenceResponses[keyof SetLicenceResponses];
 
 export type RemoveFollowerData = {
     body?: never;

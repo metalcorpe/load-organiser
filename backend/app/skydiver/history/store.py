@@ -15,6 +15,7 @@ from app.skydiver.access.sql import owned
 from app.skydiver.directory.service import EditConflict
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
 from app.skydiver.gear.tables import SkydiverComponent
+from app.skydiver.history.currency import Licence
 from app.skydiver.history.policy import Baseline
 from app.skydiver.history.service import (
     BaselineEvent,
@@ -22,7 +23,11 @@ from app.skydiver.history.service import (
     HistoryStore,
     StoreFactory,
 )
-from app.skydiver.history.tables import SkydiverJumpBaseline, SkydiverJumpBaselineEvent
+from app.skydiver.history.tables import (
+    SkydiverJumpBaseline,
+    SkydiverJumpBaselineEvent,
+    SkydiverJumperLicence,
+)
 from app.skydiver.logbook.service import ComponentRef, PlaceRef
 from app.skydiver.logbook.tables import SkydiverJump, SkydiverJumpComponent
 
@@ -122,6 +127,28 @@ class SqlHistoryStore:
         if before is not None:
             query = query.where(col(J.jumped_on) < before)
         return int(self._s.execute(query).scalar_one())
+
+    # licence ----------------------------------------------------------------------
+
+    def licence(self, actor: Actor) -> Licence:
+        row = self._s.execute(owned(SkydiverJumperLicence, actor)).scalars().first()
+        return Licence(row.licence) if row else Licence.NONE
+
+    def set_licence(self, actor: Actor, licence: Licence, now: datetime) -> None:
+        T = SkydiverJumperLicence
+        if licence is Licence.NONE:
+            self._s.execute(delete(T).where(col(T.owner_person_id) == actor.person_id))
+            return
+        self._s.execute(
+            pg_insert(T)
+            .values(
+                owner_person_id=actor.person_id, licence=licence.value, updated_at=now
+            )
+            .on_conflict_do_update(
+                index_elements=["owner_person_id"],
+                set_={"licence": licence.value, "updated_at": now},
+            )
+        )
 
     def date_range(self, actor: Actor) -> tuple[date | None, date | None]:
         first, last = self._s.execute(

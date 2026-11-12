@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay } from '#lib/listings.ts';
@@ -58,6 +59,7 @@
 				<a class="button log" href="/jumps/new">Log your first jump</a>
 			{/if}
 		</section>
+		{#if data.summary?.currency}<CurrencyStatus currency={data.summary.currency} today={data.today} />{/if}
 	{/if}
 
 	{#if data.page.items.length === 0}

@@ -212,6 +212,8 @@ export const OPERATIONS = {
 	},
 	setBaseline: { method: 'PUT', path: `${BETA}/history/baseline` },
 	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] },
+	getLicence: { method: 'GET', path: `${BETA}/me/licence` },
+	setLicence: { method: 'PUT', path: `${BETA}/me/licence` },
 	getRecords: { method: 'GET', path: `${BETA}/records` },
 	exportRecords: {
 		method: 'GET',

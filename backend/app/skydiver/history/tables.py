@@ -74,3 +74,27 @@ class SkydiverJumpBaselineEvent(SQLModel, table=True):
         default_factory=dict, sa_column=Column(_JSON, nullable=False)
     )
     created_at: datetime = Field(sa_column=_instant())
+
+
+class SkydiverJumperLicence(SQLModel, table=True):
+    """The licence the owner says they hold, for currency guidance. No row: none.
+
+    Self-reported and private; it is never checked, shown to others or used to
+    allow or refuse anything.
+    """
+
+    __tablename__ = "skydiver_jumper_licence"
+    __table_args__ = (
+        CheckConstraint(
+            "licence IN ('student', 'a', 'b', 'c', 'd')",
+            name="ck_skydiver_jumper_licence",
+        ),
+    )
+
+    owner_person_id: uuid.UUID = Field(
+        sa_column=Column(
+            ForeignKey("skydiver_person.id", ondelete="CASCADE"), primary_key=True
+        )
+    )
+    licence: str = Field(sa_column=Column(String(8), nullable=False))
+    updated_at: datetime = Field(sa_column=_instant())

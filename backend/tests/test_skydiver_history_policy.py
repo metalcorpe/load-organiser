@@ -1,11 +1,11 @@
-"""#154 prior-history totals as plain values (no database)."""
+"""#154 prior-history totals and currency guidance as plain values (no database)."""
 
-from datetime import date
+from datetime import date, timedelta
 
 import pytest
 
 from app.skydiver.directory.policy import DirectoryRuleError
-from app.skydiver.history import policy
+from app.skydiver.history import currency, policy
 from app.skydiver.history.policy import Baseline
 
 TODAY = date(2026, 11, 4)
@@ -77,3 +77,54 @@ def test_recent_months_cross_the_year() -> None:
     months = policy.recent_months(date(2026, 2, 10), 4)
     assert months == ["2025-11", "2025-12", "2026-01", "2026-02"]
     assert len(policy.recent_months(TODAY)) == 12
+
+
+# -- currency guidance (USPA SIM 5-2) ---------------------------------------------
+
+LAST = date(2026, 1, 1)
+
+
+@pytest.mark.parametrize(
+    ("licence", "days"),
+    [
+        (currency.Licence.STUDENT, 30),
+        (currency.Licence.A, 60),
+        (currency.Licence.B, 90),
+        (currency.Licence.C, 180),
+        (currency.Licence.D, 180),
+    ],
+)
+def test_each_licence_is_current_through_its_last_day(
+    licence: currency.Licence, days: int
+) -> None:
+    c = currency.currency(licence, LAST)
+    assert c.days == days
+    assert c.current_until == LAST + timedelta(days=days)
+    assert currency.is_current(c, LAST) is True
+    assert currency.is_current(c, LAST + timedelta(days=days)) is True  # day N
+    assert currency.is_current(c, LAST + timedelta(days=days + 1)) is False  # N + 1
+
+
+def test_a_licence_boundary_day_60_current_day_61_not() -> None:
+    c = currency.currency(currency.Licence.A, date(2026, 3, 1))
+    assert c.current_until == date(2026, 4, 30)
+    assert currency.is_current(c, date(2026, 4, 30)) is True
+    assert currency.is_current(c, date(2026, 5, 1)) is False
+
+
+def test_no_licence_gives_no_guidance() -> None:
+    c = currency.currency(currency.Licence.NONE, LAST)
+    assert (c.days, c.current_until) == (None, None)
+    assert currency.is_current(c, LAST) is None
+
+
+def test_no_jumps_gives_no_guidance() -> None:
+    c = currency.currency(currency.Licence.B, None)
+    assert (c.days, c.last_jump_on, c.current_until) == (90, None, None)
+    assert currency.is_current(c, LAST) is None
+
+
+def test_the_policy_table_covers_every_licence() -> None:
+    assert set(currency.RECURRENCY_DAYS) == set(currency.Licence) - {
+        currency.Licence.NONE
+    }

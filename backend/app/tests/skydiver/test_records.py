@@ -168,6 +168,7 @@ class Api:
             {"prior_jumps": 210, "before_on": "2026-01-01", "version": base["baseline"]["version"]},
         )  # fmt: skip
         self.ok("PUT", f"/saved/{listing}", secret, status=201)
+        self.ok("PUT", "/me/licence", secret, {"licence": "b"})
         self.ok(
             "POST", "/plans", secret,
             {"title": "Spring visit", "starts_on": "2027-04-01", "ends_on": "2027-04-03",
@@ -253,6 +254,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
         ],  # fmt: skip
         "saved": [s["title"] for s in r["saved_listings"]],
         "plans": [(p["title"], p["starts_on"], p["venue_id"]) for p in r["plans"]],
+        "licence": r["licence"],
     }
 
 
@@ -311,6 +313,28 @@ def test_round_trip_into_an_empty_account(api: Api) -> None:
     assert api.ok("GET", "/history", target)["totals"] == api.ok("GET", "/history", owner)["totals"]  # fmt: skip
     uses = api.ok("GET", "/history", target)["by_component"]
     assert [(u["component"]["label"], u["jumps"]) for u in uses] == [("Navigator", 1)]
+    assert archive["records"]["licence"] == "b"
+    assert api.ok("GET", "/me/licence", target) == {"licence": "b"}
+
+
+def test_a_set_licence_is_kept_and_does_not_block_a_restore(api: Api) -> None:
+    owner, target = api.accounts.session(), api.accounts.session()
+    api.ok("PUT", "/me/licence", owner, {"licence": "d"})
+    api.ok("POST", "/places", owner, {"name": "Strip", "country": "PT"}, 201)
+    raw = api.export(owner)
+    # A licence is a setting, not a record: the target still counts as empty.
+    api.ok("PUT", "/me/licence", target, {"licence": "student"})
+    assert api.call("GET", "/records", target).json()["empty"]
+    done = api.restore(target, raw)
+    assert done.status_code == 200, done.text
+    assert api.ok("GET", "/me/licence", target) == {"licence": "student"}
+
+    # An earlier v1 file without the key restores with no licence.
+    old = json.loads(raw)
+    del old["records"]["licence"]
+    fresh = api.accounts.session()
+    assert api.restore(fresh, json.dumps(old).encode()).status_code == 200
+    assert api.ok("GET", "/me/licence", fresh) == {"licence": "none"}
 
 
 def test_an_exact_repeat_is_already_restored_and_writes_nothing(api: Api) -> None:

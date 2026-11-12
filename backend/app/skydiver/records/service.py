@@ -594,4 +594,8 @@ def _rows(
             }  # fmt: skip
         )
     out["plans"] = plans
+    if r.licence is not None:
+        out["licence"] = [
+            {"owner_person_id": owner, "licence": r.licence, "updated_at": now}
+        ]
     return out
