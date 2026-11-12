@@ -76,7 +76,7 @@ Nothing is written when: the file is too large or unreadable, has no headings, t
 - The import row claims the person's next import number and the fingerprint, both unique per person, so two simultaneous imports of the same file write it once.
 - The jump and place limits are counted behind the same per-person gate (a row lock on the person, `access.sql.lock_owner`) that adding a private place by hand already used; logging a jump by hand now takes it too. An import and a hand-made jump or place at the same time therefore cannot both pass a limit.
 - Undo takes the same per-person gate first, so it never deletes a place an import is reusing, and an import never counts as a duplicate a jump that an undo is deleting. It sets its time only where it is still empty, so a second undo answers `already_undone` and changes nothing. Another person's import answers exactly like a missing one.
-- Checks are limited to 60 an hour per account. Import requests are limited to 30 an hour, counted before the file is read, and completed imports to 10 a day: a refused import (nothing to import, a limit, a missing country) does not use the daily quota. An import needs a confirmed email; a check needs only a session.
+- Checks are limited to 60 an hour per account. Import requests are limited to 30 an hour, counted before the file is read, and completed imports to 10 a day. A slot is reserved just before writing, in one serializable transaction, so imports sent at once at the limit cannot all pass; it is given back when the import is refused (nothing to import, a limit, a missing country), fails, or turns out to be an exact repeat. An import needs a confirmed email; a check needs only a session.
 
 ## Tested and untested
 
@@ -89,5 +89,4 @@ Untested or known limits:
 - The import row and its undo time are not in the erasure ledger. After a database restore from backup, an undo made later is replayed as jump and place deletions, but the import still lists as not undone.
 - Big files (2,000 rows) were tested for the limit only, not for response time on the production host.
 - The file has to be chosen again for each step (no JavaScript upload state is kept), which is clumsy on phones; not validated with users.
-- The daily import quota is checked before and counted after an import, so two imports sent at the same moment as the tenth can both complete (at most a few over the 10). The hourly limit on import requests still applies.
 - Sending the import form twice (a double click) imports once; the second answer says the file was already imported and was not imported a second time. The button is not disabled while the first request runs.

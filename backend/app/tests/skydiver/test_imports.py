@@ -24,7 +24,9 @@ from app.skydiver.directory.service import DirectoryService
 from app.skydiver.directory.service import LimitReached as PlaceLimitReached
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.directory.tables import SkydiverProvisionalPlace
-from app.skydiver.imports.api import create_router
+from app.skydiver.identity.policy import throttle_key
+from app.skydiver.identity.tables import SkydiverThrottleEvent
+from app.skydiver.imports.api import IMPORT_RULE, create_router
 from app.skydiver.imports.policy import Options
 from app.skydiver.imports.service import ImportService, LimitReached, PlaceName
 from app.skydiver.imports.store import SqlImportStore, sql_import_store_factory
@@ -615,6 +617,55 @@ def test_only_completed_imports_use_the_daily_quota(api: Api) -> None:
     over = api.run(owner, _csv("2024-03-12,11,Quota field,,,,"), country="PT")
     assert (over.status_code, over.json()["detail"]) == (429, "too_many_attempts")
     assert int(over.headers["retry-after"]) > 0
+    assert len(api.ok("GET", "/jumps?limit=50", owner)["items"]) == 10
+
+
+def _quota_hits(api: Api, secret: str) -> int:
+    account = str(api.accounts.service.current_viewer(secret=secret).account_id)
+    with Session(engine) as session:
+        return int(
+            session.execute(
+                select(func.count())
+                .select_from(SkydiverThrottleEvent)
+                .where(col(SkydiverThrottleEvent.bucket) == IMPORT_RULE.bucket)
+                .where(
+                    col(SkydiverThrottleEvent.key_hash)
+                    == throttle_key(IMPORT_RULE.bucket, account)
+                )
+            ).scalar_one()
+        )
+
+
+def test_a_refused_or_repeated_import_gives_its_quota_slot_back(api: Api) -> None:
+    owner = api.accounts.session()
+    raw = _csv("2024-03-12,1,Refund field,,,,")
+    assert api.run(owner, raw, country="PT").json()["outcome"] == "imported"
+    assert _quota_hits(api, owner) == 1
+    refused = api.run(owner, _csv("2024-03-12,2,Unknown field,,,,"))
+    assert refused.json()["detail"] == "country_required"
+    duplicate = api.run(owner, raw, country="GR")  # every row already in the logbook
+    assert duplicate.json()["detail"] == "nothing_to_import"
+    assert api.run(owner, raw, country="PT").json()["outcome"] == "already_imported"
+    assert _quota_hits(api, owner) == 1
+
+
+def test_imports_at_once_at_the_daily_limit_take_one_slot_each(api: Api) -> None:
+    owner = api.accounts.session()
+    for n in range(1, 10):
+        done = api.run(owner, _csv(f"2024-03-12,{n},Race quota,,,,"), country="PT")
+        assert done.json()["outcome"] == "imported", done.text
+    assert _quota_hits(api, owner) == 9
+    files = [_csv(f"2024-04-01,{n},Race quota,,,,") for n in (100, 200, 300)]
+    start = threading.Barrier(3, timeout=10)
+
+    def send(raw: bytes) -> int:
+        start.wait()
+        return api.run(owner, raw, country="PT").status_code
+
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        codes = sorted(pool.map(send, files))
+    assert codes == [200, 429, 429]
+    assert _quota_hits(api, owner) == 10
     assert len(api.ok("GET", "/jumps?limit=50", owner)["items"]) == 10
 
 

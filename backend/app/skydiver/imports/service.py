@@ -263,11 +263,9 @@ class ImportService:
         *,
         expected: str | None,
         before_write: Callable[[], None],
-        after_write: Callable[[], None] = lambda: None,
     ) -> Outcome:
-        """`before_write` runs once before a write is attempted (it may refuse, e.g.
-        a quota already used up); `after_write` runs only after an import committed,
-        so a refused import does not count against the quota."""
+        """`before_write` runs once, only when a write will be attempted (a quota
+        reservation the caller refunds unless the outcome is "imported")."""
         table, columns, digest = self._read(raw, options)
         if expected is not None and expected != digest:
             raise ImportChanged()
@@ -278,12 +276,9 @@ class ImportService:
         before_write()
         for _ in range(ATTEMPTS):
             try:
-                outcome = self._attempt(actor, table, columns, options, digest)
+                return self._attempt(actor, table, columns, options, digest)
             except _LostRace:
                 continue
-            if outcome.outcome == "imported":
-                after_write()
-            return outcome
         raise ImportBusy()
 
     def _attempt(

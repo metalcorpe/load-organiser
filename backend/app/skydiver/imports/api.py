@@ -45,6 +45,7 @@ from app.skydiver.imports.service import (
     ImportService,
     LimitReached,
     NotFound,
+    Outcome,
     PlaceLimitReached,
 )
 from app.skydiver.logbook.policy import AltitudeUnit
@@ -55,7 +56,7 @@ NO_STORE = {"cache-control": "no-store"}
 CHECK_RULE = ThrottleRule("jumps_import_check", 60, timedelta(hours=1))
 # Every import request, counted before the file is parsed (cheap, generous).
 ATTEMPT_RULE = ThrottleRule("jumps_import_attempt", 30, timedelta(hours=1))
-# Completed imports only: a refused import does not use the daily quota.
+# Completed imports only: reserved before writing, refunded when refused.
 IMPORT_RULE = ThrottleRule("jumps_import", 10, timedelta(days=1))
 
 JumpTypeName = Literal[
@@ -245,6 +246,34 @@ def create_router(
     def consume(rule: ThrottleRule, actor: Actor) -> None:
         identity().consume(rule=rule, key=str(actor.account_id))
 
+    def run_import(
+        actor: Actor, raw: bytes, choices: Options, expected: str | None
+    ) -> Outcome:
+        """Reserve a daily slot just before writing; give it back unless it imported.
+
+        The reservation is atomic, so concurrent imports at the limit cannot all
+        pass; a refusal, an error or an "already imported" repeat refunds it.
+        """
+        held: list[uuid.UUID] = []
+
+        def reserve() -> None:
+            held.append(identity().reserve(rule=IMPORT_RULE, key=str(actor.account_id)))
+
+        def refund() -> None:
+            for hit_id in held:
+                identity().refund(hit_id=hit_id)
+
+        try:
+            outcome = service().run(
+                actor, raw, choices, expected=expected, before_write=reserve
+            )
+        except BaseException:
+            refund()
+            raise
+        if outcome.outcome != "imported":
+            refund()
+        return outcome
+
     def options(
         date_order: Literal["dmy", "mdy", "ymd"] = "dmy",
         unit: Literal["ft", "m"] = "ft",
@@ -333,16 +362,8 @@ def create_router(
         try:
             raw = await _raw(request)
             await run_in_threadpool(consume, ATTEMPT_RULE, actor)
-            key = str(actor.account_id)
             result = await run_in_threadpool(
-                lambda: service().run(
-                    actor,
-                    raw,
-                    checked(choices),
-                    expected=expected,
-                    before_write=lambda: identity().allow(rule=IMPORT_RULE, key=key),
-                    after_write=lambda: identity().record(rule=IMPORT_RULE, key=key),
-                )
+                run_import, actor, raw, checked(choices), expected
             )
         except Errors as error:
             return _problem(error)

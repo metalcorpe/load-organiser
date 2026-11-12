@@ -174,7 +174,13 @@ class IdentityStore(Protocol):
         self, *, token_hash: str, purpose: str, now: datetime
     ) -> ConsumedToken | None: ...
     def throttle_count(self, *, bucket: str, key_hash: str, since: datetime) -> int: ...
-    def throttle_record(self, *, bucket: str, key_hash: str, now: datetime) -> None: ...
+    def throttle_record(
+        self, *, bucket: str, key_hash: str, now: datetime
+    ) -> uuid.UUID: ...
+    def throttle_forget(self, *, hit_id: uuid.UUID) -> None: ...
+    def serializable(self) -> None:
+        """Run this unit of work SERIALIZABLE; a lost conflict raises `Contended`."""
+        ...
 
 
 StoreFactory = Callable[[], AbstractContextManager[IdentityStore]]
@@ -464,17 +470,33 @@ class IdentityService:
             self._check(store, rule, now, key)
             self._hit(store, rule, now, key)
 
-    def allow(self, *, rule: ThrottleRule, key: str) -> None:
-        """Throttled when `key` is already over `rule`; counts nothing (see `record`)."""
-        now = self._clock()
-        with self._stores() as store:
-            self._check(store, rule, now, key)
+    def reserve(self, *, rule: ThrottleRule, key: str) -> uuid.UUID:
+        """Take one slot of `rule` for `key` atomically; Throttled when none is left.
 
-    def record(self, *, rule: ThrottleRule, key: str) -> None:
-        """Count one use against `rule` for `key`, after the use succeeded."""
-        now = self._clock()
+        Count and insert run in one SERIALIZABLE transaction, so of concurrent
+        reservations at the limit only as many commit as there are slots; a loser
+        is retried and then sees the winners (optimistic, no lock). Returns the
+        hit, so a use that is refused afterwards can give it back (`refund`).
+        """
+        for _ in range(RESERVE_ATTEMPTS):
+            now = self._clock()
+            try:
+                with self._stores() as store:
+                    store.serializable()
+                    self._check(store, rule, now, key)
+                    return store.throttle_record(
+                        bucket=rule.bucket,
+                        key_hash=policy.throttle_key(rule.bucket, key),
+                        now=now,
+                    )
+            except Contended:
+                continue
+        raise Throttled(int(rule.window.total_seconds()))
+
+    def refund(self, *, hit_id: uuid.UUID) -> None:
+        """Give back a reserved slot whose use was refused or wrote nothing."""
         with self._stores() as store:
-            self._hit(store, rule, now, key)
+            store.throttle_forget(hit_id=hit_id)
 
     def revoke_all(self, *, secret: str, password: str, client_ip: str) -> None:
         client_ip = policy.client_bucket(client_ip)
@@ -754,6 +776,15 @@ class IdentityService:
                 logger.warning("Identity mail failed: %s", type(exc).__name__)
                 if not neutral:
                     raise MailUnavailable() from None
+
+
+RESERVE_ATTEMPTS = 5
+
+
+class Contended(Exception):
+    """A SERIALIZABLE unit of work lost to a concurrent one; nothing was written.
+
+    Store factories raise it for PostgreSQL serialization failures (40001)."""
 
 
 class CommitThen(Exception):
