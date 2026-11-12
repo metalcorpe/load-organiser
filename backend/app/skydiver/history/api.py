@@ -28,6 +28,7 @@ from app.skydiver.history.policy import Totals
 from app.skydiver.history.service import (
     HistoryService,
     MilestoneList,
+    StatsView,
     Summary,
 )
 from app.skydiver.logbook.api import (
@@ -227,6 +228,82 @@ class ExitWeightSettingOut(BaseModel):
     unit: WeightUnitName = Field(description="Your unit for weights.")
 
 
+class PlaceCountOut(BaseModel):
+    location: LocationOut
+    jumps: int
+
+
+class PlacesOut(BaseModel):
+    items: list[PlaceCountOut] = Field(description="At most 10, most jumps first.")
+    others: int = Field(description="Jumps at the other places.")
+    other_places: int
+
+
+class AircraftCountOut(BaseModel):
+    aircraft: str = Field(description="Its most used spelling.")
+    jumps: int
+
+
+class AircraftOut(BaseModel):
+    items: list[AircraftCountOut] = Field(description="At most 10, most jumps first.")
+    others: int = Field(description="Jumps in the other aircraft.")
+    other_aircraft: int
+    not_recorded: int = Field(description="Entries without an aircraft.")
+
+
+class YearCountOut(BaseModel):
+    year: int
+    jumps: int
+
+
+class FreefallYearOut(BaseModel):
+    year: int
+    seconds: int = Field(description="Entries with a recorded freefall time only.")
+    with_freefall: int
+    without_freefall: int
+
+
+class AltitudeOut(BaseModel):
+    unit: Literal["ft", "m"] = Field(description="As entered; never converted.")
+    jumps: int = Field(description="Entries with an exit altitude in this unit.")
+    average: int
+    highest: int
+
+
+class StatsTotalOut(BaseModel):
+    recorded: int = Field(description="Your entries in scope.")
+    reported: int | None = Field(
+        description="Without a year filter: your declared prior jump count plus the"
+        " entries on or after its date, when they agree; else null."
+    )
+    prior_jumps: int | None = Field(
+        description="The declared prior jump count within `reported`."
+    )
+
+
+class StatsOut(BaseModel):
+    """Statistics from your own entries, private to you. A declared prior jump
+    count is only in `total.reported`: it has no dates, types, places or
+    measurements."""
+
+    year: int | None = Field(description="The year filter, if any.")
+    years: list[int] = Field(description="Years with an entry, newest first.")
+    total: StatsTotalOut
+    per_year: list[YearCountOut] = Field(
+        description="Every year from your first entry, oldest first; not filtered."
+    )
+    per_month: list[MonthOut] = Field(
+        description="The last 24 calendar months, or the 12 months of the year."
+    )
+    by_type: list[TypeCountOut]
+    by_place: PlacesOut
+    by_aircraft: AircraftOut
+    freefall: list[FreefallYearOut] = Field(description="Oldest first.")
+    altitudes: list[AltitudeOut] = Field(description="Feet first.")
+    altitude_not_recorded: int
+    wing_loading: LoadingRangeOut
+
+
 class MilestoneOut(BaseModel):
     kind: Literal["jump_count", "freefall", "jump_type", "place"]
     on: date | None = Field(
@@ -291,6 +368,60 @@ def _range(r: LoadingRange) -> LoadingRangeOut:
         known=r.known,
         unknown=r.unknown,
         missing=[MissingCountOut(missing=m.value, jumps=n) for m, n in r.missing],
+    )
+
+
+def _stats(view: StatsView) -> StatsOut:
+    s, t = view.stats, view.totals
+    return StatsOut(
+        year=s.year,
+        years=s.years,
+        total=StatsTotalOut(
+            recorded=s.jumps,
+            reported=t.lifetime if t else None,
+            prior_jumps=t.baseline.prior_jumps
+            if t and t.baseline and t.lifetime is not None
+            else None,
+        ),
+        per_year=[YearCountOut(year=y, jumps=n) for y, n in s.per_year],
+        per_month=[MonthOut(month=m, jumps=n) for m, n in s.per_month],
+        by_type=[TypeCountOut(jump_type=k, jumps=n) for k, n in s.by_type],
+        by_place=PlacesOut(
+            items=[
+                PlaceCountOut(location=_location(view.places[k]), jumps=n)
+                for k, n in s.by_place.items
+            ],
+            others=s.by_place.others,
+            other_places=s.by_place.other_count,
+        ),
+        by_aircraft=AircraftOut(
+            items=[
+                AircraftCountOut(aircraft=a, jumps=n) for a, n in s.by_aircraft.items
+            ],
+            others=s.by_aircraft.others,
+            other_aircraft=s.by_aircraft.other_count,
+            not_recorded=s.aircraft_not_recorded,
+        ),
+        freefall=[
+            FreefallYearOut(
+                year=f.year,
+                seconds=f.seconds,
+                with_freefall=f.with_time,
+                without_freefall=f.without_time,
+            )
+            for f in s.freefall
+        ],
+        altitudes=[
+            AltitudeOut(
+                unit="m" if a.unit == "m" else "ft",
+                jumps=a.jumps,
+                average=a.average,
+                highest=a.highest,
+            )
+            for a in s.altitudes
+        ],
+        altitude_not_recorded=s.altitude_not_recorded,
+        wing_loading=_range(s.loading),
     )
 
 
@@ -443,6 +574,24 @@ def create_router(
     def get_milestones(actor: Reader) -> MilestonesOut:
         """Dated milestones from your own entries, newest first. Computed on read."""
         return _milestones(service().milestones(actor))
+
+    @router.get(
+        "/history/stats",
+        operation_id="getStats",
+        response_model=StatsOut,
+        dependencies=deps,
+    )
+    def get_stats(
+        actor: Reader,
+        year: Annotated[
+            int | None, Query(ge=1919, le=9999, description="Only this year.")
+        ] = None,
+    ) -> StatsOut | JSONResponse:
+        """Statistics from your own entries, computed on read in a few queries."""
+        try:
+            return _stats(service().stats(actor, year))
+        except Errors as error:
+            return _problem(error)
 
     @router.get(
         "/history/baseline/preview",

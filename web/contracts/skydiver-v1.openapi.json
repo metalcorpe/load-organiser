@@ -13,6 +13,59 @@
         "title": "Accepted",
         "type": "object"
       },
+      "AircraftCountOut": {
+        "properties": {
+          "aircraft": {
+            "description": "Its most used spelling.",
+            "title": "Aircraft",
+            "type": "string"
+          },
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "aircraft",
+          "jumps"
+        ],
+        "title": "AircraftCountOut",
+        "type": "object"
+      },
+      "AircraftOut": {
+        "properties": {
+          "items": {
+            "description": "At most 10, most jumps first.",
+            "items": {
+              "$ref": "#/components/schemas/AircraftCountOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "not_recorded": {
+            "description": "Entries without an aircraft.",
+            "title": "Not Recorded",
+            "type": "integer"
+          },
+          "other_aircraft": {
+            "title": "Other Aircraft",
+            "type": "integer"
+          },
+          "others": {
+            "description": "Jumps in the other aircraft.",
+            "title": "Others",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "others",
+          "other_aircraft",
+          "not_recorded"
+        ],
+        "title": "AircraftOut",
+        "type": "object"
+      },
       "AliasIn": {
         "properties": {
           "name": {
@@ -62,6 +115,40 @@
           "kind"
         ],
         "title": "AliasOut",
+        "type": "object"
+      },
+      "AltitudeOut": {
+        "properties": {
+          "average": {
+            "title": "Average",
+            "type": "integer"
+          },
+          "highest": {
+            "title": "Highest",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "Entries with an exit altitude in this unit.",
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "unit": {
+            "description": "As entered; never converted.",
+            "enum": [
+              "ft",
+              "m"
+            ],
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "unit",
+          "jumps",
+          "average",
+          "highest"
+        ],
+        "title": "AltitudeOut",
         "type": "object"
       },
       "ArchiveCountsOut": {
@@ -2070,6 +2157,35 @@
           "state"
         ],
         "title": "FollowOut",
+        "type": "object"
+      },
+      "FreefallYearOut": {
+        "properties": {
+          "seconds": {
+            "description": "Entries with a recorded freefall time only.",
+            "title": "Seconds",
+            "type": "integer"
+          },
+          "with_freefall": {
+            "title": "With Freefall",
+            "type": "integer"
+          },
+          "without_freefall": {
+            "title": "Without Freefall",
+            "type": "integer"
+          },
+          "year": {
+            "title": "Year",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "year",
+          "seconds",
+          "with_freefall",
+          "without_freefall"
+        ],
+        "title": "FreefallYearOut",
         "type": "object"
       },
       "GearDueOut": {
@@ -5676,6 +5792,23 @@
         "title": "PersonOut",
         "type": "object"
       },
+      "PlaceCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          }
+        },
+        "required": [
+          "location",
+          "jumps"
+        ],
+        "title": "PlaceCountOut",
+        "type": "object"
+      },
       "PlaceCreateIn": {
         "properties": {
           "country": {
@@ -5818,6 +5951,34 @@
           }
         },
         "title": "PlaceUpdateIn",
+        "type": "object"
+      },
+      "PlacesOut": {
+        "properties": {
+          "items": {
+            "description": "At most 10, most jumps first.",
+            "items": {
+              "$ref": "#/components/schemas/PlaceCountOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "other_places": {
+            "title": "Other Places",
+            "type": "integer"
+          },
+          "others": {
+            "description": "Jumps at the other places.",
+            "title": "Others",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "others",
+          "other_places"
+        ],
+        "title": "PlacesOut",
         "type": "object"
       },
       "PlanIn": {
@@ -9274,6 +9435,142 @@
         "title": "SourceOut",
         "type": "object"
       },
+      "StatsOut": {
+        "description": "Statistics from your own entries, private to you. A declared prior jump\ncount is only in `total.reported`: it has no dates, types, places or\nmeasurements.",
+        "properties": {
+          "altitude_not_recorded": {
+            "title": "Altitude Not Recorded",
+            "type": "integer"
+          },
+          "altitudes": {
+            "description": "Feet first.",
+            "items": {
+              "$ref": "#/components/schemas/AltitudeOut"
+            },
+            "title": "Altitudes",
+            "type": "array"
+          },
+          "by_aircraft": {
+            "$ref": "#/components/schemas/AircraftOut"
+          },
+          "by_place": {
+            "$ref": "#/components/schemas/PlacesOut"
+          },
+          "by_type": {
+            "items": {
+              "$ref": "#/components/schemas/TypeCountOut"
+            },
+            "title": "By Type",
+            "type": "array"
+          },
+          "freefall": {
+            "description": "Oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/FreefallYearOut"
+            },
+            "title": "Freefall",
+            "type": "array"
+          },
+          "per_month": {
+            "description": "The last 24 calendar months, or the 12 months of the year.",
+            "items": {
+              "$ref": "#/components/schemas/MonthOut"
+            },
+            "title": "Per Month",
+            "type": "array"
+          },
+          "per_year": {
+            "description": "Every year from your first entry, oldest first; not filtered.",
+            "items": {
+              "$ref": "#/components/schemas/YearCountOut"
+            },
+            "title": "Per Year",
+            "type": "array"
+          },
+          "total": {
+            "$ref": "#/components/schemas/StatsTotalOut"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/LoadingRangeOut"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The year filter, if any.",
+            "title": "Year"
+          },
+          "years": {
+            "description": "Years with an entry, newest first.",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Years",
+            "type": "array"
+          }
+        },
+        "required": [
+          "year",
+          "years",
+          "total",
+          "per_year",
+          "per_month",
+          "by_type",
+          "by_place",
+          "by_aircraft",
+          "freefall",
+          "altitudes",
+          "altitude_not_recorded",
+          "wing_loading"
+        ],
+        "title": "StatsOut",
+        "type": "object"
+      },
+      "StatsTotalOut": {
+        "properties": {
+          "prior_jumps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The declared prior jump count within `reported`.",
+            "title": "Prior Jumps"
+          },
+          "recorded": {
+            "description": "Your entries in scope.",
+            "title": "Recorded",
+            "type": "integer"
+          },
+          "reported": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Without a year filter: your declared prior jump count plus the entries on or after its date, when they agree; else null.",
+            "title": "Reported"
+          }
+        },
+        "required": [
+          "recorded",
+          "reported",
+          "prior_jumps"
+        ],
+        "title": "StatsTotalOut",
+        "type": "object"
+      },
       "StatusIn": {
         "properties": {
           "status": {
@@ -10187,6 +10484,24 @@
           "missing"
         ],
         "title": "WingLoadingOut",
+        "type": "object"
+      },
+      "YearCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "year": {
+            "title": "Year",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "year",
+          "jumps"
+        ],
+        "title": "YearCountOut",
         "type": "object"
       },
       "app__skydiver__directory__api__Problem": {
@@ -15676,6 +15991,106 @@
           }
         },
         "summary": "Get Milestones",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
+    "/api/skydiver/v1/history/stats": {
+      "get": {
+        "description": "Statistics from your own entries, computed on read in a few queries.",
+        "operationId": "getStats",
+        "parameters": [
+          {
+            "description": "Only this year.",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 9999,
+                  "minimum": 1919,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only this year.",
+              "title": "Year"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Stats",
         "tags": [
           "skydiver-history"
         ]

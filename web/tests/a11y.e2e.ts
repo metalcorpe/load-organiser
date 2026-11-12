@@ -183,6 +183,10 @@ async function world(): Promise<World> {
 				`/jumps/${jump.id}/share`,
 				'/history',
 				'/history/baseline',
+				// Statistics for all years and for one, and a year without jumps.
+				'/stats',
+				'/stats?year=2026',
+				'/stats?year=2020',
 				'/activity',
 				'/people',
 				'/profile',

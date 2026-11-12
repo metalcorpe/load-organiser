@@ -15,6 +15,50 @@ export type Accepted = {
 };
 
 /**
+ * AircraftCountOut
+ */
+export type AircraftCountOut = {
+    /**
+     * Aircraft
+     *
+     * Its most used spelling.
+     */
+    aircraft: string;
+    /**
+     * Jumps
+     */
+    jumps: number;
+};
+
+/**
+ * AircraftOut
+ */
+export type AircraftOut = {
+    /**
+     * Items
+     *
+     * At most 10, most jumps first.
+     */
+    items: Array<AircraftCountOut>;
+    /**
+     * Not Recorded
+     *
+     * Entries without an aircraft.
+     */
+    not_recorded: number;
+    /**
+     * Other Aircraft
+     */
+    other_aircraft: number;
+    /**
+     * Others
+     *
+     * Jumps in the other aircraft.
+     */
+    others: number;
+};
+
+/**
  * AliasIn
  */
 export type AliasIn = {
@@ -42,6 +86,32 @@ export type AliasOut = {
      * Name
      */
     name: string;
+};
+
+/**
+ * AltitudeOut
+ */
+export type AltitudeOut = {
+    /**
+     * Average
+     */
+    average: number;
+    /**
+     * Highest
+     */
+    highest: number;
+    /**
+     * Jumps
+     *
+     * Entries with an exit altitude in this unit.
+     */
+    jumps: number;
+    /**
+     * Unit
+     *
+     * As entered; never converted.
+     */
+    unit: 'ft' | 'm';
 };
 
 /**
@@ -1031,6 +1101,30 @@ export type FollowOut = {
      * State
      */
     state: 'none' | 'requested' | 'following';
+};
+
+/**
+ * FreefallYearOut
+ */
+export type FreefallYearOut = {
+    /**
+     * Seconds
+     *
+     * Entries with a recorded freefall time only.
+     */
+    seconds: number;
+    /**
+     * With Freefall
+     */
+    with_freefall: number;
+    /**
+     * Without Freefall
+     */
+    without_freefall: number;
+    /**
+     * Year
+     */
+    year: number;
 };
 
 /**
@@ -2773,6 +2867,17 @@ export type PersonOut = {
 };
 
 /**
+ * PlaceCountOut
+ */
+export type PlaceCountOut = {
+    /**
+     * Jumps
+     */
+    jumps: number;
+    location: LocationOut;
+};
+
+/**
  * PlaceCreateIn
  */
 export type PlaceCreateIn = {
@@ -2849,6 +2954,28 @@ export type PlaceUpdateIn = {
      * Venue Id
      */
     venue_id?: string | null;
+};
+
+/**
+ * PlacesOut
+ */
+export type PlacesOut = {
+    /**
+     * Items
+     *
+     * At most 10, most jumps first.
+     */
+    items: Array<PlaceCountOut>;
+    /**
+     * Other Places
+     */
+    other_places: number;
+    /**
+     * Others
+     *
+     * Jumps at the other places.
+     */
+    others: number;
 };
 
 /**
@@ -4527,6 +4654,88 @@ export type SourceOut = {
 };
 
 /**
+ * StatsOut
+ *
+ * Statistics from your own entries, private to you. A declared prior jump
+ * count is only in `total.reported`: it has no dates, types, places or
+ * measurements.
+ */
+export type StatsOut = {
+    /**
+     * Altitude Not Recorded
+     */
+    altitude_not_recorded: number;
+    /**
+     * Altitudes
+     *
+     * Feet first.
+     */
+    altitudes: Array<AltitudeOut>;
+    by_aircraft: AircraftOut;
+    by_place: PlacesOut;
+    /**
+     * By Type
+     */
+    by_type: Array<TypeCountOut>;
+    /**
+     * Freefall
+     *
+     * Oldest first.
+     */
+    freefall: Array<FreefallYearOut>;
+    /**
+     * Per Month
+     *
+     * The last 24 calendar months, or the 12 months of the year.
+     */
+    per_month: Array<MonthOut>;
+    /**
+     * Per Year
+     *
+     * Every year from your first entry, oldest first; not filtered.
+     */
+    per_year: Array<YearCountOut>;
+    total: StatsTotalOut;
+    wing_loading: LoadingRangeOut;
+    /**
+     * Year
+     *
+     * The year filter, if any.
+     */
+    year: number | null;
+    /**
+     * Years
+     *
+     * Years with an entry, newest first.
+     */
+    years: Array<number>;
+};
+
+/**
+ * StatsTotalOut
+ */
+export type StatsTotalOut = {
+    /**
+     * Prior Jumps
+     *
+     * The declared prior jump count within `reported`.
+     */
+    prior_jumps: number | null;
+    /**
+     * Recorded
+     *
+     * Your entries in scope.
+     */
+    recorded: number;
+    /**
+     * Reported
+     *
+     * Without a year filter: your declared prior jump count plus the entries on or after its date, when they agree; else null.
+     */
+    reported: number | null;
+};
+
+/**
  * StatusIn
  */
 export type StatusIn = {
@@ -5004,6 +5213,20 @@ export type WingLoadingOut = {
      * Pounds per square foot, two decimals; null when unknown.
      */
     value: number | null;
+};
+
+/**
+ * YearCountOut
+ */
+export type YearCountOut = {
+    /**
+     * Jumps
+     */
+    jumps: number;
+    /**
+     * Year
+     */
+    year: number;
 };
 
 /**
@@ -7742,6 +7965,56 @@ export type GetMilestonesResponses = {
 };
 
 export type GetMilestonesResponse = GetMilestonesResponses[keyof GetMilestonesResponses];
+
+export type GetStatsData = {
+    body?: never;
+    headers?: {
+        /**
+         * Authorization
+         */
+        authorization?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Year
+         *
+         * Only this year.
+         */
+        year?: number | null;
+    };
+    url: '/api/skydiver/v1/history/stats';
+};
+
+export type GetStatsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverHistoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverHistoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverHistoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverHistoryApiProblem;
+};
+
+export type GetStatsError = GetStatsErrors[keyof GetStatsErrors];
+
+export type GetStatsResponses = {
+    /**
+     * Successful Response
+     */
+    200: StatsOut;
+};
+
+export type GetStatsResponse = GetStatsResponses[keyof GetStatsResponses];
 
 export type ListJumpsData = {
     body?: never;

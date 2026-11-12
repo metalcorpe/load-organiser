@@ -96,7 +96,7 @@
 
 <div class="head">
 	<h1>Logbook</h1>
-	<a href="/history">History</a>
+	<p class="links"><a href="/history">History</a> · <a href="/stats">Statistics</a></p>
 </div>
 <PrivacyLabel text="Private logbook — only you can see your jumps" />
 
@@ -548,6 +548,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
+	}
+
+	.head .links {
+		margin: 0;
 	}
 
 	.head a {

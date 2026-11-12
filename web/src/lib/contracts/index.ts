@@ -66,6 +66,7 @@ export type {
 	SessionOut,
 	UndoResultOut,
 	SharingOut,
+	StatsOut,
 	SubmissionIntakeOut,
 	TotalsOut,
 	VenueDetailOut,

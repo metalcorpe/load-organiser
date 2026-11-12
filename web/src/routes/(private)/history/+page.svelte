@@ -39,7 +39,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/records">Records</a></p>
+<p><a href="/records">Records</a> · <a href="/stats">Statistics</a></p>
 <h1>History</h1>
 <PrivacyLabel />
 <p class="lede">Totals from your own entries, private to you.</p>
