@@ -173,6 +173,11 @@ async function scan(page: Page, paths: string[]) {
 
 let shared: World;
 
+test('axe reports a planted violation, so the checks below can fail', async ({ page }) => {
+	await page.setContent('<html lang="en"><title>Control</title><main><img src="x.png"></main></html>');
+	expect((await violations(page)).join('\n')).toContain('image-alt');
+});
+
 test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 	// The page set is the same on every device; two engines cover layout differences.
 	test.beforeEach(({}, info) => {
@@ -189,6 +194,7 @@ test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 			test('public pages, signed out, and the sign-in sheet', async ({ page }) => {
 				await scan(page, shared.paths.guest);
 				await page.goto('/');
+				await expect(page.locator('html[data-sign-in-sheet="ready"]')).toHaveCount(1);
 				await page.locator('header a[data-sign-in]').click();
 				await expect(page.getByRole('dialog')).toBeVisible();
 				expect.soft(await violations(page), 'sign-in sheet').toEqual([]);

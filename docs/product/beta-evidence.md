@@ -111,12 +111,13 @@ added 2026-11-12), a dedicated first-use test of `/people`, `/plans`,
 `/gear` and `/records`.
 
 Accessibility, added 2026-11-12: e2e `a11y` runs axe 4.14 (WCAG 2.0/2.1 A and AA, 2.2 AA
-rules) on 37 pages in light and dark, in Chromium at 320 px and WebKit (iPhone 13): every
+rules) on 38 pages in light and dark, in Chromium at 320 px and WebKit (iPhone 13): every
 public page signed out (with a real listing, organiser, dropzone, profile and post), the
 open sign-in sheet, every member page with records in it, and the maintenance pages as
-the reviewer. It found no violations; a planted image without alt text was reported, so
-the rules run. axe covers only part of WCAG. After a form submit, the returned page now
-moves focus to its first error (e2e `auth`), because an alert already present at page
+the reviewer. It found no violations; a control test with a planted image without alt text
+must report it, so the checks can fail. axe covers only part of WCAG. After a POST that comes back to the same
+page, focus moves to the error of the form that was sent (e2e `auth`); search forms
+and ordinary visits never move it (e2e `social`), because an alert already present at page
 load is often not announced. When the error code concerns one field
 (`web/src/lib/field-errors.ts`, 74 codes), that field is marked `aria-invalid`, described
 by the error and focused instead (e2e `social`). This needs JavaScript; without it the
