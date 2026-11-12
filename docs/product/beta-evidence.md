@@ -104,7 +104,8 @@ request for the full gate).
 Still covered by backend tests only, judged lower risk because pages are rendered per
 request and `no-store`: blocking's effect on posts and the feed, and turning
 discoverability off. Not added: null or absent Origin on authenticated form actions
-other than sign-in (one central check, unit tested), a "starts today" listing case, a
+other than sign-in (one central check, unit tested), a "starts today" listing case (added 2026-11-12: `test_opportunities.py`
+`test_a_one_day_listing_is_upcoming_all_of_its_own_day`, from 00:30 to 23:59 local), a
 private save while the API is down (an offline submit is now stopped with the input kept;
 added 2026-11-12), a dedicated first-use test of `/people`, `/plans`,
 `/gear` and `/records`.
