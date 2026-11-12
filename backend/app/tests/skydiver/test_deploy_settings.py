@@ -64,3 +64,20 @@ def test_the_command_asks_twice_and_never_takes_a_password_argument(
     assert capsys.readouterr().out.strip() == "passwords_differ"
     with pytest.raises(SystemExit):
         main(["create-confirmed", "a@example.com", "--password", "x"], ask=lambda _: "")
+
+
+def test_a_settings_error_never_prints_the_values_it_received(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # As on a host where PROJECT_NAME was not set yet (seen on FastAPI Cloud).
+    monkeypatch.delenv("PROJECT_NAME", raising=False)
+    secret = "postgresql://owner:do-not-print-this@db.example/neondb"
+    with pytest.raises(ValueError) as refused:
+        Settings(
+            DATABASE_URL=secret, SMTP_PASSWORD="re_do_not_print_this_either",
+            _env_file=None,
+        )  # type: ignore[call-arg]  # fmt: skip
+    message = str(refused.value)
+    assert "PROJECT_NAME" in message  # still says what is missing
+    assert "do-not-print-this" not in message
+    assert "re_do_not_print_this_either" not in message
