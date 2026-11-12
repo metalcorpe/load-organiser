@@ -49,15 +49,26 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
+    # Hosted databases (Neon through FastAPI Cloud) give one connection string; it
+    # wins over the separate POSTGRES_* values, which local and test runs use.
+    DATABASE_URL: str | None = None
+    POSTGRES_SERVER: str = ""
     POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
+    POSTGRES_USER: str = ""
     POSTGRES_PASSWORD: str = ""
     POSTGRES_DB: str = ""
+
+    @model_validator(mode="after")
+    def _one_database(self) -> Self:
+        if not self.DATABASE_URL and not (self.POSTGRES_SERVER and self.POSTGRES_USER):
+            raise ValueError("Set DATABASE_URL, or POSTGRES_SERVER and POSTGRES_USER")
+        return self
 
     @computed_field  # type: ignore[prop-decorator]
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
+        if self.DATABASE_URL:
+            return PostgresDsn(database_url_for_psycopg(self.DATABASE_URL))
         return PostgresDsn.build(
             scheme="postgresql+psycopg",
             username=self.POSTGRES_USER,
@@ -131,8 +142,9 @@ class Settings(BaseSettings):
         return self
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    # Template admin account, created only by `app.initial_data`; the beta never needs it.
+    FIRST_SUPERUSER: EmailStr | None = None
+    FIRST_SUPERUSER_PASSWORD: str | None = None
 
     def _check_default_secret(self, var_name: str, value: str | None) -> None:
         if value == "changethis":
@@ -154,6 +166,18 @@ class Settings(BaseSettings):
         )
 
         return self
+
+
+def database_url_for_psycopg(url: str) -> str:
+    """The same connection string with the scheme SQLAlchemy needs for psycopg 3.
+
+    Neon and most hosts hand out `postgres://` or `postgresql://`; query parameters
+    such as `sslmode=require` and `channel_binding=require` are kept as they are.
+    """
+    scheme, sep, rest = url.partition("://")
+    if not sep or scheme not in ("postgres", "postgresql", "postgresql+psycopg"):
+        raise ValueError("DATABASE_URL must be a postgres:// or postgresql:// URL")
+    return f"postgresql+psycopg://{rest}"
 
 
 settings = Settings()  # type: ignore
