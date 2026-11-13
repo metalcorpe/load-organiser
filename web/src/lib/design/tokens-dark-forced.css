@@ -13,7 +13,6 @@
   --brand-fg: #f3f6fa;
   --brand-muted: #c9d6e4;
   --highlight: #ff8a5c;
-  --icon: #7faef5;
   --boogie-bg: #3a2c12;
   --boogie-fg: #f2c46b;
   --camp-bg: #12332c;
@@ -30,5 +29,5 @@
   --bad-fg: #f4aca8;
   --bad-bg: #3a1b1a;
   --field: #0b1624; /** Form field background */
-  --field-border: #5a7598; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
+  --field-border: #5e7a9e; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
 }
