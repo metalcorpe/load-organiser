@@ -1,5 +1,6 @@
 <script lang="ts">
 	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import FeaturedListing from '#lib/components/FeaturedListing.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
@@ -26,6 +27,19 @@
 	let { data }: PageProps = $props();
 	const countryOptions = $derived(coverageOptions(data.countries, data.filters.country));
 	const filtered = $derived(hasFilters(data.filters));
+	// "To" before "From": the visitor's own mistake, answered in the filters (field marked,
+	// panel open, every value kept), unlike a service failure, which is about the results.
+	const dateError = $derived(!data.result.ok && data.result.kind === 'invalid');
+	// With JavaScript, the date to correct takes focus after each search (a GET form navigates
+	// client-side) and is scrolled to the middle of the screen, clear of the sticky "Show
+	// listings" button and the tab bar. Without it, `autofocus` does the same on load.
+	afterNavigate(() => {
+		if (!dateError) return;
+		const field = document.getElementById('to');
+		if (!field) return;
+		field.focus({ preventScroll: true });
+		field.scrollIntoView({ block: 'center' });
+	});
 	// This search (filters and page), carried into each event for "Back to results".
 	const here = $derived(boardHref(data.filters, data.cursor || undefined));
 	// On the plain first page, the next multi-day boogie or camp gets the navy card. It is taken
@@ -102,7 +116,7 @@
 		/>
 		<button class="button secondary" type="submit">Search</button>
 	</div>
-	<details class="more">
+	<details class="more" open={dateError}>
 		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
 		<div class="form filters">
 			<div class="field">
@@ -133,15 +147,25 @@
 					</div>
 					<div class="field">
 						<label for="to">To</label>
+						<!-- svelte-ignore a11y_autofocus -->
 						<input
 							id="to"
 							name="to"
 							type="date"
 							defaultValue={data.filters.to}
-							aria-describedby="dates-hint"
+							aria-invalid={dateError ? 'true' : undefined}
+							aria-describedby={dateError ? 'dates-error dates-hint' : 'dates-hint'}
+							autofocus={dateError}
 						/>
 					</div>
 				</div>
+				<!-- Under both dates, full width: either date can be the one to change. -->
+				{#if dateError}
+					<p class="field-error" id="dates-error">
+						“To” is before “From”. Choose a “To” date on or after
+						{formatDay(data.filters.from)}, or an earlier “From” date.
+					</p>
+				{/if}
 				<p class="hint" id="dates-hint">
 					Shows every event that overlaps these dates, including ones that start earlier or end
 					later.
@@ -207,8 +231,17 @@
 	</ul>
 {/if}
 
-{#if !data.result.ok}
-	<p class="form-error" role="alert">{listingMessage(data.result.reason)}</p>
+{#if !data.result.ok && data.result.kind === 'invalid'}
+	<!-- Not an alert: the field itself carries the error and has focus. A pointer for anyone
+	     who scrolls here, also without JavaScript. -->
+	<p class="dates-note">
+		No listings shown until the dates are corrected. <a href="#to">Correct the “To” date</a>
+	</p>
+{:else if !data.result.ok}
+	<Notice title="Listings could not be loaded" tone="bad">
+		<p role="alert">{listingMessage(data.result.reason)}</p>
+		<p>Your search is kept. <a href={here} data-sveltekit-reload>Try again</a></p>
+	</Notice>
 {:else if data.result.items.length === 0}
 	<Notice title={filtered ? 'No listings match' : 'No listings published yet'} tone="warn">
 		<p>
@@ -327,6 +360,7 @@
 
 	.dates {
 		display: grid;
+		align-items: start;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
 		gap: 0.75rem;
 	}
@@ -403,6 +437,11 @@
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
+	}
+
+	.dates-note {
+		margin: 0.5rem 0 1rem;
+		color: var(--muted);
 	}
 
 	.list-heading {

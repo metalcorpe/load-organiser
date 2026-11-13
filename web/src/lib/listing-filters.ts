@@ -49,6 +49,11 @@ export function parseFilters(params: URLSearchParams): BoardFilters {
 	};
 }
 
+/** Both dates given and "to" before "from": no event can be available in that window. */
+export function datesOutOfOrder(filters: Pick<BoardFilters, 'from' | 'to'>): boolean {
+	return Boolean(filters.from && filters.to && filters.to < filters.from);
+}
+
 export function hasFilters(filters: BoardFilters): boolean {
 	return Object.values(filters).some(Boolean);
 }
