@@ -90,4 +90,23 @@ test.describe('jump currency', () => {
 			`Current until ${long(day(0))} (USPA guidance for an A licence: 60 days).`
 		);
 	});
+
+	test('saving a form lower on the page brings its confirmation into view', async ({ page }) => {
+		const email = await createAccount({ label: 'save-view' });
+		await signIn(page, email, '/profile');
+		await page.setViewportSize({ width: 320, height: 640 });
+		await page.waitForFunction(() => document.documentElement.dataset.formGuard === 'ready');
+
+		await page.getByRole('combobox', { name: 'Licence' }).selectOption({ label: 'A licence' });
+		await page.getByRole('button', { name: 'Save licence' }).click();
+		const licence = page.getByRole('status').filter({ hasText: 'Licence saved.' });
+		await expect(licence).toBeInViewport();
+		await expect(licence).toBeFocused();
+
+		await page.locator('#exit_weight').fill('82');
+		await page.getByRole('button', { name: 'Save exit weight' }).click();
+		const weight = page.getByRole('status').filter({ hasText: 'Exit weight saved.' });
+		await expect(weight).toBeInViewport();
+		await expect(weight).toBeFocused();
+	});
 });
