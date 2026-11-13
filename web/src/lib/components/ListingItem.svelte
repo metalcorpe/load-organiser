@@ -2,6 +2,7 @@
 	import type { OpportunityOut } from '#lib/contracts/index.ts';
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
+	import { eventHref } from '#lib/listing-filters.ts';
 	import {
 		CATEGORY_LABEL,
 		dateStub,
@@ -11,7 +12,9 @@
 		statusLabel
 	} from '#lib/listings.ts';
 
-	let { item }: { item: OpportunityOut } = $props();
+	/** `results`: the board search this card is listed in, carried to the event for "Back to results". */
+	let { item, results = null }: { item: OpportunityOut; results?: string | null } = $props();
+	const href = $derived(eventHref(item.id, { results }));
 	const status = $derived(statusLabel(item.status, item.ended));
 	const stub = $derived(dateStub(item.starts_on, item.ends_on));
 	const days = $derived(spanDays(item.starts_on, item.ends_on));
@@ -47,7 +50,7 @@
 			{#if status}<span class="badge status">{status}</span>{/if}
 			<span class="visually-hidden">{formatRange(item.starts_on, item.ends_on)}</span>
 		</p>
-		<a class="title" href="/events/{item.id}">{item.title}</a>
+		<a class="title" {href}>{item.title}</a>
 		<p class="line">
 			{place ? `${place}, ` : ''}{countryName(item.country)}{organizer ? ` · by ${organizer}` : ''}
 		</p>

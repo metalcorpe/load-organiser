@@ -1,5 +1,6 @@
 /** Board filters parsed from the URL: only known values pass; everything else is dropped. */
 import { isCountryCode } from '#lib/countries.ts';
+import { safeReturnPath } from '#lib/safe-return.ts';
 
 export const CATEGORY_VALUES = ['event', 'boogie', 'camp', 'course'] as const;
 export const DISCIPLINE_VALUES = [
@@ -59,4 +60,45 @@ export function boardHref(filters: BoardFilters, cursor?: string): string {
 	if (cursor) params.set('cursor', cursor);
 	const search = params.toString();
 	return search ? `/?${search}` : '/';
+}
+
+/** Any absolute base works: only the path and query of a checked local path are read. */
+const BOARD_BASE = 'https://board.invalid';
+
+/**
+ * The board search an event was opened from ("Back to results"), from an untrusted `results`
+ * parameter. Only a local path to the board itself passes (no other page, host, scheme or
+ * backslash: safeReturnPath first), and it is rebuilt from its known filters and page cursor,
+ * so nothing else in it survives. The plain board (no filters, first page) is not a search
+ * context: null, and the event page offers only "All events".
+ */
+export function resultsPath(raw: string | null | undefined): string | null {
+	const path = safeReturnPath(raw);
+	if (!path) return null;
+	const url = new URL(path, BOARD_BASE);
+	if (url.pathname !== '/') return null;
+	const cursor = (url.searchParams.get('cursor') ?? '').slice(0, 512);
+	const href = boardHref(parseFilters(url.searchParams), cursor || undefined);
+	return href === '/' ? null : href;
+}
+
+/** Longest return path the sign-in pages accept (safeReturnPath). */
+const RETURN_LIMIT = 512;
+
+/**
+ * An event's address, optionally carrying the board search it was opened from and the
+ * "sign in to save" intent. A search context too long to survive the sign-in round trip is
+ * dropped, rather than the sign-in losing the whole return path.
+ */
+export function eventHref(
+	id: string,
+	{ results, save = false }: { results?: string | null; save?: boolean } = {}
+): string {
+	const params = new URLSearchParams();
+	if (save) params.set('save', '1');
+	const context = resultsPath(results);
+	if (context) params.set('results', context);
+	const search = params.toString();
+	const href = search ? `/events/${id}?${search}` : `/events/${id}`;
+	return href.length > RETURN_LIMIT && context ? eventHref(id, { save }) : href;
 }

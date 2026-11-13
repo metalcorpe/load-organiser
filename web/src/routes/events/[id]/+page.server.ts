@@ -1,4 +1,5 @@
 import { error, fail, redirect } from '@sveltejs/kit';
+import { eventHref, resultsPath } from '#lib/listing-filters.ts';
 import { listingStatus } from '#lib/listings.ts';
 import { signInPath } from '#lib/safe-return.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
@@ -36,13 +37,21 @@ export const load: PageServerLoad = async ({ params, url, locals, cookies }) => 
 	return {
 		item,
 		saved,
+		// The board search this was opened from ("Back to results"); null for a direct link.
+		results: resultsPath(url.searchParams.get('results')),
 		// Set after signing in from "Sign in to save": offer the save, do not perform it.
 		saveIntent: url.searchParams.get('save') === '1'
 	};
 };
 
 function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies' | 'params'>): string {
-	const back = new URL(`/events/${event.params.id}?save=1`, event.url);
+	const back = new URL(
+		eventHref(event.params.id, {
+			save: true,
+			results: event.url.searchParams.get('results')
+		}),
+		event.url
+	);
 	if (!event.locals.viewer) redirect(303, signInPath(back));
 	const secret = readSessionSecret(event.cookies);
 	if (!secret) redirect(303, signInPath(back));

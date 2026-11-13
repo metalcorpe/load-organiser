@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ url }) => {
 		// null: coverage unknown, so the filter offers every country rather than none.
 		countries: coverage.ok ? coverage.value : null,
 		paged: Boolean(cursor),
+		cursor,
 		result: outcome.ok
 			? {
 					ok: true as const,
