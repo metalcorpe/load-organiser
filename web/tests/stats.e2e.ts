@@ -66,4 +66,19 @@ test.describe('statistics', () => {
 		await signIn(page, await createAccount({ label: 'statsnone' }), '/stats');
 		await expect(page.getByText('No jumps recorded yet.', { exact: true })).toBeVisible();
 	});
+
+	test('the Logbook tab stays selected on Statistics, on a phone and on a large screen', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'statstab' }), '/stats');
+		const primary = page.getByRole('navigation', { name: 'Primary' });
+		for (const viewport of [null, { width: 1280, height: 800 }]) {
+			if (viewport) await page.setViewportSize(viewport);
+			await expect(primary.getByRole('link', { name: 'Logbook' })).toHaveAttribute(
+				'aria-current',
+				'page'
+			);
+			await expect(primary.locator('[aria-current="page"]')).toHaveCount(1);
+		}
+	});
 });

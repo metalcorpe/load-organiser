@@ -20,6 +20,8 @@ describe('primary navigation', () => {
 		expect(current('/jumps')).toEqual(['Logbook']);
 		expect(current('/jumps/new')).toEqual(['Logbook']);
 		expect(current('/history/baseline')).toEqual(['Logbook']);
+		expect(current('/stats')).toEqual(['Logbook']);
+		expect(current('/statsx')).toEqual([]);
 		expect(current('/activity')).toEqual(['Friends']);
 		expect(current('/people/someone')).toEqual(['Friends']);
 		expect(current('/gear/x')).toEqual(['Me']);
