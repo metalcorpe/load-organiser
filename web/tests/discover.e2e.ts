@@ -474,7 +474,8 @@ test.describe('search context and the filter panel', () => {
 		await to.fill('2027-07-31');
 		await page.getByRole('button', { name: 'Show listings' }).click();
 		await expect(page).toHaveURL(/to=2027-07-31/);
-		await expect(to).not.toHaveAttribute('aria-invalid', 'true');
+		// A valid search folds the panel again; the field is no longer marked.
+		await expect(page.locator('#to')).not.toHaveAttribute('aria-invalid', 'true');
 	});
 
 	test('without JavaScript, "To" before "From" is marked and focused the same way', async ({
