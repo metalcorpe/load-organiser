@@ -246,10 +246,23 @@ export const OPERATIONS = {
 		path: `${BETA}/jumps/recent-aircraft`,
 		query: ['venue_id', 'place_id']
 	},
+	// The usual exit weight and the highest wing loading of the other jumps, for the jump form.
+	getWingLoadingContext: {
+		method: 'GET',
+		path: `${BETA}/jumps/wing-loading`,
+		query: ['exclude']
+	},
 	getJump: { method: 'GET', path: `${BETA}/jumps/{id}`, maxBodyBytes: 1024 * 1024 },
 	updateJump: { method: 'PATCH', path: `${BETA}/jumps/{id}` },
 	deleteJump: { method: 'DELETE', path: `${BETA}/jumps/{id}`, query: ['version'] },
 	getHistory: { method: 'GET', path: `${BETA}/history`, maxBodyBytes: 1024 * 1024 },
+	// Statistics from all entries in one call; bounded lists (top 10, at most a century of years).
+	getStats: {
+		method: 'GET',
+		path: `${BETA}/history/stats`,
+		query: ['year'],
+		maxBodyBytes: 256 * 1024
+	},
 	// Computed on read from all entries; a few dozen lines at most.
 	getMilestones: { method: 'GET', path: `${BETA}/history/milestones`, maxBodyBytes: 256 * 1024 },
 	previewBaseline: {
@@ -261,6 +274,8 @@ export const OPERATIONS = {
 	removeBaseline: { method: 'DELETE', path: `${BETA}/history/baseline`, query: ['version'] },
 	getLicence: { method: 'GET', path: `${BETA}/me/licence` },
 	setLicence: { method: 'PUT', path: `${BETA}/me/licence` },
+	getExitWeight: { method: 'GET', path: `${BETA}/me/exit-weight` },
+	setExitWeight: { method: 'PUT', path: `${BETA}/me/exit-weight` },
 	getRecords: { method: 'GET', path: `${BETA}/records` },
 	exportRecords: {
 		method: 'GET',

@@ -25,7 +25,9 @@ export const load: PageServerLoad = async (event) => {
 	const until = dateParam(params.get('until'));
 	// Notes are private: printed only when asked for.
 	const notes = params.get('notes') === 'yes';
-	const options = { from, until, notes, owner: viewer.displayName ?? null };
+	// Wing loading is an optional column, like notes.
+	const loading = params.get('loading') === 'yes';
+	const options = { from, until, notes, loading, owner: viewer.displayName ?? null };
 	if (from && until && from > until) {
 		return { options, result: { ok: false as const, reason: 'date_range_invalid' } };
 	}

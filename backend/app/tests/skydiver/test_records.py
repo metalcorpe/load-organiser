@@ -132,7 +132,8 @@ class Api:
              "serial": "N-0042", "relation": "owned", "acquisition_method": "purchase",
              "acquired": "2024-05", "repack_interval_days": 120,
              "end_of_life_on": "2034-05-01", "jump_limit": 500,
-             "jump_limit_label": "Reline", "jump_limit_service_kind": "maintenance"},
+             "jump_limit_label": "Reline", "jump_limit_service_kind": "maintenance",
+             "canopy_size_sqft": 170},
             201,
         )["component"]  # fmt: skip
         rig = self.ok("POST", "/gear/rigs", secret, {"client_key": str(uuid.uuid4()), "label": "Rig A"}, 201)  # fmt: skip
@@ -152,7 +153,7 @@ class Api:
              "exit_time": "14:05", "time_zone": "Europe/Madrid", "exit_altitude": 4000,
              "altitude_unit": "m", "altitude_datum": "agl", "notes": "Private note.",
              "links": ["https://example.org/video"], "component_ids": [main["id"]],
-             "aircraft": "Cessna 208 SX-ABC"},
+             "aircraft": "Cessna 208 SX-ABC", "exit_weight_grams": 84_000},
             201,
         )["jump"]  # fmt: skip
         self.ok(
@@ -172,6 +173,7 @@ class Api:
         )  # fmt: skip
         self.ok("PUT", f"/saved/{listing}", secret, status=201)
         self.ok("PUT", "/me/licence", secret, {"licence": "b"})
+        self.ok("PUT", "/me/exit-weight", secret, {"value": 180, "unit": "lb"})
         self.ok(
             "POST", "/plans", secret,
             {"title": "Spring visit", "starts_on": "2027-04-01", "ends_on": "2027-04-03",
@@ -236,6 +238,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 c["jump_limit"],
                 c["jump_limit_label"],
                 c["jump_limit_service_kind"],
+                c["canopy_size_sqft"],
             )
             for c in r["components"]
         ],
@@ -256,6 +259,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
                 j["links"],
                 len(j["component_ids"]),
                 j["aircraft"],
+                j["exit_weight_grams"],
             )
             for j in r["jumps"]
         ],  # fmt: skip
@@ -269,6 +273,7 @@ def _shape(archive: dict[str, Any]) -> dict[str, Any]:
         "saved": [s["title"] for s in r["saved_listings"]],
         "plans": [(p["title"], p["starts_on"], p["venue_id"]) for p in r["plans"]],
         "licence": r["licence"],
+        "exit_weight": r["exit_weight"],
     }
 
 
@@ -330,6 +335,17 @@ def test_round_trip_into_an_empty_account(api: Api) -> None:
     assert [(u["component"]["label"], u["jumps"]) for u in uses] == [("Navigator", 1)]
     assert archive["records"]["licence"] == "b"
     assert api.ok("GET", "/me/licence", target) == {"licence": "b"}
+    # Wing loading travels too: the canopy size, the jump's own weight and the
+    # usual exit weight in the unit it was entered in.
+    assert archive["records"]["exit_weight"] == {"grams": 81_647, "unit": "lb"}
+    assert archive["records"]["components"][0]["canopy_size_sqft"] == 170
+    assert archive["records"]["jumps"][-1]["exit_weight_grams"] == 84_000
+    weight = api.ok("GET", "/me/exit-weight", target)["exit_weight"]
+    assert weight == {"grams": 81_647, "value": 180.0, "unit": "lb"}
+    (restored,) = [
+        j for j in api.ok("GET", "/jumps", target)["items"] if j["components"]
+    ]
+    assert restored["wing_loading"]["value"] == 1.09  # 84 kg over 170 sq ft
 
 
 def test_a_set_licence_is_kept_and_does_not_block_a_restore(api: Api) -> None:
@@ -744,3 +760,41 @@ def test_a_jump_limit_in_a_file_must_be_complete(api: Api) -> None:
     response = api.send("/records/restore/check", api.accounts.session(), bad)
     assert response.status_code == 422
     assert response.json()["problem"] == "components[0].jump_limit_label_required"
+
+
+def test_an_earlier_file_without_wing_loading_values_restores_with_none(
+    api: Api,
+) -> None:
+    place = _place()
+    component = {
+        "id": str(uuid.uuid4()), "kind": "main", "label": "Main", "relation": "owned",
+        "created_at": "2026-10-01T10:00:00Z", "updated_at": "2026-10-01T10:00:00Z",
+    }  # fmt: skip
+    jump = _jump(place_id=place["id"], component_ids=[component["id"]])
+    raw = json.dumps(_archive(places=[place], components=[component], jumps=[jump]))
+    target = api.accounts.session()
+    done = api.restore(target, raw.encode())
+    assert done.status_code == 200, done.text
+    records = json.loads(api.export(target))["records"]
+    assert records["exit_weight"] is None
+    assert records["components"][0]["canopy_size_sqft"] is None
+    assert records["jumps"][0]["exit_weight_grams"] is None
+    # A size on a component that is not a canopy is refused before any write.
+    bad = _archive(components=[component | {"kind": "aad", "canopy_size_sqft": 170}])
+    response = api.send(
+        "/records/restore/check", api.accounts.session(), json.dumps(bad).encode()
+    )
+    assert response.status_code == 422
+    assert response.json()["problem"] == "components[0].canopy_size_not_a_canopy"
+
+
+def test_the_accounts_own_exit_weight_wins_over_the_files(api: Api) -> None:
+    owner, target = api.accounts.session(), api.accounts.session()
+    api.ok("PUT", "/me/exit-weight", owner, {"value": 90, "unit": "kg"})
+    api.ok("POST", "/places", owner, {"name": "Strip", "country": "PT"}, 201)
+    raw = api.export(owner)
+    # A setting, not a record: the target still counts as empty.
+    api.ok("PUT", "/me/exit-weight", target, {"value": 75.5, "unit": "kg"})
+    assert api.restore(target, raw).status_code == 200
+    kept = api.ok("GET", "/me/exit-weight", target)["exit_weight"]
+    assert kept == {"grams": 75_500, "value": 75.5, "unit": "kg"}

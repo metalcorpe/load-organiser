@@ -78,6 +78,7 @@ REPLAY: dict[str, Replay] = {
     "skydiver_saved_opportunity": Replay(("id",)),
     "skydiver_jump_baseline": Replay(("owner_person_id",)),
     "skydiver_jumper_licence": Replay(("owner_person_id",)),  # migration a3f6c9e2d7b4
+    "skydiver_exit_weight": Replay(("owner_person_id",)),  # migration e8b3d5f1a7c4
     "skydiver_role_grant": Replay(("id",)),
 }
 

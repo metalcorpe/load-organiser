@@ -221,7 +221,13 @@ def test_equipment_actually_used_is_the_owners_own(api: Api) -> None:
     jump_id = used.json()["jump"]["id"]
     kept = api.ok("GET", f"/jumps/{jump_id}", owner)["jump"]["components"]
     assert kept == [
-        {"id": main["id"], "kind": "main", "label": "Main", "archived": True}
+        {
+            "id": main["id"],
+            "kind": "main",
+            "label": "Main",
+            "archived": True,
+            "canopy_size_sqft": None,
+        }
     ]
 
 

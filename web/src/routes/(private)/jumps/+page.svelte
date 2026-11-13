@@ -12,6 +12,7 @@
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
 	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
 	import { formatDay, formatRange, statusLabel } from '#lib/listings.ts';
+	import { formatLoading, listNote, missingHelp } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -81,6 +82,9 @@
 		new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short' }).format(
 			new Date(instant)
 		);
+	// Wing loading shows on the rows that have one; what the others lack is said once.
+	const loadingNote = $derived(data.page.ok ? listNote(data.page.items) : null);
+	const loadingHelp = $derived(missingHelp(loadingNote?.missing ?? []));
 	const described = (name: string) =>
 		invalid.has(name) ? { 'aria-invalid': 'true' as const, 'aria-describedby': 'filter-error' } : {};
 </script>
@@ -92,7 +96,7 @@
 
 <div class="head">
 	<h1>Logbook</h1>
-	<a href="/history">History</a>
+	<p class="links"><a href="/history">History</a> · <a href="/stats">Statistics</a></p>
 </div>
 <PrivacyLabel text="Private logbook — only you can see your jumps" />
 
@@ -505,7 +509,9 @@
 							>{JUMP_TYPE_LABEL[jump.jump_type]} · {jump.location.name ?? 'Dropzone no longer listed'}{jump
 								.location.kind === 'place'
 								? ' (private place)'
-								: ''}{jump.aircraft ? ` · ${jump.aircraft}` : ''}</span
+								: ''}{jump.aircraft ? ` · ${jump.aircraft}` : ''}{jump.wing_loading.value !== null
+								? ` · wing loading ${formatLoading(jump.wing_loading.value)}`
+								: ''}</span
 						>
 						{#if jump.components.length > 0}
 							<span class="meta">Gear: {jump.components.map((c) => c.label).join(', ')}</span>
@@ -514,6 +520,15 @@
 				</li>
 			{/each}
 		</ul>
+		{#if loadingNote}
+			<p class="hint">
+				No wing loading for {loadingNote.count}
+				{loadingNote.count === 1 ? 'jump' : 'jumps'} here: {loadingNote.text}.
+				{#if loadingHelp.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if loadingHelp.profile && loadingHelp.gear}
+					·
+				{/if}{#if loadingHelp.gear}<a href="/gear">Add canopy sizes under Gear</a>{/if}
+			</p>
+		{/if}
 	{/if}
 	<p class="pager">
 		{#if data.older}<a href={data.select ? selectHref() : jumpsHref(data.filters)}>Newest</a>{/if}
@@ -533,6 +548,10 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: baseline;
+	}
+
+	.head .links {
+		margin: 0;
 	}
 
 	.head a {

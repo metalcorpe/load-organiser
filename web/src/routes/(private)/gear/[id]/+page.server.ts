@@ -1,6 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { ComponentDetailOut, GearDueOut, RigOut, ServiceOut } from '#lib/contracts/index.ts';
-import { parseInterval, parseJumpLimit } from '#lib/gear.ts';
+import { CANOPY_KINDS, parseCanopySize, parseInterval, parseJumpLimit } from '#lib/gear.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
@@ -71,7 +71,9 @@ function componentFields(data: FormData) {
 		// All three together; empty number and label clear the limit.
 		jump_limit: parseJumpLimit(field(data, 'jump_limit', { max: 12 })),
 		jump_limit_label: text(data, 'jump_limit_label', 200),
-		jump_limit_service_kind: text(data, 'jump_limit_service_kind', 16)
+		jump_limit_service_kind: text(data, 'jump_limit_service_kind', 16),
+		// Only a main or reserve shows the size field; anything else sends none.
+		canopy_size_sqft: parseCanopySize(field(data, 'canopy_size_sqft', { max: 12 }))
 	};
 }
 
@@ -94,6 +96,9 @@ export const actions: Actions = {
 		if (body.jump_limit === 'invalid')
 			return fail(400, { form: 'save', error: 'jump_limit_invalid', values: echo(data), based });
 		if (body.jump_limit === null && !body.jump_limit_label) body.jump_limit_service_kind = null;
+		if (!CANOPY_KINDS.includes(body.kind)) body.canopy_size_sqft = null;
+		if (body.canopy_size_sqft === 'invalid')
+			return fail(400, { form: 'save', error: 'canopy_size_invalid', values: echo(data), based });
 		if (body.end_of_life_on && !DATE.test(body.end_of_life_on))
 			return fail(400, { form: 'save', error: 'end_of_life_invalid', values: echo(data), based });
 		const api = createRequestApi();

@@ -38,11 +38,20 @@ class SkydiverPerson(SQLModel, table=True):
     """Persistent jumper identity: one per account, separate from credentials and roles."""
 
     __tablename__ = "skydiver_person"
+    __table_args__ = (
+        CheckConstraint(
+            "weight_unit IS NULL OR weight_unit IN ('kg', 'lb')",
+            name="ck_skydiver_person_weight_unit",
+        ),
+    )
 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     account_id: uuid.UUID = Field(sa_column=_account_fk(unique=True))
     display_name: str | None = Field(default=None, max_length=80)
     created_at: datetime = Field(sa_column=_instant())
+    # The unit the jumper last chose for weights (kg or lb). A display preference,
+    # kept when the exit weight itself is cleared (skydiver_exit_weight); no weight.
+    weight_unit: str | None = Field(default=None, max_length=2)
 
 
 class SkydiverAccountState(SQLModel, table=True):

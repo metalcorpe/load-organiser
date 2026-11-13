@@ -10,6 +10,7 @@ a first declaration carries none. Nothing here is shared, verified or a credenti
 import uuid
 from collections.abc import Callable
 from datetime import date, datetime
+from decimal import Decimal
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, Query, Response, status
@@ -24,9 +25,21 @@ from app.skydiver.history import licences
 from app.skydiver.history.currency import SOURCE, Currency, Licence
 from app.skydiver.history.licences import Progress
 from app.skydiver.history.policy import Totals
-from app.skydiver.history.service import HistoryService, MilestoneList, Summary
-from app.skydiver.logbook.api import ComponentRefOut, LocationOut
-from app.skydiver.logbook.service import Location
+from app.skydiver.history.service import (
+    HistoryService,
+    MilestoneList,
+    StatsView,
+    Summary,
+)
+from app.skydiver.logbook.api import (
+    ComponentRefOut,
+    ExitWeightOut,
+    LocationOut,
+    MissingName,
+    WeightUnitName,
+)
+from app.skydiver.logbook.loading import LoadingRange, WeightUnit, in_unit
+from app.skydiver.logbook.service import ExitWeight, Location
 
 PREFIX = "/api/skydiver/v1"
 NO_STORE = {"cache-control": "no-store"}
@@ -148,6 +161,30 @@ class LicenceProgressOut(BaseModel):
     source: Literal["USPA SIM 3-1"] = licences.SOURCE
 
 
+class LoadingMonthOut(BaseModel):
+    month: str = Field(description="YYYY-MM")
+    highest: float = Field(description="The highest wing loading jumped that month.")
+    jumps: int = Field(description="Entries that month with a known wing loading.")
+
+
+class MissingCountOut(BaseModel):
+    missing: MissingName
+    jumps: int
+
+
+class LoadingRangeOut(BaseModel):
+    """Wing loading over your entries: exit weight in pounds over the main canopy's
+    size in square feet. Not advice."""
+
+    lowest: float | None
+    highest: float | None
+    known: int = Field(description="Entries with a known wing loading.")
+    unknown: int
+    missing: list[MissingCountOut] = Field(
+        description="What the unknown entries lack (an entry can lack two things)."
+    )
+
+
 class HistoryOut(BaseModel):
     totals: TotalsOut
     baseline: BaselineOut | None
@@ -166,6 +203,105 @@ class HistoryOut(BaseModel):
     )
     currency: CurrencyOut
     progress: LicenceProgressOut | None = Field(description="Null without a licence.")
+    wing_loading_months: list[LoadingMonthOut] = Field(
+        description="The highest wing loading per month, for the latest 24 months that"
+        " have one, oldest first."
+    )
+    wing_loading: LoadingRangeOut
+    exit_weight: ExitWeightOut | None = Field(
+        description="Your usual exit weight; null when not set."
+    )
+
+
+class ExitWeightIn(BaseModel):
+    value: Annotated[Decimal, Field(gt=0, le=1000, decimal_places=1)] | None = Field(
+        description="Your usual exit weight (body and gear), 30 to 250 kg (67 to 551"
+        " lb), to one decimal; null clears it."
+    )
+    unit: WeightUnitName
+
+
+class ExitWeightSettingOut(BaseModel):
+    """Private to you; used only for wing loading. Never verified."""
+
+    exit_weight: ExitWeightOut | None
+    unit: WeightUnitName = Field(description="Your unit for weights.")
+
+
+class PlaceCountOut(BaseModel):
+    location: LocationOut
+    jumps: int
+
+
+class PlacesOut(BaseModel):
+    items: list[PlaceCountOut] = Field(description="At most 10, most jumps first.")
+    others: int = Field(description="Jumps at the other places.")
+    other_places: int
+
+
+class AircraftCountOut(BaseModel):
+    aircraft: str = Field(description="Its most used spelling.")
+    jumps: int
+
+
+class AircraftOut(BaseModel):
+    items: list[AircraftCountOut] = Field(description="At most 10, most jumps first.")
+    others: int = Field(description="Jumps in the other aircraft.")
+    other_aircraft: int
+    not_recorded: int = Field(description="Entries without an aircraft.")
+
+
+class YearCountOut(BaseModel):
+    year: int
+    jumps: int
+
+
+class FreefallYearOut(BaseModel):
+    year: int
+    seconds: int = Field(description="Entries with a recorded freefall time only.")
+    with_freefall: int
+    without_freefall: int
+
+
+class AltitudeOut(BaseModel):
+    unit: Literal["ft", "m"] = Field(description="As entered; never converted.")
+    jumps: int = Field(description="Entries with an exit altitude in this unit.")
+    average: int
+    highest: int
+
+
+class StatsTotalOut(BaseModel):
+    recorded: int = Field(description="Your entries in scope.")
+    reported: int | None = Field(
+        description="Without a year filter: your declared prior jump count plus the"
+        " entries on or after its date, when they agree; else null."
+    )
+    prior_jumps: int | None = Field(
+        description="The declared prior jump count within `reported`."
+    )
+
+
+class StatsOut(BaseModel):
+    """Statistics from your own entries, private to you. A declared prior jump
+    count is only in `total.reported`: it has no dates, types, places or
+    measurements."""
+
+    year: int | None = Field(description="The year filter, if any.")
+    years: list[int] = Field(description="Years with an entry, newest first.")
+    total: StatsTotalOut
+    per_year: list[YearCountOut] = Field(
+        description="Every year from your first entry, oldest first; not filtered."
+    )
+    per_month: list[MonthOut] = Field(
+        description="The last 24 calendar months, or the 12 months of the year."
+    )
+    by_type: list[TypeCountOut]
+    by_place: PlacesOut
+    by_aircraft: AircraftOut
+    freefall: list[FreefallYearOut] = Field(description="Oldest first.")
+    altitudes: list[AltitudeOut] = Field(description="Feet first.")
+    altitude_not_recorded: int
+    wing_loading: LoadingRangeOut
 
 
 class MilestoneOut(BaseModel):
@@ -214,6 +350,78 @@ def _totals(t: Totals) -> TotalsOut:
         recorded_since=t.recorded_since,
         lifetime=t.lifetime,
         inconsistent=t.inconsistent,
+    )
+
+
+def _weight(w: ExitWeight | None) -> ExitWeightOut | None:
+    if w is None or w.grams is None:
+        return None
+    return ExitWeightOut(
+        grams=w.grams, value=float(in_unit(w.grams, w.unit)), unit=w.unit.value
+    )
+
+
+def _range(r: LoadingRange) -> LoadingRangeOut:
+    return LoadingRangeOut(
+        lowest=float(r.lowest) if r.lowest is not None else None,
+        highest=float(r.highest) if r.highest is not None else None,
+        known=r.known,
+        unknown=r.unknown,
+        missing=[MissingCountOut(missing=m.value, jumps=n) for m, n in r.missing],
+    )
+
+
+def _stats(view: StatsView) -> StatsOut:
+    s, t = view.stats, view.totals
+    return StatsOut(
+        year=s.year,
+        years=s.years,
+        total=StatsTotalOut(
+            recorded=s.jumps,
+            reported=t.lifetime if t else None,
+            prior_jumps=t.baseline.prior_jumps
+            if t and t.baseline and t.lifetime is not None
+            else None,
+        ),
+        per_year=[YearCountOut(year=y, jumps=n) for y, n in s.per_year],
+        per_month=[MonthOut(month=m, jumps=n) for m, n in s.per_month],
+        by_type=[TypeCountOut(jump_type=k, jumps=n) for k, n in s.by_type],
+        by_place=PlacesOut(
+            items=[
+                PlaceCountOut(location=_location(view.places[k]), jumps=n)
+                for k, n in s.by_place.items
+            ],
+            others=s.by_place.others,
+            other_places=s.by_place.other_count,
+        ),
+        by_aircraft=AircraftOut(
+            items=[
+                AircraftCountOut(aircraft=a, jumps=n) for a, n in s.by_aircraft.items
+            ],
+            others=s.by_aircraft.others,
+            other_aircraft=s.by_aircraft.other_count,
+            not_recorded=s.aircraft_not_recorded,
+        ),
+        freefall=[
+            FreefallYearOut(
+                year=f.year,
+                seconds=f.seconds,
+                with_freefall=f.with_time,
+                without_freefall=f.without_time,
+            )
+            for f in s.freefall
+        ],
+        altitudes=[
+            AltitudeOut(
+                unit="m" if a.unit == "m" else "ft",
+                jumps=a.jumps,
+                average=a.average,
+                highest=a.highest,
+            )
+            for a in s.altitudes
+        ],
+        altitude_not_recorded=s.altitude_not_recorded,
+        wing_loading=_range(s.loading),
     )
 
 
@@ -314,6 +522,12 @@ def _history(s: Summary) -> HistoryOut:
         ],
         currency=_currency(s.currency),
         progress=_progress(s.progress),
+        wing_loading_months=[
+            LoadingMonthOut(month=m, highest=float(v), jumps=n)
+            for m, v, n in s.loading_months or []
+        ],
+        wing_loading=_range(s.loading or LoadingRange(None, None, 0, 0, [])),
+        exit_weight=_weight(s.exit_weight),
     )
 
 
@@ -360,6 +574,24 @@ def create_router(
     def get_milestones(actor: Reader) -> MilestonesOut:
         """Dated milestones from your own entries, newest first. Computed on read."""
         return _milestones(service().milestones(actor))
+
+    @router.get(
+        "/history/stats",
+        operation_id="getStats",
+        response_model=StatsOut,
+        dependencies=deps,
+    )
+    def get_stats(
+        actor: Reader,
+        year: Annotated[
+            int | None, Query(ge=1919, le=9999, description="Only this year.")
+        ] = None,
+    ) -> StatsOut | JSONResponse:
+        """Statistics from your own entries, computed on read in a few queries."""
+        try:
+            return _stats(service().stats(actor, year))
+        except Errors as error:
+            return _problem(error)
 
     @router.get(
         "/history/baseline/preview",
@@ -428,5 +660,30 @@ def create_router(
     def set_licence(body: LicenceIn, actor: Writer) -> LicenceOut:
         saved = service().set_licence(actor, Licence(body.licence))
         return LicenceOut(licence=saved.value)
+
+    @router.get(
+        "/me/exit-weight",
+        operation_id="getExitWeight",
+        response_model=ExitWeightSettingOut,
+        dependencies=deps,
+    )
+    def get_exit_weight(actor: Reader) -> ExitWeightSettingOut:
+        found = service().exit_weight(actor)
+        return ExitWeightSettingOut(exit_weight=_weight(found), unit=found.unit.value)
+
+    @router.put(
+        "/me/exit-weight",
+        operation_id="setExitWeight",
+        response_model=ExitWeightSettingOut,
+        dependencies=deps,
+    )
+    def set_exit_weight(
+        body: ExitWeightIn, actor: Writer
+    ) -> ExitWeightSettingOut | JSONResponse:
+        try:
+            saved = service().set_exit_weight(actor, body.value, WeightUnit(body.unit))
+        except Errors as error:
+            return _problem(error)
+        return ExitWeightSettingOut(exit_weight=_weight(saved), unit=saved.unit.value)
 
     return router

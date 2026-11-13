@@ -673,4 +673,13 @@ def _rows(
         out["licence"] = [
             {"owner_person_id": owner, "licence": r.licence, "updated_at": now}
         ]
+    if r.exit_weight is not None:
+        out["exit_weight"] = [
+            {
+                "owner_person_id": owner,
+                "grams": r.exit_weight.grams,
+                "unit": r.exit_weight.unit,
+                "updated_at": now,
+            }
+        ]
     return out

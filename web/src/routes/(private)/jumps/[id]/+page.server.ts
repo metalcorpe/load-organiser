@@ -6,7 +6,13 @@ import { isUuid } from '#lib/server/api/transport.ts';
 import { createPlace } from '#lib/server/directory.ts';
 import { field } from '#lib/server/forms.ts';
 import { jumpBody, newComponent } from '#lib/server/jump-form.ts';
-import { chosenLocation, gearFor, pickerData, placesFor } from '#lib/server/jump-page.ts';
+import {
+	chosenLocation,
+	gearFor,
+	loadingFor,
+	pickerData,
+	placesFor
+} from '#lib/server/jump-page.ts';
 import { call, failStatus } from '#lib/server/maintenance.ts';
 import { echo, version } from '#lib/server/review-forms.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
@@ -31,9 +37,11 @@ export const load: PageServerLoad = async (event) => {
 		error(503, 'Your logbook is unavailable right now. Try again later.');
 	}
 	const jump = detail.value.jump;
-	const [places, sharing] = await Promise.all([
+	const [places, sharing, loading] = await Promise.all([
 		placesFor(api, secret),
-		call<SharingOut>(api, 'getJumpSharing', { bearer: secret, id: jump.id })
+		call<SharingOut>(api, 'getJumpSharing', { bearer: secret, id: jump.id }),
+		// The highest wing loading among the other jumps, for the edit form's note.
+		loadingFor(api, secret, jump.id)
 	]);
 	const changing = event.url.searchParams.get('change') === '1';
 	const override = await chosenLocation(api, secret, event.url, places ?? []);
@@ -48,6 +56,7 @@ export const load: PageServerLoad = async (event) => {
 		override,
 		picker: changing ? await pickerData(api, event.url) : null,
 		gear: await gearFor(api, secret, jump.components),
+		loading,
 		componentKey: crypto.randomUUID()
 	};
 };

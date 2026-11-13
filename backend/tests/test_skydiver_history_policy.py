@@ -2,12 +2,14 @@
 
 import uuid
 from datetime import date, time, timedelta
+from decimal import Decimal
 
 import pytest
 
 from app.skydiver.directory.policy import DirectoryRuleError
-from app.skydiver.history import currency, licences, milestones, policy
+from app.skydiver.history import currency, licences, milestones, policy, stats
 from app.skydiver.history.policy import Baseline
+from app.skydiver.logbook import loading
 
 TODAY = date(2026, 11, 4)
 
@@ -325,3 +327,130 @@ def test_two_thousand_entries_in_one_pass() -> None:
     entries = _days(2000)
     found = milestones.milestones(entries, prior=None)
     assert _counts(found)[0] == (2000, date(2025, 1, 1) + timedelta(days=1999))
+
+
+def _stat(
+    on: date,
+    kind: str = "belly",
+    place: str = "a",
+    aircraft: str | None = None,
+    freefall: int | None = None,
+    altitude: tuple[int, str] | None = None,
+    weight: int | None = None,
+    size: int | None = None,
+) -> stats.Entry:
+    return stats.Entry(
+        jumped_on=on,
+        jump_type=kind,
+        place=("place", uuid.uuid5(uuid.NAMESPACE_URL, place)),
+        aircraft=aircraft,
+        freefall_seconds=freefall,
+        exit_altitude=altitude[0] if altitude else None,
+        altitude_unit=altitude[1] if altitude else None,
+        loading=loading.wing_loading(weight, None, [size] if size else []),
+    )
+
+
+def _named(key: stats.PlaceKey) -> str:
+    return str(key[1])
+
+
+def test_statistics_of_an_empty_logbook() -> None:
+    s = stats.stats([], year=None, latest=TODAY, place_name=_named)
+    assert (s.jumps, s.years, s.per_year, s.by_type) == (0, [], [], [])
+    assert len(s.per_month) == stats.MONTHS and s.per_month[-1] == ("2026-11", 0)
+    assert s.by_place == stats.Ranked([], 0, 0)
+    assert (s.by_aircraft.items, s.aircraft_not_recorded) == ([], 0)
+    assert (s.freefall, s.altitudes, s.altitude_not_recorded) == ([], [], 0)
+    assert s.loading == loading.LoadingRange(None, None, 0, 0, [])
+
+
+def test_statistics_count_years_months_and_types() -> None:
+    entries = [
+        _stat(date(2024, 3, 1), "belly"),
+        _stat(date(2026, 10, 2), "freefly"),
+        _stat(date(2026, 10, 3), "freefly"),
+        _stat(date(2026, 11, 4), "belly"),
+    ]
+    s = stats.stats(entries, year=None, latest=TODAY, place_name=_named)
+    assert s.jumps == 4 and s.years == [2026, 2024]
+    # Every year from the first, with the empty ones in between.
+    assert s.per_year == [(2024, 1), (2025, 0), (2026, 3)]
+    months = dict(s.per_month)
+    assert (months["2026-10"], months["2026-11"], months["2024-12"]) == (2, 1, 0)
+    assert "2024-03" not in months  # older than the last 24 months
+    assert s.by_type == [("belly", 2), ("freefly", 2)]  # ties by name
+    # A year narrows everything but the years themselves.
+    y = stats.stats(entries, year=2024, latest=TODAY, place_name=_named)
+    assert (y.jumps, y.by_type, y.per_year) == (1, [("belly", 1)], s.per_year)
+    assert [m for m, _ in y.per_month] == [f"2024-{m:02d}" for m in range(1, 13)]
+    assert dict(y.per_month)["2024-03"] == 1
+
+
+def test_the_top_ten_places_and_aircraft_and_the_others() -> None:
+    entries = [
+        _stat(TODAY, place=f"p{i}", aircraft=f"Plane {i}")
+        for i in range(12)
+        for _ in range(i + 1)
+    ]
+    entries += [_stat(TODAY, place="p0", aircraft=None)]
+    entries += [_stat(TODAY, place="p0", aircraft="  plane   11 ")]
+    s = stats.stats(entries, year=None, latest=TODAY, place_name=_named)
+    assert len(s.by_place.items) == stats.TOP
+    assert s.by_place.items[0][1] == 12  # p11
+    # p0 (1 + 2 = 3 jumps) and p1 (2) are the two others.
+    assert (s.by_place.others, s.by_place.other_count) == (5, 2)
+    # The same aircraft however it is spaced or capitalised, by its usual spelling.
+    assert s.by_aircraft.items[0] == ("Plane 11", 13)
+    assert (s.by_aircraft.others, s.by_aircraft.other_count) == (3, 2)
+    assert s.aircraft_not_recorded == 1
+
+
+def test_freefall_altitudes_and_wing_loading_count_recorded_values_only() -> None:
+    entries = [
+        _stat(date(2025, 5, 1), freefall=60, altitude=(4000, "m")),
+        _stat(date(2025, 6, 1), freefall=None, altitude=(13000, "ft")),
+        _stat(date(2026, 1, 1), freefall=45, altitude=(12001, "ft")),
+        _stat(date(2026, 2, 1), weight=81_600, size=170),
+        _stat(date(2026, 3, 1), weight=81_600, size=150),
+        _stat(date(2026, 4, 1), weight=81_600),
+    ]
+    s = stats.stats(entries, year=None, latest=TODAY, place_name=_named)
+    assert s.freefall == [
+        stats.FreefallYear(2025, 60, 1, 1),
+        stats.FreefallYear(2026, 45, 1, 3),
+    ]
+    # Feet and metres are never mixed or converted.
+    assert s.altitudes == [
+        stats.Altitude("ft", 2, 12501, 13000),
+        stats.Altitude("m", 1, 4000, 4000),
+    ]
+    assert s.altitude_not_recorded == 3
+    r = s.loading
+    assert (r.lowest, r.highest, r.known, r.unknown) == (
+        Decimal("1.06"),
+        Decimal("1.20"),
+        2,
+        4,
+    )
+    assert r.missing == [
+        (loading.Missing.EXIT_WEIGHT, 3),
+        (loading.Missing.MAIN_CANOPY, 4),
+    ]
+
+
+def test_a_year_outside_the_calendar_is_refused() -> None:
+    assert stats.check_year(None, TODAY) is None
+    assert stats.check_year(2026, TODAY) == 2026
+    assert _code(lambda: stats.check_year(2027, TODAY)) == "year_invalid"
+    assert _code(lambda: stats.check_year(1918, TODAY)) == "year_invalid"
+
+
+def test_statistics_of_two_thousand_entries() -> None:
+    entries = [
+        _stat(date(2021, 1, 1) + timedelta(days=i), place=f"p{i % 40}")
+        for i in range(2000)
+    ]
+    s = stats.stats(entries, year=None, latest=TODAY, place_name=_named)
+    assert s.jumps == 2000 and sum(n for _, n in s.per_year) == 2000
+    assert s.by_place.others + sum(n for _, n in s.by_place.items) == 2000

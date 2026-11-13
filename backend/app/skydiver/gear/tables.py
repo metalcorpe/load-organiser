@@ -84,6 +84,11 @@ class SkydiverComponent(SQLModel, table=True):
             " ('repack', 'inspection', 'maintenance', 'aad_service', 'other'))",
             name="ck_skydiver_component_jump_limit",
         ),
+        CheckConstraint(
+            "canopy_size_sqft IS NULL OR (canopy_size_sqft BETWEEN 20 AND 400"
+            " AND kind IN ('main', 'reserve'))",
+            name="ck_skydiver_component_canopy_size",
+        ),
         UniqueConstraint(
             "owner_person_id", "client_key", name="uq_skydiver_component_key"
         ),
@@ -121,6 +126,11 @@ class SkydiverComponent(SQLModel, table=True):
     )
     jump_limit_label: str | None = Field(default=None, max_length=80)
     jump_limit_service_kind: str | None = Field(default=None, max_length=16)
+    # A main or reserve canopy's size in square feet, as the owner enters it; used
+    # for the wing loading of the jumps the main is recorded on. Never looked up.
+    canopy_size_sqft: int | None = Field(
+        default=None, sa_column=Column(Integer, nullable=True)
+    )
     archived_at: datetime | None = Field(
         default=None, sa_column=Column(DateTime(timezone=True), nullable=True)
     )

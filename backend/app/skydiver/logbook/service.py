@@ -15,6 +15,7 @@ from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any, Protocol
 
@@ -27,7 +28,8 @@ from app.skydiver.directory.service import (
     decode_cursor,
     encode_cursor,
 )
-from app.skydiver.logbook import policy
+from app.skydiver.logbook import loading, policy
+from app.skydiver.logbook.loading import Loading, WeightUnit
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit, JumpType
 
 DEFAULT_PAGE = 20
@@ -96,6 +98,7 @@ class Jump:
     created_at: datetime
     updated_at: datetime
     aircraft: str | None = None
+    exit_weight_grams: int | None = None
 
 
 @dataclass(frozen=True)
@@ -110,6 +113,7 @@ class ComponentRef:
     kind: str
     label: str
     archived: bool
+    canopy_size: int | None = None  # square feet; mains and reserves
 
 
 @dataclass(frozen=True)
@@ -133,6 +137,24 @@ class JumpView:
     jump: Jump
     location: Location
     components: list[ComponentRef]
+    loading: Loading | None = None
+    weight_unit: WeightUnit = WeightUnit.KG  # the jumper's unit, for display
+
+
+@dataclass(frozen=True)
+class ExitWeight:
+    """The jumper's usual exit weight; `grams` None when not set."""
+
+    grams: int | None
+    unit: WeightUnit
+
+
+@dataclass(frozen=True)
+class LoadingContext:
+    """What the jump form needs to compare a new wing loading."""
+
+    usual: ExitWeight
+    highest: Decimal | None  # the highest loading of the other jumps
 
 
 @dataclass(frozen=True)
@@ -347,6 +369,16 @@ class LogbookStore(Protocol):
         """The owner's own components among these IDs; others are omitted."""
         ...
 
+    def exit_weight(self, actor: Actor) -> ExitWeight:
+        """The jumper's usual exit weight (a private setting)."""
+        ...
+
+    def loading_inputs(
+        self, actor: Actor, exclude: uuid.UUID | None = None
+    ) -> list[loading.Inputs]:
+        """Every jump's own exit weight and recorded mains (at most MAX_JUMPS)."""
+        ...
+
     def places(self, actor: Actor, place_ids: list[uuid.UUID]) -> list[PlaceRef]: ...
     def record(
         self,
@@ -383,6 +415,7 @@ _FACTS = (
     "altitude_datum",
     "freefall_seconds",
     "aircraft",
+    "exit_weight_grams",
 )
 _PRIVATE_TEXT = ("other_gear", "notes", "links")
 
@@ -505,6 +538,17 @@ class LogbookService:
         with self._stores() as store:
             rows = store.numbered(actor)
         return policy.numbering([policy.Numbered(r.number, r) for r in rows])
+
+    def loading_context(
+        self, actor: Actor, *, exclude: uuid.UUID | None = None
+    ) -> LoadingContext:
+        """The usual exit weight and the highest wing loading of the owner's other
+        jumps (all but `exclude`). Two queries, bounded by the jump limit."""
+        with self._stores() as store:
+            usual = store.exit_weight(actor)
+            rows = store.loading_inputs(actor, exclude)
+        found = loading.highest(loading.of(r, usual.grams) for r in rows)
+        return LoadingContext(usual, found)
 
     def jump(self, actor: Actor, jump_id: uuid.UUID) -> JumpDetail:
         with self._stores() as store:
@@ -960,6 +1004,10 @@ class LogbookService:
             values["other_gear"] = policy.other_gear(raw.get("other_gear"))
         if given("aircraft"):
             values["aircraft"] = policy.aircraft(raw.get("aircraft"))
+        if given("exit_weight_grams"):
+            values["exit_weight_grams"] = loading.exit_weight_grams(
+                raw.get("exit_weight_grams")
+            )
         if given("notes"):
             values["notes"] = policy.notes(raw.get("notes"))
         if given("links"):
@@ -1013,6 +1061,7 @@ class LogbookService:
             if component_ids
             else {}
         )
+        usual = store.exit_weight(actor) if rows else ExitWeight(None, WeightUnit.KG)
         views: list[JumpView] = []
         for row in rows:
             if row.venue_id is not None:
@@ -1033,11 +1082,18 @@ class LogbookService:
                     place.name if place else None,
                     place.country if place else None,
                 )
+            used = [components[c] for c in row.component_ids if c in components]
             views.append(
                 JumpView(
                     row,
                     location,
-                    [components[c] for c in row.component_ids if c in components],
+                    used,
+                    loading.wing_loading(
+                        row.exit_weight_grams,
+                        usual.grams,
+                        [c.canopy_size for c in used if c.kind == "main"],
+                    ),
+                    usual.unit,
                 )
             )
         return views
@@ -1059,6 +1115,7 @@ def _values_of(jump: Jump) -> dict[str, Any]:
         "freefall_seconds": jump.freefall_seconds,
         "other_gear": jump.other_gear,
         "aircraft": jump.aircraft,
+        "exit_weight_grams": jump.exit_weight_grams,
         "notes": jump.notes,
         "links": list(jump.links),
     }

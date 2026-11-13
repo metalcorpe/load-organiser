@@ -74,6 +74,46 @@ describe('jumpBody', () => {
 		expect(jumpBody(form({ ...BASE, exit_altitude: '-5' }))).toEqual({ error: 'invalid_input' });
 		expect(jumpBody(form({ ...BASE, exit_time: '9am' }))).toEqual({ error: 'exit_time_invalid' });
 	});
+
+	it('turns the exit weight into grams in its unit, or null for the usual one', () => {
+		const body = (fields: Record<string, string>) => {
+			const parsed = jumpBody(form({ ...BASE, ...fields }));
+			return 'body' in parsed ? parsed.body : parsed;
+		};
+		expect(body({ exit_weight: '', exit_weight_unit: 'kg' })).toMatchObject({ exit_weight_grams: null });
+		expect(body({ exit_weight: '180', exit_weight_unit: 'lb' })).toMatchObject({
+			exit_weight_grams: 81_647
+		});
+		expect(body({ exit_weight: '20', exit_weight_unit: 'kg' })).toEqual({ error: 'exit_weight_invalid' });
+	});
+
+	it('leaves an untouched saved weight out, so the unit never rounds it', () => {
+		// 80,000 g shown as 176.4 lb would come back as 80,014 g if it were sent again.
+		const untouched = jumpBody(
+			form({
+				...BASE,
+				exit_weight: '176.4',
+				exit_weight_unit: 'lb',
+				exit_weight_saved: '80000',
+				exit_weight_shown: '176.4'
+			})
+		);
+		expect('body' in untouched && 'exit_weight_grams' in untouched.body).toBe(false);
+		const changed = jumpBody(
+			form({
+				...BASE,
+				exit_weight: '170',
+				exit_weight_unit: 'lb',
+				exit_weight_saved: '80000',
+				exit_weight_shown: '176.4'
+			})
+		);
+		expect(changed).toEqual({ body: expect.objectContaining({ exit_weight_grams: 77_111 }) });
+		const cleared = jumpBody(
+			form({ ...BASE, exit_weight: '', exit_weight_unit: 'lb', exit_weight_saved: '80000', exit_weight_shown: '176.4' })
+		);
+		expect(cleared).toEqual({ body: expect.objectContaining({ exit_weight_grams: null }) });
+	});
 });
 
 describe('newComponent', () => {

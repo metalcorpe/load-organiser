@@ -117,6 +117,10 @@ class SkydiverJump(SQLModel, table=True):
             "source IN ('manual', 'restored', 'imported')",
             name="ck_skydiver_jump_source",
         ),
+        CheckConstraint(
+            "exit_weight_grams IS NULL OR exit_weight_grams BETWEEN 30000 AND 250000",
+            name="ck_skydiver_jump_exit_weight",
+        ),
         Index("ix_skydiver_jump_owner_date", "owner_person_id", "jumped_on", "id"),
         Index("ix_skydiver_jump_owner_number", "owner_person_id", "jump_number"),
     )
@@ -148,6 +152,11 @@ class SkydiverJump(SQLModel, table=True):
     other_gear: str | None = Field(default=None, max_length=200)
     # Free text as the jumper writes it, e.g. "Cessna 208 SX-ABC". Private.
     aircraft: str | None = Field(default=None, max_length=60)
+    # The exit weight on this jump (body and gear) in grams, when it differs from
+    # the jumper's usual one; for wing loading. Private.
+    exit_weight_grams: int | None = Field(
+        default=None, sa_column=Column(Integer, nullable=True)
+    )
     notes: str | None = Field(default=None, sa_column=Column(Text, nullable=True))
     links: list = Field(  # type: ignore[type-arg]
         default_factory=list, sa_column=Column(_JSON, nullable=False)

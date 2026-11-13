@@ -3,8 +3,24 @@
 	import { onMount } from 'svelte';
 	import { KIND_LABEL } from '#lib/gear.ts';
 	import { DATUM_LABEL, JUMP_TYPE_LABEL } from '#lib/jumps.ts';
+	import {
+		UNIT_LABEL,
+		formatWeight,
+		highestNote,
+		isNotable,
+		parseWeight,
+		wingLoading,
+		type LoadingContext,
+		type WeightUnit
+	} from '#lib/wing-loading.ts';
 
-	type Gear = { id: string; label: string; kind: string; archived: boolean };
+	type Gear = {
+		id: string;
+		label: string;
+		kind: string;
+		archived: boolean;
+		canopySize?: number | null;
+	};
 
 	/**
 	 * The private jump form (#153), for both a new entry and an edit. Values come
@@ -24,7 +40,8 @@
 		confirmDistinct = false,
 		disabled = false,
 		numberHint = null,
-		aircraftHint = null
+		aircraftHint = null,
+		loading = null
 	}: {
 		action: string;
 		values: Record<string, string>;
@@ -40,6 +57,8 @@
 		numberHint?: string | null;
 		/** Why the aircraft is filled in, e.g. "From your last jump at this place." */
 		aircraftHint?: string | null;
+		/** For the wing loading note: the usual exit weight and the highest of the other jumps. */
+		loading?: LoadingContext | null;
 	} = $props();
 
 	let dateInput: HTMLInputElement | undefined = $state();
@@ -59,6 +78,39 @@
 
 	const v = (name: string) => values[name] ?? '';
 	const chosen = $derived(new Set(selected));
+	// A refused form keeps the unit its number was typed in.
+	const unit = $derived<WeightUnit>(
+		v('exit_weight_unit') === 'lb' || v('exit_weight_unit') === 'kg'
+			? (v('exit_weight_unit') as WeightUnit)
+			: (loading?.unit ?? 'kg')
+	);
+
+	// The wing loading note follows the ticked gear and the weight typed, read from the
+	// form itself (the inputs stay uncontrolled, so nothing typed before hydration is lost).
+	// svelte-ignore state_referenced_locally
+	let ticked = $state<string[]>(selected);
+	// svelte-ignore state_referenced_locally
+	let weightText = $state(values.exit_weight ?? '');
+	let formElement: HTMLFormElement | undefined = $state();
+	function follow() {
+		if (!formElement) return;
+		const data = new FormData(formElement);
+		ticked = data.getAll('component_ids').map(String);
+		weightText = String(data.get('exit_weight') ?? '');
+	}
+	const candidate = $derived.by(() => {
+		if (!loading) return null;
+		const mains = gear.filter((g) => g.kind === 'main' && ticked.includes(g.id));
+		const size = mains.length === 1 ? (mains[0].canopySize ?? null) : null;
+		const typed = parseWeight(weightText, unit);
+		const grams = typed === 'invalid' ? null : (typed ?? loading.usualGrams);
+		return wingLoading(grams, size);
+	});
+	const note = $derived(
+		loading && candidate !== null && loading.highest !== null && isNotable(candidate, loading.highest)
+			? highestNote(candidate, loading.highest)
+			: ''
+	);
 	const showDetails = $derived(
 		['jump_number', 'exit_time', 'exit_altitude', 'deployment_altitude', 'freefall_seconds'].some(
 			(n) => v(n) !== ''
@@ -66,7 +118,15 @@
 	);
 </script>
 
-<form method="POST" {action} class="form" novalidate>
+<form
+	method="POST"
+	{action}
+	class="form"
+	novalidate
+	bind:this={formElement}
+	onchange={follow}
+	oninput={follow}
+>
 	{#if keys.jump}<input type="hidden" name="client_key" value={keys.jump} />{/if}
 	{#if version}<input type="hidden" name="version" value={version} />{/if}
 	{#if confirmDistinct}<input type="hidden" name="confirm_distinct" value="1" />{/if}
@@ -172,7 +232,11 @@
 		{#each gear as item (item.id)}
 			<label class="choice">
 				<input type="checkbox" name="component_ids" value={item.id} checked={chosen.has(item.id)} />
-				{item.label} <span class="meta">({KIND_LABEL[item.kind] ?? item.kind}{item.archived ? ', archived' : ''})</span>
+				{item.label} <span class="meta"
+					>({KIND_LABEL[item.kind] ?? item.kind}{item.canopySize ? `, ${item.canopySize} sq ft` : ''}{item.archived
+						? ', archived'
+						: ''})</span
+				>
 			</label>
 		{/each}
 		<div class="field">
@@ -203,6 +267,32 @@
 			</p>
 		</details>
 	</fieldset>
+
+	<div class="field">
+		<label for="exit_weight">Exit weight on this jump in {UNIT_LABEL[unit]} (optional)</label>
+		<input type="hidden" name="exit_weight_unit" value={unit} />
+		{#if v('exit_weight_saved')}
+			<!-- The saved weight and how it was shown: an untouched field is not sent again,
+			     so a conversion to and from the unit never changes it. -->
+			<input type="hidden" name="exit_weight_saved" value={v('exit_weight_saved')} />
+			<input type="hidden" name="exit_weight_shown" value={v('exit_weight_shown')} />
+		{/if}
+		<input
+			id="exit_weight"
+			name="exit_weight"
+			inputmode="decimal"
+			maxlength="6"
+			autocomplete="off"
+			defaultValue={v('exit_weight')}
+			aria-describedby="exit_weight_hint"
+		/>
+		<p class="hint" id="exit_weight_hint">
+			Your weight with your gear on, for the wing loading.
+			{#if loading?.usualGrams}Empty: your usual exit weight, {formatWeight(loading.usualGrams, unit)}.
+			{:else}Set your usual exit weight on your <a href="/profile#weight-heading">profile</a>.{/if}
+		</p>
+		<p class="hint" role="status">{note}</p>
+	</div>
 
 	<div class="field">
 		<label for="notes">Notes (optional, private)</label>

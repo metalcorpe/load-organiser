@@ -13,6 +13,59 @@
         "title": "Accepted",
         "type": "object"
       },
+      "AircraftCountOut": {
+        "properties": {
+          "aircraft": {
+            "description": "Its most used spelling.",
+            "title": "Aircraft",
+            "type": "string"
+          },
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "aircraft",
+          "jumps"
+        ],
+        "title": "AircraftCountOut",
+        "type": "object"
+      },
+      "AircraftOut": {
+        "properties": {
+          "items": {
+            "description": "At most 10, most jumps first.",
+            "items": {
+              "$ref": "#/components/schemas/AircraftCountOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "not_recorded": {
+            "description": "Entries without an aircraft.",
+            "title": "Not Recorded",
+            "type": "integer"
+          },
+          "other_aircraft": {
+            "title": "Other Aircraft",
+            "type": "integer"
+          },
+          "others": {
+            "description": "Jumps in the other aircraft.",
+            "title": "Others",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "others",
+          "other_aircraft",
+          "not_recorded"
+        ],
+        "title": "AircraftOut",
+        "type": "object"
+      },
       "AliasIn": {
         "properties": {
           "name": {
@@ -62,6 +115,40 @@
           "kind"
         ],
         "title": "AliasOut",
+        "type": "object"
+      },
+      "AltitudeOut": {
+        "properties": {
+          "average": {
+            "title": "Average",
+            "type": "integer"
+          },
+          "highest": {
+            "title": "Highest",
+            "type": "integer"
+          },
+          "jumps": {
+            "description": "Entries with an exit altitude in this unit.",
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "unit": {
+            "description": "As entered; never converted.",
+            "enum": [
+              "ft",
+              "m"
+            ],
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "unit",
+          "jumps",
+          "average",
+          "highest"
+        ],
+        "title": "AltitudeOut",
         "type": "object"
       },
       "ArchiveCountsOut": {
@@ -480,6 +567,9 @@
             "description": "False when it already has these values.",
             "title": "Will Change",
             "type": "boolean"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/WingLoadingOut"
           }
         },
         "required": [
@@ -490,6 +580,7 @@
           "jump_number",
           "components",
           "aircraft",
+          "wing_loading",
           "version",
           "will_change"
         ],
@@ -946,6 +1037,20 @@
             ],
             "title": "Acquisition Method"
           },
+          "canopy_size_sqft": {
+            "anyOf": [
+              {
+                "maximum": 400.0,
+                "minimum": 20.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A main or reserve canopy's size in square feet, as you enter it. The main's size gives the wing loading of the jumps it is recorded on.",
+            "title": "Canopy Size Sqft"
+          },
           "client_key": {
             "format": "uuid",
             "title": "Client Key",
@@ -1162,6 +1267,18 @@
             "title": "Archived",
             "type": "boolean"
           },
+          "canopy_size_sqft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Square feet; mains and reserves.",
+            "title": "Canopy Size Sqft"
+          },
           "end_of_life_on": {
             "anyOf": [
               {
@@ -1343,6 +1460,7 @@
           "jump_limit",
           "jump_limit_label",
           "jump_limit_service_kind",
+          "canopy_size_sqft",
           "archived",
           "version",
           "updated_at"
@@ -1355,6 +1473,18 @@
           "archived": {
             "title": "Archived",
             "type": "boolean"
+          },
+          "canopy_size_sqft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A main or reserve canopy's size in square feet.",
+            "title": "Canopy Size Sqft"
           },
           "id": {
             "format": "uuid",
@@ -1447,6 +1577,20 @@
               }
             ],
             "title": "Acquisition Method"
+          },
+          "canopy_size_sqft": {
+            "anyOf": [
+              {
+                "maximum": 400.0,
+                "minimum": 20.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "A main or reserve canopy's size in square feet, as you enter it. The main's size gives the wing loading of the jumps it is recorded on.",
+            "title": "Canopy Size Sqft"
           },
           "end_of_life_on": {
             "anyOf": [
@@ -1903,6 +2047,100 @@
         "title": "ExitAltitudeOut",
         "type": "object"
       },
+      "ExitWeightIn": {
+        "properties": {
+          "unit": {
+            "enum": [
+              "kg",
+              "lb"
+            ],
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "maximum": 1000.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your usual exit weight (body and gear), 30 to 250 kg (67 to 551 lb), to one decimal; null clears it.",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value",
+          "unit"
+        ],
+        "title": "ExitWeightIn",
+        "type": "object"
+      },
+      "ExitWeightOut": {
+        "properties": {
+          "grams": {
+            "description": "The weight in grams.",
+            "title": "Grams",
+            "type": "integer"
+          },
+          "unit": {
+            "enum": [
+              "kg",
+              "lb"
+            ],
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "description": "In `unit`, to one decimal, as you entered it.",
+            "title": "Value",
+            "type": "number"
+          }
+        },
+        "required": [
+          "grams",
+          "value",
+          "unit"
+        ],
+        "title": "ExitWeightOut",
+        "type": "object"
+      },
+      "ExitWeightSettingOut": {
+        "description": "Private to you; used only for wing loading. Never verified.",
+        "properties": {
+          "exit_weight": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExitWeightOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unit": {
+            "description": "Your unit for weights.",
+            "enum": [
+              "kg",
+              "lb"
+            ],
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "exit_weight",
+          "unit"
+        ],
+        "title": "ExitWeightSettingOut",
+        "type": "object"
+      },
       "FollowOut": {
         "properties": {
           "state": {
@@ -1919,6 +2157,35 @@
           "state"
         ],
         "title": "FollowOut",
+        "type": "object"
+      },
+      "FreefallYearOut": {
+        "properties": {
+          "seconds": {
+            "description": "Entries with a recorded freefall time only.",
+            "title": "Seconds",
+            "type": "integer"
+          },
+          "with_freefall": {
+            "title": "With Freefall",
+            "type": "integer"
+          },
+          "without_freefall": {
+            "title": "Without Freefall",
+            "type": "integer"
+          },
+          "year": {
+            "title": "Year",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "year",
+          "seconds",
+          "with_freefall",
+          "without_freefall"
+        ],
+        "title": "FreefallYearOut",
         "type": "object"
       },
       "GearDueOut": {
@@ -2192,6 +2459,17 @@
           "currency": {
             "$ref": "#/components/schemas/CurrencyOut"
           },
+          "exit_weight": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExitWeightOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your usual exit weight; null when not set."
+          },
           "first_jump_on": {
             "anyOf": [
               {
@@ -2237,6 +2515,17 @@
           },
           "totals": {
             "$ref": "#/components/schemas/TotalsOut"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/LoadingRangeOut"
+          },
+          "wing_loading_months": {
+            "description": "The highest wing loading per month, for the latest 24 months that have one, oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/LoadingMonthOut"
+            },
+            "title": "Wing Loading Months",
+            "type": "array"
           }
         },
         "required": [
@@ -2250,7 +2539,10 @@
           "by_component",
           "baseline_events",
           "currency",
-          "progress"
+          "progress",
+          "wing_loading_months",
+          "wing_loading",
+          "exit_weight"
         ],
         "title": "HistoryOut",
         "type": "object"
@@ -2606,6 +2898,20 @@
             "description": "Local exit time as entered; needs `time_zone`.",
             "title": "Exit Time"
           },
+          "exit_weight_grams": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your exit weight on this jump (body and gear) in grams, 30,000 to 250,000; omit or null to use your usual exit weight.",
+            "title": "Exit Weight Grams"
+          },
           "freefall_seconds": {
             "anyOf": [
               {
@@ -2879,6 +3185,18 @@
             ],
             "title": "Exit Time"
           },
+          "exit_weight_grams": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "This jump's own exit weight, if you entered one.",
+            "title": "Exit Weight Grams"
+          },
           "freefall_seconds": {
             "anyOf": [
               {
@@ -2996,6 +3314,9 @@
           "version": {
             "title": "Version",
             "type": "integer"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/WingLoadingOut"
           }
         },
         "required": [
@@ -3014,6 +3335,8 @@
           "components",
           "other_gear",
           "aircraft",
+          "exit_weight_grams",
+          "wing_loading",
           "notes",
           "links",
           "source",
@@ -3123,6 +3446,9 @@
           },
           "location": {
             "$ref": "#/components/schemas/LocationOut"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/WingLoadingOut"
           }
         },
         "required": [
@@ -3132,7 +3458,8 @@
           "jump_type",
           "jump_number",
           "components",
-          "aircraft"
+          "aircraft",
+          "wing_loading"
         ],
         "title": "JumpSummaryOut",
         "type": "object"
@@ -3239,6 +3566,20 @@
             ],
             "description": "Local exit time as entered; needs `time_zone`.",
             "title": "Exit Time"
+          },
+          "exit_weight_grams": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Your exit weight on this jump (body and gear) in grams, 30,000 to 250,000; omit or null to use your usual exit weight.",
+            "title": "Exit Weight Grams"
           },
           "freefall_seconds": {
             "anyOf": [
@@ -3603,6 +3944,129 @@
         "title": "LicenceProgressOut",
         "type": "object"
       },
+      "LoadingContextOut": {
+        "description": "For the jump form: your usual exit weight and the highest wing loading among\nyour other jumps, to compare a new one with.",
+        "properties": {
+          "exit_weight": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExitWeightOut"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Null when not set."
+          },
+          "highest": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The highest known wing loading of your other jumps; null when none is known.",
+            "title": "Highest"
+          },
+          "unit": {
+            "description": "Your unit for weights.",
+            "enum": [
+              "kg",
+              "lb"
+            ],
+            "title": "Unit",
+            "type": "string"
+          }
+        },
+        "required": [
+          "exit_weight",
+          "unit",
+          "highest"
+        ],
+        "title": "LoadingContextOut",
+        "type": "object"
+      },
+      "LoadingMonthOut": {
+        "properties": {
+          "highest": {
+            "description": "The highest wing loading jumped that month.",
+            "title": "Highest",
+            "type": "number"
+          },
+          "jumps": {
+            "description": "Entries that month with a known wing loading.",
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "month": {
+            "description": "YYYY-MM",
+            "title": "Month",
+            "type": "string"
+          }
+        },
+        "required": [
+          "month",
+          "highest",
+          "jumps"
+        ],
+        "title": "LoadingMonthOut",
+        "type": "object"
+      },
+      "LoadingRangeOut": {
+        "description": "Wing loading over your entries: exit weight in pounds over the main canopy's\nsize in square feet. Not advice.",
+        "properties": {
+          "highest": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Highest"
+          },
+          "known": {
+            "description": "Entries with a known wing loading.",
+            "title": "Known",
+            "type": "integer"
+          },
+          "lowest": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lowest"
+          },
+          "missing": {
+            "description": "What the unknown entries lack (an entry can lack two things).",
+            "items": {
+              "$ref": "#/components/schemas/MissingCountOut"
+            },
+            "title": "Missing",
+            "type": "array"
+          },
+          "unknown": {
+            "title": "Unknown",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "lowest",
+          "highest",
+          "known",
+          "unknown",
+          "missing"
+        ],
+        "title": "LoadingRangeOut",
+        "type": "object"
+      },
       "LocationCountOut": {
         "properties": {
           "jumps": {
@@ -3906,6 +4370,30 @@
           "counted"
         ],
         "title": "MilestonesOut",
+        "type": "object"
+      },
+      "MissingCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "missing": {
+            "enum": [
+              "exit_weight",
+              "main_canopy",
+              "canopy_size",
+              "several_mains"
+            ],
+            "title": "Missing",
+            "type": "string"
+          }
+        },
+        "required": [
+          "missing",
+          "jumps"
+        ],
+        "title": "MissingCountOut",
         "type": "object"
       },
       "ModerationIn": {
@@ -5304,6 +5792,23 @@
         "title": "PersonOut",
         "type": "object"
       },
+      "PlaceCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationOut"
+          }
+        },
+        "required": [
+          "location",
+          "jumps"
+        ],
+        "title": "PlaceCountOut",
+        "type": "object"
+      },
       "PlaceCreateIn": {
         "properties": {
           "country": {
@@ -5446,6 +5951,34 @@
           }
         },
         "title": "PlaceUpdateIn",
+        "type": "object"
+      },
+      "PlacesOut": {
+        "properties": {
+          "items": {
+            "description": "At most 10, most jumps first.",
+            "items": {
+              "$ref": "#/components/schemas/PlaceCountOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "other_places": {
+            "title": "Other Places",
+            "type": "integer"
+          },
+          "others": {
+            "description": "Jumps at the other places.",
+            "title": "Others",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "others",
+          "other_places"
+        ],
+        "title": "PlacesOut",
         "type": "object"
       },
       "PlanIn": {
@@ -8902,6 +9435,142 @@
         "title": "SourceOut",
         "type": "object"
       },
+      "StatsOut": {
+        "description": "Statistics from your own entries, private to you. A declared prior jump\ncount is only in `total.reported`: it has no dates, types, places or\nmeasurements.",
+        "properties": {
+          "altitude_not_recorded": {
+            "title": "Altitude Not Recorded",
+            "type": "integer"
+          },
+          "altitudes": {
+            "description": "Feet first.",
+            "items": {
+              "$ref": "#/components/schemas/AltitudeOut"
+            },
+            "title": "Altitudes",
+            "type": "array"
+          },
+          "by_aircraft": {
+            "$ref": "#/components/schemas/AircraftOut"
+          },
+          "by_place": {
+            "$ref": "#/components/schemas/PlacesOut"
+          },
+          "by_type": {
+            "items": {
+              "$ref": "#/components/schemas/TypeCountOut"
+            },
+            "title": "By Type",
+            "type": "array"
+          },
+          "freefall": {
+            "description": "Oldest first.",
+            "items": {
+              "$ref": "#/components/schemas/FreefallYearOut"
+            },
+            "title": "Freefall",
+            "type": "array"
+          },
+          "per_month": {
+            "description": "The last 24 calendar months, or the 12 months of the year.",
+            "items": {
+              "$ref": "#/components/schemas/MonthOut"
+            },
+            "title": "Per Month",
+            "type": "array"
+          },
+          "per_year": {
+            "description": "Every year from your first entry, oldest first; not filtered.",
+            "items": {
+              "$ref": "#/components/schemas/YearCountOut"
+            },
+            "title": "Per Year",
+            "type": "array"
+          },
+          "total": {
+            "$ref": "#/components/schemas/StatsTotalOut"
+          },
+          "wing_loading": {
+            "$ref": "#/components/schemas/LoadingRangeOut"
+          },
+          "year": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The year filter, if any.",
+            "title": "Year"
+          },
+          "years": {
+            "description": "Years with an entry, newest first.",
+            "items": {
+              "type": "integer"
+            },
+            "title": "Years",
+            "type": "array"
+          }
+        },
+        "required": [
+          "year",
+          "years",
+          "total",
+          "per_year",
+          "per_month",
+          "by_type",
+          "by_place",
+          "by_aircraft",
+          "freefall",
+          "altitudes",
+          "altitude_not_recorded",
+          "wing_loading"
+        ],
+        "title": "StatsOut",
+        "type": "object"
+      },
+      "StatsTotalOut": {
+        "properties": {
+          "prior_jumps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The declared prior jump count within `reported`.",
+            "title": "Prior Jumps"
+          },
+          "recorded": {
+            "description": "Your entries in scope.",
+            "title": "Recorded",
+            "type": "integer"
+          },
+          "reported": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Without a year filter: your declared prior jump count plus the entries on or after its date, when they agree; else null.",
+            "title": "Reported"
+          }
+        },
+        "required": [
+          "recorded",
+          "reported",
+          "prior_jumps"
+        ],
+        "title": "StatsTotalOut",
+        "type": "object"
+      },
       "StatusIn": {
         "properties": {
           "status": {
@@ -9736,6 +10405,103 @@
           "roles"
         ],
         "title": "ViewerOut",
+        "type": "object"
+      },
+      "WingLoadingOut": {
+        "description": "Exit weight in pounds over the main canopy's size in square feet, from your\nown entries. Not advice: no limit or recommendation is applied.",
+        "properties": {
+          "canopy_size_sqft": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The main canopy's size used.",
+            "title": "Canopy Size Sqft"
+          },
+          "exit_weight_from_jump": {
+            "description": "This jump's own exit weight, not your usual one.",
+            "title": "Exit Weight From Jump",
+            "type": "boolean"
+          },
+          "exit_weight_grams": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The exit weight used.",
+            "title": "Exit Weight Grams"
+          },
+          "missing": {
+            "description": "What is missing when `value` is null: `exit_weight` (none on the jump or in your settings), `main_canopy` (none recorded on the jump), `canopy_size` (the main has no size), `several_mains` (more than one main recorded).",
+            "items": {
+              "enum": [
+                "exit_weight",
+                "main_canopy",
+                "canopy_size",
+                "several_mains"
+              ],
+              "type": "string"
+            },
+            "title": "Missing",
+            "type": "array"
+          },
+          "unit": {
+            "description": "Your unit for showing weights.",
+            "enum": [
+              "kg",
+              "lb"
+            ],
+            "title": "Unit",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Pounds per square foot, two decimals; null when unknown.",
+            "title": "Value"
+          }
+        },
+        "required": [
+          "value",
+          "exit_weight_grams",
+          "exit_weight_from_jump",
+          "unit",
+          "canopy_size_sqft",
+          "missing"
+        ],
+        "title": "WingLoadingOut",
+        "type": "object"
+      },
+      "YearCountOut": {
+        "properties": {
+          "jumps": {
+            "title": "Jumps",
+            "type": "integer"
+          },
+          "year": {
+            "title": "Year",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "year",
+          "jumps"
+        ],
+        "title": "YearCountOut",
         "type": "object"
       },
       "app__skydiver__directory__api__Problem": {
@@ -15230,6 +15996,106 @@
         ]
       }
     },
+    "/api/skydiver/v1/history/stats": {
+      "get": {
+        "description": "Statistics from your own entries, computed on read in a few queries.",
+        "operationId": "getStats",
+        "parameters": [
+          {
+            "description": "Only this year.",
+            "in": "query",
+            "name": "year",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 9999,
+                  "minimum": 1919,
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Only this year.",
+              "title": "Year"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Stats",
+        "tags": [
+          "skydiver-history"
+        ]
+      }
+    },
     "/api/skydiver/v1/jumps": {
       "get": {
         "operationId": "listJumps",
@@ -17587,6 +18453,133 @@
         ]
       }
     },
+    "/api/skydiver/v1/jumps/wing-loading": {
+      "get": {
+        "description": "Your usual exit weight and the highest wing loading among your jumps.",
+        "operationId": "getWingLoadingContext",
+        "parameters": [
+          {
+            "description": "A jump of yours being edited, left out of `highest`.",
+            "in": "query",
+            "name": "exclude",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A jump of yours being edited, left out of `highest`.",
+              "title": "Exclude"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadingContextOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DuplicateProblem"
+                    }
+                  ],
+                  "title": "Response 409 Getwingloadingcontext"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Gone"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__logbook__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Wing Loading Context",
+        "tags": [
+          "skydiver-logbook"
+        ]
+      }
+    },
     "/api/skydiver/v1/jumps/{jump_id}": {
       "delete": {
         "operationId": "deleteJump",
@@ -18041,6 +19034,172 @@
         "summary": "Get Coming Up",
         "tags": [
           "skydiver-saves"
+        ]
+      }
+    },
+    "/api/skydiver/v1/me/exit-weight": {
+      "get": {
+        "operationId": "getExitWeight",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExitWeightSettingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Get Exit Weight",
+        "tags": [
+          "skydiver-history"
+        ]
+      },
+      "put": {
+        "operationId": "setExitWeight",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExitWeightIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExitWeightSettingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/app__skydiver__history__api__Problem"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        },
+        "summary": "Set Exit Weight",
+        "tags": [
+          "skydiver-history"
         ]
       }
     },

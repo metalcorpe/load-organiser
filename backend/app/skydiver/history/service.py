@@ -13,16 +13,20 @@ from collections.abc import Callable
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
+from decimal import Decimal
 from typing import Any, Literal, Protocol
 
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.service import DirectoryService, EditConflict, Venue
-from app.skydiver.history import currency, licences, milestones, policy
+from app.skydiver.history import currency, licences, milestones, policy, stats
 from app.skydiver.history.currency import Currency, Licence
 from app.skydiver.history.licences import Progress
 from app.skydiver.history.milestones import Milestone
 from app.skydiver.history.policy import Baseline, Totals
-from app.skydiver.logbook.service import ComponentRef, Location, PlaceRef
+from app.skydiver.history.stats import PlaceKey, Stats
+from app.skydiver.logbook import loading
+from app.skydiver.logbook.loading import Inputs, LoadingRange, WeightUnit
+from app.skydiver.logbook.service import ComponentRef, ExitWeight, Location, PlaceRef
 
 EVENTS_SHOWN = 50
 
@@ -63,6 +67,33 @@ class Summary:
     baseline_events: list[BaselineEvent]
     currency: Currency
     progress: Progress | None = None  # None without a licence
+    # Highest wing loading jumped per month (latest months that have one), and
+    # the range over every entry with what the others lack.
+    loading_months: list[tuple[str, Decimal, int]] | None = None
+    loading: LoadingRange | None = None
+    exit_weight: ExitWeight | None = None
+
+
+@dataclass(frozen=True)
+class EntryFacts:
+    """What statistics need of one detailed entry."""
+
+    jumped_on: date
+    jump_type: str
+    venue_id: uuid.UUID | None
+    place_id: uuid.UUID | None
+    aircraft: str | None
+    freefall_seconds: int | None
+    exit_altitude: int | None
+    altitude_unit: str | None
+    inputs: Inputs
+
+
+@dataclass(frozen=True)
+class StatsView:
+    stats: Stats
+    places: dict[PlaceKey, Location]
+    totals: Totals | None  # with the prior jump count; None with a year filter
 
 
 @dataclass(frozen=True)
@@ -131,6 +162,17 @@ class HistoryStore(Protocol):
         """Last write wins; NONE removes the setting."""
         ...
 
+    def exit_weight(self, actor: Actor) -> ExitWeight: ...
+    def set_exit_weight(
+        self, actor: Actor, grams: int | None, unit: WeightUnit | None, now: datetime
+    ) -> None:
+        """Last write wins; None clears it."""
+        ...
+
+    def entry_facts(self, actor: Actor) -> list[EntryFacts]:
+        """Every detailed entry of the owner (at most MAX_JUMPS), in no order."""
+        ...
+
     def count_jumps(self, actor: Actor) -> int: ...
     def entries(self, actor: Actor) -> list[EntryRow]:
         """Every detailed entry of the owner (at most MAX_JUMPS), in no order."""
@@ -193,6 +235,9 @@ class HistoryService:
             events = store.events(actor, EVENTS_SHOWN)
             licence = store.licence(actor)
             seconds, with_time, without_time = store.freefall(actor)
+            usual = store.exit_weight(actor)
+            rows = store.entry_facts(actor)
+        loadings = [(r.jumped_on, loading.of(r.inputs, usual.grams)) for r in rows]
         per_month = dict.fromkeys(months, 0)
         for day, jumps in per_day.items():
             key = f"{day.year:04d}-{day.month:02d}"
@@ -223,7 +268,71 @@ class HistoryService:
                 entries_with_freefall=with_time,
                 entries_without_freefall=without_time,
             ),
+            loading_months=loading.loading_by_month(loadings),
+            loading=loading.loading_range(item for _, item in loadings),
+            exit_weight=usual,
         )
+
+    def stats(self, actor: Actor, year: int | None = None) -> StatsView:
+        """Statistics from the owner's own entries, optionally for one year.
+
+        One snapshot: the baseline and counts for the total, the entries with their
+        recorded mains, the usual exit weight and the private places named; then one
+        directory lookup for the dropzones. Bounded by the jump limit, whatever the
+        number of entries, places or aircraft."""
+        latest = self._latest_local_date()
+        stats.check_year(year, latest)
+        with self._stores() as store:
+            store.snapshot()
+            totals = (
+                self._totals(store, actor, store.baseline(actor))
+                if year is None
+                else None
+            )
+            usual = store.exit_weight(actor)
+            rows = store.entry_facts(actor)
+            place_ids = sorted({r.place_id for r in rows if r.place_id is not None})
+            places = {p.id: p for p in store.places(actor, place_ids)}
+        venue_ids = sorted({r.venue_id for r in rows if r.venue_id is not None})
+        venues = self._directory.public_venues(venue_ids) if venue_ids else {}
+        found: dict[PlaceKey, Location] = {}
+        entries: list[stats.Entry] = []
+        for r in rows:
+            loc = _location(r.venue_id, r.place_id, venues, places)
+            key = (loc.kind, loc.id)
+            found[key] = loc
+            entries.append(
+                stats.Entry(
+                    jumped_on=r.jumped_on,
+                    jump_type=r.jump_type,
+                    place=key,
+                    aircraft=r.aircraft,
+                    freefall_seconds=r.freefall_seconds,
+                    exit_altitude=r.exit_altitude,
+                    altitude_unit=r.altitude_unit,
+                    loading=loading.of(r.inputs, usual.grams),
+                )
+            )
+        result = stats.stats(
+            entries,
+            year=year,
+            latest=latest,
+            place_name=lambda k: found[k].name or "",
+        )
+        return StatsView(result, found, totals)
+
+    def exit_weight(self, actor: Actor) -> ExitWeight:
+        with self._stores() as store:
+            return store.exit_weight(actor)
+
+    def set_exit_weight(
+        self, actor: Actor, value: Decimal | None, unit: WeightUnit
+    ) -> ExitWeight:
+        """A private setting for wing loading; never verified. None clears it."""
+        grams = loading.grams(value, unit) if value is not None else None
+        with self._stores() as store:
+            store.set_exit_weight(actor, grams, unit, self._clock())
+        return ExitWeight(grams, unit)
 
     def preview(self, actor: Actor, prior_jumps: int, before_on: date) -> Preview:
         """Totals now and with this declaration, without saving anything."""

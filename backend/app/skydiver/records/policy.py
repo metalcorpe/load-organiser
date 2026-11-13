@@ -16,8 +16,9 @@ from typing import Any
 from app.skydiver.directory import policy as directory
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
 from app.skydiver.gear import policy as gear
-from app.skydiver.gear.policy import AcquisitionMethod, Relation
+from app.skydiver.gear.policy import AcquisitionMethod, ComponentKind, Relation
 from app.skydiver.history import policy as history
+from app.skydiver.logbook import loading
 from app.skydiver.logbook import policy as logbook
 from app.skydiver.logbook.policy import AltitudeDatum, AltitudeUnit
 from app.skydiver.records.format import ArchiveV1
@@ -155,6 +156,10 @@ def check(archive: ArchiveV1, today: date) -> None:
         )
         if stored != (c.jump_limit, c.jump_limit_label, c.jump_limit_service_kind):
             raise ArchiveInvalid(f"{where}.jump_limit_incomplete")
+        _rule(
+            where,
+            lambda c=c: gear.canopy_size(c.canopy_size_sqft, ComponentKind(c.kind)),
+        )
 
     per_component: dict[uuid.UUID, int] = defaultdict(int)
     for i, g in enumerate(r.rigs):
@@ -267,6 +272,7 @@ def _check_jump(
     _rule(where, lambda: logbook.freefall_seconds(j.freefall_seconds))
     _rule(where, lambda: logbook.other_gear(j.other_gear))
     _text(where, "aircraft", j.aircraft, logbook.AIRCRAFT_MAX)
+    _rule(where, lambda: loading.exit_weight_grams(j.exit_weight_grams))
     _rule(where, lambda: logbook.notes(j.notes))
     if _rule(where, lambda: logbook.links(list(j.links))) != list(j.links):
         raise ArchiveInvalid(f"{where}.link_invalid")

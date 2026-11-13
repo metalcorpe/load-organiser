@@ -214,3 +214,19 @@ def test_the_count_restarts_at_the_latest_service_of_the_matching_kind() -> None
     ]
     assert policy.latest_service_on(facts, policy.ServiceKind.MAINTENANCE) == date(2026, 6, 1)  # fmt: skip
     assert policy.latest_service_on(facts, policy.ServiceKind.INSPECTION) is None
+
+
+def test_canopy_size_is_square_feet_on_mains_and_reserves_only() -> None:
+    main, reserve = policy.ComponentKind.MAIN, policy.ComponentKind.RESERVE
+    assert policy.canopy_size(None, policy.ComponentKind.AAD) is None
+    assert policy.canopy_size(170, main) == 170
+    assert policy.canopy_size(20, reserve) == 20
+    assert policy.canopy_size(400, main) == 400
+    for size, kind, code in (
+        (19, main, "canopy_size_invalid"),
+        (401, reserve, "canopy_size_invalid"),
+        (170, policy.ComponentKind.CONTAINER, "canopy_size_not_a_canopy"),
+    ):
+        with pytest.raises(DirectoryRuleError) as error:
+            policy.canopy_size(size, kind)
+        assert error.value.code == code

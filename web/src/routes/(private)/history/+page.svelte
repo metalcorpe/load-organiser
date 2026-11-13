@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BarTable from '#lib/components/BarTable.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
@@ -9,6 +10,7 @@
 	import { count, formatMonth, historyMessage, milestoneText } from '#lib/history.ts';
 	import { JUMP_TYPE_LABEL } from '#lib/jumps.ts';
 	import { formatDay } from '#lib/listings.ts';
+	import { formatLoading, formatWeight, missingHelp, missingText } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -16,6 +18,20 @@
 	const ms = $derived(data.milestones);
 	// Bar lengths for the month table, relative to the busiest month (at least 1 to avoid /0).
 	const peak = $derived(h.ok ? Math.max(1, ...h.months.map((m) => m.jumps)) : 1);
+	// Wing loading: the highest per month (newest first, like the activity table).
+	const wl = $derived(h.ok ? h.wing_loading : null);
+	const wlMissing = $derived(wl ? wl.missing.map((m) => m.missing) : []);
+	const wlHelp = $derived(missingHelp(wlMissing));
+	const wlRows = $derived(
+		h.ok
+			? [...h.wing_loading_months].reverse().map((m) => ({
+					label: formatMonth(m.month),
+					value: m.highest,
+					text: formatLoading(m.highest),
+					extra: m.jumps.toLocaleString('en-GB')
+				}))
+			: []
+	);
 </script>
 
 <svelte:head>
@@ -23,7 +39,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/records">Records</a></p>
+<p><a href="/records">Records</a> · <a href="/stats">Statistics</a></p>
 <h1>History</h1>
 <PrivacyLabel />
 <p class="lede">Totals from your own entries, private to you.</p>
@@ -111,6 +127,40 @@
 		</table>
 		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
 		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
+		</section>
+
+		<section class="card" aria-labelledby="loading-heading">
+			<h2 id="loading-heading">Wing loading</h2>
+			{#if wl && wl.known > 0 && wl.lowest !== null && wl.highest !== null}
+				<p>
+					From {formatLoading(wl.lowest)} to {formatLoading(wl.highest)} over {count(wl.known)} with a
+					known wing loading.
+				</p>
+				<BarTable
+					caption="Highest wing loading by month"
+					rowHeader="Month"
+					valueHeader="Highest"
+					extraHeader="Jumps"
+					rows={wlRows}
+				/>
+			{/if}
+			{#if wl && wl.unknown > 0}
+				<p class="hint">
+					{wl.known > 0 ? `${count(wl.unknown)} have none` : 'No jump has a wing loading yet'}: {missingText(
+						wlMissing
+					)}.
+					{#if wlHelp.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if wlHelp.profile && wlHelp.gear}
+						·
+					{/if}{#if wlHelp.gear}<a href="/gear">Add canopy sizes under Gear</a>, and tick the main
+						canopy on your jumps{/if}
+				</p>
+			{/if}
+			<p class="hint">
+				Exit weight in pounds over the size of the main canopy recorded on the jump, in square feet,
+				from your own entries{h.exit_weight
+					? `; your usual exit weight is ${formatWeight(h.exit_weight.grams, h.exit_weight.unit)}`
+					: ''}. A record, not advice.
+			</p>
 		</section>
 
 		<section class="card" aria-labelledby="milestones-heading">

@@ -1,6 +1,7 @@
 /** The printable logbook (/records/print): rows, pages and totals. Client-safe, no I/O. */
 import type { JumpOut } from './contracts/index.ts';
 import { JUMP_TYPE_LABEL } from './jumps.ts';
+import { formatLoading } from './wing-loading.ts';
 
 /** Rows on one printed sheet: fits A4 or Letter in landscape with room for signatures. */
 export const ROWS_PER_PAGE = 12;
@@ -24,6 +25,8 @@ export interface PrintRow {
 	exit: string;
 	freefall: string;
 	equipment: string;
+	/** Wing loading to two decimals; empty when unknown or not printed. */
+	loading: string;
 	notes: string;
 }
 
@@ -78,7 +81,10 @@ export function equipmentText(jump: Pick<JumpOut, 'components' | 'other_gear'>):
 	return parts.join(', ');
 }
 
-export function toRow(jump: JumpOut, { notes }: { notes: boolean }): PrintRow {
+export function toRow(
+	jump: JumpOut,
+	{ notes, loading = false }: { notes: boolean; loading?: boolean }
+): PrintRow {
 	return {
 		id: jump.id,
 		number: jump.jump_number === null ? '' : String(jump.jump_number),
@@ -89,6 +95,8 @@ export function toRow(jump: JumpOut, { notes }: { notes: boolean }): PrintRow {
 		exit: exitText(jump),
 		freefall: jump.freefall_seconds === null ? '' : formatFreefall(jump.freefall_seconds),
 		equipment: equipmentText(jump),
+		loading:
+			loading && jump.wing_loading.value !== null ? formatLoading(jump.wing_loading.value) : '',
 		notes: notes && jump.notes ? truncate(jump.notes) : ''
 	};
 }
@@ -105,7 +113,12 @@ const add = (a: Totals, b: Totals): Totals => ({
  */
 export function paginate(
 	jumps: JumpOut[],
-	{ notes, before, perPage = ROWS_PER_PAGE }: { notes: boolean; before: Totals; perPage?: number }
+	{
+		notes,
+		loading = false,
+		before,
+		perPage = ROWS_PER_PAGE
+	}: { notes: boolean; loading?: boolean; before: Totals; perPage?: number }
 ): PrintPage[] {
 	const pages: PrintPage[] = [];
 	let carried = before;
@@ -118,7 +131,7 @@ export function paginate(
 		const toDate = add(carried, page);
 		pages.push({
 			number: pages.length + 1,
-			rows: slice.map((j) => toRow(j, { notes })),
+			rows: slice.map((j) => toRow(j, { notes, loading })),
 			page,
 			broughtForward: carried,
 			toDate

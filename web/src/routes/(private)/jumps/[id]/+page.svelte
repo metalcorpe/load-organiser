@@ -6,6 +6,14 @@
 	import { countryName } from '#lib/countries.ts';
 	import { directoryMessage } from '#lib/directory-messages.ts';
 	import { JUMP_TYPE_LABEL, altitudeText, jumpMessage } from '#lib/jumps.ts';
+	import {
+		formLoading,
+		formatLoading,
+		formatWeight,
+		inUnit,
+		missingHelp,
+		missingText
+	} from '#lib/wing-loading.ts';
 	import { formatDay } from '#lib/listings.ts';
 	import { AUDIENCE_LABEL, postEventText } from '#lib/posts.ts';
 	import type { PageProps } from './$types';
@@ -15,6 +23,11 @@
 	const base = $derived(`/jumps/${jump.id}`);
 	const echoed = $derived(
 		form && form.form === 'save' && 'values' in form && form.values ? form.values : null
+	);
+	// The form's unit, also when the context could not be read: the jump's own unit.
+	const context = $derived(formLoading(data.loading, jump.wing_loading.unit));
+	const shownWeight = $derived(
+		jump.exit_weight_grams === null ? '' : String(inUnit(jump.exit_weight_grams, context.unit))
 	);
 	const saved = $derived<Record<string, string>>({
 		jumped_on: jump.jumped_on,
@@ -29,6 +42,10 @@
 		freefall_seconds: jump.freefall_seconds?.toString() ?? '',
 		other_gear: jump.other_gear ?? '',
 		aircraft: jump.aircraft ?? '',
+		exit_weight: shownWeight,
+		exit_weight_unit: context.unit,
+		exit_weight_saved: jump.exit_weight_grams?.toString() ?? '',
+		exit_weight_shown: shownWeight,
 		notes: jump.notes ?? '',
 		links: jump.links.join('\n')
 	});
@@ -55,6 +72,8 @@
 	);
 	const errorFor = (name: string) =>
 		form && form.form === name && 'error' in form ? jumpMessage(form.error) : undefined;
+	const wl = $derived(jump.wing_loading);
+	const help = $derived(missingHelp(wl.missing));
 	const heights = $derived(
 		altitudeText(jump.exit_altitude, jump.deployment_altitude, jump.altitude_unit, jump.altitude_datum)
 	);
@@ -73,6 +92,7 @@
 		freefall_seconds: 'Freefall',
 		other_gear: 'Other equipment',
 		aircraft: 'Aircraft',
+		exit_weight_grams: 'Exit weight (grams)',
 		notes: 'Notes',
 		links: 'Links',
 		equipment: 'Equipment used'
@@ -117,6 +137,22 @@
 	{#if heights}<dt>Altitudes</dt><dd>{heights}{jump.altitude_datum === 'unspecified' ? ' (reference not stated)' : ''}</dd>{/if}
 	{#if jump.freefall_seconds !== null}<dt>Freefall</dt><dd>{jump.freefall_seconds} s</dd>{/if}
 	{#if jump.aircraft}<dt>Aircraft</dt><dd>{jump.aircraft}</dd>{/if}
+	<dt>Wing loading</dt>
+	<dd data-testid="wing-loading">
+		{#if wl.value !== null}
+			{formatLoading(wl.value)}
+			<span class="meta"
+				>({wl.exit_weight_grams ? formatWeight(wl.exit_weight_grams, wl.unit) : ''}{wl.exit_weight_from_jump
+					? ' on this jump'
+					: ', your usual exit weight'}, over {wl.canopy_size_sqft} sq ft)</span
+			>
+		{:else}
+			Unknown: {missingText(wl.missing)}.
+			{#if help.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if help.profile && help.gear}
+				·
+			{/if}{#if help.gear}<a href="/gear">Gear</a>{/if}
+		{/if}
+	</dd>
 	<dt>Equipment</dt>
 	<dd>
 		{#if jump.components.length === 0 && !jump.other_gear}Not recorded{/if}
@@ -177,6 +213,7 @@
 		keys={{ component: echoed?.new_component_key || data.componentKey }}
 		version={(echoed && form && 'based' in form && form.based) || jump.version}
 		submitLabel="Save changes"
+		loading={context}
 	/>
 {/if}
 

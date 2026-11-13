@@ -2,7 +2,12 @@
  * Shared loading for the jump pages (#153): the chosen location, the location
  * picker and the viewer's gear. Reads only; the API remains the authority.
  */
-import type { ComponentSummaryOut, PlaceOut, VenueOut } from '#lib/contracts/index.ts';
+import type {
+	ComponentSummaryOut,
+	LoadingContextOut,
+	PlaceOut,
+	VenueOut
+} from '#lib/contracts/index.ts';
 import { countryName } from '#lib/countries.ts';
 import type { ApiTransport } from './api/transport.ts';
 import { isUuid } from './api/transport.ts';
@@ -69,7 +74,13 @@ export async function placesFor(api: ApiTransport, secret: string): Promise<Plac
 export async function gearFor(
 	api: ApiTransport,
 	secret: string,
-	linked: { id: string; label: string; kind: string; archived: boolean }[] = []
+	linked: {
+		id: string;
+		label: string;
+		kind: string;
+		archived: boolean;
+		canopy_size_sqft?: number | null;
+	}[] = []
 ) {
 	const active = await call<ComponentSummaryOut[]>(
 		api,
@@ -77,17 +88,51 @@ export async function gearFor(
 		{ bearer: secret },
 		isList
 	);
-	type Item = { id: string; label: string; kind: string; archived: boolean };
+	type Item = {
+		id: string;
+		label: string;
+		kind: string;
+		archived: boolean;
+		canopySize: number | null;
+	};
 	const items: Item[] = active.ok
 		? active.value.map((s) => ({
 				id: s.component.id,
 				label: s.component.label,
 				kind: s.component.kind,
-				archived: false
+				archived: false,
+				canopySize: s.component.canopy_size_sqft ?? null
 			}))
 		: [];
-	for (const item of linked) if (!items.some((i) => i.id === item.id)) items.push(item);
+	for (const item of linked) {
+		if (items.some((i) => i.id === item.id)) continue;
+		items.push({
+			id: item.id,
+			label: item.label,
+			kind: item.kind,
+			archived: item.archived,
+			canopySize: item.canopy_size_sqft ?? null
+		});
+	}
 	return { ok: active.ok, items };
+}
+
+/** The usual exit weight and the highest wing loading of the other jumps (one call). */
+export async function loadingFor(
+	api: ApiTransport,
+	secret: string,
+	exclude?: string
+): Promise<{ usualGrams: number | null; unit: 'kg' | 'lb'; highest: number | null } | null> {
+	const found = await call<LoadingContextOut>(api, 'getWingLoadingContext', {
+		bearer: secret,
+		query: { exclude }
+	});
+	if (!found.ok) return null;
+	return {
+		usualGrams: found.value.exit_weight?.grams ?? null,
+		unit: found.value.unit,
+		highest: found.value.highest
+	};
 }
 
 export type RecentLocation = {

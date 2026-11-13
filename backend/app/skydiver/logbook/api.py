@@ -21,6 +21,7 @@ from app.skydiver.access.http import AccessDependencies
 from app.skydiver.access.policy import Actor
 from app.skydiver.directory.policy import DirectoryRuleError
 from app.skydiver.directory.service import EditConflict
+from app.skydiver.logbook.loading import Loading, in_unit
 from app.skydiver.logbook.policy import JumpType
 from app.skydiver.logbook.service import (
     AlreadyUndone,
@@ -33,6 +34,7 @@ from app.skydiver.logbook.service import (
     KeyReused,
     LikelyDuplicate,
     LimitReached,
+    LoadingContext,
     LogbookService,
     NotFound,
     NumberedRef,
@@ -89,6 +91,11 @@ class JumpFields(BaseModel):
         default=None,
         description='The aircraft as you write it, e.g. "Cessna 208 SX-ABC" (60 at most).',
     )
+    exit_weight_grams: Annotated[int, Field(ge=1, le=1_000_000)] | None = Field(
+        default=None,
+        description="Your exit weight on this jump (body and gear) in grams, 30,000"
+        " to 250,000; omit or null to use your usual exit weight.",
+    )
     notes: Annotated[str, Field(max_length=4000)] | None = None
     links: (
         Annotated[list[Annotated[str, Field(max_length=2100)]], Field(max_length=10)]
@@ -131,6 +138,34 @@ class ComponentRefOut(BaseModel):
     kind: str
     label: str
     archived: bool
+    canopy_size_sqft: int | None = Field(
+        default=None, description="A main or reserve canopy's size in square feet."
+    )
+
+
+WeightUnitName = Literal["kg", "lb"]
+MissingName = Literal["exit_weight", "main_canopy", "canopy_size", "several_mains"]
+
+
+class WingLoadingOut(BaseModel):
+    """Exit weight in pounds over the main canopy's size in square feet, from your
+    own entries. Not advice: no limit or recommendation is applied."""
+
+    value: float | None = Field(
+        description="Pounds per square foot, two decimals; null when unknown."
+    )
+    exit_weight_grams: int | None = Field(description="The exit weight used.")
+    exit_weight_from_jump: bool = Field(
+        description="This jump's own exit weight, not your usual one."
+    )
+    unit: WeightUnitName = Field(description="Your unit for showing weights.")
+    canopy_size_sqft: int | None = Field(description="The main canopy's size used.")
+    missing: list[MissingName] = Field(
+        description="What is missing when `value` is null: `exit_weight` (none on the"
+        " jump or in your settings), `main_canopy` (none recorded on the jump),"
+        " `canopy_size` (the main has no size), `several_mains` (more than one main"
+        " recorded)."
+    )
 
 
 class JumpOut(BaseModel):
@@ -151,6 +186,10 @@ class JumpOut(BaseModel):
     components: list[ComponentRefOut]
     other_gear: str | None
     aircraft: str | None
+    exit_weight_grams: int | None = Field(
+        description="This jump's own exit weight, if you entered one."
+    )
+    wing_loading: WingLoadingOut
     notes: str | None
     links: list[str]
     source: Source = Field(
@@ -173,6 +212,7 @@ class JumpSummaryOut(BaseModel):
     jump_number: int | None
     components: list[ComponentRefOut]
     aircraft: str | None
+    wing_loading: WingLoadingOut
 
 
 class MatchedOut(BaseModel):
@@ -240,6 +280,24 @@ class PrintPageOut(BaseModel):
     items: list[JumpOut]
     next_cursor: str | None
     brought_forward: BroughtForwardOut
+
+
+class ExitWeightOut(BaseModel):
+    grams: int = Field(description="The weight in grams.")
+    value: float = Field(description="In `unit`, to one decimal, as you entered it.")
+    unit: WeightUnitName
+
+
+class LoadingContextOut(BaseModel):
+    """For the jump form: your usual exit weight and the highest wing loading among
+    your other jumps, to compare a new one with."""
+
+    exit_weight: ExitWeightOut | None = Field(description="Null when not set.")
+    unit: WeightUnitName = Field(description="Your unit for weights.")
+    highest: float | None = Field(
+        description="The highest known wing loading of your other jumps; null when"
+        " none is known."
+    )
 
 
 class RecentAircraftOut(BaseModel):
@@ -374,9 +432,42 @@ def _location(view: JumpView) -> LocationOut:
 
 def _components(view: JumpView) -> list[ComponentRefOut]:
     return [
-        ComponentRefOut(id=c.id, kind=c.kind, label=c.label, archived=c.archived)
+        ComponentRefOut(
+            id=c.id,
+            kind=c.kind,
+            label=c.label,
+            archived=c.archived,
+            canopy_size_sqft=c.canopy_size,
+        )
         for c in view.components
     ]
+
+
+def _loading(view: JumpView) -> WingLoadingOut:
+    w: Loading | None = view.loading
+    return WingLoadingOut(
+        value=float(w.value) if w and w.value is not None else None,
+        exit_weight_grams=w.weight_grams if w else None,
+        exit_weight_from_jump=bool(w and w.weight_from_jump),
+        unit=view.weight_unit.value,
+        canopy_size_sqft=w.canopy_size if w else None,
+        missing=[m.value for m in w.missing] if w else [],
+    )
+
+
+def loading_context_out(found: LoadingContext) -> LoadingContextOut:
+    usual = found.usual
+    return LoadingContextOut(
+        exit_weight=ExitWeightOut(
+            grams=usual.grams,
+            value=float(in_unit(usual.grams, usual.unit)),
+            unit=usual.unit.value,
+        )
+        if usual.grams is not None
+        else None,
+        unit=usual.unit.value,
+        highest=float(found.highest) if found.highest is not None else None,
+    )
 
 
 def _jump(view: JumpView) -> JumpOut:
@@ -397,6 +488,8 @@ def _jump(view: JumpView) -> JumpOut:
         components=_components(view),
         other_gear=j.other_gear,
         aircraft=j.aircraft,
+        exit_weight_grams=j.exit_weight_grams,
+        wing_loading=_loading(view),
         notes=j.notes,
         links=list(j.links),
         source=_SOURCES.get(j.source, "manual"),
@@ -416,6 +509,7 @@ def _summary(view: JumpView) -> JumpSummaryOut:
         jump_number=j.jump_number,
         components=_components(view),
         aircraft=j.aircraft,
+        wing_loading=_loading(view),
     )
 
 
@@ -441,7 +535,13 @@ def _batch_preview(preview: BatchPreview) -> BatchPreviewOut:
         if loc
         else None,
         components=[
-            ComponentRefOut(id=c.id, kind=c.kind, label=c.label, archived=c.archived)
+            ComponentRefOut(
+                id=c.id,
+                kind=c.kind,
+                label=c.label,
+                archived=c.archived,
+                canopy_size_sqft=c.canopy_size,
+            )
             for c in preview.components
         ]
         if preview.components is not None
@@ -651,6 +751,23 @@ def create_router(
         except Errors as error:
             return _problem(error)
         return RecentAircraftOut(aircraft=found)
+
+    # Before /jumps/{jump_id}, which would otherwise take "wing-loading" as an id.
+    @router.get(
+        "/jumps/wing-loading",
+        operation_id="getWingLoadingContext",
+        response_model=LoadingContextOut,
+        dependencies=deps,
+    )
+    def get_wing_loading_context(
+        actor: Reader,
+        exclude: Annotated[
+            uuid.UUID | None,
+            Query(description="A jump of yours being edited, left out of `highest`."),
+        ] = None,
+    ) -> LoadingContextOut:
+        """Your usual exit weight and the highest wing loading among your jumps."""
+        return loading_context_out(service().loading_context(actor, exclude=exclude))
 
     # -- many jumps at once (before /jumps/{jump_id}) ------------------------------
 
