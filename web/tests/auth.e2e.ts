@@ -429,7 +429,7 @@ test.describe('recovery and revocation', () => {
 		await otherPage.goto('/sign-in?returnTo=%2Fprofile');
 		await signIn(otherPage, email);
 
-		await page.goto('/sign-in?returnTo=%2Fprofile');
+		await page.goto('/sign-in?returnTo=%2Fprofile%2Faccount');
 		await signIn(page, email);
 		const everywhere = page.getByRole('region', { name: 'Sign out everywhere' });
 		await everywhere.getByLabel('Password').fill(NEW_PASSWORD);

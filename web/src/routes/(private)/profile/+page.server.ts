@@ -6,13 +6,8 @@ import { parseWeight, type WeightUnit } from '#lib/wing-loading.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { field } from '#lib/server/forms.ts';
 import { call, failStatus, isRecord } from '#lib/server/maintenance.ts';
-import {
-	changePassword,
-	deleteAccount,
-	resendVerification,
-	revokeAllSessions
-} from '#lib/server/identity.ts';
-import { clearSession, readSessionSecret } from '#lib/server/session.ts';
+import { resendVerification } from '#lib/server/identity.ts';
+import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -51,6 +46,7 @@ function secretOrSignIn(locals: App.Locals, url: URL, cookies: Parameters<typeof
 	return secret;
 }
 
+// Password, sign out everywhere and account deletion are on /profile/account.
 export const actions: Actions = {
 	resend: async ({ locals, url, cookies }) => {
 		const secret = secretOrSignIn(locals, url, cookies);
@@ -97,52 +93,5 @@ export const actions: Actions = {
 			return fail(failStatus(outcome), { form: 'exitWeight', error: outcome.reason, values });
 		}
 		return { form: 'exitWeight', done: true, cleared: grams === null };
-	},
-
-	password: async ({ locals, url, cookies, request, getClientAddress }) => {
-		const secret = secretOrSignIn(locals, url, cookies);
-		const data = await request.formData();
-		const current = field(data, 'current_password');
-		const next = field(data, 'new_password');
-		const confirm = field(data, 'new_password_confirm');
-		if (!current || !next) return fail(400, { form: 'password', error: 'missing' });
-		if (next !== confirm) return fail(400, { form: 'password', error: 'password_mismatch' });
-		const outcome = await changePassword(
-			createRequestApi(),
-			secret,
-			{ current_password: current, new_password: next },
-			getClientAddress()
-		);
-		if (!outcome.ok) return fail(statusFor(outcome.reason), { form: 'password', error: outcome.reason });
-		return { form: 'password', done: true };
-	},
-
-	revokeAll: async ({ locals, url, cookies, request, getClientAddress }) => {
-		const secret = secretOrSignIn(locals, url, cookies);
-		const data = await request.formData();
-		const password = field(data, 'password');
-		if (!password) return fail(400, { form: 'revokeAll', error: 'missing' });
-		const outcome = await revokeAllSessions(createRequestApi(), secret, password, getClientAddress());
-		if (!outcome.ok) return fail(statusFor(outcome.reason), { form: 'revokeAll', error: outcome.reason });
-		clearSession(cookies);
-		locals.clearSiteCache = true;
-		redirect(303, '/sign-in?notice=signed-out-everywhere');
-	},
-
-	deleteAccount: async ({ locals, url, cookies, request, getClientAddress }) => {
-		const secret = secretOrSignIn(locals, url, cookies);
-		const data = await request.formData();
-		if (field(data, 'confirm', { max: 4 }) !== 'on') {
-			return fail(400, { form: 'deleteAccount', error: 'confirm_delete' });
-		}
-		const password = field(data, 'password', { max: 1024 });
-		if (!password) return fail(400, { form: 'deleteAccount', error: 'missing' });
-		const outcome = await deleteAccount(createRequestApi(), secret, password, getClientAddress());
-		if (!outcome.ok) {
-			return fail(statusFor(outcome.reason), { form: 'deleteAccount', error: outcome.reason });
-		}
-		clearSession(cookies);
-		locals.clearSiteCache = true;
-		redirect(303, '/sign-in?notice=account-deleted');
 	}
 };

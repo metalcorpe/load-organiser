@@ -1,12 +1,24 @@
+<script lang="ts" module>
+	export type RecordLink = { href: string; name: string; text: string };
+	export type RecordGroup = { id: string; heading: string; items: RecordLink[] };
+</script>
+
 <script lang="ts">
-	/** Where a member's own records live: shown on Records and on the Me tab. */
-	const groups = [
+	/**
+	 * Where a member's own records live. Records shows them as tiles with a line each; the Me
+	 * tab shows the same groups as a compact list of links (`compact`), with its own groups
+	 * (people, account) added after them (`extra`).
+	 */
+	let { compact = false, extra = [] }: { compact?: boolean; extra?: RecordGroup[] } = $props();
+
+	const records: RecordGroup[] = [
 		{
 			id: 'jumps',
 			heading: 'Jumps',
 			items: [
 				{ href: '/jumps', name: 'Logbook', text: 'Every jump you logged, wherever you jumped.' },
 				{ href: '/history', name: 'History', text: 'Totals, recent months and gear use.' },
+				{ href: '/stats', name: 'Statistics', text: 'Your jumps by type, year and place.' },
 				{
 					href: '/records/print',
 					name: 'Printable logbook',
@@ -38,23 +50,39 @@
 			]
 		}
 	];
+	const groups = $derived([...records, ...extra]);
 </script>
 
-{#each groups as group (group.id)}
-	<section aria-labelledby="tiles-{group.id}">
-		<h2 id="tiles-{group.id}">{group.heading}</h2>
-		<ul class="tiles">
-			{#each group.items as item (item.href)}
-				<li>
-					<a class="tile" href={item.href}>
-						<span class="tile-name">{item.name}</span>
-						<span class="tile-text">{item.text}</span>
-					</a>
-				</li>
-			{/each}
-		</ul>
-	</section>
-{/each}
+{#if compact}
+	<div class="compact">
+		{#each groups as group (group.id)}
+			<section aria-labelledby="links-{group.id}">
+				<h2 id="links-{group.id}">{group.heading}</h2>
+				<ul class="links">
+					{#each group.items as item (item.href)}
+						<li><a href={item.href}>{item.name}</a></li>
+					{/each}
+				</ul>
+			</section>
+		{/each}
+	</div>
+{:else}
+	{#each groups as group (group.id)}
+		<section aria-labelledby="tiles-{group.id}">
+			<h2 id="tiles-{group.id}">{group.heading}</h2>
+			<ul class="tiles">
+				{#each group.items as item (item.href)}
+					<li>
+						<a class="tile" href={item.href}>
+							<span class="tile-name">{item.name}</span>
+							<span class="tile-text">{item.text}</span>
+						</a>
+					</li>
+				{/each}
+			</ul>
+		</section>
+	{/each}
+{/if}
 
 <style>
 	h2 {
@@ -97,5 +125,42 @@
 	.tile-text {
 		color: var(--muted);
 		font-size: 0.92rem;
+	}
+
+	/* Compact: each group a short card of links, groups side by side when there is room. */
+	.compact {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+		gap: 0.6rem;
+		margin: 1rem 0;
+	}
+
+	.compact section {
+		padding: 0.5rem 0.9rem 0.6rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.compact h2 {
+		margin: 0.25rem 0 0;
+		font-size: 0.9rem;
+	}
+
+	/* Links flow on as many lines as they need, each a 44px-tall target. */
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.1rem;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-weight: 600;
 	}
 </style>
