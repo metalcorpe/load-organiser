@@ -3,15 +3,14 @@
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { eventHref } from '#lib/listing-filters.ts';
-	import { dateStub, featuredLabel, formatPrice, formatRange, spanDays } from '#lib/listings.ts';
+	import { featuredLabel, formatPrice, formatRange } from '#lib/listings.ts';
 
 	/**
 	 * The board's navy card: the next multi-day boogie or camp (pickFeatured), shown once above
-	 * the dated list and not repeated in it.
+	 * the dated list and not repeated in it. The title leads; the dates follow in full, with the
+	 * year, as one line of text.
 	 */
 	let { item }: { item: OpportunityOut } = $props();
-	const stub = $derived(dateStub(item.starts_on, item.ends_on));
-	const days = $derived(spanDays(item.starts_on, item.ends_on));
 	const place = $derived(item.venue ? item.venue.name : (item.location_note ?? ''));
 	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
 	const label = $derived(featuredLabel(item.category));
@@ -19,31 +18,22 @@
 
 <section class="featured type-{item.category}" aria-labelledby="featured-heading">
 	<h2 id="featured-heading" class="visually-hidden">Highlighted: {label.toLowerCase()}</h2>
-	<div class="text">
-		<span class="type-pill"><TypeIcon category={item.category} />{label}</span>
-		<a class="title" href={eventHref(item.id)}>{item.title}</a>
-		<span class="dates">{formatRange(item.starts_on, item.ends_on)}</span>
-		<span class="meta">
-			{place ? `${place}, ` : ''}{countryName(item.country)}{price ? ` · ${price}` : ''}
-		</span>
-	</div>
-	{#if stub}
-		<div class="when" aria-hidden="true">
-			<span class="day">{stub.day}</span>
-			<span class="sub">{stub.month} · {days} days</span>
-		</div>
-	{/if}
+	<span class="type-pill"><TypeIcon category={item.category} />{label}</span>
+	<a class="title" href={eventHref(item.id)}>{item.title}</a>
+	<span class="dates">{formatRange(item.starts_on, item.ends_on)}</span>
+	<span class="meta">
+		{place ? `${place}, ` : ''}{countryName(item.country)}{price ? ` · ${price}` : ''}
+	</span>
 </section>
 
 <style>
 	.featured {
 		position: relative;
 		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 0.75rem;
-		align-items: end;
+		gap: 0.45rem;
+		justify-items: start;
 		margin: 0.25rem 0 1rem;
-		padding: 1.1rem;
+		padding: 1rem 1.1rem 1.1rem;
 		border-radius: 20px;
 		background: var(--brand);
 		color: var(--brand-fg);
@@ -54,11 +44,8 @@
 		outline-offset: 2px;
 	}
 
-	.text {
-		display: grid;
-		gap: 0.55rem;
-		justify-items: start;
-		min-width: 0;
+	.type-pill {
+		margin-bottom: 0.15rem;
 	}
 
 	.title {
@@ -79,6 +66,11 @@
 		border-radius: 20px;
 	}
 
+	.title:hover {
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
 	.title:focus-visible {
 		outline: none;
 	}
@@ -87,23 +79,8 @@
 		font-weight: 600;
 	}
 
-	.meta,
-	.sub {
+	.meta {
 		color: var(--brand-muted);
 		font-size: 0.9rem;
-	}
-
-	.when {
-		display: grid;
-		justify-items: center;
-		line-height: 0.95;
-	}
-
-	.day {
-		font-family: var(--font-display);
-		font-weight: 700;
-		font-size: 2.8rem;
-		color: var(--highlight);
-		font-variant-numeric: tabular-nums;
 	}
 </style>

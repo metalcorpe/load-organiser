@@ -10,7 +10,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					'The navy card: the next multi-day boogie or camp on the plain first page of the board, labelled only with what that selection knows ("Upcoming boogie"). It shows the full date range with the year and is not repeated in the dated list below it. One brand card per screen; orange only for the key number.'
+					'The navy card: the next multi-day boogie or camp on the plain first page of the board, labelled only with what that selection knows ("Upcoming boogie"). It shows the full date range with the year and is not repeated in the dated list below it. The title leads and the dates follow as text; there is no large start-day figure. One brand card per screen.'
 			}
 		}
 	},
