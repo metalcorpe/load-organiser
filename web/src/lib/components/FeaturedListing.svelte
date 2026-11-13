@@ -18,12 +18,16 @@
 
 <section class="featured type-{item.category}" aria-labelledby="featured-heading">
 	<h2 id="featured-heading" class="visually-hidden">Highlighted: {label.toLowerCase()}</h2>
-	<span class="type-pill"><TypeIcon category={item.category} />{label}</span>
-	<a class="title" href={eventHref(item.id)}>{item.title}</a>
-	<span class="dates">{formatRange(item.starts_on, item.ends_on)}</span>
-	<span class="meta">
-		{place ? `${place}, ` : ''}{countryName(item.country)}{price ? ` · ${price}` : ''}
-	</span>
+	<!-- What it is, then when and where: stacked on a phone, side by side on a large screen. -->
+	<div class="identity">
+		<span class="type-pill"><TypeIcon category={item.category} />{label}</span>
+		<a class="title" href={eventHref(item.id)}>{item.title}</a>
+	</div>
+	<div class="facts">
+		<span class="dates">{formatRange(item.starts_on, item.ends_on)}</span>
+		<span class="meta">{place ? `${place}, ` : ''}{countryName(item.country)}</span>
+		{#if price}<span class="meta">{price}</span>{/if}
+	</div>
 </section>
 
 <style>
@@ -31,7 +35,6 @@
 		position: relative;
 		display: grid;
 		gap: 0.45rem;
-		justify-items: start;
 		margin: 0.25rem 0 1rem;
 		padding: 1rem 1.1rem 1.1rem;
 		border-radius: 20px;
@@ -42,6 +45,21 @@
 	.featured:focus-within {
 		outline: 3px solid var(--focus);
 		outline-offset: 2px;
+	}
+
+	.identity,
+	.facts {
+		display: grid;
+		justify-items: start;
+		min-width: 0;
+	}
+
+	.identity {
+		gap: 0.45rem;
+	}
+
+	.facts {
+		gap: 0.15rem;
 	}
 
 	.type-pill {
@@ -82,5 +100,30 @@
 	.meta {
 		color: var(--brand-muted);
 		font-size: 0.9rem;
+	}
+
+	/* Large screens: the name on the left, when and where in a column on the right behind a
+	   thin rule, so the wide card reads as one composition instead of a stretched phone card. */
+	@media (min-width: 60rem) {
+		.featured {
+			grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+			align-items: center;
+			column-gap: 2rem;
+			padding: 1.4rem 1.6rem;
+		}
+
+		.title {
+			font-size: 1.9rem;
+		}
+
+		.facts {
+			gap: 0.3rem;
+			padding-left: 1.5rem;
+			border-left: 1px solid color-mix(in srgb, var(--brand-fg) 30%, transparent);
+		}
+
+		.dates {
+			font-size: 1.1rem;
+		}
 	}
 </style>
