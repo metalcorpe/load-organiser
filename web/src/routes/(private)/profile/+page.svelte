@@ -23,8 +23,9 @@
 				? String(inUnit(savedWeight.grams, savedWeight.unit))
 				: ''
 	);
-	// Me's own groups after the records: people, the account and the beta. The licence and
-	// exit weight stay on this page: the logbook, History and Statistics link to their anchors.
+	// Me's own groups after the records: people and the rest. Account and security is linked
+	// once, from the account card. The licence and exit weight come first on this page (the
+	// logbook, History and Statistics link to their anchors), the links after them.
 	const extra = $derived<RecordGroup[]>([
 		{
 			id: 'people',
@@ -35,23 +36,14 @@
 			]
 		},
 		{
-			id: 'account',
-			heading: 'Account and settings',
+			id: 'more',
+			heading: 'More',
 			items: [
-				{ href: '/profile/account', name: 'Account and security', text: '' },
-				{ href: '#licence-heading', name: 'Licence', text: '' },
-				{ href: '#weight-heading', name: 'Exit weight', text: '' },
+				{ href: '/privacy', name: 'Privacy and the beta', text: '' },
+				{ href: '/submit?kind=feedback', name: 'Send feedback', text: '' },
 				...(data.viewer?.reviewer
 					? [{ href: '/review', name: 'Maintenance (reviewer tools)', text: '' }]
 					: [])
-			]
-		},
-		{
-			id: 'beta',
-			heading: 'About the beta',
-			items: [
-				{ href: '/privacy', name: 'Privacy and the beta', text: '' },
-				{ href: '/submit?kind=feedback', name: 'Send feedback', text: '' }
 			]
 		}
 	]);
@@ -85,17 +77,15 @@
 	{/if}
 
 	<div class="summary-actions">
-		<a href="/profile/account">Account and security</a>
+		<a href="/profile/account" aria-describedby="account-link-hint">Account and security</a>
+		<span class="visually-hidden" id="account-link-hint"
+			>Password, sign out everywhere and deleting the account</span
+		>
 		<form method="POST" action="/sign-out">
 			<button class="button secondary" type="submit">Sign out</button>
 		</form>
 	</div>
-	<p class="hint">Password, sign out everywhere and deleting the account are there.</p>
 </section>
-
-<nav aria-label="Your records and settings">
-	<RecordTiles compact {extra} />
-</nav>
 
 <section class="card" aria-labelledby="licence-heading">
 	<h2 id="licence-heading">Licence</h2>
@@ -180,6 +170,11 @@
 	</form>
 </section>
 
+<!-- Everything else, in one compact card. -->
+<nav aria-label="Your records and more">
+	<RecordTiles compact {extra} />
+</nav>
+
 <style>
 	.card {
 		border: 1px solid var(--border);
@@ -235,5 +230,11 @@
 
 	.summary-actions form {
 		margin: 0;
+	}
+
+	.pair {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 	}
 </style>

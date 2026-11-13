@@ -69,7 +69,7 @@ test.describe('Me and Account and security', () => {
 		await signIn(page, email);
 		await expect(page).toHaveURL(`${ORIGIN}/profile`);
 		await expect(page.getByTestId('account-email')).toHaveText(email);
-		const links = page.getByRole('navigation', { name: 'Your records and settings' });
+		const links = page.getByRole('navigation', { name: 'Your records and more' });
 		for (const name of [
 			'Logbook',
 			'Statistics',
@@ -81,9 +81,9 @@ test.describe('Me and Account and security', () => {
 			'Import from a spreadsheet',
 			'Suggestions and reports',
 			'Your public profile',
-			'Account and security',
-			'Licence',
-			'Exit weight'
+			'People and follow requests',
+			'Privacy and the beta',
+			'Send feedback'
 		]) {
 			await expect(links.getByRole('link', { name, exact: true })).toBeVisible();
 		}
@@ -102,7 +102,9 @@ test.describe('Me and Account and security', () => {
 			await expect(page.getByRole('heading', { level: 2, name, exact: true })).toBeInViewport();
 		}
 
-		await links.getByRole('link', { name: 'Account and security' }).click();
+		// Account and security is linked once, from the account card.
+		await expect(page.getByRole('link', { name: 'Account and security' })).toHaveCount(1);
+		await page.getByRole('link', { name: 'Account and security' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/profile/account`);
 		await expect(page.getByTestId('account-email')).toHaveText(email);
 		for (const name of ['Change password', 'Sign out everywhere', 'Delete account']) {
