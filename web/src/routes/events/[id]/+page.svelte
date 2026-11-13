@@ -217,6 +217,14 @@
 		color: var(--brand-fg);
 	}
 
+	/* Edge to edge on a phone; on a larger screen it starts at the content edge, like the
+	   header and tabs above it. */
+	@media (min-width: 48rem) {
+		.hero {
+			margin-inline: 0;
+		}
+	}
+
 	.hero p {
 		margin: 0;
 	}

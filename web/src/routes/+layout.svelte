@@ -63,7 +63,7 @@
 <NavigationStatus />
 <FormGuard />
 
-<header class="w-{width}" class:guest={!data.viewer}>
+<header class:guest={!data.viewer}>
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
 	<span class="account">
@@ -81,7 +81,7 @@
 </header>
 
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
-{#if data.viewer}<AppNav {width} />{:else if !onAccountPage}<SignInSheet />{/if}
+{#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
 <main id="main" tabindex="-1" class="w-{width}">
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
@@ -90,7 +90,7 @@
 	{/key}
 </main>
 
-<footer class="w-{width}" class:with-nav={Boolean(data.viewer)}>
+<footer class:with-nav={Boolean(data.viewer)}>
 	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
 	<a href="/support">Support the beta</a>
@@ -111,11 +111,18 @@
 		top: 0.5rem;
 	}
 
+	/* One frame for the header, the tab bar, every page and the footer, so nothing moves
+	   when you switch pages. A page's own measure only limits how far its content reaches
+	   to the right: reading pages stay narrow, the discovery lists use more of the screen. */
+	:global(:root) {
+		--frame: 70rem;
+	}
+
 	header {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		max-width: 40rem;
+		max-width: var(--frame);
 		margin: 0 auto;
 		padding: 0.75rem 1rem;
 	}
@@ -212,23 +219,20 @@
 	}
 
 	main {
-		max-width: 40rem;
+		--measure: 40rem;
+		max-width: var(--frame);
 		margin: 0 auto;
-		padding: 0.5rem 1rem 1rem;
+		/* Right padding fills what the frame has beyond this page's measure. Percentages are
+		   of the page width, so min() gives the frame's actual width on any screen. */
+		padding: 0.5rem max(1rem, calc(min(var(--frame), 100%) - var(--measure) + 1rem)) 1rem 1rem;
 	}
 
-	/* The discovery lists use more of a large screen; header, tab bar and footer follow, so
-	   all four share one edge. */
-	header.w-medium,
-	main.w-medium,
-	footer.w-medium {
-		max-width: 60rem;
+	main.w-medium {
+		--measure: 60rem;
 	}
 
-	header.w-wide,
-	main.w-wide,
-	footer.w-wide {
-		max-width: 70rem;
+	main.w-wide {
+		--measure: 70rem;
 	}
 
 	main:focus {
@@ -240,7 +244,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0 1.25rem;
-		max-width: 40rem;
+		max-width: var(--frame);
 		margin: 1rem auto 0;
 		padding: 0.25rem 1rem 2rem;
 		/* A rule along the content edge, not the padding. */

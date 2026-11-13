@@ -138,7 +138,7 @@
 				defaultValue={f.q}
 				autocomplete="off"
 			/>
-			<button class="button" type="submit">Search</button>
+			<button class="button secondary" type="submit">Search</button>
 		</div>
 		<details class="more" open={moreFilters || Boolean(filterError)}>
 			<summary class="disclosure">Filters</summary>
