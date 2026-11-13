@@ -56,6 +56,10 @@
 
 <h1>Profile</h1>
 
+<!-- Large screens: the account and the two settings in the main column, every other link
+     beside them. One column on a phone, in this order. -->
+<div class="columns">
+<div class="col-main">
 <section class="card summary" aria-labelledby="account-heading">
 	<h2 id="account-heading" class="visually-hidden">Account</h2>
 	<dl>
@@ -170,10 +174,13 @@
 	</form>
 </section>
 
+</div>
+
 <!-- Everything else, in one compact card. -->
-<nav aria-label="Your records and more">
+<nav class="col-side" aria-label="Your records and more">
 	<RecordTiles compact {extra} />
 </nav>
+</div>
 
 <style>
 	.card {
@@ -230,6 +237,12 @@
 
 	.summary-actions form {
 		margin: 0;
+	}
+
+	/* Forms keep the reading measure inside the wider main column. */
+	.card p,
+	.card .form {
+		max-width: var(--measure);
 	}
 
 	.pair {

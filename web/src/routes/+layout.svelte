@@ -16,7 +16,7 @@
 	import FormGuard from '#lib/components/FormGuard.svelte';
 	import SignInSheet from '#lib/components/SignInSheet.svelte';
 	import { page } from '$app/state';
-	import { pageWidth } from '#lib/navigation.ts';
+	import { pageLayout } from '#lib/navigation.ts';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
@@ -36,9 +36,9 @@
 						: page.url.pathname + page.url.search
 				)}`
 	);
-	// Discovery lists run wider on large screens; everything else keeps the narrow measure.
-	// An error page keeps the narrow measure whatever the address.
-	const width = $derived(pageWidth(page.url.pathname, Boolean(page.error)));
+	// The primary pages share the header's frame on large screens; every other page is one
+	// narrow, centred column (navigation.ts, pageLayout).
+	const layout = $derived(pageLayout(page.url.pathname, Boolean(page.error)));
 	// On the registration page itself, Join would only point back at the form.
 	const onRegister = $derived(page.url.pathname.startsWith('/register'));
 	// Two initials from a display name; from an email address only its first letter
@@ -83,14 +83,14 @@
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
 {#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
-<main id="main" tabindex="-1" class="w-{width}">
+<main id="main" tabindex="-1" class={layout}>
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
 	{#key data.viewer?.accountId ?? 'anonymous'}
 		{@render children()}
 	{/key}
 </main>
 
-<footer class="w-{width}" class:with-nav={Boolean(data.viewer)}>
+<footer class={layout} class:with-nav={Boolean(data.viewer)}>
 	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
 	<a href="/support">Support the beta</a>
@@ -111,10 +111,14 @@
 		top: 0.5rem;
 	}
 
-	/* The header spans one frame on every page; each page and its footer are centred at
-	   the page's own measure: reading pages narrow, the discovery lists wider. */
+	/* The layout rule (navigation.ts, pageLayout). The header spans the frame on every page.
+	   The primary pages fill the same frame, so their headings start at the header's edge;
+	   every other page is one narrow column, centred. --measure is the longest line for
+	   paragraphs and forms, in either. */
 	:global(:root) {
 		--frame: 70rem;
+		--narrow: 40rem;
+		--measure: 40rem;
 	}
 
 	header {
@@ -217,20 +221,16 @@
 		font-weight: 700;
 	}
 
+	/* Same box and padding as the header, so a frame page's content edge is the header's. */
 	main {
-		max-width: 40rem;
+		max-width: var(--narrow);
 		margin: 0 auto;
 		padding: 0.5rem 1rem 1rem;
 	}
 
-	main.w-medium,
-	footer.w-medium {
-		max-width: 60rem;
-	}
-
-	main.w-wide,
-	footer.w-wide {
-		max-width: 70rem;
+	main.frame,
+	footer.frame {
+		max-width: var(--frame);
 	}
 
 	main:focus {
@@ -242,7 +242,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0 1.25rem;
-		max-width: 40rem;
+		max-width: var(--narrow);
 		margin: 1rem auto 0;
 		padding: 0.25rem 1rem 2rem;
 		/* A rule along the content edge, not the padding. */

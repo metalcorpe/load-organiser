@@ -134,6 +134,7 @@
 	/* Compact: one card, groups separated by a rule; each link is a 44px-tall target. */
 	/* Not the page's label/value grid (app.css dl): a block of groups. */
 	.compact {
+		container-type: inline-size;
 		display: block;
 		margin: 1rem 0;
 		padding: 0.25rem 0.9rem;
@@ -177,7 +178,9 @@
 		font-weight: 600;
 	}
 
-	@media (min-width: 40rem) {
+	/* By the card's own width, not the screen's: beside the Me page's main column it stays
+	   narrow, heading over links. */
+	@container (min-width: 30rem) {
 		.group {
 			display: grid;
 			grid-template-columns: 9rem minmax(0, 1fr);

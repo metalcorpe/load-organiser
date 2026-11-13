@@ -56,16 +56,24 @@ export function isCurrent(href: string, pathname: string): boolean {
 }
 
 /**
- * How far a page's header, tab bar, content and footer run on large screens. The discovery
- * lists use the room (Events most, for two columns of cards); forms, details and reading pages
- * keep a narrow measure, and so does an error page at any address. On phones every width
- * is the whole screen.
+ * How a page sits on large screens (the layout rule, 2026-11-13). The header and the tabs are
+ * the same on every page.
+ *
+ * - `frame`: the primary pages, Events and Dropzones (Explore), Logbook, Friends and Me. They
+ *   share one centred frame as wide as the header, so each heading starts at the same left
+ *   edge and nothing moves when switching tabs. Inside the frame a page uses columns
+ *   (`.columns` in app.css: a main and a side column) or a grid of cards; paragraphs and forms
+ *   keep their measure (`--measure`) and never run across the frame.
+ * - `narrow`: every other page (sign-in and the other account pages, a listing's or a jump's
+ *   own page, forms, settings, reading pages, and an error at any address) is one narrow
+ *   column, centred.
+ *
+ * On phones every page is one column, the whole screen wide.
  */
-export type PageWidth = 'narrow' | 'medium' | 'wide';
+export type PageLayout = 'frame' | 'narrow';
 
-export function pageWidth(pathname: string, error = false): PageWidth {
-	if (error) return 'narrow';
-	if (pathname === '/') return 'wide';
-	if (pathname === '/dz') return 'medium';
-	return 'narrow';
+const FRAME_PAGES: readonly string[] = ['/', '/dz', '/jumps', '/activity', '/profile'];
+
+export function pageLayout(pathname: string, error = false): PageLayout {
+	return !error && FRAME_PAGES.includes(pathname) ? 'frame' : 'narrow';
 }
