@@ -117,6 +117,44 @@ test.describe('private logbook', () => {
 		);
 	});
 
+	test('an empty logbook leads with logging and import; filters and a prior count are told apart', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'empty' }));
+		const start = page.getByRole('region', { name: 'Start your logbook' });
+		await expect(start).toContainText('No jumps yet.');
+		await expect(start.getByRole('link', { name: 'Log your first jump' })).toHaveAttribute(
+			'href',
+			'/jumps/new'
+		);
+		await expect(start.getByRole('link', { name: 'Import existing logbook' })).toHaveAttribute(
+			'href',
+			'/records/import'
+		);
+		// Nothing to search yet, and no currency box to explain.
+		await expect(page.getByRole('search')).toHaveCount(0);
+		await expect(page.getByRole('region', { name: 'Jump currency' })).toHaveCount(0);
+
+		// A search with no result keeps the controls and a way out.
+		await page.goto('/jumps?q=nothing-here');
+		await expect(page.getByRole('search')).toBeVisible();
+		await expect(page.getByLabel('Place, aircraft or notes')).toHaveValue('nothing-here');
+		const none = page.getByRole('region', { name: 'No jumps match' });
+		await expect(none.getByRole('link', { name: 'Clear filters' })).toHaveAttribute('href', '/jumps');
+		await expect(page.getByRole('region', { name: 'Start your logbook' })).toHaveCount(0);
+
+		// A declared prior count with no entries is acknowledged; logging and import still lead.
+		await page.goto('/history/baseline');
+		await page.getByLabel('Jumps completed before the date').fill('150');
+		await page.getByLabel('Date', { exact: true }).fill('2026-01-01');
+		await page.getByRole('button', { name: 'Preview' }).click();
+		await page.getByRole('button', { name: 'Save prior jump count' }).click();
+		await page.goto('/jumps');
+		await expect(start).toContainText('You declared 150 prior jumps before 1 January 2026');
+		await expect(start.getByRole('link', { name: 'Log your first jump' })).toBeVisible();
+		await expect(start.getByRole('link', { name: 'Import existing logbook' })).toBeVisible();
+	});
+
 	test('an offline save sends nothing and keeps what was typed', async ({ page, context }) => {
 		await signIn(page, await createAccount({ label: 'offline' }));
 		await startAtNewPlace(page);

@@ -37,7 +37,7 @@ test('import a spreadsheet, see the jumps in the logbook, then undo it', async (
 	await signIn(page, email);
 
 	// An empty logbook points to the import.
-	await page.getByRole('link', { name: 'Import a spreadsheet' }).click();
+	await page.getByRole('link', { name: 'Import existing logbook' }).click();
 	await expect(page).toHaveURL(`${ORIGIN}/records/import`);
 	await expect(page.getByRole('heading', { name: 'Import from a spreadsheet' })).toBeVisible();
 

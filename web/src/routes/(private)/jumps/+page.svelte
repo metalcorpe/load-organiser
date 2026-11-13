@@ -85,6 +85,14 @@
 	// Wing loading shows on the rows that have one; what the others lack is said once.
 	const loadingNote = $derived(data.page.ok ? listNote(data.page.items) : null);
 	const loadingHelp = $derived(missingHelp(loadingNote?.missing ?? []));
+	// No entry at all (whatever the filters): the page leads with logging and importing, and
+	// leaves out search, filters and the currency box until there is something to show.
+	const firstUse = $derived(
+		data.page.ok && data.page.recorded_total === 0 && !data.filtered && !data.older && !data.select
+	);
+	const declared = $derived(
+		data.summary?.priorJumps ? { count: data.summary.priorJumps, before: data.summary.priorBefore } : null
+	);
 	const described = (name: string) =>
 		invalid.has(name) ? { 'aria-invalid': 'true' as const, 'aria-describedby': 'filter-error' } : {};
 </script>
@@ -123,6 +131,7 @@
 {/if}
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
+{#if !firstUse}
 {#key page.url.search}
 	<!-- novalidate: the server checks the dates and explains; WebKit otherwise blocks the
      submit silently on a date field it considers half-filled. -->
@@ -200,11 +209,37 @@
 		</details>
 	</form>
 {/key}
+{/if}
 
 {#if !data.page.ok}
-	{#if !filterError}<p class="form-error" role="alert">{jumpMessage(data.page.reason)}</p>{/if}
+	{#if !filterError && (data.page.reason === 'unavailable' || data.page.reason === 'uncertain')}
+		<!-- A failed load is not an empty logbook: say so, and offer the same page again. -->
+		<section class="load-failed" aria-labelledby="load-failed-heading">
+			<h2 id="load-failed-heading">Your jumps could not be loaded</h2>
+			<p class="form-error" role="alert">
+				{data.page.reason === 'uncertain'
+					? 'The service did not answer in time.'
+					: 'The service is unavailable right now.'} Nothing in your logbook was changed.
+			</p>
+			<p>
+				<a class="button secondary" href={page.url.pathname + page.url.search} data-sveltekit-reload
+					>Try again</a
+				>
+			</p>
+		</section>
+	{:else if !filterError}
+		<!-- Refused, not failed (an old or altered page link): trying again would not help. -->
+		<section class="load-failed" aria-labelledby="load-failed-heading">
+			<h2 id="load-failed-heading">This page of your logbook could not be shown</h2>
+			<p class="form-error" role="alert">
+				The link to this page is out of date or incomplete. Your logbook itself is unchanged.
+			</p>
+			<p><a href="/jumps">Go to your newest jumps</a></p>
+		</section>
+	{/if}
 {:else}
-	{#if data.filtered && matched}
+	<!-- The count and span of the matches; with none, the empty state below says it. -->
+	{#if data.filtered && matched && matched.jumps > 0}
 		<section class="matched" aria-label="Matching jumps">
 			<p>
 				<strong>{n(matched.jumps)} {matched.jumps === 1 ? 'jump matches' : 'jumps match'}</strong>
@@ -215,7 +250,27 @@
 			{#if data.page.items.length > 0}<p><a href="/jumps">Clear filters</a></p>{/if}
 		</section>
 	{/if}
-	{#if !data.older && !data.filtered && !data.select}
+	{#if firstUse}
+		<!-- First use: the navy card leads with the two ways to start. -->
+		<section class="card first-use" aria-labelledby="first-use-heading">
+			<h2 id="first-use-heading">Start your logbook</h2>
+			{#if declared}
+				<p>
+					You declared {n(declared.count)} prior {declared.count === 1 ? 'jump' : 'jumps'}{declared.before
+						? ` before ${formatDay(declared.before)}`
+						: ''}; they count in your total. No jumps are logged here yet: add them one by one or
+					from a spreadsheet.
+				</p>
+			{:else}
+				<p>No jumps yet. Log one with only the date, place and type, or bring in the logbook you already keep.</p>
+			{/if}
+			<div class="start">
+				<a class="button log" href="/jumps/new">Log your first jump</a>
+				<a class="button import" href="/records/import">Import existing logbook</a>
+			</div>
+			<p class="small">Import reads a spreadsheet (CSV) and checks it before anything is saved.</p>
+		</section>
+	{:else if !data.older && !data.filtered && !data.select}
 		<!-- The screen's one navy card: totals and the main action. -->
 		<section class="card" aria-label="Totals and log a jump">
 			<div class="totals">
@@ -249,7 +304,9 @@
 				<a class="button log" href="/jumps/new">Log your first jump</a>
 			{/if}
 		</section>
-		{#if data.summary?.currency}<CurrencyStatus
+	{/if}
+	{#if !data.older && !data.filtered && !data.select}
+		{#if data.summary?.currency && !firstUse}<CurrencyStatus
 				currency={data.summary.currency}
 				today={data.today}
 				progress={data.summary.progress}
@@ -319,17 +376,27 @@
 	{/if}
 
 	{#if data.page.items.length === 0 && data.filtered}
-		<p class="hint">
-			{data.older ? 'No older matching jumps.' : 'No jumps match these filters.'}
-			<a href="/jumps">Clear filters</a>
-		</p>
+		<section class="empty" aria-labelledby="empty-heading">
+			<h2 id="empty-heading">{data.older ? 'No more matching jumps' : 'No jumps match'}</h2>
+			<p>
+				{data.older
+					? 'The earlier pages hold every jump that matches these filters.'
+					: 'No jumps match these filters. Change them, or clear them to see your whole logbook.'}
+			</p>
+			<p>
+				{#if data.older}<a href={jumpsHref(data.filters)}>Back to the first matching page</a> ·
+				{/if}<a href="/jumps">Clear filters</a>
+			</p>
+		</section>
+	{:else if data.page.items.length === 0 && data.older}
+		<section class="empty" aria-labelledby="empty-heading">
+			<h2 id="empty-heading">No older jumps</h2>
+			<p>You have reached the end of your logbook.</p>
+			<p><a href="/jumps">Back to your newest jumps</a></p>
+		</section>
 	{:else if data.page.items.length === 0}
-		<p class="hint">
-			{data.older ? 'No older entries.' : 'No jumps yet. Only the date, place and type are needed.'}
-		</p>
-		{#if !data.older}
-			<p>Have a logbook already? <a href="/records/import">Import a spreadsheet</a></p>
-		{/if}
+		<!-- An empty first page with entries elsewhere (rare: changed meanwhile); firstUse covers none. -->
+		{#if !firstUse}<p class="hint">No jumps on this page. <a href="/jumps">Reload your logbook</a></p>{/if}
 	{:else if data.select}
 		<section class="batch" aria-labelledby="batch-heading">
 			<h2 id="batch-heading">Change many jumps</h2>
@@ -613,6 +680,52 @@
 		width: 100%;
 		border-radius: 999px;
 		min-height: 52px;
+	}
+
+	.first-use h2 {
+		margin: 0;
+		color: var(--brand-fg);
+		font-size: 1.35rem;
+	}
+
+	.start {
+		display: grid;
+		gap: 0.6rem;
+	}
+
+	/* The second way to start: outlined on navy, so the first stays the main action. */
+	.import {
+		width: 100%;
+		min-height: 52px;
+		border-radius: 999px;
+		border: 1px solid color-mix(in srgb, var(--brand-fg) 45%, transparent);
+		background: transparent;
+		color: var(--brand-fg);
+	}
+
+	.small {
+		font-size: 0.85rem;
+		color: var(--brand-muted);
+	}
+
+	@media (min-width: 40rem) {
+		.start {
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+
+	.empty,
+	.load-failed {
+		margin: 1rem 0;
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius);
+		background: var(--surface);
+	}
+
+	.empty p,
+	.load-failed p {
+		margin: 0.4rem 0 0;
 	}
 
 	.others {

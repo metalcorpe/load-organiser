@@ -42,7 +42,8 @@
 	{/if}
 	<p class="hint">
 		Guidance computed from your own entries, not a verified status (USPA SIM 5-2).
-		{#if status.kind !== 'no_licence'}
+		<!-- The details matter only once there is a computed status to read them against. -->
+		{#if status.kind !== 'no_licence' && status.kind !== 'no_jumps'}
 			Every jump type counts, tandem included: the logbook does not record whether you were the
 			instructor or the passenger. A prior jump count has no dates and adds nothing.
 		{/if}
