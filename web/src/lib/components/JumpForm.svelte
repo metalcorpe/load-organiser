@@ -1,6 +1,7 @@
 <script lang="ts">
 	import TextArea from '#lib/components/TextArea.svelte';
 	import { onMount } from 'svelte';
+	import { fieldsFor } from '#lib/field-errors.ts';
 	import { KIND_LABEL } from '#lib/gear.ts';
 	import { DATUM_LABEL, JUMP_TYPE_LABEL } from '#lib/jumps.ts';
 	import {
@@ -41,7 +42,9 @@
 		disabled = false,
 		numberHint = null,
 		aircraftHint = null,
-		loading = null
+		loading = null,
+		error = null,
+		openFilled = true
 	}: {
 		action: string;
 		values: Record<string, string>;
@@ -59,6 +62,13 @@
 		aircraftHint?: string | null;
 		/** For the wing loading note: the usual exit weight and the highest of the other jumps. */
 		loading?: LoadingContext | null;
+		/** The refusal shown for this form, if any: its section opens so the field can take focus. */
+		error?: string | null;
+		/**
+		 * Open the optional sections that hold values (an edit). A new jump passes false: its
+		 * proposed number, aircraft or copied details stay folded, named in each summary.
+		 */
+		openFilled?: boolean;
 	} = $props();
 
 	let dateInput: HTMLInputElement | undefined = $state();
@@ -111,11 +121,41 @@
 			? highestNote(candidate, loading.highest)
 			: ''
 	);
-	const showDetails = $derived(
-		['jump_number', 'exit_time', 'exit_altitude', 'deployment_altitude', 'freefall_seconds'].some(
-			(n) => v(n) !== ''
-		)
-	);
+	// Quick entry: the date, place and type, then a save button. Everything else is in three
+	// named sections that stay folded unless they hold something to see. A folded section is
+	// still part of the form, so its values (typed, proposed or saved) are always sent.
+	const SECTIONS = {
+		details: {
+			fields: ['jump_number', 'freefall_seconds', 'exit_time', 'time_zone', 'exit_altitude',
+				'deployment_altitude', 'altitude_unit', 'altitude_datum', 'aircraft'],
+			// What counts as filled in (a time zone, unit or datum alone says nothing).
+			named: { jump_number: 'number', exit_time: 'exit time', exit_altitude: 'altitudes',
+				deployment_altitude: 'altitudes', freefall_seconds: 'freefall', aircraft: 'aircraft' }
+		},
+		equipment: {
+			fields: ['component_ids', 'other_gear', 'new_component_kind', 'new_component_label',
+				'exit_weight'],
+			named: { other_gear: 'other equipment', new_component_label: 'new component',
+				exit_weight: 'exit weight' }
+		},
+		notes: { fields: ['notes', 'links'], named: { notes: 'notes', links: 'links' } }
+	} as const;
+	type Section = keyof typeof SECTIONS;
+
+	const filled = (section: Section): string[] => {
+		const names: string[] = Object.entries(SECTIONS[section].named)
+			.filter(([field]) => v(field).trim() !== '')
+			.map(([, name]) => name);
+		if (section === 'equipment' && selected.length > 0) {
+			names.unshift(selected.length === 1 ? '1 item of gear' : `${selected.length} items of gear`);
+		}
+		return [...new Set(names)];
+	};
+	const errorFields = $derived(fieldsFor(error));
+	const hasError = (section: Section) =>
+		errorFields.some((name) => (SECTIONS[section].fields as readonly string[]).includes(name));
+	const isOpen = (section: Section) =>
+		hasError(section) || (openFilled && filled(section).length > 0);
 </script>
 
 <form
@@ -153,157 +193,220 @@
 		</div>
 	</div>
 
-	<details open={showDetails}>
-		<summary>Number, time and altitudes (optional)</summary>
-		<div class="pair">
+	<!-- The essentials are enough to save: this button sends the whole form, folded
+	     sections included, exactly like the one at the end. -->
+	<div class="form-actions">
+		<button class="button" type="submit" {disabled}>{submitLabel}</button>
+	</div>
+
+	<details class="section" open={isOpen('details')}>
+		<summary>
+			Number, time, altitudes and aircraft (optional){#if filled('details').length}<span
+					class="filled"><span class="visually-hidden">. </span>Filled in: {filled('details').join(', ')}</span
+				>{/if}
+		</summary>
+		<div class="section-body">
+			<div class="pair">
+				<div class="field">
+					<label for="jump_number">Your jump number</label>
+					<input
+						id="jump_number"
+						name="jump_number"
+						inputmode="numeric"
+						maxlength="8"
+						defaultValue={v('jump_number')}
+						aria-describedby={numberHint ? 'jump_number_hint' : undefined}
+					/>
+					{#if numberHint}<p class="hint" id="jump_number_hint">{numberHint} Change it if needed.</p>{/if}
+				</div>
+				<div class="field">
+					<label for="freefall_seconds">Freefall (seconds)</label>
+					<input id="freefall_seconds" name="freefall_seconds" inputmode="numeric" maxlength="4" defaultValue={v('freefall_seconds')} />
+				</div>
+			</div>
+			<div class="pair">
+				<div class="field">
+					<label for="exit_time">Exit time (local)</label>
+					<input id="exit_time" name="exit_time" type="time" defaultValue={v('exit_time')} />
+				</div>
+				<div class="field">
+					<label for="time_zone">Time zone</label>
+					<input id="time_zone" name="time_zone" maxlength="64" placeholder="Europe/Madrid" autocomplete="off" bind:this={zoneInput} defaultValue={v('time_zone')} />
+				</div>
+			</div>
+			<p class="hint">Leave the time empty if you don't know it; it is never filled in for you.</p>
+			<div class="pair">
+				<div class="field">
+					<label for="exit_altitude">Exit altitude</label>
+					<input id="exit_altitude" name="exit_altitude" inputmode="numeric" maxlength="7" defaultValue={v('exit_altitude')} />
+				</div>
+				<div class="field">
+					<label for="deployment_altitude">Deployment altitude</label>
+					<input id="deployment_altitude" name="deployment_altitude" inputmode="numeric" maxlength="7" defaultValue={v('deployment_altitude')} />
+				</div>
+			</div>
+			<fieldset class="field">
+				<legend>Altitude unit</legend>
+				<label class="choice"><input type="radio" name="altitude_unit" value="ft" checked={v('altitude_unit') === 'ft'} /> Feet</label>
+				<label class="choice"><input type="radio" name="altitude_unit" value="m" checked={v('altitude_unit') === 'm'} /> Metres</label>
+			</fieldset>
 			<div class="field">
-				<label for="jump_number">Your jump number</label>
+				<label for="altitude_datum">Measured from</label>
+				<select id="altitude_datum" name="altitude_datum">
+					{#each Object.entries(DATUM_LABEL) as [value, label] (value)}
+						<option {value} selected={(v('altitude_datum') || 'unspecified') === value}>{label}</option>
+					{/each}
+				</select>
+			</div>
+
+			<div class="field">
+				<label for="aircraft">Aircraft (optional)</label>
 				<input
-					id="jump_number"
-					name="jump_number"
-					inputmode="numeric"
-					maxlength="8"
-					defaultValue={v('jump_number')}
-					aria-describedby={numberHint ? 'jump_number_hint' : undefined}
+					id="aircraft"
+					name="aircraft"
+					maxlength="60"
+					autocomplete="off"
+					placeholder="e.g. Cessna 208 SX-ABC"
+					defaultValue={v('aircraft')}
+					aria-describedby={aircraftHint ? 'aircraft_hint' : undefined}
 				/>
-				{#if numberHint}<p class="hint" id="jump_number_hint">{numberHint} Change it if needed.</p>{/if}
+				{#if aircraftHint}<p class="hint" id="aircraft_hint">{aircraftHint} Change it if needed.</p>{/if}
 			</div>
-			<div class="field">
-				<label for="freefall_seconds">Freefall (seconds)</label>
-				<input id="freefall_seconds" name="freefall_seconds" inputmode="numeric" maxlength="4" defaultValue={v('freefall_seconds')} />
-			</div>
-		</div>
-		<div class="pair">
-			<div class="field">
-				<label for="exit_time">Exit time (local)</label>
-				<input id="exit_time" name="exit_time" type="time" defaultValue={v('exit_time')} />
-			</div>
-			<div class="field">
-				<label for="time_zone">Time zone</label>
-				<input id="time_zone" name="time_zone" maxlength="64" placeholder="Europe/Madrid" autocomplete="off" bind:this={zoneInput} defaultValue={v('time_zone')} />
-			</div>
-		</div>
-		<p class="hint">Leave the time empty if you don't know it; it is never filled in for you.</p>
-		<div class="pair">
-			<div class="field">
-				<label for="exit_altitude">Exit altitude</label>
-				<input id="exit_altitude" name="exit_altitude" inputmode="numeric" maxlength="7" defaultValue={v('exit_altitude')} />
-			</div>
-			<div class="field">
-				<label for="deployment_altitude">Deployment altitude</label>
-				<input id="deployment_altitude" name="deployment_altitude" inputmode="numeric" maxlength="7" defaultValue={v('deployment_altitude')} />
-			</div>
-		</div>
-		<fieldset class="field">
-			<legend>Altitude unit</legend>
-			<label class="choice"><input type="radio" name="altitude_unit" value="ft" checked={v('altitude_unit') === 'ft'} /> Feet</label>
-			<label class="choice"><input type="radio" name="altitude_unit" value="m" checked={v('altitude_unit') === 'm'} /> Metres</label>
-		</fieldset>
-		<div class="field">
-			<label for="altitude_datum">Measured from</label>
-			<select id="altitude_datum" name="altitude_datum">
-				{#each Object.entries(DATUM_LABEL) as [value, label] (value)}
-					<option {value} selected={(v('altitude_datum') || 'unspecified') === value}>{label}</option>
-				{/each}
-			</select>
 		</div>
 	</details>
 
-	<div class="field">
-		<label for="aircraft">Aircraft (optional)</label>
-		<input
-			id="aircraft"
-			name="aircraft"
-			maxlength="60"
-			autocomplete="off"
-			placeholder="e.g. Cessna 208 SX-ABC"
-			defaultValue={v('aircraft')}
-			aria-describedby={aircraftHint ? 'aircraft_hint' : undefined}
-		/>
-		{#if aircraftHint}<p class="hint" id="aircraft_hint">{aircraftHint} Change it if needed.</p>{/if}
-	</div>
+	<details class="section" open={isOpen('equipment')}>
+		<summary>
+			Equipment and exit weight (optional){#if filled('equipment').length}<span class="filled"
+					><span class="visually-hidden">. </span>Filled in: {filled('equipment').join(', ')}</span
+				>{/if}
+		</summary>
+		<div class="section-body">
+			<fieldset class="field">
+				<legend>Equipment used (optional)</legend>
+				<p class="hint">
+					Tick only what you actually jumped. Leave everything empty if you don't know; your current rig is
+					not assumed.
+				</p>
+				{#each gear as item (item.id)}
+					<label class="choice">
+						<input type="checkbox" name="component_ids" value={item.id} checked={chosen.has(item.id)} />
+						{item.label} <span class="meta"
+							>({KIND_LABEL[item.kind] ?? item.kind}{item.canopySize ? `, ${item.canopySize} sq ft` : ''}{item.archived
+								? ', archived'
+								: ''})</span
+						>
+					</label>
+				{/each}
+				<div class="field">
+					<label for="other_gear">Borrowed, rented or other equipment</label>
+					<input id="other_gear" name="other_gear" maxlength="200" placeholder="e.g. rented student rig" defaultValue={v('other_gear')} />
+				</div>
+				<!-- Open when re-shown with a label, so nothing hidden is sent again. -->
+				<details open={v('new_component_label') !== '' || errorFields.includes('new_component_label')}>
+					<summary>Add a new component used on this jump</summary>
+					<input type="hidden" name="new_component_key" value={keys.component} />
+					<div class="pair">
+						<div class="field">
+							<label for="new_component_kind">Component type</label>
+							<select id="new_component_kind" name="new_component_kind">
+								{#each Object.entries(KIND_LABEL) as [value, label] (value)}
+									<option {value} selected={(v('new_component_kind') || 'main') === value}>{label}</option>
+								{/each}
+							</select>
+						</div>
+						<div class="field">
+							<label for="new_component_label">Component label</label>
+							<input id="new_component_label" name="new_component_label" maxlength="80" defaultValue={v('new_component_label')} />
+						</div>
+					</div>
+					<p class="hint">
+						Saved to your private gear together with this jump. Leave the label empty to skip it; you can add
+						serials and dates later under Gear.
+					</p>
+				</details>
+			</fieldset>
 
-	<fieldset class="field">
-		<legend>Equipment used (optional)</legend>
-		<p class="hint">
-			Tick only what you actually jumped. Leave everything empty if you don't know; your current rig is
-			not assumed.
-		</p>
-		{#each gear as item (item.id)}
-			<label class="choice">
-				<input type="checkbox" name="component_ids" value={item.id} checked={chosen.has(item.id)} />
-				{item.label} <span class="meta"
-					>({KIND_LABEL[item.kind] ?? item.kind}{item.canopySize ? `, ${item.canopySize} sq ft` : ''}{item.archived
-						? ', archived'
-						: ''})</span
-				>
-			</label>
-		{/each}
-		<div class="field">
-			<label for="other_gear">Borrowed, rented or other equipment</label>
-			<input id="other_gear" name="other_gear" maxlength="200" placeholder="e.g. rented student rig" defaultValue={v('other_gear')} />
-		</div>
-		<!-- Open when re-shown with a label, so nothing hidden is sent again. -->
-		<details open={v('new_component_label') !== ''}>
-			<summary>Add a new component used on this jump</summary>
-			<input type="hidden" name="new_component_key" value={keys.component} />
-			<div class="pair">
-				<div class="field">
-					<label for="new_component_kind">Component type</label>
-					<select id="new_component_kind" name="new_component_kind">
-						{#each Object.entries(KIND_LABEL) as [value, label] (value)}
-							<option {value} selected={(v('new_component_kind') || 'main') === value}>{label}</option>
-						{/each}
-					</select>
-				</div>
-				<div class="field">
-					<label for="new_component_label">Component label</label>
-					<input id="new_component_label" name="new_component_label" maxlength="80" defaultValue={v('new_component_label')} />
-				</div>
+			<div class="field">
+				<label for="exit_weight">Exit weight on this jump in {UNIT_LABEL[unit]} (optional)</label>
+				<input type="hidden" name="exit_weight_unit" value={unit} />
+				{#if v('exit_weight_saved')}
+					<!-- The saved weight and how it was shown: an untouched field is not sent again,
+					     so a conversion to and from the unit never changes it. -->
+					<input type="hidden" name="exit_weight_saved" value={v('exit_weight_saved')} />
+					<input type="hidden" name="exit_weight_shown" value={v('exit_weight_shown')} />
+				{/if}
+				<input
+					id="exit_weight"
+					name="exit_weight"
+					inputmode="decimal"
+					maxlength="6"
+					autocomplete="off"
+					defaultValue={v('exit_weight')}
+					aria-describedby="exit_weight_hint"
+				/>
+				<p class="hint" id="exit_weight_hint">
+					Your weight with your gear on, for the wing loading.
+					{#if loading?.usualGrams}Empty: your usual exit weight, {formatWeight(loading.usualGrams, unit)}.
+					{:else}Set your usual exit weight on your <a href="/profile#weight-heading">profile</a>.{/if}
+				</p>
+				<p class="hint" role="status">{note}</p>
 			</div>
-			<p class="hint">
-				Saved to your private gear together with this jump. Leave the label empty to skip it; you can add
-				serials and dates later under Gear.
-			</p>
-		</details>
-	</fieldset>
+		</div>
+	</details>
 
-	<div class="field">
-		<label for="exit_weight">Exit weight on this jump in {UNIT_LABEL[unit]} (optional)</label>
-		<input type="hidden" name="exit_weight_unit" value={unit} />
-		{#if v('exit_weight_saved')}
-			<!-- The saved weight and how it was shown: an untouched field is not sent again,
-			     so a conversion to and from the unit never changes it. -->
-			<input type="hidden" name="exit_weight_saved" value={v('exit_weight_saved')} />
-			<input type="hidden" name="exit_weight_shown" value={v('exit_weight_shown')} />
-		{/if}
-		<input
-			id="exit_weight"
-			name="exit_weight"
-			inputmode="decimal"
-			maxlength="6"
-			autocomplete="off"
-			defaultValue={v('exit_weight')}
-			aria-describedby="exit_weight_hint"
-		/>
-		<p class="hint" id="exit_weight_hint">
-			Your weight with your gear on, for the wing loading.
-			{#if loading?.usualGrams}Empty: your usual exit weight, {formatWeight(loading.usualGrams, unit)}.
-			{:else}Set your usual exit weight on your <a href="/profile#weight-heading">profile</a>.{/if}
-		</p>
-		<p class="hint" role="status">{note}</p>
-	</div>
-
-	<div class="field">
-		<label for="notes">Notes (optional, private)</label>
-		<TextArea id="notes" name="notes" maxlength={2000} rows={3} initial={v('notes')} />
-	</div>
-	<div class="field">
-		<label for="links">Links (optional, private; one per line, at most five)</label>
-		<TextArea id="links" name="links" rows={2} spellcheck="false" initial={v('links')} />
-	</div>
+	<details class="section" open={isOpen('notes')}>
+		<summary>
+			Notes and links (optional, private){#if filled('notes').length}<span class="filled"
+					><span class="visually-hidden">. </span>Filled in: {filled('notes').join(', ')}</span
+				>{/if}
+		</summary>
+		<div class="section-body">
+			<div class="field">
+				<label for="notes">Notes (optional, private)</label>
+				<TextArea id="notes" name="notes" maxlength={2000} rows={3} initial={v('notes')} />
+			</div>
+			<div class="field">
+				<label for="links">Links (optional, private; one per line, at most five)</label>
+				<TextArea id="links" name="links" rows={2} spellcheck="false" initial={v('links')} />
+			</div>
+		</div>
+	</details>
 	<p class="hint">This is your own record. Nothing here is shared or verified.</p>
 	<div class="form-actions">
 		<button class="button" type="submit" {disabled}>{submitLabel}</button>
 	</div>
 </form>
+
+<style>
+	/* A folded group of optional fields: a full-width row with its summary, then the fields with
+	   the form's own spacing. */
+	.section {
+		border-top: 1px solid var(--border);
+		padding-top: 0.25rem;
+	}
+
+	.section > summary {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.1rem 0.4rem;
+	}
+
+	.section > summary::after {
+		order: 1;
+	}
+
+	.filled {
+		order: 2;
+		flex-basis: 100%;
+		color: var(--muted);
+		font-size: 0.9rem;
+		font-weight: 400;
+	}
+
+	.section-body {
+		display: grid;
+		gap: 1rem;
+		padding: 0.5rem 0 0.25rem;
+	}
+</style>

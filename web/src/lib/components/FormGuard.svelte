@@ -12,7 +12,8 @@
 	//    names a field (field-errors.ts), that field is marked aria-invalid, described
 	//    by the alert, and focused instead. Between the two pages only the path and the
 	//    form's position on it are kept, never form content. Search (GET) forms, client
-	//    navigations and ordinary visits never move focus.
+	//    navigations and ordinary visits never move focus. A field inside a folded
+	//    <details> section is unfolded first, so it can take focus.
 	// 3. After a POST that comes back to the same page with a confirmation
 	//    (role="status") for the form that was sent, that confirmation is focused and
 	//    scrolled into view, so a save lower on the page does not leave you at the top
@@ -69,6 +70,13 @@
 
 	const errorOf = (form: HTMLFormElement) => messageOf(form, ALERT);
 
+	/** A field inside folded sections (<details>) cannot take focus: unfold them first. */
+	function reveal(field: HTMLElement) {
+		for (let d = field.closest('details'); d; d = d.parentElement?.closest('details') ?? null) {
+			d.open = true;
+		}
+	}
+
 	function bringIntoView(target: HTMLElement) {
 		if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
 		target.focus({ preventScroll: true });
@@ -115,6 +123,7 @@
 		// would repeat it and add guidance about other fields.
 		const own = firstOwnError(form);
 		if (own) {
+			reveal(own);
 			own.focus({ preventScroll: true });
 			own.scrollIntoView({ block: 'center' });
 			return;
@@ -134,6 +143,7 @@
 			field.setAttribute('aria-invalid', 'true');
 			// Typing a new value clears the mark; the message stays until the next save.
 			field.addEventListener('input', () => field.removeAttribute('aria-invalid'), { once: true });
+			reveal(field);
 			field.focus({ preventScroll: true });
 			field.scrollIntoView({ block: 'center' });
 			return;

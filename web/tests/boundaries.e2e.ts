@@ -1,6 +1,7 @@
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
 import { randomBytes } from 'node:crypto';
 import { PASSWORD, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // #160 what leaves the server: raw HTML and SvelteKit data payloads of public
 // pages, and cross-site writes to JSON routes, on the production-cookie preview.
@@ -48,13 +49,13 @@ test.describe('payload boundaries', () => {
 		await page.getByRole('button', { name: 'Use this place' }).click();
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 		await page.getByLabel('Type', { exact: true }).selectOption('freefly');
-		await page.getByText('Number, time and altitudes (optional)').click();
+		await openJumpSections(page);
 		await page.getByLabel('Your jump number').fill('4321');
 		// Field names of private values; the values themselves are checked below.
 		const privateKeys = ['"notes"', '"other_gear"', '"jump_number"', '"place_id"', '"links"'];
 		await page.getByLabel('Borrowed, rented or other equipment').fill(secrets[2]);
 		await page.getByLabel('Notes (optional, private)').fill(secrets[1]);
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await page.getByRole('link', { name: 'Share a summary of this jump' }).click();
 		await page.getByLabel(/Caption/).fill(`Shared caption ${tag}`);

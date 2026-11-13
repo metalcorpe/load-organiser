@@ -214,6 +214,7 @@
 		version={(echoed && form && 'based' in form && form.based) || jump.version}
 		submitLabel="Save changes"
 		loading={context}
+		error={form && form.form === 'save' && 'error' in form ? form.error : null}
 	/>
 {/if}
 
