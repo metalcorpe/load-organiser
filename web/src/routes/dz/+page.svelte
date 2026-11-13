@@ -45,7 +45,7 @@
 		</select>
 	</div>
 	<div class="form-actions">
-		<button class="button secondary" type="submit">Search</button>
+		<button class="button" type="submit">Search</button>
 	</div>
 </form>
 
@@ -73,6 +73,7 @@
 					{venue.locality ? `${venue.locality}, ` : ''}{countryName(venue.country)}
 				</span>
 				{#if venue.status === 'closed'}<span class="tag">Closed</span>{/if}
+				<span class="chevron" aria-hidden="true"></span>
 			</li>
 		{/each}
 	</ul>
@@ -100,47 +101,65 @@
 	}
 
 	/* One grouped list: a single outline and quiet rules between rows instead of a card per
-	   dropzone. The name link still covers its row; hover tints the row, focus rings it inside. */
-	.grouped {
+	   dropzone. The name link still covers its row, and a chevron marks each row as one to open
+	   (on touch there is no hover). Hover tints the row; focus rings it inside its own edges.
+	   The selectors repeat .results.rows so they outrank the card rows in app.css. */
+	.results.rows.grouped {
 		gap: 0;
 		border-radius: var(--radius);
 		background: var(--surface);
 		box-shadow: 0 0 0 1px var(--border);
 	}
 
-	.grouped > li {
+	.results.rows.grouped > li {
+		padding-right: 2.5rem;
 		border-radius: 0;
 		background: none;
 		box-shadow: none;
 	}
 
-	.grouped > li + li {
+	.results.rows.grouped > li + li {
 		border-top: 1px solid var(--border);
 	}
 
-	.grouped > li:first-child {
+	.results.rows.grouped > li:first-child {
 		border-radius: var(--radius) var(--radius) 0 0;
 	}
 
-	.grouped > li:last-child {
+	.results.rows.grouped > li:last-child {
 		border-radius: 0 0 var(--radius) var(--radius);
 	}
 
-	.grouped > li:only-child {
+	.results.rows.grouped > li:only-child {
 		border-radius: var(--radius);
 	}
 
-	.grouped > li:hover {
+	.results.rows.grouped > li:has(> a.title):hover {
 		background: var(--surface-soft);
 		box-shadow: none;
 	}
 
-	.grouped > li:hover > a.title {
+	.results.rows.grouped > li:hover > a.title {
 		text-decoration: underline;
 	}
 
-	.grouped > li:has(> a.title:focus-visible) {
+	.results.rows.grouped > li:has(> a.title:focus-visible) {
 		outline-offset: -3px;
+	}
+
+	.chevron {
+		position: absolute;
+		right: 1.1rem;
+		top: 50%;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-right: 2px solid var(--muted);
+		border-bottom: 2px solid var(--muted);
+		transform: translateY(-50%) rotate(-45deg);
+	}
+
+	.results.rows.grouped > li:hover > .chevron {
+		border-color: var(--accent);
 	}
 
 	.meta {
@@ -169,7 +188,7 @@
 			align-items: end;
 		}
 
-		.grouped > li {
+		.results.rows.grouped > li {
 			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 5rem;
 			align-items: baseline;
 			gap: 1rem;
