@@ -72,11 +72,14 @@
 
 <ExploreSwitch />
 <h1>Events</h1>
-<p class="lede">Boogies, camps, courses and other events in Europe. You register with the organizer.</p>
-{#if !data.viewer}
-	<!-- Join and Sign in are in the header; this only says what an account adds. -->
-	<p class="join-line">With an account you can save events and keep a private logbook.</p>
-{/if}
+<!-- One short introduction. For guests it ends with what an account adds; Join and Sign in
+     are in the header. -->
+<p class="lede intro">
+	Boogies, camps, courses and other events in Europe. You register with the organizer{#if !data.viewer}<span
+			class="account-note"
+			>; an account lets you save events and keep a private logbook</span
+		>{/if}.
+</p>
 
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
@@ -93,7 +96,7 @@
 			defaultValue={data.filters.q}
 			autocomplete="off"
 		/>
-		<button class="button" type="submit">Search</button>
+		<button class="button secondary" type="submit">Search</button>
 	</div>
 	<details class="more">
 		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
@@ -240,8 +243,22 @@
 <p class="aside">Looking for a dropzone? <a href="/dz">Browse dropzones</a>.</p>
 
 <style>
+	/* The heading and introduction sit close together so the first events show early on a phone. */
+	h1 {
+		margin: 0 0 0.25rem;
+	}
+
+	.intro {
+		max-width: 44rem;
+		margin: 0 0 0.75rem;
+	}
+
+	.account-note {
+		font-size: 0.95em;
+	}
+
 	.board-search {
-		margin: 0.5rem 0 0.25rem;
+		margin: 0 0 0.25rem;
 	}
 
 	.search-row {
@@ -263,6 +280,10 @@
 
 	.more {
 		margin-top: 0.25rem;
+	}
+
+	.more[open] {
+		margin-bottom: 0.75rem;
 	}
 
 	.filters {
@@ -358,11 +379,6 @@
 		font-weight: 700;
 	}
 
-	.join-line {
-		margin: -0.25rem 0 0.75rem;
-		color: var(--muted);
-	}
-
 	.list-heading {
 		font-size: 1.15rem;
 		margin: 0 0 0.25rem;
@@ -376,5 +392,35 @@
 
 	.aside {
 		color: var(--muted);
+	}
+
+	/* Large screens: the search keeps a readable length, the open filters lie in one band of
+	   columns, and the events run in two columns. Cards fill row by row, so the reading order
+	   (left, right, next row) is still the date order and the page order. */
+	@media (min-width: 60rem) {
+		.search-row {
+			max-width: 44rem;
+		}
+
+		.filters {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			align-items: start;
+		}
+
+		.when {
+			grid-column: span 2;
+		}
+
+		.secondary-fields {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.results.cards {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.results.cards > li {
+			display: grid;
+		}
 	}
 </style>
