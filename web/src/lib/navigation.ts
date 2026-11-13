@@ -51,11 +51,13 @@ export function isCurrent(href: string, pathname: string): boolean {
 /**
  * How far a page's header, tab bar, content and footer run on large screens. The discovery
  * lists use the room (Events most, for two columns of cards); forms, details and reading pages
- * keep a narrow measure. On phones every width is the whole screen.
+ * keep a narrow measure, and so does an error page at any address. On phones every width
+ * is the whole screen.
  */
 export type PageWidth = 'narrow' | 'medium' | 'wide';
 
-export function pageWidth(pathname: string): PageWidth {
+export function pageWidth(pathname: string, error = false): PageWidth {
+	if (error) return 'narrow';
 	if (pathname === '/') return 'wide';
 	if (pathname === '/dz') return 'medium';
 	return 'narrow';

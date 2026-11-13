@@ -36,12 +36,13 @@
 						: page.url.pathname + page.url.search
 				)}`
 	);
-	// Two initials from a display name; from an email address only its first letter
-	// ("firstuse-1794@…" is not "F1").
 	// Discovery lists run wider on large screens; everything else keeps the narrow measure.
-	const width = $derived(pageWidth(page.url.pathname));
+	// An error page keeps the narrow measure whatever the address.
+	const width = $derived(pageWidth(page.url.pathname, Boolean(page.error)));
 	// On the registration page itself, Join would only point back at the form.
 	const onRegister = $derived(page.url.pathname.startsWith('/register'));
+	// Two initials from a display name; from an email address only its first letter
+	// ("firstuse-1794@…" is not "F1").
 	const initials = $derived(
 		data.viewer?.displayName
 			? data.viewer.displayName

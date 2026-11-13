@@ -41,5 +41,7 @@ describe('primary navigation', () => {
 		for (const path of ['/dz/abc', '/events/abc', '/register', '/sign-in', '/jumps', '/privacy']) {
 			expect(pageWidth(path)).toBe('narrow');
 		}
+		expect(pageWidth('/', true)).toBe('narrow');
+		expect(pageWidth('/dz', true)).toBe('narrow');
 	});
 });

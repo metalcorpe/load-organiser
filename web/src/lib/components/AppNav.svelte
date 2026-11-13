@@ -89,11 +89,15 @@
 			box-shadow: inset 0 -3px var(--accent);
 		}
 
-		/* On a wide page the tabs keep their size and start at the content's edge. */
+		/* The tabs start at the content's edge, like the header and the page. */
+		ul {
+			padding: 0 1rem;
+		}
+
+		/* On a wide page they keep their size instead of spreading across it. */
 		ul.w-medium,
 		ul.w-wide {
 			grid-template-columns: repeat(4, minmax(0, 9rem));
-			padding: 0 1rem;
 		}
 	}
 </style>
