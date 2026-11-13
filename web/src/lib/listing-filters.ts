@@ -62,6 +62,12 @@ export function boardHref(filters: BoardFilters, cursor?: string): string {
 	return search ? `/?${search}` : '/';
 }
 
+/**
+ * Longest board search accepted as a context. A search of 80 characters of text, every
+ * filter and a page cursor fits; the same local-path checks apply as for any return path.
+ */
+export const RESULTS_LIMIT = 2048;
+
 /** Any absolute base works: only the path and query of a checked local path are read. */
 const BOARD_BASE = 'https://board.invalid';
 
@@ -73,7 +79,7 @@ const BOARD_BASE = 'https://board.invalid';
  * context: null, and the event page offers only "All events".
  */
 export function resultsPath(raw: string | null | undefined): string | null {
-	const path = safeReturnPath(raw);
+	const path = safeReturnPath(raw, RESULTS_LIMIT);
 	if (!path) return null;
 	const url = new URL(path, BOARD_BASE);
 	if (url.pathname !== '/') return null;
@@ -85,13 +91,14 @@ export function resultsPath(raw: string | null | undefined): string | null {
 /** Longest return path the sign-in pages accept (safeReturnPath checks the decoded value). */
 const RETURN_LIMIT = 512;
 /** A sane cap for an ordinary link: the board URL is encoded twice inside it. */
-const LINK_LIMIT = 2048;
+const LINK_LIMIT = 4096;
 
 /**
  * An event's address, optionally carrying the board search it was opened from and the
  * "sign in to save" intent. The context is dropped when the address would be too long: for
  * the sign-in return path (`save`), past what sign-in accepts, so the return itself is never
- * lost; for an ordinary link, only past a generous cap.
+ * lost (the server then carries the context another way: results-context.ts); for an
+ * ordinary link, only past a generous cap.
  */
 export function eventHref(
 	id: string,

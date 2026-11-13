@@ -95,7 +95,7 @@ describe('eventHref', () => {
 		const long = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(480)}` });
 		expect(long).toContain('results=');
 		const huge = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(512)}&q=${'é'.repeat(80)}` });
-		expect(huge.length).toBeLessThanOrEqual(2048);
+		expect(huge.length).toBeLessThanOrEqual(4096);
 	});
 
 	it('drops a too-long search from the sign-in return path only', () => {

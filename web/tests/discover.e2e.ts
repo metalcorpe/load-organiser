@@ -323,7 +323,10 @@ test.describe('search context and the filter panel', () => {
 			'?results=https%3A%2F%2Fevil.example%2F',
 			'?results=%2F%5Cevil.example',
 			'?results=%2Fprofile',
-			'?results=%2F'
+			'?results=%2F',
+			// A context id with no matching cookie (forged, or expired) gives no context either.
+			'?ctx=AAAAAAAAAAAAAAAA',
+			'?save=1&ctx=not-a-valid-id'
 		]) {
 			await page.goto(`/events/${listing.id}${query}`);
 			await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.title);
@@ -356,6 +359,57 @@ test.describe('search context and the filter panel', () => {
 		await expect(page.getByText('Saved privately — you are not registered.')).toBeVisible();
 		await page.getByRole('link', { name: 'Back to results' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}${search}`);
+	});
+
+	test('a long search on its second page survives sign-in and saving', async ({ page, browser }) => {
+		test.setTimeout(120_000);
+		const base = token();
+		// Accented text is encoded twice inside the sign-in return path: well past its limit.
+		const phrase = `${base} ${'é'.repeat(60)}`;
+		// One more than a page (20), one at a time: reviewer sessions are not shared.
+		for (let i = 0; i < 21; i++) await publishListing(`${phrase} ${i}`);
+		await page.goto(`/?q=${encodeURIComponent(phrase)}&country=PT&from=2027-07-01`);
+		await page.getByRole('link', { name: 'More listings' }).click();
+		await expect(page).toHaveURL(/[?&]cursor=/);
+		const second = new URL(page.url());
+		const results = `${second.pathname}${second.search}`;
+
+		await page.getByRole('link', { name: new RegExp(base) }).first().click();
+		await expect(page.getByRole('link', { name: 'Back to results' })).toHaveAttribute('href', results);
+		// Too long for the return path: the page carries it by a short id instead.
+		const signIn = page.getByRole('link', { name: 'Sign in to save this privately' });
+		const returnTo = new URL((await signIn.getAttribute('href'))!, ORIGIN).searchParams.get('returnTo')!;
+		expect(returnTo).toMatch(/^\/events\/[0-9a-f-]+\?save=1&ctx=[A-Za-z0-9_-]{16}$/);
+		expect(returnTo).not.toContain('results=');
+
+		const email = await createAccount({ label: 'long-context' });
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		await signIn.click();
+		await signInHere(page, email);
+		await expect(page).toHaveURL(/\?save=1&ctx=/);
+		await page.getByRole('button', { name: 'Save privately' }).click();
+		await expect(page.getByText('Saved privately — you are not registered.')).toBeVisible();
+		await page.getByRole('link', { name: 'Back to results' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}${results}`);
+		await expect(page.getByLabel('Title or organizer')).toHaveValue(phrase);
+		await expect(page.getByLabel('Country')).toHaveValue('PT');
+		await expect(page.getByLabel('From', { exact: true })).toHaveValue('2027-07-01');
+
+		// The same without JavaScript: the full sign-in page, then back with the search.
+		const plain = await browser.newContext({
+			javaScriptEnabled: false,
+			ignoreHTTPSErrors: true,
+			baseURL: ORIGIN
+		});
+		const nojs = await plain.newPage();
+		await nojs.goto(results);
+		await nojs.getByRole('link', { name: new RegExp(base) }).first().click();
+		await nojs.getByRole('link', { name: 'Sign in to save this privately' }).click();
+		await expect(nojs.getByRole('heading', { level: 1, name: 'Sign in' })).toBeVisible();
+		await signInHere(nojs, email);
+		await expect(nojs).toHaveURL(/\?save=1&ctx=/);
+		await expect(nojs.getByRole('link', { name: 'Back to results' })).toHaveAttribute('href', results);
+		await plain.close();
 	});
 
 	test('country and dates come first; type, discipline and audience fold away', async ({ page }) => {

@@ -2,7 +2,6 @@
 	import Notice from '#lib/components/Notice.svelte';
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
-	import { eventHref } from '#lib/listing-filters.ts';
 	import {
 		AUDIENCE_LABEL,
 		CATEGORY_LABEL,
@@ -61,9 +60,7 @@
 		].filter((v): v is string => Boolean(v))
 	);
 	// The board search this was opened from stays with the page through sign-in and saving.
-	const signInToSave = $derived(
-		`/sign-in?returnTo=${encodeURIComponent(eventHref(item.id, { save: true, results: data.results }))}`
-	);
+	const signInToSave = $derived(data.signInToSave);
 	const actionHref = (name: string) =>
 		data.results ? `?/${name}&results=${encodeURIComponent(data.results)}` : `?/${name}`;
 </script>
