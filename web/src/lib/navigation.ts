@@ -47,3 +47,16 @@ export function isCurrent(href: string, pathname: string): boolean {
 	if (href === '/') return pathname === '/';
 	return pathname === href || pathname.startsWith(`${href}/`);
 }
+
+/**
+ * How far a page's header, tab bar, content and footer run on large screens. The discovery
+ * lists use the room (Events most, for two columns of cards); forms, details and reading pages
+ * keep a narrow measure. On phones every width is the whole screen.
+ */
+export type PageWidth = 'narrow' | 'medium' | 'wide';
+
+export function pageWidth(pathname: string): PageWidth {
+	if (pathname === '/') return 'wide';
+	if (pathname === '/dz') return 'medium';
+	return 'narrow';
+}

@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { PRIMARY_NAV, isCurrentTab } from '#lib/navigation.ts';
+	import type { PageWidth } from '#lib/navigation.ts';
 	import NavIcon from './NavIcon.svelte';
+
+	/** The page's measure, so the tabs line up with the header and content on large screens. */
+	let { width = 'narrow' }: { width?: PageWidth } = $props();
 </script>
 
 <nav aria-label="Primary">
-	<ul>
+	<ul class="w-{width}">
 		{#each PRIMARY_NAV as item (item.href)}
 			{@const current = isCurrentTab(item, page.url.pathname)}
 			<li>
@@ -35,6 +39,14 @@
 		margin: 0 auto;
 		padding: 0;
 		list-style: none;
+	}
+
+	ul.w-medium {
+		max-width: 60rem;
+	}
+
+	ul.w-wide {
+		max-width: 70rem;
 	}
 
 	a {
@@ -75,6 +87,13 @@
 
 		a[aria-current='page'] {
 			box-shadow: inset 0 -3px var(--accent);
+		}
+
+		/* On a wide page the tabs keep their size and start at the content's edge. */
+		ul.w-medium,
+		ul.w-wide {
+			grid-template-columns: repeat(4, minmax(0, 9rem));
+			padding: 0 1rem;
 		}
 	}
 </style>

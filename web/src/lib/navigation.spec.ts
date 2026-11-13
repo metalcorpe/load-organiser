@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PRIMARY_NAV, isCurrent, isCurrentTab } from './navigation.ts';
+import { PRIMARY_NAV, isCurrent, isCurrentTab, pageWidth } from './navigation.ts';
 
 const tab = (label: string) => PRIMARY_NAV.find((item) => item.label === label)!;
 const current = (pathname: string) =>
@@ -33,5 +33,13 @@ describe('primary navigation', () => {
 	it('keeps the plain section check', () => {
 		expect(isCurrent('/records', '/records/gear')).toBe(true);
 		expect(isCurrent('/records', '/recordsx')).toBe(false);
+	});
+
+	it('widens only the discovery lists', () => {
+		expect(pageWidth('/')).toBe('wide');
+		expect(pageWidth('/dz')).toBe('medium');
+		for (const path of ['/dz/abc', '/events/abc', '/register', '/sign-in', '/jumps', '/privacy']) {
+			expect(pageWidth(path)).toBe('narrow');
+		}
 	});
 });

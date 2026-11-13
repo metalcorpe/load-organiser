@@ -39,6 +39,12 @@ test.describe('public shell', () => {
 		expect(errors).toEqual([]);
 	});
 
+	test('the registration page has no header Join pointing back at itself', async ({ page }) => {
+		await page.goto('/register');
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Join' })).toHaveCount(0);
+	});
+
 	test('navigation fits small screens with 44px targets and no horizontal scroll', async ({ page }) => {
 		await page.goto('/');
 		const overflow = await page.evaluate(
