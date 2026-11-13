@@ -91,6 +91,9 @@ test.describe('discover board', () => {
 		await expect(page.getByLabel('Country')).toBeHidden();
 		await page.locator('summary', { hasText: 'Filters' }).click();
 		await page.getByLabel('Country').selectOption('PT');
+		// Type, discipline and audience are folded inside the panel until asked for.
+		await expect(page.getByLabel('Discipline')).toBeHidden();
+		await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
 		await page.getByLabel('Discipline').selectOption('freefly');
 		await page.getByRole('button', { name: 'Show listings' }).click();
 		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
@@ -98,6 +101,10 @@ test.describe('discover board', () => {
 		await expect(results.getByRole('link')).toHaveText([listing.title]);
 		// Active filters show as chips; each removes only itself.
 		await expect(page.locator('summary', { hasText: 'Filters (2)' })).toBeVisible();
+		// An active discipline opens its group on the results page.
+		await page.locator('summary', { hasText: 'Filters (2)' }).click();
+		await expect(page.getByLabel('Discipline')).toBeVisible();
+		await expect(page.getByLabel('Discipline')).toHaveValue('freefly');
 		const chips = page.getByRole('list', { name: 'Active filters' });
 		await chips.getByRole('link', { name: 'Remove Freefly' }).click();
 		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
@@ -270,5 +277,247 @@ test.describe('discover board', () => {
 		await expect(page.getByRole('alert')).toHaveText(
 			'Confirm your email address before saving privately.'
 		);
+	});
+});
+
+/** The UTC calendar day `offset` days from today, as YYYY-MM-DD. */
+function daysFromToday(offset: number): string {
+	return new Date(Date.now() + offset * 86_400_000).toISOString().slice(0, 10);
+}
+
+test.describe('search context and the filter panel', () => {
+	test('filtered results → event → back to results; All events resets', async ({ page }) => {
+		const base = token();
+		const listing = await publishListing(`${base} Return boogie`);
+		const search = `/?q=${base}&country=PT&from=2027-07-01`;
+		await page.goto(search);
+		await page.getByRole('link', { name: listing.title }).click();
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.title);
+		await expect(page).toHaveURL(/[?&]results=/);
+		const back = page.getByRole('link', { name: 'Back to results' });
+		await expect(back).toHaveAttribute('href', search);
+		await back.click();
+		await expect(page).toHaveURL(`${ORIGIN}${search}`);
+		// The search form shows the same search again.
+		await expect(page.getByLabel('Title or organizer')).toHaveValue(base);
+		await expect(page.getByLabel('Country')).toHaveValue('PT');
+		await expect(page.getByLabel('From', { exact: true })).toHaveValue('2027-07-01');
+
+		// "All events" is the explicit reset.
+		await page.getByRole('link', { name: listing.title }).click();
+		await page.getByRole('link', { name: 'All events' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/`);
+	});
+
+	test('a direct or forged link offers only All events', async ({ page }) => {
+		const listing = await publishListing(`${token()} Direct boogie`);
+		for (const query of [
+			'',
+			'?results=%2F%2Fevil.example%2F%3Fcountry%3DPT',
+			'?results=https%3A%2F%2Fevil.example%2F',
+			'?results=%2F%5Cevil.example',
+			'?results=%2Fprofile',
+			'?results=%2F'
+		]) {
+			await page.goto(`/events/${listing.id}${query}`);
+			await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.title);
+			await expect(page.getByRole('link', { name: 'Back to results' }), query).toHaveCount(0);
+			await expect(page.getByRole('link', { name: 'All events' })).toHaveAttribute('href', '/');
+		}
+	});
+
+	test('the search context survives signing in from the sheet and saving', async ({ page }) => {
+		const base = token();
+		const listing = await publishListing(`${base} Context boogie`);
+		const search = `/?q=${base}&country=PT`;
+		await page.goto(search);
+		await page.getByRole('link', { name: listing.title }).click();
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		await page.getByRole('link', { name: 'Sign in to save this privately' }).click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await signInHere(page, await createAccount({ label: 'context' }));
+		await expect(sheet).toHaveCount(0);
+		await expect(page).toHaveURL(/\?save=1&results=/);
+		await page.getByRole('button', { name: 'Save privately' }).click();
+		await expect(page.getByText('Saved privately — you are not registered.')).toBeVisible();
+		await page.getByRole('link', { name: 'Back to results' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}${search}`);
+	});
+
+	test('country and dates come first; type, discipline and audience fold away', async ({ page }) => {
+		await page.goto('/');
+		await page.locator('summary', { hasText: 'Filters' }).click();
+		const when = page.getByRole('group', { name: 'When are you available?' });
+		await expect(page.getByLabel('Country')).toBeVisible();
+		await expect(when.getByLabel('From', { exact: true })).toBeVisible();
+		await expect(when.getByLabel('To', { exact: true })).toBeVisible();
+		await expect(when.getByText('overlaps these dates')).toBeVisible();
+		await expect(page.getByLabel('Type', { exact: true })).toBeHidden();
+		await expect(page.getByLabel('Intended for')).toBeHidden();
+
+		// The apply button stays on screen with everything open, without covering the dates.
+		await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
+		await page.evaluate(() => window.scrollTo(0, 0));
+		const apply = page.getByRole('button', { name: 'Show listings' });
+		await expect(apply).toBeInViewport();
+		// A field reached by keyboard scrolls clear of it.
+		await when.getByLabel('To', { exact: true }).focus();
+		const button = (await apply.boundingBox())!;
+		const to = (await when.getByLabel('To', { exact: true }).boundingBox())!;
+		expect(to.y + to.height <= button.y || to.y >= button.y + button.height).toBe(true);
+
+		// Any of the three in use opens the group by itself.
+		await page.goto('/?audience=students');
+		await page.locator('summary', { hasText: 'Filters (1)' }).click();
+		await expect(page.getByLabel('Intended for')).toHaveValue('students');
+	});
+
+	test('the highlight is an upcoming boogie or camp, dated in full and not listed twice', async ({
+		page
+	}) => {
+		// The earliest multi-day boogie on the board: listings elsewhere in the suite start later.
+		const listing = await publishListing(`${token()} Soon boogie`, {
+			starts_on: daysFromToday(2),
+			ends_on: daysFromToday(5)
+		});
+		await page.goto('/');
+		const featured = page.getByRole('region', { name: /^Highlighted: upcoming (boogie|camp)$/ });
+		await expect(featured).toBeVisible();
+		await expect(featured).toContainText(/Upcoming (boogie|camp)/);
+		await expect(featured).not.toContainText(/big/i);
+		// A readable range with the year, as on the listing itself.
+		await expect(featured.locator('.dates')).toHaveText(/\d{1,2}.* \d{4}$/);
+		const title = (await featured.getByRole('link').textContent())!.trim();
+		expect(title).toContain('Soon boogie');
+		await expect(page.getByRole('heading', { name: 'Other events, by date' })).toBeVisible();
+		await expect(
+			page.getByRole('list', { name: 'Listings' }).getByRole('link', { name: title })
+		).toHaveCount(0);
+		// In a search, it is an ordinary result.
+		await page.goto(`/?q=${encodeURIComponent(listing.title)}`);
+		await expect(page.getByRole('region', { name: /^Highlighted/ })).toHaveCount(0);
+		await expect(page.getByRole('link', { name: listing.title })).toHaveCount(1);
+	});
+
+	test('dates across a month and across a year read in full', async ({ page }) => {
+		const base = token();
+		const months = await publishListing(`${base} Month boogie`, {
+			starts_on: '2027-06-28',
+			ends_on: '2027-07-03'
+		});
+		const years = await publishListing(`${base} Year boogie`, {
+			starts_on: '2027-12-30',
+			ends_on: '2028-01-02'
+		});
+		for (const [listing, text] of [
+			[months, '28 June – 3 July 2027'],
+			[years, '30 December 2027 – 2 January 2028']
+		] as const) {
+			await page.goto(`/events/${listing.id}`);
+			await expect(page.getByRole('region', { name: listing.title }).getByText(text)).toBeVisible();
+			await expect(page.getByText(`${text} (Europe/Lisbon local dates)`)).toBeVisible();
+		}
+	});
+});
+
+test.describe('signing in from the sheet', () => {
+	test('empty, malformed and refused sign-ins stay in the sheet', async ({ page }) => {
+		const listing = await publishListing(`${token()} Errors boogie`);
+		const email = await createAccount({ label: 'sheeterr' });
+		const url = `${ORIGIN}/events/${listing.id}`;
+		await page.goto(url);
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		const trigger = page.getByRole('link', { name: 'Sign in to save this privately' });
+		await trigger.click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		const emailField = sheet.getByLabel('Email', { exact: true });
+		const passwordField = sheet.getByLabel('Password', { exact: true });
+
+		// Nothing typed: each field says what it needs; the first one has focus.
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page).toHaveURL(url);
+		await expect(sheet.getByRole('alert')).toHaveText(
+			'Enter your email address. Enter your password.'
+		);
+		await expect(emailField).toBeFocused();
+		await expect(emailField).toHaveAttribute('aria-invalid', 'true');
+		await expect(emailField).toHaveAttribute('aria-describedby', 'sheet-email-error');
+		await expect(sheet.locator('#sheet-email-error')).toHaveText('Enter your email address.');
+		await expect(passwordField).toHaveAttribute('aria-invalid', 'true');
+
+		// Not an address.
+		await emailField.fill('jumper');
+		await passwordField.fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(sheet.locator('#sheet-email-error')).toHaveText(
+			'Enter an email address in the form name@example.com.'
+		);
+		await expect(emailField).toBeFocused();
+		await expect(passwordField).not.toHaveAttribute('aria-invalid', 'true');
+
+		// Refused by the server: the message is in the sheet, the email stays, the password goes.
+		await emailField.fill(email);
+		await passwordField.fill('not the right password at all');
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(sheet.getByRole('alert')).toHaveText('Email or password is incorrect.');
+		await expect(sheet.getByRole('alert')).toBeFocused();
+		await expect(page).toHaveURL(url);
+		await expect(emailField).toHaveValue(email);
+		await expect(passwordField).toHaveValue('');
+
+		// Closing returns focus to what opened the sheet.
+		await page.keyboard.press('Escape');
+		await expect(sheet).toBeHidden();
+		await expect(trigger).toBeFocused();
+		await expect(page).toHaveURL(url);
+
+		// And it still signs in after a refusal.
+		await trigger.click();
+		await signInHere(page, email);
+		await expect(page).toHaveURL(`${url}?save=1`);
+		await expect(page.getByText('You signed in to save this listing')).toBeVisible();
+	});
+
+	test('the password can be shown and hidden without changing autocomplete', async ({ page }) => {
+		await page.goto('/dz');
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		await page.getByRole('banner').getByRole('link', { name: 'Sign in' }).click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		const field = sheet.getByLabel('Password', { exact: true });
+		await field.fill('a passphrase to look at');
+		await sheet.getByRole('button', { name: 'Show password' }).click();
+		await expect(field).toHaveAttribute('type', 'text');
+		await expect(field).toHaveAttribute('autocomplete', 'current-password');
+		await sheet.getByRole('button', { name: 'Hide password' }).click();
+		await expect(field).toHaveAttribute('type', 'password');
+		await expect(field).toHaveValue('a passphrase to look at');
+	});
+});
+
+test.describe('without JavaScript', () => {
+	test('filters, results and Back to results are plain links and GET forms', async ({ browser }) => {
+		const base = token();
+		const listing = await publishListing(`${base} Nojs boogie`);
+		const plain = await browser.newContext({
+			javaScriptEnabled: false,
+			ignoreHTTPSErrors: true,
+			baseURL: ORIGIN
+		});
+		const page = await plain.newPage();
+		await page.goto('/');
+		await page.getByLabel('Title or organizer').fill(base);
+		await page.locator('summary', { hasText: 'Filters' }).click();
+		await page.getByLabel('Country').selectOption('PT');
+		await page.getByLabel('From', { exact: true }).fill('2027-07-01');
+		await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
+		await page.getByLabel('Type', { exact: true }).selectOption('boogie');
+		await page.getByRole('button', { name: 'Show listings' }).click();
+		await expect(page).toHaveURL(/category=boogie/);
+		await page.getByRole('link', { name: listing.title }).click();
+		await page.getByRole('link', { name: 'Back to results' }).click();
+		await expect(page).toHaveURL(
+			`${ORIGIN}/?q=${base}&category=boogie&country=PT&from=2027-07-01`
+		);
+		await plain.close();
 	});
 });

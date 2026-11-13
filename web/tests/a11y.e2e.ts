@@ -155,9 +155,13 @@ async function world(): Promise<World> {
 		paths: {
 			guest: [
 				'/',
+				// Filters in use: chips, and the folded group open.
+				'/?country=PT&category=boogie&from=2027-07-01',
 				'/dz',
 				`/dz/${venue.id}`,
 				`/events/${listing.id}`,
+				// Opened from a search: "Back to results".
+				`/events/${listing.id}?results=${encodeURIComponent('/?country=PT')}`,
 				`/organizers/${provider.id}`,
 				`/people/${handle}`,
 				`/posts/${post.id}`,
@@ -271,11 +275,40 @@ test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 				await page.locator('header a[data-sign-in]').click();
 				await expect(page.getByRole('dialog')).toBeVisible();
 				expect.soft(await violations(page), 'sign-in sheet').toEqual([]);
+				// With its field errors, and with the password shown.
+				await page.getByRole('dialog').getByRole('button', { name: 'Sign in' }).click();
+				await expect(page.getByRole('dialog').getByRole('alert')).toBeVisible();
+				await page.getByRole('dialog').getByRole('button', { name: 'Show password' }).click();
+				expect.soft(await violations(page), 'sign-in sheet with errors').toEqual([]);
+				await page.keyboard.press('Escape');
+
+				// The board with its filter panel and every group open.
+				await page.goto('/');
+				await page.locator('summary', { hasText: 'Filters' }).click();
+				await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
+				expect.soft(await violations(page), 'board filters open').toEqual([]);
+
+				// Registration and sign-in after an empty submission (field errors).
+				for (const [path, button] of [
+					['/register', 'Create account'],
+					['/sign-in', 'Sign in']
+				]) {
+					await page.goto(path);
+					await page.getByRole('main').getByRole('button', { name: button }).click();
+					await expect(page.getByRole('alert')).toBeVisible();
+					expect.soft(await violations(page), `${path} with errors`).toEqual([]);
+				}
 			});
 
 			test('member pages', async ({ page }) => {
 				await signIn(page, shared.member);
 				await scan(page, shared.paths.member);
+				// The export details folded under "What's included?", opened.
+				for (const path of ['/records', '/profile/data']) {
+					await page.goto(path);
+					await page.locator('summary', { hasText: "What's included?" }).click();
+					expect.soft(await violations(page), `${path} details open`).toEqual([]);
+				}
 			});
 
 			test('maintenance pages', async ({ page }) => {
