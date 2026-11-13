@@ -82,6 +82,92 @@ test.describe('registration and verification', () => {
 		await page.getByLabel('Repeat password').fill('fourteen chars');
 		await page.getByRole('button', { name: 'Create account' }).click();
 		await expect(page.getByRole('alert')).toHaveText('Use at least 15 characters.');
+		const password = page.getByLabel('Password', { exact: true });
+		await expect(password).toHaveAttribute('aria-invalid', 'true');
+		await expect(password).toHaveAttribute('aria-describedby', /^password-hint password-error\b/);
+	});
+
+	test('an empty form names each required field and focuses the first', async ({ page }) => {
+		await page.goto('/register');
+		await expect(page.locator('html[data-form-guard="ready"]')).toHaveCount(1);
+		await page.getByRole('button', { name: 'Create account' }).click();
+		await expect(page.getByRole('alert')).toHaveText(
+			'Enter your email address. Choose a password of 15 to 128 characters.'
+		);
+		const email = page.getByLabel('Email');
+		await expect(email).toBeFocused();
+		await expect(email).toHaveAttribute('aria-invalid', 'true');
+		await expect(email).toHaveAttribute('aria-describedby', /\bemail-error\b/);
+		await expect(page.locator('#email-error')).toHaveText('Enter your email address.');
+		await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute('aria-invalid', 'true');
+		// The name is optional and never flagged.
+		await expect(page.getByLabel('Name')).not.toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByText('Fill in every field')).toHaveCount(0);
+	});
+
+	test('a malformed email and unmatched passwords keep what was typed, except passwords', async ({
+		page
+	}) => {
+		await page.goto('/register');
+		await page.getByLabel('Email').fill('jumper');
+		await page.getByLabel('Name').fill('Jo Jumper');
+		await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await page.getByLabel('Repeat password').fill(NEW_PASSWORD);
+		await page.getByRole('button', { name: 'Create account' }).click();
+		await expect(page.getByRole('alert')).toHaveText(
+			'Enter an email address in the form name@example.com. The two new passwords do not match.'
+		);
+		await expect(page.getByLabel('Email')).toHaveValue('jumper');
+		await expect(page.getByLabel('Name')).toHaveValue('Jo Jumper');
+		await expect(page.getByLabel('Password', { exact: true })).toHaveValue('');
+		await expect(page.getByLabel('Repeat password')).toHaveValue('');
+		await expect(page.getByLabel('Repeat password')).toHaveAttribute('aria-invalid', 'true');
+		await expect(page.locator('#password-confirm-error')).toHaveText(
+			'The two new passwords do not match.'
+		);
+		// Nothing secret in the page that came back.
+		expect(await page.content()).not.toContain(PASSWORD);
+	});
+
+	test('passwords can be shown and hidden; autocomplete stays', async ({ page }) => {
+		await page.goto('/register');
+		const password = page.getByLabel('Password', { exact: true });
+		const repeat = page.getByLabel('Repeat password');
+		await password.fill(PASSWORD);
+		await page.getByRole('button', { name: 'Show password', exact: true }).click();
+		await expect(password).toHaveAttribute('type', 'text');
+		await expect(password).toHaveAttribute('autocomplete', 'new-password');
+		await expect(repeat).toHaveAttribute('type', 'password');
+		await page.getByRole('button', { name: 'Show repeated password' }).click();
+		await expect(repeat).toHaveAttribute('type', 'text');
+		await page.getByRole('button', { name: 'Hide password', exact: true }).click();
+		await expect(password).toHaveAttribute('type', 'password');
+		await expect(password).toHaveValue(PASSWORD);
+	});
+
+	test('without JavaScript, field errors still show and no dead toggle appears', async ({ browser }) => {
+		const plain = await browser.newContext({
+			javaScriptEnabled: false,
+			ignoreHTTPSErrors: true,
+			baseURL: ORIGIN
+		});
+		const page = await plain.newPage();
+		await page.goto('/register');
+		await expect(page.getByRole('button', { name: 'Show password' })).toHaveCount(0);
+		await page.getByLabel('Name').fill('Plain Jumper');
+		await page.getByRole('button', { name: 'Create account' }).click();
+		await expect(page.locator('#email-error')).toHaveText('Enter your email address.');
+		await expect(page.getByLabel('Email')).toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByLabel('Name')).toHaveValue('Plain Jumper');
+
+		await page.goto('/sign-in');
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.getByRole('alert')).toHaveText('Enter your email address. Enter your password.');
+		await page.getByLabel('Email', { exact: true }).fill(uniqueEmail());
+		await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.getByRole('alert')).toHaveText('Email or password is incorrect.');
+		await plain.close();
 	});
 });
 
@@ -100,6 +186,38 @@ test.describe('sessions', () => {
 		const wrong = await page.getByRole('alert').textContent();
 		await signIn(page, uniqueEmail(), PASSWORD);
 		await expect(page.getByRole('alert')).toHaveText(wrong!);
+	});
+
+	test('an empty or malformed sign-in names the field and focuses it', async ({ page }) => {
+		await page.goto('/sign-in?returnTo=%2Frecords');
+		await expect(page.locator('html[data-form-guard="ready"]')).toHaveCount(1);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.getByRole('alert')).toHaveText('Enter your email address. Enter your password.');
+		await expect(page.getByLabel('Email')).toBeFocused();
+		await expect(page.getByLabel('Email')).toHaveAttribute('aria-invalid', 'true');
+		await page.getByLabel('Email').fill('jumper');
+		await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.locator('#email-error')).toHaveText(
+			'Enter an email address in the form name@example.com.'
+		);
+		await expect(page.getByLabel('Email')).toHaveValue('jumper');
+		await expect(page.getByLabel('Password', { exact: true })).toHaveValue('');
+		await expect(page.getByLabel('Password', { exact: true })).not.toHaveAttribute('aria-invalid', 'true');
+		// The return path survives the refusal.
+		await signIn(page, await createAccount());
+		await expect(page).toHaveURL(`${ORIGIN}/records`);
+	});
+
+	test('sign-in page: the password can be shown and hidden', async ({ page }) => {
+		await page.goto('/sign-in');
+		const password = page.getByLabel('Password', { exact: true });
+		await password.fill(PASSWORD);
+		await page.getByRole('button', { name: 'Show password' }).click();
+		await expect(password).toHaveAttribute('type', 'text');
+		await expect(password).toHaveAttribute('autocomplete', 'current-password');
+		await page.getByRole('button', { name: 'Hide password' }).click();
+		await expect(password).toHaveAttribute('type', 'password');
 	});
 
 	test('sign-in returns to the saved deep link', async ({ page }) => {

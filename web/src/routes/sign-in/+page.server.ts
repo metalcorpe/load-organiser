@@ -1,6 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { safeReturnPath } from '#lib/safe-return.ts';
 import { statusFor } from '#lib/auth-messages.ts';
+import { firstInvalid, signInErrors } from '#lib/account-form.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { field } from '#lib/server/forms.ts';
 import { signIn, signOut } from '#lib/server/identity.ts';
@@ -32,14 +33,19 @@ export const actions: Actions = {
 		const data = await request.formData();
 		const email = field(data, 'email', { max: 254, trim: true });
 		const password = field(data, 'password');
-		if (!email || !password) return fail(400, { email, error: 'missing' });
+		const fields = signInErrors({ email, password });
+		const first = firstInvalid(fields);
+		// `error` is the first problem's code, so FormGuard focuses that field.
+		if (first) return fail(400, { email, error: fields[first], fields });
 
 		const api = createRequestApi();
 		const outcome = await signIn(api, { email, password }, getClientAddress());
 		if (!outcome.ok) {
+			// The same answer for a wrong password and an unknown account (the API's single code).
 			return fail(statusFor(outcome.reason), {
 				email,
 				error: outcome.reason,
+				fields: {},
 				retryAfter: outcome.retryAfter ?? null
 			});
 		}

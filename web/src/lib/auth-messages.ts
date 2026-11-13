@@ -1,6 +1,12 @@
 /** User-facing text for identity outcomes. No upstream detail is ever shown. */
 export const AUTH_MESSAGES: Record<string, string> = {
 	missing: 'Fill in every field.',
+	// One field each (sign-in and registration: account-form.ts).
+	email_required: 'Enter your email address.',
+	email_invalid: 'Enter an email address in the form name@example.com.',
+	password_required: 'Enter your password.',
+	new_password_required: 'Choose a password of 15 to 128 characters.',
+	password_confirm_required: 'Enter the same password again.',
 	invalid_credentials: 'Email or password is incorrect.',
 	not_authenticated: 'Your session has ended. Sign in again.',
 	too_many_attempts: 'Too many attempts. Wait a while, then try again.',
