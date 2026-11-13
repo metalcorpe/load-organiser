@@ -28,7 +28,8 @@ implemented**; their screens say so explicitly.
 | `/verify-email?token=` | Public SSR, `noindex` | GET never consumes the token; the visitor confirms with a POST |
 | `/forgot-password`, `/reset-password?token=` | Public SSR, `noindex` | Neutral acknowledgement; reset revokes every session |
 | `/sign-out` | POST action | Revokes the backend session, clears the cookie, sends `Clear-Site-Data: "cache"` |
-| `/profile` | Private | Account: confirmation status/resend, session end, change password (others signed out), sign out everywhere (password required) |
+| `/profile` | Private | Me overview: account email and confirmation status/resend, sign out, grouped links to records, people and settings; licence and exit weight forms |
+| `/profile/account` | Private | Account and security: session end, change password (others signed out), sign out everywhere and delete account (password required) |
 | `/activity`, `/jumps/new`, `/records` | Private `(private)` group | Reachable when signed in; still “Not available yet”. Unconfirmed accounts see why private writes will be blocked |
 | (any private route, anonymous) | — | `303` → `/sign-in?returnTo=…` (HTML and data requests from `handle`; the layout load forces the server round trip) |
 | anything else | — | `404` error page |
