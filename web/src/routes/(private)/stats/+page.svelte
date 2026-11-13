@@ -54,8 +54,15 @@
 		{s.reason === 'year_invalid' ? 'Choose a year from the list.' : historyMessage(s.reason)}
 	</p>
 {:else if s.total.recorded === 0 && s.years.length === 0}
-	<p class="hint">No jumps recorded yet.</p>
-	<p><a href="/jumps/new">Add jump</a></p>
+	<section class="empty-state" aria-labelledby="stats-empty-heading">
+		<h2 id="stats-empty-heading">No statistics yet</h2>
+		<p>No jumps recorded yet.</p>
+		<p>Your jumps by type, year and place show here once your logbook has jumps.</p>
+		<p class="actions">
+			<a class="button" href="/jumps/new">Log your first jump</a>
+			<a class="button secondary" href="/records/import">Import existing logbook</a>
+		</p>
+	</section>
 {:else}
 	<section class="card" aria-labelledby="total-heading">
 		<h2 id="total-heading">Jumps</h2>

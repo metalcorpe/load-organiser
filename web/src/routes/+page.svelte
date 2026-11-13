@@ -261,23 +261,30 @@
 		<p role="alert">{listingMessage(data.result.reason)}</p>
 		<p>Your search is kept. <a href={here} data-sveltekit-reload>Try again</a></p>
 	</Notice>
+{:else if data.result.items.length === 0 && filtered}
+	<!-- A result, not a page: the quiet empty state, with the way out first. -->
+	<section class="empty-state quiet" aria-labelledby="empty-heading">
+		<h2 id="empty-heading">No listings match</h2>
+		<p>
+			Nothing upcoming matches these filters. Coverage is limited to reviewed, source-backed
+			listings, so this does not mean nothing is happening.
+		</p>
+		<p class="actions">
+			<a class="button secondary" href="/">Clear filters</a>
+			<a class="button secondary" href="/submit?kind=suggest_listing">Suggest a listing</a>
+		</p>
+	</section>
 {:else if data.result.items.length === 0}
-	<Notice title={filtered ? 'No listings match' : 'No listings published yet'} tone="warn">
+	<section class="empty-state" aria-labelledby="empty-heading">
+		<h2 id="empty-heading">No listings published yet</h2>
 		<p>
-			{#if filtered}
-				Nothing upcoming matches these filters. Coverage is limited to reviewed, source-backed
-				listings, so this does not mean nothing is happening.
-			{:else}
-				Listings appear only after a source has been reviewed. Nothing here represents real
-				availability.
-			{/if}
+			Listings appear only after a source has been reviewed. Nothing here represents real
+			availability.
 		</p>
-		<p>
-			{#if filtered}<a href="/">Clear filters</a> · {/if}<a href="/submit?kind=suggest_listing"
-				>Suggest a listing</a
-			>
+		<p class="actions">
+			<a class="button secondary" href="/submit?kind=suggest_listing">Suggest a listing</a>
 		</p>
-	</Notice>
+	</section>
 {:else}
 	{#if featured}
 		<FeaturedListing item={featured} />
