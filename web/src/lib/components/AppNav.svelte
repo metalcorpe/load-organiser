@@ -77,12 +77,13 @@
 			box-shadow: inset 0 -3px var(--accent);
 		}
 
-		/* The same frame and tab size on every page, so switching tabs never moves the bar.
-		   The tabs start at the frame's edge, where the header and every page begin. */
+		/* Same size and place on every page: centred in the bar, so switching pages, whatever
+		   their width, never moves or resizes the tabs. */
 		ul {
-			max-width: var(--frame);
+			max-width: none;
 			padding: 0 1rem;
-			grid-template-columns: repeat(4, minmax(0, 9rem));
+			grid-template-columns: repeat(4, 9rem);
+			justify-content: center;
 		}
 	}
 </style>
