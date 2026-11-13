@@ -126,7 +126,7 @@
 				They are not told.
 			</p>
 			<div class="form-actions">
-				<button class="button secondary" type="submit" disabled={!data.emailVerified}>Block</button>
+				<button class="button danger" type="submit" disabled={!data.emailVerified}>Block</button>
 			</div>
 		</form>
 

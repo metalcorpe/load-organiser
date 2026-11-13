@@ -343,7 +343,7 @@
 								private places nothing else uses. This cannot be reversed.
 							</p>
 							<div class="form-actions">
-								<button class="button secondary" type="submit" disabled={!data.emailVerified}
+								<button class="button danger" type="submit" disabled={!data.emailVerified}
 									>Undo the import of {importWhen(item.created_at)}</button
 								>
 							</div>

@@ -140,8 +140,4 @@
 		flex-basis: 100%;
 	}
 
-	.small {
-		min-height: 36px;
-		padding: 0.25rem 0.75rem;
-	}
 </style>

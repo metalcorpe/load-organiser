@@ -88,7 +88,7 @@ h1 {
 	color: var(--fg);
 }
 
-.button.secondary:hover {
+.button.secondary:not(:disabled, [aria-disabled='true']):hover {
 	border-color: var(--accent);
 }
 
@@ -99,8 +99,24 @@ h1 {
 	color: var(--bad-fg);
 }
 
-.button.danger:hover {
+.button.danger:not(:disabled, [aria-disabled='true']):hover {
 	background: var(--bad-bg);
+}
+
+/* A compact button inside a row: smaller type and padding, still a 44px target. */
+.button.small {
+	padding: 0.25rem 0.75rem;
+	font-size: 0.9rem;
+}
+
+/* Not available yet (for example, before the email is confirmed): flat and muted, with
+   readable text (muted on surface-soft, 4.5:1) and no hover change. */
+.button:disabled,
+.button[aria-disabled='true'] {
+	background: var(--surface-soft);
+	border-color: var(--border);
+	color: var(--muted);
+	cursor: not-allowed;
 }
 
 @media (prefers-reduced-motion: reduce) {
