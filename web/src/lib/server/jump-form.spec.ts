@@ -72,6 +72,9 @@ describe('jumpBody', () => {
 		expect(jumpBody(form({ ...BASE, place_id: '' }))).toEqual({ error: 'location_required' });
 		expect(jumpBody(form({ ...BASE, venue_id: GEAR }))).toEqual({ error: 'location_required' });
 		expect(jumpBody(form({ ...BASE, exit_altitude: '-5' }))).toEqual({ error: 'altitude_invalid' });
+		expect(jumpBody(form({ ...BASE, deployment_altitude: '1.5' }))).toEqual({
+			error: 'deployment_altitude_invalid'
+		});
 		expect(jumpBody(form({ ...BASE, jump_number: 'x' }))).toEqual({ error: 'jump_number_invalid' });
 		expect(jumpBody(form({ ...BASE, freefall_seconds: '1.5' }))).toEqual({
 			error: 'freefall_invalid'

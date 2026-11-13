@@ -34,7 +34,7 @@ export function jumpBody(data: FormData): { body: JumpBody } | { error: string }
 	const NUMBER_ERROR: Record<string, string> = {
 		jump_number: 'jump_number_invalid',
 		exit_altitude: 'altitude_invalid',
-		deployment_altitude: 'altitude_invalid',
+		deployment_altitude: 'deployment_altitude_invalid',
 		freefall_seconds: 'freefall_invalid'
 	};
 	for (const [name, error] of Object.entries(NUMBER_ERROR)) {

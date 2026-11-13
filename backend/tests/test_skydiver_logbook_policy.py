@@ -60,6 +60,12 @@ def test_altitudes_keep_unit_and_datum_and_never_invent_them() -> None:
     assert _code(lambda: policy.altitudes(0, None, AltitudeUnit.FT, None)) == (
         "altitude_invalid"
     )
+    assert _code(lambda: policy.altitudes(4000, 0, AltitudeUnit.FT, None)) == (
+        "deployment_altitude_invalid"
+    )
+    assert _code(lambda: policy.altitudes(None, 50_000, AltitudeUnit.FT, None)) == (
+        "deployment_altitude_invalid"
+    )
     assert _code(lambda: policy.altitudes(3000, 4000, AltitudeUnit.FT, None)) == (
         "deployment_above_exit"
     )

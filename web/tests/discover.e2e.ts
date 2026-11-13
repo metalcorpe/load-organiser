@@ -478,6 +478,19 @@ test.describe('search context and the filter panel', () => {
 		await expect(page.locator('#to')).not.toHaveAttribute('aria-invalid', 'true');
 	});
 
+	test('an out-of-date page link starts the same search again, without the cursor', async ({
+		page
+	}) => {
+		await page.goto('/?country=PT&cursor=garbage');
+		await expect(page.getByText('This page link is out of date.')).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Show the first page' })).toHaveAttribute(
+			'href',
+			'/?country=PT'
+		);
+		await expect(page.getByText('could not be loaded')).toHaveCount(0);
+		await expect(page.getByRole('link', { name: 'Try again' })).toHaveCount(0);
+	});
+
 	test('without JavaScript, "To" before "From" is marked and focused the same way', async ({
 		browser
 	}) => {

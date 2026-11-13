@@ -154,6 +154,45 @@ test.describe('private logbook', () => {
 		await expect(start.getByRole('link', { name: 'Import existing logbook' })).toBeVisible();
 	});
 
+	test('an out-of-date page link is not a failure; a bad deployment altitude marks that field', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'stale' }));
+		await page.goto('/jumps?cursor=garbage');
+		const stale = page.getByRole('region', { name: 'This page of your logbook could not be shown' });
+		await expect(stale.getByRole('alert')).toContainText('The link to this page is out of date.');
+		await expect(stale.getByRole('link', { name: 'Go to your newest jumps' })).toHaveAttribute(
+			'href',
+			'/jumps'
+		);
+		await expect(page.getByRole('link', { name: 'Try again' })).toHaveCount(0);
+
+		// Only the deployment altitude is wrong: that field is marked and focused, not the exit.
+		await startAtNewPlace(page);
+		await openJumpSections(page);
+		await page.getByLabel('Exit altitude').fill('4000');
+		await page.getByLabel('Deployment altitude').fill('1.5');
+		await page.getByLabel('Feet').check();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
+		const deployment = page.getByLabel('Deployment altitude');
+		await expect(deployment).toBeFocused();
+		await expect(deployment).toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByLabel('Exit altitude')).not.toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByRole('alert')).toContainText('Check the deployment altitude');
+	});
+
+	test('a section filled and then folded says what it holds', async ({ page }) => {
+		await signIn(page, await createAccount({ label: 'folded' }));
+		await startAtNewPlace(page);
+		await openJumpSections(page);
+		const notes = page.locator('form details.section').filter({ hasText: 'Notes and links' });
+		await expect(notes).not.toContainText('Filled in');
+		await page.getByLabel('Notes (optional, private)').fill('Sunset load');
+		await notes.locator('summary').click();
+		await expect(notes).not.toHaveAttribute('open');
+		await expect(notes.locator('summary')).toContainText('Filled in: notes');
+	});
+
 	test('an offline save sends nothing and keeps what was typed', async ({ page, context }) => {
 		await signIn(page, await createAccount({ label: 'offline' }));
 		await startAtNewPlace(page);

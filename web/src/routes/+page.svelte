@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Disclosure from '#lib/components/Disclosure.svelte';
 	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
@@ -31,14 +32,25 @@
 	// panel open, every value kept), unlike a service failure, which is about the results.
 	const dateError = $derived(!data.result.ok && data.result.kind === 'invalid');
 	// With JavaScript, the date to correct takes focus after each search (a GET form navigates
-	// client-side) and is scrolled to the middle of the screen, clear of the sticky "Show
-	// listings" button and the tab bar. Without it, `autofocus` does the same on load.
+	// client-side) and is scrolled near the top of the screen, so the field and the error
+	// under it stay clear of the sticky "Show listings" button and the tab bar, even with
+	// large text. Without it, `autofocus` focuses it on load.
 	afterNavigate(() => {
 		if (!dateError) return;
 		const field = document.getElementById('to');
 		if (!field) return;
 		field.focus({ preventScroll: true });
-		field.scrollIntoView({ block: 'center' });
+		// The label, field and error together when they fit above the sticky parts; else
+		// the field itself at the top, the error right under it.
+		const wrapper = field.closest('.field') ?? field;
+		const error = document.getElementById('dates-error') ?? field;
+		const apply = document.querySelector('.board-search .apply');
+		const nav = document.querySelector('nav[aria-label="Primary"]');
+		const covered =
+			(apply?.getBoundingClientRect().height ?? 0) +
+			(nav && getComputedStyle(nav).position === 'fixed' ? nav.getBoundingClientRect().height : 0);
+		const span = error.getBoundingClientRect().bottom - wrapper.getBoundingClientRect().top;
+		(span + 24 <= innerHeight - covered ? wrapper : field).scrollIntoView({ block: 'start' });
 	});
 	// This search (filters and page), carried into each event for "Back to results".
 	const here = $derived(boardHref(data.filters, data.cursor || undefined));
@@ -116,8 +128,10 @@
 		/>
 		<button class="button secondary" type="submit">Search</button>
 	</div>
-	<details class="more" open={dateError}>
-		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
+	<!-- Disclosure: its open state is the server's, then the visitor's; nothing on the page
+	     closes a panel the visitor opened. -->
+	<Disclosure class="more" summaryClass="disclosure" open={dateError}>
+		{#snippet summary()}Filters{chips.length ? ` (${chips.length})` : ''}{/snippet}
 		<div class="form filters">
 			<div class="field">
 				<label for="country">Country</label>
@@ -171,8 +185,8 @@
 					later.
 				</p>
 			</fieldset>
-			<details class="secondary" open={moreActive > 0}>
-				<summary>Type, discipline and audience{moreActive ? ` (${moreActive})` : ''}</summary>
+			<Disclosure class="secondary" open={moreActive > 0}>
+				{#snippet summary()}Type, discipline and audience{moreActive ? ` (${moreActive})` : ''}{/snippet}
 				<div class="secondary-fields">
 					<div class="field">
 						<label for="category">Type</label>
@@ -208,13 +222,13 @@
 						</select>
 					</div>
 				</div>
-			</details>
+			</Disclosure>
 			<!-- Stays in reach at the bottom of the screen while the panel is taller than it. -->
 			<div class="form-actions apply" class:with-nav={Boolean(data.viewer)}>
 				<button class="button" type="submit">Show listings</button>
 			</div>
 		</div>
-	</details>
+	</Disclosure>
 </form>
 {/key}
 
@@ -236,6 +250,11 @@
 	     who scrolls here, also without JavaScript. -->
 	<p class="dates-note">
 		No listings shown until the dates are corrected. <a href="#to">Correct the “To” date</a>
+	</p>
+{:else if !data.result.ok && data.result.kind === 'stale'}
+	<!-- A page link that no longer works: start this search again from its first page. -->
+	<p class="dates-note">
+		This page link is out of date. <a href={boardHref(data.filters)}>Show the first page</a>
 	</p>
 {:else if !data.result.ok}
 	<Notice title="Listings could not be loaded" tone="bad">
@@ -323,11 +342,12 @@
 		font: inherit;
 	}
 
-	.more {
+	/* The panels are rendered by Disclosure, hence :global inside the search form. */
+	.board-search :global(details.more) {
 		margin-top: 0.25rem;
 	}
 
-	.more[open] {
+	.board-search :global(details.more[open]) {
 		margin-bottom: 0.75rem;
 	}
 
@@ -341,7 +361,7 @@
 	}
 
 	.when,
-	details.secondary,
+	.board-search :global(details.secondary),
 	.apply {
 		grid-column: 1 / -1;
 	}
@@ -356,6 +376,12 @@
 	.when legend {
 		padding: 0;
 		margin-bottom: 0.4rem;
+	}
+
+	/* Room above the date scrolled to after a "to before from" error. */
+	.dates .field,
+	.dates input {
+		scroll-margin-top: 0.75rem;
 	}
 
 	.dates {

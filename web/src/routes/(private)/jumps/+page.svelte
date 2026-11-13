@@ -10,7 +10,7 @@
 	import { KIND_LABEL } from '#lib/gear.ts';
 	import { appliedText, batchHeading, batchMessage, undoneText } from '#lib/jump-batch.ts';
 	import { freefallText, jumpsHref } from '#lib/jump-filters.ts';
-	import { JUMP_TYPE_LABEL, jumpMessage } from '#lib/jumps.ts';
+	import { JUMP_TYPE_LABEL, jumpMessage, loadFailure } from '#lib/jumps.ts';
 	import { formatDay, formatRange, statusLabel } from '#lib/listings.ts';
 	import { formatLoading, listNote, missingHelp } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
@@ -212,7 +212,7 @@
 {/if}
 
 {#if !data.page.ok}
-	{#if !filterError && (data.page.reason === 'unavailable' || data.page.reason === 'uncertain')}
+	{#if !filterError && loadFailure(data.page.reason) === 'retry'}
 		<!-- A failed load is not an empty logbook: say so, and offer the same page again. -->
 		<section class="load-failed" aria-labelledby="load-failed-heading">
 			<h2 id="load-failed-heading">Your jumps could not be loaded</h2>
@@ -227,15 +227,22 @@
 				>
 			</p>
 		</section>
-	{:else if !filterError}
-		<!-- Refused, not failed (an old or altered page link): trying again would not help. -->
+	{:else if !filterError && loadFailure(data.page.reason) === 'stale'}
+		<!-- An old or altered page link: trying it again would not help. -->
 		<section class="load-failed" aria-labelledby="load-failed-heading">
 			<h2 id="load-failed-heading">This page of your logbook could not be shown</h2>
 			<p class="form-error" role="alert">
-				The link to this page is out of date or incomplete. Your logbook itself is unchanged.
+				The link to this page is out of date. Your logbook itself is unchanged.
 			</p>
-			<p><a href="/jumps">Go to your newest jumps</a></p>
+			<p>
+				<a href={jumpsHref(data.filters)}
+					>{data.filtered ? 'Go to the first page of this search' : 'Go to your newest jumps'}</a
+				>
+			</p>
 		</section>
+	{:else if !filterError}
+		<!-- Any other refusal keeps its own wording (session ended, not allowed, bad input). -->
+		<p class="form-error" role="alert">{jumpMessage(data.page.reason)}</p>
 	{/if}
 {:else}
 	<!-- The count and span of the matches; with none, the empty state below says it. -->
