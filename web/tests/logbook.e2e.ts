@@ -93,9 +93,8 @@ test.describe('private logbook', () => {
 		await openJumpSections(page);
 		await page.getByLabel('Notes (optional, private)').fill('Typed, then folded.');
 		await page.getByLabel('Exit weight on this jump in kg (optional)').fill('999');
-		for (const summary of await page.locator('form details.section[open] > summary').all()) {
-			await summary.click();
-		}
+		const open = page.locator('form details.section[open] > summary');
+		while ((await open.count()) > 0) await open.first().click();
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		const weight = page.getByLabel('Exit weight on this jump in kg (optional)');

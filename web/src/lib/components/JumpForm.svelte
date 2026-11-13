@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Disclosure from '#lib/components/Disclosure.svelte';
 	import TextArea from '#lib/components/TextArea.svelte';
 	import { onMount } from 'svelte';
 	import { fieldsFor } from '#lib/field-errors.ts';
@@ -156,6 +157,16 @@
 		errorFields.some((name) => (SECTIONS[section].fields as readonly string[]).includes(name));
 	const isOpen = (section: Section) =>
 		hasError(section) || (openFilled && filled(section).length > 0);
+	// Decided once, when the form is made; Disclosure applies it only then (see there), so
+	// a section the jumper opens stays open whatever else on the form updates.
+	// svelte-ignore state_referenced_locally
+	const opened = {
+		details: isOpen('details'),
+		equipment: isOpen('equipment'),
+		notes: isOpen('notes'),
+		// Open when re-shown with a label, so nothing hidden is sent again.
+		component: v('new_component_label') !== '' || fieldsFor(error).includes('new_component_label')
+	};
 </script>
 
 <form
@@ -199,12 +210,12 @@
 		<button class="button" type="submit" {disabled}>{submitLabel}</button>
 	</div>
 
-	<details class="section" open={isOpen('details')}>
-		<summary>
+	<Disclosure class="section" open={opened.details}>
+		{#snippet summary()}
 			Number, time, altitudes and aircraft (optional){#if filled('details').length}<span
 					class="filled"><span class="visually-hidden">. </span>Filled in: {filled('details').join(', ')}</span
 				>{/if}
-		</summary>
+		{/snippet}
 		<div class="section-body">
 			<div class="pair">
 				<div class="field">
@@ -273,14 +284,14 @@
 				{#if aircraftHint}<p class="hint" id="aircraft_hint">{aircraftHint} Change it if needed.</p>{/if}
 			</div>
 		</div>
-	</details>
+	</Disclosure>
 
-	<details class="section" open={isOpen('equipment')}>
-		<summary>
+	<Disclosure class="section" open={opened.equipment}>
+		{#snippet summary()}
 			Equipment and exit weight (optional){#if filled('equipment').length}<span class="filled"
 					><span class="visually-hidden">. </span>Filled in: {filled('equipment').join(', ')}</span
 				>{/if}
-		</summary>
+		{/snippet}
 		<div class="section-body">
 			<fieldset class="field">
 				<legend>Equipment used (optional)</legend>
@@ -302,9 +313,8 @@
 					<label for="other_gear">Borrowed, rented or other equipment</label>
 					<input id="other_gear" name="other_gear" maxlength="200" placeholder="e.g. rented student rig" defaultValue={v('other_gear')} />
 				</div>
-				<!-- Open when re-shown with a label, so nothing hidden is sent again. -->
-				<details open={v('new_component_label') !== '' || errorFields.includes('new_component_label')}>
-					<summary>Add a new component used on this jump</summary>
+				<Disclosure open={opened.component}>
+					{#snippet summary()}Add a new component used on this jump{/snippet}
 					<input type="hidden" name="new_component_key" value={keys.component} />
 					<div class="pair">
 						<div class="field">
@@ -324,7 +334,7 @@
 						Saved to your private gear together with this jump. Leave the label empty to skip it; you can add
 						serials and dates later under Gear.
 					</p>
-				</details>
+				</Disclosure>
 			</fieldset>
 
 			<div class="field">
@@ -353,14 +363,14 @@
 				<p class="hint" role="status">{note}</p>
 			</div>
 		</div>
-	</details>
+	</Disclosure>
 
-	<details class="section" open={isOpen('notes')}>
-		<summary>
+	<Disclosure class="section" open={opened.notes}>
+		{#snippet summary()}
 			Notes and links (optional, private){#if filled('notes').length}<span class="filled"
 					><span class="visually-hidden">. </span>Filled in: {filled('notes').join(', ')}</span
 				>{/if}
-		</summary>
+		{/snippet}
 		<div class="section-body">
 			<div class="field">
 				<label for="notes">Notes (optional, private)</label>
@@ -371,7 +381,7 @@
 				<TextArea id="links" name="links" rows={2} spellcheck="false" initial={v('links')} />
 			</div>
 		</div>
-	</details>
+	</Disclosure>
 	<p class="hint">This is your own record. Nothing here is shared or verified.</p>
 	<div class="form-actions">
 		<button class="button" type="submit" {disabled}>{submitLabel}</button>
@@ -381,18 +391,19 @@
 <style>
 	/* A folded group of optional fields: a full-width row with its summary, then the fields with
 	   the form's own spacing. */
-	.section {
+	/* The <details> and <summary> are rendered by Disclosure, hence :global. */
+	.form :global(details.section) {
 		border-top: 1px solid var(--border);
 		padding-top: 0.25rem;
 	}
 
-	.section > summary {
+	.form :global(details.section > summary) {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.1rem 0.4rem;
 	}
 
-	.section > summary::after {
+	.form :global(details.section > summary::after) {
 		order: 1;
 	}
 
