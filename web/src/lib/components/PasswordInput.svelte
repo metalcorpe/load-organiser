@@ -40,9 +40,21 @@
 	onMount(() => {
 		ready = true;
 		const form = input?.form;
-		const hide = () => (shown = false);
+		// Hidden again before the form is sent, and before the page goes away: a field left as
+		// type=text can be stored by the browser's session restore (Firefox) or form cache.
+		// The type is set directly too, because leaving the page does not wait for a re-render.
+		const hide = () => {
+			shown = false;
+			if (input) input.type = 'password';
+		};
 		form?.addEventListener('submit', hide);
-		return () => form?.removeEventListener('submit', hide);
+		window.addEventListener('pagehide', hide);
+		window.addEventListener('beforeunload', hide);
+		return () => {
+			form?.removeEventListener('submit', hide);
+			window.removeEventListener('pagehide', hide);
+			window.removeEventListener('beforeunload', hide);
+		};
 	});
 </script>
 
