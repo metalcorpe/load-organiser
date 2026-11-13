@@ -45,7 +45,7 @@
 		</select>
 	</div>
 	<div class="form-actions">
-		<button class="button" type="submit">Search</button>
+		<button class="button secondary" type="submit">Search</button>
 	</div>
 </form>
 
@@ -65,7 +65,7 @@
 		</p>
 	</Notice>
 {:else}
-	<ul class="results rows" aria-label="Dropzones">
+	<ul class="results rows grouped" aria-label="Dropzones">
 		{#each data.result.items as venue (venue.id)}
 			<li>
 				<a class="title" href="/dz/{venue.id}">{venue.name}</a>
@@ -87,8 +87,60 @@
 {/if}
 
 <style>
+	h1 {
+		margin: 0 0 0.25rem;
+	}
+
+	.lede {
+		margin-bottom: 0.75rem;
+	}
+
 	.search {
-		margin-bottom: 1rem;
+		margin: 0 0 1rem;
+	}
+
+	/* One grouped list: a single outline and quiet rules between rows instead of a card per
+	   dropzone. The name link still covers its row; hover tints the row, focus rings it inside. */
+	.grouped {
+		gap: 0;
+		border-radius: var(--radius);
+		background: var(--surface);
+		box-shadow: 0 0 0 1px var(--border);
+	}
+
+	.grouped > li {
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
+	}
+
+	.grouped > li + li {
+		border-top: 1px solid var(--border);
+	}
+
+	.grouped > li:first-child {
+		border-radius: var(--radius) var(--radius) 0 0;
+	}
+
+	.grouped > li:last-child {
+		border-radius: 0 0 var(--radius) var(--radius);
+	}
+
+	.grouped > li:only-child {
+		border-radius: var(--radius);
+	}
+
+	.grouped > li:hover {
+		background: var(--surface-soft);
+		box-shadow: none;
+	}
+
+	.grouped > li:hover > a.title {
+		text-decoration: underline;
+	}
+
+	.grouped > li:has(> a.title:focus-visible) {
+		outline-offset: -3px;
 	}
 
 	.meta {
@@ -96,6 +148,7 @@
 	}
 
 	.tag {
+		justify-self: start;
 		border: 1px solid var(--border);
 		border-radius: 999px;
 		padding: 0 0.5rem;
@@ -107,5 +160,23 @@
 		display: flex;
 		gap: 1rem;
 		margin: 1rem 0;
+	}
+
+	/* Larger screens: the search on one line, and each dropzone on one line, name first. */
+	@media (min-width: 48rem) {
+		.search {
+			grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+			align-items: end;
+		}
+
+		.grouped > li {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 5rem;
+			align-items: baseline;
+			gap: 1rem;
+		}
+
+		.grouped .tag {
+			justify-self: end;
+		}
 	}
 </style>
