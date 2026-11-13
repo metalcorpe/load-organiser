@@ -102,13 +102,15 @@
 		font-size: 0.9rem;
 	}
 
-	/* Large screens: the name on the left, when and where in a column on the right behind a
-	   thin rule, so the wide card reads as one composition instead of a stretched phone card. */
+	/* Large screens: the card takes the two columns of the event list under it. The name fills
+	   the left one; when and where start behind a thin rule exactly over the right-hand cards
+	   (the same 0.6rem gap as the list), so a short title does not leave a band of empty navy
+	   between the two, and a long one wraps within its half. */
 	@media (min-width: 60rem) {
 		.featured {
-			grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 			align-items: center;
-			column-gap: 2rem;
+			column-gap: 0.6rem;
 			padding: 1.4rem 1.6rem;
 		}
 
