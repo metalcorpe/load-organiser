@@ -70,6 +70,7 @@
 
 <svelte:head>
 	<title>{item.title} · Events · Load Organiser</title>
+	<link rel="canonical" href={data.canonical} />
 	<meta
 		name="description"
 		content="{CATEGORY_LABEL[item.category]} in {countryName(item.country)}, {formatRange(

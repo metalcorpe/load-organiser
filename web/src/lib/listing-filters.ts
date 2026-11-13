@@ -82,13 +82,16 @@ export function resultsPath(raw: string | null | undefined): string | null {
 	return href === '/' ? null : href;
 }
 
-/** Longest return path the sign-in pages accept (safeReturnPath). */
+/** Longest return path the sign-in pages accept (safeReturnPath checks the decoded value). */
 const RETURN_LIMIT = 512;
+/** A sane cap for an ordinary link: the board URL is encoded twice inside it. */
+const LINK_LIMIT = 2048;
 
 /**
  * An event's address, optionally carrying the board search it was opened from and the
- * "sign in to save" intent. A search context too long to survive the sign-in round trip is
- * dropped, rather than the sign-in losing the whole return path.
+ * "sign in to save" intent. The context is dropped when the address would be too long: for
+ * the sign-in return path (`save`), past what sign-in accepts, so the return itself is never
+ * lost; for an ordinary link, only past a generous cap.
  */
 export function eventHref(
 	id: string,
@@ -100,5 +103,6 @@ export function eventHref(
 	if (context) params.set('results', context);
 	const search = params.toString();
 	const href = search ? `/events/${id}?${search}` : `/events/${id}`;
-	return href.length > RETURN_LIMIT && context ? eventHref(id, { save }) : href;
+	const limit = save ? RETURN_LIMIT : LINK_LIMIT;
+	return href.length > limit && context ? eventHref(id, { save }) : href;
 }

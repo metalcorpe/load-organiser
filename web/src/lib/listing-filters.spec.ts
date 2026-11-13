@@ -81,6 +81,30 @@ describe('eventHref', () => {
 		expect(resultsPath(back)).toBe('/?country=PT&cursor=abc');
 	});
 
+	it('keeps a non-ASCII search on ordinary links, though it is encoded twice', () => {
+		const q = 'é'.repeat(80);
+		const href = eventHref(id, { results: `/?q=${encodeURIComponent(q)}&country=PT` });
+		expect(href.length).toBeGreaterThan(512);
+		const back = new URL(href, 'https://x.invalid').searchParams.get('results');
+		expect(back).not.toBeNull();
+		expect(new URL(back!, 'https://x.invalid').searchParams.get('q')).toBe(q);
+		expect(resultsPath(back)).toBe(back);
+	});
+
+	it('keeps a long cursor on ordinary links up to the link cap', () => {
+		const long = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(480)}` });
+		expect(long).toContain('results=');
+		const huge = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(512)}&q=${'é'.repeat(80)}` });
+		expect(huge.length).toBeLessThanOrEqual(2048);
+	});
+
+	it('drops a too-long search from the sign-in return path only', () => {
+		const q = encodeURIComponent('é'.repeat(80));
+		const href = eventHref(id, { results: `/?q=${q}`, save: true });
+		expect(href).toBe(`/events/${id}?save=1`);
+		expect(safeReturnPath(href)).toBe(href);
+	});
+
 	it('drops a search too long to survive the sign-in return path, keeping the intent', () => {
 		const href = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(480)}`, save: true });
 		expect(href).toBe(`/events/${id}?save=1`);

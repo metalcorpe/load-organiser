@@ -1,4 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
+import { APP_ORIGIN } from '$app/env/private';
+import { parseAppOrigin } from '#lib/server/api/origin.ts';
 import { eventHref, resultsPath } from '#lib/listing-filters.ts';
 import { listingStatus } from '#lib/listings.ts';
 import { signInPath } from '#lib/safe-return.ts';
@@ -13,7 +15,16 @@ import {
 import { readSessionSecret } from '#lib/server/session.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
 
-export const load: PageServerLoad = async ({ params, url, locals, cookies }) => {
+/** The configured public origin, or undefined (unset or invalid: the request's own origin is used). */
+function appOrigin(): string | undefined {
+	try {
+		return parseAppOrigin(APP_ORIGIN);
+	} catch {
+		return undefined;
+	}
+}
+
+export const load: PageServerLoad =async ({ params, url, locals, cookies }) => {
 	if (!isUuid(params.id)) error(404, 'Not found');
 	const api = createRequestApi();
 	const outcome = await getOpportunity(api, params.id);
@@ -37,6 +48,8 @@ export const load: PageServerLoad = async ({ params, url, locals, cookies }) => 
 	return {
 		item,
 		saved,
+		// One address per event for search engines and sharing, without the search context.
+		canonical: new URL(`/events/${item.id}`, appOrigin() ?? url.origin).href,
 		// The board search this was opened from ("Back to results"); null for a direct link.
 		results: resultsPath(url.searchParams.get('results')),
 		// Set after signing in from "Sign in to save": offer the save, do not perform it.
