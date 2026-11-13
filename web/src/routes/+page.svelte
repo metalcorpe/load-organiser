@@ -18,6 +18,7 @@
 		DISCIPLINE_LABEL,
 		formatDay,
 		listingMessage,
+		groupByMonth,
 		pickFeatured
 	} from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -38,6 +39,9 @@
 	const listed = $derived(
 		data.result.ok ? data.result.items.filter((i) => i.id !== featured?.id) : []
 	);
+	// Under month headings by start month, so the date order reads at a glance. A month that runs
+	// on to the next page starts that page with its heading again.
+	const months = $derived(groupByMonth(listed));
 	// Type, discipline and audience fold away unless one of them is in use.
 	const moreActive = $derived(
 		[data.filters.category, data.filters.discipline, data.filters.audience].filter(Boolean).length
@@ -225,13 +229,21 @@
 {:else}
 	{#if featured}
 		<FeaturedListing item={featured} />
-		<h2 class="list-heading">Other events, by date</h2>
 	{/if}
-	<ul class="results cards" aria-label="Listings">
-		{#each listed as item (item.id)}
-			<li><ListingItem {item} results={here} /></li>
+	<section class="by-month" aria-label="Listings">
+		<!-- Shown under the highlight; otherwise the page heading says it, so only screen readers get it. -->
+		<h2 class="list-heading" class:visually-hidden={!featured}>
+			{featured ? 'Other events, by date' : 'Events by date'}
+		</h2>
+		{#each months as month (month.key)}
+			<h3 class="month" id="month-{month.key}">{month.label}</h3>
+			<ul class="results cards" aria-labelledby="month-{month.key}">
+				{#each month.items as item (item.id)}
+					<li><ListingItem {item} results={here} /></li>
+				{/each}
+			</ul>
 		{/each}
-	</ul>
+	</section>
 	<nav class="pager" aria-label="More listings">
 		{#if data.paged}<a href={boardHref(data.filters)}>First page</a>{/if}
 		{#if data.result.nextCursor}
@@ -296,7 +308,7 @@
 	}
 
 	.when,
-	.secondary,
+	details.secondary,
 	.apply {
 		grid-column: 1 / -1;
 	}
@@ -355,14 +367,16 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.4rem 0.6rem;
+		gap: 0.5rem 0.6rem;
 		list-style: none;
 		padding: 0;
 		margin: 0 0 0.5rem;
 	}
 
+	/* Compact pills with a 44px tap target: the target reaches 4px above and below. */
 	.chip {
 		display: inline-flex;
+		position: relative;
 		align-items: center;
 		gap: 0.4rem;
 		min-height: 36px;
@@ -374,6 +388,18 @@
 		text-decoration: none;
 	}
 
+	.chip::after {
+		content: '';
+		position: absolute;
+		inset: -4px 0;
+	}
+
+	.chips li > a:not(.chip) {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+	}
+
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
@@ -382,6 +408,22 @@
 	.list-heading {
 		font-size: 1.15rem;
 		margin: 0 0 0.25rem;
+	}
+
+	/* Month headings: smaller than the list heading, a clear break between months. */
+	.month {
+		margin: 1rem 0 0.4rem;
+		font-family: var(--font-display);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.list-heading + .month {
+		margin-top: 0.25rem;
+	}
+
+	.month + .results.cards {
+		margin-top: 0;
 	}
 
 	.pager {

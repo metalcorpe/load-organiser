@@ -26,7 +26,7 @@ test.describe('public shell', () => {
 		// Either reviewed listings or the honest empty state; never placeholder activity.
 		await expect(
 			page
-				.getByRole('list', { name: 'Listings' })
+				.getByRole('region', { name: 'Listings' })
 				.or(page.getByText('No listings published yet'))
 		).toBeVisible();
 
