@@ -8,9 +8,13 @@
 	let { data, form }: PageProps = $props();
 	const fields: FieldErrors = $derived(form?.fields ?? {});
 	const error = $derived(errorSummary(fields) ?? authMessage(form?.error));
-	// A missing field marks only itself; a refused sign-in marks both (it never says which).
-	const invalid = (name: 'email' | 'password') =>
-		Boolean(fields[name] || (error && !errorSummary(fields)));
+	// As in the sign-in sheet: a field problem marks and describes only that field; refused
+	// details mark both (the answer never says which) and point them at the alert. Throttling or
+	// an outage says nothing about the fields.
+	const refused = $derived(form?.error === 'invalid_credentials');
+	const invalid = (name: 'email' | 'password') => Boolean(fields[name] || refused);
+	const describedBy = (name: 'email' | 'password') =>
+		fields[name] ? `${name}-error` : refused ? 'sign-in-error' : undefined;
 	const registerHref = $derived(
 		data.returnTo ? `/register?returnTo=${encodeURIComponent(data.returnTo)}` : '/register'
 	);
@@ -79,7 +83,7 @@
 			maxlength="254"
 			defaultValue={form?.email ?? ''}
 			aria-invalid={invalid('email') ? 'true' : undefined}
-			aria-describedby={fields.email ? 'email-error' : error ? 'sign-in-error' : undefined}
+			aria-describedby={describedBy('email')}
 		/>
 		{#if fields.email}<p class="field-error" id="email-error">{fieldMessage(fields.email)}</p>{/if}
 	</div>
@@ -92,7 +96,7 @@
 			required
 			maxlength={1024}
 			invalid={invalid('password')}
-			describedby={fields.password ? 'password-error' : error ? 'sign-in-error' : undefined}
+			describedby={describedBy('password')}
 		/>
 		{#if fields.password}
 			<p class="field-error" id="password-error">{fieldMessage(fields.password)}</p>

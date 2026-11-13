@@ -17,9 +17,9 @@
 	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import { fieldsFor } from '#lib/field-errors.ts';
+	import { OFFLINE_MESSAGE } from '#lib/offline.ts';
 
-	const OFFLINE =
-		'You are offline, so nothing was sent. What you entered is still here: send it again when you have a connection.';
+	const OFFLINE = OFFLINE_MESSAGE;
 	const SUBMITTED = 'form-submitted';
 	const ALERT = '.form-error[role="alert"]';
 
