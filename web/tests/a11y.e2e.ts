@@ -277,7 +277,7 @@ test.describe('accessibility (axe, WCAG 2.2 A/AA)', () => {
 				expect.soft(await violations(page), 'sign-in sheet').toEqual([]);
 				// With its field errors, and with the password shown.
 				await page.getByRole('dialog').getByRole('button', { name: 'Sign in' }).click();
-				await expect(page.getByRole('dialog').getByRole('alert')).toBeVisible();
+				await expect(page.locator('#sheet-email-error')).toBeVisible();
 				await page.getByRole('dialog').getByRole('button', { name: 'Show password' }).click();
 				expect.soft(await violations(page), 'sign-in sheet with errors').toEqual([]);
 				await page.keyboard.press('Escape');

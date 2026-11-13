@@ -180,6 +180,12 @@ test.describe('discover board', () => {
 		await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
 		await expect(page.getByRole('dialog')).toHaveCount(0);
 		await expect(page.locator('html[data-sign-in-sheet]')).toHaveCount(0);
+		// The enhanced sign-in sets the same production cookie as the plain post.
+		const cookie = (await page.context().cookies(ORIGIN)).find(
+			(c) => c.name === '__Host-organiser_session'
+		);
+		expect(cookie).toMatchObject({ httpOnly: true, secure: true, sameSite: 'Lax', path: '/' });
+		expect(cookie?.domain).toBe('127.0.0.1');
 	});
 
 	test('without JavaScript, sign in to save opens the full sign-in page', async ({ browser }) => {
@@ -324,6 +330,14 @@ test.describe('search context and the filter panel', () => {
 			await expect(page.getByRole('link', { name: 'Back to results' }), query).toHaveCount(0);
 			await expect(page.getByRole('link', { name: 'All events' })).toHaveAttribute('href', '/');
 		}
+		// With or without a search context, one canonical address.
+		for (const query of ['', `?results=${encodeURIComponent('/?country=PT')}`]) {
+			await page.goto(`/events/${listing.id}${query}`);
+			await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+				'href',
+				`${ORIGIN}/events/${listing.id}`
+			);
+		}
 	});
 
 	test('the search context survives signing in from the sheet and saving', async ({ page }) => {
@@ -433,13 +447,12 @@ test.describe('signing in from the sheet', () => {
 		const emailField = sheet.getByLabel('Email', { exact: true });
 		const passwordField = sheet.getByLabel('Password', { exact: true });
 
-		// Nothing typed: each field says what it needs; the first one has focus.
+		// Nothing typed: each field says what it needs; the first one has focus. Field problems
+		// are announced through the focused field only, not also by an alert.
 		await sheet.getByRole('button', { name: 'Sign in' }).click();
 		await expect(page).toHaveURL(url);
-		await expect(sheet.getByRole('alert')).toHaveText(
-			'Enter your email address. Enter your password.'
-		);
 		await expect(emailField).toBeFocused();
+		await expect(sheet.getByRole('alert')).toHaveCount(0);
 		await expect(emailField).toHaveAttribute('aria-invalid', 'true');
 		await expect(emailField).toHaveAttribute('aria-describedby', 'sheet-email-error');
 		await expect(sheet.locator('#sheet-email-error')).toHaveText('Enter your email address.');
@@ -455,12 +468,14 @@ test.describe('signing in from the sheet', () => {
 		await expect(emailField).toBeFocused();
 		await expect(passwordField).not.toHaveAttribute('aria-invalid', 'true');
 
-		// Refused by the server: the message is in the sheet, the email stays, the password goes.
+		// Refused by the server: the message is an alert in the sheet (announced by its role, so
+		// focus is not moved to it), the email stays, the password goes.
 		await emailField.fill(email);
 		await passwordField.fill('not the right password at all');
 		await sheet.getByRole('button', { name: 'Sign in' }).click();
 		await expect(sheet.getByRole('alert')).toHaveText('Email or password is incorrect.');
-		await expect(sheet.getByRole('alert')).toBeFocused();
+		await expect(sheet.getByRole('alert')).not.toBeFocused();
+		await expect(emailField).toHaveAttribute('aria-describedby', 'sheet-error');
 		await expect(page).toHaveURL(url);
 		await expect(emailField).toHaveValue(email);
 		await expect(passwordField).toHaveValue('');
@@ -491,7 +506,141 @@ test.describe('signing in from the sheet', () => {
 		await sheet.getByRole('button', { name: 'Hide password' }).click();
 		await expect(field).toHaveAttribute('type', 'password');
 		await expect(field).toHaveValue('a passphrase to look at');
+		// Leaving the page hides it again, so the browser never stores it as plain text.
+		await sheet.getByRole('button', { name: 'Show password' }).click();
+		await expect(field).toHaveAttribute('type', 'text');
+		const typeAfterPagehide = await field.evaluate((input: HTMLInputElement) => {
+			window.dispatchEvent(new PageTransitionEvent('pagehide', { persisted: false }));
+			return input.type; // read synchronously: unloading does not wait for a re-render
+		});
+		expect(typeAfterPagehide).toBe('password');
 	});
+
+	/** Opens the sheet over a listing; returns the sheet and its fields. */
+	async function openSheet(page: Page) {
+		const listing = await publishListing(`${token()} Sheet net boogie`);
+		const url = `${ORIGIN}/events/${listing.id}`;
+		await page.goto(url);
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
+		await page.getByRole('link', { name: 'Sign in to save this privately' }).click();
+		const sheet = page.getByRole('dialog', { name: 'Sign in' });
+		await expect(sheet).toBeVisible();
+		return {
+			url,
+			sheet,
+			email: sheet.getByLabel('Email', { exact: true }),
+			password: sheet.getByLabel('Password', { exact: true })
+		};
+	}
+
+	test('closing the sheet abandons a sign-in still in flight', async ({ page }) => {
+		const { url, sheet, email, password } = await openSheet(page);
+		let held = false;
+		await page.route(/\/sign-in\?/, async (route) => {
+			if (route.request().method() !== 'POST') return route.fallback();
+			held = true;
+			await new Promise((resolve) => setTimeout(resolve, 2_000));
+			// The browser has dropped the request by now; continuing may fail, which is fine.
+			await route.continue().catch(() => {});
+		});
+		await email.fill(await createAccount({ label: 'abandon' }));
+		await password.fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect.poll(() => held).toBe(true);
+		await page.keyboard.press('Escape');
+		await expect(sheet).toBeHidden();
+		await page.waitForTimeout(3_000);
+		await expect(page).toHaveURL(url);
+		await expect(page.getByRole('link', { name: 'Sign in to save this privately' })).toBeVisible();
+		await expect(page.getByRole('navigation', { name: 'Primary' })).toHaveCount(0);
+	});
+
+	test('offline, nothing is sent and what was typed stays', async ({ page, context }) => {
+		const { url, sheet, email, password } = await openSheet(page);
+		await email.fill('offline@example.com');
+		await password.fill(PASSWORD);
+		await context.setOffline(true);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(sheet.getByRole('alert')).toHaveText(/You are offline, so nothing was sent/);
+		await expect(email).toHaveValue('offline@example.com');
+		await expect(password).toHaveValue(PASSWORD);
+		await expect(email).not.toHaveAttribute('aria-invalid', 'true');
+		await context.setOffline(false);
+		await expect(page).toHaveURL(url);
+	});
+
+	test('a request that gets no answer keeps the password', async ({ page }) => {
+		const { sheet, email, password } = await openSheet(page);
+		await page.route(/\/sign-in\?/, (route) =>
+			route.request().method() === 'POST' ? route.abort('connectionfailed') : route.fallback()
+		);
+		await email.fill('noanswer@example.com');
+		await password.fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(sheet.getByRole('alert')).toHaveText(
+			'The service is unavailable right now. Try again later.'
+		);
+		await expect(password).toHaveValue(PASSWORD);
+	});
+
+	test('throttling is explained inside the sheet (answer mocked)', async ({ page }) => {
+		// Triggering the real limit would throttle the shared test address for the whole run, so
+		// the action's answer is replaced with the shape the server sends for too_many_attempts.
+		const { url, sheet, email, password } = await openSheet(page);
+		await page.route(/\/sign-in\?/, (route) =>
+			route.request().method() === 'POST'
+				? route.fulfill({
+						status: 200,
+						contentType: 'application/json',
+						body: JSON.stringify({
+							type: 'failure',
+							status: 429,
+							data: JSON.stringify([{ error: 1, fields: 2 }, 'too_many_attempts', {}])
+						})
+					})
+				: route.fallback()
+		);
+		await email.fill('throttled@example.com');
+		await password.fill(PASSWORD);
+		await sheet.getByRole('button', { name: 'Sign in' }).click();
+		await expect(sheet.getByRole('alert')).toHaveText(
+			'Too many attempts. Wait a while, then try again.'
+		);
+		await expect(email).toHaveValue('throttled@example.com');
+		await expect(email).not.toHaveAttribute('aria-invalid', 'true');
+		await expect(page).toHaveURL(url);
+	});
+});
+
+test('a cross-site enhanced sign-in POST is refused', async ({ playwright }) => {
+	const request = await playwright.request.newContext({ ignoreHTTPSErrors: true });
+	const response = await request.post(`${ORIGIN}/sign-in?returnTo=%2Fdz`, {
+		headers: {
+			origin: 'https://evil.example',
+			'x-sveltekit-action': 'true',
+			accept: 'application/json',
+			'content-type': 'application/x-www-form-urlencoded'
+		},
+		data: 'email=a%40example.com&password=x',
+		maxRedirects: 0
+	});
+	expect(response.status()).toBe(403);
+	await request.dispose();
+});
+
+test('for a member, the sticky apply button sits above the tab bar', async ({ page }) => {
+	await page.goto('/sign-in');
+	await signInHere(page, await createAccount({ label: 'sticky' }));
+	await expect(page.getByRole('navigation', { name: 'Primary' })).toBeVisible();
+	await page.goto('/');
+	await page.locator('summary', { hasText: 'Filters' }).click();
+	await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
+	await page.evaluate(() => window.scrollTo(0, 0));
+	const apply = page.getByRole('button', { name: 'Show listings' });
+	await expect(apply).toBeInViewport();
+	const button = (await apply.boundingBox())!;
+	const nav = (await page.getByRole('navigation', { name: 'Primary' }).boundingBox())!;
+	expect(button.y + button.height).toBeLessThanOrEqual(nav.y + 1);
 });
 
 test.describe('without JavaScript', () => {
@@ -509,14 +658,21 @@ test.describe('without JavaScript', () => {
 		await page.locator('summary', { hasText: 'Filters' }).click();
 		await page.getByLabel('Country').selectOption('PT');
 		await page.getByLabel('From', { exact: true }).fill('2027-07-01');
+		await page.getByLabel('To', { exact: true }).fill('2027-07-31');
 		await page.locator('summary', { hasText: 'Type, discipline and audience' }).click();
 		await page.getByLabel('Type', { exact: true }).selectOption('boogie');
+		await page.getByLabel('Discipline').selectOption('freefly');
+		await page.getByLabel('Intended for').selectOption('licensed');
 		await page.getByRole('button', { name: 'Show listings' }).click();
-		await expect(page).toHaveURL(/category=boogie/);
+		// The form's own GET: parameters in the panel's order (country and dates first). Names,
+		// values and meaning are as before; only their order in the URL changed.
+		await expect(page).toHaveURL(
+			`${ORIGIN}/?q=${base}&country=PT&from=2027-07-01&to=2027-07-31&category=boogie&discipline=freefly&audience=licensed`
+		);
 		await page.getByRole('link', { name: listing.title }).click();
 		await page.getByRole('link', { name: 'Back to results' }).click();
 		await expect(page).toHaveURL(
-			`${ORIGIN}/?q=${base}&category=boogie&country=PT&from=2027-07-01`
+			`${ORIGIN}/?q=${base}&category=boogie&country=PT&discipline=freefly&audience=licensed&from=2027-07-01&to=2027-07-31`
 		);
 		await plain.close();
 	});
