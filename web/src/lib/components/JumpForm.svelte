@@ -103,11 +103,19 @@
 	// svelte-ignore state_referenced_locally
 	let weightText = $state(values.exit_weight ?? '');
 	let formElement: HTMLFormElement | undefined = $state();
+	// The optional fields as they stand in the form, for the sections' "Filled in" line:
+	// null until the first change, then read the same way as the gear and the weight.
+	let current = $state<Record<string, string> | null>(null);
 	function follow() {
 		if (!formElement) return;
 		const data = new FormData(formElement);
 		ticked = data.getAll('component_ids').map(String);
 		weightText = String(data.get('exit_weight') ?? '');
+		current = Object.fromEntries(
+			Object.values(SECTIONS).flatMap((section) =>
+				Object.keys(section.named).map((name) => [name, String(data.get(name) ?? '')])
+			)
+		);
 	}
 	const candidate = $derived.by(() => {
 		if (!loading) return null;
@@ -143,12 +151,13 @@
 	} as const;
 	type Section = keyof typeof SECTIONS;
 
+	// What a section holds now: what was typed since the page loaded, else what it came with.
 	const filled = (section: Section): string[] => {
 		const names: string[] = Object.entries(SECTIONS[section].named)
-			.filter(([field]) => v(field).trim() !== '')
+			.filter(([field]) => (current ? (current[field] ?? '') : v(field)).trim() !== '')
 			.map(([, name]) => name);
-		if (section === 'equipment' && selected.length > 0) {
-			names.unshift(selected.length === 1 ? '1 item of gear' : `${selected.length} items of gear`);
+		if (section === 'equipment' && ticked.length > 0) {
+			names.unshift(ticked.length === 1 ? '1 item of gear' : `${ticked.length} items of gear`);
 		}
 		return [...new Set(names)];
 	};
@@ -389,6 +398,13 @@
 </form>
 
 <style>
+	/* Two fields side by side when there is room, each with the form's own spacing. */
+	.pair {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+	}
+
 	/* A folded group of optional fields: a full-width row with its summary, then the fields with
 	   the form's own spacing. */
 	/* The <details> and <summary> are rendered by Disclosure, hence :global. */
