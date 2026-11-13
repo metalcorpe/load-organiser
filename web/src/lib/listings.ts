@@ -80,6 +80,36 @@ export function spanDays(start: string | null, end: string | null): number {
 	return Math.round((day(end).getTime() - day(start).getTime()) / 86_400_000) + 1;
 }
 
+/** The fields the board's highlight is chosen by. */
+export interface FeaturedCandidate {
+	category: string;
+	status: string;
+	starts_on: string | null;
+	ends_on: string | null;
+}
+
+/**
+ * The board's highlighted card: the first listing (results come in start-date order) that is a
+ * published, multi-day boogie or camp starting after `today` (YYYY-MM-DD). Nothing more is
+ * known about it (not its size, popularity or importance), so its wording says only that.
+ */
+export function pickFeatured<T extends FeaturedCandidate>(items: readonly T[], today: string): T | null {
+	return (
+		items.find(
+			(i) =>
+				(i.category === 'boogie' || i.category === 'camp') &&
+				i.status === 'published' &&
+				spanDays(i.starts_on, i.ends_on) > 1 &&
+				(i.starts_on ?? '') > today
+		) ?? null
+	);
+}
+
+/** "Upcoming boogie", "Upcoming camp": what the selection above supports, and no more. */
+export function featuredLabel(category: string): string {
+	return `Upcoming ${(CATEGORY_LABEL[category] ?? 'event').toLowerCase()}`;
+}
+
 export function languageName(code: string): string {
 	try {
 		return LANGUAGES.of(code) ?? code;

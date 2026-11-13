@@ -2,33 +2,30 @@
 	import type { OpportunityOut } from '#lib/contracts/index.ts';
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
-	import {
-		CATEGORY_LABEL,
-		dateStub,
-		formatPrice,
-		formatRange,
-		spanDays
-	} from '#lib/listings.ts';
+	import { eventHref } from '#lib/listing-filters.ts';
+	import { dateStub, featuredLabel, formatPrice, formatRange, spanDays } from '#lib/listings.ts';
 
-	/** The board's navy card: the next multi-day boogie or camp, shown once above the list. */
+	/**
+	 * The board's navy card: the next multi-day boogie or camp (pickFeatured), shown once above
+	 * the dated list and not repeated in it.
+	 */
 	let { item }: { item: OpportunityOut } = $props();
 	const stub = $derived(dateStub(item.starts_on, item.ends_on));
 	const days = $derived(spanDays(item.starts_on, item.ends_on));
 	const place = $derived(item.venue ? item.venue.name : (item.location_note ?? ''));
 	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
+	const label = $derived(featuredLabel(item.category));
 </script>
 
 <section class="featured type-{item.category}" aria-labelledby="featured-heading">
-	<h2 id="featured-heading" class="visually-hidden">Next big event</h2>
+	<h2 id="featured-heading" class="visually-hidden">Highlighted: {label.toLowerCase()}</h2>
 	<div class="text">
-		<span class="type-pill"
-			><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]} · next big one</span
-		>
-		<a class="title" href="/events/{item.id}">{item.title}</a>
+		<span class="type-pill"><TypeIcon category={item.category} />{label}</span>
+		<a class="title" href={eventHref(item.id)}>{item.title}</a>
+		<span class="dates">{formatRange(item.starts_on, item.ends_on)}</span>
 		<span class="meta">
 			{place ? `${place}, ` : ''}{countryName(item.country)}{price ? ` · ${price}` : ''}
 		</span>
-		<span class="visually-hidden">{formatRange(item.starts_on, item.ends_on)}</span>
 	</div>
 	{#if stub}
 		<div class="when" aria-hidden="true">
@@ -84,6 +81,10 @@
 
 	.title:focus-visible {
 		outline: none;
+	}
+
+	.dates {
+		font-weight: 600;
 	}
 
 	.meta,

@@ -18,39 +18,40 @@
 		DISCIPLINE_LABEL,
 		formatDay,
 		listingMessage,
-		spanDays
+		pickFeatured
 	} from '#lib/listings.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const countryOptions = $derived(coverageOptions(data.countries, data.filters.country));
 	const filtered = $derived(hasFilters(data.filters));
-	// On the plain first page, the next multi-day boogie or camp gets the navy card and is not
-	// repeated in the list.
+	// This search (filters and page), carried into each event for "Back to results".
+	const here = $derived(boardHref(data.filters, data.cursor || undefined));
+	// On the plain first page, the next multi-day boogie or camp gets the navy card. It is taken
+	// out of the dated list below rather than shown twice; the list's heading says so.
+	// "Next" by UTC date: good enough for a label.
 	const featured = $derived(
 		!filtered && !data.paged && data.result.ok && data.result.items.length > 1
-			? (data.result.items.find(
-					(i) =>
-						(i.category === 'boogie' || i.category === 'camp') &&
-						i.status === 'published' &&
-						spanDays(i.starts_on, i.ends_on) > 1 &&
-						// "Next big one" means not started yet (UTC date; good enough for a label).
-						(i.starts_on ?? '') > new Date().toISOString().slice(0, 10)
-				) ?? null)
+			? pickFeatured(data.result.items, new Date().toISOString().slice(0, 10))
 			: null
 	);
 	const listed = $derived(
 		data.result.ok ? data.result.items.filter((i) => i.id !== featured?.id) : []
 	);
+	// Type, discipline and audience fold away unless one of them is in use.
+	const moreActive = $derived(
+		[data.filters.category, data.filters.discipline, data.filters.audience].filter(Boolean).length
+	);
 	// Each active filter (other than the search text) as a chip that removes just that filter.
+	// The dates keep the board's overlap rule: "from" = ending on or after, "to" = starting by.
 	const chips = $derived(
 		[
-			['category', data.filters.category && CATEGORY_LABEL[data.filters.category]],
 			['country', data.filters.country && countryName(data.filters.country)],
+			['from', data.filters.from && `Available from ${formatDay(data.filters.from)}`],
+			['to', data.filters.to && `Available until ${formatDay(data.filters.to)}`],
+			['category', data.filters.category && CATEGORY_LABEL[data.filters.category]],
 			['discipline', data.filters.discipline && DISCIPLINE_LABEL[data.filters.discipline]],
-			['audience', data.filters.audience && AUDIENCE_LABEL[data.filters.audience]],
-			['from', data.filters.from && `Ending on or after ${formatDay(data.filters.from)}`],
-			['to', data.filters.to && `Starting by ${formatDay(data.filters.to)}`]
+			['audience', data.filters.audience && AUDIENCE_LABEL[data.filters.audience]]
 		]
 			.filter(([, label]) => label)
 			.map(([key, label]) => ({
@@ -71,12 +72,10 @@
 
 <ExploreSwitch />
 <h1>Events</h1>
-<p class="lede">Dated events, boogies, camps and courses. Register on the organizer's site.</p>
+<p class="lede">Boogies, camps, courses and other events in Europe. You register with the organizer.</p>
 {#if !data.viewer}
-	<p class="join-line">
-		Members also keep a private logbook, gear and history, and save events.
-		<a href="/register">Join</a> or <a href="/sign-in?returnTo=%2F" data-sign-in>sign in</a>.
-	</p>
+	<!-- Join and Sign in are in the header; this only says what an account adds. -->
+	<p class="join-line">With an account you can save events and keep a private logbook.</p>
 {/if}
 
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
@@ -100,15 +99,6 @@
 		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
 		<div class="form filters">
 			<div class="field">
-				<label for="category">Type</label>
-				<select id="category" name="category">
-					<option value="" selected={!data.filters.category}>Any type</option>
-					{#each CATEGORY_VALUES as value (value)}
-						<option {value} selected={value === data.filters.category}>{CATEGORY_LABEL[value]}</option>
-					{/each}
-				</select>
-			</div>
-			<div class="field">
 				<label for="country">Country</label>
 				<select id="country" name="country">
 					<option value="" selected={!data.filters.country}>Any country</option>
@@ -119,35 +109,77 @@
 					{/each}
 				</select>
 			</div>
-			<div class="field">
-				<label for="discipline">Discipline</label>
-				<select id="discipline" name="discipline">
-					<option value="" selected={!data.filters.discipline}>Any discipline</option>
-					{#each DISCIPLINE_VALUES as value (value)}
-						<option {value} selected={value === data.filters.discipline}
-							>{DISCIPLINE_LABEL[value]}</option
-						>
-					{/each}
-				</select>
-			</div>
-			<div class="field">
-				<label for="audience">Intended for</label>
-				<select id="audience" name="audience">
-					<option value="" selected={!data.filters.audience}>Anyone</option>
-					{#each AUDIENCE_VALUES as value (value)}
-						<option {value} selected={value === data.filters.audience}>{AUDIENCE_LABEL[value]}</option>
-					{/each}
-				</select>
-			</div>
-			<div class="field">
-				<label for="from">Ending on or after</label>
-				<input id="from" name="from" type="date" defaultValue={data.filters.from} />
-			</div>
-			<div class="field">
-				<label for="to">Starting on or before</label>
-				<input id="to" name="to" type="date" defaultValue={data.filters.to} />
-			</div>
-			<div class="form-actions wide">
+			<!-- Overlap, unchanged: "from" keeps events ending on or after it, "to" those starting
+			     on or before it. -->
+			<fieldset class="when">
+				<legend>When are you available?</legend>
+				<div class="dates">
+					<div class="field">
+						<label for="from">From</label>
+						<input
+							id="from"
+							name="from"
+							type="date"
+							defaultValue={data.filters.from}
+							aria-describedby="dates-hint"
+						/>
+					</div>
+					<div class="field">
+						<label for="to">To</label>
+						<input
+							id="to"
+							name="to"
+							type="date"
+							defaultValue={data.filters.to}
+							aria-describedby="dates-hint"
+						/>
+					</div>
+				</div>
+				<p class="hint" id="dates-hint">
+					Shows every event that overlaps these dates, including ones that start earlier or end
+					later.
+				</p>
+			</fieldset>
+			<details class="secondary" open={moreActive > 0}>
+				<summary>Type, discipline and audience{moreActive ? ` (${moreActive})` : ''}</summary>
+				<div class="secondary-fields">
+					<div class="field">
+						<label for="category">Type</label>
+						<select id="category" name="category">
+							<option value="" selected={!data.filters.category}>Any type</option>
+							{#each CATEGORY_VALUES as value (value)}
+								<option {value} selected={value === data.filters.category}
+									>{CATEGORY_LABEL[value]}</option
+								>
+							{/each}
+						</select>
+					</div>
+					<div class="field">
+						<label for="discipline">Discipline</label>
+						<select id="discipline" name="discipline">
+							<option value="" selected={!data.filters.discipline}>Any discipline</option>
+							{#each DISCIPLINE_VALUES as value (value)}
+								<option {value} selected={value === data.filters.discipline}
+									>{DISCIPLINE_LABEL[value]}</option
+								>
+							{/each}
+						</select>
+					</div>
+					<div class="field">
+						<label for="audience">Intended for</label>
+						<select id="audience" name="audience">
+							<option value="" selected={!data.filters.audience}>Anyone</option>
+							{#each AUDIENCE_VALUES as value (value)}
+								<option {value} selected={value === data.filters.audience}
+									>{AUDIENCE_LABEL[value]}</option
+								>
+							{/each}
+						</select>
+					</div>
+				</div>
+			</details>
+			<!-- Stays in reach at the bottom of the screen while the panel is taller than it. -->
+			<div class="form-actions apply" class:with-nav={Boolean(data.viewer)}>
 				<button class="button" type="submit">Show listings</button>
 			</div>
 		</div>
@@ -190,11 +222,11 @@
 {:else}
 	{#if featured}
 		<FeaturedListing item={featured} />
-		<h2 class="list-heading">Coming up</h2>
+		<h2 class="list-heading">Other events, by date</h2>
 	{/if}
 	<ul class="results cards" aria-label="Listings">
 		{#each listed as item (item.id)}
-			<li><ListingItem {item} /></li>
+			<li><ListingItem {item} results={here} /></li>
 		{/each}
 	</ul>
 	<nav class="pager" aria-label="More listings">
@@ -242,8 +274,60 @@
 		background: var(--surface);
 	}
 
-	.wide {
+	.when,
+	.secondary,
+	.apply {
 		grid-column: 1 / -1;
+	}
+
+	.when {
+		display: grid;
+		gap: 0.6rem;
+		padding: 0;
+		border: 0;
+	}
+
+	.when legend {
+		padding: 0;
+		margin-bottom: 0.4rem;
+	}
+
+	.dates {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+		gap: 0.75rem;
+	}
+
+	.secondary-fields {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+		gap: 1rem;
+		padding-top: 0.25rem;
+	}
+
+	/* The apply button stays on screen while the open panel is taller than the screen; it
+	   stops at the end of the panel, so it never sits over the results or the footer. */
+	.apply {
+		position: sticky;
+		bottom: env(safe-area-inset-bottom);
+		z-index: 1;
+		margin: 0 -0.85rem -0.85rem;
+		padding: 0.6rem 0.85rem;
+		border-top: 1px solid var(--border);
+		border-radius: 0 0 var(--radius) var(--radius);
+		background: var(--surface);
+	}
+
+	/* Members' tab bar is fixed at the bottom on phones: sit just above it. */
+	@media (max-width: 47.99rem) {
+		.apply.with-nav {
+			bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+		}
+	}
+
+	/* A field focused under the sticky button scrolls clear of it (and of the tab bar). */
+	:global(html:has(.board-search details[open])) {
+		scroll-padding-bottom: calc(var(--nav-height) + 5rem + env(safe-area-inset-bottom));
 	}
 
 	.chips {
