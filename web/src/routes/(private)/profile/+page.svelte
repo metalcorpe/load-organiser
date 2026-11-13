@@ -269,7 +269,7 @@
 		</div>
 		<label class="choice"><input type="checkbox" name="confirm" /> Delete my account and records</label>
 		<div class="form-actions">
-			<button class="button secondary" type="submit">Delete account</button>
+			<button class="button danger" type="submit">Delete account</button>
 		</div>
 	</form>
 </section>

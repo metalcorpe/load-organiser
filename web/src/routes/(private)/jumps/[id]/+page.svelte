@@ -260,7 +260,7 @@
 	<input type="hidden" name="version" value={jump.version} />
 	<label class="choice"><input type="checkbox" name="confirm" /> Delete this jump and its history</label>
 	<p class="hint">This cannot be undone. Your gear and places are kept.</p>
-	<div class="form-actions"><button class="button secondary" type="submit">Delete jump</button></div>
+	<div class="form-actions"><button class="button danger" type="submit">Delete jump</button></div>
 </form>
 </section>
 

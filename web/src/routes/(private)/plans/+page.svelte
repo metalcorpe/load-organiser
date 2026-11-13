@@ -154,7 +154,7 @@
 					</form>
 					<form method="POST" action="?/remove">
 						<input type="hidden" name="id" value={plan.id} />
-						<button class="button secondary" type="submit">Delete plan</button>
+						<button class="button danger" type="submit">Delete plan</button>
 					</form>
 				</details>
 			</li>

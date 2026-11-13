@@ -50,7 +50,7 @@
 					{#if item}<a href="/plans?opportunity={item.id}">Plan a visit</a>{/if}
 					<form method="POST" action="?/remove">
 						<input type="hidden" name="id" value={entry.opportunity_id} />
-						<button class="button secondary small" type="submit">Remove</button>
+						<button class="button danger small" type="submit">Remove</button>
 					</form>
 				</span>
 			</li>
