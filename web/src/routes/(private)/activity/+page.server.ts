@@ -14,7 +14,7 @@ export const load: PageServerLoad = async (event) => {
 	if (!secret) redirect(303, '/sign-in');
 	const before = event.url.searchParams.get('before') ?? '';
 	const api = createRequestApi();
-	const [feed, own, following] = await Promise.all([
+	const [feed, own, following, requested] = await Promise.all([
 		call<PostPageOut>(api, 'getFeed', {
 			bearer: secret,
 			query: { before: isUuid(before) ? before : undefined }
@@ -22,7 +22,9 @@ export const load: PageServerLoad = async (event) => {
 		call<OwnProfileOut | null>(api, 'getOwnProfile', { bearer: secret }, () => true),
 		// The people you follow sit beside the feed. Their failure is shown there (null) and
 		// never hides the feed.
-		call<PersonOut[]>(api, 'listFollowing', { bearer: secret }, isList)
+		call<PersonOut[]>(api, 'listFollowing', { bearer: secret }, isList),
+		// Asked to follow, not approved yet: said apart from following.
+		call<PersonOut[]>(api, 'listRequested', { bearer: secret }, isList)
 	]);
 	// The session ended between the guard and the API call: sign in again.
 	if (!feed.ok && feed.status === 401) redirect(303, signInPath(event.url));
@@ -32,6 +34,7 @@ export const load: PageServerLoad = async (event) => {
 		hasProfile: own.ok ? own.value !== null : true,
 		// Waiting follow requests come with the viewer's own profile.
 		requests: own.ok && own.value ? own.value.pending_requests : 0,
-		following: following.ok ? following.value : null
+		following: following.ok ? following.value : null,
+		requested: requested.ok ? requested.value : null
 	};
 };

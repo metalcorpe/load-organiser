@@ -310,8 +310,10 @@ class SqlSocialStore:
                 if relation in ("requests", "followers")
                 else (F.followee_person_id, F.follower_person_id)
             )
-            status = "pending" if relation == "requests" else "approved"
-            when = F.created_at if relation == "requests" else F.approved_at
+            # requests: asking to follow me; requested: my own requests not yet approved.
+            pending = relation in ("requests", "requested")
+            status = "pending" if pending else "approved"
+            when = F.created_at if pending else F.approved_at
             query = (
                 select(col(P.handle), col(P.display_name), col(when))
                 .join(F, col(other) == col(P.person_id))
