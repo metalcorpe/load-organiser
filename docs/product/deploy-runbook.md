@@ -137,6 +137,28 @@ for the next deploy) so the reviewer role is granted. Without mail, use
 - [ ] The API refuses a request without a session: `curl -i https://<api-address>/api/skydiver/v1/jumps` answers 401.
 - [ ] Cold start: first request after idle, note the time.
 
+## Dropzones on staging (owner request 2026-11-14)
+
+The researched inventory (`docs/product/inventory/dropzones/`, 685 records) is the one
+research data set that may go to the hosted database, and only by the owner, in two
+steps. From a checkout of `main`, in your own terminal:
+
+1. `export DATABASE_URL='…'` (the Neon direct string), then
+   `scripts/staging.sh load-dropzones YOUR_EMAIL`. New dropzones are created as
+   **drafts**: nothing public changes. Dropzones already on staging are recognised
+   (within 1.5 km, the same place name, or an alias only that record carries) and
+   listed under `duplicates` in the report instead of being added again.
+2. Look over the drafts: in Review, search part of a dropzone name (matches show every
+   status, drafts included; each source note reads "Research status: …. Inventory ref
+   …"), and compare with the counts in `_summary.md`.
+3. `scripts/staging.sh load-dropzones YOUR_EMAIL active,seasonal` (or the statuses you
+   choose: `active`, `seasonal`, `uncertain`, `closed`). Drafts with those statuses and
+   coordinates become public (`closed` ones as closed); recognised existing dropzones
+   of those statuses get coordinates if they had none. The rest stay drafts.
+
+Running it again adds nothing twice. A public dropzone cannot go back to draft (links
+to it must keep working): close it or merge it into another in Review → Dropzones.
+
 ## Not done yet (gates before real data or other people)
 
 - **Backups and a restore drill on the hosted database** (#161): destination, schedule,

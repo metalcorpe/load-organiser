@@ -7,6 +7,9 @@
 #   scripts/staging.sh migrate               # apply migrations (before deploying code that needs them)
 #   scripts/staging.sh create-account EMAIL  # your confirmed account; asks for the password
 #   scripts/staging.sh grant-reviewer EMAIL  # the maintainer role
+#   scripts/staging.sh load-dropzones EMAIL [STATUSES]
+#                                            # the researched dropzones as drafts; with
+#                                            # STATUSES (e.g. active,seasonal) those go public
 #
 # The connection string is read from this shell only and never written anywhere.
 # Commands run from an empty temporary directory with a cleared environment, so the
@@ -50,8 +53,14 @@ case "${1:-}" in
     [ -n "${2:-}" ] || { echo "usage: $0 grant-reviewer EMAIL" >&2; exit 2; }
     run python -m app.skydiver.access.grant reviewer "$2"
     ;;
+  load-dropzones)
+    [ -n "${2:-}" ] || { echo "usage: $0 load-dropzones EMAIL [STATUSES]" >&2; exit 2; }
+    run python -m app.skydiver.devdata dropzones \
+      "$(cd "$B/.." && pwd)/docs/product/inventory/dropzones" --reviewer "$2" \
+      ${3:+--publish "$3"}
+    ;;
   *)
-    sed -n '2,10p' "$0" >&2
+    sed -n '2,13p' "$0" >&2
     exit 2
     ;;
 esac

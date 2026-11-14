@@ -120,15 +120,24 @@ FIXTURES = Path(__file__).parent / "fixtures" / "dropzones"
 
 
 def _only_this_run(monkeypatch: pytest.MonkeyPatch, tag: str) -> None:
-    """The test database is shared: other tests' venues sit at the fixture's places."""
-    real = devdata._stored_venues
+    """The test database is shared: other tests' venues sit at the fixture's places and
+    carry its aliases (another run's "LEXX")."""
+    real_stored, real_names = devdata._stored_venues, devdata._venue_names
 
-    def tagged(engine: Any) -> dict[str, list[devdata.StoredVenue]]:
+    def ids(engine: Any) -> set[uuid.UUID]:
         with engine.connect() as conn:
-            ids = set(conn.execute(text("SELECT id FROM skydiver_venue WHERE name LIKE :t"), {"t": f"%{tag}%"}).scalars())  # fmt: skip
-        return {c: [v for v in vs if v.id in ids] for c, vs in real(engine).items()}
+            return set(conn.execute(text("SELECT id FROM skydiver_venue WHERE name LIKE :t"), {"t": f"%{tag}%"}).scalars())  # fmt: skip
 
-    monkeypatch.setattr(devdata, "_stored_venues", tagged)
+    def stored(engine: Any) -> dict[str, list[devdata.StoredVenue]]:
+        mine = ids(engine)
+        return {c: [v for v in vs if v.id in mine] for c, vs in real_stored(engine).items()}  # fmt: skip
+
+    def names(engine: Any) -> dict[tuple[str, str], uuid.UUID]:
+        mine = ids(engine)
+        return {k: v for k, v in real_names(engine).items() if v in mine}
+
+    monkeypatch.setattr(devdata, "_stored_venues", stored)
+    monkeypatch.setattr(devdata, "_venue_names", names)
 
 
 def test_loads_the_dropzone_inventory_with_coordinates_once(
@@ -156,7 +165,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     dev_dz = directory.search(query=f"Dev DZ {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     active_dz = directory.search(query=f"Active Field {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     assert {k: v for k, v in report.items() if k != "refused"} == {
-        "files": 1, "added": 5, "closed": 1, "skipped": 0, "resumed": 0,
+        "files": 1, "added": 5, "closed": 1, "skipped": 0, "resumed": 0, "drafted": 0,
         "duplicates": [
             # ~500 m from a dropzone this run added, under another name.
             {"key": f"es-{tag}-near-active", "matched": str(active_dz.id), "by": "distance"},
@@ -385,6 +394,61 @@ def test_refuses_without_the_explicit_opt_in(monkeypatch: pytest.MonkeyPatch) ->
     assert devdata.dev_data_refusal({"SKYDIVER_DEV_DATA": "1"}, "local", "127.0.0.1")
     assert devdata.dev_data_refusal({**local, "SKYDIVER_DEV_DATA": "yes"}, "local", "127.0.0.1")  # fmt: skip
     assert devdata.dev_data_refusal(local, "local", "db.example.org")
+
+
+def test_the_hosted_load_drafts_first_and_publishes_only_the_chosen_statuses(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC))  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    for source in FIXTURES.iterdir():
+        (folder / source.name).write_text(source.read_text(encoding="utf-8").replace("TAG", tag), encoding="utf-8")  # fmt: skip
+
+    def public() -> list[str]:
+        return sorted(v.name for v in directory.search(query=tag, country="ES", cursor=None, limit=None).items)  # fmt: skip
+
+    def counts(report: dict[str, Any]) -> tuple[int, ...]:
+        return tuple(report[k] for k in ("added", "resumed", "drafted", "skipped", "located"))  # fmt: skip
+
+    # Step 1: drafts only. The ~500 m neighbour is still recognised, against a draft.
+    first = devdata.load_dropzones(
+        engine, folder, actor, directory, publish=frozenset()
+    )
+    assert counts(first) == (0, 0, 6, 0, 0)
+    assert [d["key"] for d in first["duplicates"]] == [f"es-{tag}-near-active"]
+    assert public() == []
+    with engine.connect() as conn:
+        note = conn.execute(text("SELECT source_note FROM skydiver_venue WHERE name = :n"), {"n": f"Active Field {tag}"}).scalar_one()  # fmt: skip
+    # Shown on the public page once published: words, not the local-only marker.
+    assert note == f"Research status: active. Inventory ref es-{tag}-active."
+
+    # Step 2: the owner publishes active dropzones with coordinates; the rest wait.
+    second = devdata.load_dropzones(engine, folder, actor, directory, publish=frozenset({"active"}))  # fmt: skip
+    assert counts(second) == (3, 3, 3, 0, 0)
+    assert public() == sorted([f"Active Field {tag}", f"Second Field {tag}", f"Active {tag} West Field"])  # fmt: skip
+
+    again = devdata.load_dropzones(engine, folder, actor, directory, publish=frozenset({"active"}))  # fmt: skip
+    assert counts(again) == (0, 0, 3, 3, 0)
+
+
+def test_the_hosted_load_runs_only_from_the_staging_script(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    args = ["dropzones", str(tmp_path), "--reviewer", "a@example.com"]
+    monkeypatch.setenv("ENVIRONMENT", "local")
+    monkeypatch.setenv("DATABASE_URL", "postgresql://example.invalid/db")
+    assert devdata.main(args) == 2
+    monkeypatch.setenv("ENVIRONMENT", "staging")
+    monkeypatch.delenv("DATABASE_URL")
+    assert devdata.main(args) == 2
+    assert devdata.hosted_refusal({"ENVIRONMENT": "staging", "DATABASE_URL": "postgresql://x/y"}) is None  # fmt: skip
+    with pytest.raises(SystemExit):
+        devdata.main([*args, "--publish", "active,listed"])  # not a research status
 
 
 def test_refuses_a_dropzones_path_that_is_not_a_folder(
