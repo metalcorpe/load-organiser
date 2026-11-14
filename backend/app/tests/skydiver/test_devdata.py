@@ -165,7 +165,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     dev_dz = directory.search(query=f"Dev DZ {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     active_dz = directory.search(query=f"Active Field {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     assert {k: v for k, v in report.items() if k != "refused"} == {
-        "files": 1, "added": 5, "closed": 1, "skipped": 0, "resumed": 0, "drafted": 0,
+        "files": 1, "added": 4, "closed": 1, "skipped": 0, "resumed": 0, "drafted": 1,
         "duplicates": [
             # ~500 m from a dropzone this run added, under another name.
             {"key": f"es-{tag}-near-active", "matched": str(active_dz.id), "by": "distance"},
@@ -205,10 +205,13 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     assert (active["url"], active["checked_on"]) == ("https://example.org/federation", "2026-11-13")  # fmt: skip
     assert active["note"].startswith(f"dev-data:es-{tag}-active ")
     assert venue(f"Closed Field {tag}")["status"] == "closed"
-    unplaced = venue(f"Unplaced Field {tag}")
-    assert (unplaced["status"], unplaced["lat"]) == ("listed", None)
-    assert unplaced["checked_on"] == "2026-11-14"  # the file's research day
-    assert unplaced["note"].endswith("Research status: uncertain.")
+    # An uncertain lead is kept as a draft: not shown as a dropzone, here as on staging.
+    assert directory.search(query=f"Unplaced Field {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
+    with engine.connect() as conn:
+        unplaced = conn.execute(text("SELECT status, checked_on, source_note FROM skydiver_venue WHERE name = :n"), {"n": f"Unplaced Field {tag}"}).one()  # fmt: skip
+    assert unplaced.status == "draft"
+    assert unplaced.checked_on.isoformat() == "2026-11-14"  # the file's research day
+    assert unplaced.source_note.endswith("Research status: uncertain.")
     # The listings' own venue, found by the dropzone's name, got the coordinates.
     known = venue(f"Dev DZ {tag}")
     assert (known["lat"], known["lon"]) == (41.5, 2.1)
@@ -228,7 +231,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     )
 
     again = devdata.load(engine, path, actor, directory, listings)["dropzones"]
-    assert (again["added"], again["skipped"], again["located"]) == (0, 5, 0)
+    assert (again["added"], again["skipped"], again["drafted"], again["located"]) == (0, 4, 1, 0)  # fmt: skip
     assert [d["key"] for d in again["duplicates"]] == [f"es-{tag}-near-active", f"es-{tag}-listed-already"]  # fmt: skip
 
 

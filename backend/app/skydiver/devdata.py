@@ -28,8 +28,9 @@ country carries. An existing venue without coordinates gets the researched ones.
 Aliases several records share never match: they are often operator brands of
 several airfields. Each venue is created as a
 draft and made public (listed, or closed for researched `closed` dropzones) in one
-step at the end; `uncertain` ones stay listed, with the research status in the
-source note. Invalid records are refused and reported; the rest still load.
+step at the end; `uncertain` ones stay drafts, as on staging: an unconfirmed lead is
+not shown as a dropzone. The research status is in the source note. Invalid records
+are refused and reported; the rest still load.
 """
 
 import argparse
@@ -312,6 +313,8 @@ def _venue_status(engine: Engine, venue_id: uuid.UUID) -> str:
 
 
 DROPZONE_STATUSES = frozenset({"active", "seasonal", "uncertain", "closed"})
+# The local load shows what the research confirmed; `uncertain` leads stay drafts.
+LOCAL_PUBLISH = DROPZONE_STATUSES - {"uncertain"}
 DROPZONE_KEY = re.compile(r"^[a-z0-9-]+$")
 
 
@@ -416,9 +419,10 @@ def load_dropzones(
     that country carries the alias. Shared aliases (often operator brands of several
     airfields) never identify a dropzone.
 
-    `publish` None is the local development load: everything is made public. Given
-    (the hosted load), only records whose research status is in it and that have
-    coordinates are made public, and only they fill in a stored venue's missing
+    `publish` None is the local development load: every status but `uncertain` is
+    made public (`LOCAL_PUBLISH`), with or without coordinates. Given (the hosted
+    load), only records whose research status is in it and that have coordinates are
+    made public. Only records made public fill in a stored venue's missing
     coordinates; every other new record stays a draft that a later run with its
     status publishes. An empty set changes nothing public.
     """
@@ -436,7 +440,9 @@ def load_dropzones(
     }
 
     def publishes(dz: Mapping[str, Any]) -> bool:
-        return publish is None or (dz["status"] in publish and _point(dz) is not None)
+        if publish is None:
+            return dz["status"] in LOCAL_PUBLISH
+        return dz["status"] in publish and _point(dz) is not None
 
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
