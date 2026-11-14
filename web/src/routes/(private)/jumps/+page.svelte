@@ -3,6 +3,7 @@
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
 	import DueList from '#lib/components/DueList.svelte';
+	import Notice from '#lib/components/Notice.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { localToday } from '#lib/currency.ts';
 	import { fieldsFor } from '#lib/field-errors.ts';
@@ -90,6 +91,17 @@
 	const firstUse = $derived(
 		data.page.ok && data.page.recorded_total === 0 && !data.filtered && !data.older && !data.select
 	);
+	// Currency, gear and plans: on the plain logbook (any page) beside the jumps. A phone shows
+	// them on the first page only, and a filtered one only the count of matches.
+	// Nothing beside a failed or stale load.
+	const home = $derived(data.page.ok && !data.filtered && !data.select);
+	const matchedSide = $derived(
+		data.page.ok && data.filtered && matched !== null && matched.jumps > 0
+	);
+	// Without anything for the side column (selecting jumps, no matches, a failed load), there
+	// are no columns: the main column alone, as wide as it is beside the side column.
+	const hasSide = $derived(home || matchedSide);
+	const sideOnPhones = $derived(matchedSide || (home && !data.older));
 	const declared = $derived(
 		data.summary?.priorJumps ? { count: data.summary.priorJumps, before: data.summary.priorBefore } : null
 	);
@@ -108,6 +120,10 @@
 </div>
 <PrivacyLabel text="Private logbook — only you can see your jumps" />
 
+<!-- Large screens: the jumps (or the way to start) in the main column; currency, gear due
+     soon and what is coming up beside them. One column on a phone, in this order. -->
+<div class={hasSide ? 'columns' : 'solo'}>
+<div class="col-main">
 {#if filterError}
 	<p class="form-error" role="alert" id="filter-error">{jumpMessage(filterError)}</p>
 {/if}
@@ -213,10 +229,9 @@
 
 {#if !data.page.ok}
 	{#if !filterError && loadFailure(data.page.reason) === 'retry'}
-		<!-- A failed load is not an empty logbook: say so, and offer the same page again. -->
-		<section class="load-failed" aria-labelledby="load-failed-heading">
-			<h2 id="load-failed-heading">Your jumps could not be loaded</h2>
-			<p class="form-error" role="alert">
+		<!-- A failed load is not an empty logbook: the error tone, and the same page again. -->
+		<Notice title="Your jumps could not be loaded" tone="bad">
+			<p role="alert">
 				{data.page.reason === 'uncertain'
 					? 'The service did not answer in time.'
 					: 'The service is unavailable right now.'} Nothing in your logbook was changed.
@@ -226,27 +241,82 @@
 					>Try again</a
 				>
 			</p>
-		</section>
+		</Notice>
 	{:else if !filterError && loadFailure(data.page.reason) === 'stale'}
 		<!-- An old or altered page link: trying it again would not help. -->
-		<section class="load-failed" aria-labelledby="load-failed-heading">
-			<h2 id="load-failed-heading">This page of your logbook could not be shown</h2>
-			<p class="form-error" role="alert">
-				The link to this page is out of date. Your logbook itself is unchanged.
-			</p>
+		<Notice title="This page of your logbook could not be shown" tone="warn">
+			<p role="alert">The link to this page is out of date. Your logbook itself is unchanged.</p>
 			<p>
 				<a href={jumpsHref(data.filters)}
 					>{data.filtered ? 'Go to the first page of this search' : 'Go to your newest jumps'}</a
 				>
 			</p>
-		</section>
+		</Notice>
 	{:else if !filterError}
 		<!-- Any other refusal keeps its own wording (session ended, not allowed, bad input). -->
 		<p class="form-error" role="alert">{jumpMessage(data.page.reason)}</p>
 	{/if}
-{:else}
-	<!-- The count and span of the matches; with none, the empty state below says it. -->
-	{#if data.filtered && matched && matched.jumps > 0}
+{:else if firstUse}
+	<!-- First use: the shared empty state, with the two ways to start. -->
+	<section class="empty-state" aria-labelledby="first-use-heading">
+		<h2 id="first-use-heading">Start your logbook</h2>
+		{#if declared}
+			<p>
+				You declared {n(declared.count)} prior {declared.count === 1 ? 'jump' : 'jumps'}{declared.before
+					? ` before ${formatDay(declared.before)}`
+					: ''}; they count in your total. No jumps are logged here yet: add them one by one or
+				from a spreadsheet.
+			</p>
+		{:else}
+			<p>No jumps yet. Log one with only the date, place and type, or bring in the logbook you already keep.</p>
+		{/if}
+		<p class="actions">
+			<a class="button" href="/jumps/new">Log your first jump</a>
+			<a class="button secondary" href="/records/import">Import existing logbook</a>
+		</p>
+		<p class="hint">Import reads a spreadsheet (CSV) and checks it before anything is saved.</p>
+	</section>
+{:else if !data.older && !data.filtered && !data.select}
+	<!-- The screen's one navy card: totals and the main action. -->
+	<section class="card" aria-label="Totals and log a jump">
+		<div class="totals">
+			<p class="big">
+				<span class="number">{n(data.summary?.lifetime ?? data.page.recorded_total)}</span>
+				<span class="unit"
+					>{(data.summary?.lifetime ?? data.page.recorded_total) === 1 ? 'jump' : 'jumps'}</span
+				>
+			</p>
+			<div class="side">
+				<p>
+					{n(data.page.recorded_total)}
+					{data.page.recorded_total === 1 ? 'jump' : 'jumps'} recorded here.
+				</p>
+				{#if data.summary?.lastJumpOn}<p>Last: {formatDay(data.summary.lastJumpOn)}</p>{/if}
+			</div>
+		</div>
+		{#if first}
+			{#if data.continueFrom}
+				<a class="button log" href="{pick(first)}&from={data.continueFrom}">Log the next jump at {first.name}</a>
+			{:else}
+				<a class="button log" href={pick(first)}>Log a jump at {first.name}</a>
+			{/if}
+			<p class="others">
+				{#each data.recent.slice(1) as loc (loc.kind + loc.id)}
+					<a class="chip" href={pick(loc)}>{loc.name}</a>
+				{/each}
+				<a class="chip" href="/jumps/new">Other place</a>
+			</p>
+		{:else}
+			<a class="button log" href="/jumps/new">Log your first jump</a>
+		{/if}
+	</section>
+{/if}
+</div>
+
+{#if hasSide}
+<div class="col-side" class:wide-only={!sideOnPhones}>
+	<!-- The count and span of the matches; with none, the quiet empty state says it. -->
+	{#if matchedSide && matched && data.page.ok}
 		<section class="matched" aria-label="Matching jumps">
 			<p>
 				<strong>{n(matched.jumps)} {matched.jumps === 1 ? 'jump matches' : 'jumps match'}</strong>
@@ -257,109 +327,66 @@
 			{#if data.page.items.length > 0}<p><a href="/jumps">Clear filters</a></p>{/if}
 		</section>
 	{/if}
-	{#if firstUse}
-		<!-- First use: the navy card leads with the two ways to start. -->
-		<section class="card first-use" aria-labelledby="first-use-heading">
-			<h2 id="first-use-heading">Start your logbook</h2>
-			{#if declared}
-				<p>
-					You declared {n(declared.count)} prior {declared.count === 1 ? 'jump' : 'jumps'}{declared.before
-						? ` before ${formatDay(declared.before)}`
-						: ''}; they count in your total. No jumps are logged here yet: add them one by one or
-					from a spreadsheet.
-				</p>
-			{:else}
-				<p>No jumps yet. Log one with only the date, place and type, or bring in the logbook you already keep.</p>
-			{/if}
-			<div class="start">
-				<a class="button log" href="/jumps/new">Log your first jump</a>
-				<a class="button import" href="/records/import">Import existing logbook</a>
-			</div>
-			<p class="small">Import reads a spreadsheet (CSV) and checks it before anything is saved.</p>
-		</section>
-	{:else if !data.older && !data.filtered && !data.select}
-		<!-- The screen's one navy card: totals and the main action. -->
-		<section class="card" aria-label="Totals and log a jump">
-			<div class="totals">
-				<p class="big">
-					<span class="number">{n(data.summary?.lifetime ?? data.page.recorded_total)}</span>
-					<span class="unit"
-						>{(data.summary?.lifetime ?? data.page.recorded_total) === 1 ? 'jump' : 'jumps'}</span
-					>
-				</p>
-				<div class="side">
-					<p>
-						{n(data.page.recorded_total)}
-						{data.page.recorded_total === 1 ? 'jump' : 'jumps'} recorded here.
-					</p>
-					{#if data.summary?.lastJumpOn}<p>Last: {formatDay(data.summary.lastJumpOn)}</p>{/if}
-				</div>
-			</div>
-			{#if first}
-				{#if data.continueFrom}
-					<a class="button log" href="{pick(first)}&from={data.continueFrom}">Log the next jump at {first.name}</a>
-				{:else}
-					<a class="button log" href={pick(first)}>Log a jump at {first.name}</a>
-				{/if}
-				<p class="others">
-					{#each data.recent.slice(1) as loc (loc.kind + loc.id)}
-						<a class="chip" href={pick(loc)}>{loc.name}</a>
-					{/each}
-					<a class="chip" href="/jumps/new">Other place</a>
-				</p>
-			{:else}
-				<a class="button log" href="/jumps/new">Log your first jump</a>
-			{/if}
-		</section>
-	{/if}
-	{#if !data.older && !data.filtered && !data.select}
+	{#if home}
 		{#if data.summary?.currency && !firstUse}<CurrencyStatus
 				currency={data.summary.currency}
 				today={data.today}
 				progress={data.summary.progress}
 			/>{/if}
-		{#if due.length > 0 || data.coming.length > 0}
-			<!-- One calm card for what is ahead, each list soonest first; nothing when nothing is. -->
-			<section
-				class="ahead"
-				aria-label={[due.length > 0 && 'Due soon', data.coming.length > 0 && 'Coming up']
-					.filter(Boolean)
-					.join(' and ')}
-			>
-				{#if due.length > 0}
-					<h2>Due soon</h2>
-					<DueList items={due} {today} label="Due soon" />
-					<p class="more-link"><a href="/gear">All gear dates</a></p>
-				{/if}
-				{#if data.coming.length > 0}
-					<h2>Coming up</h2>
-					<ol class="coming" aria-label="Coming up">
-						{#each data.coming as item (item.kind + item.id)}
-							{@const state = item.status ? statusLabel(item.status, false) : null}
-							<li>
-								<a href={item.kind === 'plan' ? `/plans#plan-${item.id}` : `/events/${item.id}`}
-									>{item.title}</a
+		<!-- Gear and plans, each its own section, soonest first. With nothing in one, a phone shows
+		     nothing; beside the jumps a line says what would appear there. -->
+		{#if due.length > 0}
+			<section class="ahead" aria-labelledby="due-heading">
+				<h2 id="due-heading">Due soon</h2>
+				<DueList items={due} {today} label="Due soon" />
+				<p class="more-link"><a href="/gear">All gear dates</a></p>
+			</section>
+		{:else}
+			<section class="ahead quiet wide-only" aria-labelledby="due-heading">
+				<h2 id="due-heading">Gear due soon</h2>
+				<p>Reserve repacks and other service dates show here as they come due.</p>
+				<p class="more-link"><a href="/gear">Your gear</a></p>
+			</section>
+		{/if}
+		{#if data.coming.length > 0}
+			<section class="ahead" aria-labelledby="coming-heading">
+				<h2 id="coming-heading">Coming up</h2>
+				<ol class="coming" aria-label="Coming up">
+					{#each data.coming as item (item.kind + item.id)}
+						{@const state = item.status ? statusLabel(item.status, false) : null}
+						<li>
+							<a href={item.kind === 'plan' ? `/plans#plan-${item.id}` : `/events/${item.id}`}
+								>{item.title}</a
+							>
+							<span class="meta"
+								>{item.kind === 'plan' ? 'Your plan' : 'Saved listing'} · {formatRange(
+									item.starts_on,
+									item.ends_on
+								)}{item.place ? ` · ${item.place}` : ''}</span
+							>
+							{#if state}
+								<span class="tag"
+									>{item.kind === 'plan' ? `Listing ${state.toLowerCase()}` : state}</span
 								>
-								<span class="meta"
-									>{item.kind === 'plan' ? 'Your plan' : 'Saved listing'} · {formatRange(
-										item.starts_on,
-										item.ends_on
-									)}{item.place ? ` · ${item.place}` : ''}</span
-								>
-								{#if state}
-									<span class="tag"
-										>{item.kind === 'plan' ? `Listing ${state.toLowerCase()}` : state}</span
-									>
-								{/if}
-							</li>
-						{/each}
-					</ol>
-					<p class="more-link"><a href="/saved">See all saved</a> · <a href="/plans">See all plans</a></p>
-				{/if}
+							{/if}
+						</li>
+					{/each}
+				</ol>
+				<p class="more-link"><a href="/saved">See all saved</a> · <a href="/plans">See all plans</a></p>
+			</section>
+		{:else}
+			<section class="ahead quiet wide-only" aria-labelledby="coming-heading">
+				<h2 id="coming-heading">Coming up</h2>
+				<p>Events you save and the visits you plan show here, soonest first.</p>
+				<p class="more-link"><a href="/">Browse events</a> · <a href="/plans">Plan a visit</a></p>
 			</section>
 		{/if}
 	{/if}
+</div>
+{/if}
 
+<div class="col-main-end">
+{#if data.page.ok}
 	{#if data.numbering.notes.length > 0}
 		<section class="numbering" aria-labelledby="numbering-heading">
 			<h2 id="numbering-heading">Jump numbers to check</h2>
@@ -383,23 +410,26 @@
 	{/if}
 
 	{#if data.page.items.length === 0 && data.filtered}
-		<section class="empty" aria-labelledby="empty-heading">
+		<!-- A result, not a page: the quiet empty state, with the way out. -->
+		<section class="empty-state quiet" aria-labelledby="empty-heading">
 			<h2 id="empty-heading">{data.older ? 'No more matching jumps' : 'No jumps match'}</h2>
 			<p>
 				{data.older
 					? 'The earlier pages hold every jump that matches these filters.'
 					: 'No jumps match these filters. Change them, or clear them to see your whole logbook.'}
 			</p>
-			<p>
-				{#if data.older}<a href={jumpsHref(data.filters)}>Back to the first matching page</a> ·
-				{/if}<a href="/jumps">Clear filters</a>
+			<p class="actions">
+				{#if data.older}<a class="button secondary" href={jumpsHref(data.filters)}
+						>Back to the first matching page</a
+					>{/if}
+				<a class="button secondary" href="/jumps">Clear filters</a>
 			</p>
 		</section>
 	{:else if data.page.items.length === 0 && data.older}
-		<section class="empty" aria-labelledby="empty-heading">
+		<section class="empty-state quiet" aria-labelledby="empty-heading">
 			<h2 id="empty-heading">No older jumps</h2>
 			<p>You have reached the end of your logbook.</p>
-			<p><a href="/jumps">Back to your newest jumps</a></p>
+			<p class="actions"><a class="button secondary" href="/jumps">Back to your newest jumps</a></p>
 		</section>
 	{:else if data.page.items.length === 0}
 		<!-- An empty first page with entries elsewhere (rare: changed meanwhile); firstUse covers none. -->
@@ -616,12 +646,22 @@
 		{/if}
 	</p>
 {/if}
+</div>
+</div>
 
 <style>
+	/* With very large text the links move under the heading; "Logbook" never breaks inside
+	   the word (the page's overflow-wrap: anywhere would let the flex row squeeze it). */
 	.head {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: baseline;
+		column-gap: 1rem;
+	}
+
+	.head h1 {
+		overflow-wrap: break-word;
 	}
 
 	.head .links {
@@ -668,6 +708,16 @@
 		font-variant-numeric: tabular-nums;
 	}
 
+	/* With large text the dates move under the total; no number or word breaks in two. */
+	.totals {
+		flex-wrap: wrap;
+	}
+
+	.totals p,
+	.totals span {
+		overflow-wrap: break-word;
+	}
+
 	.unit {
 		font-family: var(--font-display);
 		font-weight: 600;
@@ -689,52 +739,6 @@
 		min-height: 52px;
 	}
 
-	.first-use h2 {
-		margin: 0;
-		color: var(--brand-fg);
-		font-size: 1.35rem;
-	}
-
-	.start {
-		display: grid;
-		gap: 0.6rem;
-	}
-
-	/* The second way to start: outlined on navy, so the first stays the main action. */
-	.import {
-		width: 100%;
-		min-height: 52px;
-		border-radius: 999px;
-		border: 1px solid color-mix(in srgb, var(--brand-fg) 45%, transparent);
-		background: transparent;
-		color: var(--brand-fg);
-	}
-
-	.small {
-		font-size: 0.85rem;
-		color: var(--brand-muted);
-	}
-
-	@media (min-width: 40rem) {
-		.start {
-			grid-template-columns: 1fr 1fr;
-		}
-	}
-
-	.empty,
-	.load-failed {
-		margin: 1rem 0;
-		padding: 1rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius);
-		background: var(--surface);
-	}
-
-	.empty p,
-	.load-failed p {
-		margin: 0.4rem 0 0;
-	}
-
 	.others {
 		display: flex;
 		flex-wrap: wrap;
@@ -752,7 +756,7 @@
 		text-decoration: none;
 	}
 
-	h2 {
+	.list-head h2 {
 		font-size: 1.15rem;
 		margin: 0 0 0.5rem;
 	}
@@ -768,7 +772,8 @@
 	.jumps li {
 		position: relative;
 		display: grid;
-		grid-template-columns: 3rem 1fr;
+		/* The number tile grows with large text instead of breaking "214" in two. */
+		grid-template-columns: minmax(3rem, max-content) minmax(0, 1fr);
 		gap: 0.8rem;
 		align-items: center;
 		padding: 0.6rem 0.75rem;
@@ -780,8 +785,10 @@
 	.num {
 		display: grid;
 		place-items: center;
-		height: 2.8rem;
+		min-height: 2.8rem;
+		padding: 0 0.35rem;
 		border-radius: 12px;
+		overflow-wrap: normal;
 		background: var(--surface-soft);
 		font-family: var(--font-display);
 		font-weight: 700;
@@ -838,6 +845,7 @@
 	.undo h2,
 	.batch h2 {
 		font-size: 1rem;
+		margin: 0 0 0.5rem;
 	}
 
 	.confirm h3 {
@@ -966,8 +974,22 @@
 		margin: 0.4rem 0 0;
 	}
 
-	.ahead .more-link + h2 {
-		margin-top: 0.85rem;
+	/* Nothing in it yet (beside the jumps only): a line and a link, no card. */
+	.ahead.quiet {
+		padding: 0.6rem 0 0;
+		border: 0;
+		border-top: 1px solid var(--border);
+		border-radius: 0;
+		background: none;
+	}
+
+	.ahead.quiet p {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.ahead.quiet .more-link {
+		margin-top: 0.25rem;
 	}
 
 	.coming {

@@ -28,7 +28,14 @@
 {#if !data.saved.ok}
 	<p class="form-error" role="alert">{listingMessage(data.saved.reason)}</p>
 {:else if data.saved.items.length === 0}
-	<p>You have not saved any listings. <a href="/">Browse listings</a>.</p>
+	<section class="empty-state" aria-labelledby="empty-heading">
+		<h2 id="empty-heading">Nothing saved yet</h2>
+		<p>
+			You have not saved any listings. Save an event from its page to keep it here and under Coming
+			up on your Logbook.
+		</p>
+		<p class="actions"><a class="button" href="/">Browse events</a></p>
+	</section>
 {:else}
 	<ul class="results rows" aria-label="Saved listings">
 		{#each data.saved.items as entry (entry.opportunity_id)}

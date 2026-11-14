@@ -104,7 +104,17 @@
 	{/if}
 
 	{#if t.recorded === 0}
-		<p class="hint">No jumps recorded yet. <a href="/jumps/new">Add jump</a></p>
+		<section class="empty-state" aria-labelledby="history-empty-heading">
+			<h2 id="history-empty-heading">Nothing to look back on yet</h2>
+			<p>
+				No jumps recorded yet. Your totals, recent months and gear use show here once your
+				logbook has jumps.
+			</p>
+			<p class="actions">
+				<a class="button" href="/jumps/new">Log your first jump</a>
+				<a class="button secondary" href="/records/import">Import existing logbook</a>
+			</p>
+		</section>
 	{:else}
 		<section class="card" aria-labelledby="activity-heading">
 		<h2 id="activity-heading">Recent activity</h2>

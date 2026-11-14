@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
-	import Notice from '#lib/components/Notice.svelte';
 	import { COUNTRY_OPTIONS, countryName } from '#lib/countries.ts';
 	import { directoryMessage } from '#lib/directory-messages.ts';
 	import type { PageProps } from './$types';
@@ -52,7 +51,9 @@
 {#if !data.result.ok}
 	<p class="form-error" role="alert">{directoryMessage(data.result.reason)}</p>
 {:else if data.result.items.length === 0}
-	<Notice title={filtered ? 'No listed dropzones match' : 'No dropzones are listed yet'} tone="warn">
+	<!-- No match is a quiet result under the search; an empty directory is the empty state. -->
+	<section class={filtered ? 'empty-state quiet' : 'empty-state'} aria-labelledby="empty-heading">
+		<h2 id="empty-heading">{filtered ? 'No listed dropzones match' : 'No dropzones are listed yet'}</h2>
 		<p>
 			{#if filtered}
 				Try another spelling or country. Coverage is limited to reviewed, source-backed listings.
@@ -63,7 +64,8 @@
 			Signed-in jumpers can keep a <a href="/places">private place</a> for any dropzone that is missing,
 			or <a href="/submit?kind=suggest_venue">suggest it</a>.
 		</p>
-	</Notice>
+		{#if filtered}<p class="actions"><a class="button secondary" href="/dz">Clear search</a></p>{/if}
+	</section>
 {:else}
 	<ul class="results rows grouped" aria-label="Dropzones">
 		{#each data.result.items as venue (venue.id)}
@@ -181,11 +183,13 @@
 		margin: 1rem 0;
 	}
 
-	/* Larger screens: the search on one line, and each dropzone on one line, name first. */
+	/* Larger screens: the search on one line, and each dropzone on one line, name first. The
+	   search keeps a form's length; the list uses the frame. */
 	@media (min-width: 48rem) {
 		.search {
 			grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
 			align-items: end;
+			max-width: 48rem;
 		}
 
 		.results.rows.grouped > li {

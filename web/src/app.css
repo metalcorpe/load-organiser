@@ -3,6 +3,12 @@
    which the root layout imports before this file. Do not set token values here. */
 :root {
 	color-scheme: light dark;
+	/* Layout widths (navigation.ts, pageLayout): the frame the header and the primary pages
+	   share, the narrow column of every other page, and the longest line for paragraphs and
+	   forms in either. Here rather than in the layout, so Storybook has them too. */
+	--frame: 70rem;
+	--narrow: 40rem;
+	--measure: 40rem;
 }
 
 *,
@@ -63,8 +69,121 @@ h1 {
 }
 
 .lede {
+	max-width: var(--measure);
 	color: var(--muted);
 	margin-top: 0;
+}
+
+/* Columns inside the frame of a primary page (navigation.ts, pageLayout). Below 60rem the
+   parts simply follow one another in source order, one column. From 60rem: .col-main on the
+   left, .col-side on the right from the top, and .col-main-end (optional) carrying on under
+   .col-main, so a page can keep its phone order and still lift side matter beside the top. */
+@media (min-width: 60rem) {
+	.columns {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 20rem;
+		grid-template-rows: auto 1fr;
+		grid-template-areas:
+			'main side'
+			'end side';
+		column-gap: 2.5rem;
+		align-items: start;
+	}
+
+	.columns > .col-main {
+		grid-area: main;
+	}
+
+	.columns > .col-side {
+		grid-area: side;
+	}
+
+	.columns > .col-main-end {
+		grid-area: end;
+	}
+
+	/* Each column starts level with the other (above a component's own top margin). */
+	.columns > .col-main > :first-child,
+	.columns > .col-side > :first-child,
+	.columns > .col-main-end > :first-child {
+		margin-top: 0;
+	}
+}
+
+/* A primary page with nothing for the side column (for example while selecting jumps) has
+   no columns: the main column alone at the frame's left edge, as wide as it is beside the
+   side column, never an empty side column. */
+@media (min-width: 60rem) {
+	.solo {
+		max-width: calc(var(--frame) - 2rem - 22.5rem);
+	}
+}
+
+/* Text in a column keeps the reading measure, however wide the column. */
+.col-main p,
+.col-main-end p {
+	max-width: var(--measure);
+}
+
+/* Shown beside the main column only: on one column it would push the main task down. */
+@media (max-width: 59.99rem) {
+	.wide-only {
+		display: none;
+	}
+}
+
+/* Empty states: one pattern for "nothing here yet". A heading, a sentence or two specific to
+   the task, the main action (filled) and at most one other (outlined), on the plain card
+   surface. No illustration and no navy.
+   - .empty-state.quiet: a search or filter that found nothing. No card, a rule above, and a
+     way to clear the filter, so it reads as a result, not as a page.
+   - A failure is never an empty state: it uses the error tone (Notice tone="bad" or
+     .form-error) and says nothing was lost. */
+.empty-state {
+	margin: 1rem 0;
+	padding: 1rem 1.15rem 1.15rem;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: var(--surface);
+}
+
+.empty-state > h2,
+.empty-state > h3 {
+	margin: 0 0 0.35rem;
+	font-size: 1.15rem;
+}
+
+.empty-state > p {
+	max-width: var(--measure);
+	margin: 0 0 0.5rem;
+}
+
+.empty-state > .actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin: 0.85rem 0 0;
+}
+
+.empty-state > .actions + .hint {
+	margin-top: 0.75rem;
+}
+
+.empty-state.quiet {
+	padding: 0.75rem 0 0;
+	border: 0;
+	border-top: 1px solid var(--border);
+	border-radius: 0;
+	background: none;
+}
+
+.empty-state.quiet > h2,
+.empty-state.quiet > h3 {
+	font-size: 1rem;
+}
+
+.empty-state.quiet > .actions {
+	margin-top: 0.25rem;
 }
 
 .button {
@@ -201,6 +320,7 @@ h1 {
 }
 
 .form-error {
+	max-width: var(--measure);
 	margin: 0;
 	padding: 0.6rem 0.8rem;
 	border-radius: 9px;

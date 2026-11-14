@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PRIMARY_NAV, isCurrent, isCurrentTab, pageWidth } from './navigation.ts';
+import { PRIMARY_NAV, isCurrent, isCurrentTab, pageLayout } from './navigation.ts';
 
 const tab = (label: string) => PRIMARY_NAV.find((item) => item.label === label)!;
 const current = (pathname: string) =>
@@ -37,13 +37,26 @@ describe('primary navigation', () => {
 		expect(isCurrent('/records', '/recordsx')).toBe(false);
 	});
 
-	it('widens only the discovery lists', () => {
-		expect(pageWidth('/')).toBe('wide');
-		expect(pageWidth('/dz')).toBe('medium');
-		for (const path of ['/dz/abc', '/events/abc', '/register', '/sign-in', '/jumps', '/privacy']) {
-			expect(pageWidth(path)).toBe('narrow');
+	it('frames the primary pages and keeps every other page narrow', () => {
+		for (const path of ['/', '/dz', '/jumps', '/activity', '/profile']) {
+			expect(pageLayout(path)).toBe('frame');
 		}
-		expect(pageWidth('/', true)).toBe('narrow');
-		expect(pageWidth('/dz', true)).toBe('narrow');
+		for (const path of [
+			'/dz/abc',
+			'/events/abc',
+			'/register',
+			'/sign-in',
+			'/jumps/new',
+			'/jumps/abc/edit',
+			'/profile/account',
+			'/people',
+			'/privacy',
+			'/jumpsx'
+		]) {
+			expect(pageLayout(path)).toBe('narrow');
+		}
+		// An error page is narrow whatever its address.
+		expect(pageLayout('/', true)).toBe('narrow');
+		expect(pageLayout('/jumps', true)).toBe('narrow');
 	});
 });

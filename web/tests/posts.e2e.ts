@@ -139,10 +139,22 @@ test.describe('shared jump summaries', () => {
 			await browser.newContext({ baseURL: ORIGIN, ignoreHTTPSErrors: true })
 		).newPage();
 
+		// The Friends tab's page is called Friends; following no one yet, it leads to Find people.
 		await sam.page.goto('/activity');
-		await expect(sam.page.getByText('Nothing to show yet.', { exact: false })).toBeVisible();
+		await expect(sam.page).toHaveTitle('Friends · Load Organiser');
+		await expect(sam.page.getByRole('heading', { level: 1 })).toHaveText('Friends');
+		const noOne = sam.page.getByRole('region', { name: 'You do not follow anyone yet' });
+		await expect(noOne.getByRole('link', { name: 'Find people' })).toHaveAttribute('href', '/people');
 		await sam.page.goto(`/people/${alexHandle}`);
 		await sam.page.getByRole('button', { name: 'Ask to follow' }).click();
+		// Alex follows no one, and on a phone still sees the waiting request on Friends.
+		await alex.page.setViewportSize({ width: 390, height: 844 });
+		await alex.page.goto('/activity');
+		await expect(alex.page.getByRole('region', { name: 'You do not follow anyone yet' })).toBeVisible();
+		await expect(alex.page.getByRole('link', { name: '1 follow request waiting' })).toBeVisible();
+		await expect(
+			alex.page.getByRole('link', { name: 'Followers, requests and blocking' })
+		).toBeVisible();
 		await alex.page.goto('/people');
 		await alex.page
 			.getByRole('list', { name: 'Follow requests' })
@@ -166,9 +178,11 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByRole('button', { name: 'Publish' }).click();
 		await expect(alex.page.getByText('Published.', { exact: true })).toBeVisible();
 
-		const feed = sam.page.getByRole('list', { name: 'Activity' });
+		const feed = sam.page.getByRole('list', { name: 'Shared jumps' });
 		await sam.page.goto('/activity');
 		await expect(feed).toContainText(`Big way ${tag}`);
+		// Find people stays in reach above the feed.
+		await expect(sam.page.getByRole('link', { name: 'Find people' })).toHaveAttribute('href', '/people');
 		await expect(feed).toContainText('jumped 15 August 2026');
 		const here = visitor.getByRole('list', { name: 'Shared jumps here' });
 		await visitor.goto(`/dz/${venueId}`);
@@ -189,8 +203,9 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByLabel('Unpublish this post').check();
 		await alex.page.getByRole('button', { name: 'Unpublish' }).click();
 		await expect(alex.page.getByText('Unpublished.', { exact: false })).toBeVisible();
+		// Following someone who shares nothing is told apart from following no one.
 		await sam.page.goto('/activity');
-		await expect(sam.page.getByText('Nothing to show yet.', { exact: false })).toBeVisible();
+		await expect(sam.page.getByRole('region', { name: 'No shared jumps yet' })).toBeVisible();
 
 		await Promise.all([alex.context.close(), sam.context.close(), visitor.context().close()]);
 	});

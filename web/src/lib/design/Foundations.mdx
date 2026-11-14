@@ -31,6 +31,47 @@ from `src/lib/design/tokens/*.json`, the same files Style Dictionary builds the 
   always with the type's icon. Colour is never the only cue.
 - Tap targets are at least 44px. Text meets WCAG 2.1 contrast; `tokens.spec.ts` checks every pair.
 
+## Layout
+
+- **Primary pages** (Events, Dropzones, Logbook, Friends, Me) share one centred frame, as wide as
+  the header (`--frame`, 70rem): each heading starts at the header's left edge, and the header and
+  tabs never move between them. Inside, `.columns` gives a main column and a 20rem side column from
+  60rem (`.col-main`, `.col-side`, and `.col-main-end` to continue the main column under the side's
+  top); below 60rem the parts follow one another in source order. Events and Dropzones use the
+  whole frame for their lists instead.
+- **Every other page** (sign-in and account pages, a listing's or jump's own page, forms,
+  settings) is one narrow column (`--narrow`, 40rem), centred.
+- Paragraphs and forms keep `--measure` (40rem) in either. The rule lives in `navigation.ts`
+  (`pageLayout`).
+
+## Empty states
+
+One pattern (`.empty-state` in `app.css`): a heading, a sentence or two about this task, the main
+action filled and at most one other outlined. No illustration, no navy.
+
+<section className="empty-state" aria-labelledby="demo-first-use">
+  <h2 id="demo-first-use">Start your logbook</h2>
+  <p>No jumps yet. Log one with only the date, place and type, or bring in the logbook you already keep.</p>
+  <p className="actions">
+    <a className="button" href="#first-use">Log your first jump</a>
+    <a className="button secondary" href="#first-use">Import existing logbook</a>
+  </p>
+</section>
+
+A search or filter that found nothing is quieter: `.empty-state.quiet`, a rule instead of a card,
+and the way to clear the filter.
+
+<section className="empty-state quiet" aria-labelledby="demo-no-match">
+  <h2 id="demo-no-match">No jumps match</h2>
+  <p>No jumps match these filters. Change them, or clear them to see your whole logbook.</p>
+  <p className="actions">
+    <a className="button secondary" href="#no-match">Clear filters</a>
+  </p>
+</section>
+
+A failure is never an empty state: it uses the error tone (`Notice` with `tone="bad"`, or
+`.form-error`) and says that nothing was lost.
+
 ## Colour: light (E) and dark (G)
 
 Each row shows the light value, then the dark value.
