@@ -68,11 +68,18 @@ async function world(): Promise<World> {
 	return { base, alpha, beta, closed, unplaced };
 }
 
+interface Seen {
+	tiles: string[];
+	referers: Set<string>;
+	/** Requests to any other host than the site (tiles included, answered locally). */
+	external: string[];
+	/** The map's own point requests to the site. */
+	points: string[];
+}
+
 /** Answer tile requests locally, and record every request that leaves for another host. */
-async function stubTiles(
-	page: Page
-): Promise<{ tiles: string[]; referers: Set<string>; external: string[] }> {
-	const seen = { tiles: [] as string[], referers: new Set<string>(), external: [] as string[] };
+async function stubTiles(page: Page): Promise<Seen> {
+	const seen: Seen = { tiles: [], referers: new Set(), external: [], points: [] };
 	await page.route(TILES, (route) => {
 		seen.tiles.push(route.request().url());
 		seen.referers.add(route.request().headers()['referer'] ?? '');
@@ -80,10 +87,15 @@ async function stubTiles(
 	});
 	page.on('request', (request: Request) => {
 		const url = new URL(request.url());
-		if (url.origin !== ORIGIN && !url.protocol.startsWith('data')) seen.external.push(url.href);
+		if (url.protocol === 'data:' || url.protocol === 'blob:') return;
+		if (url.origin !== ORIGIN) seen.external.push(url.href);
+		else if (url.pathname === '/dz/points') seen.points.push(url.search);
 	});
 	return seen;
 }
+
+const offSite = (seen: Seen) =>
+	seen.external.filter((url) => !url.startsWith('https://tile.openstreetmap.org/'));
 
 async function showMap(page: Page) {
 	await page.getByRole('button', { name: 'Show map' }).click();
@@ -104,8 +116,16 @@ test.beforeAll(async () => {
 });
 
 test.describe('dropzone map', () => {
+	// Every test: tiles answered locally, and nothing else may leave the site.
+	let seen: Seen;
+	test.beforeEach(async ({ page }) => {
+		seen = await stubTiles(page);
+	});
+	test.afterEach(() => {
+		expect(offSite(seen), 'requests to hosts other than the site and the tile host').toEqual([]);
+	});
+
 	test('the Map view asks first, then loads the map with markers', async ({ page }) => {
-		const seen = await stubTiles(page);
 		const { base } = shared;
 		const response = await page.goto(`/dz?q=${base}`);
 		// Images from the site and the one tile host only; scripts and styles are untouched.
@@ -127,8 +147,11 @@ test.describe('dropzone map', () => {
 		await expect(page.getByTestId('dz-map')).toHaveCount(0);
 		await expect(page.getByTestId('map-needs-js')).toHaveCount(0);
 		expect(seen.external).toEqual([]);
+		// The points are not loaded either until the choice.
+		expect(seen.points).toEqual([]);
 
 		await showMap(page);
+		expect(seen.points).toEqual([`?q=${base}&country=`]);
 		const map = page.getByRole('region', { name: 'Map of 3 dropzones' });
 		await expect(map).toBeVisible();
 		await expect(map).toBeFocused();
@@ -139,16 +162,21 @@ test.describe('dropzone map', () => {
 			/dz-marker-closed/
 		);
 		await expect(page.getByRole('button', { name: new RegExp(`${base} Delta`) })).toHaveCount(0);
-		await expect(page.getByRole('link', { name: 'OpenStreetMap' })).toHaveAttribute(
+		const attribution = page.locator('.leaflet-control-attribution');
+		await expect(attribution.getByRole('link', { name: 'OpenStreetMap' })).toHaveAttribute(
 			'href',
 			'https://www.openstreetmap.org/copyright'
 		);
+		await expect(attribution).toContainText('© OpenStreetMap contributors');
+		// A plain Leaflet credit, without the default prefix's flag.
+		await expect(attribution.getByRole('link', { name: 'Leaflet' })).toHaveAttribute(
+			'href',
+			'https://leafletjs.com'
+		);
+		await expect(attribution.locator('svg')).toHaveCount(0);
 		await expect.poll(() => seen.tiles.length).toBeGreaterThan(0);
 		// The tile servers require a Referer: they get the site's origin, never the page or query.
 		expect([...seen.referers]).toEqual([`${ORIGIN}/`]);
-		// Only tiles leave the site, and only from the one tile host.
-		expect(seen.external.every((url) => url.startsWith('https://tile.openstreetmap.org/'))).toBe(true);
-
 		// The choice lasts for the session: the map loads again without asking.
 		await page.reload();
 		await expect(page.locator('.dz-marker').first()).toBeVisible();
@@ -156,7 +184,6 @@ test.describe('dropzone map', () => {
 	});
 
 	test('the search filters the map, and the views keep it', async ({ page }) => {
-		await stubTiles(page);
 		const { base, alpha } = shared;
 		await page.goto(`/dz?view=map&q=${base}`);
 		await showMap(page);
@@ -173,15 +200,18 @@ test.describe('dropzone map', () => {
 	});
 
 	test('a popup links to the dropzone page, which links out to OpenStreetMap', async ({ page }) => {
-		await stubTiles(page);
 		const { base, alpha, closed } = shared;
 		await page.goto(`/dz?view=map&q=${base}`);
 		await showMap(page);
 
+		// A click opens the popup and leaves focus where it was.
 		await page.getByRole('button', { name: `${closed.name} (closed)` }).click();
-		await expect(page.locator('.leaflet-popup', { hasText: closed.name })).toContainText('Closed');
+		const closedPopup = page.locator('.leaflet-popup', { hasText: closed.name });
+		await expect(closedPopup).toContainText('Closed');
+		await expect(closedPopup.getByRole('link')).not.toBeFocused();
 
-		// From the keyboard: Enter opens the popup and moves focus to its link.
+		// From the keyboard: Enter opens the popup and moves focus to its link; Escape closes it
+		// and returns to the marker.
 		const marker = page.getByRole('button', { name: alpha.name, exact: true });
 		await marker.focus();
 		await page.keyboard.press('Enter');
@@ -191,6 +221,11 @@ test.describe('dropzone map', () => {
 		await expect(link).toBeFocused();
 		await expect(popup).toContainText('Reykjavik, Iceland');
 		await expect(link).toHaveAttribute('href', `/dz/${alpha.id}`);
+		await page.keyboard.press('Escape');
+		await expect(popup).toHaveCount(0);
+		await expect(marker).toBeFocused();
+		await page.keyboard.press('Enter');
+		await expect(link).toBeFocused();
 		await page.keyboard.press('Enter');
 
 		await expect(page).toHaveURL(`${ORIGIN}/dz/${alpha.id}`);
@@ -205,15 +240,34 @@ test.describe('dropzone map', () => {
 	test('without JavaScript the Map view points to the list', async ({ browser }) => {
 		const plain = await browser.newContext({ javaScriptEnabled: false, ignoreHTTPSErrors: true });
 		const page = await plain.newPage();
-		const seen = await stubTiles(page);
+		const plainSeen = await stubTiles(page);
 		await page.goto(`${ORIGIN}/dz?view=map&q=${shared.base}`);
 		await expect(page.getByText('The map needs JavaScript.')).toBeVisible();
 		await expect(page.getByRole('button', { name: 'Show map' })).toHaveCount(0);
 		await page.getByRole('link', { name: 'Use the list' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/dz?q=${shared.base}`);
 		await expect(page.getByRole('list', { name: 'Dropzones' }).getByRole('link')).toHaveCount(4);
-		expect(seen.tiles).toEqual([]);
+		expect(plainSeen.external).toEqual([]);
 		await plain.close();
+	});
+
+	test.describe('reduced motion', () => {
+		test.use({ reducedMotion: 'reduce' });
+
+		test('the map works without animation, keyboard included', async ({ page }) => {
+			await page.goto(`/dz?view=map&q=${shared.base}`);
+			await showMap(page);
+			const marker = page.getByRole('button', { name: shared.beta.name, exact: true });
+			await marker.focus();
+			await page.keyboard.press('Enter');
+			const popup = page.locator('.leaflet-popup', { hasText: shared.beta.name });
+			await expect(popup.getByRole('link', { name: shared.beta.name })).toBeFocused();
+			// No fade: the popup is fully shown at once and gone at once.
+			await expect(popup).toHaveCSS('opacity', '1');
+			await page.keyboard.press('Escape');
+			await expect(popup).toHaveCount(0);
+			await expect(marker).toBeFocused();
+		});
 	});
 
 	for (const scheme of ['light', 'dark'] as const) {
@@ -221,7 +275,6 @@ test.describe('dropzone map', () => {
 			test.use({ colorScheme: scheme });
 
 			test('axe passes on the Map view: asking, loaded, and with a popup open', async ({ page }) => {
-				await stubTiles(page);
 				await page.goto(`/dz?view=map&q=${shared.base}`);
 				await expect(page.getByRole('button', { name: 'Show map' })).toBeVisible();
 				expect.soft(await violations(page), 'asking').toEqual([]);

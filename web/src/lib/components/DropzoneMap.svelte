@@ -3,41 +3,65 @@
 	import { onMount, tick } from 'svelte';
 	import type { VenuePointOut } from '#lib/contracts/index.ts';
 	import { countryName } from '#lib/countries.ts';
-	import { mapChosen, rememberMapChoice } from '#lib/dz-map.ts';
-	import type { MapPoint } from '#lib/leaflet-map.ts';
+	import { dzHref, mapChosen, rememberMapChoice, type MapPoint } from '#lib/dz-map.ts';
 
 	/**
-	 * The Map view of the directory. Nothing third-party loads until the visitor presses "Show
-	 * map": then Leaflet (a separate chunk) draws OpenStreetMap tiles, and the choice is kept for
-	 * this browser session. Without JavaScript only the note pointing to the list renders.
+	 * The Map view of the directory. Nothing loads until the visitor presses "Show map": then
+	 * the points come from /dz/points, Leaflet (a separate chunk) draws OpenStreetMap tiles, and
+	 * the choice is kept for this browser session. Without JavaScript only the note pointing to
+	 * the list renders.
 	 */
-	let { points, listHref }: { points: VenuePointOut[]; listHref: string } = $props();
+	let { q, country, listHref }: { q: string; country: string; listHref: string } = $props();
 
-	type Phase = 'server' | 'ask' | 'loading' | 'shown' | 'failed';
+	type Phase = 'server' | 'ask' | 'loading' | 'shown' | 'empty' | 'failed';
 	let phase: Phase = $state('server');
 	let container: HTMLDivElement | undefined = $state();
 	let leaflet: typeof import('#lib/leaflet-map.ts') | undefined = $state.raw();
+	let points: MapPoint[] = $state.raw([]);
+	let truncated = $state(false);
 
 	const session = () => (browser ? window.sessionStorage : undefined);
-	const mapPoints: MapPoint[] = $derived(
-		points.map((p) => ({
-			id: p.id,
-			name: p.name,
-			place: p.locality ? `${p.locality}, ${countryName(p.country)}` : countryName(p.country),
-			lat: p.lat,
-			lon: p.lon,
-			closed: p.closed
-		}))
-	);
+	const filtered = $derived(Boolean(q || country));
+	const query = $derived(new URLSearchParams({ q, country }).toString());
+	// The query whose points are drawn (plain, not reactive: it only guards refetching).
+	let loadedQuery: string | null = null;
 	const label = $derived(
 		`Map of ${points.length.toLocaleString('en-GB')} ${points.length === 1 ? 'dropzone' : 'dropzones'}`
 	);
 
+	function toPoint(p: VenuePointOut): MapPoint {
+		const nation = countryName(p.country);
+		return {
+			id: p.id,
+			name: p.name,
+			place: p.locality ? `${p.locality}, ${nation}` : nation,
+			lat: p.lat,
+			lon: p.lon,
+			closed: p.closed
+		};
+	}
+
+	async function fetchPoints(wanted: string): Promise<void> {
+		loadedQuery = wanted;
+		const response = await fetch(`/dz/points?${wanted}`, { headers: { accept: 'application/json' } });
+		const body = (await response.json()) as
+			| { ok: true; points: VenuePointOut[]; truncated: boolean }
+			| { ok: false };
+		if (!response.ok || !body.ok) throw new Error('points unavailable');
+		if (wanted !== loadedQuery) return; // a newer search took over
+		points = body.points.map(toPoint);
+		truncated = body.truncated;
+	}
+
 	async function load(focus: boolean) {
 		phase = 'loading';
 		try {
-			if (browser) leaflet = await import('#lib/leaflet-map.ts');
-			phase = 'shown';
+			const [library] = await Promise.all([
+				browser ? import('#lib/leaflet-map.ts') : undefined,
+				fetchPoints(query)
+			]);
+			leaflet = library;
+			phase = points.length > 0 ? 'shown' : 'empty';
 			await tick();
 			if (focus) container?.focus();
 		} catch {
@@ -55,11 +79,24 @@
 		else phase = 'ask';
 	});
 
-	// Drawn once the library is here, and again when the filters change the points.
+	// A new search in the Map view: fetch its points and redraw.
+	$effect(() => {
+		const wanted = query;
+		if ((phase !== 'shown' && phase !== 'empty') || wanted === loadedQuery) return;
+		fetchPoints(wanted).then(
+			() => (phase = points.length > 0 ? 'shown' : 'empty'),
+			() => (phase = 'failed')
+		);
+	});
+
+	// Drawn once the library and points are here, and again when the points change.
 	$effect(() => {
 		if (phase !== 'shown' || !container || !leaflet) return;
 		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const handle = leaflet.createDropzoneMap(container, mapPoints, { reducedMotion });
+		const handle = leaflet.createDropzoneMap(container, points, {
+			reducedMotion,
+			filtered
+		});
 		return () => handle.destroy();
 	});
 </script>
@@ -83,19 +120,38 @@
 		<div class="consent">
 			<p>
 				Map images come from the OpenStreetMap tile servers. Showing the map sends them your IP
-				address and this site's address, as loading any image from another site does. Nothing is
-				requested until you choose. <a href="/privacy#account">Privacy</a>
+				address, this site's address and the area of the map you look at, which follows your
+				search. Nothing is requested until you choose. <a href="/privacy#map">Privacy</a>
 			</p>
 			<button class="button" type="button" onclick={show}>Show map</button>
 		</div>
 	{/if}
 
+	{#if phase === 'empty'}
+		<section class="empty-state quiet" aria-labelledby="map-empty-heading">
+			<h2 id="map-empty-heading">No dropzones to show on the map</h2>
+			<p>
+				{filtered ? 'None of the matching dropzones' : 'No listed dropzone'} has coordinates yet.
+				<a href={listHref}>The list</a> shows every listed dropzone{filtered ? ' that matches' : ''}.
+			</p>
+			{#if filtered}
+				<p class="actions"><a class="button secondary" href={dzHref({ view: 'map' })}>Clear search</a></p>
+			{/if}
+		</section>
+	{/if}
+
 	{#if phase === 'loading' || phase === 'shown'}
+		{#if phase === 'shown' && truncated}
+			<p class="hint" role="status">
+				Showing the first {points.length.toLocaleString('en-GB')} dropzones. Choose a country to see the
+				rest.
+			</p>
+		{/if}
 		<div
 			class="map"
 			bind:this={container}
 			role="region"
-			aria-label={label}
+			aria-label={phase === 'shown' ? label : 'Map'}
 			aria-busy={phase === 'loading'}
 			tabindex="-1"
 			data-testid="dz-map"
@@ -106,8 +162,8 @@
 			<li><span class="swatch cluster" aria-hidden="true">3</span>Several: zoom in</li>
 		</ul>
 		<p class="hint">
-			Use the arrow keys to move the map and + or − to zoom. Tab moves through the markers; Enter
-			opens one.
+			Use the arrow keys to move the map and + or − to zoom. Tab moves through the markers. Enter
+			opens a marker's popup and moves to its link; Escape closes the popup.
 		</p>
 	{/if}
 

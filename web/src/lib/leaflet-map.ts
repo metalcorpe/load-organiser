@@ -2,7 +2,7 @@
  * The dropzone map, drawn with Leaflet and Leaflet.markercluster over OpenStreetMap tiles.
  *
  * Browser only, and imported dynamically by DropzoneMap.svelte once the visitor chooses to
- * show the map: neither library nor its CSS is in the page bundle, and no tile is requested
+ * show the map: the libraries' JavaScript is not in the page bundle, and no tile is requested
  * before that choice. Popup content is built with DOM text nodes, never HTML strings.
  */
 import L from 'leaflet';
@@ -11,23 +11,22 @@ import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
-import { TILE_ATTRIBUTION, TILE_REFERRER_POLICY, TILE_URL } from './dz-map.ts';
+import {
+	ATTRIBUTION_PREFIX,
+	TILE_ATTRIBUTION,
+	TILE_REFERRER_POLICY,
+	TILE_URL,
+	startBounds,
+	type MapPoint
+} from './dz-map.ts';
 
-export interface MapPoint {
-	id: string;
-	name: string;
-	/** "Locality, Country", already formatted for reading. */
-	place: string;
-	lat: number;
-	lon: number;
-	closed: boolean;
-}
+export type { MapPoint } from './dz-map.ts';
 
 export interface DropzoneMapHandle {
 	destroy(): void;
 }
 
-/** Europe, when there is nothing to fit the view to. */
+/** Mainland Europe, when there is nothing to fit the view to. */
 const FALLBACK: L.LatLngTuple = [50, 10];
 
 function text(tag: string, className: string, value: string): HTMLElement {
@@ -73,18 +72,61 @@ function clusterIcon(cluster: L.MarkerCluster): L.DivIcon {
 	return L.divIcon({ className: 'dz-cluster', html: box, iconSize: [size, size] });
 }
 
+/**
+ * Popups from the keyboard: Enter on a marker opens its popup and moves focus to its link;
+ * Escape in the popup closes it and returns focus to the marker. A mouse or touch opening
+ * leaves focus where it was.
+ */
+function keyboardPopup(marker: L.Marker): void {
+	let enterPressed = false;
+	let returnFocus = false;
+	marker.on('add', () => {
+		marker.getElement()?.addEventListener('keydown', (event) => {
+			if (event.key === 'Enter') enterPressed = true;
+		});
+	});
+	marker.on('popupopen', (event: L.PopupEvent) => {
+		returnFocus = enterPressed;
+		enterPressed = false;
+		const element = event.popup.getElement();
+		if (!element) return;
+		// One handler per popup element (assigned, so reopening does not add another).
+		element.onkeydown = (key) => {
+			if (key.key !== 'Escape') return;
+			key.preventDefault();
+			key.stopPropagation();
+			returnFocus = true;
+			marker.closePopup();
+		};
+		if (returnFocus) element.querySelector<HTMLAnchorElement>('.dz-popup-name a')?.focus();
+	});
+	marker.on('popupclose', () => {
+		if (returnFocus) marker.getElement()?.focus();
+		returnFocus = false;
+	});
+}
+
 export function createDropzoneMap(
 	container: HTMLElement,
 	points: MapPoint[],
-	options: { reducedMotion: boolean }
+	options: { reducedMotion: boolean; filtered: boolean }
 ): DropzoneMapHandle {
 	const animate = !options.reducedMotion;
 	const map = L.map(container, {
 		zoomAnimation: animate,
 		fadeAnimation: animate,
 		markerZoomAnimation: animate,
+		inertia: animate,
 		worldCopyJump: true
 	});
+	if (!animate) {
+		// Leaflet has no map-wide switch for animated panning (arrow keys, popup auto-pan,
+		// cluster zoom-to-bounds all go through panBy), so this map always pans without it.
+		const panBy = map.panBy.bind(map);
+		map.panBy = (offset, panOptions) => panBy(offset, { ...panOptions, animate: false });
+	}
+	// The plain "Leaflet" credit, without the default prefix's flag icon.
+	map.attributionControl.setPrefix(ATTRIBUTION_PREFIX);
 	L.tileLayer(TILE_URL, {
 		maxZoom: 19,
 		attribution: TILE_ATTRIBUTION,
@@ -107,33 +149,19 @@ export function createDropzoneMap(
 			keyboard: true,
 			riseOnHover: true
 		});
-		marker.bindPopup(() => popupContent(point), { minWidth: 160, maxWidth: 260 });
-		// Opened from the keyboard, the popup takes focus so its link can be reached; on close,
-		// focus goes back to the marker instead of being lost.
-		let fromKeyboard = false;
-		marker.on('popupopen', (event: L.PopupEvent) => {
-			fromKeyboard = document.activeElement === marker.getElement();
-			const link = event.popup.getElement()?.querySelector<HTMLAnchorElement>('.dz-popup-name a');
-			if (fromKeyboard && link) link.focus();
+		marker.bindPopup(() => popupContent(point), {
+			minWidth: 160,
+			maxWidth: 260,
+			autoPanPadding: [16, 16]
 		});
-		marker.on('popupclose', (event: L.PopupEvent) => {
-			const active = document.activeElement;
-			const lost = !active || active === document.body;
-			if (fromKeyboard && (lost || event.popup.getElement()?.contains(active))) {
-				marker.getElement()?.focus();
-			}
-			fromKeyboard = false;
-		});
+		keyboardPopup(marker);
 		group.addLayer(marker);
 	}
 	map.addLayer(group);
 
-	if (points.length > 0) {
-		map.fitBounds(L.latLngBounds(points.map((p) => [p.lat, p.lon] as L.LatLngTuple)), {
-			padding: [24, 24],
-			maxZoom: 10,
-			animate: false
-		});
+	const bounds = startBounds(points, { filtered: options.filtered });
+	if (bounds) {
+		map.fitBounds(bounds, { padding: [24, 24], maxZoom: 10, animate: false });
 	} else {
 		map.setView(FALLBACK, 4);
 	}

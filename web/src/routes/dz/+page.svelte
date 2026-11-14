@@ -51,29 +51,8 @@
 	<a href={mapHref} aria-current={data.view === 'map' ? 'page' : undefined}>Map</a>
 </nav>
 
-{#if data.map}
-	{#if !data.map.ok}
-		<p class="form-error" role="alert">{directoryMessage(data.map.reason)}</p>
-	{:else if data.map.points.length === 0}
-		<section class="empty-state quiet" aria-labelledby="empty-heading">
-			<h2 id="empty-heading">No dropzones to show on the map</h2>
-			<p>
-				{filtered ? 'None of the matching dropzones' : 'No listed dropzone'} has coordinates yet.
-				<a href={listHref}>The list</a> shows every listed dropzone{filtered ? ' that matches' : ''}.
-			</p>
-			{#if filtered}
-				<p class="actions"><a class="button secondary" href={dzHref({ view: 'map' })}>Clear search</a></p>
-			{/if}
-		</section>
-	{:else}
-		{#if data.map.truncated}
-			<p class="hint" role="status">
-				Showing the first {data.map.points.length.toLocaleString('en-GB')} dropzones. Choose a country
-				to see the rest.
-			</p>
-		{/if}
-		<DropzoneMap points={data.map.points} {listHref} />
-	{/if}
+{#if data.view === 'map'}
+	<DropzoneMap q={data.q} country={data.country} {listHref} />
 {:else if data.result && !data.result.ok}
 	<p class="form-error" role="alert">{directoryMessage(data.result.reason)}</p>
 {:else if data.result && data.result.items.length === 0}
@@ -165,10 +144,6 @@
 
 	.views a:focus-visible {
 		outline-offset: 1px;
-	}
-
-	.hint {
-		color: var(--muted);
 	}
 
 	/* One grouped list: a single outline and quiet rules between rows instead of a card per

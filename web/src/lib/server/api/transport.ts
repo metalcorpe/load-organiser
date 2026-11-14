@@ -69,12 +69,13 @@ export const OPERATIONS = {
 		path: `${BETA}/venues`,
 		query: ['q', 'country', 'cursor', 'limit']
 	},
-	// Map points of the venues searchVenues finds: up to 1,000 small records per page.
+	// Map points of the venues searchVenues finds: up to 1,000 small records per page
+	// (at most about 1.1 KB each with 120-character names and localities in 4-byte UTF-8).
 	listVenuePoints: {
 		method: 'GET',
 		path: `${BETA}/venue-points`,
 		query: ['q', 'country', 'cursor', 'limit'],
-		maxBodyBytes: 1024 * 1024
+		maxBodyBytes: 2 * 1024 * 1024
 	},
 	getVenue: { method: 'GET', path: `${BETA}/venues/{id}` },
 	listPlaces: { method: 'GET', path: `${BETA}/places` },

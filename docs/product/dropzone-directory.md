@@ -74,14 +74,16 @@ service and no new infrastructure.
 
 | Area | Behaviour |
 | --- | --- |
-| Data | `GET /api/skydiver/v1/venue-points` (same `q`/`country` filters and public statuses as `/venues`, merged and draft venues excluded, venues without coordinates left out): id, name, locality, country, lat, lon, closed. Pages of up to 1,000; the web shows the first page and says when there are more |
-| Map | Leaflet and Leaflet.markercluster (npm), OpenStreetMap standard tiles with the "© OpenStreetMap contributors" attribution. Closed dropzones have their own marker and say "Closed" in the popup; popups link to `/dz/{id}` |
-| Privacy | Nothing third-party loads before the visitor presses "Show map"; the choice is kept in `sessionStorage` for that tab. Tiles then send the visitor's IP address and the site's origin (`Referrer-Policy: strict-origin` on tiles only, which the tile usage policy requires) to `tile.openstreetmap.org`, the only image host the CSP allows besides the site. The privacy page says so |
+| Data | `GET /api/skydiver/v1/venue-points` (same `q`/`country` filters and public statuses as `/venues`, merged and draft venues excluded, venues without coordinates left out): id, name, locality, country, lat, lon, closed. Pages of up to 1,000; the web shows the first page and says when there are more. The page itself loads no points: the browser fetches them from `/dz/points` only after "Show map". Like every dynamic response they are `no-store` (A3: no shared caching without a visibility and invalidation design) |
+| Map | Leaflet and Leaflet.markercluster (npm), OpenStreetMap standard tiles with the "© OpenStreetMap contributors" attribution and a plain "Leaflet" credit. Closed dropzones have their own marker and say "Closed" in the popup; popups link to `/dz/{id}`. Unfiltered, the map starts on the central 90% of points by latitude and longitude, so outliers (Iceland, the Canaries) do not zoom out the continent; a search or country fits every match |
+| Privacy | Nothing third-party loads before the visitor presses "Show map"; the choice is kept in `sessionStorage` for that tab. Tiles then send the visitor's IP address, the site's origin (`Referrer-Policy: strict-origin` on tiles only, which the tile usage policy requires) and, by which tiles are fetched, the map area viewed, which follows the search, to `tile.openstreetmap.org`, the only image host the CSP allows besides the site. The privacy page says so |
 | Without JavaScript | The Map view says the map needs JavaScript and links to the list, which stays complete |
-| Accessibility | The list is the equivalent and the map says so. The map region is labelled and focusable (arrow keys pan, +/- zoom); markers and clusters are named buttons; Enter on a marker opens its popup and moves focus to its link, and closing returns focus to the marker |
+| Accessibility | The list is the equivalent and the map says so. The map region is labelled and focusable (arrow keys pan, +/- zoom); markers and clusters are named buttons; Enter on a marker opens its popup and moves focus to its link, Escape closes it and returns focus to the marker; a click leaves focus alone. With reduced motion, zoom, fade, inertia, panning and cluster animations are off |
 | Detail page | Coordinates as text and a plain "Open in OpenStreetMap" link; no map is embedded |
 
 The tile servers are run by volunteers under a [usage policy](https://operations.osmfoundation.org/policies/tiles/) meant for moderate use. If the map ever needs more than that, the policy asks for another tile provider or self-hosting; that would be a new decision.
+
+Follow-up, not done: the name search is a `LIKE '%…%'` over `name_key` and alias keys, which scans; a trigram index would help once the directory is large.
 
 No venue data is shipped. Listings must come from reviewed sources with reuse permission (#151/#162); the beta directory starts empty.
 
