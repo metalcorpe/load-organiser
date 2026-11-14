@@ -17,9 +17,12 @@ const COOKIE = 'board_context';
 const MAX_AGE_SECONDS = 30 * 60;
 const ID = /^[A-Za-z0-9_-]{16}$/;
 
+/** 12 random bytes as 16 base64url characters. btoa, not Buffer: Workers has no Buffer here. */
 function newId(): string {
 	const bytes = crypto.getRandomValues(new Uint8Array(12));
-	return Buffer.from(bytes).toString('base64url');
+	return btoa(String.fromCharCode(...bytes))
+		.replace(/\+/g, '-')
+		.replace(/\//g, '_');
 }
 
 function cookiePath(eventId: string): string {
