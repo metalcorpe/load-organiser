@@ -162,8 +162,11 @@
 </section>
 
 <style>
+	/* One column no wider than the page: with large text the search box narrows beside its
+	   button instead of its natural width pushing the button off the screen. */
 	.search {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 0.3rem;
 		margin: 0.75rem 0;
 	}
@@ -172,13 +175,15 @@
 		font-weight: 650;
 	}
 
+	/* The button wraps under the box when the box would be narrower than 8rem beside it. */
 	.search-row {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
 	}
 
 	.search-row input {
-		flex: 1;
+		flex: 1 1 8rem;
 		min-width: 0;
 		min-height: 44px;
 		padding: 0.5rem 0.75rem;

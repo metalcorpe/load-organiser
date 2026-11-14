@@ -12,8 +12,9 @@ import {
 // Reflow with enlarged text (WCAG 1.4.4 and 1.4.10): 320 CSS px wide, text at 200%. The page
 // text keeps its words whole (overflow-wrap: break-word, app.css), so the long unbroken strings
 // (web addresses, emails, handles) need overflow-wrap: anywhere where they are shown. Here each
-// one is as long as allowed or longer, and the page content must still not reach past the
-// right edge of the screen.
+// one is as long as allowed or longer, and the page (header and content) must still not reach
+// past the right edge of the screen. The jump fills every table and figure that Statistics and
+// History draw, with a prior jump count, so those pages are measured at their widest.
 const ORIGIN = 'https://127.0.0.1:4175';
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true, viewport: { width: 320, height: 640 } });
 
@@ -76,16 +77,35 @@ async function world(): Promise<World> {
 		body: { handle, display_name: 'Reflow Jumper', discoverable: true }
 	});
 	expect(profile.status).toBeLessThan(300);
+	const canopy = (
+		await created('/gear/components', bearer, {
+			client_key: randomUUID(),
+			kind: 'main',
+			label: 'Reflow main',
+			canopy_size_sqft: 135
+		})
+	).component;
 	const jump = (
 		await created('/jumps', bearer, {
 			client_key: randomUUID(),
 			jumped_on: '2026-10-10',
 			jump_type: 'belly',
 			venue_id: venue.id,
+			aircraft: 'de Havilland Canada DHC-6 Twin Otter',
+			exit_altitude: 13500,
+			altitude_unit: 'ft',
+			freefall_seconds: 60,
+			exit_weight_grams: 85000,
+			component_ids: [canopy.id],
 			notes: `Video at ${URL_LONG}, sent by ${member}.`,
 			links: [URL_LONG]
 		})
 	).jump;
+	const baseline = await apiCall('PUT', '/history/baseline', {
+		bearer,
+		body: { prior_jumps: 1250, before_on: '2026-01-01' }
+	});
+	expect(baseline.status, await baseline.clone().text()).toBeLessThan(300);
 	const post = await created(`/me/jumps/${jump.id}/post`, bearer, {
 		jump_version: jump.version,
 		audience: 'public',
@@ -126,14 +146,23 @@ async function world(): Promise<World> {
 		paths: {
 			guest: [
 				'/',
+				'/dz',
+				'/dz?view=map',
 				`/dz/${venue.id}`,
 				`/events/${listing.id}`,
 				`/organizers/${provider.id}`,
 				`/people/${handle}`,
-				`/posts/${post.id}`
+				`/posts/${post.id}`,
+				'/support'
 			],
 			member: [
 				'/jumps',
+				'/jumps/new',
+				`/jumps/new?venue=${venue.id}`,
+				'/history',
+				'/history/baseline',
+				'/stats',
+				'/dz',
 				`/jumps/${jump.id}`,
 				'/profile',
 				'/profile/account',
@@ -169,23 +198,24 @@ interface Reflow {
 
 /**
  * Text at 200%, as a browser's text-only zoom: rem sizes and the body's 16px base doubled (no
- * font size in app.css is in px besides that base). Then the page content (main) is measured;
- * the header and tab bar are left to shell.e2e.ts. An element inside its own scroll box does
- * not count: it scrolls there, not the page.
+ * font size in app.css is in px besides that base), with every folded section open. Then the
+ * header and the page content (main) are measured; the tab bar is left to shell.e2e.ts. An
+ * element inside its own scroll box does not count: it scrolls there, not the page (a data
+ * table may, WCAG 1.4.10; the 'tables' test below checks a keyboard can reach it).
  */
 async function at200(page: Page): Promise<Reflow> {
 	return page.evaluate(() => {
 		document.documentElement.style.fontSize = '200%';
 		document.body.style.fontSize = '32px';
+		for (const details of document.querySelectorAll('details')) details.open = true;
 		const edge = document.documentElement.clientWidth;
-		const main = document.querySelector('main')!;
 		const scrolls = (element: Element | null): boolean => {
-			for (let at = element; at && at !== main; at = at.parentElement) {
+			for (let at = element; at && at !== document.body; at = at.parentElement) {
 				if (getComputedStyle(at).overflowX !== 'visible') return true;
 			}
 			return false;
 		};
-		const past = [...main.querySelectorAll('*')]
+		const past = [...document.querySelectorAll('header:not(main *), header:not(main *) *, main, main *')]
 			.map((element) => ({ element, right: element.getBoundingClientRect().right }))
 			.filter(({ element, right }) => right > edge + 0.5 && !scrolls(element.parentElement))
 			.sort((a, b) => b.right - a.right);
@@ -228,6 +258,42 @@ test.describe('reflow at 320px with 200% text', () => {
 	test('member pages', async ({ page }) => {
 		await signIn(page, shared.member);
 		await check(page, shared.paths.member);
+	});
+
+	test('a table too wide for the screen scrolls inside itself, and a keyboard can reach it', async ({
+		page
+	}, info) => {
+		await signIn(page, shared.member);
+		await page.goto('/stats');
+		const years = page.getByRole('region', { name: 'Jumps per year' });
+		// At ordinary sizes it fits: no extra tab stop or landmark.
+		await expect(page.getByRole('table', { name: 'Jumps per year' })).toBeVisible();
+		await expect(years).toHaveCount(0);
+		await at200(page);
+		await expect(years).toHaveAttribute('tabindex', '0');
+		// It scrolls instead of squeezing its labels: "2026" stays on one line.
+		const label = page.getByRole('table', { name: 'Jumps per year' }).getByRole('rowheader').first();
+		const lines = await label.evaluate((th) => {
+			const range = document.createRange();
+			range.selectNodeContents(th);
+			return new Set([...range.getClientRects()].map((rect) => Math.round(rect.top))).size;
+		});
+		expect(lines).toBe(1);
+		// Its caption wraps within the part of the box that shows.
+		const [captionRight, boxRight] = await years.evaluate((box) => [
+			box.querySelector('caption')!.getBoundingClientRect().right,
+			box.getBoundingClientRect().right
+		]);
+		expect(captionRight).toBeLessThanOrEqual(boxRight + 0.5);
+		// The next tab stop after the year filter.
+		await page.getByRole('button', { name: 'Show' }).focus();
+		await page.keyboard.press('Tab');
+		await expect(years).toBeFocused();
+		// WebKit's iPhone emulation does not scroll a box with the arrow keys (a phone has none).
+		if (info.project.name === 'chromium-320') {
+			await page.keyboard.press('ArrowRight');
+			await expect.poll(() => years.evaluate((box) => box.scrollLeft)).toBeGreaterThan(0);
+		}
 	});
 
 	test('maintenance pages', async ({ page }) => {

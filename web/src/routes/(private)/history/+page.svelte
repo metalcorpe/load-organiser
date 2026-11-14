@@ -16,8 +16,10 @@
 	let { data }: PageProps = $props();
 	const h = $derived(data.history);
 	const ms = $derived(data.milestones);
-	// Bar lengths for the month table, relative to the busiest month (at least 1 to avoid /0).
-	const peak = $derived(h.ok ? Math.max(1, ...h.months.map((m) => m.jumps)) : 1);
+	// The last 12 months, newest first.
+	const monthRows = $derived(
+		h.ok ? [...h.months].reverse().map((m) => ({ label: formatMonth(m.month), value: m.jumps })) : []
+	);
 	// Wing loading: the highest per month (newest first, like the activity table).
 	const wl = $derived(h.ok ? h.wing_loading : null);
 	const wlMissing = $derived(wl ? wl.missing.map((m) => m.missing) : []);
@@ -123,18 +125,12 @@
 				? formatDay(h.first_jump_on)
 				: 'none'}.
 		</p>
-		<table class="months">
-			<caption>Recorded jumps in the last 12 months</caption>
-			<thead><tr><th scope="col">Month</th><th scope="col">Jumps</th></tr></thead>
-			<tbody>
-				{#each [...h.months].reverse() as m (m.month)}
-					<tr>
-						<th scope="row">{formatMonth(m.month)}</th>
-						<td><span class="track" aria-hidden="true"><span class="bar" style="--w: {(m.jumps / peak) * 100}%"></span></span>{m.jumps}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
+		<BarTable
+			caption="Recorded jumps in the last 12 months"
+			rowHeader="Month"
+			valueHeader="Jumps"
+			rows={monthRows}
+		/>
 		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
 		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
 		</section>
@@ -264,8 +260,9 @@
 {/if}
 
 <style>
-	/* Totals: the screen's one navy card. */
+	/* Totals: the screen's one navy card. Its width sizes the total (below). */
 	.hero {
+		container-type: inline-size;
 		margin: 0.5rem 0 1rem;
 		padding: 1.1rem;
 		border-radius: 22px;
@@ -283,11 +280,13 @@
 		color: var(--brand-muted);
 	}
 
+	/* At most about a quarter of the card's width, so six characters (12,345) still fit inside
+	   it with large text on a small phone; at ordinary sizes that limit is never reached. */
 	.big {
 		margin: 0 0 0.35rem;
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 3.4rem;
+		font-size: min(3.4rem, 26cqi);
 		line-height: 0.95;
 		color: var(--highlight);
 		font-variant-numeric: tabular-nums;
@@ -307,52 +306,10 @@
 		column-gap: 0.75rem;
 	}
 
+	/* The dates line up in a column; with large text the column is no wider than the list. */
 	.milestones .when {
-		min-width: 11rem;
+		min-width: min(11rem, 100%);
 		color: var(--muted);
-		font-variant-numeric: tabular-nums;
-	}
-
-	/* A fixed track per row, so the bars compare at a glance; the number stays the data. */
-	.track {
-		display: inline-block;
-		width: 9rem;
-		height: 0.6rem;
-		margin-right: 0.6rem;
-		border-radius: 999px;
-		background: var(--surface-soft);
-		vertical-align: middle;
-	}
-
-	.bar {
-		display: block;
-		width: var(--w);
-		height: 100%;
-		border-radius: 999px;
-		background: var(--accent);
-	}
-
-	.months td {
-		white-space: nowrap;
-	}
-
-	.months {
-		border-collapse: collapse;
-		margin-block: 0.5rem;
-	}
-	.months caption {
-		text-align: start;
-		font-weight: 600;
-		padding-block-end: 0.25rem;
-	}
-	.months th,
-	.months td {
-		padding: 0.25rem 1rem 0.25rem 0;
-		text-align: start;
-		border-block-end: 1px solid var(--border);
-	}
-	.months td {
-		text-align: end;
 		font-variant-numeric: tabular-nums;
 	}
 </style>
