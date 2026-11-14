@@ -70,8 +70,8 @@
         }
       ],
       "aircraft": "Cessna 182 (photo caption)",
-      "status": "uncertain",
-      "status_evidence": "Club site (checked 2026-11-14) states weekend jump operations at Flugplatz LOAN and sells tandems; the only date is an image named 'Tandem-Aktion-2025'. No dated 2025+ jump post opened.",
+      "status": "seasonal",
+      "status_evidence": "ÖAeC approved-school list issued 2026-02-03 explicitly lists LOAN; the operator confirms weekend and holiday jumps at Wiener Neustadt Ost.",
       "sources": [
         {
           "url": "https://www.fallschirmsportverein.at/eastsideskydive",
@@ -87,6 +87,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOAN, used for coordinates"
+        },
+        {
+          "url": "https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 approved parachuting schools and training airfields"
         }
       ],
       "note": "Found in the check pass; was missing from the first draft."
@@ -500,8 +505,8 @@
           "website": "https://www.fallschirmspringen-kaernten.at/de/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "status": "seasonal",
+      "status_evidence": "Operator 2026 jump calendar lists 12 July at this site.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -512,9 +517,14 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOKG, used for coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 site-specific jump calendar, opened by Codex"
         }
       ],
-      "note": "Roaming tandem operator; jump days probably occasional."
+      "note": "Roaming tandem operator; 2026 calendar specifies 12 July at Ferlach."
     },
     {
       "key": "at-noetsch",
@@ -535,8 +545,8 @@
           "website": "https://www.fallschirmspringen-kaernten.at/de/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "status": "seasonal",
+      "status_evidence": "Operator 2026 jump calendar lists 28 June, 16 August and 12–13 September at this site.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -547,6 +557,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOKN, used for coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 site-specific jump calendar, opened by Codex"
         }
       ]
     },
@@ -569,7 +584,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -580,6 +595,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOKL, used for coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar checked: this site is absent despite appearing on the route page"
         }
       ],
       "aircraft": "aircraft with rear ramp (type not stated)"
@@ -603,7 +623,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -614,6 +634,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOKW, used for coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar checked: this site is absent despite appearing on the route page"
         }
       ]
     },
@@ -636,7 +661,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed as a jump site ('Hirt', 9360 Micheldorf) on the operator's route page (© 2026); no dated jump day seen.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -647,6 +672,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LOKH, used for coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar checked: this site is absent despite appearing on the route page"
         }
       ],
       "note": "A 2023 Aero-Club Kärnten folder (search result, not opened) also names a club at Friesach."
@@ -659,9 +689,9 @@
       ],
       "country": "AT",
       "locality": "Krumpendorf am Wörthersee, Kärnten",
-      "latitude": 46.631524,
-      "longitude": 14.237837,
-      "coordinates_source": "https://www.openstreetmap.org/way/124913561 (building at the operator's stated address Jerolitschstraße 43; not a surveyed landing area)",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
       "icao": null,
       "operators": [
         {
@@ -669,8 +699,8 @@
           "website": "https://www.fallschirmspringen-kaernten.at/de/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "status": "seasonal",
+      "status_evidence": "Operator 2026 jump calendar lists multiple weekends May–August at this site.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -681,9 +711,14 @@
           "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Jerolitschstrasse%2043%20Krumpendorf",
           "checked_on": "2026-11-14",
           "what": "OSM Nominatim lookup of the address"
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 site-specific jump calendar, opened by Codex"
         }
       ],
-      "note": "Coordinates are the street address the operator gives, not a confirmed landing area. Departure airfield not stated (Klagenfurt is nearby)."
+      "note": "The operator gives Jerolitschstraße 43 as a meeting address; its building is not a confirmed landing area. Coordinates withheld pending a landing-area or airfield map."
     },
     {
       "key": "at-st-johann-tirol",
@@ -817,9 +852,9 @@
       ],
       "country": "AT",
       "locality": "Fromberg, Kirchberg am Walde, Niederösterreich",
-      "latitude": 48.735359,
-      "longitude": 15.089792,
-      "coordinates_source": "https://www.openstreetmap.org/way/226879636 (Steinberghalle at the stated venue address Fromberg 42; runway not mapped)",
+      "latitude": 48.735905,
+      "longitude": 15.094874,
+      "coordinates_source": "https://pink.at/schedule.htm (Waldviertel boogie map destination: 48.7359052, 15.0948741)",
       "icao": null,
       "operators": [
         {
@@ -848,11 +883,53 @@
           "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Fromberg%2042%2C%203932%20Kirchberg%20am%20Walde",
           "checked_on": "2026-11-14",
           "what": "OSM lookup of the venue address"
+        },
+        {
+          "url": "https://pink.at/schedule.htm",
+          "checked_on": "2026-11-14",
+          "what": "Schedule updated 2026-11-06; Waldviertel boogie 3–11 July 2027 and map destination"
         }
       ],
       "aircraft": "Short SC.7 Skyvan (Pink Skyvan)",
       "season": "summer jump week (Pink Boogie 4–12 July 2026; next listed 3 July 2027)",
-      "note": "Event dropzone. Coordinates are the venue address, not the landing area."
+      "note": "Event venue pin from the operator schedule map; replaces the Steinberghalle street-address point. This identifies the boogie site, not a surveyed parachute target."
+    },
+    {
+      "key": "at-trieben",
+      "name": "Trieben Airfield",
+      "aliases": [],
+      "country": "AT",
+      "locality": "Trieben, Steiermark",
+      "latitude": 47.493364,
+      "longitude": 14.49558,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LOGI)",
+      "icao": "LOGI",
+      "operators": [
+        {
+          "name": "Internationaler Pink Parachute Club",
+          "website": "https://pink.at/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "ÖAeC school register dated 3 February 2026 lists LOGI as the training airfield; no actual 2025+ jump dates at Trieben were confirmed in the operator schedule.",
+      "sources": [
+        {
+          "url": "https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2026 authorized school and training-place register"
+        },
+        {
+          "url": "https://pink.at/schedule.htm",
+          "checked_on": "2026-11-14",
+          "what": "Schedule updated 6 November 2026; no Trieben dates visible"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "LOGI airfield coordinates"
+        }
+      ],
+      "note": "Added by Codex; current training authorization does not establish recent regular jumping."
     }
   ]
 }

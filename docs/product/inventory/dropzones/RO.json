@@ -281,8 +281,7 @@
       "key": "ro-brasov-ghimbav",
       "name": "Ghimbav Aerodrome",
       "aliases": [
-        "Brașov",
-        "Sânpetru"
+        "Brașov"
       ],
       "country": "RO",
       "locality": "Ghimbav, Brașov County",
@@ -297,7 +296,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found March 2025 reporting explicitly locates parachuting at Ghimbav rather than Sânpetru.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -323,9 +322,14 @@
           "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
           "checked_on": "2026-11-14",
           "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        },
+        {
+          "url": "https://infrapress.ro/2025/03/18/ministerul-transporturilor-infiinteaza-doua-aerocluburi-teritoriale-aeroclubul-teritorial-aurel-raican-braila-ianca-si-aeroclubul-teritorial-mircea-zorileanu-brasov/",
+          "checked_on": "2026-11-14",
+          "what": "18 March 2025 report distinguishes Ghimbav aircraft/parachuting from Sânpetru gliding"
         }
       ],
-      "note": "The club runs two aerodromes, Ghimbav and Sânpetru (LRSP, OSM way 1051125732). Which one is used for jumps is not stated; Ghimbav is the club seat. Check: the club page gives addresses at both Sânpetru and Ghimbav, and 2025–2026 club events are at Sânpetru; Ghimbav is now also Brașov-Ghimbav International Airport (LRBV). The jump site is unconfirmed, so these coordinates may be the wrong one of the two airfields."
+      "note": "March 2025 report identifies Ghimbav as the aircraft/parachuting site and Sânpetru as the gliding site. These coordinates are the sport aerodrome, not Brașov-Ghimbav International Airport; Sânpetru is a separate airfield."
     },
     {
       "key": "ro-cluj-dezmir",
@@ -344,7 +348,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Târgu Mureș, not here. No dated jump at this aerodrome found",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Târgu Mureș, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -481,7 +485,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Suceava, not here. No dated jump at this aerodrome found",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Suceava, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -523,7 +527,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Pitești is not in Aeroclubul României's 2026 list of clubs taking parachuting students (posted 2025-12-30), although the club's course menu lists 'Parasutism'. No dated jump found",
+      "status_evidence": "Pitești is not in Aeroclubul României's 2026 list of clubs taking parachuting students (posted 2025-12-30), although the club's course menu lists 'Parasutism'. No dated jump found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -612,7 +616,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Deva, not here. No dated jump at this aerodrome found",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Deva, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -743,7 +747,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed as a territorial aeroclub on aeroclubulromaniei.ro (2026), with a Facebook page only; parachuting not confirmed; Oradea is not in Aeroclubul României's 2026 parachuting enrolment list",
+      "status_evidence": "Listed as a territorial aeroclub on aeroclubulromaniei.ro (2026), with a Facebook page only; parachuting not confirmed; Oradea is not in Aeroclubul României's 2026 parachuting enrolment list Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
       "sources": [
         {
           "url": "https://www.aeroclubulromaniei.ro/",
@@ -792,6 +796,44 @@
         }
       ],
       "note": "Added in check. List-based status like the other territorial clubs; not checked in OSM (Overpass unreachable). The researcher had found no parachuting on the club's course menu."
+    },
+    {
+      "key": "ro-magura-cisnadie",
+      "name": "Măgura Airfield",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Cisnădie, Sibiu",
+      "latitude": 45.737222,
+      "longitude": 24.165278,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LRCD)",
+      "icao": "LRCD",
+      "operators": [
+        {
+          "name": "Club Sportiv Benzoi / Benzoi Aviation",
+          "website": "https://www.benzoi.ro/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator confirms tandem jumps at Măgura and May–October booking season; no dated 2025+ jump or season calendar was established.",
+      "sources": [
+        {
+          "url": "https://www.benzoi.ro/despre-noi/",
+          "checked_on": "2026-11-14",
+          "what": "Operator locates its aircraft and parachuting activities at Măgura"
+        },
+        {
+          "url": "https://www.benzoi.ro/bookings/services/view/1",
+          "checked_on": "2026-11-14",
+          "what": "Tandem booking page identifies Măgura and May–October season"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "LRCD coordinates"
+        }
+      ],
+      "note": "Added by Codex; distinct from the territorial Sibiu aeroclub airfield.",
+      "season": "May–October (operator booking page)"
     }
   ]
 }

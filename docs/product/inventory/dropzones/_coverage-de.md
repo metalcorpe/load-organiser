@@ -167,3 +167,107 @@ with no dated jump days (its 2027 dates are not yet published). They remain lead
 
 Totals after the check: 106 records. 20 active, 65 seasonal, 19 uncertain, 2 closed, 3 with null
 coordinates.
+
+## Codex cross-check
+
+Checked 2026-11-14 by codex. The input had 106 records: 20 active, 65 seasonal, 19 uncertain and 2 closed. The earlier “31 DFV-only” count predates the preceding review: the file received here had 29 active/seasonal records beginning with “DFV list”, plus the 19 uncertain records. All 48 were reviewed. Original researcher metadata is retained; this section records the second-model audit.
+
+### Results
+
+- 0 uncertain records upgraded; 8 active/seasonal records downgraded to uncertain.
+- 2 additional closures: Hartenholm and Bruchsal (civilian dropzone operation, not necessarily the whole airfield).
+- Eggenfelden changed from active to seasonal because the operator says daily **during the season**, not year-round.
+- 1 addition: Langeoog, with recurring 2026 visiting boogies documented by local reports and an operator calendar.
+- 1 missing coordinate pair filled: Jumpzone Bremerhaven is at Kührstedt-Bederkesa (EDXZ), so its key/name/location were corrected.
+- 10 existing coordinate pairs spot-checked; none was at the wrong airfield.
+- Final totals: **107 records: 15 active, 61 seasonal, 27 uncertain, 4 closed; 2 without coordinates**.
+
+### Activity evidence and decisions
+
+Dates in copyright footers and search-engine crawl dates were not treated as jump dates. The [DFV change log](https://www.dfv.aero/Neues/Letzte%2B%C3%84nderungen), opened directly, shows that several still-visible directory records were last edited in 2022–2023. A live directory does not by itself establish a newly verified 2026 season. Public Facebook pages for Passau, Sylt and Kiel exposed titles but no dated posts; no login was attempted. Operator sites, public calendar feeds, local reports, DAeC and DFV were checked, with source URLs recorded in JSON.
+
+| Place | Decision | Evidence / remaining limitation |
+|---|---|---|
+| Hartenholm airfield | seasonal → closed | Albatros states that jumping at Hartenholm is no longer permitted because it could not obtain usable take-off/landing permission; vouchers are now handled at Hungriger Wolf (operator and municipality pages checked 2026-11-14). |
+| Bruchsal drop zone (Eichelberg) | seasonal → closed | Wikipedia states FSC Bruchsal used the Eichelberg military training area only until the end of 2022; a Bundeswehr notice dated 2026-02-08 refers to its former clubhouse. No successor civilian operation found. |
+| Schwäbisch Hall-Weckrieden airfield | seasonal → uncertain | Para Club and airport still describe jumping at Weckrieden, but no dated 2025+ jump calendar or activity report was found; the live directory is not proof of a 2026 season. |
+| Breitscheid airfield | seasonal → uncertain | Operator homepage says there is currently no jumping at Breitscheid; its calendar/status pages returned no readable dates, so a winter pause cannot be distinguished from a longer interruption. |
+| Kempten-Durach airfield | seasonal → uncertain | Schatt explicitly says it currently offers no jumps at Kempten-Durach and redirects to other fields; no 2025+ local club activity was found. |
+| Fürstenzell airfield | active → uncertain | Club website describes jumping but supplies no 2025+ activity dates; public Facebook view exposed only the page title and no dated posts. |
+| Westerland (Sylt) airport | seasonal → uncertain | Operator describes an April–October season without a year; its booking page still shows cancelled 2020 events, and no dated 2025+ activity was readable publicly. |
+| Rosenthal-Plössen airfield | active → uncertain | Operator advertises weekend jumping at Rosenthal-Plössen, but no dated 2025+ jump activity or season calendar was found; a current copyright footer is insufficient. |
+| Burgheim airfield | active → uncertain | Club describes regular Friday/weekend jumping and sells tandem vouchers, but no dated 2025+ jump day or season calendar was found. |
+| Kiel-Holtenau airport | active → uncertain | LSV Kiel describes jumping but supplies no dated 2025+ activity on the page checked; Kiel-Boogie was blocked and the public Facebook view exposed no dated posts. |
+| Thalmässing-Waizenhofen airfield | seasonal → seasonal | Operator publishes a 2026 season calendar with jumping events and training camps. |
+| Grefrath-Niershorst airfield | seasonal → seasonal | Operator news dated 2026-03-09 announces season start; August 2026 news reports jumping and advertises Supervan operations on 28–30 August. |
+| Rottweil-Zepfenhan airfield | active → active | Jump & Fun Factory training calendar, updated 2025-07-12, lists the 12–16 May 2025 AFF course at Rottweil; its operator description states year-round jumping. |
+| Neustadt-Glewe airfield | seasonal → seasonal | Regional sports report dated 2026-09-16 discusses the home club and its 31 October 2026 end-of-season Scramble at Neustadt-Glewe. |
+| Elmster Berg (FSC Münster) | seasonal → seasonal | Club events page lists Fallen Leaves on 4–6 September 2026 and the 27–28 September 2025 Speedstar event. |
+| Neustadt/Aisch airfield (Eichelberg) | active → active | Current operator site publishes jump prices effective March 2025 and links its jump manifest; dated price publication corroborates the DFV listing, although no dated jump-day calendar was verified. |
+| Lachen-Speyerdorf airfield | seasonal → seasonal | Public club calendar feed lists 2026 jump days through 31 October and a jump week beginning 20 July 2026; the feed also contains older years. |
+| Günzburg-Donauried airfield | seasonal → seasonal | Club public calendar lists Sprungbetrieb on 11 and 26 April, 29 May, 15–16 August and 2 September 2026, plus a 5 September Scramble. |
+| Trier-Föhren airfield | seasonal → seasonal | Club page publishes introductory courses on 15–16 May and 21–22 August 2026 and its anniversary on 29 August 2026. |
+| Altenstadt army jump area | seasonal → seasonal | Club page explicitly describes its 2026 facilities and continuing Saturday/selected-Friday jumping from April to October; this corroborates the DFV listing, but a dated individual jump calendar was not readable. |
+| Roitzschjora airfield | seasonal → seasonal | Sportstadt Leipzig article dated 2026-07-31 describes Skydive Leipzig operating at Roitzschjora with a Pilatus PC-6. |
+| Meißendorf-Brunsiek | seasonal → seasonal | Operator booking page lists an AFF course at Sprungplatz Meißendorf on 29 April–2 May 2027 with remaining places; a published future season date, checked 2026-11-14. |
+| Flensburg-Schäferhaus airfield | active → active | Club statement dated 2026-05-23 confirms its parachuting section trains students and makes sport jumps, while clarifying it does not sell or conduct tandem jumps. |
+| Eggenfelden airfield | active → seasonal | Operator tandem-booking page is explicitly updated 2026-07-14 and advertises Eggenfelden jumps; homepage says daily operation during the season, replacing the directory claim of year-round daily jumping. No dated available slot was exposed in the public feed. |
+| Stadtlohn-Vreden airfield | seasonal → seasonal | DFV national-championship site lists 6–13 September 2025 at Stadtlohn-Vreden with Skyfactory UG; former Skydive Stadtlohn ceased at the end of 2023, but the airfield has a successor. |
+| Hildesheim airfield | seasonal → seasonal | Operator events page publishes May 2027 jumping/training events, including 27–29 May Ladies Days; confirms a forthcoming season beyond the undated directory entry. |
+| Unterschüpf airfield | seasonal → seasonal | Operator calendar lists the 22–30 August 2026 jump week, 11 July 2026 World Skydiving Day and May 2026 canopy training. |
+| Ganderkesee Atlas airfield | active → active | Local report dated 2026-05-11 announces YourSky jumping/tandem open days at Ganderkesee on 16–17 May 2026; corroborates current operator and DFV year-round listing. |
+| Itzehoe/Hungriger Wolf airfield | seasonal → seasonal | IAS Itzehoer Airservice publishes a YUU Skydive flight-calendar entry for 23 August 2026; the current YUU operator site also advertises jumping at Hungriger Wolf. |
+| Schwarzheide/Schipkau airfield | uncertain → uncertain | Club news dated January 2026 concerns the airfield lease dispute; no dated 2025+ jump operation was found. |
+| Lahr airport | uncertain → uncertain | DFV still names Lahr, but the club site was unreadable and no dated 2025+ jumping at Lahr was found; Black Forest activity at Rottweil does not establish Lahr operations. |
+| Lechfeld (Graben) | uncertain → uncertain | Club affiliation and activities elsewhere do not establish jumping at Lechfeld; no dated 2025+ civilian jump day at this military site was found. |
+| Oberpfaffenhofen (DLR special airport) | uncertain → uncertain | The club parachuting page describes historical starts at Oberpfaffenhofen with landings at Maxhof and more recent visits to other dropzones; no dated 2025+ jumping at EDMO was found. |
+| Grafenau area (Flying Bears e.V.) | uncertain → uncertain | DFV gives only a Flying Bears postal address; neither a physical dropzone nor 2025+ local jump activity was established. |
+| Seedorf (Zeven) military jump area | uncertain → uncertain | The former operator domain is parked and a 2024 closure threat remains unresolved; no 2025+ regular civilian jumping was found, distinct from military demonstrations. |
+| Braunschweig-Wolfsburg airport | uncertain → uncertain | DFV still lists the club and airfield, but the operator domain failed and no dated 2025+ jump activity was found. |
+| Bad Lippspringe drop zone | uncertain → uncertain | Closure indicators concern the former civilian skydiving operation; no 2025+ civilian access or jump calendar was found, and military use alone does not establish a public dropzone. |
+| Rheine-Eschendorf airfield | uncertain → uncertain | DFV retains the entry but the former operator domain is parked; no dated 2025+ activity or replacement operator was found. |
+| Bonn-Hangelar (FSG Hangelar) | uncertain → uncertain | DFV identifies a Hennef postal address and Soest office, not a confirmed Hangelar landing area; no 2025+ local jumping or mappable site was established. |
+| Finsterwalde-Schacksdorf | uncertain → uncertain | Both candidate operator domains failed to resolve; the directory entry was not corroborated by any dated 2025+ jump operation. |
+| Hüttenbusch airfield | uncertain → uncertain | Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Hüttenbusch was found. |
+| Lüchow-Rehbeck airfield | uncertain → uncertain | Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Lüchow-Rehbeck was found. |
+| Jena-Schöngleina airfield | uncertain → uncertain | DAeC still lists the Thüringia school at Jena-Schöngleina, but its operator website was unreadable and no dated 2025+ local jumping was found. |
+| Stendal-Borstel airfield | uncertain → uncertain | Airport company report dated 2022-06-15 describes the dissolution of Skydive-Stendal; no 2025+ successor jump operation was confirmed. |
+| Bienenfarm airfield | uncertain → uncertain | Historical accounts and the airport description mention occasional parachuting, but no dated 2025+ regular civilian jump operation was found. |
+| Bad Dürkheim airfield | uncertain → uncertain | Skyhopping still lists the location, but its calendar yielded no jump dates and Jump & Fun Factory does not yet publish site-specific 2027 dates. |
+| Kaufbeuren air base | uncertain → uncertain | DFV lists the parachuting section, but club news concerns other flying activities; no dated 2025+ civilian jump operation was found. |
+| Kührstedt-Bederkesa airfield (Jumpzone Bremerhaven) | uncertain → uncertain | The detailed Jumpzone directory entry identifies Kührstedt-Bederkesa, but no dated 2025+ activity or readable current operator calendar was found. |
+
+The stronger new dated evidence includes Günzburg's public Google calendar, Lachen-Speyerdorf's public event feed, 2026 club events at Grefrath/Trier/Sendenhorst/Unterschüpf, the 2025 Rottweil course, the 2025 Stadtlohn championships, and published 2027 dates at Hildesheim and Meißendorf. Lachen-Speyerdorf's feed begins with 2018 entries but also contains 2026 events; its recent dates were filtered and read. Some September 2026 dates are explicitly cancelled, so the retained evidence cites other scheduled days.
+
+Neustadt/Aisch, Altenstadt and Eggenfelden have weaker corroboration than a dated jump event: respectively a jump-price list effective March 2025, a club description explicitly discussing 2026 facilities alongside regular jumping, and a tandem-booking page updated in July 2026. Their current operator statements corroborate the existing DFV entry, but an individual dated jump day was not verified. These remain follow-up leads rather than being presented as completed-jump reports.
+
+Stadtlohn is a useful operator/site distinction: the old business ended in 2023, while Skyfactory hosted the 2025 national championships at the same airfield. The operator was replaced in the existing record, not added as another dropzone. Bruchsal closure evidence is the historical end-of-2022 statement together with a February 2026 Bundeswehr notice describing the former FSC clubhouse. Stendal's 2022 airport report describes dissolution of its club; this does not rule out a successor, so Stendal remains uncertain.
+
+### Coordinates
+
+The following individual OurAirports pages were opened and their coordinates compared with the dataset (airport reference points, not guessed town centres).
+
+| Place | Airport page | Reference latitude, longitude | Result |
+|---|---|---|---|
+| Hartenholm | [EDHM](https://ourairports.com/airports/EDHM/) | 53.915001, 10.035556 | Matches |
+| Weckrieden | [EDTX](https://ourairports.com/airports/EDTX/) | 49.124443, 9.781111 | Matches |
+| Breitscheid | [EDGB](https://ourairports.com/airports/EDGB/) | 50.676388, 8.169444 | Existing facility point about 0.44 km away, same airfield |
+| Thalmässing | [EDPW](https://ourairports.com/airports/EDPW/) | 49.064167, 11.209167 | Matches |
+| Grefrath | [EDLF](https://ourairports.com/airports/EDLF/) | 51.333889, 6.359444 | Existing facility point about 0.11 km away, same airfield |
+| Durach | [EDMK](https://ourairports.com/airports/EDMK/) | 47.691944, 10.338056 | Matches |
+| Rottweil | [EDSZ](https://ourairports.com/airports/EDSZ/) | 48.186604, 8.722801 | Matches |
+| Neustadt-Glewe | [EDAN](https://ourairports.com/airports/EDAN/) | 53.362444, 11.613764 | Matches |
+| Fürstenzell | [EDMF](https://ourairports.com/airports/EDMF/) | 48.518055, 13.345833 | Matches |
+| Stadtlohn | [EDLS](https://ourairports.com/airports/EDLS/) | 51.995834, 6.840556 | Matches |
+
+The [detailed Jumpzone directory entry](https://www.sky-junkies.de/sprungplatz/fallschirmsport-bremerhaven-jumpzone/) explicitly names Kührstedt-Bederkesa. Its [EDXZ airport page](https://ourairports.com/airports/EDXZ/) supplies 53.568054, 8.789444. This resolves the old Bremerhaven/Luneort ambiguity without inventing a landing point. [EDWL](https://ourairports.com/airports/EDWL/) supplies the new Langeoog point.
+
+**Still null:** Grafenau (Flying Bears has only a postal address; no verified jump field) and Bonn-Hangelar (DFV gives Hennef/Soest addresses without identifying an actual landing site). Assigning Elsenthal, Bonn-Hangelar airport or Soest coordinates would be an unsupported inference. Overpass was not retried.
+
+### Completeness and open leads
+
+German-language searches checked “Fallschirmspringen”, “Sprungbetrieb”, “Sprungplatz”, “Boogie”, operator names and 2025/2026 dates. Langeoog is confirmed by the two dated local reports and Varrelbusch's calendar linked in its new record. Riedenheim/Oberhausen is a club address, not another present dropzone: [Skydive City's operator site](https://www.skydivecity.de/) and [directions on its calendar page](https://www.skydivecity.de/index.php/skydiven/termine) locate current jumping at already-recorded Rothenburg. DAeC's school address alone therefore did not justify a duplicate.
+
+No dated recurring operations were confirmed for the other missing-place leads: Pfullendorf, Mühlacker/Hangensteiner Hof, Giengen/Brenz, Schopfheim/Seven Sky, or Diepholz. [Jump & Fun Factory's booking calendar](https://www.sky-dive.de/termint1.html) says site-specific 2027 dates will appear in February; it does not yet establish those sites. Paderborn-Haxterberg remains an earlier open lead; no confirmed recurring civilian operation was added. The 27 uncertain records remain explicit research gaps, not assumed closures.
+
+Validation: JSON syntax, required fields, unique keys, coordinate pairing and status totals checked after editing; no commit made.

@@ -289,10 +289,14 @@
       "operators": [
         {
           "name": "Paraclube Nacional 'Os Boinas Verdes'"
+        },
+        {
+          "name": "Skydive Cerval",
+          "website": "https://www.skydivecerval.pt/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. Military parachuting continues here (an Army team post mentions a national championship held at Tancos), but this is not evidence of civilian club jumps.",
+      "status": "active",
+      "status_evidence": "O MIRANTE report dated 9 June 2026 describes beginners and experienced jumpers at the Boinas Verdes club in Tancos; Skydive Cerval also advertises Tancos as its jump zone.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -308,9 +312,19 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://omirante.pt/cultura-e-lazer/2026-06-09-boinas-verdes-de-tancos-continuam-a-ensinar-a-voar-e-a-guardar-a-memoria-dos-paraquedistas-909a5e93",
+          "checked_on": "2026-11-14",
+          "what": "Dated report on civilian club parachuting at Tancos"
+        },
+        {
+          "url": "https://www.skydivecerval.pt/",
+          "checked_on": "2026-11-14",
+          "what": "Operator homepage explicitly identifies TANCOS as its jump zone"
         }
       ],
-      "note": "Military airbase; club access for civilian members not confirmed."
+      "note": "Military airfield with civilian club jumping supported by the 2026 O MIRANTE report and Skydive Cerval offer; access arrangements should be confirmed with the operator."
     },
     {
       "key": "pt-vila-real",
@@ -331,7 +345,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. A Yumping customer review dated 2026-06-06 (on the Skydive Porto Chaves page) regrets that there are no parachute jumps in Vila Real.",
+      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. A Yumping customer review dated 2026-06-06 (on the Skydive Porto Chaves page) regrets that there are no parachute jumps in Vila Real. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -371,7 +385,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator site live (copyright 2026) and FPPq club list names Skydive Minho at Cerval, but no dated jump post from 2025 or later was found; the Facebook posts seen are about 5 years old.",
+      "status_evidence": "Uncertain: operator website identifies Tancos as its jump zone while retaining the Cerval address; no dated recent jumps at Cerval itself confirmed.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/ace.html",
@@ -409,7 +423,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Trip.com lists it as temporarily closed; not on the FPPq lists; operator site did not respond on 2026-11-14.",
+      "status_evidence": "Trip.com lists it as temporarily closed; not on the FPPq lists; operator site did not respond on 2026-11-14. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/fly-skydive-coimbra/",
@@ -447,7 +461,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The Maia entry is commented out (hidden) in the FPPq dropzone page source; operator domain did not resolve on 2026-11-14; same group as Skydive Valladolid, which closed in 2025. An Instagram topic page (search-result view) describes Skydive Maia in the past tense ('era um centro de paraquedismo').",
+      "status_evidence": "Uncertain: May 2026 reporting traces the former operator from Maia to Spain and its eventual cessation; no evidence establishes whether another operator now jumps at Maia.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -468,6 +482,11 @@
           "url": "https://www.openstreetmap.org/node/8421707775",
           "checked_on": "2026-11-14",
           "what": "OSM: Skydive Maia, sport=parachuting"
+        },
+        {
+          "url": "https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 report traces former Maia operation to León and Valladolid; no evidence of a replacement Maia operator"
         }
       ],
       "note": "Probably closed. OSM node 8421707775 'Skydive Maia' (41.28049, -8.51706) agrees with the airfield point."
@@ -491,7 +510,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The Águeda entry is commented out (hidden) in the FPPq dropzone page source; no recent activity found.",
+      "status_evidence": "The Águeda entry is commented out (hidden) in the FPPq dropzone page source; no recent activity found. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -525,7 +544,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The entry is commented out (hidden) in the FPPq dropzone page source; Skydive Seven now flies from Portimão.",
+      "status_evidence": "The entry is commented out (hidden) in the FPPq dropzone page source; Skydive Seven now flies from Portimão. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -580,6 +599,33 @@
         }
       ],
       "note": "Visiting operation, not a resident dropzone: Skydive Porto and Skydive Portugal bring aircraft and instructors on announced weekends. Not on the FPPq dropzone page."
+    },
+    {
+      "key": "pt-rio-maior",
+      "name": "Complexo Desportivo de Rio Maior landing area",
+      "aliases": [],
+      "country": "PT",
+      "locality": "Rio Maior, Santarém",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Pára-Clube Nacional Os Boinas Verdes"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Report dated 11 August 2026 announces the recurring Portugal precision-landing cup at the sports-complex training fields on 7–8 November 2026, identifying the organiser and previous annual editions.",
+      "sources": [
+        {
+          "url": "https://noticiasdosorraia.sapo.pt/taca-de-portugal-de-paraquedismo-passa-para-novembro-em-rio-maior/",
+          "checked_on": "2026-11-14",
+          "what": "Dated annual competition announcement and named landing grounds"
+        }
+      ],
+      "note": "Added by Codex as a recurring competition landing place, not a daily tandem centre. Exact training-field coordinates were not established; a town or sports-complex office point is not substituted.",
+      "season": "Annual competition; 7–8 November in 2026"
     }
   ]
 }

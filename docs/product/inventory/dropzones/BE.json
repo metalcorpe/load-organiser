@@ -218,7 +218,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "RTBF (17 October 2023): the centre opened at Saint-Ghislain in October 2022, jump altitudes were limited by skeyes, and the company moved its jumps back to Cerfontaine and to France; Saint-Ghislain awaited a decision by the authorities. No 2025+ evidence of jumps at Saint-Ghislain found.",
+      "status_evidence": "RTBF (17 October 2023): the centre opened at Saint-Ghislain in October 2022, jump altitudes were limited by skeyes, and the company moved its jumps back to Cerfontaine and to France; Saint-Ghislain awaited a decision by the authorities. No 2025+ evidence of jumps at Saint-Ghislain found. Codex cross-check found no dated resumption; remains uncertain rather than inferring closure from directory absence.",
       "sources": [
         {
           "url": "https://www.rtbf.be/article/baptemes-en-parachute-la-saga-skydive-saint-ghislain-en-approche-de-conclusion-11269479",
@@ -229,6 +229,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row EBSG, used for coordinates"
+        },
+        {
+          "url": "https://fwcp.be/",
+          "checked_on": "2026-11-14",
+          "what": "Current Walloon federation lists Spa, Cerfontaine and Namur; absence does not establish closure"
         }
       ],
       "note": "Probably no longer used for jumps; kept as uncertain rather than closed because no closure notice was found."

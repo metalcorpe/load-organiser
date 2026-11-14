@@ -214,3 +214,41 @@ HR:
   - Padobranski klub Croatia (no jump site on its page)
 - MT: a deal.com.mt "Fly Zone" tandem offer appears to be for jumps in Italy. No Maltese dropzone
   was found.
+
+
+## Codex cross-check
+
+Date: 2026-11-14 (environment date). Scope: Italy only; the earlier SI/HR/MT/SM findings are unchanged. Read the README and prior coverage before reviewing all five uncertain records and the ENAC-list-based active records. Independently opened and parsed the [ENAC 2026 workbook](https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx), operator sites, calendars and local-language searches. No sign-in, terms acceptance, contact, Overpass requests or commits.
+
+### Changes and counts
+
+- Upgraded to active/seasonal: **0**; downgraded to uncertain: **0**; closed: **1**; added: **0**; existing coordinate pairs corrected: **0**.
+- **Acqui Terme: uncertain → closed.** [AcquiNews, 24 June 2026](https://acquinews.ilpiccolo.net/2026/06/24/acqui-una-croce-bianca-sulla-pista-aviosuperficie-chiusa-resta-la-speranza/) reports the airstrip's closure and quotes its operator confirming that jumps and aircraft have moved to Novi Ligure. [Albatros's March 2026 announcement](https://aeroclub-albatros.it/category/news-eventi/) independently confirms the move. The existing Novi Ligure record already consolidates Albatros and Paraclub.
+- Added stronger dated activity evidence to Belluno, Cumiana, Arezzo, Nettuno and Fano from the [AeCI sporting calendar](https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list); Serdiana from the operator-linked public calendar; Siracusa and Paestum from operator event calendars; Fermo from its November 2026 canopy course; Orbetello from a dated 2025 customer account; Molinella from October 2026 reporting; Scarlino from a July 2026 tandem report. These records retain active status.
+
+| Country | Active | Seasonal | Uncertain | Closed | Total | Missing coordinates |
+|---|---:|---:|---:|---:|---:|---:|
+| IT | 32 | 0 | 4 | 1 | 37 | 0 |
+
+### Directory-based activity review
+
+The ENAC list is an aviation-authority authorization list, not a generic club directory. Its 2026 school/locality entries were independently verified and retained as qualifying evidence under the README's current-list rule unless a specific contradiction was established. An authorization is not proof of daily operation; copyright years and undated booking forms were not converted into dated jump reports.
+
+For Verona, Vercelli, Cremona, Reggio Emilia, Thiene, Loreto, Ferrara, San Stino, Udine, Caltagirone, Sibari, Garzigliana, Alessandria, Monte Compatri and the remaining undated operator pages, the cross-check did not establish a separate field-specific dated schedule beyond the authority evidence. Lucca and San Vincenzo also retain the checked 2026 authority evidence; search-only articles/offers were not added as opened activity sources. No newly confirmed closure was established at those fields. Casale's current operator still advertises booking and a weekly opening pattern; January 2026 enforcement news is a lead to clarify rather than proof of permanent dropzone closure, so the record retains the 2026 authority basis. The opened operator and authority URLs are recorded in IT.json.
+
+### Uncertain records and gaps
+
+- `it-costa-volpino`: Operator pages remain live but undated; no 2025–2026 site-specific operating calendar or jump report was established.
+- `it-melendugno`: Operator offers remain undated, while an AIRAC digest reports removal of the Melendugno parachuting area effective 20 February 2025; continued regular jumping is unconfirmed.
+- `it-lavello`: The operator event page was reopened but yielded no dated 2025–2026 Lavello jumping; copyright dates do not establish activity.
+- `it-cecina`: Historical ENAC accident evidence identifies the site, but no reliable 2025–2026 activity or definitive operator closure notice was established.
+
+Melendugno's [secondary AIRAC digest](https://aeronauticalinformation.it/index.php/2024/10/02/aeroporti-di-belluno-e-lecce-lepore/) says its parachuting area was deleted effective 20 February 2025. This strengthens the uncertainty but does not independently prove the operator permanently closed. Cecina has conflicting reseller offers and closure comments; no authoritative recent outcome was established. Sunflyers' event pages for Lavello and Caltagirone yielded no dated events in the retrieved text. Primolancio's calendar returned HTTP 403; the homepage was readable. Public operator pages were preferred over social search snippets; no login-gated social content was used.
+
+Completeness searches covered Italian-language 2025/2026 parachuting, calendars, schools and the earlier Palermo/Sicilia Boogie lead. Generated-2026 printouts of old event articles were not treated as 2026 events. No missing regular civilian site was confirmed; Palermo's actual continuing field/operator combination remains open.
+
+### Coordinate audit
+
+Ten existing points were compared against individually opened OurAirports pages: LIPN Verona, LIDB Belluno, LILM Casale, LILI Vercelli, LILR Cremona, LIDR Ravenna, LIDE Reggio Emilia, LIQL Lucca, LIQB Arezzo and LIDH Thiene. All correspond to the stated airport, with differences of about 0.03–0.19 km from the airport reference points. Original OSM geometry points were retained; all ten audit-source URLs were added to the records. There were no missing IT coordinates and no coordinate corrections.
+
+Validation: IT.json passed `python3 -m json.tool` and structural checks for source presence, unique keys, allowed status values and paired coordinates. No commit was made.

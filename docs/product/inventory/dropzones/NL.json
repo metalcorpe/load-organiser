@@ -312,6 +312,75 @@
         }
       ],
       "note": "Airfield identified from the operator's Arnemuiden address; the operator page does not name the airfield."
+    },
+    {
+      "key": "nl-westbroek",
+      "name": "Westbroek landing area",
+      "aliases": [],
+      "country": "NL",
+      "locality": "Westbroek, Utrecht",
+      "latitude": 52.136204,
+      "longitude": 5.134176,
+      "coordinates_source": "https://www.skydivehilversum.nl/en/im-a-skydiver/ (operator map destination: 52.1362041, 5.1341759)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Hilversum / Paraclub Midden Nederland",
+          "website": "https://www.skydivehilversum.nl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Dutch Safety Board reports parachuting here on 22 March 2025; operator identifies Westbroek as its principal weekend landing area.",
+      "sources": [
+        {
+          "url": "https://www.skydivehilversum.nl/en/im-a-skydiver/",
+          "checked_on": "2026-11-14",
+          "what": "Operator landing-area description and explicit map destination"
+        },
+        {
+          "url": "https://www.ehhv.nl/for-pilots/para-jumping-dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Airport confirms separate Westbroek landing area"
+        },
+        {
+          "url": "https://onderzoeksraad.nl/onderzoek/bijna-botsing-met-parachutist-diamond-aircraft-industries-inc-da20-a1-dropzone-westbroek/",
+          "checked_on": "2026-11-14",
+          "what": "Report published 8 January 2026 identifies 22 March 2025 jump activity"
+        }
+      ],
+      "note": "Added by Codex; aircraft depart Hilversum, but this is a separate regular landing place."
+    },
+    {
+      "key": "nl-baarn",
+      "name": "Baarn landing area",
+      "aliases": [],
+      "country": "NL",
+      "locality": "Baarn, Utrecht",
+      "latitude": 52.204786,
+      "longitude": 5.326372,
+      "coordinates_source": "https://www.skydivehilversum.nl/en/im-a-skydiver/ (operator map destination: 52.2047856, 5.3263715)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Hilversum / Paraclub Midden Nederland",
+          "website": "https://www.skydivehilversum.nl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator and Hilversum airport describe Baarn as an alternative landing area; no dated 2025+ jump at Baarn itself was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.skydivehilversum.nl/en/im-a-skydiver/",
+          "checked_on": "2026-11-14",
+          "what": "Operator describes secondary landing site and provides map destination"
+        },
+        {
+          "url": "https://www.ehhv.nl/for-pilots/para-jumping-dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Airport confirms distinct alternative landing place"
+        }
+      ],
+      "note": "Added by Codex; weather-dependent secondary landing area, separate from Hilversum and Westbroek."
     }
   ]
 }

@@ -73,7 +73,7 @@
       ],
       "aircraft": "Maule (DFV)",
       "status": "uncertain",
-      "status_evidence": "Listed by DFV; club site (2026 news) is about an airfield lease court case and gives no jump dates",
+      "status_evidence": "Club news dated January 2026 concerns the airfield lease dispute; no dated 2025+ jump operation was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7383",
@@ -84,6 +84,11 @@
           "url": "https://www.aecschwarzheide.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://aecschwarzheide.de/",
+          "checked_on": "2026-11-14",
+          "what": "Club news dated January 2026 concerns the airfield lease dispute; no dated 2025+ jump operation was found."
         }
       ],
       "note": "DFV marker 51.4897,13.8794 agrees with the airfield. Activity in 2025–2026 not confirmed."
@@ -191,8 +196,8 @@
       ],
       "aircraft": "Cessna 208 Caravan",
       "season": "April–October",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026 (club and company); tandemsprung-finden 2026 lists the season as April–October",
+      "status": "closed",
+      "status_evidence": "Albatros states that jumping at Hartenholm is no longer permitted because it could not obtain usable take-off/landing permission; vouchers are now handled at Hungriger Wolf (operator and municipality pages checked 2026-11-14).",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7340",
@@ -208,6 +213,21 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.my-skyworld.de",
+          "checked_on": "2026-11-14",
+          "what": "Albatros states that jumping at Hartenholm is no longer permitted because it could not obtain usable take-off/landing permission; vouchers are now handled at Hungriger Wolf (operator and municipality pages checked 2026-11-14)."
+        },
+        {
+          "url": "https://www.hasenmoor.de/seite/79312/gewerbe-dienstleistungen.html",
+          "checked_on": "2026-11-14",
+          "what": "Municipal business listing confirms Albatros no longer jumps in Hasenmoor/Hartenholm."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDHM/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -236,8 +256,8 @@
       ],
       "aircraft": "Cessna 206",
       "season": "weekends and holidays, April–October",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026 (two operators at Weckrieden)",
+      "status": "uncertain",
+      "status_evidence": "Para Club and airport still describe jumping at Weckrieden, but no dated 2025+ jump calendar or activity report was found; the live directory is not proof of a 2026 season.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7420",
@@ -253,6 +273,16 @@
           "url": "https://www.paraclub.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://www.edty.de/de/airport/fascination_flight/sky_diving/sky_diving.php",
+          "checked_on": "2026-11-14",
+          "what": "Para Club and airport still describe jumping at Weckrieden, but no dated 2025+ jump calendar or activity report was found; the live directory is not proof of a 2026 season."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDTX/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -274,7 +304,7 @@
       ],
       "aircraft": "Cessna 208 Caravan (DFV)",
       "status": "uncertain",
-      "status_evidence": "DFV lists the club with a Lahr jump-site address (Europastraße 38) and year-round weekend jumping; the club site sits behind a bot check and could not be read (2026-11-14); a 'Black Forest Skydive e.V. / BFV e.V.' entry on sky-junkies suggests the club now uses Rottweil",
+      "status_evidence": "DFV still names Lahr, but the club site was unreadable and no dated 2025+ jumping at Lahr was found; Black Forest activity at Rottweil does not establish Lahr operations.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7327",
@@ -307,7 +337,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "DFV lists the club as a Sprungplatz at Graben (Lechfeld); Paranodon 2026 brochure names Coolschranxx as a partner club; no jump dates at Lechfeld found",
+      "status_evidence": "Club affiliation and activities elsewhere do not establish jumping at Lechfeld; no dated 2025+ civilian jump day at this military site was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7429",
@@ -411,8 +441,8 @@
       ],
       "aircraft": "Cessna 208 Caravan (Supervan 900)",
       "season": "weekends and holidays, April–October",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026; OSM tags the operator as Springwerk GmbH",
+      "status": "uncertain",
+      "status_evidence": "Operator homepage says there is currently no jumping at Breitscheid; its calendar/status pages returned no readable dates, so a winter pause cannot be distinguished from a longer interruption.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7376",
@@ -423,6 +453,16 @@
           "url": "https://www.openstreetmap.org/node/6425499452",
           "checked_on": "2026-11-14",
           "what": "OSM parachuting node"
+        },
+        {
+          "url": "https://www.skydive-westerwald.de",
+          "checked_on": "2026-11-14",
+          "what": "Operator homepage says there is currently no jumping at Breitscheid; its calendar/status pages returned no readable dates, so a winter pause cannot be distinguished from a longer interruption."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDGB/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -495,7 +535,7 @@
       "aircraft": "Pilatus PC-6 Porter",
       "season": "April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026 list",
+      "status_evidence": "Operator publishes a 2026 season calendar with jumping events and training camps.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7403",
@@ -511,6 +551,16 @@
           "url": "https://www.freifallen.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://freifallen.de/saison-kalender/",
+          "checked_on": "2026-11-14",
+          "what": "Operator publishes a 2026 season calendar with jumping events and training camps."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDPW/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -568,7 +618,7 @@
       "aircraft": "Cessna 206 turbine; Cessna 208 and Antonov An-2 as needed",
       "season": "Fri–Sun and holidays, April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; operator site live (2026)",
+      "status_evidence": "Operator news dated 2026-03-09 announces season start; August 2026 news reports jumping and advertises Supervan operations on 28–30 August.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7421",
@@ -579,6 +629,16 @@
           "url": "http://www.FSGrefrath.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://fsgrefrath.de/termine-news/",
+          "checked_on": "2026-11-14",
+          "what": "Operator news dated 2026-03-09 announces season start; August 2026 news reports jumping and advertises Supervan operations on 28–30 August."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDLF/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ],
       "note": "DFV marker (51.2004,6.2156) is off by about 15 km; OSM node at the airfield used."
@@ -717,12 +777,17 @@
       ],
       "aircraft": "Dornier Do 27 (DFV)",
       "status": "uncertain",
-      "status_evidence": "Listed by DFV; the club's parachuting page returned 404 on 2026-11-14",
+      "status_evidence": "The club parachuting page describes historical starts at Oberpfaffenhofen with landings at Maxhof and more recent visits to other dropzones; no dated 2025+ jumping at EDMO was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7959",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.fsg-im-dlr.de/node/56",
+          "checked_on": "2026-11-14",
+          "what": "The club parachuting page describes historical starts at Oberpfaffenhofen with landings at Maxhof and more recent visits to other dropzones; no dated 2025+ jumping at EDMO was found."
         }
       ],
       "note": "Security area of the DLR; access only by prior arrangement (DFV)."
@@ -745,13 +810,23 @@
       ],
       "aircraft": "Cessna 206; Cessna 182",
       "season": "weekends, by arrangement",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026; club site did not respond on 2026-11-14",
+      "status": "uncertain",
+      "status_evidence": "Schatt explicitly says it currently offers no jumps at Kempten-Durach and redirects to other fields; no 2025+ local club activity was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7417",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.fallschirmspringen-tandemspringen.de/fallschirmspringen-allgaeu-kempten-durach/",
+          "checked_on": "2026-11-14",
+          "what": "Schatt explicitly says it currently offers no jumps at Kempten-Durach and redirects to other fields; no 2025+ local club activity was found."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDMK/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -771,7 +846,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed by DFV with only a Grafenau postal address; no website or jump dates found",
+      "status_evidence": "DFV gives only a Flying Bears postal address; neither a physical dropzone nor 2025+ local jump activity was established.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7414",
@@ -836,7 +911,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed by DFV; club domain freifallsport.de is now a parked domain (2026-11-14); Zevener Zeitung (2024-04-11) reported the civilian club faced closure; no 2025–2026 activity found",
+      "status_evidence": "The former operator domain is parked and a 2024 closure threat remains unresolved; no 2025+ regular civilian jumping was found, distinct from military demonstrations.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7370",
@@ -873,8 +948,8 @@
       ],
       "aircraft": "Pilatus PC-6 Porter (D-FLAC)",
       "season": "Fri–Sun and holidays, April–October",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026 (club calendar on its homepage); club site returned 503 on 2026-11-14",
+      "status": "closed",
+      "status_evidence": "Wikipedia states FSC Bruchsal used the Eichelberg military training area only until the end of 2022; a Bundeswehr notice dated 2026-02-08 refers to its former clubhouse. No successor civilian operation found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7416",
@@ -885,6 +960,16 @@
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7400",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://de.wikipedia.org/wiki/General-Dr.-Speidel-Kaserne",
+          "checked_on": "2026-11-14",
+          "what": "Wikipedia states FSC Bruchsal used the Eichelberg military training area only until the end of 2022; a Bundeswehr notice dated 2026-02-08 refers to its former clubhouse. No successor civilian operation found."
+        },
+        {
+          "url": "https://www.nussbaum.de/entdecken/news/die-bundeswehr-am-standort-bruchsal-informiert-3240846",
+          "checked_on": "2026-11-14",
+          "what": "Bundeswehr local notice, 2026-02-08, describes the former FSC clubhouse."
         }
       ],
       "note": "Former military training area at Eichelberg. An OSM node tagged with this club (node/11602226198) lies near Hockenheim and looks misplaced; not used."
@@ -947,12 +1032,17 @@
       ],
       "aircraft": "Cessna 182",
       "status": "uncertain",
-      "status_evidence": "DFV still lists FSC 100 at Braunschweig, but the club domain does not resolve (DNS, 2026-11-14) and no dated activity from 2025 or later was found",
+      "status_evidence": "DFV still lists the club and airfield, but the operator domain failed and no dated 2025+ jump activity was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7422",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.dfv.aero/kW7422/FSC%20100%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "DFV still lists the club and airfield, but the operator domain failed and no dated 2025+ jump activity was found."
         }
       ],
       "note": "OSM way is the club's packing area ('FS-Packplatz') at the airport. Downgraded from active by the check: the only evidence is the DFV directory entry."
@@ -1016,7 +1106,7 @@
       "aircraft": "Cessna 182 (Jump & Fun Factory)",
       "season": "all year",
       "status": "active",
-      "status_evidence": "DFV list 2026; Jump & Fun Factory states its Cessna 182 is stationed at Rottweil and jumps all year; Black Forest Skydive advertises tandems at Zepfenhan (2026 listings)",
+      "status_evidence": "Jump & Fun Factory training calendar, updated 2025-07-12, lists the 12–16 May 2025 AFF course at Rottweil; its operator description states year-round jumping.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7425",
@@ -1032,6 +1122,16 @@
           "url": "https://www.tripadvisor.com/Attraction_Review-g983762-d26842542-Reviews-Black_Forest_Skydive-Rottweil_Baden_Wurttemberg.html",
           "checked_on": "2026-11-14",
           "what": "Black Forest Skydive listing (search result, lead)"
+        },
+        {
+          "url": "https://www.sky-dive.de/term_aff.html",
+          "checked_on": "2026-11-14",
+          "what": "Jump & Fun Factory training calendar, updated 2025-07-12, lists the 12–16 May 2025 AFF course at Rottweil; its operator description states year-round jumping."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDSZ/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -1091,7 +1191,7 @@
       "aircraft": "Cessna 208 Caravan (D-FIXX)",
       "season": "weekends, April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026 gives April–October",
+      "status_evidence": "Regional sports report dated 2026-09-16 discusses the home club and its 31 October 2026 end-of-season Scramble at Neustadt-Glewe.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7378",
@@ -1102,6 +1202,16 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://mv-sport.de/speed-skydiver-marco-hepp-rast-erneut-zum-dm-titel-formation-four-elements-holt-silber",
+          "checked_on": "2026-11-14",
+          "what": "Regional sports report dated 2026-09-16 discusses the home club and its 31 October 2026 end-of-season Scramble at Neustadt-Glewe."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDAN/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -1125,7 +1235,7 @@
       "aircraft": "Cessna 208B Grand Caravan",
       "season": "weekends, March–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026",
+      "status_evidence": "Club events page lists Fallen Leaves on 4–6 September 2026 and the 27–28 September 2025 Speedstar event.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7360",
@@ -1136,6 +1246,11 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://fallschirm-muenster.de/ueber-uns/",
+          "checked_on": "2026-11-14",
+          "what": "Club events page lists Fallen Leaves on 4–6 September 2026 and the 27–28 September 2025 Speedstar event."
         }
       ]
     },
@@ -1152,18 +1267,28 @@
       "operators": [
         {
           "name": "FSC Neustadt a.d. Aisch",
-          "website": "http://www.fsc-nea.de"
+          "website": "https://dropzone-aisch.de"
         }
       ],
       "aircraft": "Cessna 182 (300 hp)",
       "season": "weekends and holidays",
       "status": "active",
-      "status_evidence": "DFV list 2026",
+      "status_evidence": "Current operator site publishes jump prices effective March 2025 and links its jump manifest; dated price publication corroborates the DFV listing, although no dated jump-day calendar was verified.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7408",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://dropzone-aisch.de",
+          "checked_on": "2026-11-14",
+          "what": "Current operator site publishes jump prices effective March 2025 and links its jump manifest; dated price publication corroborates the DFV listing, although no dated jump-day calendar was verified."
+        },
+        {
+          "url": "https://dropzone-aisch.de/assets/index-DSYZxBKt.js",
+          "checked_on": "2026-11-14",
+          "what": "Public website bundle containing the displayed jump-price list effective March 2025."
         }
       ]
     },
@@ -1186,7 +1311,7 @@
       ],
       "season": "weekends and holidays, April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; club site live (2026)",
+      "status_evidence": "Public club calendar feed lists 2026 jump days through 31 October and a jump week beginning 20 July 2026; the feed also contains older years.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7354",
@@ -1197,6 +1322,11 @@
           "url": "http://www.fsc-nw.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://www.fsc-nw.de/termine/getEvents/802?calendarid=1&start=2025-01-01&end=2027-01-01",
+          "checked_on": "2026-11-14",
+          "what": "Public club calendar feed lists 2026 jump days through 31 October and a jump week beginning 20 July 2026; the feed also contains older years."
         }
       ]
     },
@@ -1376,7 +1506,7 @@
       ],
       "aircraft": "BN-2T Islander (DFV)",
       "status": "uncertain",
-      "status_evidence": "DFV still lists FSC Paderborn (March–November, BN-2T) but its DFV page names no jump site; OurAirports marks 'Skydive Bad Lippspringe' closed; the club domain fsc-paderborn.de shows only a hosting placeholder (2026-11-14)",
+      "status_evidence": "Closure indicators concern the former civilian skydiving operation; no 2025+ civilian access or jump calendar was found, and military use alone does not establish a public dropzone.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7359",
@@ -1419,13 +1549,28 @@
         }
       ],
       "aircraft": "Cessna 182",
-      "status": "active",
-      "status_evidence": "DFV list 2026",
+      "status": "uncertain",
+      "status_evidence": "Club website describes jumping but supplies no 2025+ activity dates; public Facebook view exposed only the page title and no dated posts.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7418",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.fsc-passau.de",
+          "checked_on": "2026-11-14",
+          "what": "Club website describes jumping but supplies no 2025+ activity dates; public Facebook view exposed only the page title and no dated posts."
+        },
+        {
+          "url": "https://www.facebook.com/FallschirmsportPassau/",
+          "checked_on": "2026-11-14",
+          "what": "Public unauthenticated view checked; page title only, no dated activity readable."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDMF/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
       ]
     },
@@ -1448,12 +1593,17 @@
       "aircraft": "Cessna 182",
       "season": "all year",
       "status": "uncertain",
-      "status_evidence": "DFV still lists FSC Rheine (all year), but the club domain fallschirmsport-rheine.de is now a parked domain (2026-11-14) and no dated activity from 2025 or later was found",
+      "status_evidence": "DFV retains the entry but the former operator domain is parked; no dated 2025+ activity or replacement operator was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7357",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.dfv.aero/kW7357/FSC%20Rheine%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "DFV retains the entry but the former operator domain is parked; no dated 2025+ activity or replacement operator was found."
         }
       ],
       "note": "Downgraded from active by the check: the only evidence is the DFV directory entry."
@@ -1517,7 +1667,7 @@
       "aircraft": "Pilatus PC-6 Porter",
       "season": "Wednesdays, weekends and holidays, March–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; Airtime (site 2026) names Günzburg as a tandem location",
+      "status_evidence": "Club public calendar lists Sprungbetrieb on 11 and 26 April, 29 May, 15–16 August and 2 September 2026, plus a 5 September Scramble.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7392",
@@ -1528,6 +1678,16 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/fscschwaben%40gmail.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Club public calendar lists Sprungbetrieb on 11 and 26 April, 29 May, 15–16 August and 2 September 2026, plus a 5 September Scramble."
+        },
+        {
+          "url": "https://www.fsc-schwaben.de/kalender/",
+          "checked_on": "2026-11-14",
+          "what": "Club page embeds the public calendar whose 2026 jump entries were read."
         }
       ]
     },
@@ -1638,8 +1798,8 @@
       ],
       "aircraft": "Cessna 182; Do 28 for the beach boogie",
       "season": "weekends and holidays, April–October",
-      "status": "seasonal",
-      "status_evidence": "DFV list 2026; operator site live (2026)",
+      "status": "uncertain",
+      "status_evidence": "Operator describes an April–October season without a year; its booking page still shows cancelled 2020 events, and no dated 2025+ activity was readable publicly.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7344",
@@ -1650,6 +1810,16 @@
           "url": "http://www.seventhsky.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://www.seventhsky.de/index.php?option=com_seminarman&view=category&cid=1&Itemid=246",
+          "checked_on": "2026-11-14",
+          "what": "Operator describes an April–October season without a year; its booking page still shows cancelled 2020 events, and no dated 2025+ activity was readable publicly."
+        },
+        {
+          "url": "https://www.facebook.com/seventhsky.sylt",
+          "checked_on": "2026-11-14",
+          "what": "Public unauthenticated view checked; page title only, no dated activity readable."
         }
       ],
       "note": "OSM way is an untagged-name parachuting area inside the airport."
@@ -1674,7 +1844,7 @@
       "aircraft": "Cessna 182",
       "season": "weekends and holidays, April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026",
+      "status_evidence": "Club page publishes introductory courses on 15–16 May and 21–22 August 2026 and its anniversary on 29 August 2026.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7355",
@@ -1685,6 +1855,11 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.fallschirm-trier.de/ueber-uns",
+          "checked_on": "2026-11-14",
+          "what": "Club page publishes introductory courses on 15–16 May and 21–22 August 2026 and its anniversary on 29 August 2026."
         }
       ]
     },
@@ -1784,12 +1959,17 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed by DFV with a Hennef postal address and a Do 28; no website or dates found",
+      "status_evidence": "DFV identifies a Hennef postal address and Soest office, not a confirmed Hangelar landing area; no 2025+ local jumping or mappable site was established.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7363",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.dfv.aero/kW7363/FSG%20Hangelar%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "DFV identifies a Hennef postal address and Soest office, not a confirmed Hangelar landing area; no 2025+ local jumping or mappable site was established."
         }
       ],
       "note": "Coordinates null: the jump site is not stated. The DFV page gives a Hennef address, a Do 28 and a 'Sprungzentrum/Büro Soest'; Skydive Soest at Soest-Bad Sassendorf (de-soest-bad-sassendorf) also flies a Do 28, so the club may jump there. Bonn-Hangelar airfield (EDKB) is the other possibility. Neither is confirmed."
@@ -1812,8 +1992,8 @@
       ],
       "aircraft": "Cessna 206",
       "season": "weekends and holidays",
-      "status": "active",
-      "status_evidence": "DFV list 2026; club site live (2026)",
+      "status": "uncertain",
+      "status_evidence": "Operator advertises weekend jumping at Rosenthal-Plössen, but no dated 2025+ jump activity or season calendar was found; a current copyright footer is insufficient.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7391",
@@ -1824,6 +2004,11 @@
           "url": "http://www.fallschirmspringen-online.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://www.fallschirmspringen-online.de",
+          "checked_on": "2026-11-14",
+          "what": "Operator advertises weekend jumping at Rosenthal-Plössen, but no dated 2025+ jump activity or season calendar was found; a current copyright footer is insufficient."
         }
       ]
     },
@@ -1889,7 +2074,7 @@
       "aircraft": "Cessna 208 Caravan; AS350 helicopter twice a year",
       "season": "April–October, selected dates",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026: about two Fri/Sat per month April–October plus an August jump week",
+      "status_evidence": "Club page explicitly describes its 2026 facilities and continuing Saturday/selected-Friday jumping from April to October; this corroborates the DFV listing, but a dated individual jump calendar was not readable.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7402",
@@ -1900,6 +2085,11 @@
           "url": "http://www.skydive-altenstadt.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://skydive-altenstadt.de/club-2000/",
+          "checked_on": "2026-11-14",
+          "what": "Club page explicitly describes its 2026 facilities and continuing Saturday/selected-Friday jumping from April to October; this corroborates the DFV listing, but a dated individual jump calendar was not readable."
         }
       ],
       "note": "Bundeswehr airborne school drop zone used by a civilian club."
@@ -1927,7 +2117,7 @@
       "aircraft": "Pilatus PC-6 Porter (Skydive Leipzig); PZL-104 Wilga (Eilenburg)",
       "season": "April–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026 gives April–October",
+      "status_evidence": "Sportstadt Leipzig article dated 2026-07-31 describes Skydive Leipzig operating at Roitzschjora with a Pilatus PC-6.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7347",
@@ -1943,6 +2133,11 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.sportstadt-leipzig.de/2026/07/31/faszination-fliegen/",
+          "checked_on": "2026-11-14",
+          "what": "Sportstadt Leipzig article dated 2026-07-31 describes Skydive Leipzig operating at Roitzschjora with a Pilatus PC-6."
         }
       ]
     },
@@ -1968,7 +2163,7 @@
       "aircraft": "Cessna 206 turbine",
       "season": "mid-March–end of October, weekends and course weeks",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026",
+      "status_evidence": "Operator booking page lists an AFF course at Sprungplatz Meißendorf on 29 April–2 May 2027 with remaining places; a published future season date, checked 2026-11-14.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7365",
@@ -1979,6 +2174,11 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.meido.de/ausbildung/ausbildungsanmeldung/ausbildung/aff-ausbildung-vollkurs",
+          "checked_on": "2026-11-14",
+          "what": "Operator booking page lists an AFF course at Sprungplatz Meißendorf on 29 April–2 May 2027 with remaining places; a published future season date, checked 2026-11-14."
         }
       ]
     },
@@ -2134,8 +2334,8 @@
       ],
       "aircraft": "Cessna 182 (300 hp)",
       "season": "all year",
-      "status": "active",
-      "status_evidence": "DFV list 2026 (all year, every summer weekend)",
+      "status": "uncertain",
+      "status_evidence": "Club describes regular Friday/weekend jumping and sells tandem vouchers, but no dated 2025+ jump day or season calendar was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7394",
@@ -2151,6 +2351,11 @@
           "url": "https://www.openstreetmap.org/way/126432191",
           "checked_on": "2026-11-14",
           "what": "OSM: Flugplatz Burgheim, aerodrome tagged sport=parachuting"
+        },
+        {
+          "url": "https://lsg-burgheim.de/fallschirmspringen/",
+          "checked_on": "2026-11-14",
+          "what": "Club describes regular Friday/weekend jumping and sells tandem vouchers, but no dated 2025+ jump day or season calendar was found."
         }
       ]
     },
@@ -2173,12 +2378,17 @@
       "aircraft": "Cessna 182; Cessna 208 for boogies",
       "season": "all year",
       "status": "active",
-      "status_evidence": "DFV list 2026; club site live with 2026 posts",
+      "status_evidence": "Club statement dated 2026-05-23 confirms its parachuting section trains students and makes sport jumps, while clarifying it does not sell or conduct tandem jumps.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7343",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.luftsportverein-flensburg.de/anfragen-zu-tandemspruengen/",
+          "checked_on": "2026-11-14",
+          "what": "Club statement dated 2026-05-23 confirms its parachuting section trains students and makes sport jumps, while clarifying it does not sell or conduct tandem jumps."
         }
       ],
       "note": "DFV marker 54.7333,9.41667 is approximate."
@@ -2202,13 +2412,23 @@
       ],
       "aircraft": "Cessna 182",
       "season": "all year; weekdays by arrangement",
-      "status": "active",
-      "status_evidence": "DFV list 2026",
+      "status": "uncertain",
+      "status_evidence": "LSV Kiel describes jumping but supplies no dated 2025+ activity on the page checked; Kiel-Boogie was blocked and the public Facebook view exposed no dated posts.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7341",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://www.lsv-kiel.de/sprungbetrieb/",
+          "checked_on": "2026-11-14",
+          "what": "LSV Kiel describes jumping but supplies no dated 2025+ activity on the page checked; Kiel-Boogie was blocked and the public Facebook view exposed no dated posts."
+        },
+        {
+          "url": "https://www.facebook.com/skydivekiel/",
+          "checked_on": "2026-11-14",
+          "what": "Public unauthenticated view checked; page title only, no dated activity readable."
         }
       ]
     },
@@ -2306,9 +2526,9 @@
         }
       ],
       "aircraft": "Cessna 206 turbine",
-      "season": "all year",
-      "status": "active",
-      "status_evidence": "DFV list 2026 (all year, daily); tandemsprung-finden 2026",
+      "season": "Daily during the season (operator); exact months not verified",
+      "status": "seasonal",
+      "status_evidence": "Operator tandem-booking page is explicitly updated 2026-07-14 and advertises Eggenfelden jumps; homepage says daily operation during the season, replacing the directory claim of year-round daily jumping. No dated available slot was exposed in the public feed.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7411",
@@ -2319,6 +2539,16 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.skydive-exit.com/tandemsprung-termin-buchen/",
+          "checked_on": "2026-11-14",
+          "what": "Operator tandem-booking page is explicitly updated 2026-07-14 and advertises Eggenfelden jumps; homepage says daily operation during the season, replacing the directory claim of year-round daily jumping. No dated available slot was exposed in the public feed."
+        },
+        {
+          "url": "https://www.skydive-exit.com",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly describes daily jumping during the season."
         }
       ]
     },
@@ -2339,7 +2569,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed by DFV; neither skydive-finsterwald.de (DFV link) nor skydive-finsterwalde.de (DFV e-mail domain) resolves (2026-11-14); no dated activity found",
+      "status_evidence": "Both candidate operator domains failed to resolve; the directory entry was not corroborated by any dated 2025+ jump operation.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7436",
@@ -2484,7 +2714,10 @@
     {
       "key": "de-stadtlohn",
       "name": "Stadtlohn-Vreden airfield",
-      "aliases": [],
+      "aliases": [
+        "Skydive Stadtlohn",
+        "Skyfactory"
+      ],
       "country": "DE",
       "locality": "Stadtlohn, North Rhine-Westphalia",
       "latitude": 51.995834,
@@ -2493,21 +2726,42 @@
       "icao": "EDLS",
       "operators": [
         {
-          "name": "Skydive Stadtlohn",
-          "website": "http://www.skydive-stadtlohn.de"
+          "name": "Skyfactory UG",
+          "website": "https://skyfactory-stadtlohn.de/"
         }
       ],
       "aircraft": "Cessna 208 Caravan; Cessna 206 turbine; Antonov An-2",
-      "season": "Sat, Sun and holidays, April–October",
+      "season": "Weekends from Good Friday through the last October weekend; selected weekdays",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026",
+      "status_evidence": "DFV national-championship site lists 6–13 September 2025 at Stadtlohn-Vreden with Skyfactory UG; former Skydive Stadtlohn ceased at the end of 2023, but the airfield has a successor.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7431",
           "checked_on": "2026-11-14",
           "what": "DFV member list (Plätze & Vereine), club detail page"
+        },
+        {
+          "url": "https://dm2025.dfv.aero/Kontakt",
+          "checked_on": "2026-11-14",
+          "what": "DFV national-championship site lists 6–13 September 2025 at Stadtlohn-Vreden with Skyfactory UG; former Skydive Stadtlohn ceased at the end of 2023, but the airfield has a successor."
+        },
+        {
+          "url": "https://www.skydive-stadtlohn.de",
+          "checked_on": "2026-11-14",
+          "what": "Former operator announces cessation at the end of 2023."
+        },
+        {
+          "url": "https://skyfactory-stadtlohn.de/",
+          "checked_on": "2026-11-14",
+          "what": "Successor operator describes regular weekend jumping from Good Friday to the last October weekend."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDLS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex spot-check: existing coordinates agree with the airfield; small differences from the airport reference point retained for on-airfield facility locations."
         }
-      ]
+      ],
+      "note": "Former operator Skydive Stadtlohn ceased at the end of 2023; Skyfactory operates the same airfield, so this remains one place record."
     },
     {
       "key": "de-hildesheim",
@@ -2529,7 +2783,7 @@
       "aircraft": "Cessna 208 Caravan; Cessna 182",
       "season": "late March–early November",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; operator site live (2026)",
+      "status_evidence": "Operator events page publishes May 2027 jumping/training events, including 27–29 May Ladies Days; confirms a forthcoming season beyond the undated directory entry.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7325",
@@ -2540,6 +2794,11 @@
           "url": "http://www.skydive-hildesheim.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://www.skydive-hildesheim.de/skydiver/termine",
+          "checked_on": "2026-11-14",
+          "what": "Operator events page publishes May 2027 jumping/training events, including 27–29 May Ladies Days; confirms a forthcoming season beyond the undated directory entry."
         }
       ]
     },
@@ -2597,7 +2856,7 @@
       "aircraft": "Cessna 182 (300 hp)",
       "season": "weekends March–October; winter by arrangement",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; tandemsprung-finden 2026",
+      "status_evidence": "Operator calendar lists the 22–30 August 2026 jump week, 11 July 2026 World Skydiving Day and May 2026 canopy training.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7435",
@@ -2608,6 +2867,11 @@
           "url": "https://www.tandemsprung-finden.de/anbieter",
           "checked_on": "2026-11-14",
           "what": "tandemsprung-finden.de provider list 2026 (aggregator, lead)"
+        },
+        {
+          "url": "https://www.skytandem.de/event/",
+          "checked_on": "2026-11-14",
+          "what": "Operator calendar lists the 22–30 August 2026 jump week, 11 July 2026 World Skydiving Day and May 2026 canopy training."
         }
       ]
     },
@@ -2763,7 +3027,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Still in the DFV list, but the operator's home page now names only Karlshöfen and Stade",
+      "status_evidence": "Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Hüttenbusch was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7437",
@@ -2774,6 +3038,11 @@
           "url": "https://www.tandem-skydive.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://www.tandem-skydive.de/",
+          "checked_on": "2026-11-14",
+          "what": "Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Hüttenbusch was found."
         }
       ]
     },
@@ -2794,7 +3063,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Still in the DFV list, but the operator's home page now names only Karlshöfen and Stade",
+      "status_evidence": "Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Lüchow-Rehbeck was found.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7438",
@@ -2805,6 +3074,11 @@
           "url": "https://www.tandem-skydive.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://www.tandem-skydive.de/",
+          "checked_on": "2026-11-14",
+          "what": "Tandem-Skydive now names Karlshöfen and Stade on its homepage; no 2025+ operation at Lüchow-Rehbeck was found."
         }
       ]
     },
@@ -2828,7 +3102,7 @@
       "aircraft": "Pilatus PC-6 Porter; Cessna 206",
       "season": "all year",
       "status": "active",
-      "status_evidence": "DFV list 2026 (all year); operator site live (2026)",
+      "status_evidence": "Local report dated 2026-05-11 announces YourSky jumping/tandem open days at Ganderkesee on 16–17 May 2026; corroborates current operator and DFV year-round listing.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7369",
@@ -2839,6 +3113,11 @@
           "url": "http://www.YourSky.de",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://huntewesernews.de/grand-opening-bei-yoursky-in-ganderkesee-zwei-tage-voller-action-adrenalin-und-einblicke-in-den-fallschirmsport/",
+          "checked_on": "2026-11-14",
+          "what": "Local report dated 2026-05-11 announces YourSky jumping/tandem open days at Ganderkesee on 16–17 May 2026; corroborates current operator and DFV year-round listing."
         }
       ]
     },
@@ -2861,7 +3140,7 @@
       "aircraft": "Cessna 208 Caravan (long and short)",
       "season": "March–October",
       "status": "seasonal",
-      "status_evidence": "DFV list 2026; club site live (2026)",
+      "status_evidence": "IAS Itzehoer Airservice publishes a YUU Skydive flight-calendar entry for 23 August 2026; the current YUU operator site also advertises jumping at Hungriger Wolf.",
       "sources": [
         {
           "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7407",
@@ -2872,6 +3151,11 @@
           "url": "http://www.yuu-skydive.de",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://d-funk.de/en/component/jevents/eventdetail/945/-/yuu-skydive.html",
+          "checked_on": "2026-11-14",
+          "what": "IAS Itzehoer Airservice publishes a YUU Skydive flight-calendar entry for 23 August 2026; the current YUU operator site also advertises jumping at Hungriger Wolf."
         }
       ]
     },
@@ -3106,12 +3390,17 @@
       ],
       "aircraft": "Cessna 182 (sky-junkies)",
       "status": "uncertain",
-      "status_evidence": "Only aggregator entries found; club site did not respond; no 2025–2026 evidence",
+      "status_evidence": "DAeC still lists the Thüringia school at Jena-Schöngleina, but its operator website was unreadable and no dated 2025+ local jumping was found.",
       "sources": [
         {
           "url": "https://www.sky-junkies.de/sprungplatz/fallschirmsportspringerclub-thueringia-e-v",
           "checked_on": "2026-11-14",
           "what": "sky-junkies.de dropzone directory entry (aggregator, lead)"
+        },
+        {
+          "url": "https://lsgb.daec.de/sprungfallschirme/",
+          "checked_on": "2026-11-14",
+          "what": "DAeC still lists the Thüringia school at Jena-Schöngleina, but its operator website was unreadable and no dated 2025+ local jumping was found."
         }
       ]
     },
@@ -3131,12 +3420,17 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only an aggregator entry found; no 2025–2026 evidence",
+      "status_evidence": "Airport company report dated 2022-06-15 describes the dissolution of Skydive-Stendal; no 2025+ successor jump operation was confirmed.",
       "sources": [
         {
           "url": "https://www.sky-junkies.de/sprungplatz/skydive-stendal-e-v",
           "checked_on": "2026-11-14",
           "what": "sky-junkies.de dropzone directory entry (aggregator, lead)"
+        },
+        {
+          "url": "https://session.stendal.de/bi/getfile.php?id=57991&type=do",
+          "checked_on": "2026-11-14",
+          "what": "Airport company report dated 2022-06-15 describes the dissolution of Skydive-Stendal; no 2025+ successor jump operation was confirmed."
         }
       ]
     },
@@ -3156,12 +3450,17 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only an aggregator entry found; no 2025–2026 evidence",
+      "status_evidence": "Historical accounts and the airport description mention occasional parachuting, but no dated 2025+ regular civilian jump operation was found.",
       "sources": [
         {
           "url": "https://www.sky-junkies.de/sprungplatz/fsc-nord-ost-99-e-v",
           "checked_on": "2026-11-14",
           "what": "sky-junkies.de dropzone directory entry (aggregator, lead)"
+        },
+        {
+          "url": "https://de.wikipedia.org/wiki/Flugplatz_Bienenfarm",
+          "checked_on": "2026-11-14",
+          "what": "Historical accounts and the airport description mention occasional parachuting, but no dated 2025+ regular civilian jump operation was found."
         }
       ]
     },
@@ -3186,7 +3485,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Skyhopping has a Bad Dürkheim booking page; no dated jump day confirmed",
+      "status_evidence": "Skyhopping still lists the location, but its calendar yielded no jump dates and Jump & Fun Factory does not yet publish site-specific 2027 dates.",
       "sources": [
         {
           "url": "https://skyhopping.com",
@@ -3202,6 +3501,11 @@
           "url": "https://www.sky-dive.de/dropzone.html",
           "checked_on": "2026-11-14",
           "what": "Jump & Fun Factory list of its jump sites"
+        },
+        {
+          "url": "https://skyhopping.com/termineorte/terminkalender/range.listevents/-",
+          "checked_on": "2026-11-14",
+          "what": "Skyhopping still lists the location, but its calendar yielded no jump dates and Jump & Fun Factory does not yet publish site-specific 2027 dates."
         }
       ],
       "note": "Jump & Fun Factory lists Bad Dürkheim airfield (In den Almen 5, 49°28.4'N 8°11.8'E, matching EDRF) among its jump sites but says not every site is offered every season."
@@ -3306,7 +3610,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "sky-junkies lists jumping from a Cessna 206; the club site (2026) shows only gliding and powered flying",
+      "status_evidence": "DFV lists the parachuting section, but club news concerns other flying activities; no dated 2025+ civilian jump operation was found.",
       "sources": [
         {
           "url": "https://www.sky-junkies.de/sprungplatz/lsv-kaufbeuren-e-v",
@@ -3317,6 +3621,11 @@
           "url": "https://lsvk.weebly.com",
           "checked_on": "2026-11-14",
           "what": "club site"
+        },
+        {
+          "url": "https://www.dfv.aero/kW7415/LSV%20Kaufbeuren%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "DFV lists the parachuting section, but club news concerns other flying activities; no dated 2025+ civilian jump operation was found."
         }
       ]
     },
@@ -3610,22 +3919,25 @@
       "note": "Two airfields exist in Bad Wörishofen; the northern one (EDNH) is assumed and should be confirmed."
     },
     {
-      "key": "de-bremerhaven",
-      "name": "Bremerhaven area (Fallschirmsport Bremerhaven – Jumpzone)",
-      "aliases": [],
+      "key": "de-kuehrstedt-bederkesa",
+      "name": "Kührstedt-Bederkesa airfield (Jumpzone Bremerhaven)",
+      "aliases": [
+        "Fallschirmsport Bremerhaven – Jumpzone"
+      ],
       "country": "DE",
-      "locality": "Bremerhaven area (sky-junkies lists the club under Lower Saxony)",
-      "latitude": null,
-      "longitude": null,
-      "coordinates_source": null,
-      "icao": null,
+      "locality": "Geestland, Lower Saxony",
+      "latitude": 53.568054,
+      "longitude": 8.789444,
+      "coordinates_source": "https://ourairports.com/airports/EDXZ/",
+      "icao": "EDXZ",
       "operators": [
         {
-          "name": "Fallschirmsport Bremerhaven – Jumpzone"
+          "name": "Fallschirmsport Bremerhaven – Jumpzone",
+          "website": "https://www.jumpzone.de"
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only a sky-junkies list entry (tandem, Lower Saxony); no website, post or date from 2025 or later found",
+      "status_evidence": "The detailed Jumpzone directory entry identifies Kührstedt-Bederkesa, but no dated 2025+ activity or readable current operator calendar was found.",
       "sources": [
         {
           "url": "https://www.sky-junkies.de/sprungplatzkarte/",
@@ -3636,9 +3948,68 @@
           "url": "https://www.bremerhaven.de/en/tourism/architecture-monuments/city-history/fishery-harbors/bremerhaven-airport-at-luneort.56623.html",
           "checked_on": "2026-11-14",
           "what": "city page: Luneort airport closed since 1 March 2016"
+        },
+        {
+          "url": "https://www.sky-junkies.de/sprungplatz/fallschirmsport-bremerhaven-jumpzone/",
+          "checked_on": "2026-11-14",
+          "what": "The detailed Jumpzone directory entry identifies Kührstedt-Bederkesa, but no dated 2025+ activity or readable current operator calendar was found."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDXZ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page supplies Kührstedt-Bederkesa coordinates."
         }
       ],
-      "note": "Coordinates null: no source gives the jump site. The earlier point was Bremerhaven-Luneort airport, which closed on 1 March 2016 (bremerhaven.de), so it cannot be the jump site; sky-junkies also places the club in Lower Saxony, not in Bremen."
+      "note": "Jumpzone directory identifies Kührstedt-Bederkesa; airport reference coordinates used, not the closed Bremerhaven-Luneort airport. Current jump activity remains unconfirmed."
+    },
+    {
+      "key": "de-langeoog",
+      "name": "Langeoog airfield",
+      "aliases": [
+        "Langeoog Boogie"
+      ],
+      "country": "DE",
+      "locality": "Langeoog, Lower Saxony",
+      "latitude": 53.742379,
+      "longitude": 7.496345,
+      "coordinates_source": "https://ourairports.com/airports/EDWL/",
+      "icao": "EDWL",
+      "operators": [
+        {
+          "name": "FSG Wildeshausen / Skydive Varrelbusch",
+          "website": "https://skydive-varrelbusch.de"
+        },
+        {
+          "name": "The Flying Bones",
+          "website": "https://www.flyingbones.de"
+        }
+      ],
+      "season": "Recurring visiting boogies; May and July–August events documented in 2026",
+      "status": "seasonal",
+      "status_evidence": "Langeoognews reports the recurring Varrelbusch boogie on 2026-05-15 and announces Flying Bones jumping from 24 July to 2 August 2026 in a 2026-07-18 article.",
+      "sources": [
+        {
+          "url": "https://www.langeoognews.de/langeoog-aktuell/aktuelles/20-jahre-freier-fall-ueber-langeoog/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 report of the recurring annual boogie and jumping from a Cessna."
+        },
+        {
+          "url": "https://www.langeoognews.de/buddelei-sport/sportnachrichten/aktuelles-sport/flying-bones-bieten-tandemfallschirmspringen-ab-freitag/",
+          "checked_on": "2026-11-14",
+          "what": "Dated announcement of 24 July–2 August 2026 jumps at Langeoog airfield."
+        },
+        {
+          "url": "https://skydive-varrelbusch.de/wp-content/uploads/2026/03/Skydive_Varrelbusch_Terminplan_2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Operator 2026 calendar includes the Langeoog boogie."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDWL/",
+          "checked_on": "2026-11-14",
+          "what": "Opened Langeoog airport page gives coordinates."
+        }
+      ],
+      "note": "Recurring seasonal visiting operations at one airfield; not a year-round resident centre."
     }
   ]
 }

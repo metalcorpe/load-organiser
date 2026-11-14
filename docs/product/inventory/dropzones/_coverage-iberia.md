@@ -188,3 +188,32 @@ Still open after the check:
 - AD.json and GI.json keep a top-level `note` field that the README format does not define.
   It was left in place; the format owner should decide.
 
+
+## Codex cross-check
+
+Checked independently on 2026-11-14. Existing uncertain records and directory-only evidence were reviewed with operator pages, dated calendars/news and local-language searches. A failed page load or a copyright year was not treated as evidence of recent jumping. No login, contact, booking, Overpass query, commit or push was made.
+
+Coordinate method: opened the [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv) and compared every existing non-null point with its named airfield, rather than replacing coordinates with the nearest airport indiscriminately. Airport reference points establish the airfield, not the exact parachute target. Off-airfield sites and unresolved points are described below. Counts supersede earlier sections; additions can remain uncertain when the place is confirmed but recent operation is not.
+
+### Spain
+
+- Ontur **uncertain → active**: [Club Aéreo Universal September 2025 bulletin](https://www.clubaereouniversal.com/gallery/2025%209%20SEP%20BOLETI%CC%81N%20MENSUAL%20DEL%20CAU.pdf), page 21, names Ontur as a school/booking location, corroborated by the [operator](https://skydivelamancha.com/). The bulletin's actual August-jump report is about Requena, so that distinction is retained in the record.
+- Chozas **uncertain → closed**: [31 May 2026 reporting](https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html) traces relocation to Valladolid and cessation. This closes the recorded jumping operation, not the airfield.
+- Trebujena remains uncertain: [ENAIRE SUP 119/25](https://aip.enaire.es/recursos/descargas/SUP/LE_SUP_A_2025_119_es.html) imposed temporary closure through estimated July 2026. No superseding reopening notice or recent jump operation was established.
+- Coordinates: all 17 existing points checked against airport data; none changed. Spanish completeness searches included Villamartín, Alhama and Casarrubios; no additional regular civilian DZ confirmed. Those leads, Lebrija/El Copero and any replacement operation at Trebujena remain open.
+
+### Portugal
+
+- Tancos **uncertain → active**: [O MIRANTE, 9 June 2026](https://omirante.pt/cultura-e-lazer/2026-06-09-boinas-verdes-de-tancos-continuam-a-ensinar-a-voar-e-a-guardar-a-memoria-dos-paraquedistas-909a5e93) describes the club's jumping and newcomers; [Skydive Cerval](https://www.skydivecerval.pt/) explicitly advertises Tancos as the jump zone. Added that operator at Tancos.
+- Cerval stays uncertain: website address says Cerval but jumping heading says Tancos. Maia stays uncertain: reporting traces the old operator's move to Spain, without proving that every Maia operation ceased. Vila Real, Coimbra, Águeda and Figueira dos Cavaleiros had no verified 2025+ local jump programme in the Portuguese searches; all retain explicit uncertainty.
+- Added **Rio Maior, seasonal**, a recurring precision-landing competition place, based on the [11 August 2026 announcement](https://noticiasdosorraia.sapo.pt/taca-de-portugal-de-paraquedismo-passa-para-novembro-em-rio-maior/). This is an annual sporting venue, not a daily commercial centre. Its exact training-field coordinates remain null; the town or sports-complex office is not a substitute.
+- Coordinates: all 13 pre-existing airfield points checked, none changed. Portuguese completeness searches also found São Jacinto/Skydive Dunas and Proença, already present. Remaining gaps: actual current use of the six uncertain airfields and exact Rio Maior landing field. The NAV 2025 amendment PDF timed out; it was not used as decisive evidence.
+
+### Result counts
+
+| Country | Active | Seasonal | Uncertain | Closed | Added | Upgraded | Downgraded | Closed in check | Existing coordinates changed | Null coordinates |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| ES | 12 | 0 | 1 | 4 | 0 | 1 | 0 | 1 | 0 | 0 |
+| PT | 6 | 2 | 6 | 0 | 1 | 1 | 0 | 0 | 0 | 1 |
+
+Validation: each country file passed `python3 -m json.tool`; unique keys, status values, source presence and paired coordinates checked. Countries with fewer than ten records were checked in full.

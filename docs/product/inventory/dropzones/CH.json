@@ -32,7 +32,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); Swissboogie site © 2026.",
+      "status_evidence": "SPHAIR media hub publishes 2026 jump-course reports for Kappelen.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -48,6 +48,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LSZP, used for coordinates"
+        },
+        {
+          "url": "https://sphair.ch/de/mediahub/sphair-para",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 reports from parachute training courses"
         }
       ],
       "aircraft": "Pilatus PC-6 (Swissboogie)",
@@ -73,7 +78,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2025, title 'Skydive Zürich | Fehraltorf'.",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2025, title 'Skydive Zürich | Fehraltorf'. Codex opened the operator schedule description; embedded calendar dates were not readable, so current federation evidence remains the dated basis.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -89,6 +94,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LSZK, used for coordinates"
+        },
+        {
+          "url": "https://www.skydive.ch/skydivers",
+          "checked_on": "2026-11-14",
+          "what": "Operator confirms Tuesday/Thursday/Friday and selected weekend jumps at Speck"
         }
       ],
       "note": "A swissactivities.com snippet (not opened) says jumps every Friday April–October."
@@ -240,7 +250,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site mentions 2025 and a March 2027 event.",
+      "status_evidence": "SPHAIR media hub publishes 2026 jump-course reports for Neudorf/Skydive Luzern.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -256,6 +266,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LSZO, used for coordinates"
+        },
+        {
+          "url": "https://sphair.ch/de/mediahub/sphair-para",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 reports from parachute training courses"
         }
       ]
     },
@@ -319,7 +334,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "psctriengen.ch now serves the Skydive Grenchen / DROPZONE 47 site, which says the club merged and the clubs are building their base at Grenchen (checked 2026-11-14). Swiss Skydive still lists PSC Triengen.",
+      "status_evidence": "psctriengen.ch now serves the Skydive Grenchen / DROPZONE 47 site, which says the club merged and the clubs are building their base at Grenchen (checked 2026-11-14). Swiss Skydive still lists PSC Triengen. Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -359,7 +374,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "fgf.ch now serves the DROPZONE 47 (Grenchen) site, which says FG Freiamt merged into it (checked 2026-11-14).",
+      "status_evidence": "fgf.ch now serves the DROPZONE 47 (Grenchen) site, which says FG Freiamt merged into it (checked 2026-11-14). Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -567,7 +582,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2026.",
+      "status_evidence": "Para Centro Locarno publishes its 2026 jump-course calendar and tandem booking timetable.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -583,6 +598,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airport data, row LSZL, used for coordinates"
+        },
+        {
+          "url": "https://www.paracentro.ch/images/PCL-PDF/prezzi_web_kl.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Operator 2026 course calendar and prices; document cover gives 2026"
         }
       ],
       "note": "Airfield is shared with the Swiss military."
@@ -694,7 +714,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2025 describes its dropzone at Flugplatz Sitterdorf.",
+      "status_evidence": "Operator dropzone page describes March–November jumping and includes a jump-ticket price update dated 13 May 2026.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -875,16 +895,63 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator site live (checked 2026-11-14) selling helicopter tandems at Verbier, address 1934 Le Châble; no dated 2025+ post opened. Not on the Swiss Skydive school list.",
+      "status_evidence": "Uncertain: operator offers helicopter tandems; tourism listing displays all-year 2026 opening but is stamped last updated April 2024. No dated jump programme or confirmed landing area was established.",
       "sources": [
         {
           "url": "https://www.alpskydive.com",
           "checked_on": "2026-11-14",
           "what": "operator site"
+        },
+        {
+          "url": "https://www.alpskydive.com/",
+          "checked_on": "2026-11-14",
+          "what": "Operator offers helicopter jumps but publishes an address rather than an identified landing-area coordinate"
+        },
+        {
+          "url": "https://www.verbier.ch/decouvrir/explore-activites/chute-libre-avec-alpskydive-le-chable-fr-2993420/",
+          "checked_on": "2026-11-14",
+          "what": "Tourism listing shows 2026 opening period but last-updated stamp is 7 April 2024; location is the Le Châble address"
         }
       ],
       "aircraft": "helicopter",
       "note": "Coordinates null: departure and landing sites not stated."
+    },
+    {
+      "key": "ch-bressaucourt",
+      "name": "Bressaucourt Airfield",
+      "aliases": [],
+      "country": "CH",
+      "locality": "Bressaucourt, Jura",
+      "latitude": 47.392408,
+      "longitude": 7.028956,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LSZQ)",
+      "icao": "LSZQ",
+      "operators": [
+        {
+          "name": "Swissboogie",
+          "website": "https://swissboogie.ch/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator annual calendar names Bressaucourt as a jump location and Jura Tourisme offers tandems there, but no dated 2025+ Bressaucourt jump was visible.",
+      "sources": [
+        {
+          "url": "https://swissboogie.ch/de/pages/fallschirmsprungkalender",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Bressaucourt as a jump site"
+        },
+        {
+          "url": "https://www.j3l.ch/fr/P33534/a-faire/sport-loisirs/fun-aventure/saut-en-parachute",
+          "checked_on": "2026-11-14",
+          "what": "Regional tourism office lists Bressaucourt skydiving"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "LSZQ coordinates"
+        }
+      ],
+      "note": "Added by Codex; embedded calendar events were not readable, so status remains uncertain."
     }
   ]
 }

@@ -225,3 +225,45 @@ after this check are listed at the end of this section.
 | LI | 0 | 0 | 0 | 0 | 0 |
 
 All six JSON files were validated with `python3 -m json.tool` after the edits.
+
+## Codex cross-check
+
+Checked independently on 2026-11-14. Existing uncertain records and directory-only evidence were reviewed with operator pages, dated calendars/news and local-language searches. A failed page load or a copyright year was not treated as evidence of recent jumping. No login, contact, booking, Overpass query, commit or push was made.
+
+Coordinate method: opened the [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv) and compared every existing non-null point with its named airfield, rather than replacing coordinates with the nearest airport indiscriminately. Airport reference points establish the airfield, not the exact parachute target. Off-airfield sites and unresolved points are described below. Counts supersede earlier sections; additions can remain uncertain when the place is confirmed but recent operation is not.
+
+### Austria
+
+- **Four upgrades to seasonal**: Wiener Neustadt Ost, Ferlach, Nötsch and Wörthersee. The [ÖAeC register dated 3 February 2026](https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf) identifies LOAN explicitly, and the Eastside operator confirms weekend jumping. The [Kärnten 2026 calendar](https://www.fallschirmspringen-kaernten.at/de/termine.html) supplies site-specific dates for the other three.
+- Lienz, Wolfsberg and Hirt remain uncertain: still in the operator directions, absent from its 2026 calendar. Added **Trieben, uncertain**: explicit training location in the 2026 register, but no recent Trieben date on the [Pink schedule](https://pink.at/schedule.htm).
+- Coordinates: all 22 original points compared with airport data. Twenty are airfield points, while Wörthersee and Fromberg required separate checks. **Wörthersee coordinates removed** because they pointed to the meeting-address building, not a confirmed landing area. **Fromberg corrected** from Steinberghalle to the Waldviertel Boogie map destination linked in the operator's November 2026 schedule; this is a venue pin, not a surveyed target. New Trieben uses opened OurAirports LOGI.
+- German completeness searches and the new school register raised Klagenfurt and Linz. [Union Linz](https://www.unionlinz.com/) explicitly jumps at Wels, already present. [KFSC calendar](https://kfsc.at/termine.html), including its public JavaScript, identifies Wörthersee/Nötsch/Glainach/Feldkirchen dates; Klagenfurt's office/training-register address does not justify another landing-place record. Thalgau's competition landing site and whether Klagenfurt Airport itself has separate regular jumps remain leads.
+
+### Switzerland
+
+- Strengthened four active records: Kappelen and Beromünster with [SPHAIR 2026 course reports](https://sphair.ch/de/mediahub/sphair-para), Locarno with the operator's [2026 calendar PDF](https://www.paracentro.ch/images/PCL-PDF/prezzi_web_kl.pdf), and Sitterdorf with its [13 May 2026 ticket update](https://www.skydive-ostschweiz.ch/dropzone). Fehraltorf's operator schedule confirms jumping, but dated embedded calendar entries could not be read; federation evidence remains its dated basis.
+- Triengen and Buttwil remain uncertain: redirects/merger evidence do not establish whether all jumping at the old airfields ended. Verbier remains uncertain and unlocated: its [tourism listing](https://www.verbier.ch/decouvrir/explore-activites/chute-libre-avec-alpskydive-le-chable-fr-2993420/) shows 2026 opening but a 2024 last-updated stamp, and gives only the address.
+- Added **Bressaucourt, uncertain**: [Swissboogie calendar](https://swissboogie.ch/de/pages/fallschirmsprungkalender) names this jump site and [Jura Tourisme](https://www.j3l.ch/fr/P33534/a-faire/sport-loisirs/fun-aventure/saut-en-parachute) offers it; dated embedded events were not readable. Coordinates from OurAirports LSZQ.
+- Coordinates: all 20 original non-null points compared; 19 match airfields/heliports, with Wilderswil retained as the separately documented off-airfield Interlaken landing place. No existing point changed. German/French/Italian searches found no further confirmed additions. Open: Verbier landing area, Grindelwald place, Bressaucourt dates, and old Triengen/Buttwil operations.
+
+### Belgium
+
+- Saint-Ghislain remains uncertain: no 2025+ resumption confirmed. The opened [Walloon federation](https://fwcp.be/) lists Spa, Cerfontaine and Namur; absence is not proof of closure.
+- All eight coordinate points checked against airport data, no corrections. French/Dutch completeness searches and the federation list produced no confirmed missing regular DZ. Existing other records already have 2025/2026 activity beyond directory membership. Saint-Ghislain reopening remains the gap.
+
+### Netherlands
+
+- Added **Westbroek, active**, and **Baarn, uncertain** as separate landing places of Skydive Hilversum, not duplicate operators at Hilversum airport. The [operator page](https://www.skydivehilversum.nl/en/im-a-skydiver/) and [airport guide](https://www.ehhv.nl/for-pilots/para-jumping-dropzones) explicitly distinguish all three. [Safety Board report](https://onderzoeksraad.nl/onderzoek/bijna-botsing-met-parachutist-diamond-aircraft-industries-inc-da20-a1-dropzone-westbroek/) establishes jumping at Westbroek in March 2025; no dated Baarn jump was confirmed.
+- Coordinates: seven existing airport points checked against OurAirports; Rhoon's off-airfield approximate junction point reviewed against [operator directions](https://skydiverotterdam.com/routebeschrijving), with its prior 100–200 m caveat retained. Both added locations use explicit destination coordinates in the opened operator page's map links. Thus ten place coordinates reviewed; Rhoon's precise target is still unresolved, not falsely moved to Rotterdam airport.
+- Dutch completeness searches exposed these extra landing areas despite the eight-centre federation count. Echten (Hoogeveen alternative landing area) remains a lead without a confirmed recent place-specific schedule. LVNL AIP pages failed or returned 403/oversized PDF; their search-result coordinates were not used. Baarn's recent activity remains uncertain.
+
+### Result counts
+
+| Country | Active | Seasonal | Uncertain | Closed | Added | Upgraded | Downgraded | Closed in check | Existing coordinates changed | Null coordinates |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| AT | 3 | 16 | 4 | 0 | 1 | 4 | 0 | 0 | 2 | 1 |
+| CH | 11 | 7 | 4 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
+| BE | 6 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| NL | 8 | 1 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 |
+
+Validation: each country file passed `python3 -m json.tool`; unique keys, status values, source presence and paired coordinates checked. Countries with fewer than ten records were checked in full.

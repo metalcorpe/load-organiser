@@ -225,3 +225,65 @@ These need someone to recheck them:
   - Kroměříž (CZ): only a sightseeing-flight offer was found.
   - Sky Camp Baltic jumps onto Mewia Rewa (Hel): the airfield is not identified.
   - Płock-Kostrogaj has display jumps at an August 2026 air picnic only, so it is not a dropzone.
+
+
+## Codex cross-check
+
+Date: 2026-11-14 (environment date). Independently reviewed the earlier coverage, every remaining uncertain record, operator pages, local-language 2025–2026 searches and ten existing coordinate pairs per country. None of these countries has an active/seasonal record supported solely by a federation directory; several reseller-based records remain weaker evidence as identified in the earlier check. No sign-in, terms acceptance, contact, Overpass requests or commits were used.
+
+### Changes and counts
+
+| Country | Upgraded from uncertain | Downgraded to uncertain | Closed | Added | Existing coordinates fixed |
+|---|---:|---:|---:|---:|---:|
+| PL | 2 | 0 | 0 | 1 | 0 |
+| CZ | 0 | 0 | 1 | 1 | 0 |
+| SK | 0 | 0 | 0 | 1 | 0 |
+| HU | 0 | 0 | 0 | 0 | 0 |
+
+| Country | Active | Seasonal | Uncertain | Closed | Total | Missing coordinates |
+|---|---:|---:|---:|---:|---:|---:|
+| PL | 5 | 27 | 4 | 0 | 36 | 1 |
+| CZ | 0 | 20 | 3 | 1 | 24 | 0 |
+| SK | 2 | 12 | 2 | 0 | 16 | 0 |
+| HU | 1 | 7 | 2 | 0 | 10 | 0 |
+
+**PL:** Lubin and Gryźliny changed to seasonal. The directly identified Lubin operator is [Skydive Polska](https://www.skydivepolska.pl/), and its [partner page](https://prezentmarzen.com/wykonawca/skydive-polska-pl/) contains multiple customer reports specifically for Lubin in April–August 2026. The unconfirmed SkyKrawiec attribution was replaced. Gryźliny has a [Skydive.pl location-specific offer](https://skydive.pl/lokalizacja/mazury-gryzliny/) plus a [21 September 2026 customer report explicitly for Gryźliny](https://prezentmarzen.com/wykonawca/skocz-na-olsztyn/). Generic site-wide reviews were not used as location-specific evidence. Skocz na Olsztyn was consolidated on that same airfield record.
+
+Added **Krosno (EPKR)**: an [operator statement about 20 September 2026](https://dlapilota.pl/wiadomosci/polska/sky-magic-wykonalo-wspanialy-pokaz-podczas-nocnego-airshow-w-krosnie) identifies REAKTOR24 as resident at EPKR and explicitly distinguishes its ordinary jumping from the visiting Sky Magic airshow display. Coordinates came from the opened EPKR airport page. Tandemowe.pl now responds and identifies Jelenia Góra, correcting the previous access failure, but lacks a dated field-specific schedule. Zamość's current shop and operator homepage confirm Mokre as the location; a search-indexed 2025 school-training PDF returned 404 and was not counted as opened proof. Szymanów's current suspension notice remains in place.
+
+**CZ:** **Hradec Králové → closed** for the advertised civilian tandem operation: [Tandem Hradec's 2026 reservation page](https://www.tandem-hradec.cz/rezervace/) says it permanently relocated in 2022, and the [other operator's 2026 location notice](https://www.tandemove-seskoky.cz/tandemove-seskoky-hradec-kralove/) independently moves its jumps to Nové Město. Added Tandem Hradec to the existing Nové Město operators. This does not imply the airport is closed or military displays have ceased.
+
+Added **Šumperk (LKSU)** from [Air Hit Morava's 2026 calendar](https://www.tandemovyseskok.cz/terminy): six weekends June–October plus individual jumping by arrangement. Coordinates came from the opened LKSU airport page. The dated Jičín aeroclub festival confirms a 2025 display, not regular operation. Paraservice's latest visible linked calendar remains 2024. Krnov yielded historical lists rather than dated operating evidence.
+
+**SK:** Added **Košice-Barca (LZKZ)**, distinct from Bidovce, from the [resident club's Cassovia 2026 regulations](https://paraklub.aeroklubkosice.sk/aktuality/). Its 12 September 2026 competition admits civilian licensed participants; the club describes annual recurrence and links its September 2025 results. Classified seasonal for this recurring club event, not year-round tandem availability. Coordinates are the airport reference from the opened LZKZ page, not an exact accuracy target. Ražňany and Kvetoslavov remain uncertain because the current operator pages omit them despite voucher offers. COMPACT's booking page names only Lisková, Spišská Nová Ves and Bidovce. SkyTaxi names Slávnica and Kráľová pri Senci; that latter field remains a relocation/closure lead, not a confirmed new operating DZ.
+
+**HU:** All ten coordinates checked. Tököl remains a stated business base/future ambition, with the operator explicitly limiting current jumping to Nyíregyháza and Hajdúszoboszló. Gödöllő searches did not establish regular recent civilian jumping. Local-language Békéscsaba/Pécs leads produced club/gliding or memorial material rather than verified regular parachuting, so no speculative field was added.
+
+### Remaining uncertainty
+
+- `pl-jelenia-gora`: Tandemowe.pl now responds and advertises Jelenia Góra, but no dated 2025–2026 calendar or field-specific jump report was established.
+- `pl-chyzne`: SkyFun contact page explicitly names Lądowisko Chyżne, but no dated 2025–2026 jumping or unambiguous coordinate source was established.
+- `pl-wroclaw-szymanow`: Skydive Wrocław still explicitly suspends Szymanów jumps and uses Leszno; no dated 2025–2026 evidence resolved the conflicting PL Strefa listing.
+- `pl-zamosc`: Aeroklub Ziemi Zamojskiej currently sells tandems at Mokre, but no opened dated 2025–2026 evidence establishes a regular jumping schedule.
+- `cz-strunkovice`: Paraservice still exposes only a 2024 calendar; no dated 2025–2026 activity or definitive operator closure was established.
+- `cz-jicin`: The aeroclub advertises parachute displays on 24 May 2025, but that event does not establish regular civilian jumping or revive the old Parateam schedule.
+- `cz-krnov`: Searches found historical club/tandem listings but no dated 2025–2026 operating calendar or jump report at Krnov.
+- `sk-presov-raznany`: Current operator booking page names Lisková, Spišská Nová Ves and Bidovce, not Ražňany; the voucher lead lacks site-specific dated jumping evidence.
+- `sk-kvetoslavov`: Current operator site names Slávnica and Kráľová pri Senci, not Kvetoslavov; voucher availability does not resolve regular operation here.
+- `hu-godollo`: Federation membership and historical parachuting references remain, but 2025–2026 searches did not establish regular civilian jumping at Gödöllő.
+- `hu-tokol`: Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló.
+
+### Coordinates and completeness limits
+
+Ten existing points in each country were compared with individually opened airport pages, with one OSM API fallback. The corresponding audit sources were added to each record:
+
+- PL: EPLU, EPLS, EPJG, EPLR, EPZP, EPPT, EPNT, EPNL, EPKP, EPWK. OurAirports EPPZ failed, so EPWK was the tenth successful comparison. All points match their named airports.
+- CZ: LKKT, LKPJ, LKPM, LKMO, LKKO, LKMB, LKNM, LKHV, LKJH, LKHS. Differences up to about 0.62 km (Příbram) reflect different points on the airfield, not another town or airport.
+- SK: LZSE, LZDB, LZHL, LZTR, LZNZ, LZNI, LZPE, LZMA, LZRU, LZOC. Differences up to about 0.63 km (Boleráz) are consistent with an operator/airfield point versus the reference point; no correction was needed.
+- HU: all ten records, LHKV, LHSK, LHDV, LHUD, LHSS, LHNY, LHHO, LHGD, LHTL against OurAirports, and LHBD against the opened [OSM relation geometry](https://api.openstreetmap.org/api/0.6/relation/5518240/full.json). OurAirports LHBD returned 404; the OSM feature explicitly identifies Alba Airport/Börgönd and contains the stored point. No mismatched airfield found.
+
+The only missing pair is still **Chyżne**. The [operator contact page](https://skyfun.pl/kontakt) explicitly names the strip and street address, but neither it nor the searched airport/map leads established its coordinates. A street or town centroid was not substituted. The three added sites have opened airport coordinate sources.
+
+Completeness searches included Polish aero-club and regional jumping leads (Rybnik, Krosno, Toruń, Zamość and Gryźliny), Czech scheduled tandem locations, Slovak club/calendar searches, and Hungarian parachuting-club/airfield searches. Rybnik's found 2026 event is a display and does not establish a recurring dropzone. A nationwide Polish parachuting tour also does not establish permanent operation at every stop. Other prior open leads remain unresolved rather than silently treated as absent. No claim of exhaustive completeness is made.
+
+Validation: all four JSON files passed `python3 -m json.tool` and checks for required fields, unique keys, status values, source presence and paired valid coordinates. Existing schema and researcher attribution were preserved; this section records Codex's contribution. No commit was made.

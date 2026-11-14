@@ -417,8 +417,8 @@
           "website": "https://skydivelamancha.com/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator site is live (copyright 2026) and the Aircruz locations page lists parachuting at Ontur, but no dated 2025-2026 jump post was found. A LinkedIn profile for 'SkyDiveOntur' shares undated posts about weekend jumps at Ontur.",
+      "status": "active",
+      "status_evidence": "Club Aéreo Universal September 2025 bulletin lists Skydive La Mancha at Ontur as a booking location; the operator still advertises tandem and AFF at Ontur. The bulletin reports actual August jumps at Requena, not specifically Ontur.",
       "sources": [
         {
           "url": "https://skydivelamancha.com/",
@@ -439,6 +439,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://www.clubaereouniversal.com/gallery/2025%209%20SEP%20BOLETI%CC%81N%20MENSUAL%20DEL%20CAU.pdf",
+          "checked_on": "2026-11-14",
+          "what": "September 2025 club bulletin, page 21: Ontur school and bookings"
         }
       ]
     },
@@ -712,7 +717,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Tripadvisor listing says the location was reported permanently closed; Yumping still lists it. Operator domains did not resolve on 2026-11-14.",
+      "status_evidence": "Uncertain: ENAIRE SUP 119/25 closed the aerodrome through estimated 10 July 2026; no reopening notice or 2025+ parachuting activity was confirmed in this cross-check.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/skydive-jerez/",
@@ -733,6 +738,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://aip.enaire.es/recursos/descargas/SUP/LE_SUP_A_2025_119_es.html",
+          "checked_on": "2026-11-14",
+          "what": "Official temporary airfield closure from 10 July 2025 to estimated 10 July 2026; cancellation requires NOTAM/SUP/AIP amendment"
         }
       ],
       "note": "Likely closed; not confirmed by the operator."
@@ -793,8 +803,8 @@
           "name": "Skydive León (Skydive Ibéria group)"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator LinkedIn (2024) and TikTok place it at Chozas de Abajo; the sister operation Skydive Valladolid closed in 2025; operator domain did not resolve on 2026-11-14; Tripadvisor reviews report repeated cancellations. Tripadvisor (search-result view, 2026-11-14) shows a February 2026 review calling the operator 'ESTAFADORES' (fraudsters); no dated jump post from 2025 or later found.",
+      "status": "closed",
+      "status_evidence": "Report of 31 May 2026 traces the operator from Chozas to Valladolid and reports cessation; a customer was told in 2024 that León jumps had moved to Valladolid.",
       "sources": [
         {
           "url": "https://www.tiktok.com/@skydiveleonparacaidismo",
@@ -820,9 +830,14 @@
           "url": "https://www.tripadvisor.es/Attraction_Review-g21331332-d8526233-Reviews-Skydive_Leon-Chozas_de_Abajo_Province_of_Leon_Castile_and_Leon.html",
           "checked_on": "2026-11-14",
           "what": "Tripadvisor listing (search-result view)"
+        },
+        {
+          "url": "https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 report on cessation and relocation of LyF/Skydive León; closure concerns the jumping operation"
         }
       ],
-      "note": "Aggregator gives an older site at Los Oteros (LEOS, 42.333056, -5.451944)."
+      "note": "Former Skydive León jumping operation closed; this does not establish that the aerodrome itself is closed."
     }
   ]
 }

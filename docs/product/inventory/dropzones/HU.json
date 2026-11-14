@@ -56,6 +56,11 @@
           "url": "https://skydive.hu/tagszervezetek",
           "checked_on": "2026-11-14",
           "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://api.openstreetmap.org/api/0.6/relation/5518240/full.json",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened named OSM aerodrome geometry; stored point is within the airfield bounds."
         }
       ],
       "note": "skydivingsource lists Tandem Team under Veszprém, which looks outdated."
@@ -98,6 +103,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/hungary",
           "checked_on": "2026-11-14",
           "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHKV/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -143,6 +153,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/hungary",
           "checked_on": "2026-11-14",
           "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHSK/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -186,6 +201,11 @@
           "url": "https://skydive.hu/tagszervezetek",
           "checked_on": "2026-11-14",
           "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHDV/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "skydivingsource lists Millennium under Siófok; its own site now names Dunaújváros."
@@ -223,6 +243,11 @@
           "url": "https://www.tandemzona.hu",
           "checked_on": "2026-11-14",
           "what": "operator homepage: names Szeged airfield (Bajai út) and Szolnok; no suspension notice; no dates"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHUD/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "Booking page shows the service as unavailable (likely off-season); recheck in spring 2027."
@@ -259,6 +284,11 @@
           "url": "https://skydive.hu/tagszervezetek",
           "checked_on": "2026-11-14",
           "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHSS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "Club/military sport parachuting; civilian tandems via Tandemzóna (Szeged–Szolnok)."
@@ -301,6 +331,11 @@
           "url": "https://skydive.hu/tagszervezetek",
           "checked_on": "2026-11-14",
           "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHNY/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -348,6 +383,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/hungary",
           "checked_on": "2026-11-14",
           "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHHO/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -370,7 +410,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Sky Escort is a federation member and OSM airfield operator; a Gödöllő tandem Facebook page exists, but no dated 2025/2026 jump evidence was opened",
+      "status_evidence": "Federation membership and historical parachuting references remain, but 2025–2026 searches did not establish regular civilian jumping at Gödöllő.",
       "sources": [
         {
           "url": "https://skydive.hu/tagszervezetek",
@@ -381,6 +421,11 @@
           "url": "https://ais-en.hungarocontrol.hu/vfrmanual/LHGD",
           "checked_on": "2026-11-14",
           "what": "HungaroControl VFR manual: aerodrome operator Sky Escort Hungary Aero Club (search view)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHGD/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "Check 2026-11-14: a search for 2026 tandem jumps at Gödöllő found nothing."
@@ -401,12 +446,17 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "flyjumptandemugras.hu (opened 2026-11-14) calls Tököl its base but says it currently jumps only at Nyíregyháza and Hajdúszoboszló",
+      "status_evidence": "Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló.",
       "sources": [
         {
           "url": "https://flyjumptandemugras.hu",
           "checked_on": "2026-11-14",
-          "what": "operator page: Tököl is its base; current sites Nyíregyháza and Hajdúszoboszló; 2025 prices"
+          "what": "operator page: Tököl is its base; current sites Nyíregyháza and Hajdúszoboszló; 2025 prices; Codex cross-check: Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló."
+        },
+        {
+          "url": "https://ourairports.com/airports/LHTL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     }

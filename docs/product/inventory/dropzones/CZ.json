@@ -43,6 +43,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKKT/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -85,6 +90,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKPJ/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "Home of the ASC Dukla Prostějov accuracy team (per aeroklub.cz)."
@@ -129,6 +139,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKPM/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -173,6 +188,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKMO/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -208,6 +228,11 @@
           "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
           "checked_on": "2026-11-14",
           "what": "2026 tandem jump calendar of tandemove-seskoky.cz (season 4 April – 1 November 2026)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKKO/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -233,6 +258,11 @@
           "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
           "checked_on": "2026-11-14",
           "what": "2026 tandem jump calendar of tandemove-seskoky.cz (season 4 April – 1 November 2026)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKMB/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -252,6 +282,10 @@
         {
           "name": "tandemove-seskoky.cz",
           "website": "https://www.tandemove-seskoky.cz"
+        },
+        {
+          "name": "Tandem Hradec Králové",
+          "website": "https://www.tandem-hradec.cz/"
         }
       ],
       "status": "seasonal",
@@ -266,6 +300,16 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKNM/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.tandem-hradec.cz/rezervace/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Additional operator at the same airfield; recurring April–October 2026 calendar."
         }
       ]
     },
@@ -308,6 +352,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKHV/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -343,6 +392,11 @@
           "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
           "checked_on": "2026-11-14",
           "what": "2026 tandem jump calendar of tandemove-seskoky.cz (season 4 April – 1 November 2026)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKJH/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -381,6 +435,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
           "checked_on": "2026-11-14",
           "what": "aggregator list of 14 Czech dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LKHS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ],
       "note": "volnypad.cz separately lists 'České Budějovice – Planá' (LKCS); not recorded as a dropzone yet."
@@ -691,12 +750,12 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator site (opened 2026-11-14) links only a 2024 events calendar; no 2025/2026 jump evidence found",
+      "status_evidence": "Paraservice still exposes only a 2024 calendar; no dated 2025–2026 activity or definitive operator closure was established.",
       "sources": [
         {
           "url": "https://paraservice.cz/",
           "checked_on": "2026-11-14",
-          "what": "operator homepage"
+          "what": "operator homepage; Codex cross-check: Homepage reopened; latest linked calendar remains 2024."
         }
       ],
       "note": "Check 2026-11-14: firmy.cz directory lists Paraservice-cz at Strunkovice nad Blanicí as closed (search view, undated); the latest offer found (Slevomat) is from 2022."
@@ -719,8 +778,8 @@
           "website": "https://www.tandemove-seskoky.cz"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Named by skydivingsource and the tandemove-seskoky.cz home page, but absent from that operator's 2026 calendar",
+      "status": "closed",
+      "status_evidence": "Tandem Hradec states on its 2026 booking page that jumps permanently moved to Nové Město nad Metují in 2022; tandemove-seskoky.cz independently states its 2026 Hradec jumps are relocated there.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/europe/czech-republic",
@@ -731,8 +790,19 @@
           "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
           "checked_on": "2026-11-14",
           "what": "2026 tandem jump calendar of tandemove-seskoky.cz (season 4 April – 1 November 2026)"
+        },
+        {
+          "url": "https://www.tandem-hradec.cz/rezervace/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Permanent relocation notice on 2026 calendar."
+        },
+        {
+          "url": "https://www.tandemove-seskoky.cz/tandemove-seskoky-hradec-kralove/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Explicit 2026 relocation notice."
         }
-      ]
+      ],
+      "note": "Closed refers to the advertised civilian tandem operation, not the airport or occasional military displays."
     },
     {
       "key": "cz-jicin",
@@ -750,12 +820,17 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Parateam page (opened 2026-11-14) says tandems run April–November at Jičín-Vokšice, but the page dates from 2013",
+      "status_evidence": "The aeroclub advertises parachute displays on 24 May 2025, but that event does not establish regular civilian jumping or revive the old Parateam schedule.",
       "sources": [
         {
           "url": "https://parateam.webnode.cz/tandemove-seskoky",
           "checked_on": "2026-11-14",
           "what": "club tandem page (2013 content)"
+        },
+        {
+          "url": "https://www.letistejicin.info/rockovy-hangar-2025/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated festival includes parachute displays; regular dropzone use remains unconfirmed."
         }
       ]
     },
@@ -775,7 +850,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only an older tandem-jumps.cz page names Krnov; not on the 2026 calendar",
+      "status_evidence": "Searches found historical club/tandem listings but no dated 2025–2026 operating calendar or jump report at Krnov.",
       "sources": [
         {
           "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
@@ -784,6 +859,40 @@
         }
       ],
       "note": "Lead from search result http://www.tandem-jumps.cz/index.asp?menu=597 (not opened). Check 2026-11-14: firmy.cz lists SKYSPORT TEAM s.r.o. as a parachute operator with a Krnov address (search view, undated); still no dated jumps."
+    },
+    {
+      "key": "cz-sumperk",
+      "name": "Letiště Šumperk",
+      "aliases": [
+        "LKSU"
+      ],
+      "country": "CZ",
+      "locality": "Šumperk, Olomoucký kraj",
+      "latitude": 49.960602,
+      "longitude": 17.017799,
+      "coordinates_source": "https://ourairports.com/airports/LKSU/",
+      "icao": "LKSU",
+      "operators": [
+        {
+          "name": "Air Hit Morava / Tandemový seskok",
+          "website": "https://www.tandemovyseskok.cz/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator calendar lists six jumping weekends from June through October 2026 at Šumperk airport.",
+      "sources": [
+        {
+          "url": "https://www.tandemovyseskok.cz/terminy",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: dated activity and operator evidence."
+        },
+        {
+          "url": "https://ourairports.com/airports/LKSU/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport reference coordinates."
+        }
+      ],
+      "note": "Recurring tandem and individual jumps; airport reference coordinate."
     }
   ]
 }

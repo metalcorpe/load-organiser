@@ -14,12 +14,12 @@
       "icao": "EPLU",
       "operators": [
         {
-          "name": "SkyKrawiec",
-          "website": "https://www.skykrawiec.pl/"
+          "name": "Skydive Polska",
+          "website": "https://www.skydivepolska.pl/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Only fajnewypady.pl (checked 2026-10-08) places SkyKrawiec and Skydive Wrocław at Lubin; neither operator's own homepage (opened 2026-11-14) names Lubin as a jump site, and no dated 2025/2026 jump evidence was found for Lubin",
+      "status": "seasonal",
+      "status_evidence": "Skydive Polska identifies Lubin airfield as its base; its partner page has site-specific tandem reports dated 19 April, 31 May, 9 August and 10 August 2026.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -35,9 +35,24 @@
           "url": "https://skydive.wroclaw.pl/",
           "checked_on": "2026-11-14",
           "what": "operator homepage notice: jumps currently at Leszno; Lubin and Jelenia Góra not named as jump sites"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLU/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://prezentmarzen.com/wykonawca/skydive-polska-pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated customer reports explicitly refer to the Lubin tandem product, corroborating regular 2026 operation."
+        },
+        {
+          "url": "https://www.skydivepolska.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator names Aeroklub Zagłębia Miedziowego, Spacerowa 9, Lubin."
         }
       ],
-      "note": "Skydive Wrocław's own homepage (opened 2026-11-14) says it currently jumps at Leszno, so its presence at Lubin is unconfirmed. Check 2026-11-14: downgraded from seasonal; SkyKrawiec's own site lists Zielona Góra, Leszno and Chojna."
+      "note": "Earlier SkyKrawiec attribution was not confirmed; the directly identified local operator is Skydive Polska."
     },
     {
       "key": "pl-leszno",
@@ -70,6 +85,11 @@
           "url": "https://www.skykrawiec.pl/",
           "checked_on": "2026-11-14",
           "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -84,7 +104,8 @@
       "icao": "EPJG",
       "operators": [
         {
-          "name": "Tandemowe.pl"
+          "name": "Tandemowe.pl",
+          "website": "https://tandemowe.pl/"
         },
         {
           "name": "Skydive Wrocław",
@@ -92,7 +113,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only fajnewypady.pl (checked 2026-10-08) lists Tandemowe.pl and Skydive Wrocław here; Skydive Wrocław's homepage does not name Jelenia Góra, tandemowe.pl returned HTTP 500 on 2026-11-14, and no dated 2025/2026 jump evidence was found",
+      "status_evidence": "Tandemowe.pl now responds and advertises Jelenia Góra, but no dated 2025–2026 calendar or field-specific jump report was established.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -103,6 +124,16 @@
           "url": "https://skydive.wroclaw.pl/",
           "checked_on": "2026-11-14",
           "what": "operator homepage notice: jumps currently at Leszno; Lubin and Jelenia Góra not named as jump sites"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPJG/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://tandemowe.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Website reopened successfully; locality named, but copyright year alone does not prove recent jumps."
         }
       ],
       "note": "Operator site of Tandemowe.pl not opened; Skydive Wrocław listing for Jelenia Góra may be outdated (see pl-leszno). Check 2026-11-14: downgraded from seasonal."
@@ -136,6 +167,11 @@
           "url": "https://www.aeroklub.lublin.pl/kategoria-produktu/oferta/skoki-spadochronowe/",
           "checked_on": "2026-11-14",
           "what": "aero club shop page for parachute jumps"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLR/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -166,6 +202,11 @@
           "url": "https://www.skykrawiec.pl/",
           "checked_on": "2026-11-14",
           "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPZP/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -206,6 +247,11 @@
           "url": "https://skydivingsource.com/dropzones/europe/poland",
           "checked_on": "2026-11-14",
           "what": "aggregator list of Polish dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPPT/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -273,6 +319,11 @@
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
           "checked_on": "2026-11-14",
           "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPNT/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -292,7 +343,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed on fajnewypady.pl (checked 2026-10-08) as 'Chyżne (lądowisko)', but the SkyFun homepage (opened 2026-11-14) does not name Chyżne, shows only 2018 reviews and no season dates",
+      "status_evidence": "SkyFun contact page explicitly names Lądowisko Chyżne, but no dated 2025–2026 jumping or unambiguous coordinate source was established.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -303,6 +354,11 @@
           "url": "https://www.skyfun.pl/kontakt",
           "checked_on": "2026-11-14",
           "what": "operator contact page with strip address"
+        },
+        {
+          "url": "https://skyfun.pl/kontakt",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator explicitly names the strip and street address; no coordinate-bearing map supplied."
         }
       ],
       "note": "Coordinates unknown; no source gave a position. Check 2026-11-14: OSM places street 'Chyżnik' (the contact address) in Jabłonka village, about 49.449, 19.667, not in Chyżne; neither OSM nor OurAirports has a strip there, so coordinates stay null."
@@ -334,6 +390,11 @@
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
           "checked_on": "2026-11-14",
           "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPNL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -364,6 +425,11 @@
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
           "checked_on": "2026-11-14",
           "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPKP/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -433,6 +499,11 @@
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
           "checked_on": "2026-11-14",
           "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPWK/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
     },
@@ -480,10 +551,13 @@
         {
           "name": "Skydive.pl",
           "website": "https://skydive.pl/"
+        },
+        {
+          "name": "Skocz na Olsztyn"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Named as a Skydive.pl site on fajnewypady.pl (checked 2026-10-08) but not on skydive.pl's own current location list",
+      "status": "seasonal",
+      "status_evidence": "Skydive.pl sells a location-specific Gryźliny voucher, and Skocz na Olsztyn has a customer report dated 21 September 2026 explicitly for the Gryźliny tandem product.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -494,8 +568,19 @@
           "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
           "checked_on": "2026-11-14",
           "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://prezentmarzen.com/wykonawca/skocz-na-olsztyn/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: 2026 customer report explicitly identifies Gryźliny rather than generic Olsztyn."
+        },
+        {
+          "url": "https://skydive.pl/lokalizacja/mazury-gryzliny/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened operator location-specific booking offer; generic site-wide reviews were not treated as field-specific evidence."
         }
-      ]
+      ],
+      "note": "One Gryźliny airfield record; marketing brands consolidated."
     },
     {
       "key": "pl-suwalki",
@@ -944,7 +1029,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Conflicting: plstrefa.pl lists Szymanów as active, but Skydive Wrocław's homepage says jumps there are currently not possible",
+      "status_evidence": "Skydive Wrocław still explicitly suspends Szymanów jumps and uses Leszno; no dated 2025–2026 evidence resolved the conflicting PL Strefa listing.",
       "sources": [
         {
           "url": "https://plstrefa.pl/lokalizacje",
@@ -954,7 +1039,7 @@
         {
           "url": "https://skydive.wroclaw.pl/",
           "checked_on": "2026-11-14",
-          "what": "operator notice that Szymanów jumps are suspended"
+          "what": "operator notice that Szymanów jumps are suspended; Codex cross-check: Current suspension notice reopened."
         }
       ]
     },
@@ -1174,7 +1259,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroklub Zamość Facebook video (search view, undated) sells tandem vouchers; no dated 2025/2026 jump evidence opened",
+      "status_evidence": "Aeroklub Ziemi Zamojskiej currently sells tandems at Mokre, but no opened dated 2025–2026 evidence establishes a regular jumping schedule.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/europe/poland",
@@ -1185,9 +1270,48 @@
           "url": "https://dlapilota.pl/wiadomosci/polska/spadochronowe-zawody-eeal-w-hrubieszowie-0",
           "checked_on": "2026-11-14",
           "what": "news: EEAL accuracy competition 31 July–2 August 2026, co-organised by Aeroklub Ziemi Zamojskiej, but jumps at Metelin strip and Hrubieszów, not at Mokre"
+        },
+        {
+          "url": "https://www.aeroklubzamosc.pl",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator homepage sells tandems and names Mokre; unrelated dated news was not treated as jumping evidence."
         }
       ],
       "note": "Lead from skydivingsource and Facebook search result; needs confirmation. Check 2026-11-14: the aero club's name is Aeroklub Ziemi Zamojskiej. A 2024 EEAL round was held at Mokre (search view); the 2026 round moved to Hrubieszów. Still no dated 2025/2026 jumping at Mokre."
+    },
+    {
+      "key": "pl-krosno",
+      "name": "Lotnisko Krosno",
+      "aliases": [
+        "EPKR"
+      ],
+      "country": "PL",
+      "locality": "Krosno, Podkarpackie",
+      "latitude": 49.683807,
+      "longitude": 21.740953,
+      "coordinates_source": "https://ourairports.com/airports/EPKR/",
+      "icao": "EPKR",
+      "operators": [
+        {
+          "name": "Grupa Spadochronowa REAKTOR24",
+          "website": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "An operator statement concerning 20 September 2026, published by dlapilota, confirms REAKTOR24 operates at EPKR and made ordinary jumps there before the separate airshow.",
+      "sources": [
+        {
+          "url": "https://dlapilota.pl/wiadomosci/polska/sky-magic-wykonalo-wspanialy-pokaz-podczas-nocnego-airshow-w-krosnie",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: dated activity and operator evidence."
+        },
+        {
+          "url": "https://ourairports.com/airports/EPKR/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport reference coordinates."
+        }
+      ],
+      "note": "Site included for the resident operator activity; the visiting Sky Magic display is not counted as a separate dropzone."
     }
   ]
 }

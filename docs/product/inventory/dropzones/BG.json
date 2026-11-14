@@ -106,8 +106,8 @@
         }
       ],
       "aircraft": "Piper (type not stated)",
-      "status": "uncertain",
-      "status_evidence": "Operator page offers tandems from Gradishte airfield in a Piper but gives no season or dates; no dated post or third-party confirmation found",
+      "status": "active",
+      "status_evidence": "Bulgarian National Radio report dated 24 April 2026 schedules parachuting at Gradishte on 9–12 September 2026; September municipality/BTA search results report the event took place (full follow-up pages unavailable).",
       "sources": [
         {
           "url": "https://skyshumen.com/izberi-adrenalin/tandemen-skok",
@@ -118,6 +118,11 @@
           "url": "https://www.openstreetmap.org/node/5704984515",
           "checked_on": "2026-11-14",
           "what": "OSM 'Градище' Gradishte Airstrip LBGD"
+        },
+        {
+          "url": "https://bnrnews.bg/shumen/post/461205/parva-balkaniada-po-vazdushni-sportove-v-shumen",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 parachuting competition announcement identifying Gradishte airfield"
         }
       ],
       "note": "dev-listings key bg-shumen-airfield-gradishte. OSM also has a former 'Shumen Airstrip' (way 929606722) at 43.2863, 26.9409; the operator names Gradishte, so the LBGD point is used."
@@ -134,7 +139,7 @@
       "icao": "LBPR",
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "Only an undated travel guide (guidebg.com) calls it a popular tandem skydiving spot; no operator, aircraft or dated activity found",
+      "status_evidence": "Uncertain: LAND BG airfield page lists parachuting by prior arrangement, but no 2025+ jump schedule or operator activity was established.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Primorsko_Airfield",
@@ -150,9 +155,51 @@
           "url": "https://www.openstreetmap.org/way/115601721",
           "checked_on": "2026-11-14",
           "what": "OSM 'Летище Приморско' LBPR"
+        },
+        {
+          "url": "https://www.landbg.info/bg/airport/primorsko",
+          "checked_on": "2026-11-14",
+          "what": "Aviation directory lists parachuting by prior arrangement but no dated jump activity"
         }
       ],
       "note": "Lead only. Not in dev-listings."
+    },
+    {
+      "key": "bg-erden",
+      "name": "Erden Airfield",
+      "aliases": [
+        "Aeroclub Montana"
+      ],
+      "country": "BG",
+      "locality": "Erden, Montana",
+      "latitude": 43.499031,
+      "longitude": 23.305078,
+      "coordinates_source": "https://www.landbg.info/bg/airport/erden",
+      "icao": "LBRD",
+      "operators": [
+        {
+          "name": "Aeroclub Montana",
+          "website": "https://www.dropzone.bg/"
+        },
+        {
+          "name": "Bulgarian National Parachute Club"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "National aero-club membership page identifies two parachuting clubs at Erden; LAND BG confirms parachuting training and jumps, but no dated 2025+ local programme was established.",
+      "sources": [
+        {
+          "url": "https://www.landbg.info/bg/airport/erden",
+          "checked_on": "2026-11-14",
+          "what": "Airfield coordinates, parachuting training and jump services; opened through HTTP after web-tool timeout"
+        },
+        {
+          "url": "https://www.bnac.bg/%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/",
+          "checked_on": "2026-11-14",
+          "what": "National federation club structure identifies Aeroclub Montana and Bulgarian National Parachute Club at Erden"
+        }
+      ],
+      "note": "Added by Codex; operator site returned HTTP 403. The federation page is undated and its registration column refers to 2020."
     }
   ]
 }

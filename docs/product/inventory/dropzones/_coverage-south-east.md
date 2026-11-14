@@ -223,3 +223,45 @@ Still doubtful:
 - Location: RO Brașov (Ghimbav or Sânpetru), and RO Ianca (coordinates from OurAirports only).
 - Operators: TR skydive.tr, and whether Skydive Efes is the same operation as the THK school.
 - Kingsfield: whether civilians can jump there.
+
+## Codex cross-check
+
+Checked independently on 2026-11-14. Existing uncertain records and directory-only evidence were reviewed with operator pages, dated calendars/news and local-language searches. A failed page load or a copyright year was not treated as evidence of recent jumping. No login, contact, booking, Overpass query, commit or push was made.
+
+Coordinate method: opened the [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv) and compared every existing non-null point with its named airfield, rather than replacing coordinates with the nearest airport indiscriminately. Airport reference points establish the airfield, not the exact parachute target. Off-airfield sites and unresolved points are described below. Counts supersede earlier sections; additions can remain uncertain when the place is confirmed but recent operation is not.
+
+### Türkiye
+
+- No status changes. Karain, Erzincan, Etimesgut and Cappadocia remain uncertain: Turkish 2025/2026 searches mostly returned general aviation-centre announcements or paragliding. These do not prove aircraft parachuting at the named site.
+- **Filled Etimesgut coordinates** using the opened [airport page](https://en.wikipedia.org/wiki/Etimesgut_Air_Base), which explicitly identifies it as the Türkkuşu training centre's airfield. It is an airfield reference point, not a surveyed landing target. All three pre-existing coordinate points were checked against airport data; Etimesgut makes four located records.
+- [Cappadocia contact page](https://www.skydivecappadocia.org/en/contact) still supplies no confirmed landing place; Erzincan's training centre was not tied to an airfield. Both retain null coordinates. Searches for İstanbul/Fethiye did not establish another regular aircraft DZ. The THK Erzincan page timed out and its search snippet was not treated as recent activity evidence.
+
+### Romania
+
+- Existing status totals unchanged; added **Măgura/Cisnădie, uncertain**. [Benzoi operator page](https://www.benzoi.ro/despre-noi/) and [booking page](https://www.benzoi.ro/bookings/services/view/1) confirm the distinct place and May–October tandem offer, but no dated recent jump/season programme was established. Coordinates from OurAirports LRCD.
+- Resolved the Ghimbav/Sânpetru textual ambiguity using [18 March 2025 reporting](https://infrapress.ro/2025/03/18/ministerul-transporturilor-infiinteaza-doua-aerocluburi-teritoriale-aeroclubul-teritorial-aurel-raican-braila-ianca-si-aeroclubul-teritorial-mircea-zorileanu-brasov/): Ghimbav handles aircraft/parachuting, Sânpetru gliding. Removed Sânpetru as an alias and the incorrect implication that this sport aerodrome is the international airport. The coordinate stays at the sport airfield.
+- Cluj, Iași, Pitești, Sibiu and Oradea remain uncertain; Romanian searches did not overturn the course-centre transfers or supply dated local jumps. The other federation-dependent records already have the dated 2026 national course notice; no inference was made that every listed student trains at the enrolment city.
+- Coordinates: all 17 original non-null points compared with airport data; Sânmihaiu German retained its operator-published reference point rather than the nearest unrelated airfield. New Măgura also checked. Oradea remains null because the actual jump place is not established. Open: recent activity at the six uncertain places, exact Suceava club landing arrangement, Satu Mare and Șiria leads.
+
+### Greece
+
+- Messolonghi **uncertain → active**: [10 November 2026 local report](https://messolonghinews.gr/skydive-messolonghi-kentro-eleftheris-ptosis/) announces the centre opening, explicitly at the civil airfield, with tandem, AFF and sport services.
+- Thiva/Perneri and Polykastro remain uncertain after Greek-language searches; no dated local resumption confirmed. Greek completeness searches including Crete did not identify a new regular aircraft DZ.
+- All six coordinates checked against airport data; no changes. Existing Kopaida and Chortero still have weaker undated operator evidence, as already flagged by the first researcher; this review did not manufacture dated posts for them.
+
+### Bulgaria
+
+- Shumen/Gradishte **uncertain → active**: [Bulgarian National Radio, 24 April 2026](https://bnrnews.bg/shumen/post/461205/parva-balkaniada-po-vazdushni-sportove-v-shumen) gives the September 2026 parachuting programme at Gradishte. Municipality/BTA follow-up search results describe completed competition, but full follow-up loads failed; this distinction is in the record.
+- Primorsko remains uncertain: [LAND BG](https://www.landbg.info/bg/airport/primorsko) confirms an on-request parachuting offer but no dated activity. Added **Erden, uncertain**, omitted originally: the opened [national aero-club structure](https://www.bnac.bg/%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/) locates two parachuting clubs there and [LAND BG](https://www.landbg.info/bg/airport/erden) publishes training, jumps and exact coordinates. No recent dated local programme was confirmed; the operator site returned 403.
+- All four original coordinate points checked against airport data; new Erden coordinates converted directly from LAND BG DMS. No existing points changed. Bulgarian searches also raised Pleven national competition, Krumovo military activity, Draganovtsi, Gorna Oryahovitsa and federation clubs without located jumping grounds; these remain leads, not assumed regular civilian DZs.
+
+### Result counts
+
+| Country | Active | Seasonal | Uncertain | Closed | Added | Upgraded | Downgraded | Closed in check | Existing coordinates changed | Null coordinates |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| TR | 2 | 0 | 4 | 0 | 0 | 0 | 0 | 0 | 1 | 2 |
+| RO | 11 | 2 | 6 | 0 | 1 | 0 | 0 | 0 | 0 | 1 |
+| GR | 4 | 0 | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| BG | 3 | 0 | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+
+Validation: each country file passed `python3 -m json.tool`; unique keys, status values, source presence and paired coordinates checked. Countries with fewer than ten records were checked in full.

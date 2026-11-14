@@ -173,7 +173,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only resellers (Manawa, unlimited-adrenaline.gr, discover-greece-tours) mention tandems at Perneri; one Skydive Greece listing names Perneri, another names Megara. No operator page or dated post found",
+      "status_evidence": "Only resellers (Manawa, unlimited-adrenaline.gr, discover-greece-tours) mention tandems at Perneri; one Skydive Greece listing names Perneri, another names Megara. No operator page or dated post found Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
       "sources": [
         {
           "url": "https://discover-greece-tours.com/skydiving/",
@@ -209,8 +209,8 @@
           "website": "https://skydivemessolonghi.gr/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator site live (footer 2026) with address at Messolonghi airfield, but no schedule, aircraft or dated activity found; no third-party listing found",
+      "status": "active",
+      "status_evidence": "Messolonghi News dated 10 November 2026 reports the official opening of the tandem, AFF and sport-jumping centre at Messolonghi Civil Airfield.",
       "sources": [
         {
           "url": "https://skydivemessolonghi.gr/",
@@ -221,9 +221,14 @@
           "url": "https://www.openstreetmap.org/way/462552303",
           "checked_on": "2026-11-14",
           "what": "OSM airfield LGMS"
+        },
+        {
+          "url": "https://messolonghinews.gr/skydive-messolonghi-kentro-eleftheris-ptosis/",
+          "checked_on": "2026-11-14",
+          "what": "Dated centre-opening report, location and services"
         }
       ],
-      "note": "dev-listings key gr-mesolongi-civil-airfield. Check Instagram for recent jumps."
+      "note": "dev-listings key gr-mesolongi-civil-airfield. Codex found a dated centre-opening report on 10 November 2026."
     },
     {
       "key": "gr-polykastro-nea-kavala",
@@ -246,7 +251,7 @@
       ],
       "season": "occasional, about one weekend a month (per listing)",
       "status": "uncertain",
-      "status_evidence": "Booking listings (Manawa/Greeka, undated) say the northern base is Nea Kavala airport at Polykastro, sometimes Lagadas, about one weekend per month; OurAirports lists the airfield as closed. No 2025+ evidence",
+      "status_evidence": "Booking listings (Manawa/Greeka, undated) say the northern base is Nea Kavala airport at Polykastro, sometimes Lagadas, about one weekend per month; OurAirports lists the airfield as closed. No 2025+ evidence Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
       "sources": [
         {
           "url": "https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers",
