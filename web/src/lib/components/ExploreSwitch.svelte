@@ -20,14 +20,16 @@
 </nav>
 
 <style>
+	/* Two equal segments side by side; with very large text the second wraps under the first
+	   instead of running off the screen. */
 	.switch {
-		display: inline-grid;
-		grid-auto-flow: column;
-		grid-auto-columns: 1fr;
+		display: inline-flex;
+		flex-wrap: wrap;
+		max-width: 100%;
 		gap: 0.25rem;
-		margin: 0.25rem 0 0.75rem;
+		margin: 0 0 0.5rem;
 		padding: 0.25rem;
-		border-radius: 999px;
+		border-radius: 24px;
 		background: var(--surface-soft);
 		box-shadow: 0 0 0 1px var(--border);
 	}
@@ -37,7 +39,8 @@
 		align-items: center;
 		justify-content: center;
 		min-height: 44px;
-		min-width: 7.5rem;
+		flex: 1 1 0;
+		min-width: 120px;
 		padding: 0 1rem;
 		border-radius: 999px;
 		color: var(--muted);

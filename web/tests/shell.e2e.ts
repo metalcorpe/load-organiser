@@ -26,7 +26,7 @@ test.describe('public shell', () => {
 		// Either reviewed listings or the honest empty state; never placeholder activity.
 		await expect(
 			page
-				.getByRole('list', { name: 'Listings' })
+				.getByRole('region', { name: 'Listings' })
 				.or(page.getByText('No listings published yet'))
 		).toBeVisible();
 
@@ -37,6 +37,12 @@ test.describe('public shell', () => {
 		const explore = page.getByRole('navigation', { name: 'Explore' });
 		await expect(explore.getByRole('link', { name: 'Events' })).toHaveAttribute('aria-current', 'page');
 		expect(errors).toEqual([]);
+	});
+
+	test('the registration page has no header Join pointing back at itself', async ({ page }) => {
+		await page.goto('/register');
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Sign in' })).toBeVisible();
+		await expect(page.getByRole('banner').getByRole('link', { name: 'Join' })).toHaveCount(0);
 	});
 
 	test('navigation fits small screens with 44px targets and no horizontal scroll', async ({ page }) => {

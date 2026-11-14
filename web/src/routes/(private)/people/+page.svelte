@@ -91,7 +91,7 @@
 				Removes follows both ways; while signed in, neither of you can see or find the other.
 				Anything shared publicly stays visible to people who are not signed in. They are not told.
 			</p>
-			<button class="button secondary" disabled={!data.emailVerified}>Block</button>
+			<button class="button danger" disabled={!data.emailVerified}>Block</button>
 		</form>
 	</details>
 {/snippet}

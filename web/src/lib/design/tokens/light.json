@@ -65,11 +65,6 @@
 		"$value": "#ff8a5c",
 		"$description": "Key numbers on brand"
 	},
-	"icon": {
-		"$type": "color",
-		"$value": "#2f6fd6",
-		"$description": "Fact list icons"
-	},
 	"boogie": {
 		"bg": {
 			"$type": "color",
@@ -151,7 +146,7 @@
 	},
 	"field-border": {
 		"$type": "color",
-		"$value": "#7b8da4",
+		"$value": "#788aa1",
 		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
 	}
 }

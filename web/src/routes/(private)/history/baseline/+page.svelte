@@ -145,7 +145,7 @@
 			<label class="choice"><input type="checkbox" name="confirm" /> Remove my prior jump count</label>
 			<p class="hint">Your recorded jumps are kept. Totals then show recorded entries only.</p>
 			<div class="form-actions">
-				<button class="button secondary" type="submit" disabled={!data.emailVerified}>Remove</button>
+				<button class="button danger" type="submit" disabled={!data.emailVerified}>Remove</button>
 			</div>
 		</form>
 	{/if}

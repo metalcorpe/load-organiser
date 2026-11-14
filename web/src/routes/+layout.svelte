@@ -16,6 +16,7 @@
 	import FormGuard from '#lib/components/FormGuard.svelte';
 	import SignInSheet from '#lib/components/SignInSheet.svelte';
 	import { page } from '$app/state';
+	import { pageWidth } from '#lib/navigation.ts';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
@@ -35,6 +36,11 @@
 						: page.url.pathname + page.url.search
 				)}`
 	);
+	// Discovery lists run wider on large screens; everything else keeps the narrow measure.
+	// An error page keeps the narrow measure whatever the address.
+	const width = $derived(pageWidth(page.url.pathname, Boolean(page.error)));
+	// On the registration page itself, Join would only point back at the form.
+	const onRegister = $derived(page.url.pathname.startsWith('/register'));
 	// Two initials from a display name; from an email address only its first letter
 	// ("firstuse-1794@…" is not "F1").
 	const initials = $derived(
@@ -57,7 +63,7 @@
 <NavigationStatus />
 <FormGuard />
 
-<header>
+<header class:guest={!data.viewer}>
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
 	<span class="account">
@@ -69,7 +75,7 @@
 			</a>
 		{:else}
 			<a href={signInHref} data-sign-in>Sign in</a>
-			<a class="button join" href="/register">Join</a>
+			{#if !onRegister}<a class="button secondary join" href="/register">Join</a>{/if}
 		{/if}
 	</span>
 </header>
@@ -77,14 +83,14 @@
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
 {#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
-<main id="main" tabindex="-1">
+<main id="main" tabindex="-1" class="w-{width}">
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
 	{#key data.viewer?.accountId ?? 'anonymous'}
 		{@render children()}
 	{/key}
 </main>
 
-<footer class:with-nav={Boolean(data.viewer)}>
+<footer class="w-{width}" class:with-nav={Boolean(data.viewer)}>
 	<a href="/privacy">Privacy and the beta</a>
 	<a href="/status">Service status</a>
 	<a href="/support">Support the beta</a>
@@ -105,13 +111,25 @@
 		top: 0.5rem;
 	}
 
+	/* The header spans one frame on every page; each page and its footer are centred at
+	   the page's own measure: reading pages narrow, the discovery lists wider. */
+	:global(:root) {
+		--frame: 70rem;
+	}
+
 	header {
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
-		max-width: 40rem;
+		max-width: var(--frame);
 		margin: 0 auto;
 		padding: 0.75rem 1rem;
+	}
+
+	/* With very large text, Sign in and Join move under the name instead of off the screen. A
+	   member's name shortens instead. */
+	header.guest {
+		flex-wrap: wrap;
 	}
 
 	.brand {
@@ -132,10 +150,10 @@
 		min-width: 0;
 	}
 
+	/* An outlined button: the page's own main action keeps the filled orange. */
 	.account .join {
 		min-height: 44px;
 		padding: 0.35rem 1rem;
-		color: var(--accent-fg);
 	}
 
 	.me {
@@ -205,17 +223,39 @@
 		padding: 0.5rem 1rem 1rem;
 	}
 
+	main.w-medium,
+	footer.w-medium {
+		max-width: 60rem;
+	}
+
+	main.w-wide,
+	footer.w-wide {
+		max-width: 70rem;
+	}
+
 	main:focus {
 		outline: none;
 	}
 
+	/* Quiet links: muted and smaller than the page's own, still underlined. */
 	footer {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0 1.25rem;
 		max-width: 40rem;
-		margin: 0 auto;
-		padding: 0 1rem 2rem;
+		margin: 1rem auto 0;
+		padding: 0.25rem 1rem 2rem;
+		/* A rule along the content edge, not the padding. */
+		background: linear-gradient(var(--border), var(--border)) 1rem 0 / calc(100% - 2rem) 1px no-repeat;
+		font-size: 0.9rem;
+	}
+
+	footer a {
+		color: var(--muted);
+	}
+
+	footer a:hover {
+		color: var(--fg);
 	}
 
 	/* Room for the members' fixed tab bar on phones. */

@@ -4,6 +4,7 @@ import {
 	featuredLabel,
 	formatPrice,
 	formatRange,
+	groupByMonth,
 	pickFeatured,
 	spanDays,
 	statusLabel
@@ -81,5 +82,31 @@ describe('spanDays', () => {
 		expect(spanDays('2026-12-30', '2027-01-02')).toBe(4);
 		expect(spanDays('2026-11-14', '2026-11-14')).toBe(1);
 		expect(spanDays(null, null)).toBe(0);
+	});
+});
+
+describe('groupByMonth', () => {
+	const at = (id: string, starts_on: string | null) => ({ id, starts_on });
+
+	it('groups by start month in the order given, undated last', () => {
+		const groups = groupByMonth([
+			at('a', '2026-11-28'),
+			at('b', '2026-11-30'),
+			at('c', '2026-12-30'),
+			at('d', '2027-01-02'),
+			at('e', null)
+		]);
+		expect(groups.map((g) => g.label)).toEqual([
+			'November 2026',
+			'December 2026',
+			'January 2027',
+			'Dates not announced'
+		]);
+		expect(groups.map((g) => g.items.map((i) => i.id))).toEqual([['a', 'b'], ['c'], ['d'], ['e']]);
+	});
+
+	it('has no undated group when every listing has dates', () => {
+		expect(groupByMonth([at('a', '2027-03-01')]).map((g) => g.key)).toEqual(['2027-03']);
+		expect(groupByMonth([])).toEqual([]);
 	});
 });

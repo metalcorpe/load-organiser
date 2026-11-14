@@ -56,10 +56,6 @@
 		"$type": "color",
 		"$value": "#ff8a5c"
 	},
-	"icon": {
-		"$type": "color",
-		"$value": "#7faef5"
-	},
 	"boogie": {
 		"bg": {
 			"$type": "color",
@@ -141,7 +137,7 @@
 	},
 	"field-border": {
 		"$type": "color",
-		"$value": "#5a7598",
+		"$value": "#5e7a9e",
 		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
 	}
 }

@@ -26,7 +26,7 @@ function value(tokens: Tokens, path: string): string {
 	return (token as { $value: string }).$value;
 }
 
-// Text needs 4.5:1; large numbers on the brand card and non-text icons need 3:1 (WCAG 2.1).
+// Text needs 4.5:1; large numbers on the brand card and non-text edges and focus rings need 3:1 (WCAG 2.1).
 const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['fg', 'bg', 4.5],
 	['fg', 'surface', 4.5],
@@ -38,7 +38,6 @@ const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['brand-fg', 'brand', 4.5],
 	['brand-muted', 'brand', 4.5],
 	['highlight', 'brand', 3],
-	['icon', 'bg', 3],
 	['muted', 'surface-soft', 4.5],
 	['muted', 'accent-soft', 4.5],
 	['focus', 'bg', 3],
@@ -48,6 +47,9 @@ const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['field-border', 'field', 3],
 	['field-border', 'surface', 3],
 	['field-border', 'bg', 3],
+	// Secondary buttons and fields on soft panels; danger buttons are outlined in bad.fg.
+	['field-border', 'surface-soft', 3],
+	['bad.fg', 'surface', 4.5],
 	['boogie.fg', 'boogie.bg', 4.5],
 	['camp.fg', 'camp.bg', 4.5],
 	['course.fg', 'course.bg', 4.5],

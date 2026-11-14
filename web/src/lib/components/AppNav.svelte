@@ -76,5 +76,14 @@
 		a[aria-current='page'] {
 			box-shadow: inset 0 -3px var(--accent);
 		}
+
+		/* Same size and place on every page: centred in the bar, so switching pages, whatever
+		   their width, never moves or resizes the tabs. */
+		ul {
+			max-width: none;
+			padding: 0 1rem;
+			grid-template-columns: repeat(4, 9rem);
+			justify-content: center;
+		}
 	}
 </style>

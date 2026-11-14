@@ -97,7 +97,7 @@ test.describe('discover board', () => {
 		await page.getByLabel('Discipline').selectOption('freefly');
 		await page.getByRole('button', { name: 'Show listings' }).click();
 		await expect(page).toHaveURL(new RegExp(`q=${base}.*country=PT`));
-		const results = page.getByRole('list', { name: 'Listings' });
+		const results = page.getByRole('region', { name: 'Listings' });
 		await expect(results.getByRole('link')).toHaveText([listing.title]);
 		// Active filters show as chips; each removes only itself.
 		await expect(page.locator('summary', { hasText: 'Filters (2)' })).toBeVisible();
@@ -459,12 +459,45 @@ test.describe('search context and the filter panel', () => {
 		expect(title).toContain('Soon boogie');
 		await expect(page.getByRole('heading', { name: 'Other events, by date' })).toBeVisible();
 		await expect(
-			page.getByRole('list', { name: 'Listings' }).getByRole('link', { name: title })
+			page.getByRole('region', { name: 'Listings' }).getByRole('link', { name: title })
 		).toHaveCount(0);
 		// In a search, it is an ordinary result.
 		await page.goto(`/?q=${encodeURIComponent(listing.title)}`);
 		await expect(page.getByRole('region', { name: /^Highlighted/ })).toHaveCount(0);
 		await expect(page.getByRole('link', { name: listing.title })).toHaveCount(1);
+	});
+
+	test('results sit under their start month, months in date order', async ({ page }) => {
+		const base = token();
+		// Published out of order; the one running into July belongs to June.
+		const august = await publishListing(`${base} August camp`, {
+			starts_on: '2027-08-02',
+			ends_on: '2027-08-04'
+		});
+		const june = await publishListing(`${base} June boogie`, {
+			starts_on: '2027-06-28',
+			ends_on: '2027-07-03'
+		});
+		const july = await publishListing(`${base} July boogie`, {
+			starts_on: '2027-07-10',
+			ends_on: '2027-07-14'
+		});
+		await page.goto(`/?q=${base}`);
+		const results = page.getByRole('region', { name: 'Listings' });
+		await expect(results.getByRole('heading', { level: 3 })).toHaveText([
+			'June 2027',
+			'July 2027',
+			'August 2027'
+		]);
+		for (const [month, listing] of [
+			['June 2027', june],
+			['July 2027', july],
+			['August 2027', august]
+		] as const) {
+			await expect(results.getByRole('list', { name: month }).getByRole('link')).toHaveText([
+				listing.title
+			]);
+		}
 	});
 
 	test('dates across a month and across a year read in full', async ({ page }) => {

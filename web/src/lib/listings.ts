@@ -105,6 +105,47 @@ export function pickFeatured<T extends FeaturedCandidate>(items: readonly T[], t
 	);
 }
 
+const MONTH_YEAR = new Intl.DateTimeFormat('en-GB', {
+	month: 'long',
+	year: 'numeric',
+	timeZone: 'UTC'
+});
+
+export interface MonthGroup<T> {
+	/** "2026-11", or "undated". */
+	key: string;
+	/** "November 2026", or "Dates not announced". */
+	label: string;
+	items: T[];
+}
+
+/**
+ * The board's listings under month headings, by start month (an event running into the next
+ * month stays under the month it starts in). Months keep the order the listings came in (start
+ * date order); undated listings, if any, form a last "Dates not announced" group.
+ */
+export function groupByMonth<T extends { starts_on: string | null }>(
+	items: readonly T[]
+): MonthGroup<T>[] {
+	const groups = new Map<string, MonthGroup<T>>();
+	let undated: MonthGroup<T> | null = null;
+	for (const item of items) {
+		if (!item.starts_on) {
+			undated ??= { key: 'undated', label: 'Dates not announced', items: [] };
+			undated.items.push(item);
+			continue;
+		}
+		const key = item.starts_on.slice(0, 7);
+		let group = groups.get(key);
+		if (!group) {
+			group = { key, label: MONTH_YEAR.format(day(`${key}-01`)), items: [] };
+			groups.set(key, group);
+		}
+		group.items.push(item);
+	}
+	return undated ? [...groups.values(), undated] : [...groups.values()];
+}
+
 /** "Upcoming boogie", "Upcoming camp": what the selection above supports, and no more. */
 export function featuredLabel(category: string): string {
 	return `Upcoming ${(CATEGORY_LABEL[category] ?? 'event').toLowerCase()}`;

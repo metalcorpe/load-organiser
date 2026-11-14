@@ -104,7 +104,7 @@
 					{/if}
 					<form method="POST" action="?/remove">
 						<input type="hidden" name="id" value={place.id} />
-						<button class="button secondary" type="submit">Remove</button>
+						<button class="button danger" type="submit">Remove</button>
 					</form>
 				</div>
 				{#if errorFor('link', place.id) || errorFor('unlink', place.id) || errorFor('remove', place.id)}

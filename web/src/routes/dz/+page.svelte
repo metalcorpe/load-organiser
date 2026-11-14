@@ -65,7 +65,7 @@
 		</p>
 	</Notice>
 {:else}
-	<ul class="results rows" aria-label="Dropzones">
+	<ul class="results rows grouped" aria-label="Dropzones">
 		{#each data.result.items as venue (venue.id)}
 			<li>
 				<a class="title" href="/dz/{venue.id}">{venue.name}</a>
@@ -73,6 +73,7 @@
 					{venue.locality ? `${venue.locality}, ` : ''}{countryName(venue.country)}
 				</span>
 				{#if venue.status === 'closed'}<span class="tag">Closed</span>{/if}
+				<span class="chevron" aria-hidden="true"></span>
 			</li>
 		{/each}
 	</ul>
@@ -87,8 +88,78 @@
 {/if}
 
 <style>
+	h1 {
+		margin: 0 0 0.25rem;
+	}
+
+	.lede {
+		margin-bottom: 0.75rem;
+	}
+
 	.search {
-		margin-bottom: 1rem;
+		margin: 0 0 1rem;
+	}
+
+	/* One grouped list: a single outline and quiet rules between rows instead of a card per
+	   dropzone. The name link still covers its row, and a chevron marks each row as one to open
+	   (on touch there is no hover). Hover tints the row; focus rings it inside its own edges.
+	   The selectors repeat .results.rows so they outrank the card rows in app.css. */
+	.results.rows.grouped {
+		gap: 0;
+		border-radius: var(--radius);
+		background: var(--surface);
+		box-shadow: 0 0 0 1px var(--border);
+	}
+
+	.results.rows.grouped > li {
+		padding-right: 2.5rem;
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
+	}
+
+	.results.rows.grouped > li + li {
+		border-top: 1px solid var(--border);
+	}
+
+	.results.rows.grouped > li:first-child {
+		border-radius: var(--radius) var(--radius) 0 0;
+	}
+
+	.results.rows.grouped > li:last-child {
+		border-radius: 0 0 var(--radius) var(--radius);
+	}
+
+	.results.rows.grouped > li:only-child {
+		border-radius: var(--radius);
+	}
+
+	.results.rows.grouped > li:has(> a.title):hover {
+		background: var(--surface-soft);
+		box-shadow: none;
+	}
+
+	.results.rows.grouped > li:hover > a.title {
+		text-decoration: underline;
+	}
+
+	.results.rows.grouped > li:has(> a.title:focus-visible) {
+		outline-offset: -3px;
+	}
+
+	.chevron {
+		position: absolute;
+		right: 1.1rem;
+		top: 50%;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-right: 2px solid var(--muted);
+		border-bottom: 2px solid var(--muted);
+		transform: translateY(-50%) rotate(-45deg);
+	}
+
+	.results.rows.grouped > li:hover > .chevron {
+		border-color: var(--accent);
 	}
 
 	.meta {
@@ -96,6 +167,7 @@
 	}
 
 	.tag {
+		justify-self: start;
 		border: 1px solid var(--border);
 		border-radius: 999px;
 		padding: 0 0.5rem;
@@ -107,5 +179,23 @@
 		display: flex;
 		gap: 1rem;
 		margin: 1rem 0;
+	}
+
+	/* Larger screens: the search on one line, and each dropzone on one line, name first. */
+	@media (min-width: 48rem) {
+		.search {
+			grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+			align-items: end;
+		}
+
+		.results.rows.grouped > li {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 5rem;
+			align-items: baseline;
+			gap: 1rem;
+		}
+
+		.grouped .tag {
+			justify-self: end;
+		}
 	}
 </style>

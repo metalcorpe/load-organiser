@@ -314,7 +314,7 @@
 					{#if entry.notes}<span class="meta notes">{entry.notes}</span>{/if}
 					<form method="POST" action="?/removeService">
 						<input type="hidden" name="entry" value={entry.id} />
-						<button class="button secondary small" type="submit">Remove</button>
+						<button class="button danger small" type="submit">Remove</button>
 					</form>
 				</li>
 			{/each}
@@ -376,7 +376,7 @@
 	<form method="POST" action="?/delete" class="form">
 		<input type="hidden" name="version" value={c.version} />
 		<label class="choice"><input type="checkbox" name="confirm" /> Delete this item, its service entries and history</label>
-		<div class="form-actions"><button class="button secondary" type="submit">Delete permanently</button></div>
+		<div class="form-actions"><button class="button danger" type="submit">Delete permanently</button></div>
 	</form>
 
 	<ReviewHistory events={d.events} />
@@ -421,8 +421,4 @@
 		white-space: pre-line;
 	}
 
-	.small {
-		min-height: 36px;
-		padding: 0.25rem 0.75rem;
-	}
 </style>

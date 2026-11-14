@@ -18,6 +18,7 @@
 		DISCIPLINE_LABEL,
 		formatDay,
 		listingMessage,
+		groupByMonth,
 		pickFeatured
 	} from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -38,6 +39,9 @@
 	const listed = $derived(
 		data.result.ok ? data.result.items.filter((i) => i.id !== featured?.id) : []
 	);
+	// Under month headings by start month, so the date order reads at a glance. A month that runs
+	// on to the next page starts that page with its heading again.
+	const months = $derived(groupByMonth(listed));
 	// Type, discipline and audience fold away unless one of them is in use.
 	const moreActive = $derived(
 		[data.filters.category, data.filters.discipline, data.filters.audience].filter(Boolean).length
@@ -72,11 +76,14 @@
 
 <ExploreSwitch />
 <h1>Events</h1>
-<p class="lede">Boogies, camps, courses and other events in Europe. You register with the organizer.</p>
-{#if !data.viewer}
-	<!-- Join and Sign in are in the header; this only says what an account adds. -->
-	<p class="join-line">With an account you can save events and keep a private logbook.</p>
-{/if}
+<!-- One short introduction. For guests it ends with what an account adds; Join and Sign in
+     are in the header. -->
+<p class="lede intro">
+	Boogies, camps, courses and other events in Europe. You register with the organizer{#if !data.viewer}<span
+			class="account-note"
+			>; an account lets you save events and keep a private logbook</span
+		>{/if}.
+</p>
 
 <!-- defaultValue keeps text typed before hydration; the key resets the fields when
      the URL's filters change (Clear filters, back/forward). -->
@@ -93,7 +100,7 @@
 			defaultValue={data.filters.q}
 			autocomplete="off"
 		/>
-		<button class="button" type="submit">Search</button>
+		<button class="button secondary" type="submit">Search</button>
 	</div>
 	<details class="more">
 		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
@@ -222,13 +229,21 @@
 {:else}
 	{#if featured}
 		<FeaturedListing item={featured} />
-		<h2 class="list-heading">Other events, by date</h2>
 	{/if}
-	<ul class="results cards" aria-label="Listings">
-		{#each listed as item (item.id)}
-			<li><ListingItem {item} results={here} /></li>
+	<section class="by-month" aria-label="Listings">
+		<!-- Shown under the highlight; otherwise the page heading says it, so only screen readers get it. -->
+		<h2 class="list-heading" class:visually-hidden={!featured}>
+			{featured ? 'Other events, by date' : 'Events by date'}
+		</h2>
+		{#each months as month (month.key)}
+			<h3 class="month" id="month-{month.key}">{month.label}</h3>
+			<ul class="results cards" aria-labelledby="month-{month.key}">
+				{#each month.items as item (item.id)}
+					<li><ListingItem {item} results={here} /></li>
+				{/each}
+			</ul>
 		{/each}
-	</ul>
+	</section>
 	<nav class="pager" aria-label="More listings">
 		{#if data.paged}<a href={boardHref(data.filters)}>First page</a>{/if}
 		{#if data.result.nextCursor}
@@ -240,8 +255,22 @@
 <p class="aside">Looking for a dropzone? <a href="/dz">Browse dropzones</a>.</p>
 
 <style>
+	/* The heading and introduction sit close together so the first events show early on a phone. */
+	h1 {
+		margin: 0 0 0.25rem;
+	}
+
+	.intro {
+		max-width: 44rem;
+		margin: 0 0 0.75rem;
+	}
+
+	.account-note {
+		font-size: 0.95em;
+	}
+
 	.board-search {
-		margin: 0.5rem 0 0.25rem;
+		margin: 0 0 0.25rem;
 	}
 
 	.search-row {
@@ -265,6 +294,10 @@
 		margin-top: 0.25rem;
 	}
 
+	.more[open] {
+		margin-bottom: 0.75rem;
+	}
+
 	.filters {
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 		margin: 0.25rem 0 0;
@@ -275,7 +308,7 @@
 	}
 
 	.when,
-	.secondary,
+	details.secondary,
 	.apply {
 		grid-column: 1 / -1;
 	}
@@ -334,14 +367,16 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.4rem 0.6rem;
+		gap: 0.5rem 0.6rem;
 		list-style: none;
 		padding: 0;
 		margin: 0 0 0.5rem;
 	}
 
+	/* Compact pills with a 44px tap target: the target reaches 4px above and below. */
 	.chip {
 		display: inline-flex;
+		position: relative;
 		align-items: center;
 		gap: 0.4rem;
 		min-height: 36px;
@@ -353,19 +388,42 @@
 		text-decoration: none;
 	}
 
+	.chip::after {
+		content: '';
+		position: absolute;
+		inset: -4px 0;
+	}
+
+	.chips li > a:not(.chip) {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+	}
+
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
 	}
 
-	.join-line {
-		margin: -0.25rem 0 0.75rem;
-		color: var(--muted);
-	}
-
 	.list-heading {
 		font-size: 1.15rem;
 		margin: 0 0 0.25rem;
+	}
+
+	/* Month headings: smaller than the list heading, a clear break between months. */
+	.month {
+		margin: 1rem 0 0.4rem;
+		font-family: var(--font-display);
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.list-heading + .month {
+		margin-top: 0.25rem;
+	}
+
+	.month + .results.cards {
+		margin-top: 0;
 	}
 
 	.pager {
@@ -376,5 +434,35 @@
 
 	.aside {
 		color: var(--muted);
+	}
+
+	/* Large screens: the search keeps a readable length, the open filters lie in one band of
+	   columns, and the events run in two columns. Cards fill row by row, so the reading order
+	   (left, right, next row) is still the date order and the page order. */
+	@media (min-width: 60rem) {
+		.search-row {
+			max-width: 44rem;
+		}
+
+		.filters {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			align-items: start;
+		}
+
+		.when {
+			grid-column: span 2;
+		}
+
+		.secondary-fields {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+
+		.results.cards {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.results.cards > li {
+			display: grid;
+		}
 	}
 </style>
