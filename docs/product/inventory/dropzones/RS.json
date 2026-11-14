@@ -1,0 +1,329 @@
+{
+  "country": "RS",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "rs-lisicji-jarak",
+      "name": "Aerodrom Lisičji Jarak",
+      "aliases": [
+        "LYBJ",
+        "Lisičiji Jarak",
+        "Padinska Skela"
+      ],
+      "country": "RS",
+      "locality": "Padinska Skela, Palilula, Belgrade",
+      "latitude": 44.93628,
+      "longitude": 20.44438,
+      "coordinates_source": "https://www.openstreetmap.org/way/671173337 (OSM 'Drop zone' landing area on the airfield; airfield way 67713852 centre 44.9386, 20.44531)",
+      "icao": "LYBJ",
+      "operators": [
+        {
+          "name": "Tandem Skok Beograd / Skydive Serbia",
+          "website": "https://tandemskokbeograd.com/",
+          "facebook": "https://www.facebook.com/skydiveserbia/"
+        },
+        {
+          "name": "Padobranski klub Feniks (Padobranski centar Beograd)",
+          "website": "https://www.padobranskicentarbeograd.rs/"
+        },
+        {
+          "name": "DTO Centar za obuku padobranaca IKAR"
+        },
+        {
+          "name": "DTO Arhistratig (veterans' club of the 63rd Parachute Brigade)",
+          "website": "http://www.arhistratig.rs/"
+        }
+      ],
+      "aircraft": "Piper Seneca II, Cessna F172G, Cessna 182K (Tandem Skok Beograd site)",
+      "season": "all year, mainly weekends, weather permitting (operator site)",
+      "status": "active",
+      "status_evidence": "Operator site lists 2026 season jump dates (14-15 Nov 2026); Serbian CAD register shows two parachute training organisations at the airfield approved 21.04.2026 and 22.05.2026; Ministry of Defence reports the Balkan Friendship Jump 2026 opened at Lisičji Jarak on 18 May 2026.",
+      "sources": [
+        {
+          "url": "https://tandemskokbeograd.com/",
+          "checked_on": "2026-11-14",
+          "what": "Operator site: airfield LYBJ, aircraft, 2026 jump dates"
+        },
+        {
+          "url": "https://www.skydiveserbia.com/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Serbia site: LYBJ, links to Facebook/Instagram (site footer 2022)"
+        },
+        {
+          "url": "https://www.padobranskicentarbeograd.rs/sr/obuka/tandem-skok",
+          "checked_on": "2026-11-14",
+          "what": "Padobranski klub Feniks tandem page at Lisičji Jarak; blog posts dated 2025"
+        },
+        {
+          "url": "https://cad.gov.rs/upload/Vazduhoplovno_osoblje/Deklarisane_organizacije/2026/Evidencija_deklarisanih_organizacija_DTO.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Civil Aviation Directorate register of declared training organisations (parachutist DTOs IKAR and Arhistratig)"
+        },
+        {
+          "url": "https://www.mod.gov.rs/eng/23281/balkanski-skok-prijateljstva-2026-okupio-padobrance-regiona",
+          "checked_on": "2026-11-14",
+          "what": "Ministry of Defence report on Balkan Friendship Jump 2026 at Lisičji Jarak"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/671173337",
+          "checked_on": "2026-11-14",
+          "what": "OSM landing area 'Drop zone' (sport=free_flying, 'Skydivers landing area')"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/671174167",
+          "checked_on": "2026-11-14",
+          "what": "OSM building Padobranski centar Beograd, sport=skydiving"
+        }
+      ],
+      "note": "Several clubs and companies share the airfield; the relation between the Skydive Serbia and Tandem Skok Beograd brands was not confirmed beyond shared phone number and airfield."
+    },
+    {
+      "key": "rs-paracin-davidovac",
+      "name": "Sportski aerodrom Davidovac (Paraćin)",
+      "aliases": [
+        "LYPN",
+        "Aerodrom Paraćin",
+        "SkyDiving Serbia"
+      ],
+      "country": "RS",
+      "locality": "Davidovac, Paraćin",
+      "latitude": 43.86631,
+      "longitude": 21.48689,
+      "coordinates_source": "https://www.openstreetmap.org/way/309522756 (OSM aerodrome way centre)",
+      "icao": "LYPN",
+      "operators": [
+        {
+          "name": "Aero klub \"Naša krila\" Paraćin / SkyDiving Serbia",
+          "website": "https://skydivingserbia.rs/",
+          "facebook": "https://www.facebook.com/padobranstvouparacinu/"
+        }
+      ],
+      "aircraft": "Utva 66, Cessna 206 (operator site)",
+      "season": "all year, weekdays and weekends (operator site)",
+      "status": "active",
+      "status_evidence": "Club site (aeroklubpn.org.rs) lists 2025 and 2026 parachuting news and offers jump booking and tandem jumps; RTV Paraćin 3 Jun 2025 reports the club's parachute team winning the 71st Serbian championship.",
+      "sources": [
+        {
+          "url": "https://skydivingserbia.rs/",
+          "checked_on": "2026-11-14",
+          "what": "Operator site: parachute centre at Paraćin airfield LYPN, aircraft, all-year zone (footer 2024)"
+        },
+        {
+          "url": "http://www.aeroklubpn.org.rs/",
+          "checked_on": "2026-11-14",
+          "what": "Aero klub Naša krila site: parachuting section, booking, 2025/2026 news"
+        },
+        {
+          "url": "https://rtvparacin.rs/2025/06/03/dvostruka-pobeda-aero-kluba-nasa-krila-na-padobranskom-prvenstvu-srbije/",
+          "checked_on": "2026-11-14",
+          "what": "Local news 2025-06-03 on club parachute team"
+        },
+        {
+          "url": "https://www.novosti.rs/sport/ostali-sportovi/1147274/zavrseno-padobransko-prvenstvo-srbije-sampion-ekipa-arhistratig-63-padobranske-brigade",
+          "checked_on": "2026-11-14",
+          "what": "2022 Serbian parachuting championship held at Davidovac airfield"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/309522756",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Paraćin LYPN, operator Aero klub Naša krila"
+        }
+      ]
+    },
+    {
+      "key": "rs-cenej-novi-sad",
+      "name": "Aerodrom Čenej (Novi Sad)",
+      "aliases": [
+        "LYNS",
+        "November-Sierra"
+      ],
+      "country": "RS",
+      "locality": "Čenej, Novi Sad",
+      "latitude": 45.38567,
+      "longitude": 19.83396,
+      "coordinates_source": "https://www.openstreetmap.org/way/1049109403 (OSM aerodrome way centre)",
+      "icao": "LYNS",
+      "operators": [
+        {
+          "name": "Tandem Skok Novi Sad / Skydiving Novi Sad",
+          "facebook": "https://www.facebook.com/skydiving.novisad",
+          "website": "https://www.instagram.com/skydiving_novisad/"
+        },
+        {
+          "name": "Udruženje sportskih padobranaca November-Sierra",
+          "website": "https://www.instagram.com/skydiving_novisad/"
+        },
+        {
+          "name": "Aeroklub Novi Sad (airfield operator)"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Dated 2025 posts by the operator, read as search-result snippets because the pages show a login wall: Instagram skydiving_novisad 10 Sep 2025 'tandem jumps every weekend at Čenej airfield', 26 Jun 2025 and 7 Jun 2025; Facebook Skydiving Novi Sad 27 Jun 2025 'aerodrom Čenej'. The Instagram profile also lists posts dated Oct 2026.",
+      "sources": [
+        {
+          "url": "https://novisad.travel/en/padobranstvo-i-paraglajding/",
+          "checked_on": "2026-11-14",
+          "what": "City tourism page naming November-Sierra at Čenej airport"
+        },
+        {
+          "url": "https://serbia.com/?p=33499",
+          "checked_on": "2026-11-14",
+          "what": "Tourism page listing sport airports in Novi Sad, Kikinda, Subotica and Ečka for tandem jumps (undated)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1049109403",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Čenej LYNS, operator Aeroklub Novi Sad"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DOa4QJeDTVU",
+          "checked_on": "2026-11-14",
+          "what": "Instagram reel by skydiving_novisad dated 10 Sep 2025 (date and caption from search snippet; page behind login wall)"
+        },
+        {
+          "url": "https://www.facebook.com/skydiving.novisad/posts/-padobranska-obuka-ili-tandem-skokprijavi-se-adrenalin-ide-prvi-ro%C5%A1tilj-odmah-po/744497607923564",
+          "checked_on": "2026-11-14",
+          "what": "Facebook post 27 Jun 2025 naming aerodrom Čenej (search snippet)"
+        }
+      ]
+    },
+    {
+      "key": "rs-ecka-zrenjanin",
+      "name": "Aerodrom Ečka (Zrenjanin)",
+      "aliases": [
+        "LYZR"
+      ],
+      "country": "RS",
+      "locality": "Ečka, Zrenjanin",
+      "latitude": 45.33994,
+      "longitude": 20.45335,
+      "coordinates_source": "https://www.openstreetmap.org/way/1049425322 (OSM aerodrome way centre)",
+      "icao": "LYZR",
+      "operators": [
+        {
+          "name": "Aeroklub \"Zrenjanin\" / Aerodrom Ečka",
+          "website": "https://www.ecka.aero",
+          "facebook": "https://www.facebook.com/AeroKlubZrenjanin"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Airfield site ecka.aero (footer 2026) offers tandem jumps but gives no dates; local news says the tandem offer started 23 Aug 2021. No dated 2025+ jump activity found.",
+      "sources": [
+        {
+          "url": "https://serbia.com/?p=33499",
+          "checked_on": "2026-11-14",
+          "what": "Undated tourism page naming Ečka airport for tandem jumps"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1049425322",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Ečka LYZR"
+        },
+        {
+          "url": "https://www.ecka.aero",
+          "checked_on": "2026-11-14",
+          "what": "Airfield/club site: tandem jump offer, club DTO SRB-DTO/003, fleet Cessna 172M and PA-38 (no jump aircraft named)"
+        },
+        {
+          "url": "https://volimzrenjanin.com/od-ponedeljka-probajte-tandem-skokove-na-aerodromu-ecka",
+          "checked_on": "2026-11-14",
+          "what": "Local news: tandem jumps from 3,000 m at Ečka from 23 Aug 2021"
+        }
+      ],
+      "note": "Operator identified in the check; still no dated jump activity from 2025 or later."
+    },
+    {
+      "key": "rs-kikinda",
+      "name": "Aerodrom Kikinda",
+      "aliases": [
+        "LYKI"
+      ],
+      "country": "RS",
+      "locality": "Kikinda",
+      "latitude": 45.76809,
+      "longitude": 20.41777,
+      "coordinates_source": "https://www.openstreetmap.org/way/1106537428 (OSM aerodrome way centre)",
+      "icao": "LYKI",
+      "operators": [
+        {
+          "name": "Aeroklub \"Mileta Protić\" (airfield operator per OSM)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Named as a tandem jump location only on an undated tourism page and an old voucher listing; no 2025+ evidence found.",
+      "sources": [
+        {
+          "url": "https://serbia.com/?p=33499",
+          "checked_on": "2026-11-14",
+          "what": "Undated tourism page naming the Kikinda sport airport for tandem jumps"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1106537428",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Kikinda LYKI"
+        }
+      ],
+      "note": "Lead only."
+    },
+    {
+      "key": "rs-subotica",
+      "name": "Aerodrom Subotica (Bikovo)",
+      "aliases": [
+        "LYSU",
+        "Skydive Subotica"
+      ],
+      "country": "RS",
+      "locality": "Subotica",
+      "latitude": 46.02281,
+      "longitude": 19.70502,
+      "coordinates_source": "https://www.openstreetmap.org/way/251779751 (OSM aerodrome way centre)",
+      "icao": "LYSU",
+      "operators": [
+        {
+          "name": "Skydive 024",
+          "website": "https://www.skydive024.com",
+          "facebook": "https://www.facebook.com/Skydive024"
+        },
+        {
+          "name": "Aeroklub \"Ivan Sarić\"",
+          "website": "http://aeroklubivansaric.rs/padobranstvo"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Instagram @skydive_subotica reel 'Tandem skok Subotica' dated 27 May 2026 (search snippet; page behind login wall); Skydive 024 site (footer 2026, address Čantavirski put BB, the airfield road) says the team is at the airfield every weekend and runs tandem jumps and a parachuting school.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Subotica_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield article listing skydiving activity"
+        },
+        {
+          "url": "https://docs.google.com/forms/d/e/1FAIpQLSemvAtyvEnDvUYHpLCCUCnwm_Bedd2cUg0NlHSvd1dlP0IIpQ/viewform",
+          "checked_on": "2026-11-14",
+          "what": "Registration form for 'Kup Subotice' international accuracy skydiving competition (undated; viewed only, nothing submitted)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/251779751",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Subotica LYSU, operator Aeroklub Ivan Sarić"
+        },
+        {
+          "url": "https://www.skydive024.com",
+          "checked_on": "2026-11-14",
+          "what": "Operator site: tandem jumps and parachuting school, Čantavirski put BB Subotica, every weekend at the airfield (footer 2026)"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DY2Oj10qIMP",
+          "checked_on": "2026-11-14",
+          "what": "Instagram reel 'Tandem skok Subotica' by @skydive_subotica, 27 May 2026 (search snippet)"
+        },
+        {
+          "url": "http://aeroklubivansaric.rs/padobranstvo",
+          "checked_on": "2026-11-14",
+          "what": "Aeroklub Ivan Sarić parachuting training page (undated)"
+        }
+      ]
+    }
+  ]
+}

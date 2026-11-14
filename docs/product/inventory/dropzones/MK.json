@@ -1,0 +1,63 @@
+{
+  "country": "MK",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "mk-stenkovec-skopje",
+      "name": "Sportski aerodrom Stenkovec",
+      "aliases": [
+        "LWSN",
+        "Aeroklub Skopje"
+      ],
+      "country": "MK",
+      "locality": "Stenkovec, Skopje",
+      "latitude": 42.05925,
+      "longitude": 21.38822,
+      "coordinates_source": "https://www.openstreetmap.org/way/444244457 (OSM aerodrome way centre)",
+      "icao": "LWSN",
+      "operators": [
+        {
+          "name": "Aeroklub Skopje",
+          "website": "https://aeroklubskopje.mk/en/training-center/"
+        }
+      ],
+      "season": "beginner courses spring and autumn; tandem on request (club site)",
+      "status": "uncertain",
+      "status_evidence": "Club pages (aeroklubskopje.mk, aeroclub.mk, lwsn.mk) offer tandem jumps and say beginner courses run each spring and autumn, but none is dated; aeroclub.mk footer reads 2023. The newest dated jumping evidence found is a March 2023 training report (fakulteti.mk). Airfield documents revised in 2025 are not evidence of jumps.",
+      "sources": [
+        {
+          "url": "https://aeroklubskopje.mk/en/training-center/",
+          "checked_on": "2026-11-14",
+          "what": "Club page: tandem jumps, parachuting courses, instructor"
+        },
+        {
+          "url": "https://aeroclub.mk/services-2/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield page: airfield used for training parachutists"
+        },
+        {
+          "url": "https://umno.mk/100-godini-od-osnovanjeto-na-aeroklubot-skopje/",
+          "checked_on": "2026-11-14",
+          "what": "2023 centenary event at Stenkovec including parachute jumps"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/444244457",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Stenkovec LWSN, operator Aeroklub Skopje"
+        },
+        {
+          "url": "https://www.fakulteti.mk/news/17032023/aeroklubot-skopje-ja-pochna-obukata-za-novi-padobranci-po-prviot-skok-pochetnicite-plovat-po-oblaci-iako-vekje-sletale",
+          "checked_on": "2026-11-14",
+          "what": "News 17 Mar 2023: Aeroklub Skopje starts training new parachutists"
+        },
+        {
+          "url": "https://lwsn.mk/elementor-485",
+          "checked_on": "2026-11-14",
+          "what": "Airfield site: skydiving courses and tandem jumps (undated)"
+        }
+      ],
+      "note": "Downgraded from active in the check: the club is clearly a parachuting club, but no 2025+ dated jump activity was found."
+    }
+  ]
+}

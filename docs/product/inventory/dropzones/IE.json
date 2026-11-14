@@ -1,0 +1,176 @@
+{
+  "country": "IE",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "ie-birr",
+      "name": "Birr Aerodrome",
+      "aliases": [],
+      "country": "IE",
+      "locality": "Crinkill, Birr, County Offaly",
+      "latitude": 53.07083,
+      "longitude": -7.89861,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Birr_Aerodrome",
+      "icao": "EIBR",
+      "operators": [
+        {
+          "name": "SkydiveThru Ireland",
+          "website": "https://skydivethruireland.ie/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Public 2026 instructor recruitment and a directory identify a Birr operation, but actual commencement of regular jumps was not verified.",
+      "sources": [
+        {
+          "url": "https://ie.linkedin.com/jobs/view/skydiving-instructor-at-skydivethru-4398149767",
+          "checked_on": "2026-11-14",
+          "what": "Public employer recruitment listing for Birr instructors."
+        },
+        {
+          "url": "https://dropzonefinder.com/dropzones/ireland",
+          "checked_on": "2026-11-14",
+          "what": "Directory names SkydiveThru at Birr Airfield."
+        },
+        {
+          "url": "https://skydivethruireland.ie/",
+          "checked_on": "2026-11-14",
+          "what": "Operator homepage opened; only title readable."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Birr_Aerodrome",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Launch lead; recruitment is not proof of operational status. Airport article coordinates match Birr, although its GeoHack label incorrectly says Bantry."
+    },
+    {
+      "key": "ie-carrickfinn",
+      "name": "Donegal Airport",
+      "aliases": [],
+      "country": "IE",
+      "locality": "Carrickfinn, County Donegal",
+      "latitude": 55.044167,
+      "longitude": -8.341111,
+      "coordinates_source": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+      "icao": "EIDL",
+      "operators": [
+        {
+          "name": "Irish Parachute Club",
+          "website": "https://skydive.ie/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "AirNav Ireland AIP ENR 5.5 valid 11 June 2026 lists IPC parachuting at Donegal during summer months only.",
+      "sources": [
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 AIP lists operator, summer season and airport-centred coordinates."
+        }
+      ],
+      "note": "AIP designation supports seasonal use; no dated operator 2026 Donegal event calendar was found. Confirm actual operating dates before use.",
+      "season": "Summer months only, per 2026 AIP."
+    },
+    {
+      "key": "ie-clonbullogue",
+      "name": "Clonbullogue Airfield",
+      "aliases": [
+        "Skydive IPC"
+      ],
+      "country": "IE",
+      "locality": "Clonbullogue, County Offaly",
+      "latitude": 53.249722,
+      "longitude": -7.123333,
+      "coordinates_source": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+      "icao": "EICL",
+      "operators": [
+        {
+          "name": "Irish Parachute Club",
+          "website": "https://skydive.ie/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Official club calendar schedules skydiving events from March through October 2026.",
+      "sources": [
+        {
+          "url": "https://skydive.ie/our-blog/events-calendar/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 club events."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 AIP parachuting sites and airfield-centred coordinates."
+        }
+      ]
+    },
+    {
+      "key": "ie-kilkenny",
+      "name": "Kilkenny Airport",
+      "aliases": [
+        "Tandem Skydive Club Kilkenny"
+      ],
+      "country": "IE",
+      "locality": "Holdensrath, County Kilkenny",
+      "latitude": 52.650833,
+      "longitude": -7.296111,
+      "coordinates_source": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+      "icao": "EIKK",
+      "operators": [
+        {
+          "name": "Irish Skydiving Club CLG",
+          "website": "https://www.skydiveclub.ie/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "January 2026 local reporting describes upheld grounding/licence enforcement; June 2026 AIP still lists parachuting here. Resumption of regular jumps was not verified.",
+      "sources": [
+        {
+          "url": "https://www.skydiveclub.ie/contact",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Kilkenny Aerodrome."
+        },
+        {
+          "url": "https://www.kilkennypeople.ie/news/high-court-weighs-in-on-skydiving-club-dispute-with-iaa-at-airfield-in-kilkenny-6660188",
+          "checked_on": "2026-11-14",
+          "what": "7 January 2026 report of court decision and disrupted bookings."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 AIP retains this designated parachuting site."
+        }
+      ],
+      "note": "Do not treat an AIP designation or a live contact page as evidence that suspended flights restarted."
+    },
+    {
+      "key": "ie-sligo",
+      "name": "Sligo Airport",
+      "aliases": [],
+      "country": "IE",
+      "locality": "Strandhill, County Sligo",
+      "latitude": 54.28028,
+      "longitude": -8.59917,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Sligo_Airport",
+      "icao": "EISG",
+      "operators": [],
+      "status": "uncertain",
+      "status_evidence": "Airport article mentions skydiving and charity jumps without a dated activity source; no 2025+ regular dropzone operator evidence found.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Sligo_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airport coordinates and undated parachuting lead."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check: not among the AIP parachuting locations."
+        }
+      ],
+      "note": "Operator unknown; regular operation versus occasional display or charity event remains unresolved."
+    }
+  ]
+}

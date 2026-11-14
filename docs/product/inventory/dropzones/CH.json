@@ -1,0 +1,890 @@
+{
+  "country": "CH",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "ch-biel-kappelen",
+      "name": "Biel-Kappelen Airfield",
+      "aliases": [
+        "Swissboogie",
+        "Paraclub Seeland",
+        "Skydive Kappelen",
+        "LSZP"
+      ],
+      "country": "CH",
+      "locality": "Kappelen, Bern",
+      "latitude": 47.088242,
+      "longitude": 7.289055,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZP)",
+      "icao": "LSZP",
+      "operators": [
+        {
+          "name": "Swissboogie",
+          "website": "https://swissboogie.ch/"
+        },
+        {
+          "name": "Paraclub Seeland",
+          "facebook": "http://www.facebook.com/ParaclubSeeland"
+        },
+        {
+          "name": "Skydive Kappelen (club)"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); Swissboogie site © 2026.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://swissboogie.ch/de",
+          "checked_on": "2026-11-14",
+          "what": "Swissboogie site, airfield address 3273 Kappelen"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZP, used for coordinates"
+        }
+      ],
+      "aircraft": "Pilatus PC-6 (Swissboogie)",
+      "note": "Paraclub Seeland and Skydive Kappelen are on the Swiss Skydive club list; their link to Kappelen is inferred from names and not confirmed on their own pages."
+    },
+    {
+      "key": "ch-speck-fehraltorf",
+      "name": "Speck-Fehraltorf Airfield",
+      "aliases": [
+        "Skydive Zürich",
+        "LSZK"
+      ],
+      "country": "CH",
+      "locality": "Fehraltorf, Zürich",
+      "latitude": 47.3764,
+      "longitude": 8.7575,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZK)",
+      "icao": "LSZK",
+      "operators": [
+        {
+          "name": "Skydive Zürich",
+          "website": "https://www.skydive.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2025, title 'Skydive Zürich | Fehraltorf'.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://www.skydive.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZK, used for coordinates"
+        }
+      ],
+      "note": "A swissactivities.com snippet (not opened) says jumps every Friday April–October."
+    },
+    {
+      "key": "ch-reichenbach",
+      "name": "Reichenbach Airfield",
+      "aliases": [
+        "Skydive Switzerland",
+        "Skydive by OUTDOOR",
+        "LSGR"
+      ],
+      "country": "CH",
+      "locality": "Reichenbach im Kandertal, Bern (near Interlaken)",
+      "latitude": 46.613602,
+      "longitude": 7.67778,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGR)",
+      "icao": "LSGR",
+      "operators": [
+        {
+          "name": "Skydive Switzerland",
+          "website": "https://skydiveswitzerland.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site (checked 2026-11-14) states daily, year-round operation and shows a countdown of days left in 2026.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://skydiveswitzerland.com/dropzone",
+          "checked_on": "2026-11-14",
+          "what": "operator dropzone page: Airport Reichenbach, 3713 Reichenbach im Kandertal; aircraft"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGR, used for coordinates"
+        }
+      ],
+      "aircraft": "Cessna Grand Caravan EX (earlier Pilatus PC-6)",
+      "season": "all year"
+    },
+    {
+      "key": "ch-lauterbrunnen",
+      "name": "Lauterbrunnen Heliport",
+      "aliases": [
+        "LSXL"
+      ],
+      "country": "CH",
+      "locality": "Lauterbrunnen, Bern",
+      "latitude": 46.585497,
+      "longitude": 7.913509,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSXL)",
+      "icao": "LSXL",
+      "operators": [
+        {
+          "name": "Skydive Switzerland",
+          "website": "https://skydiveswitzerland.com/"
+        },
+        {
+          "name": "Skydive Interlaken",
+          "website": "https://www.skydiveinterlaken.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Switzerland lists 'Heliport, 3822 Lauterbrunnen' as its helicopter-jump base; Skydive Interlaken sells 2026 helicopter jumps in Lauterbrunnen (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://skydiveswitzerland.com/dropzone",
+          "checked_on": "2026-11-14",
+          "what": "operator page naming the Lauterbrunnen heliport"
+        },
+        {
+          "url": "https://www.skydiveinterlaken.ch/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Interlaken site: helicopter jumps in Interlaken, Lauterbrunnen and Grindelwald"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSXL, used for coordinates"
+        },
+        {
+          "url": "https://www.skydiveinterlaken.ch/about-us",
+          "checked_on": "2026-11-14",
+          "what": "operator page: 'Our Lauterbrunnen dropzone is located at the Air Glaciers Lauterbrunnen Heliport'"
+        }
+      ],
+      "aircraft": "helicopter",
+      "note": "Helicopter tandem jumps only. The heliport is the departure point; the landing field may differ."
+    },
+    {
+      "key": "ch-interlaken",
+      "name": "Interlaken helicopter dropzone",
+      "aliases": [
+        "Skydive Interlaken"
+      ],
+      "country": "CH",
+      "locality": "Interlaken / Wilderswil, Bern",
+      "latitude": 46.669008,
+      "longitude": 7.87367,
+      "coordinates_source": "https://www.openstreetmap.org/way/549967848 (address Mittelweg 11, 3812 Wilderswil via Nominatim; operator says the office and Interlaken dropzone are together, 7 minutes' walk from Wilderswil station)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Interlaken GmbH",
+          "website": "https://www.skydiveinterlaken.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site (checked 2026-11-14) sells helicopter jumps over Interlaken; blog posts dated March and May 2026.",
+      "sources": [
+        {
+          "url": "https://www.skydiveinterlaken.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site, office Mittelweg 11, 3812 Wilderswil"
+        },
+        {
+          "url": "https://www.skydiveinterlaken.ch/about-us",
+          "checked_on": "2026-11-14",
+          "what": "operator page: Interlaken office and dropzone at Mittelweg 11, Wilderswil; Lauterbrunnen dropzone at the Air Glaciers heliport; Grindelwald dropzone"
+        }
+      ],
+      "aircraft": "helicopter",
+      "season": "all year (as stated)",
+      "note": "Coordinates are the office address, which the operator gives as next to its Interlaken landing area; not a surveyed landing field. A Grindelwald dropzone ('bottom of the Grindelwald valley') is also named, with no position; no record."
+    },
+    {
+      "key": "ch-beromuenster",
+      "name": "Luzern-Beromünster Airfield",
+      "aliases": [
+        "Skydive Luzern",
+        "LSZO"
+      ],
+      "country": "CH",
+      "locality": "Neudorf/Beromünster, Luzern",
+      "latitude": 47.188993,
+      "longitude": 8.204556,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZO)",
+      "icao": "LSZO",
+      "operators": [
+        {
+          "name": "Skydive Luzern",
+          "website": "https://www.skydive-luzern.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site mentions 2025 and a March 2027 event.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://www.skydive-luzern.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: Flugplatz, 6025 Neudorf"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZO, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "ch-grenchen",
+      "name": "Grenchen Airport",
+      "aliases": [
+        "Skydive Grenchen",
+        "DROPZONE 47",
+        "LSZG"
+      ],
+      "country": "CH",
+      "locality": "Grenchen, Solothurn",
+      "latitude": 47.181599,
+      "longitude": 7.41719,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZG)",
+      "icao": "LSZG",
+      "operators": [
+        {
+          "name": "Skydive Grenchen / DROPZONE 47",
+          "website": "https://skydivegrenchen.ch"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site posts a jump weather decision ('Meteoentscheid') dated 14.11.2026.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://skydivegrenchen.ch",
+          "checked_on": "2026-11-14",
+          "what": "operator site: DROPZONE 47 formed by merger of Skydive Grenchen, PSC Triengen and FG Freiamt, based at Grenchen airport"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZG, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "ch-triengen",
+      "name": "Triengen Airfield",
+      "aliases": [
+        "Para-Sport-Club Triengen",
+        "LSPN"
+      ],
+      "country": "CH",
+      "locality": "Triengen, Luzern",
+      "latitude": 47.2267,
+      "longitude": 8.07806,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSPN)",
+      "icao": "LSPN",
+      "operators": [
+        {
+          "name": "Para-Sport-Club Triengen (now part of DROPZONE 47)",
+          "website": "https://psctriengen.ch/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "psctriengen.ch now serves the Skydive Grenchen / DROPZONE 47 site, which says the club merged and the clubs are building their base at Grenchen (checked 2026-11-14). Swiss Skydive still lists PSC Triengen.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://psctriengen.ch/",
+          "checked_on": "2026-11-14",
+          "what": "redirects to the DROPZONE 47 (Grenchen) site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSPN, used for coordinates"
+        }
+      ],
+      "note": "Probably no longer a regular dropzone after the merger; not confirmed closed."
+    },
+    {
+      "key": "ch-buttwil",
+      "name": "Buttwil Airfield",
+      "aliases": [
+        "Fallschirmgruppe Freiamt",
+        "LSZU"
+      ],
+      "country": "CH",
+      "locality": "Buttwil, Aargau",
+      "latitude": 47.264702,
+      "longitude": 8.3025,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZU)",
+      "icao": "LSZU",
+      "operators": [
+        {
+          "name": "Fallschirmgruppe Freiamt (now part of DROPZONE 47)",
+          "website": "http://www.fgf.ch/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "fgf.ch now serves the DROPZONE 47 (Grenchen) site, which says FG Freiamt merged into it (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "http://www.fgf.ch/",
+          "checked_on": "2026-11-14",
+          "what": "redirects to the DROPZONE 47 (Grenchen) site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZU, used for coordinates"
+        },
+        {
+          "url": "https://www.skydiveeducationsystem.com/de/ses/dropzones/fallschirm-gruppe-freiamt-30.html",
+          "checked_on": "2026-11-14",
+          "what": "SES dropzone page: FG Freiamt dropzone is at Flugplatz Buttwil (search result content)"
+        },
+        {
+          "url": "https://www.localcities.ch/de/vereine/buttwil/5601/86108",
+          "checked_on": "2026-11-14",
+          "what": "local directory: FG Freiamt is a parachuting club at Flugplatz Buttwil"
+        }
+      ],
+      "note": "FG Freiamt's link to Buttwil is confirmed by SES and localcities.ch (undated). After the merger into DROPZONE 47 the airfield is probably no longer a regular dropzone; not confirmed closed."
+    },
+    {
+      "key": "ch-yverdon",
+      "name": "Yverdon-les-Bains Airfield",
+      "aliases": [
+        "Romandie Parachutisme",
+        "LSGY"
+      ],
+      "country": "CH",
+      "locality": "Yverdon-les-Bains, Vaud",
+      "latitude": 46.761871,
+      "longitude": 6.613178,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGY)",
+      "icao": "LSGY",
+      "operators": [
+        {
+          "name": "Romandie Parachutisme",
+          "website": "https://www.romandieparachutisme.ch/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator 'Nos terrains' page © 2026 names Yverdon as its main site for the spring–summer season (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://www.romandieparachutisme.ch/nos-terrains",
+          "checked_on": "2026-11-14",
+          "what": "operator page listing its sites: Yverdon-les-Bains (Ch. de l'Aérodrome 4), Sion, Raron"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGY, used for coordinates"
+        }
+      ],
+      "aircraft": "aeroplane and helicopter tandems (as stated)",
+      "season": "March–September (main site, as stated)"
+    },
+    {
+      "key": "ch-sion",
+      "name": "Sion Airport",
+      "aliases": [
+        "LSGS"
+      ],
+      "country": "CH",
+      "locality": "Sion, Valais",
+      "latitude": 46.219166,
+      "longitude": 7.326944,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGS)",
+      "icao": "LSGS",
+      "operators": [
+        {
+          "name": "Romandie Parachutisme",
+          "website": "https://www.romandieparachutisme.ch/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator 'Nos terrains' page © 2026 lists Sion as its winter site, October to February, weather permitting (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://www.romandieparachutisme.ch/nos-terrains",
+          "checked_on": "2026-11-14",
+          "what": "operator page listing Sion as a site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGS, used for coordinates"
+        }
+      ],
+      "season": "October–February (as stated)"
+    },
+    {
+      "key": "ch-raron",
+      "name": "Raron Airfield",
+      "aliases": [
+        "Rarogne",
+        "LSTA"
+      ],
+      "country": "CH",
+      "locality": "Raron, Valais",
+      "latitude": 46.30449,
+      "longitude": 7.819085,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSTA)",
+      "icao": "LSTA",
+      "operators": [
+        {
+          "name": "Romandie Parachutisme",
+          "website": "https://www.romandieparachutisme.ch/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator 'Nos terrains' page © 2026 says Raron is used depending on weather and activity planning, mainly for experienced jumpers (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://www.romandieparachutisme.ch/nos-terrains",
+          "checked_on": "2026-11-14",
+          "what": "operator page listing Rarogne/Raron as a site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSTA, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "ch-colombier",
+      "name": "Neuchâtel Airfield (Colombier)",
+      "aliases": [
+        "Colombier (NE)",
+        "LSGN"
+      ],
+      "country": "CH",
+      "locality": "Colombier, Milvignes, Neuchâtel",
+      "latitude": 46.957371,
+      "longitude": 6.864574,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGN)",
+      "icao": "LSGN",
+      "operators": [
+        {
+          "name": "Romandie Parachutisme",
+          "website": "https://www.romandieparachutisme.ch/"
+        },
+        {
+          "name": "Ecole de Parachutisme de Château-d'Oex (EPCO)",
+          "website": "http://www.epco.aero/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "EPCO 2027 jump agenda (posted 27 October 2026) lists Colombier on 23 May, 19 June, 17 July and 21 August 2027; Romandie Parachutisme lists Colombier (NE) as a site used on planned weekends (page © 2026).",
+      "sources": [
+        {
+          "url": "https://www.romandieparachutisme.ch/nos-terrains",
+          "checked_on": "2026-11-14",
+          "what": "operator page listing Colombier (NE), used on specific planned weekends"
+        },
+        {
+          "url": "https://epco.aero/navig/page.php?langue=en&page=calendar",
+          "checked_on": "2026-11-14",
+          "what": "EPCO jump agenda 2027 with Colombier dates"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGN, used for coordinates"
+        }
+      ],
+      "season": "selected weekends",
+      "note": "Neither operator names the airfield; Neuchâtel airfield (LSGN) lies at Colombier and is the only airfield there."
+    },
+    {
+      "key": "ch-locarno",
+      "name": "Locarno Airport",
+      "aliases": [
+        "Para Centro Locarno",
+        "Squadra Paracadutisti Ticinese",
+        "LSZL"
+      ],
+      "country": "CH",
+      "locality": "Locarno/Magadino, Ticino",
+      "latitude": 46.162535,
+      "longitude": 8.878908,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZL)",
+      "icao": "LSZL",
+      "operators": [
+        {
+          "name": "Para Centro Locarno",
+          "website": "https://www.paracentro.ch/"
+        },
+        {
+          "name": "Squadra Paracadutisti Ticinese (club)"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2026.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://www.paracentro.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZL, used for coordinates"
+        }
+      ],
+      "note": "Airfield is shared with the Swiss military."
+    },
+    {
+      "key": "ch-bex",
+      "name": "Bex Airfield",
+      "aliases": [
+        "Flying-Devil",
+        "GPS Bex",
+        "LSGB"
+      ],
+      "country": "CH",
+      "locality": "Bex, Vaud",
+      "latitude": 46.259159,
+      "longitude": 6.984414,
+      "coordinates_source": "https://www.openstreetmap.org/way/244004788 (hangar tagged sport=parachuting, name Flying Devils)",
+      "icao": "LSGB",
+      "operators": [
+        {
+          "name": "Flying-Devil",
+          "website": "https://flying-devil.ch/"
+        },
+        {
+          "name": "GPS Bex (club)",
+          "website": "http://www.gps-bex.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Flying-Devil site names Bex and Ecuvillens as its two centres; GPS Bex site © 2026 (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "http://www.flying-devil.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: two centres, Bex and Ecuvillens, two Pilatus Porters"
+        },
+        {
+          "url": "http://www.gps-bex.ch/",
+          "checked_on": "2026-11-14",
+          "what": "club site © 2026"
+        }
+      ],
+      "aircraft": "2 Pilatus PC-6 Porter (Flying-Devil)",
+      "season": "all year (as stated)",
+      "note": "Coordinates are the Flying Devils hangar on the airfield (OurAirports gives 46.2583, 6.9864 for LSGB)."
+    },
+    {
+      "key": "ch-ecuvillens",
+      "name": "Ecuvillens Airfield",
+      "aliases": [
+        "Para-Club Fribourg",
+        "LSGE"
+      ],
+      "country": "CH",
+      "locality": "Ecuvillens, Fribourg",
+      "latitude": 46.755279,
+      "longitude": 7.075746,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGE)",
+      "icao": "LSGE",
+      "operators": [
+        {
+          "name": "Flying-Devil",
+          "website": "https://flying-devil.ch/"
+        },
+        {
+          "name": "Para-Club Fribourg",
+          "facebook": "https://www.facebook.com/ParaClubFribourg"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Flying-Devil events calendar has Ecuvillens jump days in 2026 (search result page flying-devil.ch/event/ecuvillens-52, 17 July); Flying-Devil site names it one of its two centres.",
+      "sources": [
+        {
+          "url": "http://www.flying-devil.ch/",
+          "checked_on": "2026-11-14",
+          "what": "operator site naming Ecuvillens as a centre"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGE, used for coordinates"
+        }
+      ],
+      "note": "Para-Club Fribourg address Route de l'Aérodrome 20, 1730 Ecuvillens (Facebook search snippet). pcf.ch no longer serves the club."
+    },
+    {
+      "key": "ch-sitterdorf",
+      "name": "Sitterdorf Airfield",
+      "aliases": [
+        "Skydive Ostschweiz",
+        "Fallschirmgruppe Sittertal",
+        "LSZV"
+      ],
+      "country": "CH",
+      "locality": "Sitterdorf, Thurgau",
+      "latitude": 47.5089,
+      "longitude": 9.26278,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZV)",
+      "icao": "LSZV",
+      "operators": [
+        {
+          "name": "Skydive Ostschweiz / Fallschirmgruppe Sittertal",
+          "website": "https://www.skydive-ostschweiz.ch/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Swiss Skydive certified-school list (checked 2026-11-14); operator site © 2025 describes its dropzone at Flugplatz Sitterdorf.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "https://www.skydive-ostschweiz.ch/dropzone",
+          "checked_on": "2026-11-14",
+          "what": "operator dropzone page: FG Sittertal based in Sitterdorf since 1976"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZV, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "ch-kaegiswil",
+      "name": "Kägiswil Airfield",
+      "aliases": [
+        "Fallschirmgruppe Titlis",
+        "LSPG"
+      ],
+      "country": "CH",
+      "locality": "Kägiswil, Sarnen, Obwalden",
+      "latitude": 46.908298,
+      "longitude": 8.25417,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSPG)",
+      "icao": "LSPG",
+      "operators": [
+        {
+          "name": "Fallschirmgruppe Titlis (club)",
+          "website": "https://www.fg-titlis.ch/"
+        },
+        {
+          "name": "Skydive Ostschweiz (visiting jump weekends)",
+          "website": "https://www.skydive-ostschweiz.ch/kaegiswil"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Ostschweiz page describes a Kägiswil jump weekend on 12–13 April 2025 hosted with FG Titlis; FG Titlis site lists 2025 and 2026 entries.",
+      "sources": [
+        {
+          "url": "https://www.fg-titlis.ch/der-club.html",
+          "checked_on": "2026-11-14",
+          "what": "club history: jumps and landings at Kägiswil airfield"
+        },
+        {
+          "url": "https://www.skydive-ostschweiz.ch/kaegiswil",
+          "checked_on": "2026-11-14",
+          "what": "jump weekend information for Kägiswil"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSPG, used for coordinates"
+        }
+      ],
+      "note": "Small club dropzone; jumping appears to be occasional rather than weekly."
+    },
+    {
+      "key": "ch-epagny-gruyere",
+      "name": "La Gruyère Airfield",
+      "aliases": [
+        "Para-Club de la Gruyère",
+        "EPCO",
+        "Ecole de Parachutisme de Château-d'Oex",
+        "LSGT"
+      ],
+      "country": "CH",
+      "locality": "Epagny, Fribourg",
+      "latitude": 46.5942,
+      "longitude": 7.09444,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSGT)",
+      "icao": "LSGT",
+      "operators": [
+        {
+          "name": "Para-Club de la Gruyère",
+          "website": "http://www.aerodrome-gruyere.ch/parachutisme/aero-gruyere.htm"
+        },
+        {
+          "name": "Ecole de Parachutisme de Château-d'Oex (EPCO)",
+          "website": "http://www.epco.aero/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "EPCO posted its 2027 jump agenda on 27 October 2026; it lists 15 jump days at Gruyères from 3 April to 23 October 2027. Swiss Skydive lists both EPCO and Para-Club de la Gruyère.",
+      "sources": [
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Swiss Skydive list of certified schools and clubs"
+        },
+        {
+          "url": "http://www.aerodrome-gruyere.ch/parachutisme/aero-gruyere.htm",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome site with Para-Club de la Gruyère page; Route de l'Aérodrome 41, 1663 Epagny"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSGT, used for coordinates"
+        },
+        {
+          "url": "https://epco.aero/navig/page.php?langue=en&page=calendar",
+          "checked_on": "2026-11-14",
+          "what": "EPCO jump agenda 2027: Gruyères, Colombier, Bex, Piscina (IT) dates"
+        },
+        {
+          "url": "https://epco.aero/navig/page.php?langue=en&page=news",
+          "checked_on": "2026-11-14",
+          "what": "EPCO news: 'The schedule 2027 is online' 27/10/26; 2025 schedule posted 28/11/24"
+        }
+      ],
+      "season": "April–October (EPCO tandems, as stated)",
+      "note": "EPCO's office is at Château-d'Oex, but its jump days are at Gruyères (La Gruyère airfield) and other sites; the former ch-chateau-d-oex record was merged here."
+    },
+    {
+      "key": "ch-samedan",
+      "name": "Engadin Airport",
+      "aliases": [
+        "EngadinSky",
+        "LSZS"
+      ],
+      "country": "CH",
+      "locality": "Samedan, Graubünden",
+      "latitude": 46.5341,
+      "longitude": 9.88411,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LSZS)",
+      "icao": "LSZS",
+      "operators": [
+        {
+          "name": "Skydive Luzern (EngadinSky event)",
+          "website": "https://www.engadinsky.ch/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Luzern site announces EngadinSky jumps from 5200 m over Samedan, 6–14 March 2027 (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://www.engadinsky.ch/",
+          "checked_on": "2026-11-14",
+          "what": "EngadinSky event site, 7503 Samedan"
+        },
+        {
+          "url": "https://www.skydive-luzern.ch/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Luzern site announcing EngadinSky 2027"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LSZS, used for coordinates"
+        }
+      ],
+      "season": "one event week a year (6–14 March 2027 announced)",
+      "note": "Event dropzone, not a weekly operation."
+    },
+    {
+      "key": "ch-le-chable-verbier",
+      "name": "Le Châble (Verbier) helicopter dropzone",
+      "aliases": [
+        "Alp Skydive",
+        "Skydive Verbier"
+      ],
+      "country": "CH",
+      "locality": "Le Châble, Val de Bagnes, Valais",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Alp Skydive",
+          "website": "https://www.alpskydive.com"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator site live (checked 2026-11-14) selling helicopter tandems at Verbier, address 1934 Le Châble; no dated 2025+ post opened. Not on the Swiss Skydive school list.",
+      "sources": [
+        {
+          "url": "https://www.alpskydive.com",
+          "checked_on": "2026-11-14",
+          "what": "operator site"
+        }
+      ],
+      "aircraft": "helicopter",
+      "note": "Coordinates null: departure and landing sites not stated."
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "country": "ME",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "me-cemovsko-polje-podgorica",
+      "name": "Aerodrom Špiro Mugoša (Ćemovsko polje)",
+      "aliases": [
+        "LYPO",
+        "Ćemovsko polje"
+      ],
+      "country": "ME",
+      "locality": "Ćemovsko polje, Podgorica",
+      "latitude": 42.42207,
+      "longitude": 19.29136,
+      "coordinates_source": "https://www.openstreetmap.org/way/153924769 (OSM aerodrome way centre)",
+      "icao": "LYPO",
+      "operators": [
+        {
+          "name": "Aeroklub \"Špiro Mugoša\"",
+          "website": "https://www.instagram.com/aeroklubspiromugosa/"
+        },
+        {
+          "name": "Tandem Skok Podgorica",
+          "website": "https://www.instagram.com/tandem.skok_podgorica/"
+        }
+      ],
+      "season": "about April-October, weather dependent (tourism guide)",
+      "status": "active",
+      "status_evidence": "Podgorica Tourist Organisation active-tourism brochure published February 2025 lists tandem skydiving from 3,000 m operated by Aeroklub Špiro Mugoša and Tandem Skok Podgorica.",
+      "sources": [
+        {
+          "url": "https://podgorica.travel/wp-content/uploads/2025/02/Aktivni-turizam-brosura-9-final-print-ready_compressed-1.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Tourism brochure (Feb 2025) listing both tandem operators"
+        },
+        {
+          "url": "https://podgorica.travel/en/skydiving-podgorica/",
+          "checked_on": "2026-11-14",
+          "what": "Tourism organisation skydiving page"
+        },
+        {
+          "url": "https://gopodgorica.com/skydiving-podgorica",
+          "checked_on": "2026-11-14",
+          "what": "Guide: jumps at Spiro Mugoša airfield on Ćemovsko polje"
+        },
+        {
+          "url": "https://www.caa.me/en/aerodromes-airfields",
+          "checked_on": "2026-11-14",
+          "what": "CAA Montenegro airfield list: LYPO approved for parachuting (page updated 2018)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/153924769",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Špiro Mugoša LYPO"
+        }
+      ]
+    },
+    {
+      "key": "me-kapino-polje-niksic",
+      "name": "Aerodrom Kapino polje (Nikšić)",
+      "aliases": [
+        "LYNK"
+      ],
+      "country": "ME",
+      "locality": "Kapino polje, Nikšić",
+      "latitude": 42.77365,
+      "longitude": 18.91515,
+      "coordinates_source": "https://www.openstreetmap.org/way/867787409 (OSM aerodrome way centre)",
+      "icao": "LYNK",
+      "operators": [
+        {
+          "name": "Sportski Aero klub \"Nikšić\""
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Montenegro CAA list (updated 2018) approves the airfield for parachuting and parachute training; no 2025+ jump activity found.",
+      "sources": [
+        {
+          "url": "https://www.caa.me/en/aerodromes-airfields",
+          "checked_on": "2026-11-14",
+          "what": "CAA Montenegro airfield list: operator and approved parachuting activity"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/867787409",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Kapino polje LYNK"
+        }
+      ]
+    }
+  ]
+}

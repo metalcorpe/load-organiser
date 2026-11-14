@@ -1,0 +1,158 @@
+{
+  "country": "BG",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "bg-ihtiman",
+      "name": "Ihtiman Airfield",
+      "aliases": [
+        "Skydive Sofia",
+        "Chernyovo"
+      ],
+      "country": "BG",
+      "locality": "Chernyovo village, Ihtiman, Sofia Province",
+      "latitude": 42.4214627,
+      "longitude": 23.7665532,
+      "coordinates_source": "https://skydivebulgaria.com/en/dropzone/ (operator's Google Maps link; OSM way 228015365 'Ихтиман' LBHT agrees within 100 m)",
+      "icao": "LBHT",
+      "operators": [
+        {
+          "name": "Skydive Bulgaria (Skydive Sofia)",
+          "website": "https://skydivebulgaria.com/en/",
+          "facebook": "https://www.facebook.com/SKYDIVEBGIHTIMAN"
+        }
+      ],
+      "season": "Wednesday–Sunday (closed Monday–Tuesday)",
+      "status": "active",
+      "status_evidence": "Operator dropzone page (2026) gives working hours Wednesday–Sunday 08:00–20:00 and a current midweek booking offer; Capital.bg (Oct 2023) reports the airfield is owned by skydivers since 2022",
+      "sources": [
+        {
+          "url": "https://skydivebulgaria.com/en/dropzone/",
+          "checked_on": "2026-11-14",
+          "what": "operator: Ihtiman Airport LBHT, Chernyovo; hours Wed–Sun 08:00–20:00; 119.25 MHz"
+        },
+        {
+          "url": "https://www.capital.bg/biznes/kompanii/2023/10/29/4536372_ot_ihtiman_do_nebeto_i_obratno/",
+          "checked_on": "2026-11-14",
+          "what": "news: airfield bought by skydivers in 2022, company Skydive Sofia"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/228015365",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome LBHT"
+        }
+      ],
+      "note": "dev-listings key bg-skydive-bulgaria-dropzone-ihtiman-airfield-lbht (had null coordinates)."
+    },
+    {
+      "key": "bg-sapareva-banya",
+      "name": "Sapareva Banya Airfield (Kraynitsi)",
+      "aliases": [
+        "Sko4i",
+        "Kraynitsi",
+        "Летище Сапарева баня"
+      ],
+      "country": "BG",
+      "locality": "Kraynitsi, near Sapareva Banya, Kyustendil Province",
+      "latitude": 42.30814,
+      "longitude": 23.24676,
+      "coordinates_source": "https://www.openstreetmap.org/way/439598934",
+      "icao": "LBSP",
+      "operators": [
+        {
+          "name": "Sky Adventures Bulgaria (Sko4i.bg)",
+          "website": "https://www.sko4i.bg/en/",
+          "facebook": "https://www.facebook.com/sko4i.bg/"
+        }
+      ],
+      "season": "all year, weather permitting (per reseller)",
+      "status": "active",
+      "status_evidence": "Operator site (footer 2026) names Sapareva Banya Airport as its jump site; Adrenalin.bg lists tandems there all year, weather permitting (undated). No dated post found",
+      "sources": [
+        {
+          "url": "https://www.sko4i.bg/en/sapareva_banya_airport/Sapareva-Banya-Airport.html",
+          "checked_on": "2026-11-14",
+          "what": "operator page for Sapareva Banya Airport"
+        },
+        {
+          "url": "https://adrenalin.bg/en/deynosti/parachute-jump.html",
+          "checked_on": "2026-11-14",
+          "what": "reseller: tandem 3000–3500 m at Sapareva Banya, all year"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/439598934",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Летище Крайници' / Sapareva Banya Airfield LBSP"
+        }
+      ],
+      "note": "dev-listings key bg-sapareva-banya-airport (had null coordinates). Operator office is in Lyaskovets; no jumps there were found."
+    },
+    {
+      "key": "bg-shumen-gradishte",
+      "name": "Shumen Gradishte Airfield",
+      "aliases": [],
+      "country": "BG",
+      "locality": "Gradishte, near Shumen",
+      "latitude": 43.33398,
+      "longitude": 26.85425,
+      "coordinates_source": "https://www.openstreetmap.org/node/5704984515",
+      "icao": "LBGD",
+      "operators": [
+        {
+          "name": "SkyShumen",
+          "website": "https://skyshumen.com/",
+          "facebook": "https://www.facebook.com/SkyShumen"
+        }
+      ],
+      "aircraft": "Piper (type not stated)",
+      "status": "uncertain",
+      "status_evidence": "Operator page offers tandems from Gradishte airfield in a Piper but gives no season or dates; no dated post or third-party confirmation found",
+      "sources": [
+        {
+          "url": "https://skyshumen.com/izberi-adrenalin/tandemen-skok",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandem jump at Shumen airfield Gradishte, Piper aircraft"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/5704984515",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Градище' Gradishte Airstrip LBGD"
+        }
+      ],
+      "note": "dev-listings key bg-shumen-airfield-gradishte. OSM also has a former 'Shumen Airstrip' (way 929606722) at 43.2863, 26.9409; the operator names Gradishte, so the LBGD point is used."
+    },
+    {
+      "key": "bg-primorsko",
+      "name": "Primorsko Airfield",
+      "aliases": [],
+      "country": "BG",
+      "locality": "Yasna Polyana, near Primorsko, Burgas Province",
+      "latitude": 42.25938,
+      "longitude": 27.70429,
+      "coordinates_source": "https://www.openstreetmap.org/way/115601721",
+      "icao": "LBPR",
+      "operators": [],
+      "status": "uncertain",
+      "status_evidence": "Only an undated travel guide (guidebg.com) calls it a popular tandem skydiving spot; no operator, aircraft or dated activity found",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Primorsko_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "airfield facts (LBPR, 910 m runway); no mention of skydiving"
+        },
+        {
+          "url": "https://www.guidebg.com/primorsko-airfield/",
+          "checked_on": "2026-11-14",
+          "what": "travel guide claim about tandem skydiving (page not opened: TLS error; claim seen in search results only)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/115601721",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Летище Приморско' LBPR"
+        }
+      ],
+      "note": "Lead only. Not in dev-listings."
+    }
+  ]
+}

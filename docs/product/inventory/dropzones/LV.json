@@ -1,0 +1,114 @@
+{
+  "country": "LV",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "lv-limbazi",
+      "name": "Limbaži airfield",
+      "aliases": [],
+      "country": "LV",
+      "locality": "Limbaži",
+      "latitude": 57.485048,
+      "longitude": 24.672614,
+      "coordinates_source": "https://skydive.lv/en/pages/contact",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Latvia",
+          "website": "https://skydive.lv/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Federation announces a September 2026 record attempt at Limbaži.",
+      "sources": [
+        {
+          "url": "https://lif.lv/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://skydive.lv/en/pages/sports_and_funjumpers",
+          "checked_on": "2026-11-14",
+          "what": "Operating season"
+        },
+        {
+          "url": "https://skydive.lv/en/pages/contact",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "season": "April–October"
+    },
+    {
+      "key": "lv-griva",
+      "name": "Grīva airfield dropzone",
+      "aliases": [],
+      "country": "LV",
+      "locality": "Daugavpils",
+      "latitude": 55.889985,
+      "longitude": 26.45999,
+      "coordinates_source": "https://ourairports.com/airports/LV-0002/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Daugavpils / D.I.S.K.",
+          "website": "https://dropzone.lv/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator announces the championship on 28–30 August 2026.",
+      "sources": [
+        {
+          "url": "https://dropzone.lv/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dropzone.lv/contacts",
+          "checked_on": "2026-11-14",
+          "what": "Operator location map"
+        },
+        {
+          "url": "https://ourairports.com/airports/LV-0002/",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; Grīva airfield reference, distinct from Daugavpils international airport."
+        }
+      ],
+      "note": "Grīva airfield reference, distinct from Daugavpils international airport.",
+      "season": "May–October weekends"
+    },
+    {
+      "key": "lv-jelgava",
+      "name": "Jelgava former dropzone",
+      "aliases": [],
+      "country": "LV",
+      "locality": "Jelgava",
+      "latitude": 56.6725,
+      "longitude": 23.67889,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Jelgava_Air_Base",
+      "icao": "EVEA",
+      "operators": [
+        {
+          "name": "Jelgava dropzone (historical listing)",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory evidence suggests closure, but no dated 2025–2026 operator activity or definitive closure statement was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/latvia",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jelgava_Air_Base",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ],
+      "note": "Possible closure retained as uncertain."
+    }
+  ]
+}

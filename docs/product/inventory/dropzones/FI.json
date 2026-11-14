@@ -1,0 +1,492 @@
+{
+  "country": "FI",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "fi-alavus",
+      "name": "Alavus airfield",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Alavus",
+      "latitude": 62.554699,
+      "longitude": 23.573299,
+      "coordinates_source": "https://ourairports.com/airports/EFAL/",
+      "icao": "EFAL",
+      "operators": [
+        {
+          "name": "Alavuden Ilmailukerho",
+          "website": "https://alavudenilmailukerho.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EFAL/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "fi-vesivehmaa",
+      "name": "Vesivehmaa airfield",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Asikkala",
+      "latitude": 61.144199,
+      "longitude": 25.693501,
+      "coordinates_source": "https://ourairports.com/airports/EFLA/",
+      "icao": "EFLA",
+      "operators": [
+        {
+          "name": "Hämeen Laskuvarjourheilijat",
+          "website": "https://skydivehame.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EFLA/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "fi-tikkakoski",
+      "name": "Jyväskylä Tikkakoski airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Jyväskylä",
+      "latitude": 62.409036,
+      "longitude": 25.670927,
+      "coordinates_source": "https://www.openstreetmap.org/way/299348878",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Jyväskylän Laskuvarjokerho",
+          "website": "https://skydivejkl.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/299348878",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-kemi-tornio",
+      "name": "Kemi-Tornio airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Kemi",
+      "latitude": 65.777546,
+      "longitude": 24.572069,
+      "coordinates_source": "https://www.openstreetmap.org/way/76904541",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Kemin Laskuvarjokerho",
+          "website": "https://www.skydivekemi.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/76904541",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-rissala",
+      "name": "Kuopio Rissala airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Siilinjärvi",
+      "latitude": 63.010813,
+      "longitude": 27.78626,
+      "coordinates_source": "https://www.openstreetmap.org/way/152159379",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Kuopion Laskuvarjourheilijat",
+          "website": "https://klu.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/152159379",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-oulunsalo",
+      "name": "Oulu airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Oulunsalo",
+      "latitude": 64.92833,
+      "longitude": 25.37417,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Oulu_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Oulu Skydive Center",
+          "website": "https://www.ouluskydivecenter.fi/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Oulu_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "fi-pori",
+      "name": "Pori airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Pori",
+      "latitude": 61.46139,
+      "longitude": 21.79778,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Pori_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Satakunnan Laskuvarjourheilijat",
+          "website": "https://skydivepori.net"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Pori_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "fi-utti",
+      "name": "Utti airfield",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Kouvola",
+      "latitude": 60.897849,
+      "longitude": 26.919358,
+      "coordinates_source": "https://www.openstreetmap.org/node/4337349992",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Finland",
+          "website": "https://skydivefinland.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/4337349992",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-immola",
+      "name": "Immola airfield",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Imatra",
+      "latitude": 61.248272,
+      "longitude": 28.895759,
+      "coordinates_source": "https://www.openstreetmap.org/way/1396614979",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Karjala",
+          "website": "https://skydivekarjala.fi"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1396614979",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-jami",
+      "name": "Jämi airfield",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Jämijärvi",
+      "latitude": 61.778599,
+      "longitude": 22.716101,
+      "coordinates_source": "https://ourairports.com/airports/EFJM/",
+      "icao": "EFJM",
+      "operators": [
+        {
+          "name": "Tampereen Laskuvarjokerho",
+          "website": "https://tamlk.org"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EFJM/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "fi-turku",
+      "name": "Turku airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Turku",
+      "latitude": 60.507649,
+      "longitude": 22.265084,
+      "coordinates_source": "https://www.openstreetmap.org/way/121070985",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Turun Laskuvarjourheilijat",
+          "website": "https://skydiveturku.yhdistysavain.fi/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/121070985",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-vaasa",
+      "name": "Vaasa airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Vaasa",
+      "latitude": 63.040521,
+      "longitude": 21.77327,
+      "coordinates_source": "https://www.openstreetmap.org/way/1174112508",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Vaasan Laskuvarjokerho",
+          "website": "https://skydivevaasa.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation presentation dated 8 February 2026 reports nonzero 2025 jumps for this club and operating locality.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1174112508",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "OSM club/hangar points, where used, identify the airport-side premises rather than an exact touchdown point."
+    },
+    {
+      "key": "fi-pirkkala",
+      "name": "Tampere-Pirkkala airport",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Pirkkala",
+      "latitude": 61.414101,
+      "longitude": 23.604401,
+      "coordinates_source": "https://ourairports.com/airports/EFTP/",
+      "icao": "EFTP",
+      "operators": [
+        {
+          "name": "Tampereen Laskuvarjokerho",
+          "website": "https://tamlk.org"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator information names Pirkkala, but dated 2025 federation evidence concerns Jämi and no 2025–2026 Pirkkala schedule was established.",
+      "sources": [
+        {
+          "url": "https://tamlk.org/kysymyksia/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EFTP/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Operator describes this as a jumping location alongside Jämi, but the dated 2025 federation report identifies Jämi only."
+    },
+    {
+      "key": "fi-malmi",
+      "name": "Helsinki Malmi former dropzone",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Helsinki",
+      "latitude": 60.25389,
+      "longitude": 25.04417,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Helsinki-Malmi_Airport",
+      "icao": "EFHF",
+      "operators": [
+        {
+          "name": "Skyxperience (historical listing)",
+          "website": null
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Helsinki decision dated 2 September 2025 confirms the airport operating permit has been revoked with legal finality and the former airport is being redeveloped.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/finland",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Helsinki-Malmi_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://paatokset.hel.fi/fi/asia/hel-2025-007869/4524ded0-bf76-4902-ac02-fcc32ea5c38f",
+          "checked_on": "2026-11-14",
+          "what": "2025 city decision confirms airport closure and redevelopment."
+        }
+      ],
+      "note": "Historical dropzone retained as closed; airport operations ended in 2021."
+    },
+    {
+      "key": "fi-rovaniemi",
+      "name": "Rovaniemi historical dropzone",
+      "aliases": [],
+      "country": "FI",
+      "locality": "Rovaniemi",
+      "latitude": 66.563327,
+      "longitude": 25.829751,
+      "coordinates_source": "https://ourairports.com/airports/EFRO/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Arctic Circle Skydivers (historical listing)",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Finavia confirms occasional parachuting in 2022, but no 2025–2026 evidence of regular civilian operation was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/finland",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EFRO/",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; Airport reference; Finavia describes occasional parachuting in its 2022 noise plan, but regular civilian operation in 2025–2026 is unconfirmed."
+        },
+        {
+          "url": "https://www.finavia.fi/sites/default/files/documents/Toimintaohje%20-%2000657%20-%20Rovaniemen%20lentoaseman%20siviililentoliikenteen%20melunhallintasuunnitelma%20v3.0%20F%20%28ID%2012701%29.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2022 noise plan section 5.7 confirms airport association and occasional parachuting, not recent regular activity."
+        }
+      ],
+      "note": "Airport reference; Finavia describes occasional parachuting in its 2022 noise plan, but regular civilian operation in 2025–2026 is unconfirmed."
+    }
+  ]
+}

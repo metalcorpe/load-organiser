@@ -1,0 +1,190 @@
+# Coverage: Iberia (ES, PT, AD, GI)
+
+Researched 2026-11-14 by claude. Development data only; nothing here is checked by the owner yet.
+
+## Method and limits
+
+- **OpenStreetMap / Overpass: not used.** overpass-api.de returned 429 and 502 ("at capacity").
+  The kumi.systems, private.coffee and mail.ru mirrors did not answer within 200 s. The shared
+  `_osm-sweep.json` in this folder has no candidates. The OSM pass is still open; see "Open" below.
+- **Coordinates** come from the OurAirports open dataset
+  (<https://davidmegginson.github.io/ourairports-data/airports.csv>), matched by airfield name or
+  ICAO code. Three ES records use the operator's own map point instead (Empuriabrava, El Pinar,
+  Totana) and give the OurAirports value in `coordinates_source`. Barcelona-Bages uses the
+  operator's schema.org point. All points are airfield reference points, not surveyed landing
+  areas.
+- **Facebook and Instagram** were read only through public search-result views. No page was
+  signed in to.
+- The Codex MCP server did not connect in this session, so all of this research was done by claude.
+
+## ES: Spain (17 records; counts below updated by the check)
+
+| Status | Count | Records |
+|---|---|---|
+| active | 11 | Empuriabrava, La Juliana, Lillo, Castellón El Pinar, El Berriel (Gran Canaria), Requena, Totana, Casas de los Pinos, A Fervenza (Mazaricos), Barcelona-Bages, Córdoba |
+| uncertain | 3 | Ontur, Trebujena (Skydive Jerez), Chozas de Abajo (Skydive León) |
+| closed | 3 | Ocaña (Skydive Madrid moved to Lillo in 2024), Matilla de los Caños (Skydive Valladolid, failed in 2025), Santa Cilia (the club jumps at Lasclaveries, France) |
+| missing coordinates | 0 | |
+
+All 5 ES venues from `../dev-listings.json` are merged in. La Juliana, Lillo and El Berriel now
+have coordinates. iJump Gran Canaria is recorded at El Berriel airfield, not at its check-in office.
+
+Sources checked:
+- RFAE: only regulation PDFs were found, with no public list of centres. The earlier ES.md notes
+  say the RFAE calendar showed no parachuting events.
+- Operator sites: skydiveempuriabrava.com, skydivespain.com, skydiveatmosfera.com,
+  skydivemadrid.es (including the presentation page), skydivelillo.com, skytime.es, ijump.es,
+  ijumpskydive.com, skydiveaircruz.com (locations table), skydivetotana.es, skydivelamancha.com,
+  paracaidismogalicia.com, saltamos.es, skydivecordoba.com and paracaidismonorte.com. The
+  Pirineos site returned 403; the Skydive Jerez and León domains did not resolve.
+- Aggregators, used as leads: skydivingsource.com (Spain list, 17 entries), Yumping (Spain list
+  and Cádiz/Córdoba pages), Curlie, Manawa, Puraventura blog, extrmsport.
+- Press and other: El País 2021, Diario de Valladolid 2026, es.wikipedia (Aeródromo de Requena),
+  Tripadvisor and Instagram (public views).
+- dropzone.com: its directory URLs now return 404 (the domain serves another site), so it was not
+  usable.
+
+Open leads, not recorded because no source places jumps at a specific airfield:
+- **Lebrija, "Campo de Vuelo El Copero" (Skydive Lebrija):** named only in a Puraventura blog. No
+  operator site was found. OurAirports has "Lebrija UL" (36.896, -6.039), but it is not confirmed
+  as the same field.
+- **Villamartín, LETF:** Yumping's Cádiz page says jumps are made there. No operator was
+  identified.
+- **Alhama de Murcia, LELH (Skydive España):** an old skydivingsource entry. It may be a
+  predecessor of Skydive Totana; not confirmed.
+- **Casarrubios del Monte, LEMT, and Colmenar Viejo:** named in a Puraventura blog. No operator
+  was found.
+- **"Skydive Pirineus" (Lleida):** named in a Puraventura blog. No operator or airfield was found.
+- **Mallorca (Yumping lists "Alcudia"):** no operator site was found. MallorcaFly says it does not
+  offer jumps.
+- **Aircruz pages for Almería, Granada, Alicante, Castellón and Cuenca:** these look like
+  resale/landing pages pointing to the group's own airfields. No separate airfield was found.
+- **Excluded:** Norte Sky Dive (Leioa, Bizkaia) jumps at Mimizan, France. Paradise 64 / "Pau" on
+  Yumping is in France. Puraventura (Alicante) and skydive.barcelona are resellers. Military-only
+  sites, such as Alcantarilla (PAPEA) and Jerez, were not checked for civilian use.
+
+## PT: Portugal (13 records after the check)
+
+| Status | Count | Records |
+|---|---|---|
+| active | 5 | Portimão, Évora, Proença-a-Nova, Braga, São Jacinto |
+| seasonal | 1 | Chaves (visiting operation, added by the check) |
+| uncertain | 7 | Tancos, Vila Real, Cerval, Coimbra, Maia, Águeda (Casarão), Figueira dos Cavaleiros |
+| closed | 0 | |
+| missing coordinates | 0 | |
+
+All 3 PT venues from `../dev-listings.json` (Évora, Portimão, Proença-a-Nova) are merged in, now
+with coordinates.
+
+Sources checked:
+- FPPq dropzone page <https://www.fppq.pt/saltar/dz.html>: 7 visible dropzones. The Águeda, Maia
+  and Figueira dos Cavaleiros entries are present but commented out in the HTML; they are
+  recorded as uncertain.
+- FPPq clubs page <https://www.fppq.pt/saltar/ace.html>.
+- Operator sites: skydivealgarve.com, skydiveseven.pt (including the Skydive Lisboa page),
+  skydiveportugal.pt, skydiveporto.com, skydivecerval.pt and skydivedunas.com.
+- Other: skydivingsource.com Portugal list (7 entries), Diário de Aveiro (2025-12-04),
+  visitportugal and Trip.com (Coimbra), and Instagram public views.
+
+Open:
+- FPPq lists several clubs with no airfield: Skydive Big Smile (Setúbal), Motivo Vertical /
+  Vertical Extreme (Santo Antão do Tojal), Fly 4 Fun, Get High, SkySport, APQAL (Elvas) and others.
+  Where they jump was not found. They probably use the listed dropzones.
+- Azores and Madeira: no skydiving operation was found.
+- Tancos and Vila Real need dated activity evidence, such as a club Facebook page.
+
+## AD: Andorra (0 records)
+
+No fixed-wing airfield exists (heliports only), and searches found no skydiving operation.
+`AD.json` has an empty list and a note.
+
+## GI: Gibraltar (0 records)
+
+The only airfield is Gibraltar Airport (LXGB, RAF), and no civilian skydiving was found.
+`GI.json` has an empty list and a note.
+
+## Still to do
+
+1. Re-run the OSM pass when Overpass has capacity. Query `sport=parachuting` and aerodromes whose
+   name or operator mentions parachuting, inside the ES and PT country areas. Compare the results
+   with the points above.
+2. ~~Check the Barcelona-Bages landing point.~~ Resolved by the check (wrong comparison airfield).
+3. Find dated 2025–2026 evidence for every "uncertain" record, mainly from Facebook pages.
+
+## Check
+
+Checked 2026-11-14 by a second claude pass (skeptical review). All 29 original records were
+looked at; these were re-opened against sources, least certain first: Barcelona-Bages, Santa
+Cilia, Trebujena, Chozas de Abajo, Ontur, Córdoba, El Berriel, Casas de los Pinos, Requena,
+Braga, Vila Real, Tancos, Cerval, Coimbra, Maia, Águeda, Figueira dos Cavaleiros, plus the
+FPPq page (re-read with its HTML comments).
+
+How coordinates were checked:
+- Every point was compared with the nearest OurAirports airfield: all are within 0.45 km
+  of the stated airfield, in the stated country and town. None falls in the sea or in another town.
+- OpenStreetMap: one Overpass query succeeded through the maps.mail.ru mirror (the others timed
+  out or returned 504). It returned the `sport=parachuting` points in Iberia and the aerodromes
+  around Bages. The OSM points for Saltamos/SkydiveBCN, Skydive Madrid (Lillo), Skydive Valladolid
+  (Matilla), Skydive Maia, Skydive Algarve and Skydive Seven (Portimão) and Empuriabrava all lie
+  within 0.4 km of the recorded points. A full OSM aerodrome comparison for every record timed out
+  and is still open.
+
+Changes made:
+- **ES Barcelona-Bages (was `es-pla-de-bages`, now `es-barcelona-bages`):** the point was right,
+  the name was wrong. Saltamos is at Aeròdrom Barcelona-Bages (OSM relation 20333619, icao LEMS;
+  OurAirports LEMS "Manresa Airfield"), 0.2 km from the record. "Aeròdrom del Pla de Bages"
+  (ES-0063, near Sallent) is a different airfield 2.6 km away, which explains the earlier 2.5 km
+  "mismatch". Key renamed, `icao` set to LEMS, wrong alias removed. No other file used the old key.
+- **ES Santa Cilia: uncertain to closed.** The Yumping page that the researcher cited says the
+  Centro de Paracaidismo Pirineos is based in Jaca but jumps at Aérodrome de Lasclaveries, about
+  18 km north of Pau, France (43.4274, -0.2888). The Santa Cilia airfield operators list gliding
+  and sightseeing flights only. The "season" text had come from the Lasclaveries description and
+  was removed. **For FR:** Lasclaveries should be in FR.json (Pau; probably the same field as
+  "Paradise 64"); this check did not edit FR.json.
+- **PT Chaves: added (`pt-chaves`, seasonal).** Skydive Porto (GoXtreme) sells tandems from Chaves
+  aerodrome (LPCH) on Yumping, last updated 2026-09-23, with a verified review of a jump there
+  dated 2026-06-06. A Skydive Portugal reel announcing jumps at Chaves on 19-20 September was seen
+  only in search results. It is a visiting operation on announced weekends, not a resident
+  dropzone, and is not on the FPPq page. Coordinates from OurAirports LPCH.
+- **PT Braga: kept active, evidence replaced.** The old evidence misquoted Skydive Porto: its page
+  says it jumps mainly at Proença-a-Nova and only occasionally at Braga. New evidence: APM ran a
+  landing-accuracy round of the national competition at Braga aerodrome on 31 Oct-1 Nov 2026
+  (public posts, search-result view).
+- **ES Casas de los Pinos and El Berriel: kept active, stronger evidence.** Operator Instagram
+  videos dated 8-9 Nov 2026 (Casas de los Pinos), and a 2026 iJump event booking plus 2026
+  reseller listings naming El Berriel (GCLB).
+- **ES Chozas de Abajo:** added a February 2026 Tripadvisor fraud complaint. Still uncertain.
+- **PT Vila Real:** added a 2026-06-06 customer review saying there are no jumps in Vila Real.
+  Still uncertain, and likely inactive.
+- **PT Maia:** added the OSM point (agrees) and a search view describing it in the past tense.
+  Still uncertain, probably closed.
+- **PT Tancos:** noted that military parachuting continues there. Civilian club activity is still
+  unconfirmed.
+- **ES Ontur:** noted a "SkyDiveOntur" LinkedIn lead with undated posts. Still uncertain.
+
+Checked with no change needed: Córdoba (operator says it has its own facilities at Córdoba
+Airport, and the point is the LEBA reference point), Requena (Instagram posts dated 4-8 Nov 2026),
+Trebujena (Tripadvisor still says permanently closed; left uncertain because that is
+user-reported), Cerval (site live with a 2026 footer only; still uncertain), Coimbra (Trip.com
+"temporarily closed"), and Águeda and Figueira dos Cavaleiros (FPPq entries commented out,
+confirmed).
+
+Duplicates: none. Each airfield appears once, and multi-operator airfields (La Juliana, El Berriel,
+Portimão, Évora, Braga) are already merged.
+
+Rejected in the completeness pass:
+- DreamFly (OSM `sport=parachuting` at Sintra, PT) is an indoor wind tunnel.
+- "Bassella experiences" (OSM `sport=parachuting`, Lleida, ES) has no confirmed jump operation;
+  it is a lead only.
+- Yumping "Guipúzcoa" (Centro de Paracaidismo Pau, Berastegui) jumps in Pau, France.
+- Mallorca: only a tunnel and paratrike/paragliding operators were found.
+- Associação de Paraquedistas do Nordeste (Bragança) is on the FPPq club list, but no airfield
+  activity was found; it is a lead only.
+
+Still open after the check:
+- the full OSM comparison;
+- dated evidence for Ontur, Cerval and Tancos;
+- whether Trebujena's closure is confirmed;
+- AD.json and GI.json keep a top-level `note` field that the README format does not define.
+  It was left in place; the format owner should decide.
+

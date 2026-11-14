@@ -1,0 +1,258 @@
+{
+  "country": "TR",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "tr-selcuk-efes",
+      "name": "Selçuk-Efes Airport",
+      "aliases": [
+        "Skydive Ephesus",
+        "Skydive Kuşadası",
+        "Efes"
+      ],
+      "country": "TR",
+      "locality": "Selçuk, İzmir Province",
+      "latitude": 37.94962,
+      "longitude": 27.32906,
+      "coordinates_source": "https://www.openstreetmap.org/way/252778982",
+      "icao": "LTFB",
+      "operators": [
+        {
+          "name": "THK Selçuk Efes Paraşüt Okulu (Türk Hava Kurumu)"
+        },
+        {
+          "name": "Skydive Efes",
+          "website": "https://www.skydiveefes.com",
+          "instagram": "https://www.instagram.com/parasutokuluefes"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Yeni Asır (2026-10-21) describes Skydive Efes at Selçuk as Türkiye's only jump centre; TGRT/Haber7 (2026) report a THK vice-president jumping from 12,000 ft at the THK Selçuk Efes parachute school",
+      "sources": [
+        {
+          "url": "https://www.yeniasir.com.tr/izmir/2026/10/21/izmirde-nefes-kesen-okul-turkiyede-baska-hicbir-yerde-yok",
+          "checked_on": "2026-11-14",
+          "what": "news 2026-10-21: Skydive Efes parachute school, Selçuk, about 70 km from İzmir; student, FS, CRW, wingsuit training"
+        },
+        {
+          "url": "https://www.tgrthaber.com/gundem-videolari/thk-genel-baskan-yardimcisi-kayadan-nefes-kesen-atlayis-12-bin-fitten-bosluga-birakti-3340104",
+          "checked_on": "2026-11-14",
+          "what": "news 2026: jump from 12,000 ft at THK Selçuk Efes Paraşüt Okulu; 43,000 certificates issued"
+        },
+        {
+          "url": "https://www.memurlar.net/haber/1105022/thk-ulke-insanina-havaciligi-sevdiriyor.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2024-06-17: THK parachute courses at Karain, Efes-Selçuk, Etimesgut Türkkuşu, Erzincan, June–September"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/252778982",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Selçuk-Efes Havaalanı' LTFB"
+        },
+        {
+          "url": "https://www.skydiveefes.com",
+          "checked_on": "2026-11-14",
+          "what": "search result only (TLS certificate expired, not opened): page title 'Skydive Efes - Türk Hava Kurumu', tandem price listed"
+        },
+        {
+          "url": "https://www.instagram.com/parasutokuluefes",
+          "checked_on": "2026-11-14",
+          "what": "search result only: 'Skydiveefes Dzefes', tandem and solo jumps"
+        }
+      ],
+      "note": "Resellers sell this DZ as 'Skydive Ephesus' or 'Skydive Kuşadası'. Check: the Skydive Efes site title names Türk Hava Kurumu, so Skydive Efes is probably the THK school's public name; kept as two operator entries until confirmed."
+    },
+    {
+      "key": "tr-karain",
+      "name": "THK Karain Aviation Training Centre",
+      "aliases": [],
+      "country": "TR",
+      "locality": "Karain, Döşemealtı, Antalya Province",
+      "latitude": 37.09398,
+      "longitude": 30.64543,
+      "coordinates_source": "https://www.openstreetmap.org/way/84721816",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Türk Hava Kurumu (THK) Karain Havacılık Eğitim Merkezi"
+        }
+      ],
+      "season": "June–September (2024 article)",
+      "status": "uncertain",
+      "status_evidence": "Memurlar.net (2024-06-17) lists Karain as a THK parachute course site (static line, June–September); an Anadolu University notice (2026-10-21) lists Karain as an active THK centre without naming parachuting. No 2025+ jump evidence",
+      "sources": [
+        {
+          "url": "https://www.memurlar.net/haber/1105022/thk-ulke-insanina-havaciligi-sevdiriyor.html",
+          "checked_on": "2026-11-14",
+          "what": "THK parachute courses incl. Antalya Karain"
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "2026 notice listing THK centres (İnönü, Selçuk, Erzincan, Karain)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/84721816",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Karain Havaalanı' (OurAirports ident LTXE)"
+        }
+      ]
+    },
+    {
+      "key": "tr-erzincan",
+      "name": "THK Erzincan Aviation Training Centre",
+      "aliases": [],
+      "country": "TR",
+      "locality": "Erzincan",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Türk Hava Kurumu (THK) Erzincan Havacılık Eğitim Merkezi"
+        }
+      ],
+      "season": "June–September (2024 article)",
+      "status": "uncertain",
+      "status_evidence": "Memurlar.net (2024-06-17) lists Erzincan as a THK parachute course site (June–September); 2026 Anadolu University notice lists the centre without naming parachuting",
+      "sources": [
+        {
+          "url": "https://www.memurlar.net/haber/1105022/thk-ulke-insanina-havaciligi-sevdiriyor.html",
+          "checked_on": "2026-11-14",
+          "what": "THK parachute courses incl. Erzincan"
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "2026 notice listing THK Erzincan centre"
+        }
+      ],
+      "note": "Coordinates null: the centre's airfield was not identified (Erzincan Airport LTCD is a candidate, not confirmed)."
+    },
+    {
+      "key": "tr-etimesgut-turkkusu",
+      "name": "THK Türkkuşu, Etimesgut",
+      "aliases": [],
+      "country": "TR",
+      "locality": "Etimesgut, Ankara",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Türk Hava Kurumu (THK) Türkkuşu"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Memurlar.net (2024-06-17) lists Etimesgut Türkkuşu as a THK parachute course site; the 2026 Anadolu University notice lists only the Ankara museum and parachute tower, not Etimesgut",
+      "sources": [
+        {
+          "url": "https://www.memurlar.net/haber/1105022/thk-ulke-insanina-havaciligi-sevdiriyor.html",
+          "checked_on": "2026-11-14",
+          "what": "THK parachute courses incl. Etimesgut Türkkuşu"
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "2026 notice: Ankara THK museum and parachute tower"
+        }
+      ],
+      "note": "Coordinates null: where the jumps land was not confirmed (Etimesgut Air Base LTAD, a military field, is a candidate). The Ankara parachute tower is a museum, not a dropzone."
+    },
+    {
+      "key": "tr-manavgat-side",
+      "name": "Manavgat airstrip (Skydive Manavgat)",
+      "aliases": [
+        "Skydive Manavgat",
+        "Skydive Side",
+        "Skydive Alanya",
+        "Skydive Antalya",
+        "Manavgat Model Uçak Pisti",
+        "Manavgat Sport Aeroclub"
+      ],
+      "country": "TR",
+      "locality": "Near the Manavgat river mouth, Manavgat, Antalya Province",
+      "latitude": 36.748796,
+      "longitude": 31.479853,
+      "coordinates_source": "https://manavgatskydive.com (operator's Google Maps link 'Manavgat Model Uçak Pisti'; OurAirports TR-0159 'Manavgat Sport Aeroclub' is about 270 m away)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Manavgat Skydive",
+          "website": "https://manavgatskydive.com"
+        }
+      ],
+      "aircraft": "Cessna 206 (per one reseller)",
+      "status": "active",
+      "status_evidence": "Operator site says '2026 open for booking' with tandem prices from 10,000 ft; an Instagram reel by skydive.tr dated 2025-12-28 shows tandems at Manavgat (search result only)",
+      "sources": [
+        {
+          "url": "https://manavgatskydive.com",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandem from 10,000 ft over Manavgat/Side, 2026 bookings, map link to the strip"
+        },
+        {
+          "url": "https://vigotours.com/side-turkey/tandem-skydiving-antalya",
+          "checked_on": "2026-11-14",
+          "what": "reseller: transfer to the airfield near the Manavgat River"
+        },
+        {
+          "url": "https://www.headout.com/skydiving/alanya-tandem-skydiving-over-the-mediterranean-sea-e-46137/",
+          "checked_on": "2026-11-14",
+          "what": "reseller: Alanya tandem at 'a USPA-authorized drop zone near Alanya', hotel pickup"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DSzlCS0iK8T",
+          "checked_on": "2026-11-14",
+          "what": "search result only: skydive.tr reel 2025-12-28, tandem at Manavgat"
+        }
+      ],
+      "note": "Check: airfield and operator found, coordinates filled. The map label calls it a model-aircraft strip; the OurAirports entry nearby is the same strip or next to it. 'SkyDive Turkey' (skydive.tr, Sorgun, Manavgat) may be the same or a second operator here; unconfirmed."
+    },
+    {
+      "key": "tr-cappadocia",
+      "name": "Skydive Cappadocia (airfield not identified)",
+      "aliases": [
+        "Skydive Cappadocia",
+        "Kapadokya"
+      ],
+      "country": "TR",
+      "locality": "Cappadocia; office in Ürgüp, Nevşehir",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Cappadocia",
+          "website": "https://www.skydivecappadocia.org",
+          "facebook": "https://www.facebook.com/skydivecappadocia",
+          "instagram": "https://www.instagram.com/skydive.cappadocia/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator site (footer 2025) calls itself Türkiye's first private dropzone, lists a general aviation operating licence and offers tandems and daily jumps for licensed skydivers all year, weather permitting; no dated jump and no airfield named",
+      "sources": [
+        {
+          "url": "https://www.skydivecappadocia.org",
+          "checked_on": "2026-11-14",
+          "what": "operator home page"
+        },
+        {
+          "url": "https://www.skydivecappadocia.org/contact-skydive-cappadocia",
+          "checked_on": "2026-11-14",
+          "what": "contact: office address in Ürgüp, Nevşehir"
+        },
+        {
+          "url": "https://www.skydivecappadocia.org/deneyimli-parasutculer-skydive-cappadocia",
+          "checked_on": "2026-11-14",
+          "what": "jumps for FAI/USPA B-licence holders all year, 06:00–18:00"
+        }
+      ],
+      "note": "Added in check. Coordinates null: the landing area is not given; the map pin on the site is the Ürgüp office, not an airfield."
+    }
+  ]
+}

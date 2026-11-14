@@ -1,0 +1,317 @@
+{
+  "country": "NL",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "nl-texel",
+      "name": "Texel International Airport",
+      "aliases": [
+        "Paracentrum Texel",
+        "EHTX"
+      ],
+      "country": "NL",
+      "locality": "De Cocksdorp, Texel, Noord-Holland",
+      "latitude": 53.118195,
+      "longitude": 4.827834,
+      "coordinates_source": "https://www.openstreetmap.org/node/2779305482 (sport=skydiving, website paracentrumtexel.nl)",
+      "icao": "EHTX",
+      "operators": [
+        {
+          "name": "Paracentrum Texel",
+          "website": "https://www.paracentrumtexel.nl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); operator site shows reviews and calendar dates from October 2026.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.paracentrumtexel.nl/",
+          "checked_on": "2026-11-14",
+          "what": "operator site, address 1795 JS De Cocksdorp"
+        }
+      ],
+      "note": "Operator states it has part-SPO approval and offers static-line and AFF training. Same group runs Skydive Ameland."
+    },
+    {
+      "key": "nl-ameland",
+      "name": "Ameland Airport Ballum",
+      "aliases": [
+        "Skydive Ameland",
+        "EHAL"
+      ],
+      "country": "NL",
+      "locality": "Ballum, Ameland, Friesland",
+      "latitude": 53.453612,
+      "longitude": 5.678396,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EHAL)",
+      "icao": "EHAL",
+      "operators": [
+        {
+          "name": "Skydive Ameland",
+          "website": "https://www.skydive-ameland.nl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); operator site footer and booking text dated 2026.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.skydive-ameland.nl/",
+          "checked_on": "2026-11-14",
+          "what": "operator site, address Strandweg 21, 9162 EV Ballum"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EHAL, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "nl-seppe",
+      "name": "Breda International Airport (Seppe)",
+      "aliases": [
+        "Skydive ENPC",
+        "Eerste Nederlandse Parachutisten Club",
+        "EHSE"
+      ],
+      "country": "NL",
+      "locality": "Bosschenhoofd/Hoeven, Noord-Brabant",
+      "latitude": 51.554901,
+      "longitude": 4.553003,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EHSE)",
+      "icao": "EHSE",
+      "operators": [
+        {
+          "name": "Skydive ENPC",
+          "website": "https://www.enpc.nl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); operator site shows a tandem review dated October 2026.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.enpc.nl/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: club on Breda International Airport (vliegveld Seppe), founded 1948"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EHSE, used for coordinates"
+        }
+      ],
+      "note": "Static-line training per KNVvL list."
+    },
+    {
+      "key": "nl-hilversum",
+      "name": "Hilversum Airfield",
+      "aliases": [
+        "Skydive Hilversum",
+        "EHHV"
+      ],
+      "country": "NL",
+      "locality": "Hilversum, Noord-Holland",
+      "latitude": 52.189977,
+      "longitude": 5.151038,
+      "coordinates_source": "https://www.openstreetmap.org/node/2878365129 (sport=parachuting, name Skydive Hilversum)",
+      "icao": "EHHV",
+      "operators": [
+        {
+          "name": "Skydive Hilversum",
+          "website": "https://www.skydivehilversum.nl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); club roster lists jumping on 7 November 2026 ('springen vanaf 1300').",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.skydivehilversum.nl/",
+          "checked_on": "2026-11-14",
+          "what": "operator site (club-run, static-line training)"
+        },
+        {
+          "url": "https://www.skydivehilversum.nl/rooster",
+          "checked_on": "2026-11-14",
+          "what": "club roster with November 2026 entries, jumping on 7 November 2026"
+        }
+      ]
+    },
+    {
+      "key": "nl-hoogeveen",
+      "name": "Hoogeveen Airfield",
+      "aliases": [
+        "Skydive Hoogeveen",
+        "EHHO"
+      ],
+      "country": "NL",
+      "locality": "Hoogeveen, Drenthe",
+      "latitude": 52.732165,
+      "longitude": 6.521053,
+      "coordinates_source": "https://www.openstreetmap.org/node/2835894462 (sport=parachuting, name Skydive Hoogeveen)",
+      "icao": "EHHO",
+      "operators": [
+        {
+          "name": "Skydive Hoogeveen",
+          "website": "https://skydivehoogeveen.nl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site has news dated October and November 2026, thanks jumpers for the 2026 season and takes bookings for 2027.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://skydivehoogeveen.nl/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: season March to October, address Plesmanstraat 14, 7903 BE Hoogeveen"
+        }
+      ],
+      "season": "March–October"
+    },
+    {
+      "key": "nl-rhoon",
+      "name": "Rhoon landing area (Rotterdam)",
+      "aliases": [
+        "Skydive Rotterdam",
+        "The Flying Dutchman"
+      ],
+      "country": "NL",
+      "locality": "Rhoon, Albrandswaard, Zuid-Holland",
+      "latitude": 51.85396,
+      "longitude": 4.46316,
+      "coordinates_source": "https://www.openstreetmap.org/way/7511157 and https://www.openstreetmap.org/way/7511246 (junction of Lageweg and Poelweg, Rhoon, via Nominatim; the landing field is at that corner per buijtenland-van-rhoon.nl)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Rotterdam \"The Flying Dutchman\"",
+          "website": "https://skydiverotterdam.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); Buijtenland van Rhoon agenda lists a '60 jaar Skydive Rotterdam' exhibition on 13 December 2025 that names the Rhoon dropzone and a 2025 national title.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://skydiverotterdam.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: aircraft takes off from Rotterdam The Hague Airport, tandems land on the dropzone in Rhoon"
+        },
+        {
+          "url": "https://www.buijtenland-van-rhoon.nl/interview/skydive-rotterdam-2",
+          "checked_on": "2026-11-14",
+          "what": "area cooperative page: since 2020 the landing site is in the corner of Lageweg and Poelweg (Buijtenland van Rhoon); Cessna Caravan from Rotterdam Airport"
+        },
+        {
+          "url": "https://www.buijtenland-van-rhoon.nl/agenda/60-jaar-skydive-rotterdam",
+          "checked_on": "2026-11-14",
+          "what": "event page, 13 December 2025: club has its dropzone in the Buijtenland van Rhoon"
+        }
+      ],
+      "note": "Coordinates are the Lageweg/Poelweg road junction, not a surveyed landing area; the field lies at that corner (accuracy about 100–200 m). The aircraft departs from Rotterdam The Hague Airport (EHRD), about 11 km north.",
+      "aircraft": "Cessna Caravan (as stated by buijtenland-van-rhoon.nl)"
+    },
+    {
+      "key": "nl-teuge",
+      "name": "Teuge Airport",
+      "aliases": [
+        "Skydive Teuge",
+        "EHTE"
+      ],
+      "country": "NL",
+      "locality": "Teuge, Gelderland",
+      "latitude": 52.240905,
+      "longitude": 6.044644,
+      "coordinates_source": "https://www.openstreetmap.org/node/13030247333 (sport=parachuting, name Skydive Teuge)",
+      "icao": "EHTE",
+      "operators": [
+        {
+          "name": "Skydive Teuge",
+          "website": "https://www.skydiveteuge.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); operator site advertises Shark Boogies 2026.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.skydiveteuge.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: jumping at Teuge since 1969"
+        }
+      ],
+      "note": "Operator says close to half of all Dutch jumps are made at Teuge."
+    },
+    {
+      "key": "nl-midden-zeeland",
+      "name": "Midden-Zeeland Airfield",
+      "aliases": [
+        "Skydive Zeeland",
+        "EHMZ"
+      ],
+      "country": "NL",
+      "locality": "Arnemuiden, Zeeland",
+      "latitude": 51.512199,
+      "longitude": 3.73111,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EHMZ)",
+      "icao": "EHMZ",
+      "operators": [
+        {
+          "name": "Skydive Zeeland",
+          "website": "https://www.skydive-zeeland.nl"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "On the KNVvL paracentra list (checked 2026-11-14); operator site shows reviews and dates from October 2026.",
+      "sources": [
+        {
+          "url": "https://parachute.nl/paracentra/",
+          "checked_on": "2026-11-14",
+          "what": "KNVvL parachuting section list of the eight Dutch paracentra with their own dropzone (linked from knvvl.nl/parachutespringen/je-eerste-sprong)"
+        },
+        {
+          "url": "https://www.skydive-zeeland.nl",
+          "checked_on": "2026-11-14",
+          "what": "operator site, address Calandweg 44, 4341 RA Arnemuiden"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EHMZ, used for coordinates"
+        }
+      ],
+      "note": "Airfield identified from the operator's Arnemuiden address; the operator page does not name the airfield."
+    }
+  ]
+}

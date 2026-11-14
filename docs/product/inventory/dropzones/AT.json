@@ -1,0 +1,858 @@
+{
+  "country": "AT",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "at-wiener-neustadt-west",
+      "name": "Wiener Neustadt West Airfield",
+      "aliases": [
+        "Para Club Wiener Neustadt",
+        "LOXN"
+      ],
+      "country": "AT",
+      "locality": "Wiener Neustadt, Niederösterreich",
+      "latitude": 47.836933,
+      "longitude": 16.221838,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOXN)",
+      "icao": "LOXN",
+      "operators": [
+        {
+          "name": "Para Club Wiener Neustadt",
+          "website": "https://paraclub.at/de"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club course page lists AFF courses for the 2026 season (June and July 2026, booked out); booking site live (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://paraclub.at/de",
+          "checked_on": "2026-11-14",
+          "what": "operator site, address Flugfeldgürtel 5, 2700 Wiener Neustadt; club founded 1972"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOXN, used for coordinates"
+        },
+        {
+          "url": "https://paraclub.at/de/ueber-uns/anfahrt",
+          "checked_on": "2026-11-14",
+          "what": "directions page: 'Wir befinden uns auf dem WEST-Platz' (Flugfeldgürtel 5)"
+        },
+        {
+          "url": "https://paraclub.at/de/ausbildung/kurstermine",
+          "checked_on": "2026-11-14",
+          "what": "AFF course dates, season 2026 (search result content)"
+        }
+      ],
+      "note": "The club's directions page confirms the West airfield (LOXN), a military airfield with civil use; Wiener Neustadt East (LOAN) has a separate club (at-wiener-neustadt-ost)."
+    },
+    {
+      "key": "at-wiener-neustadt-ost",
+      "name": "Wiener Neustadt East Airfield",
+      "aliases": [
+        "Eastside Skydive",
+        "HFSV Wiener Neustadt",
+        "Heeres Fallschirm Sport Verein",
+        "LOAN"
+      ],
+      "country": "AT",
+      "locality": "Wiener Neustadt, Niederösterreich",
+      "latitude": 47.8433,
+      "longitude": 16.260099,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOAN)",
+      "icao": "LOAN",
+      "operators": [
+        {
+          "name": "Heeres Fallschirm Sport Verein Wiener Neustadt (Eastside Skydive)",
+          "website": "https://www.fallschirmsportverein.at/eastsideskydive"
+        }
+      ],
+      "aircraft": "Cessna 182 (photo caption)",
+      "status": "uncertain",
+      "status_evidence": "Club site (checked 2026-11-14) states weekend jump operations at Flugplatz LOAN and sells tandems; the only date is an image named 'Tandem-Aktion-2025'. No dated 2025+ jump post opened.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmsportverein.at/eastsideskydive",
+          "checked_on": "2026-11-14",
+          "what": "club page: Viktor Lang Straße 10, Flugplatz LOAN, Wiener Neustadt Ost (Zivilflugplatz); jumps Sat/Sun/holidays"
+        },
+        {
+          "url": "https://www.ganz-wien.at/freizeit/sport/fallschirmspringen.html",
+          "checked_on": "2026-11-14",
+          "what": "list of clubs near Vienna: HFSV Wr. Neustadt at Zivilflugplatz Wiener Neustadt Ost (undated, © 2026)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOAN, used for coordinates"
+        }
+      ],
+      "note": "Found in the check pass; was missing from the first draft."
+    },
+    {
+      "key": "at-krems-langenlois",
+      "name": "Krems-Langenlois Airfield (Gneixendorf)",
+      "aliases": [
+        "Jump Club Krems",
+        "LOAG"
+      ],
+      "country": "AT",
+      "locality": "Gneixendorf, Krems an der Donau, Niederösterreich",
+      "latitude": 48.446084,
+      "longitude": 15.628968,
+      "coordinates_source": "https://www.openstreetmap.org/node/10742161693 (sport=parachuting, name Jump Club Krems)",
+      "icao": "LOAG",
+      "operators": [
+        {
+          "name": "Jumpclub Krems",
+          "website": "https://www.fallschirmspringen-krems.at/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site (checked 2026-11-14) states season April–October and sells tickets; Instagram profile snippet shows posts dated 7 April and 4 September 2026.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-krems.at/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: Flughafenstraße 5, 3500 Krems; season April–October"
+        },
+        {
+          "url": "https://www.instagram.com/jumpclubkrems",
+          "checked_on": "2026-11-14",
+          "what": "Instagram profile (search result snippet, posts dated April and September 2026; not opened)"
+        }
+      ],
+      "season": "April–October"
+    },
+    {
+      "key": "at-wels",
+      "name": "Wels Airfield",
+      "aliases": [
+        "Union Fallschirmspringerclub Linz",
+        "LOLW"
+      ],
+      "country": "AT",
+      "locality": "Wels, Oberösterreich",
+      "latitude": 48.182513,
+      "longitude": 14.039283,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOLW)",
+      "icao": "LOLW",
+      "operators": [
+        {
+          "name": "Union Fallschirmspringerclub Linz",
+          "website": "https://www.unionlinz.com"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club ran the 1st Upper Austria Wingsuit Performance at Flugplatz Wels on 15 August 2026 (SPORTUNION WINNER 03/2026) and the Upper Austria 4-way championship on 19 September 2026 (club event page); a tandem partner says Wels is sold out for 2026.",
+      "sources": [
+        {
+          "url": "https://www.unionlinz.com",
+          "checked_on": "2026-11-14",
+          "what": "club site: jumps at Flugplatz Wels"
+        },
+        {
+          "url": "https://www.wmw.at/fallschirmspringen-in-wels",
+          "checked_on": "2026-11-14",
+          "what": "airfield operator page (search snippet): all jump operations at Wels run by Union Linz"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOLW, used for coordinates"
+        },
+        {
+          "url": "https://sportunion.at/ooe/wp-content/uploads/sites/5/winner-03-2026-web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "SPORTUNION magazine 03/2026: wingsuit competition at Flugplatz Wels, 15 August 2026"
+        },
+        {
+          "url": "https://www.unionlinz.com/events/ooe-lm-4er-formation-2026",
+          "checked_on": "2026-11-14",
+          "what": "club event page: 4-way championship on 19.09.2026 (search result content)"
+        },
+        {
+          "url": "https://www.unionlinz.com/tandem/fragen-und-antworten",
+          "checked_on": "2026-11-14",
+          "what": "club FAQ: jumps at Flugplatz Wels, landing zone in the middle of the airfield"
+        }
+      ]
+    },
+    {
+      "key": "at-punitz",
+      "name": "Punitz-Güssing Airfield",
+      "aliases": [
+        "freifall.at",
+        "LOGG"
+      ],
+      "country": "AT",
+      "locality": "Punitz, Tobaj, Burgenland",
+      "latitude": 47.146654,
+      "longitude": 16.317058,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOGG)",
+      "icao": "LOGG",
+      "operators": [
+        {
+          "name": "freifall.at",
+          "website": "https://www.freifall.at/cm"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site calendar has November 2026 dates (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://www.freifall.at/cm",
+          "checked_on": "2026-11-14",
+          "what": "operator site: Flugplatz Punitz, Flugplatz 129, 7535 Tobaj; tandem dates"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOGG, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "at-zell-am-see",
+      "name": "Zell am See Airfield",
+      "aliases": [
+        "Alpenfreifall",
+        "LOWZ"
+      ],
+      "country": "AT",
+      "locality": "Zell am See, Salzburg",
+      "latitude": 47.291468,
+      "longitude": 12.790632,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOWZ)",
+      "icao": "LOWZ",
+      "operators": [
+        {
+          "name": "Alpenfreifall GmbH",
+          "website": "https://www.alpenfreifall.at"
+        },
+        {
+          "name": "Visiting tandem operators with the Pink Skyvan",
+          "website": "https://www.fallschirmsprung-tandem.at/zell-am-see/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Tandem operator calendar lists Zell am See jumps on 14–15 November 2026; Alpenfreifall reviews dated 30 August 2026.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmsprung-tandem.at/",
+          "checked_on": "2026-11-14",
+          "what": "tandem operator page with Zell am See dates November 2026"
+        },
+        {
+          "url": "https://www.alpenfreifall.at",
+          "checked_on": "2026-11-14",
+          "what": "operator site: tandems in Zell am See and Gmunden"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOWZ, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "at-gmunden-laakirchen",
+      "name": "Gmunden-Laakirchen Airfield",
+      "aliases": [
+        "LOLU"
+      ],
+      "country": "AT",
+      "locality": "Laakirchen, Oberösterreich",
+      "latitude": 47.951541,
+      "longitude": 13.867271,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOLU)",
+      "icao": "LOLU",
+      "operators": [
+        {
+          "name": "Alpenfreifall GmbH",
+          "website": "https://www.alpenfreifall.at"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Alpenfreifall site (reviews dated August 2026) offers tandems in Gmunden (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://www.alpenfreifall.at",
+          "checked_on": "2026-11-14",
+          "what": "operator site naming Gmunden"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOLU, used for coordinates"
+        },
+        {
+          "url": "https://www.fliegerclub-traunsee.at/2017/07/10/tandemspringen-am-flgplatz-gmunden",
+          "checked_on": "2026-11-14",
+          "what": "airfield club post (2017): Alpenfreifall runs tandem jumps at Flugplatz Gmunden"
+        },
+        {
+          "url": "https://www.salzburgadventures.com/de/abenteuer/liste/skydiving/fallschirmspringen-gmunden-oberoesterreich",
+          "checked_on": "2026-11-14",
+          "what": "reseller page: Cessna tandem jumps in Gmunden, April–October"
+        }
+      ],
+      "note": "Flugplatz Gmunden is the Gmunden-Laakirchen airfield (LOLU) of Fliegerclub Traunsee, whose own post confirms Alpenfreifall tandems there.",
+      "season": "April–October (reseller page)"
+    },
+    {
+      "key": "at-hohenems",
+      "name": "Hohenems-Dornbirn Airfield",
+      "aliases": [
+        "Skydive Hohenems",
+        "Union Para Club Silvretta",
+        "LOIH"
+      ],
+      "country": "AT",
+      "locality": "Hohenems, Vorarlberg",
+      "latitude": 47.384477,
+      "longitude": 9.699776,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOIH)",
+      "icao": "LOIH",
+      "operators": [
+        {
+          "name": "Union Para Club Silvretta (Skydive Hohenems)",
+          "website": "https://www.upcs.at"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Austrian national skydiving championships held at Hohenems on 21–22 August 2026 (SPORTUNION WINNER 03/2026); operator site © 2026.",
+      "sources": [
+        {
+          "url": "https://www.upcs.at",
+          "checked_on": "2026-11-14",
+          "what": "operator site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOIH, used for coordinates"
+        },
+        {
+          "url": "https://sportunion.at/ooe/wp-content/uploads/sites/5/winner-03-2026-web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "SPORTUNION magazine 03/2026: Austrian championships 21–22 August 2026 in Hohenems"
+        }
+      ],
+      "aircraft": "Cessna Grand Caravan (C208B)"
+    },
+    {
+      "key": "at-graz",
+      "name": "Graz Airport",
+      "aliases": [
+        "1. OEFC Graz",
+        "LOWG"
+      ],
+      "country": "AT",
+      "locality": "Feldkirchen bei Graz, Steiermark",
+      "latitude": 46.9911,
+      "longitude": 15.4396,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOWG)",
+      "icao": "LOWG",
+      "operators": [
+        {
+          "name": "1. Österreichischer Fallschirmspringerclub Graz",
+          "website": "https://www.oefc.at/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club training page lists 2026 course dates (22–31 May, 31 July–9 August 2026) with jumps at Graz airport.",
+      "sources": [
+        {
+          "url": "https://www.oefc.at/cms/main/ausbildung",
+          "checked_on": "2026-11-14",
+          "what": "club training page with 2026 dates"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOWG, used for coordinates"
+        }
+      ],
+      "note": "The 2026 training page lists course dates but also says no more courses take place in 2026; the 2026 courses may have been cancelled. Jumping at an international airport is limited to the club's course weeks."
+    },
+    {
+      "key": "at-fuerstenfeld",
+      "name": "Fürstenfeld Airfield",
+      "aliases": [
+        "LOGF"
+      ],
+      "country": "AT",
+      "locality": "Fürstenfeld, Steiermark",
+      "latitude": 47.061873,
+      "longitude": 16.083901,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOGF)",
+      "icao": "LOGF",
+      "operators": [
+        {
+          "name": "1. Österreichischer Fallschirmspringerclub Graz",
+          "website": "https://www.oefc.at/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "OEFC Graz 2026 course plan uses Fürstenfeld for the first student jumps of each course week.",
+      "sources": [
+        {
+          "url": "https://www.oefc.at/cms/main/ausbildung",
+          "checked_on": "2026-11-14",
+          "what": "club training page"
+        }
+      ],
+      "note": "Used during course weeks only, as far as the page says."
+    },
+    {
+      "key": "at-freistadt",
+      "name": "Freistadt Airfield",
+      "aliases": [
+        "Skydive Freistadt",
+        "Heeresfallschirmspringerclub Freistadt",
+        "LOLF"
+      ],
+      "country": "AT",
+      "locality": "Freistadt, Oberösterreich",
+      "latitude": 48.513748,
+      "longitude": 14.406579,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOLF)",
+      "icao": "LOLF",
+      "operators": [
+        {
+          "name": "Heeresfallschirmspringerclub Freistadt (Skydive Freistadt)",
+          "website": "https://www.skydive-freistadt.at"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club site has dated posts from 2025 and 2026 (tandem voucher offers 1 December 2025 and 8 March 2026; 45th International Para-Cross on 21 June 2026). That Para-Cross was held in Bad Leonfelden, not at the airfield (SPORTUNION WINNER 02/2026).",
+      "sources": [
+        {
+          "url": "https://www.skydive-freistadt.at",
+          "checked_on": "2026-11-14",
+          "what": "club site with dated news and training page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOLF, used for coordinates"
+        },
+        {
+          "url": "https://sportunion.at/ooe/wp-content/uploads/sites/5/winner-02-2026-web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "SPORTUNION magazine 02/2026: 45th Para-Cross 20–21 June 2026 in Bad Leonfelden, organised by HSFC Freistadt, helicopter jumps"
+        }
+      ],
+      "note": "Military sports club based at Flugplatz Freistadt (Guttenbrunn 26, 4242 Hirschbach); mainly accuracy and Para-Cross plus student training."
+    },
+    {
+      "key": "at-feldkirchen",
+      "name": "Feldkirchen Airfield",
+      "aliases": [
+        "Fallschirmzentrum Kärnten",
+        "LOKF"
+      ],
+      "country": "AT",
+      "locality": "Feldkirchen in Kärnten",
+      "latitude": 46.70893,
+      "longitude": 14.076722,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKF)",
+      "icao": "LOKF",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site © 2026 says the 2026 season has ended and lists 2027 dates as forthcoming; Feldkirchen is one of its listed jump sites.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page listing its jump sites: Wörthersee, Feldkirchen, Ferlach, Lienz-Nikolsdorf, Nötsch, Wolfsberg, Lavamünd (Slovenia), Hirt, Bovec (Slovenia)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKF, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "at-ferlach-glainach",
+      "name": "Ferlach-Glainach Airfield",
+      "aliases": [
+        "LOKG"
+      ],
+      "country": "AT",
+      "locality": "Ferlach, Kärnten",
+      "latitude": 46.532778,
+      "longitude": 14.330833,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKG)",
+      "icao": "LOKG",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKG, used for coordinates"
+        }
+      ],
+      "note": "Roaming tandem operator; jump days probably occasional."
+    },
+    {
+      "key": "at-noetsch",
+      "name": "Nötsch im Gailtal Airfield",
+      "aliases": [
+        "Flugplatz Nötsch/Villach",
+        "LOKN"
+      ],
+      "country": "AT",
+      "locality": "Nötsch im Gailtal, Kärnten",
+      "latitude": 46.5811,
+      "longitude": 13.6292,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKN)",
+      "icao": "LOKN",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKN, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "at-lienz-nikolsdorf",
+      "name": "Lienz-Nikolsdorf Airfield",
+      "aliases": [
+        "LOKL"
+      ],
+      "country": "AT",
+      "locality": "Nikolsdorf, Tirol",
+      "latitude": 46.798069,
+      "longitude": 12.87833,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKL)",
+      "icao": "LOKL",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKL, used for coordinates"
+        }
+      ],
+      "aircraft": "aircraft with rear ramp (type not stated)"
+    },
+    {
+      "key": "at-wolfsberg",
+      "name": "Wolfsberg Airfield",
+      "aliases": [
+        "LOKW"
+      ],
+      "country": "AT",
+      "locality": "St. Stefan im Lavanttal, Kärnten",
+      "latitude": 46.818202,
+      "longitude": 14.825154,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKW)",
+      "icao": "LOKW",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page, Reinfelsdorf 17, 9431 St. Stefan"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKW, used for coordinates"
+        }
+      ]
+    },
+    {
+      "key": "at-friesach-hirt",
+      "name": "Friesach-Hirt Airfield",
+      "aliases": [
+        "LOKH"
+      ],
+      "country": "AT",
+      "locality": "Micheldorf, Kärnten",
+      "latitude": 46.927491,
+      "longitude": 14.431848,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOKH)",
+      "icao": "LOKH",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site ('Hirt', 9360 Micheldorf) on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOKH, used for coordinates"
+        }
+      ],
+      "note": "A 2023 Aero-Club Kärnten folder (search result, not opened) also names a club at Friesach."
+    },
+    {
+      "key": "at-krumpendorf-woerthersee",
+      "name": "Wörthersee jump site (Krumpendorf)",
+      "aliases": [
+        "Absprung über dem Wörthersee"
+      ],
+      "country": "AT",
+      "locality": "Krumpendorf am Wörthersee, Kärnten",
+      "latitude": 46.631524,
+      "longitude": 14.237837,
+      "coordinates_source": "https://www.openstreetmap.org/way/124913561 (building at the operator's stated address Jerolitschstraße 43; not a surveyed landing area)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten (SKYDIVER)",
+          "website": "https://www.fallschirmspringen-kaernten.at/de/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a jump site on the operator's route page (© 2026); no dated jump day seen.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "operator route page: Jerolitschstrasse 43, 9201 Krumpendorf"
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Jerolitschstrasse%2043%20Krumpendorf",
+          "checked_on": "2026-11-14",
+          "what": "OSM Nominatim lookup of the address"
+        }
+      ],
+      "note": "Coordinates are the street address the operator gives, not a confirmed landing area. Departure airfield not stated (Klagenfurt is nearby)."
+    },
+    {
+      "key": "at-st-johann-tirol",
+      "name": "St. Johann in Tirol Airfield",
+      "aliases": [
+        "Bestskydive",
+        "Bestfallschirm",
+        "LOIJ"
+      ],
+      "country": "AT",
+      "locality": "St. Johann in Tirol",
+      "latitude": 47.5201,
+      "longitude": 12.4497,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOIJ)",
+      "icao": "LOIJ",
+      "operators": [
+        {
+          "name": "Bestfallschirm / Bestskydive Tirol",
+          "website": "https://www.bestfallschirm.com",
+          "facebook": "https://www.facebook.com/bestskydive"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site (checked 2026-11-14) says it is in its off-season and the next season runs April–October 2027; aeroplane and helicopter tandems offered.",
+      "sources": [
+        {
+          "url": "https://www.bestfallschirm.com",
+          "checked_on": "2026-11-14",
+          "what": "operator site: Flugplatz St. Johann Tirol, Reitham 2, 6380 St. Johann; season pause, next season April–October 2027"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOIJ, used for coordinates"
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Reitham%202%2C%206380%20St.%20Johann%20in%20Tirol",
+          "checked_on": "2026-11-14",
+          "what": "OSM lookup of the operator address, about 130 m from the LOIJ reference point"
+        }
+      ],
+      "season": "April–October",
+      "aircraft": "aeroplane and helicopter (types not stated)"
+    },
+    {
+      "key": "at-niederoeblarn",
+      "name": "Niederöblarn Airfield",
+      "aliases": [
+        "Fallschirmzentrum Niederöblarn",
+        "LOGO"
+      ],
+      "country": "AT",
+      "locality": "Niederöblarn, Öblarn, Steiermark",
+      "latitude": 47.478742,
+      "longitude": 14.007101,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident LOGO)",
+      "icao": "LOGO",
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Niederöblarn",
+          "website": "https://www.fallschirmspringen-steiermark.at/",
+          "facebook": "https://www.facebook.com/fallschirmzentrumniederoeblarn"
+        }
+      ],
+      "aircraft": "helicopter, Airbus AS350 (as stated)",
+      "status": "seasonal",
+      "status_evidence": "Operator site (checked 2026-11-14) says the 2026 season has ended and 2027 dates will be published in spring.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-steiermark.at/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: helicopter tandem jumps at the foot of the Grimming; 'Saison 2026 beendet'"
+        },
+        {
+          "url": "https://www.fallschirmspringen-steiermark.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "directions page (search result content): Flugplatz 83, 8960 Niederöblarn"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row LOGO, used for coordinates"
+        }
+      ],
+      "season": "summer (dates announced each spring)",
+      "note": "Found in the check pass; was missing from the first draft. Helicopter jumps only."
+    },
+    {
+      "key": "at-radfeld",
+      "name": "Radfeld airstrip (Skydive Tirol)",
+      "aliases": [
+        "Fallschirmspringen Tirol",
+        "Tirol Mountain Boogie"
+      ],
+      "country": "AT",
+      "locality": "Radfeld, Tirol",
+      "latitude": 47.463787,
+      "longitude": 11.95055,
+      "coordinates_source": "https://www.openstreetmap.org/way/1503298521 (aeroway=aerodrome, name/operator Skydive Tirol; grass runway 07/25 way 1503540929)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fallschirmspringen Tirol",
+          "website": "https://www.fallschirmspringen-tirol.at"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site (checked 2026-11-14) announces the Tirol Mountain Boogie 2026 at Radfeld on 10/11, 17/18 and 24/25 October 2026 with the Pink Skyvan.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-tirol.at",
+          "checked_on": "2026-11-14",
+          "what": "operator site: jump site Wies 1, 6241 Radfeld; Tirol Mountain Boogie October 2026; prices valid from 1 July 2025"
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Wies%201%2C%206241%20Radfeld",
+          "checked_on": "2026-11-14",
+          "what": "OSM lookup of the operator address, about 130 m from the OSM Skydive Tirol strip"
+        }
+      ],
+      "aircraft": "Pink Skyvan (as stated)",
+      "season": "summer and autumn",
+      "note": "The operator's address (Wies 1, Radfeld) lies about 130 m from the OSM 'Skydive Tirol' strip, which confirms the match. skydive-tirol.at now serves a German club's site (Skydive Exit, Eggenfelden)."
+    },
+    {
+      "key": "at-fromberg",
+      "name": "Fromberg (Waldviertel)",
+      "aliases": [
+        "Pink Boogie",
+        "IPPC Internationaler Pink Parachute Club"
+      ],
+      "country": "AT",
+      "locality": "Fromberg, Kirchberg am Walde, Niederösterreich",
+      "latitude": 48.735359,
+      "longitude": 15.089792,
+      "coordinates_source": "https://www.openstreetmap.org/way/226879636 (Steinberghalle at the stated venue address Fromberg 42; runway not mapped)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Pink Skyvan / IPPC",
+          "website": "https://www.fallschirmspringen.at/"
+        },
+        {
+          "name": "Tandem resellers jumping at the Pink Boogie",
+          "website": "https://www.fallschirmsprung-tandem.at/fromberg/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Tandem operator calendar lists a Fromberg date on 3 July 2027; Pink Boogie 2026 held 4–12 July 2026 (fallschirmsprung-dingolfing.de snippet).",
+      "sources": [
+        {
+          "url": "https://www.fallschirmsprung-tandem.at/fromberg/",
+          "checked_on": "2026-11-14",
+          "what": "tandem operator page for Fromberg"
+        },
+        {
+          "url": "https://www.fallschirmsprung-tandem.at/",
+          "checked_on": "2026-11-14",
+          "what": "calendar with next Fromberg date 3 July 2027"
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search?format=jsonv2&q=Fromberg%2042%2C%203932%20Kirchberg%20am%20Walde",
+          "checked_on": "2026-11-14",
+          "what": "OSM lookup of the venue address"
+        }
+      ],
+      "aircraft": "Short SC.7 Skyvan (Pink Skyvan)",
+      "season": "summer jump week (Pink Boogie 4–12 July 2026; next listed 3 July 2027)",
+      "note": "Event dropzone. Coordinates are the venue address, not the landing area."
+    }
+  ]
+}

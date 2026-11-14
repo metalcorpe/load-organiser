@@ -1,0 +1,828 @@
+{
+  "country": "ES",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "es-empuriabrava",
+      "name": "Aeródromo de Empuriabrava",
+      "aliases": [
+        "Skydive Empuriabrava",
+        "LEAP"
+      ],
+      "country": "ES",
+      "locality": "Empuriabrava, Castelló d'Empúries, Girona",
+      "latitude": 42.25857,
+      "longitude": 3.108934,
+      "coordinates_source": "Operator Google Maps link on https://skydiveempuriabrava.com/es/calendario-de-eventos/ (dev-listings.json); OurAirports LEAP gives 42.260309, 3.109619",
+      "icao": "LEAP",
+      "operators": [
+        {
+          "name": "Skydive Empuriabrava (JIP Aviació SLU)",
+          "website": "https://skydiveempuriabrava.com/"
+        }
+      ],
+      "season": "all year (operator AFF page)",
+      "status": "active",
+      "status_evidence": "Operator event calendar lists dated events December 2026 to April 2027 (checked 2026-11-09 for dev-listings.json; homepage re-fetched 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://skydiveempuriabrava.com/es/calendario-de-eventos/",
+          "checked_on": "2026-11-14",
+          "what": "operator event calendar"
+        },
+        {
+          "url": "https://skydiveempuriabrava.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/spain/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "es-la-juliana",
+      "name": "Aeródromo La Juliana",
+      "aliases": [
+        "Skydive Spain",
+        "Skydive Atmosfera",
+        "LEJU"
+      ],
+      "country": "ES",
+      "locality": "Bollullos de la Mitación, Sevilla",
+      "latitude": 37.294998,
+      "longitude": -6.1625,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LEJU; page https://ourairports.com/airports/LEJU/",
+      "icao": "LEJU",
+      "operators": [
+        {
+          "name": "Skydive Spain",
+          "website": "https://www.skydivespain.com/",
+          "facebook": "https://www.facebook.com/skydivespain"
+        },
+        {
+          "name": "Skydive Atmosfera",
+          "website": "https://www.skydiveatmosfera.com/"
+        }
+      ],
+      "season": "all year (operator says open 365 days)",
+      "status": "active",
+      "status_evidence": "Skydive Spain Facebook video posts dated October 2026 say 'open every day'; Xmas Boogie advertised; Skydive Atmosfera site shows a 'Planner 2026/2027'.",
+      "sources": [
+        {
+          "url": "https://www.skydivespain.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.facebook.com/skydivespain",
+          "checked_on": "2026-11-14",
+          "what": "operator Facebook page (public view via search results)"
+        },
+        {
+          "url": "https://www.skydiveatmosfera.com/",
+          "checked_on": "2026-11-14",
+          "what": "second operator at La Juliana"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-atmosfera/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Skydive Atmosfera at LEJU La Juliana"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Coordinates are the OurAirports airfield reference point, not a surveyed landing area."
+    },
+    {
+      "key": "es-lillo",
+      "name": "Aeródromo de Lillo",
+      "aliases": [
+        "Skydive Madrid",
+        "Skydive Lillo",
+        "LELT"
+      ],
+      "country": "ES",
+      "locality": "Lillo, Toledo (A-4 exit 81)",
+      "latitude": 39.7169,
+      "longitude": -3.32056,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LELT; page https://ourairports.com/airports/LELT/",
+      "icao": "LELT",
+      "operators": [
+        {
+          "name": "Skydive Madrid",
+          "website": "https://www.skydivemadrid.es/"
+        }
+      ],
+      "season": "all year",
+      "status": "active",
+      "status_evidence": "Operator events page lists dated events 14 Nov to 13 Dec 2026; presentation page calls Lillo the current location of Skydive Madrid.",
+      "sources": [
+        {
+          "url": "https://www.skydivemadrid.es/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.skydivemadrid.es/skydive_centro/presentacion",
+          "checked_on": "2026-11-14",
+          "what": "operator presentation: Lillo is current zone, Ocaña was used until 2024"
+        },
+        {
+          "url": "https://skydivelillo.com/",
+          "checked_on": "2026-11-14",
+          "what": "legacy operator site, redirects content to Skydive Madrid"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-ocana",
+      "name": "Aeródromo de Ocaña",
+      "aliases": [
+        "Centro de Paracaidismo de Ocaña",
+        "Freefall University Spain (former)",
+        "LEOC"
+      ],
+      "country": "ES",
+      "locality": "Ocaña, Toledo",
+      "latitude": 39.9375,
+      "longitude": -3.50333,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LEOC; page https://ourairports.com/airports/LEOC/",
+      "icao": "LEOC",
+      "operators": [
+        {
+          "name": "Skydive Madrid (former)",
+          "website": "https://www.skydivemadrid.es/"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Skydive Madrid presentation page (checked 2026-11-14) calls Ocaña its previous jump zone, used from 1992 until 2024.",
+      "sources": [
+        {
+          "url": "https://www.skydivemadrid.es/skydive_centro/presentacion",
+          "checked_on": "2026-11-14",
+          "what": "operator: Ocaña was the previous zone until 2024"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/freefall-university-spain/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Freefall University Spain at A-4 km 62 Ocaña (stale)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Closed as a dropzone for Skydive Madrid. Aggregators (Yumping, Manawa) still name Ocaña; another operator using it was not found."
+    },
+    {
+      "key": "es-castellon-el-pinar",
+      "name": "Aeródromo de Castellón (El Pinar)",
+      "aliases": [
+        "SkyTime",
+        "LECN"
+      ],
+      "country": "ES",
+      "locality": "El Grao, Castellón de la Plana",
+      "latitude": 39.9945917,
+      "longitude": 0.0252846,
+      "coordinates_source": "Operator embedded Google Maps link on https://www.skytime.es/ (dev-listings.json); OurAirports LECN gives 39.99836, 0.026355",
+      "icao": "LECN",
+      "operators": [
+        {
+          "name": "SkyTime Centro de Paracaidismo",
+          "website": "https://www.skytime.es/"
+        }
+      ],
+      "season": "tandems daily; fun jumps at weekends (operator)",
+      "status": "active",
+      "status_evidence": "Operator homepage (updated 2026-08-26 per page metadata) gives daily hours and live tandem booking.",
+      "sources": [
+        {
+          "url": "https://www.skytime.es/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/spain/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "es-el-berriel",
+      "name": "Aeródromo de El Berriel",
+      "aliases": [
+        "iJump Gran Canaria",
+        "Skydive Gran Canaria",
+        "Paraclub de Gran Canaria",
+        "GCLB"
+      ],
+      "country": "ES",
+      "locality": "Tarajalillo, San Bartolomé de Tirajana, Gran Canaria",
+      "latitude": 27.782499,
+      "longitude": -15.5072,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident GCLB; page https://ourairports.com/airports/GCLB/",
+      "icao": "GCLB",
+      "operators": [
+        {
+          "name": "iJump Gran Canaria",
+          "website": "https://www.ijump.es/"
+        },
+        {
+          "name": "Skydive Gran Canaria"
+        },
+        {
+          "name": "Paraclub de Gran Canaria"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "iJump sells tandems from El Berriel (GCLB); a Ticket Tailor booking page for an 'Adventure Week 2026' tandem event with iJump and the Yumping and GetYourGuide listings (2026) name El Berriel as the start point. Skydive Gran Canaria and Paraclub de Gran Canaria not confirmed current.",
+      "sources": [
+        {
+          "url": "https://www.ijump.es/",
+          "checked_on": "2026-11-14",
+          "what": "operator site (check-in office in Playa del Inglés)"
+        },
+        {
+          "url": "https://www.tickettailor.com/events/cancanaria/1755475",
+          "checked_on": "2026-11-14",
+          "what": "2026 event booking with iJump (search-result view)"
+        },
+        {
+          "url": "https://www.getyourguide.com/gran-canaria-l418/gran-canaria-skydiving-over-maspalomas-dunes-t733749",
+          "checked_on": "2026-11-14",
+          "what": "reseller listing: start at iJump, El Berriel (GCLB)"
+        },
+        {
+          "url": "https://elviajero.elpais.com/elviajero/2021/10/07/actualidad/1633598266_935284.html",
+          "checked_on": "2026-11-14",
+          "what": "press: iJump planes take off from El Berriel"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-gran-canaria/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Skydive Gran Canaria at Aeroclub El Berriel"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/paraclub-de-gran-canaria/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Paraclub de Gran Canaria at El Berriel"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Tandems land near the Maspalomas dunes per operators; the point is the airfield. Office coordinates on ijump.es (27.7519, -15.5702) are the shop, not used."
+    },
+    {
+      "key": "es-requena",
+      "name": "Aeródromo de Requena (El Rebollar)",
+      "aliases": [
+        "Skydive Requena",
+        "Skydive Aircruz",
+        "LERE"
+      ],
+      "country": "ES",
+      "locality": "El Rebollar, Requena, Valencia",
+      "latitude": 39.474701,
+      "longitude": -1.03444,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LERE; page https://ourairports.com/airports/LERE/",
+      "icao": "LERE",
+      "operators": [
+        {
+          "name": "Skydive Aircruz / Skydive Requena",
+          "website": "https://skydiveaircruz.com/",
+          "facebook": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Instagram (public view via search results) shows Skydive Requena posts dated 22 Oct to 10 Nov 2026; Aircruz locations page lists parachuting at Requena.",
+      "sources": [
+        {
+          "url": "https://skydiveaircruz.com/localizaciones/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Aircruz table of its airfields and services (Requena, Totana, Ontur)"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DWhJTAMjGSc",
+          "checked_on": "2026-11-14",
+          "what": "Instagram public view listing Skydive Requena posts Oct-Nov 2026"
+        },
+        {
+          "url": "https://es.wikipedia.org/wiki/Aer%C3%B3dromo_de_Requena",
+          "checked_on": "2026-11-14",
+          "what": "Wikipedia: LERE airfield (gives 39.4753, -1.0375)"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/espana",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish skydiving operators and towns (lead)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-totana",
+      "name": "Aeródromo de Totana",
+      "aliases": [
+        "Skydive Totana",
+        "Aeroclub Totana",
+        "LETX"
+      ],
+      "country": "ES",
+      "locality": "Totana, Murcia",
+      "latitude": 37.7520342,
+      "longitude": -1.4490406,
+      "coordinates_source": "Operator embedded Google Maps link on https://skydivetotana.es/ ; OurAirports ES-0036 (LETX) gives 37.753083, -1.4487",
+      "icao": "LETX",
+      "operators": [
+        {
+          "name": "Skydive Totana (Skydive Aircruz group)",
+          "website": "https://skydivetotana.es/",
+          "facebook": "https://www.facebook.com/skydivetotana"
+        }
+      ],
+      "season": "weekends (Instagram summary)",
+      "status": "active",
+      "status_evidence": "Aircruz locations page (2026) lists parachuting at Totana; Yumping says the operator has taken bookings since October 2025.",
+      "sources": [
+        {
+          "url": "https://skydivetotana.es/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://skydiveaircruz.com/localizaciones/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Aircruz table of its airfields and services (Requena, Totana, Ontur)"
+        },
+        {
+          "url": "https://www.yumping.com/en/skydiving/centro-deportivo-skydive-totana--e19745080",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: bookings since Oct 2025"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-ontur",
+      "name": "Aeródromo de Ontur",
+      "aliases": [
+        "Skydive La Mancha",
+        "LEOT"
+      ],
+      "country": "ES",
+      "locality": "Ontur, Albacete",
+      "latitude": 38.615681,
+      "longitude": -1.526477,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LEOT; page https://ourairports.com/airports/LEOT/",
+      "icao": "LEOT",
+      "operators": [
+        {
+          "name": "Skydive La Mancha (Skydive Aircruz group)",
+          "website": "https://skydivelamancha.com/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator site is live (copyright 2026) and the Aircruz locations page lists parachuting at Ontur, but no dated 2025-2026 jump post was found. A LinkedIn profile for 'SkyDiveOntur' shares undated posts about weekend jumps at Ontur.",
+      "sources": [
+        {
+          "url": "https://skydivelamancha.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://skydiveaircruz.com/localizaciones/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Aircruz table of its airfields and services (Requena, Totana, Ontur)"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/espana",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish skydiving operators and towns (lead)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-casas-de-los-pinos",
+      "name": "Aeródromo de Casas de los Pinos",
+      "aliases": [
+        "I Jump Skydive Puravida",
+        "LEPI"
+      ],
+      "country": "ES",
+      "locality": "Casas de los Pinos, Cuenca (N-301)",
+      "latitude": 39.298199,
+      "longitude": -2.37872,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LEPI; page https://ourairports.com/airports/LEPI/",
+      "icao": "LEPI",
+      "operators": [
+        {
+          "name": "I Jump Skydive Puravida",
+          "website": "https://www.ijumpskydive.com/",
+          "facebook": "https://www.facebook.com/ijumpskydive.es"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Instagram profile @ijumpskydive (public view via search results, 2026-11-14) shows operator videos dated 8 and 9 November 2026; operator homepage has live booking at Aeródromo Casas de los Pinos.",
+      "sources": [
+        {
+          "url": "https://www.ijumpskydive.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/espana",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish skydiving operators and towns (lead)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://www.instagram.com/ijumpskydive",
+          "checked_on": "2026-11-14",
+          "what": "operator Instagram (public search-result view)"
+        }
+      ],
+      "note": "Operator schema gives 39.317, -2.367 (3 decimals); OurAirports airfield point used instead."
+    },
+    {
+      "key": "es-mazaricos-a-fervenza",
+      "name": "Aeródromo de A Fervenza",
+      "aliases": [
+        "Paracaidismo Galicia",
+        "LEMZ"
+      ],
+      "country": "ES",
+      "locality": "Mazaricos, A Coruña",
+      "latitude": 42.982329,
+      "longitude": -9.005002,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident ES-0175; page https://ourairports.com/airports/ES-0175/",
+      "icao": "LEMZ",
+      "operators": [
+        {
+          "name": "Paracaidismo Galicia",
+          "website": "https://paracaidismogalicia.com/",
+          "facebook": "https://www.facebook.com/ParacaidismoGalicia"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator news posts dated 25 Nov 2025 (Black Friday) and 18 Dec 2025 (Christmas vouchers); Instagram 2024 posts announce the move to A Fervenza.",
+      "sources": [
+        {
+          "url": "https://paracaidismogalicia.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://paracaidismogalicia.com/tandem/preguntas-frecuentes",
+          "checked_on": "2026-11-14",
+          "what": "operator FAQ: jumps at Aeródromo de A Fervenza, Mazaricos"
+        },
+        {
+          "url": "https://airfervenza.com/aerodromo",
+          "checked_on": "2026-11-14",
+          "what": "airfield operator page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-barcelona-bages",
+      "name": "Aeròdrom Barcelona-Bages",
+      "aliases": [
+        "Aeródromo Barcelona-Bages",
+        "Manresa Airfield",
+        "LEMS",
+        "Saltamos Village",
+        "SkydiveBcn"
+      ],
+      "country": "ES",
+      "locality": "Sant Fruitós de Bages, Barcelona",
+      "latitude": 41.7642059,
+      "longitude": 1.8637557,
+      "coordinates_source": "Operator schema.org point on https://saltamos.es/; matches OSM node 3632717197 'Saltamos - SkydiveBCN' (sport=parachuting, 41.76414, 1.86374) and lies 0.2 km from OSM relation 20333619 'Aeròdrom Barcelona-Bages' (icao LEMS) and OurAirports LEMS 'Manresa Airfield'.",
+      "icao": "LEMS",
+      "operators": [
+        {
+          "name": "Saltamos Village (SkydiveBcn)",
+          "website": "https://saltamos.es/"
+        }
+      ],
+      "season": "Thursday to Sunday (Yelp listing)",
+      "status": "active",
+      "status_evidence": "Operator homepage runs a promotion for tandem jumps on Saturdays and Sundays of November 2026.",
+      "sources": [
+        {
+          "url": "https://saltamos.es/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/3632717197",
+          "checked_on": "2026-11-14",
+          "what": "OSM: Saltamos - SkydiveBCN, sport=parachuting"
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/20333619",
+          "checked_on": "2026-11-14",
+          "what": "OSM: Aeròdrom Barcelona-Bages, icao LEMS"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-bcn/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Aeródromo Barcelona-Bages"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/espana",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Spanish skydiving operators and towns (lead)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Checked 2026-11-14: this is Aeròdrom Barcelona-Bages (LEMS), not Aeròdrom del Pla de Bages (OurAirports ES-0063, OSM relation 7278627, near Sallent), which is a separate airfield 2.6 km to the north-east. The earlier 2.5 km mismatch came from comparing with the wrong airfield. Site also has a wind tunnel (not counted)."
+    },
+    {
+      "key": "es-cordoba",
+      "name": "Aeropuerto de Córdoba",
+      "aliases": [
+        "Skydive Córdoba",
+        "LEBA"
+      ],
+      "country": "ES",
+      "locality": "Córdoba",
+      "latitude": 37.841999,
+      "longitude": -4.84888,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LEBA; page https://ourairports.com/airports/LEBA/",
+      "icao": "LEBA",
+      "operators": [
+        {
+          "name": "Skydive Córdoba",
+          "website": "https://skydivecordoba.com/"
+        }
+      ],
+      "season": "weekends (aggregator offer text)",
+      "status": "active",
+      "status_evidence": "Operator site live with 2026-dated content and booking; customer review dated 30-10-2025 on Yumping.",
+      "sources": [
+        {
+          "url": "https://skydivecordoba.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/cordoba",
+          "checked_on": "2026-11-14",
+          "what": "aggregator, review dated 30-10-2025"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-cordoba/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-santa-cilia",
+      "name": "Aeródromo de Santa Cilia - Los Pirineos",
+      "aliases": [
+        "Centro de Paracaidismo Pirineos",
+        "LECI"
+      ],
+      "country": "ES",
+      "locality": "Santa Cilia, Huesca (near Jaca)",
+      "latitude": 42.569199,
+      "longitude": -0.727778,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LECI; page https://ourairports.com/airports/LECI/",
+      "icao": "LECI",
+      "operators": [
+        {
+          "name": "Centro de Paracaidismo Pirineos (club based in Jaca; jumps at Lasclaveries, France)",
+          "website": "http://www.paracaidismopirineos.com/"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "No current jumping at Santa Cilia found. The operator's own Yumping profile (opened 2026-11-14) says the club is based in Jaca but makes its jumps at Aérodrome de Lasclaveries, about 18 km north of Pau, France (43.427443, -0.288781). The Santa Cilia airfield sites (fly-pyr.es, aerodromosantacilia.es) and the Jaca tourist office list gliding and sightseeing flights only. Only skydivingsource places the club at Santa Cilia.",
+      "sources": [
+        {
+          "url": "https://www.yumping.com/paracaidismo/centro-de-paracaidismo-pirineos--e5330",
+          "checked_on": "2026-11-14",
+          "what": "operator profile: jumps at Lasclaveries (Pau, France), weekends, Pilatus Porter and Twin Otter"
+        },
+        {
+          "url": "https://www.fly-pyr.es",
+          "checked_on": "2026-11-14",
+          "what": "Santa Cilia airfield operator: no parachuting listed"
+        },
+        {
+          "url": "https://www.aerodromosantacilia.es",
+          "checked_on": "2026-11-14",
+          "what": "Santa Cilia gliding operator: no parachuting listed"
+        },
+        {
+          "url": "https://visitjaca.es/aerodromo-de-santa-cilia",
+          "checked_on": "2026-11-14",
+          "what": "Jaca tourist office: airfield activities, no parachuting"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/centro-de-paracaidismo-pirineos/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator placing the club at Santa Cilia (contradicted)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Status 'closed' means no dropzone at Santa Cilia now; whether jumps were ever made here was not confirmed. Kept so the aggregator listing is not re-added. The club's real dropzone (Lasclaveries) belongs in FR.json. The earlier 'season' text came from the Lasclaveries description and was removed."
+    },
+    {
+      "key": "es-trebujena",
+      "name": "Aeródromo de Trebujena",
+      "aliases": [
+        "Skydive Jerez",
+        "Sky Dive Jerez",
+        "LETJ"
+      ],
+      "country": "ES",
+      "locality": "Trebujena, Cádiz (A-2000 Jerez road km 17.5)",
+      "latitude": 36.858889,
+      "longitude": -6.139167,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident ES-0001; page https://ourairports.com/airports/ES-0001/",
+      "icao": "LETJ",
+      "operators": [
+        {
+          "name": "Skydive Jerez"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Tripadvisor listing says the location was reported permanently closed; Yumping still lists it. Operator domains did not resolve on 2026-11-14.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-jerez/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/sky-dive-jerez--e19701889",
+          "checked_on": "2026-11-14",
+          "what": "aggregator listing"
+        },
+        {
+          "url": "https://www.aerodromodetrebujena.com",
+          "checked_on": "2026-11-14",
+          "what": "airfield site"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Likely closed; not confirmed by the operator."
+    },
+    {
+      "key": "es-matilla-de-los-canos",
+      "name": "Aeródromo Beatriz Cantos (Matilla de los Caños)",
+      "aliases": [
+        "Skydive Valladolid",
+        "LETC"
+      ],
+      "country": "ES",
+      "locality": "Matilla de los Caños, Valladolid",
+      "latitude": 41.530602,
+      "longitude": -4.925,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LETC; page https://ourairports.com/airports/LETC/",
+      "icao": "LETC",
+      "operators": [
+        {
+          "name": "Skydive Valladolid (Lyf Aviation)"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Diario de Valladolid (2026) reports the operator's plane was out of service from mid-2025 and equipment was removed from the airfield in October 2025; airfield Facebook post 22 Oct 2025 redirects complaints to the operator.",
+      "sources": [
+        {
+          "url": "https://www.diariodevalladolid.es/valladolid/260713/284512/nuevo-reves-perjudicada-estafa-paracaidismo-matilla-valladolid-juez-ve-lesiones.html",
+          "checked_on": "2026-11-14",
+          "what": "press report on closure"
+        },
+        {
+          "url": "https://www.facebook.com/AerodomoDeMatilla/posts/lamentamos-todo-esto-por-parte-de-los-afectados-pero-no-podemos-hacer-nada-al-re/1310725364428570",
+          "checked_on": "2026-11-14",
+          "what": "airfield Facebook post 2025-10-22 (public view via search)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "es-chozas-de-abajo",
+      "name": "Aeródromo de Chozas de Abajo",
+      "aliases": [
+        "Skydive León",
+        "LEZS"
+      ],
+      "country": "ES",
+      "locality": "Chozas de Abajo, León",
+      "latitude": 42.497215,
+      "longitude": -5.682669,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident ES-0092; page https://ourairports.com/airports/ES-0092/",
+      "icao": "LEZS",
+      "operators": [
+        {
+          "name": "Skydive León (Skydive Ibéria group)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator LinkedIn (2024) and TikTok place it at Chozas de Abajo; the sister operation Skydive Valladolid closed in 2025; operator domain did not resolve on 2026-11-14; Tripadvisor reviews report repeated cancellations. Tripadvisor (search-result view, 2026-11-14) shows a February 2026 review calling the operator 'ESTAFADORES' (fraudsters); no dated jump post from 2025 or later found.",
+      "sources": [
+        {
+          "url": "https://www.tiktok.com/@skydiveleonparacaidismo",
+          "checked_on": "2026-11-14",
+          "what": "operator TikTok profile: Aeródromo de Chozas de Abajo"
+        },
+        {
+          "url": "https://www.linkedin.com/company/skydive-ib%C3%A9ria-paracaidismo",
+          "checked_on": "2026-11-14",
+          "what": "group page (2024 posts)"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-leon/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: older address at Aeródromo Los Oteros, Pajares de los Oteros (LEOS)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://www.tripadvisor.es/Attraction_Review-g21331332-d8526233-Reviews-Skydive_Leon-Chozas_de_Abajo_Province_of_Leon_Castile_and_Leon.html",
+          "checked_on": "2026-11-14",
+          "what": "Tripadvisor listing (search-result view)"
+        }
+      ],
+      "note": "Aggregator gives an older site at Los Oteros (LEOS, 42.333056, -5.451944)."
+    }
+  ]
+}

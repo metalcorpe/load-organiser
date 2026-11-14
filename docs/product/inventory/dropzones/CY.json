@@ -1,0 +1,48 @@
+{
+  "country": "CY",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "cy-kingsfield",
+      "name": "Kingsfield Airfield (Dhekelia)",
+      "aliases": [
+        "Skydive Cyprus",
+        "JSPC Cyprus",
+        "Kingsfield Air Base"
+      ],
+      "country": "CY",
+      "locality": "Kingsfield, near Xylotymbou, Dhekelia Sovereign Base Area",
+      "latitude": 35.0139531,
+      "longitude": 33.7152371,
+      "coordinates_source": "https://www.openstreetmap.org/way/1301354619",
+      "icao": "LCRE",
+      "operators": [
+        {
+          "name": "Cyprus Combined Services Parachute Centre (Skydive Cyprus)",
+          "website": "http://www.skydivecyprus.org"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on British Skydiving's current 'find a drop zone' page; a charity of that name (working name Skydive Cyprus) was registered with the UK Charity Commission on 2025-09-26 (seen in search results)",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "British Skydiving affiliated DZ: Kingsfield, Xylotymbou, Cyprus 7510; www.skydivecyprus.org"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1301354619",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Kingsfield Airfield' (via Nominatim)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident CY-0004)",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports CY-0004 Kingsfield Air Base LCRE, 35.014275, 33.715851"
+        }
+      ],
+      "note": "Military (British Forces) centre in a UK Sovereign Base Area; ISO has no separate code, so filed under CY. Whether civilians can jump is not confirmed: the operator site had a TLS error and the AIP PDF did not download. A directory mentions a Britten-Norman Islander (old)."
+    }
+  ]
+}
