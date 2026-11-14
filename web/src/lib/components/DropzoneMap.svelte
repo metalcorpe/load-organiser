@@ -71,11 +71,13 @@
 		<a href={listHref}>list</a> is the accessible equivalent, with the same dropzones and search.
 	</p>
 
-	<noscript>
+	<!-- Server-rendered and replaced once the component runs, rather than <noscript>, so it also
+	     shows when scripts are blocked or fail to load, not only when they are switched off. -->
+	{#if phase === 'server'}
 		<p class="notice" data-testid="map-needs-js">
 			The map needs JavaScript. <a href={listHref}>Use the list</a>: it has the same dropzones.
 		</p>
-	</noscript>
+	{/if}
 
 	{#if phase === 'ask'}
 		<div class="consent">

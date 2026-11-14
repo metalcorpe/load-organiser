@@ -125,6 +125,7 @@ test.describe('dropzone map', () => {
 			`/dz?q=${base}`
 		);
 		await expect(page.getByTestId('dz-map')).toHaveCount(0);
+		await expect(page.getByTestId('map-needs-js')).toHaveCount(0);
 		expect(seen.external).toEqual([]);
 
 		await showMap(page);
@@ -178,16 +179,17 @@ test.describe('dropzone map', () => {
 		await showMap(page);
 
 		await page.getByRole('button', { name: `${closed.name} (closed)` }).click();
-		const closedPopup = page.locator('.leaflet-popup');
-		await expect(closedPopup).toContainText('Closed');
+		await expect(page.locator('.leaflet-popup', { hasText: closed.name })).toContainText('Closed');
 
 		// From the keyboard: Enter opens the popup and moves focus to its link.
 		const marker = page.getByRole('button', { name: alpha.name, exact: true });
 		await marker.focus();
 		await page.keyboard.press('Enter');
-		const link = page.locator('.leaflet-popup').getByRole('link', { name: alpha.name });
+		// (The previous popup may still be fading out: find this one by its dropzone.)
+		const popup = page.locator('.leaflet-popup', { hasText: alpha.name });
+		const link = popup.getByRole('link', { name: alpha.name });
 		await expect(link).toBeFocused();
-		await expect(page.locator('.leaflet-popup')).toContainText('Reykjavik, Iceland');
+		await expect(popup).toContainText('Reykjavik, Iceland');
 		await expect(link).toHaveAttribute('href', `/dz/${alpha.id}`);
 		await page.keyboard.press('Enter');
 
@@ -226,7 +228,7 @@ test.describe('dropzone map', () => {
 				await showMap(page);
 				expect.soft(await violations(page), 'loaded').toEqual([]);
 				await page.getByRole('button', { name: shared.alpha.name, exact: true }).click();
-				await expect(page.locator('.leaflet-popup')).toBeVisible();
+				await expect(page.locator('.leaflet-popup', { hasText: shared.alpha.name })).toBeVisible();
 				expect.soft(await violations(page), 'popup').toEqual([]);
 			});
 		});
