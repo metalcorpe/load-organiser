@@ -4,7 +4,7 @@
  * Responses are shape-checked before reaching pages; failures are reduced to a
  * small reason code. Upstream bodies and URLs are never passed through.
  */
-import type { PlaceOut, VenueOut, VenueRefOut } from '#lib/contracts/index.ts';
+import type { PlaceOut, VenueOut, VenuePointOut, VenueRefOut } from '#lib/contracts/index.ts';
 import type { ApiTransport, OperationId, RequestOptions } from './api/transport.ts';
 
 export type DirectoryReason =
@@ -39,6 +39,12 @@ const KNOWN = new Set<string>([
 export interface VenuePage {
 	items: VenueOut[];
 	nextCursor: string | null;
+}
+
+export interface VenuePoints {
+	points: VenuePointOut[];
+	/** More venues match than one page holds; the map shows the first page only. */
+	truncated: boolean;
 }
 
 export interface VenueDetail {
@@ -98,6 +104,22 @@ export function isVenueOut(value: unknown): value is VenueOut {
 	);
 }
 
+const within = (v: unknown, limit: number) =>
+	typeof v === 'number' && Number.isFinite(v) && Math.abs(v) <= limit;
+
+export function isVenuePoint(value: unknown): value is VenuePointOut {
+	return (
+		isRecord(value) &&
+		isString(value.id) &&
+		isString(value.name) &&
+		isNullableString(value.locality) &&
+		isString(value.country) &&
+		within(value.lat, 90) &&
+		within(value.lon, 180) &&
+		typeof value.closed === 'boolean'
+	);
+}
+
 function isVenueRef(value: unknown): value is VenueRefOut {
 	return (
 		isRecord(value) &&
@@ -146,6 +168,27 @@ export async function searchVenues(
 		return invalid();
 	}
 	return { ok: true, value: { items: body.items, nextCursor: body.next_cursor as string | null } };
+}
+
+/** One page of map points (the API's maximum, 1,000) for the same filters as the list. */
+export async function listVenuePoints(
+	api: ApiTransport,
+	query: { q?: string; country?: string }
+): Promise<DirectoryOutcome<VenuePoints>> {
+	const outcome = await call(api, 'listVenuePoints', {
+		query: { q: query.q, country: query.country, limit: '1000' }
+	});
+	if (!outcome.ok) return outcome;
+	const body = outcome.value;
+	if (
+		!isRecord(body) ||
+		!Array.isArray(body.items) ||
+		!body.items.every(isVenuePoint) ||
+		!isNullableString(body.next_cursor)
+	) {
+		return invalid();
+	}
+	return { ok: true, value: { points: body.items, truncated: body.next_cursor !== null } };
 }
 
 export async function getVenue(

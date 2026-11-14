@@ -67,6 +67,22 @@ Open details: initial directory sources and reuse permissions, minimum location 
 | Provisional places | Owner-only name + country, saved immediately (confirmed email required, like all private writes); optional link to a public venue; at most 200 per person (design default). Never public, never a suggestion, never visible on venue pages |
 | Authority | Maintenance requires the server-granted `reviewer` role (`python -m app.skydiver.access.grant reviewer <email>`). Listings have no operator, claim, endorsement or verification fields, and public venue responses contain no counts or linked private records |
 
+## Map view
+
+Requested by the owner 2026-11-14: `/dz?view=map` shows the same search as the list on a map. No paid
+service and no new infrastructure.
+
+| Area | Behaviour |
+| --- | --- |
+| Data | `GET /api/skydiver/v1/venue-points` (same `q`/`country` filters and public statuses as `/venues`, merged and draft venues excluded, venues without coordinates left out): id, name, locality, country, lat, lon, closed. Pages of up to 1,000; the web shows the first page and says when there are more |
+| Map | Leaflet and Leaflet.markercluster (npm), OpenStreetMap standard tiles with the "© OpenStreetMap contributors" attribution. Closed dropzones have their own marker and say "Closed" in the popup; popups link to `/dz/{id}` |
+| Privacy | Nothing third-party loads before the visitor presses "Show map"; the choice is kept in `sessionStorage` for that tab. Tiles then send the visitor's IP address and the site's origin (`Referrer-Policy: strict-origin` on tiles only, which the tile usage policy requires) to `tile.openstreetmap.org`, the only image host the CSP allows besides the site. The privacy page says so |
+| Without JavaScript | The Map view says the map needs JavaScript and links to the list, which stays complete |
+| Accessibility | The list is the equivalent and the map says so. The map region is labelled and focusable (arrow keys pan, +/- zoom); markers and clusters are named buttons; Enter on a marker opens its popup and moves focus to its link, and closing returns focus to the marker |
+| Detail page | Coordinates as text and a plain "Open in OpenStreetMap" link; no map is embedded |
+
+The tile servers are run by volunteers under a [usage policy](https://operations.osmfoundation.org/policies/tiles/) meant for moderate use. If the map ever needs more than that, the policy asks for another tile provider or self-hosting; that would be a new decision.
+
 No venue data is shipped. Listings must come from reviewed sources with reuse permission (#151/#162); the beta directory starts empty.
 
 Related: [connected product model](product-model.md), [feature catalog](feature-catalog.md), and [discovery board](discovery-board.md).

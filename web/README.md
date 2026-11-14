@@ -19,7 +19,7 @@ implemented**; their screens say so explicitly.
 | Route | Access | Behaviour in #144 |
 | --- | --- | --- |
 | `/` Discover | Public SSR | Explains that no listings are published. No fixture or sample listings |
-| `/dz` | Public SSR | Directory search (name/alias/former name, country) over listed and closed venues; keyset “More results”; honest empty state (#148) |
+| `/dz` | Public SSR | Directory search (name/alias/former name, country) over listed and closed venues; keyset “More results”; honest empty state (#148). `?view=map`: the same search on an OpenStreetMap map, loaded only after “Show map” ([map view](../docs/product/dropzone-directory.md#map-view)) |
 | `/dz/[id]` | Public SSR | Sourced venue detail; closed label; merged IDs answer `301` to the surviving venue; drafts and unknown IDs `404` |
 | `/places` | Private | Owner-only provisional places: add (name + country), edit, link to/unlink from a listed venue, remove |
 | `/status` | Public SSR | Live `GET /api/skydiver/v1/health` via the server transport: operational / degraded (DB down) / timeout / unreachable / unexpected response / not configured |
@@ -56,7 +56,7 @@ signup and password recovery are replaced by #145's session design, not ported.
 - **Origin:** every unsafe method must carry exactly `APP_ORIGIN` (absent, `null` or other origins get
   403), in addition to SvelteKit's own form check. Unset `APP_ORIGIN` refuses all unsafe requests.
 - **Headers:** every dynamic response is `Cache-Control: no-store`, with CSP (hashed scripts,
-  `frame-ancestors 'none'`; inline style *attributes* only, because SvelteKit emits them), `nosniff`,
+  `frame-ancestors 'none'`; images from 'self', `data:` and `https://tile.openstreetmap.org` for the dropzone map; inline style *attributes* only, because SvelteKit emits them), `nosniff`,
   `Referrer-Policy: same-origin`. Data preloading is disabled.
 
 ## Commands

@@ -100,6 +100,11 @@
 			signs out your other devices; a password reset signs out all of them.
 		</li>
 		<li>No advertising or analytics scripts run on these pages.</li>
+		<li>
+			The dropzone map loads only when you choose "Show map". Your browser then fetches map images
+			from the OpenStreetMap tile servers, which receive your IP address, browser details and this
+			site's address (not the page or your search), as their usage policy requires. The choice lasts until you close the browser tab.
+		</li>
 	</ul>
 </section>
 

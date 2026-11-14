@@ -5,6 +5,7 @@
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { formatDay, listingMessage } from '#lib/listings.ts';
 	import { countryName } from '#lib/countries.ts';
+	import { formatCoordinates, osmLink } from '#lib/dz-map.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -65,7 +66,13 @@
 	{/if}
 	{#if venue.latitude !== null && venue.longitude !== null}
 		<dt>Coordinates</dt>
-		<dd>{venue.latitude}, {venue.longitude}</dd>
+		<dd>
+			{formatCoordinates(venue.latitude, venue.longitude)}
+			<!-- A plain link: nothing from OpenStreetMap loads on this page. -->
+			<br /><a href={osmLink(venue.latitude, venue.longitude)} rel="external noopener noreferrer"
+				>Open in OpenStreetMap</a
+			>
+		</dd>
 	{/if}
 	{#each venue.aliases as alias (alias.kind + alias.name)}
 		<dt>{KIND_LABEL[alias.kind]}</dt>

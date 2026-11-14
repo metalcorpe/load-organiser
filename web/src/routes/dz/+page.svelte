@@ -1,20 +1,16 @@
 <script lang="ts">
+	import DropzoneMap from '#lib/components/DropzoneMap.svelte';
 	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
 	import { COUNTRY_OPTIONS, countryName } from '#lib/countries.ts';
 	import { directoryMessage } from '#lib/directory-messages.ts';
+	import { dzHref } from '#lib/dz-map.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
 	const filtered = $derived(Boolean(data.q || data.country));
-
-	function href(cursor?: string): string {
-		const params = new URLSearchParams();
-		if (data.q) params.set('q', data.q);
-		if (data.country) params.set('country', data.country);
-		if (cursor) params.set('cursor', cursor);
-		const search = params.toString();
-		return search ? `/dz?${search}` : '/dz';
-	}
+	const listHref = $derived(dzHref({ q: data.q, country: data.country }));
+	const mapHref = $derived(dzHref({ q: data.q, country: data.country, view: 'map' }));
+	const href = (cursor?: string) => dzHref({ q: data.q, country: data.country, cursor });
 </script>
 
 <svelte:head>
@@ -43,14 +39,44 @@
 			{/each}
 		</select>
 	</div>
+	{#if data.view === 'map'}<input type="hidden" name="view" value="map" />{/if}
 	<div class="form-actions">
 		<button class="button" type="submit">Search</button>
 	</div>
 </form>
 
-{#if !data.result.ok}
+<!-- Two addresses, not a client-side toggle: each view can be shared and works without JS. -->
+<nav class="views" aria-label="Show dropzones as">
+	<a href={listHref} aria-current={data.view === 'list' ? 'page' : undefined}>List</a>
+	<a href={mapHref} aria-current={data.view === 'map' ? 'page' : undefined}>Map</a>
+</nav>
+
+{#if data.map}
+	{#if !data.map.ok}
+		<p class="form-error" role="alert">{directoryMessage(data.map.reason)}</p>
+	{:else if data.map.points.length === 0}
+		<section class="empty-state quiet" aria-labelledby="empty-heading">
+			<h2 id="empty-heading">No dropzones to show on the map</h2>
+			<p>
+				{filtered ? 'None of the matching dropzones' : 'No listed dropzone'} has coordinates yet.
+				<a href={listHref}>The list</a> shows every listed dropzone{filtered ? ' that matches' : ''}.
+			</p>
+			{#if filtered}
+				<p class="actions"><a class="button secondary" href={dzHref({ view: 'map' })}>Clear search</a></p>
+			{/if}
+		</section>
+	{:else}
+		{#if data.map.truncated}
+			<p class="hint" role="status">
+				Showing the first {data.map.points.length.toLocaleString('en-GB')} dropzones. Choose a country
+				to see the rest.
+			</p>
+		{/if}
+		<DropzoneMap points={data.map.points} {listHref} />
+	{/if}
+{:else if data.result && !data.result.ok}
 	<p class="form-error" role="alert">{directoryMessage(data.result.reason)}</p>
-{:else if data.result.items.length === 0}
+{:else if data.result && data.result.items.length === 0}
 	<!-- No match is a quiet result under the search; an empty directory is the empty state. -->
 	<section class={filtered ? 'empty-state quiet' : 'empty-state'} aria-labelledby="empty-heading">
 		<h2 id="empty-heading">{filtered ? 'No listed dropzones match' : 'No dropzones are listed yet'}</h2>
@@ -66,7 +92,7 @@
 		</p>
 		{#if filtered}<p class="actions"><a class="button secondary" href="/dz">Clear search</a></p>{/if}
 	</section>
-{:else}
+{:else if data.result}
 	<ul class="results rows grouped" aria-label="Dropzones">
 		{#each data.result.items as venue (venue.id)}
 			<li>
@@ -100,6 +126,49 @@
 
 	.search {
 		margin: 0 0 1rem;
+	}
+
+	/* List or Map: two plain links styled as a small segmented control. */
+	.views {
+		display: inline-flex;
+		gap: 0.25rem;
+		margin: 0 0 1rem;
+		padding: 0.25rem;
+		border-radius: 12px;
+		background: var(--surface-soft);
+		box-shadow: 0 0 0 1px var(--border);
+	}
+
+	.views a {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 5.5rem;
+		min-height: 44px;
+		padding: 0 1rem;
+		border-radius: 9px;
+		color: var(--muted);
+		font-weight: 600;
+		text-decoration: none;
+	}
+
+	.views a[aria-current='page'] {
+		background: var(--surface);
+		color: var(--fg);
+		box-shadow: 0 0 0 1px var(--field-border);
+	}
+
+	.views a:not([aria-current='page']):hover {
+		color: var(--fg);
+		text-decoration: underline;
+	}
+
+	.views a:focus-visible {
+		outline-offset: 1px;
+	}
+
+	.hint {
+		color: var(--muted);
 	}
 
 	/* One grouped list: a single outline and quiet rules between rows instead of a card per

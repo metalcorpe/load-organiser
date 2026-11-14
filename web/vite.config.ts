@@ -20,7 +20,9 @@ export default defineConfig({
 					// SvelteKit emits inline style *attributes* (body wrapper, route announcer).
 					// Only attributes are allowed inline; stylesheets and scripts stay 'self'/hashed.
 					'style-src-attr': ['unsafe-inline'],
-					'img-src': ['self', 'data:'],
+					// OpenStreetMap tiles for /dz?view=map, requested only after the visitor chooses
+					// "Show map". Images from that one host; scripts and styles stay 'self'.
+					'img-src': ['self', 'data:', 'https://tile.openstreetmap.org'],
 					'connect-src': ['self'],
 					'object-src': ['none'],
 					'base-uri': ['self'],
