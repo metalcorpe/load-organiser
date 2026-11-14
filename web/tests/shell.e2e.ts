@@ -182,6 +182,24 @@ test.describe('private routes deny anonymous access', () => {
 test.describe('upstream failure (API origin points at a closed port)', () => {
 	test.use({ baseURL: 'http://127.0.0.1:4174' });
 
+	test('the events board tells a failed load apart from a date mistake', async ({ page }) => {
+		await page.goto('/?q=boogie');
+		const failure = page.getByRole('region', { name: 'Listings could not be loaded' });
+		await expect(failure.getByRole('alert')).toHaveText(
+			'The service is unavailable right now. Try again later.'
+		);
+		await expect(failure.getByRole('link', { name: 'Try again' })).toHaveAttribute(
+			'href',
+			'/?q=boogie'
+		);
+		await expect(page.getByLabel('Title or organizer')).toHaveValue('boogie');
+
+		// A "to" before "from" is answered without the service: the field, not a failure.
+		await page.goto('/?from=2027-07-10&to=2027-07-01');
+		await expect(page.getByRole('region', { name: 'Listings could not be loaded' })).toHaveCount(0);
+		await expect(page.getByLabel('To', { exact: true })).toHaveAttribute('aria-invalid', 'true');
+	});
+
 	test('status page reports the API as unreachable', async ({ page }) => {
 		const response = await page.goto('/status');
 		expect(response?.status()).toBe(200);

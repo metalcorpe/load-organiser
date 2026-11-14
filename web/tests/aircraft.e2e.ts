@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { PASSWORD, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the logbook tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -25,11 +26,12 @@ test.describe('aircraft on each jump', () => {
 		await expect(page.getByText('Aircraft strip', { exact: true })).toBeVisible();
 		const placeUrl = page.url();
 		// Nothing recorded at this place yet: the field starts empty.
+		await openJumpSections(page);
 		await expect(page.getByLabel('Aircraft (optional)')).toHaveValue('');
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 		await page.getByLabel('Type', { exact: true }).selectOption('belly');
 		await page.getByLabel('Aircraft (optional)').fill('Cessna 208 SX-ABC');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await expect(page.getByText('Cessna 208 SX-ABC', { exact: true })).toBeVisible();
 
@@ -43,16 +45,18 @@ test.describe('aircraft on each jump', () => {
 
 		// A new jump at the same place starts with the aircraft, editable, with a hint.
 		await page.goto(placeUrl);
+		await openJumpSections(page);
 		const aircraft = page.getByLabel('Aircraft (optional)');
 		await expect(aircraft).toHaveValue('Cessna 208 SX-ABC');
 		await expect(aircraft).toHaveAccessibleDescription(/From your last jump here/);
 		await aircraft.fill('Twin Otter');
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-11');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 
 		// "Log the next jump" carries the aircraft of the jump it starts from.
 		await page.getByRole('link', { name: 'Log the next jump' }).click();
+		await openJumpSections(page);
 		await expect(page.getByLabel('Aircraft (optional)')).toHaveValue('Twin Otter');
 	});
 });

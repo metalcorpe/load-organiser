@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { JumpNumberingOut, JumpOut } from './contracts/index.ts';
-import { nextJumpValues, numberHint, numberingNotes, proposedNumber } from './jumps.ts';
+import {
+	jumpMessage,
+	loadFailure,
+	nextJumpValues,
+	numberHint,
+	numberingNotes,
+	proposedNumber
+} from './jumps.ts';
 
 const jump = (over: Partial<JumpOut> = {}): JumpOut =>
 	({
@@ -118,5 +125,30 @@ describe('numberingNotes', () => {
 			numbering({ repeats: [{ jump_number: 7, uses: 5, jumps: [] }], repeat_count: 1 })
 		);
 		expect(notes[0].text).toBe('#7 is used 5 times');
+	});
+});
+
+describe('loadFailure', () => {
+	it('offers a retry only when the service failed or did not answer', () => {
+		expect(loadFailure('unavailable')).toBe('retry');
+		expect(loadFailure('uncertain')).toBe('retry');
+	});
+
+	it('treats an old page link as stale, not as a failure', () => {
+		expect(loadFailure('cursor_invalid')).toBe('stale');
+	});
+
+	it('keeps every other refusal with its own message', () => {
+		for (const reason of ['not_authenticated', 'forbidden', 'invalid_input', 'not_found']) {
+			expect(loadFailure(reason)).toBe('refused');
+		}
+		expect(jumpMessage('not_authenticated')).toBe('Your session has ended. Sign in again.');
+	});
+});
+
+describe('altitude errors', () => {
+	it('name the altitude that failed', () => {
+		expect(jumpMessage('altitude_invalid')).toMatch(/^Check the exit altitude/);
+		expect(jumpMessage('deployment_altitude_invalid')).toMatch(/^Check the deployment altitude/);
 	});
 });

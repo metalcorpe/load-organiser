@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
 import { PASSWORD, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the account tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -21,8 +22,9 @@ async function logJump(page: Page) {
 	await page.getByRole('button', { name: 'Use this place' }).click();
 	await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 	await page.getByLabel('Type', { exact: true }).selectOption('wingsuit');
+	await openJumpSections(page);
 	await page.getByLabel('Notes (optional, private)').fill('Exported note.');
-	await page.getByRole('button', { name: 'Save private jump' }).click();
+	await page.getByRole('button', { name: 'Save private jump' }).first().click();
 	await expect(page.getByText('Saved privately.')).toBeVisible();
 }
 

@@ -47,6 +47,10 @@ test.describe('jump currency', () => {
 	test('without a licence the logbook asks for one; with one it shows the guidance', async ({ page }) => {
 		const email = await createAccount({ label: 'currency' });
 		await signIn(page, email, '/jumps');
+		// An empty logbook leads with logging and importing; currency waits for a first jump.
+		await expect(page.getByRole('link', { name: 'Log your first jump' })).toBeVisible();
+		await expect(page.getByRole('region', { name: 'Jump currency' })).toHaveCount(0);
+		await page.goto('/history');
 		const box = page.getByRole('region', { name: 'Jump currency' });
 		await expect(box).toContainText('Set your licence to see your jump currency.');
 		await expect(box).toContainText('not a verified status (USPA SIM 5-2)');
@@ -55,6 +59,10 @@ test.describe('jump currency', () => {
 		await page.goto('/history');
 		await expect(page.getByRole('region', { name: 'Jump currency' })).toContainText(
 			'No jumps recorded yet, so there is no currency to show.'
+		);
+		// The details come with a computed status, not before.
+		await expect(page.getByRole('region', { name: 'Jump currency' })).not.toContainText(
+			'Every jump type counts'
 		);
 
 		await logJump(email, day(-10));

@@ -194,6 +194,7 @@ async function world(): Promise<World> {
 				'/activity',
 				'/people',
 				'/profile',
+				'/profile/account',
 				'/profile/public',
 				'/profile/data',
 				'/records',

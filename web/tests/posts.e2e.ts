@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from '@playwright/test';
 import { randomBytes } from 'node:crypto';
 import { PASSWORD, apiCall, createAccount, reviewerSession } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the account tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -36,8 +37,9 @@ async function logJump(page: Page): Promise<string> {
 	await page.getByRole('button', { name: 'Use this place' }).click();
 	await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 	await page.getByLabel('Type', { exact: true }).selectOption('freefly');
+	await openJumpSections(page);
 	await page.getByLabel('Notes (optional, private)').fill('secret detail');
-	await page.getByRole('button', { name: 'Save private jump' }).click();
+	await page.getByRole('button', { name: 'Save private jump' }).first().click();
 	await expect(page.getByText('Saved privately.')).toBeVisible();
 	return page.url().split('/jumps/')[1].split('?')[0];
 }
@@ -103,12 +105,13 @@ test.describe('shared jump summaries', () => {
 
 		// Editing a private note leaves it; editing the shared type withdraws it.
 		await alex.page.goto(`/jumps/${jumpId}`);
+		await openJumpSections(alex.page);
 		await alex.page.getByLabel('Notes (optional, private)').fill('another secret');
-		await alex.page.getByRole('button', { name: 'Save changes' }).click();
+		await alex.page.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(alex.page.getByText('Saved privately.')).toBeVisible();
 		expect((await visitor.goto(postHref!))?.status()).toBe(200);
 		await alex.page.getByLabel('Type', { exact: true }).selectOption('angle');
-		await alex.page.getByRole('button', { name: 'Save changes' }).click();
+		await alex.page.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(alex.page.getByRole('list', { name: 'History' })).toContainText(
 			'Post withdrawn: you changed a value it shared'
 		);
@@ -153,7 +156,7 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByRole('link', { name }).click();
 		await alex.page.getByLabel('Date', { exact: true }).fill('2026-08-15');
 		await alex.page.getByLabel('Type', { exact: true }).selectOption('wingsuit');
-		await alex.page.getByRole('button', { name: 'Save private jump' }).click();
+		await alex.page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(alex.page.getByText('Saved privately.')).toBeVisible();
 		await alex.page.getByRole('link', { name: 'Share a summary of this jump' }).click();
 		await alex.page.getByLabel('Dropzone', { exact: true }).check();

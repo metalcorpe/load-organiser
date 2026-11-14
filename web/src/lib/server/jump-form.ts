@@ -30,9 +30,16 @@ export function jumpBody(data: FormData): { body: JumpBody } | { error: string }
 	if (!(isUuid(venue) ? !place : isUuid(place) && !venue)) return { error: 'location_required' };
 
 	const numbers: Record<string, number | null> = {};
-	for (const name of ['jump_number', 'exit_altitude', 'deployment_altitude', 'freefall_seconds']) {
+	// Each malformed number names its own field, so the form can open its section and focus it.
+	const NUMBER_ERROR: Record<string, string> = {
+		jump_number: 'jump_number_invalid',
+		exit_altitude: 'altitude_invalid',
+		deployment_altitude: 'deployment_altitude_invalid',
+		freefall_seconds: 'freefall_invalid'
+	};
+	for (const [name, error] of Object.entries(NUMBER_ERROR)) {
 		const value = whole(data, name);
-		if (value === 'invalid') return { error: 'invalid_input' };
+		if (value === 'invalid') return { error };
 		numbers[name] = value;
 	}
 	const hasAltitude = numbers.exit_altitude !== null || numbers.deployment_altitude !== null;

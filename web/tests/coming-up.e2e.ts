@@ -103,7 +103,7 @@ test.describe('coming up on the logbook', () => {
 
 	test('nothing coming up shows nothing', async ({ page }) => {
 		await signIn(page, await createAccount({ label: 'nothing' }), '/jumps');
-		await expect(page.getByRole('heading', { name: 'Logbook' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Logbook', exact: true })).toBeVisible();
 		await expect(page.getByRole('list', { name: 'Coming up' })).toHaveCount(0);
 	});
 });

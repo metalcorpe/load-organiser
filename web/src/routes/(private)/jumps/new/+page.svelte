@@ -81,6 +81,8 @@
 		{numberHint}
 		{aircraftHint}
 		loading={data.loading}
+		error={saveForm && 'error' in saveForm ? saveForm.error : null}
+		openFilled={false}
 	/>
 	{#if !data.gear.ok}<p class="hint">Your gear could not be loaded; you can still save the jump.</p>{/if}
 {:else}

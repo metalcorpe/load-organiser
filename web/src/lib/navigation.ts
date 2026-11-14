@@ -22,7 +22,14 @@ export const PRIMARY_NAV: readonly NavItem[] = [
 		private: false,
 		also: ['/events', '/dz', '/organizers']
 	},
-	{ href: '/jumps', label: 'Logbook', icon: 'logbook', private: true, also: ['/history'] },
+	{
+		href: '/jumps',
+		label: 'Logbook',
+		icon: 'logbook',
+		private: true,
+		// Statistics is read from the logbook (History links to it), so it stays under Logbook.
+		also: ['/history', '/stats']
+	},
 	{ href: '/activity', label: 'Friends', icon: 'friends', private: true, also: ['/people', '/posts'] },
 	{
 		href: '/profile',

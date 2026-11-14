@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { randomUUID } from 'node:crypto';
 import { PASSWORD, apiCall, apiSession, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the logbook tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -45,6 +46,7 @@ test.describe('suggested next jump number', () => {
 		const { email, placeId } = await jumper('nextnum', [119, 120]);
 		await signIn(page, email);
 		await page.goto(`/jumps/new?place=${placeId}`);
+		await openJumpSections(page);
 		const number = page.getByLabel('Your jump number');
 		await expect(number).toHaveValue('121');
 		await expect(page.getByText('Your last numbered jump is #120.')).toBeVisible();
@@ -52,7 +54,7 @@ test.describe('suggested next jump number', () => {
 		// The proposal is only a starting value.
 		await number.fill('130');
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await expect(page.getByText('#130', { exact: true })).toBeVisible();
 	});
@@ -61,6 +63,7 @@ test.describe('suggested next jump number', () => {
 		const { email, placeId, ids } = await jumper('nextfrom', [119, 120]);
 		await signIn(page, email);
 		await page.goto(`/jumps/new?place=${placeId}&from=${ids[0]}`);
+		await openJumpSections(page);
 		await expect(page.getByLabel('Your jump number')).toHaveValue('120');
 		await expect(page.getByText('Your last numbered jump is')).toHaveCount(0);
 	});
@@ -69,6 +72,7 @@ test.describe('suggested next jump number', () => {
 		const { email, placeId } = await jumper('nonum', [null]);
 		await signIn(page, email);
 		await page.goto(`/jumps/new?place=${placeId}`);
+		await openJumpSections(page);
 		await expect(page.getByLabel('Your jump number')).toHaveValue('');
 		await expect(page.getByText('Your last numbered jump is')).toHaveCount(0);
 	});

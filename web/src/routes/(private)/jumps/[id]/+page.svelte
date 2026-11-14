@@ -204,17 +204,22 @@
 {:else}
 	{#if data.override}<p class="hint" role="status">New place chosen; save to apply it.</p>{/if}
 	{#if errorFor('save')}<p class="form-error" role="alert">{errorFor('save')}</p>{/if}
-	<JumpForm
-		action="?{query}&/save"
-		{values}
-		{location}
-		gear={data.gear.items}
-		{selected}
-		keys={{ component: echoed?.new_component_key || data.componentKey }}
-		version={(echoed && form && 'based' in form && form.based) || jump.version}
-		submitLabel="Save changes"
-		loading={context}
-	/>
+	<!-- Keyed by jump: moving to another jump starts its form afresh (open sections,
+	     typed state), as a full page load would. -->
+	{#key jump.id}
+		<JumpForm
+			action="?{query}&/save"
+			{values}
+			{location}
+			gear={data.gear.items}
+			{selected}
+			keys={{ component: echoed?.new_component_key || data.componentKey }}
+			version={(echoed && form && 'based' in form && form.based) || jump.version}
+			submitLabel="Save changes"
+			loading={context}
+			error={form && form.form === 'save' && 'error' in form ? form.error : null}
+		/>
+	{/key}
 {/if}
 
 </section>

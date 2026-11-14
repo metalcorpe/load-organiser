@@ -38,7 +38,7 @@ test.describe('form errors after a save', () => {
 
 	test('a form without field errors still links the field to the summary', async ({ page }) => {
 		const email = await createAccount({ label: 'guard-summary' });
-		await signIn(page, email, '/profile');
+		await signIn(page, email, '/profile/account');
 		await guardReady(page);
 
 		await page.getByLabel('Current password').fill(PASSWORD);
@@ -57,7 +57,7 @@ test.describe('form errors after a save', () => {
 
 	test('a field described only by a hint keeps the hint and gains the summary', async ({ page }) => {
 		const email = await createAccount({ label: 'guard-hint' });
-		await signIn(page, email, '/profile');
+		await signIn(page, email, '/profile/account');
 		await guardReady(page);
 
 		await page.getByLabel('Current password').fill(PASSWORD);

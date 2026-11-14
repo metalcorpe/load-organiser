@@ -52,6 +52,16 @@
 		text-decoration: none;
 	}
 
+	/* A label never breaks inside its word. On a phone it shrinks with the tab's width
+	   (3.4vw) down to a floor that still grows with the text size, so at 320px and 200%
+	   text "Explore" stays whole. */
+	a span {
+		white-space: nowrap;
+		overflow-wrap: normal;
+		word-break: keep-all;
+		font-size: clamp(0.55rem, 3.4vw, 1em);
+	}
+
 	a[aria-current='page'] {
 		color: var(--accent);
 		font-weight: 750;
@@ -64,6 +74,10 @@
 			border-top: 0;
 			border-bottom: 1px solid var(--border);
 			padding-bottom: 0;
+		}
+
+		a span {
+			font-size: inherit;
 		}
 
 		a {

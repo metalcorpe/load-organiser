@@ -46,7 +46,10 @@ export const JUMP_MESSAGES: Record<string, string> = {
 	time_zone_required: 'An exit time needs its time zone, e.g. Europe/Madrid.',
 	time_zone_invalid: 'Use a time zone name such as Europe/Madrid.',
 	altitude_unit_required: 'Choose feet or metres for the altitudes.',
-	altitude_invalid: 'Check the altitudes.',
+	altitude_invalid:
+		'Check the exit altitude: a whole number above 0, at most 45,000 ft or 13,700 m.',
+	deployment_altitude_invalid:
+		'Check the deployment altitude: a whole number above 0, at most 45,000 ft or 13,700 m.',
 	altitudes_incomplete: 'Check the altitudes.',
 	deployment_above_exit: 'The deployment altitude cannot be above the exit altitude.',
 	freefall_invalid: 'Freefall time must be between 0 and 600 seconds.',
@@ -70,6 +73,18 @@ export const JUMP_MESSAGES: Record<string, string> = {
 		'Save not confirmed: the service did not answer in time. It may or may not have been saved. Send the form again: it will not create a second entry.',
 	unavailable: 'The service is unavailable right now. Nothing was saved. Try again later.'
 };
+
+/**
+ * How the logbook says that a page of jumps could not be read: `retry` for a service that
+ * failed or did not answer (the same page again may work), `stale` for a page link that
+ * no longer works (start from the first page), `refused` for anything else, shown with
+ * its own message (session ended, not allowed, bad input).
+ */
+export function loadFailure(reason: string): 'retry' | 'stale' | 'refused' {
+	if (reason === 'unavailable' || reason === 'uncertain') return 'retry';
+	if (reason === 'cursor_invalid') return 'stale';
+	return 'refused';
+}
 
 export function jumpMessage(code: string | undefined): string | undefined {
 	return code ? (JUMP_MESSAGES[code] ?? JUMP_MESSAGES.invalid_input) : undefined;

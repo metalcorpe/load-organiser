@@ -440,6 +440,78 @@ test.describe('search context and the filter panel', () => {
 		await expect(page.getByLabel('Intended for')).toHaveValue('students');
 	});
 
+	test('"To" before "From" keeps the panel open, marks and focuses "To", keeps every filter', async ({
+		page
+	}) => {
+		await page.goto('/?q=nothing');
+		await page.locator('summary', { hasText: 'Filters' }).click();
+		await page.getByLabel('Country').selectOption('PT');
+		const when = page.getByRole('group', { name: 'When are you available?' });
+		await when.getByLabel('From', { exact: true }).fill('2027-07-10');
+		await when.getByLabel('To', { exact: true }).fill('2027-07-01');
+		await page.getByRole('button', { name: 'Show listings' }).click();
+		await expect(page).toHaveURL(/from=2027-07-10&to=2027-07-01/);
+
+		const to = when.getByLabel('To', { exact: true });
+		await expect(to).toHaveAttribute('aria-invalid', 'true');
+		await expect(to).toHaveAccessibleDescription(/“To” is before “From”/);
+		await expect(to).toBeFocused();
+		await expect(when.getByLabel('From', { exact: true })).toHaveValue('2027-07-10');
+		await expect(to).toHaveValue('2027-07-01');
+		await expect(page.getByLabel('Country')).toHaveValue('PT');
+		await expect(page.getByLabel('Title or organizer')).toHaveValue('nothing');
+		// The field is in view and not under the sticky button.
+		await expect(to).toBeInViewport();
+		const button = (await page.getByRole('button', { name: 'Show listings' }).boundingBox())!;
+		const box = (await to.boundingBox())!;
+		expect(box.y + box.height <= button.y || box.y >= button.y + button.height).toBe(true);
+		// A validation error, not a failure: no alert, no "could not be loaded".
+		await expect(page.getByRole('alert')).toHaveCount(0);
+		await expect(page.getByText('could not be loaded')).toHaveCount(0);
+		await expect(page.getByText('No listings shown until the dates are corrected.')).toBeVisible();
+
+		// Correcting the date searches normally.
+		await to.fill('2027-07-31');
+		await page.getByRole('button', { name: 'Show listings' }).click();
+		await expect(page).toHaveURL(/to=2027-07-31/);
+		// A valid search folds the panel again; the field is no longer marked.
+		await expect(page.locator('#to')).not.toHaveAttribute('aria-invalid', 'true');
+	});
+
+	test('an out-of-date page link starts the same search again, without the cursor', async ({
+		page
+	}) => {
+		await page.goto('/?country=PT&cursor=garbage');
+		await expect(page.getByText('This page link is out of date.')).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Show the first page' })).toHaveAttribute(
+			'href',
+			'/?country=PT'
+		);
+		await expect(page.getByText('could not be loaded')).toHaveCount(0);
+		await expect(page.getByRole('link', { name: 'Try again' })).toHaveCount(0);
+	});
+
+	test('without JavaScript, "To" before "From" is marked and focused the same way', async ({
+		browser
+	}) => {
+		const plain = await browser.newContext({
+			javaScriptEnabled: false,
+			ignoreHTTPSErrors: true,
+			baseURL: ORIGIN
+		});
+		const nojs = await plain.newPage();
+		await nojs.goto('/?country=PT&from=2027-07-10&to=2027-07-01');
+		const to = nojs.getByRole('group', { name: 'When are you available?' }).getByLabel('To', {
+			exact: true
+		});
+		await expect(to).toBeVisible();
+		await expect(to).toHaveAttribute('aria-invalid', 'true');
+		await expect(to).toHaveAccessibleDescription(/“To” is before “From”/);
+		await expect(to).toBeFocused();
+		await expect(nojs.getByLabel('Country')).toHaveValue('PT');
+		await plain.close();
+	});
+
 	test('the highlight is an upcoming boogie or camp, dated in full and not listed twice', async ({
 		page
 	}) => {

@@ -2,8 +2,11 @@
  * Which form field an error code is about, by the field's `name`. Errors are reported
  * per form (one alert naming the field in words); this lets FormGuard also mark the
  * field itself as invalid and tie it to that alert for screen readers. Candidates are
- * tried in order within the form that showed the error. A code that is about the whole
- * form (conflicts, limits, availability) is deliberately absent.
+ * tried in order within the form that showed the error: several names are the same field
+ * on different forms, never two fields of one form. A code about the whole form (conflicts,
+ * availability, an account-wide limit) is deliberately absent; a limit that one field can
+ * fix (component_limit_reached: leave the new component's label empty) names that field.
+ * The gear codes name the checkboxes, so the first one is marked and focused.
  */
 const FIELDS: Record<string, readonly string[]> = {
 	title_required: ['title'],
@@ -37,7 +40,8 @@ const FIELDS: Record<string, readonly string[]> = {
 	jump_date_in_future: ['jumped_on'],
 	jump_type_invalid: ['jump_type'],
 	jump_number_invalid: ['jump_number'],
-	altitude_invalid: ['exit_altitude', 'deployment_altitude'],
+	altitude_invalid: ['exit_altitude'],
+	deployment_altitude_invalid: ['deployment_altitude'],
 	deployment_above_exit: ['deployment_altitude'],
 	freefall_invalid: ['freefall_seconds'],
 	exit_time_invalid: ['exit_time'],
@@ -64,6 +68,12 @@ const FIELDS: Record<string, readonly string[]> = {
 	acquired_invalid: ['acquired'],
 	performed_by_too_long: ['performed_by'],
 	other_gear_too_long: ['other_gear'],
+	aircraft_too_long: ['aircraft'],
+	exit_weight_invalid: ['exit_weight'],
+	altitude_unit_required: ['altitude_unit'],
+	too_many_components: ['component_ids'],
+	component_unknown: ['component_ids'],
+	component_limit_reached: ['new_component_label'],
 	prior_jumps_invalid: ['prior_jumps'],
 	baseline_date_invalid: ['before_on'],
 	baseline_date_in_future: ['before_on'],

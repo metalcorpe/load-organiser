@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { boardHref, eventHref, hasFilters, parseFilters, resultsPath } from './listing-filters.ts';
+import {
+	boardHref,
+	datesOutOfOrder,
+	eventHref,
+	hasFilters,
+	parseFilters,
+	resultsPath
+} from './listing-filters.ts';
 import { safeReturnPath } from './safe-return.ts';
 
 describe('parseFilters', () => {
@@ -109,5 +116,21 @@ describe('eventHref', () => {
 		const href = eventHref(id, { results: `/?country=PT&cursor=${'a'.repeat(480)}`, save: true });
 		expect(href).toBe(`/events/${id}?save=1`);
 		expect(safeReturnPath(href)).toBe(href);
+	});
+});
+
+describe('datesOutOfOrder', () => {
+	it('is true only when both dates are given and "to" is before "from"', () => {
+		expect(datesOutOfOrder({ from: '2027-07-10', to: '2027-07-01' })).toBe(true);
+		expect(datesOutOfOrder({ from: '2027-07-01', to: '2027-07-01' })).toBe(false);
+		expect(datesOutOfOrder({ from: '2027-07-01', to: '2027-07-10' })).toBe(false);
+		expect(datesOutOfOrder({ from: '2027-07-10', to: '' })).toBe(false);
+		expect(datesOutOfOrder({ from: '', to: '2027-07-01' })).toBe(false);
+	});
+
+	it('keeps both dates when parsing, so nothing typed is lost', () => {
+		const filters = parseFilters(new URLSearchParams('from=2027-07-10&to=2027-07-01&q=x'));
+		expect(filters).toMatchObject({ from: '2027-07-10', to: '2027-07-01', q: 'x' });
+		expect(datesOutOfOrder(filters)).toBe(true);
 	});
 });

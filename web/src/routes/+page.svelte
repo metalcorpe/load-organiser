@@ -1,5 +1,7 @@
 <script lang="ts">
+	import Disclosure from '#lib/components/Disclosure.svelte';
 	import ExploreSwitch from '#lib/components/ExploreSwitch.svelte';
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/state';
 	import FeaturedListing from '#lib/components/FeaturedListing.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
@@ -26,6 +28,30 @@
 	let { data }: PageProps = $props();
 	const countryOptions = $derived(coverageOptions(data.countries, data.filters.country));
 	const filtered = $derived(hasFilters(data.filters));
+	// "To" before "From": the visitor's own mistake, answered in the filters (field marked,
+	// panel open, every value kept), unlike a service failure, which is about the results.
+	const dateError = $derived(!data.result.ok && data.result.kind === 'invalid');
+	// With JavaScript, the date to correct takes focus after each search (a GET form navigates
+	// client-side) and is scrolled near the top of the screen, so the field and the error
+	// under it stay clear of the sticky "Show listings" button and the tab bar, even with
+	// large text. Without it, `autofocus` focuses it on load.
+	afterNavigate(() => {
+		if (!dateError) return;
+		const field = document.getElementById('to');
+		if (!field) return;
+		field.focus({ preventScroll: true });
+		// The label, field and error together when they fit above the sticky parts; else
+		// the field itself at the top, the error right under it.
+		const wrapper = field.closest('.field') ?? field;
+		const error = document.getElementById('dates-error') ?? field;
+		const apply = document.querySelector('.board-search .apply');
+		const nav = document.querySelector('nav[aria-label="Primary"]');
+		const covered =
+			(apply?.getBoundingClientRect().height ?? 0) +
+			(nav && getComputedStyle(nav).position === 'fixed' ? nav.getBoundingClientRect().height : 0);
+		const span = error.getBoundingClientRect().bottom - wrapper.getBoundingClientRect().top;
+		(span + 24 <= innerHeight - covered ? wrapper : field).scrollIntoView({ block: 'start' });
+	});
 	// This search (filters and page), carried into each event for "Back to results".
 	const here = $derived(boardHref(data.filters, data.cursor || undefined));
 	// On the plain first page, the next multi-day boogie or camp gets the navy card. It is taken
@@ -102,8 +128,10 @@
 		/>
 		<button class="button secondary" type="submit">Search</button>
 	</div>
-	<details class="more">
-		<summary class="disclosure">Filters{chips.length ? ` (${chips.length})` : ''}</summary>
+	<!-- Disclosure: its open state is the server's, then the visitor's; nothing on the page
+	     closes a panel the visitor opened. -->
+	<Disclosure class="more" summaryClass="disclosure" open={dateError}>
+		{#snippet summary()}Filters{chips.length ? ` (${chips.length})` : ''}{/snippet}
 		<div class="form filters">
 			<div class="field">
 				<label for="country">Country</label>
@@ -133,22 +161,32 @@
 					</div>
 					<div class="field">
 						<label for="to">To</label>
+						<!-- svelte-ignore a11y_autofocus -->
 						<input
 							id="to"
 							name="to"
 							type="date"
 							defaultValue={data.filters.to}
-							aria-describedby="dates-hint"
+							aria-invalid={dateError ? 'true' : undefined}
+							aria-describedby={dateError ? 'dates-error dates-hint' : 'dates-hint'}
+							autofocus={dateError}
 						/>
 					</div>
 				</div>
+				<!-- Under both dates, full width: either date can be the one to change. -->
+				{#if dateError}
+					<p class="field-error" id="dates-error">
+						“To” is before “From”. Choose a “To” date on or after
+						{formatDay(data.filters.from)}, or an earlier “From” date.
+					</p>
+				{/if}
 				<p class="hint" id="dates-hint">
 					Shows every event that overlaps these dates, including ones that start earlier or end
 					later.
 				</p>
 			</fieldset>
-			<details class="secondary" open={moreActive > 0}>
-				<summary>Type, discipline and audience{moreActive ? ` (${moreActive})` : ''}</summary>
+			<Disclosure class="secondary" open={moreActive > 0}>
+				{#snippet summary()}Type, discipline and audience{moreActive ? ` (${moreActive})` : ''}{/snippet}
 				<div class="secondary-fields">
 					<div class="field">
 						<label for="category">Type</label>
@@ -184,13 +222,13 @@
 						</select>
 					</div>
 				</div>
-			</details>
+			</Disclosure>
 			<!-- Stays in reach at the bottom of the screen while the panel is taller than it. -->
 			<div class="form-actions apply" class:with-nav={Boolean(data.viewer)}>
 				<button class="button" type="submit">Show listings</button>
 			</div>
 		</div>
-	</details>
+	</Disclosure>
 </form>
 {/key}
 
@@ -207,8 +245,22 @@
 	</ul>
 {/if}
 
-{#if !data.result.ok}
-	<p class="form-error" role="alert">{listingMessage(data.result.reason)}</p>
+{#if !data.result.ok && data.result.kind === 'invalid'}
+	<!-- Not an alert: the field itself carries the error and has focus. A pointer for anyone
+	     who scrolls here, also without JavaScript. -->
+	<p class="dates-note">
+		No listings shown until the dates are corrected. <a href="#to">Correct the “To” date</a>
+	</p>
+{:else if !data.result.ok && data.result.kind === 'stale'}
+	<!-- A page link that no longer works: start this search again from its first page. -->
+	<p class="dates-note">
+		This page link is out of date. <a href={boardHref(data.filters)}>Show the first page</a>
+	</p>
+{:else if !data.result.ok}
+	<Notice title="Listings could not be loaded" tone="bad">
+		<p role="alert">{listingMessage(data.result.reason)}</p>
+		<p>Your search is kept. <a href={here} data-sveltekit-reload>Try again</a></p>
+	</Notice>
 {:else if data.result.items.length === 0}
 	<Notice title={filtered ? 'No listings match' : 'No listings published yet'} tone="warn">
 		<p>
@@ -290,11 +342,12 @@
 		font: inherit;
 	}
 
-	.more {
+	/* The panels are rendered by Disclosure, hence :global inside the search form. */
+	.board-search :global(details.more) {
 		margin-top: 0.25rem;
 	}
 
-	.more[open] {
+	.board-search :global(details.more[open]) {
 		margin-bottom: 0.75rem;
 	}
 
@@ -308,7 +361,7 @@
 	}
 
 	.when,
-	details.secondary,
+	.board-search :global(details.secondary),
 	.apply {
 		grid-column: 1 / -1;
 	}
@@ -325,8 +378,15 @@
 		margin-bottom: 0.4rem;
 	}
 
+	/* Room above the date scrolled to after a "to before from" error. */
+	.dates .field,
+	.dates input {
+		scroll-margin-top: 0.75rem;
+	}
+
 	.dates {
 		display: grid;
+		align-items: start;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
 		gap: 0.75rem;
 	}
@@ -403,6 +463,11 @@
 	.chip span[aria-hidden] {
 		color: var(--accent);
 		font-weight: 700;
+	}
+
+	.dates-note {
+		margin: 0.5rem 0 1rem;
+		color: var(--muted);
 	}
 
 	.list-heading {

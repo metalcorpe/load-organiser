@@ -119,8 +119,12 @@ def altitudes(
         return Altitudes(None, None, None, AltitudeDatum.UNSPECIFIED)
     if unit is None:
         raise RuleError("altitude_unit_required")
-    if any(not 0 < a <= ALTITUDE_MAX[unit.value] for a in given):
+    limit = ALTITUDE_MAX[unit.value]
+    # Each height names its own field, so a form can mark the one to correct.
+    if exit_altitude is not None and not 0 < exit_altitude <= limit:
         raise RuleError("altitude_invalid")
+    if deployment_altitude is not None and not 0 < deployment_altitude <= limit:
+        raise RuleError("deployment_altitude_invalid")
     if (
         exit_altitude is not None
         and deployment_altitude is not None

@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { expect, test, type Page } from '@playwright/test';
 import { PASSWORD, apiCall, apiSession, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the logbook tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -50,10 +51,11 @@ test.describe('wing loading', () => {
 		await expect(page.getByText('Loading strip', { exact: true })).toBeVisible();
 		const placeUrl = page.url();
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
+		await openJumpSections(page);
 		await page.getByRole('checkbox', { name: /^Sabre 170/ }).check();
 		// No loading recorded before: nothing to compare with, so no note.
 		await expect(page.getByText(/highest wing loading so far/)).toHaveCount(0);
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.', { exact: true })).toBeVisible();
 		await expect(page.getByTestId('wing-loading')).toContainText('1.06');
 
@@ -64,6 +66,7 @@ test.describe('wing loading', () => {
 		// The next jump with the 135: 1.33, more than 0.1 above 1.06, gets the note.
 		await page.goto(placeUrl);
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-11');
+		await openJumpSections(page);
 		await page.getByRole('checkbox', { name: /^Velo 135/ }).check();
 		await expect(
 			page.getByText('This is your highest wing loading so far (1.33; previous highest 1.06).', {
@@ -74,7 +77,7 @@ test.describe('wing loading', () => {
 		await page.getByLabel('Exit weight on this jump in kg (optional)', { exact: true }).fill('70');
 		await expect(page.getByText(/highest wing loading so far/)).toHaveCount(0);
 		await page.getByLabel('Exit weight on this jump in kg (optional)', { exact: true }).fill('');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.', { exact: true })).toBeVisible();
 		await expect(page.getByTestId('wing-loading')).toContainText('1.33');
 

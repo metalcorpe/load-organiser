@@ -96,7 +96,7 @@
 			most seven days and is not extended by use; up to five can be active at once.
 		</li>
 		<li>
-			You can sign out everywhere from your <a href="/profile">profile</a>. Changing your password
+			You can sign out everywhere from <a href="/profile/account">Account and security</a>. Changing your password
 			signs out your other devices; a password reset signs out all of them.
 		</li>
 		<li>No advertising or analytics scripts run on these pages.</li>
@@ -121,7 +121,7 @@
 <section aria-labelledby="deletion">
 	<h2 id="deletion">Deleting your account</h2>
 	<p>
-		From your <a href="/profile">profile</a>, with your password. Deletion is immediate and cannot
+		From <a href="/profile/account">Account and security</a>, with your password. Deletion is immediate and cannot
 		be undone, so export first if you want a copy. It removes your account, sessions, public profile,
 		follows both ways, blocks, posts, logbook, gear, places, history, saved listings, plans, and
 		reports made by or about you.

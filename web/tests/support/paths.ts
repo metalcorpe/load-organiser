@@ -15,6 +15,7 @@ export const PRIVATE_PATHS = [
 	'/records/import',
 	'/records/print',
 	'/profile',
+	'/profile/account',
 	'/places',
 	'/gear',
 	'/gear/new',

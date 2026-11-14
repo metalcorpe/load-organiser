@@ -156,6 +156,9 @@ export const load: PageServerLoad = async (event) => {
 			history.ok && totals
 				? {
 						lifetime: totals.inconsistent ? null : totals.lifetime,
+						// A declared prior count (B before D): acknowledged on a logbook with no entries.
+						priorJumps: totals.prior_jumps,
+						priorBefore: totals.before_on,
 						lastJumpOn: history.value.last_jump_on,
 						currency: history.value.currency,
 						progress: history.value.progress ?? null

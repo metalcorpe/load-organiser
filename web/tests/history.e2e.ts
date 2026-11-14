@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { PASSWORD, createAccount } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the account tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -26,10 +27,11 @@ async function logJump(page: Page, on: string, gear?: string) {
 	}
 	await page.getByLabel('Date', { exact: true }).fill(on);
 	if (gear) {
+		await openJumpSections(page);
 		await page.getByText('Add a new component used on this jump').click();
 		await page.getByLabel('Component label').fill(gear);
 	}
-	await page.getByRole('button', { name: 'Save private jump' }).click();
+	await page.getByRole('button', { name: 'Save private jump' }).first().click();
 	await expect(page.getByText('Saved privately.')).toBeVisible();
 }
 

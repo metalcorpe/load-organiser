@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { randomBytes } from 'node:crypto';
 import { PASSWORD, apiCall, createAccount, reviewerSession } from './support/accounts.ts';
+import { openJumpSections } from './support/jump-form.ts';
 
 // Same production-cookie preview as the account tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -28,7 +29,7 @@ async function logJump(page: Page): Promise<string> {
 	await startAtNewPlace(page);
 	await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 	await page.getByLabel('Type', { exact: true }).selectOption('freefly');
-	await page.getByRole('button', { name: 'Save private jump' }).click();
+	await page.getByRole('button', { name: 'Save private jump' }).first().click();
 	await expect(page.getByText('Saved privately.')).toBeVisible();
 	return page.url().split('/jumps/')[1].split('?')[0];
 }
@@ -39,12 +40,12 @@ test.describe('private logbook', () => {
 		await startAtNewPlace(page, 'Next strip');
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-12');
 		await page.getByLabel('Type', { exact: true }).selectOption('freefly');
-		await page.getByText('Number, time and altitudes (optional)').click();
+		await openJumpSections(page);
 		await page.getByLabel('Your jump number').fill('120');
 		await page.getByLabel('Exit altitude').fill('4000');
 		await page.getByLabel('Metres').check();
 		await page.getByLabel('Notes (optional, private)').fill('Only about the first load.');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 
 		// Same place, day, type and altitude; the next number; nothing jump-specific.
@@ -52,10 +53,11 @@ test.describe('private logbook', () => {
 		await expect(page.getByText('Next strip', { exact: true })).toBeVisible();
 		await expect(page.getByLabel('Date', { exact: true })).toHaveValue('2026-10-12');
 		await expect(page.getByLabel('Type', { exact: true })).toHaveValue('freefly');
+		await openJumpSections(page);
 		await expect(page.getByLabel('Your jump number')).toHaveValue('121');
 		await expect(page.getByLabel('Exit altitude')).toHaveValue('4000');
 		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await expect(page.getByText('#121', { exact: true })).toBeVisible();
 
@@ -69,13 +71,126 @@ test.describe('private logbook', () => {
 		await expect(page.getByText('Plain strip', { exact: true })).toBeVisible();
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-13');
 		await page.getByLabel('Type', { exact: true }).selectOption('belly');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await page.getByRole('link', { name: 'Log the next jump' }).click();
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await page.goto('/jumps');
 		await expect(page.getByText('4 jumps recorded here.', { exact: false })).toBeVisible();
+	});
+
+	test('quick entry: save after the essentials; folded sections still send and reopen', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'quick' }));
+		await startAtNewPlace(page);
+		const sections = page.locator('form details.section');
+		await expect(sections).toHaveCount(3);
+		for (const section of await sections.all()) await expect(section).not.toHaveAttribute('open');
+		// A refusal about a field in a folded section opens that section and focuses the field;
+		// what was typed elsewhere, folded or not, is kept.
+		await openJumpSections(page);
+		await page.getByLabel('Notes (optional, private)').fill('Typed, then folded.');
+		await page.getByLabel('Exit weight on this jump in kg (optional)').fill('999');
+		const open = page.locator('form details.section[open] > summary');
+		while ((await open.count()) > 0) await open.first().click();
+		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
+		const weight = page.getByLabel('Exit weight on this jump in kg (optional)');
+		await expect(weight).toBeFocused();
+		await expect(weight).toHaveAttribute('aria-invalid', 'true');
+		await expect(weight).toHaveValue('999');
+		await expect(sections.filter({ hasText: 'Notes and links' })).not.toHaveAttribute('open');
+		await expect(sections.filter({ hasText: 'Notes and links' })).toContainText('Filled in: notes');
+
+		// The early button sends the folded notes too.
+		await weight.fill('');
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		// Editing: the section with a value is open, the empty ones folded.
+		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('Typed, then folded.');
+		await expect(sections.filter({ hasText: 'Notes and links' })).toHaveAttribute('open');
+		await expect(sections.filter({ hasText: 'Equipment and exit weight' })).not.toHaveAttribute(
+			'open'
+		);
+	});
+
+	test('an empty logbook leads with logging and import; filters and a prior count are told apart', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'empty' }));
+		const start = page.getByRole('region', { name: 'Start your logbook' });
+		await expect(start).toContainText('No jumps yet.');
+		await expect(start.getByRole('link', { name: 'Log your first jump' })).toHaveAttribute(
+			'href',
+			'/jumps/new'
+		);
+		await expect(start.getByRole('link', { name: 'Import existing logbook' })).toHaveAttribute(
+			'href',
+			'/records/import'
+		);
+		// Nothing to search yet, and no currency box to explain.
+		await expect(page.getByRole('search')).toHaveCount(0);
+		await expect(page.getByRole('region', { name: 'Jump currency' })).toHaveCount(0);
+
+		// A search with no result keeps the controls and a way out.
+		await page.goto('/jumps?q=nothing-here');
+		await expect(page.getByRole('search')).toBeVisible();
+		await expect(page.getByLabel('Place, aircraft or notes')).toHaveValue('nothing-here');
+		const none = page.getByRole('region', { name: 'No jumps match' });
+		await expect(none.getByRole('link', { name: 'Clear filters' })).toHaveAttribute('href', '/jumps');
+		await expect(page.getByRole('region', { name: 'Start your logbook' })).toHaveCount(0);
+
+		// A declared prior count with no entries is acknowledged; logging and import still lead.
+		await page.goto('/history/baseline');
+		await page.getByLabel('Jumps completed before the date').fill('150');
+		await page.getByLabel('Date', { exact: true }).fill('2026-01-01');
+		await page.getByRole('button', { name: 'Preview' }).click();
+		await page.getByRole('button', { name: 'Save prior jump count' }).click();
+		await page.goto('/jumps');
+		await expect(start).toContainText('You declared 150 prior jumps before 1 January 2026');
+		await expect(start.getByRole('link', { name: 'Log your first jump' })).toBeVisible();
+		await expect(start.getByRole('link', { name: 'Import existing logbook' })).toBeVisible();
+	});
+
+	test('an out-of-date page link is not a failure; a bad deployment altitude marks that field', async ({
+		page
+	}) => {
+		await signIn(page, await createAccount({ label: 'stale' }));
+		await page.goto('/jumps?cursor=garbage');
+		const stale = page.getByRole('region', { name: 'This page of your logbook could not be shown' });
+		await expect(stale.getByRole('alert')).toContainText('The link to this page is out of date.');
+		await expect(stale.getByRole('link', { name: 'Go to your newest jumps' })).toHaveAttribute(
+			'href',
+			'/jumps'
+		);
+		await expect(page.getByRole('link', { name: 'Try again' })).toHaveCount(0);
+
+		// Only the deployment altitude is wrong: that field is marked and focused, not the exit.
+		await startAtNewPlace(page);
+		await openJumpSections(page);
+		await page.getByLabel('Exit altitude').fill('4000');
+		await page.getByLabel('Deployment altitude').fill('1.5');
+		await page.getByLabel('Feet').check();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
+		const deployment = page.getByLabel('Deployment altitude');
+		await expect(deployment).toBeFocused();
+		await expect(deployment).toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByLabel('Exit altitude')).not.toHaveAttribute('aria-invalid', 'true');
+		await expect(page.getByRole('alert')).toContainText('Check the deployment altitude');
+	});
+
+	test('a section filled and then folded says what it holds', async ({ page }) => {
+		await signIn(page, await createAccount({ label: 'folded' }));
+		await startAtNewPlace(page);
+		await openJumpSections(page);
+		const notes = page.locator('form details.section').filter({ hasText: 'Notes and links' });
+		await expect(notes).not.toContainText('Filled in');
+		await page.getByLabel('Notes (optional, private)').fill('Sunset load');
+		await notes.locator('summary').click();
+		await expect(notes).not.toHaveAttribute('open');
+		await expect(notes.locator('summary')).toContainText('Filled in: notes');
 	});
 
 	test('an offline save sends nothing and keeps what was typed', async ({ page, context }) => {
@@ -83,21 +198,22 @@ test.describe('private logbook', () => {
 		await startAtNewPlace(page);
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-11');
 		await page.getByLabel('Type', { exact: true }).selectOption('belly');
+		await openJumpSections(page);
 		await page.getByLabel('Notes (optional, private)').fill('Typed with no signal.');
 		const form = page.url();
 
 		await context.setOffline(true);
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByRole('alert')).toContainText('You are offline, so nothing was sent.');
 		expect(page.url()).toBe(form);
 		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('Typed with no signal.');
 		// A second try while still offline shows the same single notice.
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.locator('[data-offline-notice]')).toHaveCount(1);
 
 		await context.setOffline(false);
 		await expect(page.locator('[data-offline-notice]')).toHaveCount(0);
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await expect(page.getByLabel('Notes (optional, private)')).toHaveValue('Typed with no signal.');
 	});
@@ -133,14 +249,14 @@ test.describe('private logbook', () => {
 		await expect(page.getByLabel('Date', { exact: true })).not.toHaveValue('');
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 		await page.getByLabel('Type', { exact: true }).selectOption('belly');
-		await page.getByText('Number, time and altitudes (optional)').click();
+		await openJumpSections(page);
 		await page.getByLabel('Your jump number').fill('120');
 		await page.getByLabel('Exit altitude').fill('4000');
 		await page.getByLabel('Metres').check();
 		await page.getByText('Add a new component used on this jump').click();
 		await page.getByLabel('Component label').fill('Rented Navigator');
 		await page.getByLabel('Notes (optional, private)').fill('First jump here.');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await expect(page.getByText('entered by you, not verified')).toBeVisible();
@@ -176,7 +292,7 @@ test.describe('private logbook', () => {
 		await page.getByRole('link', { name }).click();
 		await expect(page.getByText(name, { exact: true })).toBeVisible();
 		await page.getByLabel('Date', { exact: true }).fill('2026-09-01');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await page.goto('/jumps');
 		await expect(page.getByRole('list', { name: 'Jumps' })).toContainText(
@@ -187,7 +303,7 @@ test.describe('private logbook', () => {
 		await page.goto('/jumps/new');
 		await page.getByRole('list', { name: 'Recent places' }).getByRole('link', { name }).click();
 		await expect(page.getByText(name, { exact: true })).toBeVisible();
-		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Save private jump' }).first()).toBeVisible();
 		await page.goto('/jumps/new');
 		await expect(page.getByLabel('Place name')).toBeHidden();
 		// The Logbook home continues from the newest jump as its one-tap main action:
@@ -201,7 +317,7 @@ test.describe('private logbook', () => {
 			return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 		});
 		await expect(page.getByLabel('Date', { exact: true })).toHaveValue(today);
-		await expect(page.getByRole('button', { name: 'Save private jump' })).toBeVisible();
+		await expect(page.getByRole('button', { name: 'Save private jump' }).first()).toBeVisible();
 	});
 
 	test('a likely duplicate warns, and a distinct jump still saves', async ({ page }) => {
@@ -211,13 +327,13 @@ test.describe('private logbook', () => {
 		await page.getByRole('link', { name: 'Farm strip' }).click();
 		await page.getByLabel('Date', { exact: true }).fill('2026-10-10');
 		await page.getByLabel('Type', { exact: true }).selectOption('freefly');
-		await page.getByRole('button', { name: 'Save private jump' }).click();
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 		await expect(page.getByText('This looks like a jump you already logged')).toBeVisible();
 		await expect(page.getByRole('link', { name: 'View the earlier entry' })).toHaveAttribute(
 			'href',
 			`/jumps/${first}`
 		);
-		await page.getByRole('button', { name: 'Save as a distinct jump' }).click();
+		await page.getByRole('button', { name: 'Save as a distinct jump' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await page.goto('/jumps');
 		await expect(page.getByText('2 jumps recorded here.', { exact: false })).toBeVisible();
@@ -228,8 +344,9 @@ test.describe('private logbook', () => {
 		// hydration keeps it instead of sending an empty field.
 		await signIn(page, await createAccount({ label: 'nojs' }));
 		const id = await logJump(page);
+		await openJumpSections(page);
 		await page.getByLabel('Notes (optional, private)').fill('kept without js');
-		await page.getByRole('button', { name: 'Save changes' }).click();
+		await page.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(page.getByRole('list', { name: 'History' })).toContainText('Notes: changed');
 		const nojs = await browser.newContext({
 			storageState: await page.context().storageState(),
@@ -246,8 +363,9 @@ test.describe('private logbook', () => {
 		await signIn(page, await createAccount({ label: 'edits' }));
 		const id = await logJump(page);
 		await page.getByLabel('Type', { exact: true }).selectOption('wingsuit');
+		await openJumpSections(page);
 		await page.getByLabel('Notes (optional, private)').fill('secret detail');
-		await page.getByRole('button', { name: 'Save changes' }).click();
+		await page.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		const history = page.getByRole('list', { name: 'History' });
 		await expect(history).toContainText('Type: freefly → wingsuit');
@@ -271,14 +389,14 @@ test.describe('private logbook', () => {
 		const second = await context.newPage();
 		await second.goto(`/jumps/${id}`);
 		await page.getByLabel('Type', { exact: true }).selectOption('angle');
-		await page.getByRole('button', { name: 'Save changes' }).click();
+		await page.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(page.getByText('Saved privately.')).toBeVisible();
 		await second.getByLabel('Type', { exact: true }).selectOption('canopy');
-		await second.getByRole('button', { name: 'Save changes' }).click();
+		await second.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
 		// Sending the re-shown stale form again still conflicts; it never overwrites.
 		await expect(second.getByLabel('Type', { exact: true })).toHaveValue('canopy');
-		await second.getByRole('button', { name: 'Save changes' }).click();
+		await second.getByRole('button', { name: 'Save changes' }).first().click();
 		await expect(second.getByRole('alert')).toContainText('changed since you opened it');
 		await page.reload();
 		await expect(page.getByLabel('Type', { exact: true })).toHaveValue('angle');
