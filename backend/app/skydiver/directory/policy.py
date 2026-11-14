@@ -27,6 +27,9 @@ SOURCE_URL_MAX = 2048
 SOURCE_NOTE_MAX = 280
 PAGE_DEFAULT = 20
 PAGE_MAX = 50
+# Map points are small (no aliases or sources); one page covers a continent's dropzones.
+POINTS_PAGE_DEFAULT = 1000
+POINTS_PAGE_MAX = 1000
 QUERY_MAX = 80
 # Review cadence (release brief, operating default): recheck listed profiles after
 # 60 days without a successful source check.
@@ -120,10 +123,12 @@ def search_key(text: str) -> str:
     return " ".join(re.sub(r"[\W_]+", " ", stripped.casefold()).split())
 
 
-def page_size(requested: int | None) -> int:
+def page_size(
+    requested: int | None, *, default: int = PAGE_DEFAULT, maximum: int = PAGE_MAX
+) -> int:
     if requested is None:
-        return PAGE_DEFAULT
-    return max(1, min(requested, PAGE_MAX))
+        return default
+    return max(1, min(requested, maximum))
 
 
 @dataclass(frozen=True)

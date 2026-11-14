@@ -72,6 +72,8 @@ export type {
 	VenueDetailOut,
 	VenueOut,
 	VenuePageOut,
+	VenuePointOut,
+	VenuePointPageOut,
 	VenueRefOut,
 	ViewerOut
 } from './generated/types.gen.ts';

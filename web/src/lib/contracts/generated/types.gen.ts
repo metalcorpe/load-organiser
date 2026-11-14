@@ -5069,6 +5069,62 @@ export type VenuePageOut = {
 };
 
 /**
+ * VenuePointOut
+ *
+ * A public venue as a map point: the list's venues that have coordinates.
+ */
+export type VenuePointOut = {
+    /**
+     * Closed
+     */
+    closed: boolean;
+    /**
+     * Country
+     *
+     * ISO 3166-1 alpha-2 code.
+     */
+    country: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Lat
+     *
+     * WGS84 latitude, decimal degrees.
+     */
+    lat: number;
+    /**
+     * Locality
+     */
+    locality: string | null;
+    /**
+     * Lon
+     *
+     * WGS84 longitude, decimal degrees.
+     */
+    lon: number;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * VenuePointPageOut
+ */
+export type VenuePointPageOut = {
+    /**
+     * Items
+     */
+    items: Array<VenuePointOut>;
+    /**
+     * Next Cursor
+     */
+    next_cursor: string | null;
+};
+
+/**
  * VenueRefOut
  */
 export type VenueRefOut = {
@@ -12047,6 +12103,64 @@ export type GetSubmissionIntakeResponses = {
 };
 
 export type GetSubmissionIntakeResponse = GetSubmissionIntakeResponses[keyof GetSubmissionIntakeResponses];
+
+export type ListVenuePointsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string | null;
+        /**
+         * Country
+         */
+        country?: string | null;
+        /**
+         * Cursor
+         */
+        cursor?: string | null;
+        /**
+         * Limit
+         */
+        limit?: number | null;
+    };
+    url: '/api/skydiver/v1/venue-points';
+};
+
+export type ListVenuePointsErrors = {
+    /**
+     * Unauthorized
+     */
+    401: AppSkydiverDirectoryApiProblem;
+    /**
+     * Forbidden
+     */
+    403: AppSkydiverDirectoryApiProblem;
+    /**
+     * Not Found
+     */
+    404: AppSkydiverDirectoryApiProblem;
+    /**
+     * Conflict
+     */
+    409: AppSkydiverDirectoryApiProblem;
+    /**
+     * Unprocessable Content
+     */
+    422: AppSkydiverDirectoryApiProblem;
+};
+
+export type ListVenuePointsError = ListVenuePointsErrors[keyof ListVenuePointsErrors];
+
+export type ListVenuePointsResponses = {
+    /**
+     * Successful Response
+     */
+    200: VenuePointPageOut;
+};
+
+export type ListVenuePointsResponse = ListVenuePointsResponses[keyof ListVenuePointsResponses];
 
 export type SearchVenuesData = {
     body?: never;

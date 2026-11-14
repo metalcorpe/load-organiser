@@ -1,6 +1,7 @@
 """HTTP adapter for the directory (#148). Called only by the SvelteKit server.
 
 - Public:   GET /venues, GET /venues/{id}        (listed and closed venues only)
+            GET /venue-points                     (the same venues, with coordinates)
 - Reviewer: /directory/venues...                 (role `reviewer`; maintenance)
 - Owner:    /places...                           (private provisional places)
 """
@@ -76,6 +77,23 @@ class VenueOut(BaseModel):
 
 class VenuePageOut(BaseModel):
     items: list[VenueOut]
+    next_cursor: str | None
+
+
+class VenuePointOut(BaseModel):
+    """A public venue as a map point: the list's venues that have coordinates."""
+
+    id: uuid.UUID
+    name: str
+    locality: str | None
+    country: str = Field(description="ISO 3166-1 alpha-2 code.")
+    lat: float = Field(description="WGS84 latitude, decimal degrees.")
+    lon: float = Field(description="WGS84 longitude, decimal degrees.")
+    closed: bool
+
+
+class VenuePointPageOut(BaseModel):
+    items: list[VenuePointOut]
     next_cursor: str | None
 
 
@@ -311,6 +329,45 @@ def create_router(
             return _problem(error)
         return VenuePageOut(
             items=[_public(v) for v in page.items], next_cursor=page.next_cursor
+        )
+
+    @router.get(
+        "/venue-points",
+        operation_id="listVenuePoints",
+        response_model=VenuePointPageOut,
+        dependencies=deps,
+        description=(
+            "Map points for the venues `GET /venues` finds with the same `q` and "
+            "`country`, without venues that have no coordinates. Same order and "
+            "cursor form; pages of up to 1000."
+        ),
+    )
+    def list_venue_points(
+        q: Annotated[str | None, Query(max_length=200)] = None,
+        country: Annotated[str | None, Query(min_length=2, max_length=2)] = None,
+        cursor: Annotated[str | None, Query(max_length=512)] = None,
+        limit: Annotated[int | None, Query(ge=1, le=1000)] = None,
+    ) -> VenuePointPageOut | JSONResponse:
+        try:
+            page = service().map_points(
+                query=q, country=country, cursor=cursor, limit=limit
+            )
+        except Errors as error:
+            return _problem(error)
+        return VenuePointPageOut(
+            items=[
+                VenuePointOut(
+                    id=p.id,
+                    name=p.name,
+                    locality=p.locality,
+                    country=p.country,
+                    lat=p.latitude,
+                    lon=p.longitude,
+                    closed=p.closed,
+                )
+                for p in page.items
+            ],
+            next_cursor=page.next_cursor,
         )
 
     @router.get(
