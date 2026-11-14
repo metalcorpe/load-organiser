@@ -98,9 +98,11 @@
 {/if}
 
 <style>
+	/* With large text the tabs wrap rather than widen the page. */
 	.tabs {
 		display: flex;
-		gap: 1rem;
+		flex-wrap: wrap;
+		gap: 0 1rem;
 		margin: 1rem 0;
 	}
 

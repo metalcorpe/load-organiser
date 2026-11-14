@@ -90,6 +90,12 @@
 		font-weight: 600;
 	}
 
+	/* The labels share each row with a fixed-width bar; with large text a long label (a place
+	   name) breaks inside a word rather than widening the table past the screen. */
+	.bars th {
+		overflow-wrap: anywhere;
+	}
+
 	.bars .value {
 		text-align: end;
 		white-space: nowrap;

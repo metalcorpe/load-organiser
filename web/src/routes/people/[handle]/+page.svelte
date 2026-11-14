@@ -19,7 +19,7 @@
 </svelte:head>
 
 <h1>{p.display_name}</h1>
-<p class="lede">@{p.handle}</p>
+<p class="lede wrap-anywhere">@{p.handle}</p>
 
 {#if p.bio}<p class="bio">{p.bio}</p>{/if}
 <dl class="facts">

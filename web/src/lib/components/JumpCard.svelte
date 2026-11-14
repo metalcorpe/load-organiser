@@ -26,7 +26,8 @@
 	</p>
 	{#if author}
 		<p class="meta">
-			by <a href="/people/{post.author.handle}">{post.author.display_name}</a> (@{post.author.handle})
+			by <a href="/people/{post.author.handle}">{post.author.display_name}</a>
+			<span class="wrap-anywhere">(@{post.author.handle})</span>
 		</p>
 	{/if}
 	<dl class="facts">
@@ -38,9 +39,11 @@
 		{#if altitude}<dt>Exit altitude</dt><dd>{altitude}</dd>{/if}
 		{#if post.freefall_seconds !== null}<dt>Freefall</dt><dd>{post.freefall_seconds} s</dd>{/if}
 	</dl>
-	{#if post.caption}<p class="caption">{post.caption}</p>{/if}
+	{#if post.caption}<p class="caption wrap-anywhere">{post.caption}</p>{/if}
 	{#if post.link}
-		<p><a href={post.link} rel="noopener noreferrer nofollow ugc" target="_blank">{post.link}</a></p>
+		<p class="wrap-anywhere">
+			<a href={post.link} rel="noopener noreferrer nofollow ugc" target="_blank">{post.link}</a>
+		</p>
 	{/if}
 	<p class="meta">
 		Self-reported, not verified · jumped {formatDay(post.jumped_on)} ·
