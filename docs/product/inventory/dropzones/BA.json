@@ -79,7 +79,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Club and tandem-centre information found only on an undated tourism page (latest event mentioned 2014); no 2025+ evidence found.",
+      "status_evidence": "Club and tandem-centre information found only on an undated tourism page (latest event mentioned 2014); no 2025+ evidence found. Re-checked 2026-11-14: The AIP effective 22 January 2026 identifies Zalužani as a sport, glider and parachuting area and names its airfield administration. It does not identify a current parachuting operator or dated jump operation; the preliminary 2025 Banja Luka cup was explicitly unconfirmed.",
       "sources": [
         {
           "url": "https://hotelviktorija.com/en/parachute-club-banjaluka/",
@@ -116,8 +116,8 @@
           "website": "http://aeroclub-bihac.com"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Aero centar Panorama Bihać describes tandem jumps at Golubić only for groups of at least 15 people; its newest dated jump video is 24 Sep 2022 (search snippet). No 2025+ evidence found.",
+      "status": "seasonal",
+      "status_evidence": "Aero centar Panorama has held the Para Challenge Cup at Golubić airfield every year: Sep 2022, Jul 2024, the weekend before 22 Jul 2025 (with a Cessna from Hungary), and 25-26 Jul 2026, when RTV USK called it traditional and reported tandems offered to the public. That is recurring event-based jumping.",
       "sources": [
         {
           "url": "https://www.facebook.com/aerocentarpanoramabihac/videos/video-materijal-tandem-skokovi-padobranom-izvedeni-24092022g-u-biha%C4%87u-na-sportsk/1207935676424263",
@@ -133,6 +133,21 @@
           "url": "https://www.openstreetmap.org/way/198730611",
           "checked_on": "2026-11-14",
           "what": "OSM aerodrome Golubić LQBI, operator Aero klub Bihać"
+        },
+        {
+          "url": "https://www.rtvusk.ba/clanak/poslijepodne-uz-rtv-usk-prica-padobranci-iz-regije-i-evrope-osvojili-nebo-iznad-bihaca/7434",
+          "checked_on": "2026-11-14",
+          "what": "Dated report names Golubić, organiser Panorama, visiting Cessna and domestic/international sport parachutists."
+        },
+        {
+          "url": "https://www.rtvusk.ba/clanak/padobranski-spektakl-u-bihacu-odrzan-tradicionalni-para-challenge-cup-2026/16570",
+          "checked_on": "2026-11-14",
+          "what": "25 Jul 2026: the traditional cup held again at Golubić, competition jumps and public tandems"
+        },
+        {
+          "url": "https://www.walar-skydive.com/events/para-challenge-cup-biha%C4%87-2024-bosnia-and-herzegovina-biha%C4%87",
+          "checked_on": "2026-11-14",
+          "what": "Event listing for the 13-14 Jul 2024 edition at Golubić (recurrence lead)"
         }
       ],
       "note": "Added in the check. Event-based club jumping; not a regular dropzone on current evidence."
@@ -157,7 +172,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Slobodan Pad offered tandem jumps at Visoko airfield on 28-31 May 2026 (booking page), from a Cessna 182. This is a scheduled visit; no resident dropzone or regular season found.",
+      "status_evidence": "Slobodan Pad offered tandem jumps at Visoko airfield on 28-31 May 2026 (booking page), from a Cessna 182. This is a scheduled visit; no resident dropzone or regular season found. Re-checked 2026-11-14: Slobodan Pad publishes tandem jump dates of 28–31 May 2026 and explicitly locates its Sarajevo offer at Visoko airfield. The offer describes its Cessna 182; the evidence supports scheduled visiting jump days rather than year-round service.",
       "sources": [
         {
           "url": "https://slobodanpad.hr/tandem-skok-padobranom-sarajevo",

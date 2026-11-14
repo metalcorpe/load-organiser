@@ -173,7 +173,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Only resellers (Manawa, unlimited-adrenaline.gr, discover-greece-tours) mention tandems at Perneri; one Skydive Greece listing names Perneri, another names Megara. No operator page or dated post found Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
+      "status_evidence": "Only resellers (Manawa, unlimited-adrenaline.gr, discover-greece-tours) mention tandems at Perneri; one Skydive Greece listing names Perneri, another names Megara. No operator page or dated post found Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain. Re-checked 2026-11-14: A club report confirms parachute training at Perneri in spring 2024, completed on 15 June 2024. No 2025+ local jumping evidence was found; the former Skydive Greece homepage now redirects to Skydive Megara, which alone does not prove Perneri closed.",
       "sources": [
         {
           "url": "https://discover-greece-tours.com/skydiving/",
@@ -250,8 +250,8 @@
         }
       ],
       "season": "occasional, about one weekend a month (per listing)",
-      "status": "uncertain",
-      "status_evidence": "Booking listings (Manawa/Greeka, undated) say the northern base is Nea Kavala airport at Polykastro, sometimes Lagadas, about one weekend per month; OurAirports lists the airfield as closed. No 2025+ evidence Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
+      "status": "closed",
+      "status_evidence": "Closed holds, but Codex's reasoning is out of date. The camp no longer sits on the runway: OSM shows the refugee site about 500 m NE of the runway, and a 13 Jun 2023 local report and the AELPO aero club page say the camp moved and the runway was freed, with the municipality leasing it to reopen. The 'former airstrip' in the ministry address is only a location label. Jumping did stop when the camp took over the strip in 2016. The club's page, last modified 1 Jul 2025, says restoration is still pending, and Hellenic Skydivers' northern tandems are now sold at Chortero, so there is no sign of a restart. Re-check later, because the airfield may reopen.",
       "sources": [
         {
           "url": "https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers",
@@ -272,6 +272,31 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident GR-0004)",
           "checked_on": "2026-11-14",
           "what": "OurAirports GR-0004, type closed"
+        },
+        {
+          "url": "https://migration.gov.gr/ris/perifereiakes-monades/domes/domi-polykastroy/",
+          "checked_on": "2026-11-14",
+          "what": "Official facility address explicitly says former airstrip (Πρώην Αεροδιάδρομος)."
+        },
+        {
+          "url": "https://ourairports.com/airports/GR-0004/",
+          "checked_on": "2026-11-14",
+          "what": "Closed airfield listing and dated 2016 conversion report; corroborating lead, not sole evidence."
+        },
+        {
+          "url": "https://aelpo.gr/",
+          "checked_on": "2026-11-14",
+          "what": "Aero club page 'FREE AT LAST' (WP modified 2025-07-01): runway freed; camp moved east of runway; remaining works before aerodrome reopens"
+        },
+        {
+          "url": "https://www.eidisis.gr/topika-nea-toy-n-kilkis/apokleistiko-to-aerodromio-neas-kabalas-polykastroy-etoimazetai-n-anoiksei-ta-ftera-toy.html",
+          "checked_on": "2026-11-14",
+          "what": "13 Jun 2023: camp moved off runway, runway in poor condition, municipality of Paionia leasing 44 stremmata to reopen; future plans only"
+        },
+        {
+          "url": "https://www.unlimited-adrenaline.gr/hellenic-skydivers/p/en/316",
+          "checked_on": "2026-11-14",
+          "what": "Hellenic Skydivers northern tandem now listed at Chortero, Serres (reseller lead)"
         }
       ],
       "note": "Not in dev-listings. Possibly superseded by Chortero (Skydive Thessaloniki)."

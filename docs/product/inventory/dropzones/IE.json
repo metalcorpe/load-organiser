@@ -20,7 +20,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Public 2026 instructor recruitment and a directory identify a Birr operation, but actual commencement of regular jumps was not verified.",
+      "status_evidence": "Public 2026 instructor recruitment and a directory identify a Birr operation, but actual commencement of regular jumps was not verified. Re-checked 2026-11-14: Public 2026 SkydiveThru recruitment identifies Birr and a new operation, but does not establish that regular jumping commenced. The operator homepage yielded no readable activity details, and the USPA detail-page lead could not be retrieved.",
       "sources": [
         {
           "url": "https://ie.linkedin.com/jobs/view/skydiving-instructor-at-skydivethru-4398149767",
@@ -125,7 +125,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "January 2026 local reporting describes upheld grounding/licence enforcement; June 2026 AIP still lists parachuting here. Resumption of regular jumps was not verified.",
+      "status_evidence": "January 2026 local reporting describes upheld grounding/licence enforcement; June 2026 AIP still lists parachuting here. Resumption of regular jumps was not verified. Re-checked 2026-11-14: The 7 January 2026 court report describes disrupted bookings but also says the aircraft grounding order was lifted in March 2023; it does not establish resumed jumping. The June 2026 AIP still names Irish Skydiving Club at Kilkenny, while the operator’s indexed booking notice says flights are suspended, leaving actual operation unresolved.",
       "sources": [
         {
           "url": "https://www.skydiveclub.ie/contact",
@@ -157,7 +157,7 @@
       "icao": "EISG",
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "Airport article mentions skydiving and charity jumps without a dated activity source; no 2025+ regular dropzone operator evidence found.",
+      "status_evidence": "Airport article mentions skydiving and charity jumps without a dated activity source; no 2025+ regular dropzone operator evidence found. Re-checked 2026-11-14: Sligo Airport’s indexed page advertises selected summer weekends but has no activity year; direct opening showed a verification page. No 2025–2026 airport-specific operation was confirmed, and the dated County Sligo charity event instead names Clonbullogue as its venue.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Sligo_Airport",

@@ -1,0 +1,436 @@
+{
+  "group": "de",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "de-bad-duerkheim",
+      "verdict": "active",
+      "confidence": "high",
+      "evidence": "A report dated 2025-09-01 documents an aircraft parachute jump at the In den Almen airfield on 2025-08-30. The airfield operator also advertises parachuting there; no restriction to occasional weekends was established.",
+      "sources": [
+        {
+          "url": "https://www.wochenblatt-reporter.de/bad-duerkheim/c-blaulicht/fallschirmspringer-muss-nach-sturz-notoperiert-werden_a668871",
+          "checked_on": "2026-11-14",
+          "what": "Dated report of a Cessna jump and landing accident at Bad Dürkheim."
+        },
+        {
+          "url": "https://www.edrf.de/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield operator describes parachuting at its field."
+        }
+      ]
+    },
+    {
+      "key": "de-bad-lippspringe",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The airfield history describes the civilian-access RAPA operation ending in 2015 and military reactivation in 2022. No 2025+ civilian-access jump operation was established, and the FSC Paderborn directory entry does not name a jump site.",
+      "sources": [
+        {
+          "url": "https://de.wikipedia.org/wiki/Flugplatz_Bad_Lippspringe",
+          "checked_on": "2026-11-14",
+          "what": "History distinguishes the former RAPA operation from later military use."
+        },
+        {
+          "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7359",
+          "checked_on": "2026-11-14",
+          "what": "FSC Paderborn entry has a blank jump-site field."
+        }
+      ]
+    },
+    {
+      "key": "de-bienenfarm",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The airport publishes a 2026 fly-in programme, but this does not establish a regular parachuting operation. No dated 2025+ sport, training or tandem jump operation was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.flugplatz-bienenfarm.de/besucher/",
+          "checked_on": "2026-11-14",
+          "what": "Airport visitor page includes its 2026 programme announced on 2025-10-11; no dated parachuting operation identified."
+        }
+      ]
+    },
+    {
+      "key": "de-bonn-hangelar",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The FSG Hangelar entry gives a Hennef-Dambroich street address and a Soest office, rather than an identified Hangelar airfield landing area. No 2025+ local jump operation or defensible coordinate correction was established.",
+      "sources": [
+        {
+          "url": "https://www.dfv.aero/kW7363/FSG%20Hangelar%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "Federation entry gives Hennef-Dambroich and Soest addresses, with no dated jump calendar."
+        }
+      ]
+    },
+    {
+      "key": "de-braunschweig",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "DFV names FSC 100 and Braunschweig airport, but the entry supplies no dated 2025+ operation. German-language searches found club listings rather than recent local jump reports.",
+      "sources": [
+        {
+          "url": "https://www.dfv.aero/kW7422/FSC%20100%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "Undated federation entry identifies the airport and a Cessna 182."
+        }
+      ]
+    },
+    {
+      "key": "de-breitscheid",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "The operator status update marked October 2026 explicitly suspends sport, training and tandem jumps at Breitscheid while unresolved obstacles are addressed with the municipality. It hopes to restart later; this is a suspension, not proof of permanent closure.",
+      "sources": [
+        {
+          "url": "https://skydive-westerwald.de/status/",
+          "checked_on": "2026-11-14",
+          "what": "Operator notice updated 2026-10 says no jump operations and no restart date."
+        },
+        {
+          "url": "https://www.soaringspot.com/de/lahn-dill-bergland-cup-2026/tasks/standard/task-1-on-2026-08-01",
+          "checked_on": "2026-11-14",
+          "what": "August 2026 gliding briefing mentions Breitscheid parachuting, but the October operator suspension is later."
+        }
+      ]
+    },
+    {
+      "key": "de-burgheim",
+      "verdict": "seasonal",
+      "confidence": "high",
+      "evidence": "The 2025-09-08 local photo report documents parachute jumps during the Burgheim flying festival. LSG Burgheim offers tandem, student and licensed jumps and specifies Friday, weekend and holiday operating hours.",
+      "sources": [
+        {
+          "url": "https://www.augsburger-allgemeine.de/neuburg/burgheim-fliegerfest-2025-in-burgheim-das-sind-die-bilder-110713498",
+          "checked_on": "2026-11-14",
+          "what": "Dated festival report and parachuting captions; public HTML read directly with curl after browser fetch failed."
+        },
+        {
+          "url": "https://lsg-burgheim.de/fallschirmspringen/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies its Cessna 182 and Friday/weekend/holiday jumping schedule."
+        }
+      ],
+      "corrections": {
+        "season": "Fridays, weekends and public holidays"
+      }
+    },
+    {
+      "key": "de-finsterwalde-schacksdorf",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "The aviation authority revoked the airfield operating permission on 2025-02-18 and ordered closure markings and removal of aviation facilities. Its decision records the sole aircraft-maintenance user agreeing to closure.",
+      "sources": [
+        {
+          "url": "https://lubb.berlin-brandenburg.de/wp-content/uploads/Widerruf-der-Genehmigung-vom-18.02.2025.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Official seven-page closure decision for EDUS, dated 2025-02-18."
+        }
+      ]
+    },
+    {
+      "key": "de-fuerstenzell",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "FSC Passau advertises tandem, student and sport jumps and publishes prices, but neither the homepage nor price list dates the operation to 2025 or later. No dated local jumping evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.fsc-passau.de/",
+          "checked_on": "2026-11-14",
+          "what": "Operator describes its parachuting activities."
+        },
+        {
+          "url": "https://www.fsc-passau.de/preise/",
+          "checked_on": "2026-11-14",
+          "what": "Undated tandem, solo-jump and training price list."
+        }
+      ]
+    },
+    {
+      "key": "de-grafenau",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The Flying Bears entry provides Stifterstraße 26 in Grafenau but no identified airfield, aircraft or programme. No 2025+ local jumps or sourced landing-area coordinates were established.",
+      "sources": [
+        {
+          "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7414",
+          "checked_on": "2026-11-14",
+          "what": "Federation club entry gives only a street address and contact details."
+        }
+      ]
+    },
+    {
+      "key": "de-huettenbusch",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The listed operator now advertises Karlshöfen and Stade as its two locations. No dated 2025+ jumping at Hüttenbusch was established; omission alone does not prove closure.",
+      "sources": [
+        {
+          "url": "https://www.tandem-skydive.de/",
+          "checked_on": "2026-11-14",
+          "what": "Operator homepage names Karlshöfen and Stade, not Hüttenbusch."
+        }
+      ]
+    },
+    {
+      "key": "de-jena-schoengleina",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "DAeC still lists Thüringia at Flugplatz 1, Jena-Schöngleina, but does not date that school listing. No dated 2025+ local jump operation was established, and fun-jump.de could not be fetched.",
+      "sources": [
+        {
+          "url": "https://lsgb.daec.de/sprungfallschirme/",
+          "checked_on": "2026-11-14",
+          "what": "Federation training-school list identifies Thüringia and the airfield address."
+        },
+        {
+          "url": "https://www.fun-jump.de",
+          "checked_on": "2026-11-14",
+          "what": "Attempted operator-page open failed; no activity content readable."
+        }
+      ]
+    },
+    {
+      "key": "de-kaufbeuren",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The club has dated 2025 news about glider flying, whereas DFV retains an undated Sunday parachuting entry. No dated 2025+ aircraft parachuting at Kaufbeuren was established.",
+      "sources": [
+        {
+          "url": "https://lsvk.weebly.com/",
+          "checked_on": "2026-11-14",
+          "what": "2025 club news concerns gliding and aerotow."
+        },
+        {
+          "url": "https://www.dfv.aero/kW7415/LSV%20Kaufbeuren%20e.V.",
+          "checked_on": "2026-11-14",
+          "what": "Undated parachuting-section entry describes Sunday Cessna 206 jumps."
+        }
+      ]
+    },
+    {
+      "key": "de-kempten-durach",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Schatt’s readable page offers 3,000-metre Cessna tandem jumps and explains the loss of Skyvan permission since 2012, but gives no dated 2025+ local jump day. This does not establish a current season or closure of all local jumping.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-tandemspringen.de/fallschirmspringen-allgaeu-kempten-durach/",
+          "checked_on": "2026-11-14",
+          "what": "Undated offer for Kempten-Durach, with historical aircraft restrictions; differs from the prior coverage description."
+        }
+      ]
+    },
+    {
+      "key": "de-kiel-holtenau",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "LSV Kiel says year-round jumping is generally possible at Kiel-Holtenau, but the page has no dated 2025+ jump evidence. The linked Kiel-Boogie site timed out.",
+      "sources": [
+        {
+          "url": "https://www.lsv-kiel.de/sprungbetrieb/",
+          "checked_on": "2026-11-14",
+          "what": "Undated operator description and link to event information."
+        },
+        {
+          "url": "https://kiel-boogie.de/",
+          "checked_on": "2026-11-14",
+          "what": "Attempted public open timed out; no calendar readable."
+        }
+      ]
+    },
+    {
+      "key": "de-kuehrstedt-bederkesa",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The Jumpzone directory lead identifies Kührstedt-Bederkesa, but its operator website returned a gateway error. No dated 2025+ activity was established, so the aggregator is not treated as operating evidence.",
+      "sources": [
+        {
+          "url": "https://www.sky-junkies.de/sprungplatz/fallschirmsport-bremerhaven-jumpzone/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead identifies Kührstedt-Bederkesa and links to Jumpzone."
+        },
+        {
+          "url": "https://www.jumpzone.de",
+          "checked_on": "2026-11-14",
+          "what": "Operator open returned 502 Bad Gateway."
+        }
+      ]
+    },
+    {
+      "key": "de-lahr",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "DFV retains the Lahr address, while the municipal Black Forest Skydive page lists only 2021 events. No dated 2025+ jumping at Lahr was established; activity advertised in Rottweil does not prove Lahr remains operational.",
+      "sources": [
+        {
+          "url": "https://www.dfv.aero/kW7327/Breisgauverein%20f%C3%BCr%20Fallschirmsport",
+          "checked_on": "2026-11-14",
+          "what": "Undated Lahr jump-site listing."
+        },
+        {
+          "url": "https://www.lahr.de/black-forest-skydive-e-v-.142619.htm",
+          "checked_on": "2026-11-14",
+          "what": "Municipal club listing contains 2021 event dates only."
+        }
+      ]
+    },
+    {
+      "key": "de-lechfeld",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "DFV gives Coolschranxx a street address in Graben, with no aircraft or dated jump programme. No 2025+ civilian-access jumping at the Lechfeld military airfield was established.",
+      "sources": [
+        {
+          "url": "https://www.dfv.aero/Info/Pl%C3%A4tze+Vereine/Details/kW7429",
+          "checked_on": "2026-11-14",
+          "what": "Club entry gives Hasenweg 1, Graben, without a dated local programme."
+        }
+      ]
+    },
+    {
+      "key": "de-luechow-rehbeck",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The regional tourism page still advertises Tandem-Skydive at Lüchow-Rehbeck, but the operator homepage names Karlshöfen and Stade. Neither supplies dated 2025+ jumps at Rehbeck, so this conflict remains unresolved.",
+      "sources": [
+        {
+          "url": "https://region-wendland.de/aktivit%C3%A4t/fallschirmspringen/",
+          "checked_on": "2026-11-14",
+          "what": "Undated regional tourism description names Rehbeck and Tandem-Skydive."
+        },
+        {
+          "url": "https://www.tandem-skydive.de/",
+          "checked_on": "2026-11-14",
+          "what": "Operator currently advertises Karlshöfen and Stade."
+        }
+      ]
+    },
+    {
+      "key": "de-oberpfaffenhofen",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The club explicitly says it has no regular jump operation and organises occasional visits or events. Its history describes Oberpfaffenhofen departures with Maxhof landings and later jumping elsewhere; no dated 2025+ local dropzone operation was established.",
+      "sources": [
+        {
+          "url": "https://www.fsg-im-dlr.de/node/2489",
+          "checked_on": "2026-11-14",
+          "what": "Club jump-operation page says no regular jumping and names events elsewhere."
+        },
+        {
+          "url": "https://www.fsg-im-dlr.de/node/56",
+          "checked_on": "2026-11-14",
+          "what": "Historical account distinguishes departure airport from Maxhof landing site."
+        }
+      ]
+    },
+    {
+      "key": "de-rheine-eschendorf",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The airport homepage still identifies FSC Rheine as resident, but provides no dated 2025+ jump activity. No recent operator programme or successor operation was established.",
+      "sources": [
+        {
+          "url": "https://edxe.de/",
+          "checked_on": "2026-11-14",
+          "what": "Airport operator mentions FSC Rheine and links to its former domain; the description is undated."
+        }
+      ]
+    },
+    {
+      "key": "de-schwaebisch-hall-weckrieden",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "Para Club Hall states that an eviction action ended its operation provisionally in 2023. Its homepage is seeking a new landing meadow, supporting loss of the former Weckrieden dropzone rather than a normal seasonal pause.",
+      "sources": [
+        {
+          "url": "https://www.paraclub.de/der-para-club",
+          "checked_on": "2026-11-14",
+          "what": "Club history explicitly records the provisional end in 2023 following eviction action."
+        },
+        {
+          "url": "https://www.paraclub.de/",
+          "checked_on": "2026-11-14",
+          "what": "Club asks for a new unobstructed landing meadow."
+        }
+      ]
+    },
+    {
+      "key": "de-schwarzheide",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The club’s 2026-01-08 notice confirms it won the lease dispute and can continue using the airfield. That notice contains no parachuting activity, and no dated 2025+ jump operation was established.",
+      "sources": [
+        {
+          "url": "https://aecschwarzheide.de/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 lease-dispute statement; no parachuting programme found."
+        }
+      ]
+    },
+    {
+      "key": "de-seedorf",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The publicly readable portion of a 2024-04-11 local report says the civilian parachuting club faced closure. No dated 2025+ continuation or completed closure was established.",
+      "sources": [
+        {
+          "url": "https://www.zevener-zeitung.de/zeven/schwierige-lage-darum-droht-dem-seedorfer-freifallsportverein-das-aus-203096.html",
+          "checked_on": "2026-11-14",
+          "what": "Public article introduction dates the threatened closure to 2024-04-11; subscription-only remainder was not accessed."
+        }
+      ]
+    },
+    {
+      "key": "de-speichersdorf-rosenthal",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The operator site advertises jumping at Speichersdorf, but has no dated 2025+ jump programme and displays placeholder contact details. Municipal and federation listings alone do not establish a newly verified season.",
+      "sources": [
+        {
+          "url": "https://fallschirmspringen-online.de/",
+          "checked_on": "2026-11-14",
+          "what": "Undated operator offer; visible contact email and phone are placeholders."
+        }
+      ]
+    },
+    {
+      "key": "de-stendal-borstel",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The airport company report dated 2022-06-15 explicitly records dissolution of SkyDive Stendal, while the district sports federation still lists the club without a dated operating programme. No dated 2025+ successor jump operation was established, so site activity remains unresolved.",
+      "sources": [
+        {
+          "url": "https://session.stendal.de/bi/getfile.php?id=57991&type=do",
+          "checked_on": "2026-11-14",
+          "what": "Full municipal PDF downloaded and extracted in memory; airport company report, Anlage 4 page 13, records club dissolution on 2022-06-15."
+        },
+        {
+          "url": "https://www.ksbstendalaltmark.de/unsere_sportvereine/",
+          "checked_on": "2026-11-14",
+          "what": "Undated district sports-federation list retains Skydive-Stendal; not evidence of jumps at the airfield."
+        }
+      ]
+    },
+    {
+      "key": "de-sylt",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Seventhsky says a season has ended without naming its year, while its booking page still lists cancelled April–October 2020 jumps. No dated 2025+ local operation was established.",
+      "sources": [
+        {
+          "url": "https://www.seventhsky.de/",
+          "checked_on": "2026-11-14",
+          "what": "Undated season-end announcement."
+        },
+        {
+          "url": "https://www.seventhsky.de/index.php?option=com_seminarman&view=category&cid=1&Itemid=246",
+          "checked_on": "2026-11-14",
+          "what": "Booking table shows cancelled 2020 events and no dated 2025+ activity."
+        }
+      ]
+    }
+  ]
+}

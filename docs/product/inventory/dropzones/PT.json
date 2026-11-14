@@ -343,7 +343,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. A Yumping customer review dated 2026-06-06 (on the Skydive Porto Chaves page) regrets that there are no parachute jumps in Vila Real. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. A Yumping customer review dated 2026-06-06 (on the Skydive Porto Chaves page) regrets that there are no parachute jumps in Vila Real. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield. Re-checked 2026-11-14: The federation still names Falcões do Marão at Vila Real, but its page has no publication or season date. No independently dated 2025+ local jump programme was established.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -383,7 +383,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Uncertain: operator website identifies Tancos as its jump zone while retaining the Cerval address; no dated recent jumps at Cerval itself confirmed.",
+      "status_evidence": "Uncertain: operator website identifies Tancos as its jump zone while retaining the Cerval address; no dated recent jumps at Cerval itself confirmed. Re-checked 2026-11-14: The operator homepage identifies Tancos as its jump zone while retaining the Cerval address. No dated 2025+ jumps at Cerval itself were established; the 2026 copyright footer is not activity evidence.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/ace.html",
@@ -421,7 +421,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Trip.com lists it as temporarily closed; not on the FPPq lists; operator site did not respond on 2026-11-14. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "status_evidence": "Trip.com lists it as temporarily closed; not on the FPPq lists; operator site did not respond on 2026-11-14. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield. Re-checked 2026-11-14: The municipality announced a trial Skydive Portugal operation for May–October 2021, while the tourism board retains an undated Fly Skydive Coimbra listing. Neither establishes continuing jumps in 2025 or later.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/fly-skydive-coimbra/",
@@ -458,8 +458,8 @@
           "name": "Skydive Maia (Skydive Ibéria group)"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Uncertain: May 2026 reporting traces the former operator from Maia to Spain and its eventual cessation; no evidence establishes whether another operator now jumps at Maia.",
+      "status": "closed",
+      "status_evidence": "NiT (22 January 2026) reports that Skydive Maia's premises at Vilar de Luz were abandoned and its website and social media deleted, and RTP (6 February 2026, date confirmed in the page metadata) says it shut its doors. The federation has commented out its Maia entry, and no other operator jumping at Vilar de Luz in 2025 or later was found; Skydive Porto jumps at Proença-a-Nova, Braga and Espinho, not Maia.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -485,6 +485,21 @@
           "url": "https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html",
           "checked_on": "2026-11-14",
           "what": "2026 report traces former Maia operation to León and Valladolid; no evidence of a replacement Maia operator"
+        },
+        {
+          "url": "https://www.rtp.pt/noticias/pais/skydive-empresa-de-saltos-de-para-quedas-alvo-de-acusacoes-de-burla_v1716912",
+          "checked_on": "2026-11-14",
+          "what": "Dated national broadcaster report explicitly states Skydive Maia closed."
+        },
+        {
+          "url": "https://www.nit.pt/fora-de-casa/na-cidade/empresa-de-skydiving-na-maia-acusada-de-enganar-dezenas-de-clientes",
+          "checked_on": "2026-11-14",
+          "what": "22 January 2026: the company's premises at Aeródromo Vilar de Luz abandoned, website and social media deleted, phone number disconnected."
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "The other operator in the region lists Proença-a-Nova, Braga and Espinho as its sites; Maia is not mentioned."
         }
       ],
       "note": "Probably closed. OSM node 8421707775 'Skydive Maia' (41.28049, -8.51706) agrees with the airfield point."
@@ -508,7 +523,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The Águeda entry is commented out (hidden) in the FPPq dropzone page source; no recent activity found. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "status_evidence": "The Águeda entry is commented out (hidden) in the FPPq dropzone page source; no recent activity found. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield. Re-checked 2026-11-14: The federation hides its former Casarão entry in HTML comments. A 26 March 2026 report confirms airfield emergency exercises, but no 2025+ parachuting programme was found.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -542,7 +557,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The entry is commented out (hidden) in the FPPq dropzone page source; Skydive Seven now flies from Portimão. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "status_evidence": "The entry is commented out (hidden) in the FPPq dropzone page source; Skydive Seven now flies from Portimão. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield. Re-checked 2026-11-14: The federation entry is hidden in HTML comments, and the 2015 CAVOK airfield page describes historical parachuting use. No dated 2025+ local jump programme or definitive closure was established.",
       "sources": [
         {
           "url": "https://www.fppq.pt/saltar/dz.html",
@@ -643,7 +658,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "2026 AIP retains the parachuting area and a booking listing was updated in August 2026, but the operator describes special-event use and a seller reports runway-maintenance closure; actual resumption at Espinho is unconfirmed.",
+      "status_evidence": "2026 AIP retains the parachuting area and a booking listing was updated in August 2026, but the operator describes special-event use and a seller reports runway-maintenance closure; actual resumption at Espinho is unconfirmed. Re-checked 2026-11-14: NAV AIP effective 6 August 2026 lists the Espinho parachuting area but identifies only the airfield director, not a jumping operator. Skydive Porto reserves Espinho for special events on an undated activity page; no dated 2025+ event or resumption was established.",
       "sources": [
         {
           "url": "https://skydivingsource.com/locations/europe/portugal/",
@@ -689,11 +704,11 @@
       "icao": "LPBG",
       "operators": [
         {
-          "name": "Centro de Paracaidismo Galsur / Skydive Bragança"
+          "name": "Associação de Paraquedistas do Nordeste"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Historic directories identify the airport operation; no dated 2025+ civilian jump programme was found.",
+      "status": "seasonal",
+      "status_evidence": "Codex cited only a pre-event programme, but a TVI report dated 12 July 2026 and the Aero Clube de Bragança 'Saltos Tandem' video from that day show the air-show jumps went ahead. Jumps at the aerodrome also recur: the 2025 Careto AirShow programme lists the 'paraquedistas Caretos' jumps, the Associação de Paraquedistas do Nordeste ran a course at the aerodrome in August 2024, and it opened sign-ups for its next civil course on 5 May 2026. This is occasional club and event use, not a resident operation; the 2026 programme calls the tandem jumps the first in Bragança in over two decades.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/portugal/centro-de-paracaidismo-galsur-skydive-braganca",
@@ -709,8 +724,44 @@
           "url": "https://ourairports.com/airports/LPBG/",
           "checked_on": "2026-11-14",
           "what": "Airfield position"
+        },
+        {
+          "url": "https://www.aeroclubedebraganca.pt/careto-air-show-2026/",
+          "checked_on": "2026-11-14",
+          "what": "Organizer programme names the airfield, date, tandem activity and collaborating parachute association."
+        },
+        {
+          "url": "https://tvi.iol.pt/noticias/video/careto-airshow-junta-centenas-de-aeronaves-e-milhares-de-visitantes-em-braganca/6a538ed40cf2f6a1a1e70559",
+          "checked_on": "2026-11-14",
+          "what": "TVI report dated 12 July 2026 (the object ID decodes to 2026-07-12) mentions parachute jumps at the air show that weekend."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/posts/saltos-de-paraquedas-com-instrutor-dia-12-de-julho-no-aer%C3%B3dromo-municipal-de-bra/1437065618453439",
+          "checked_on": "2026-11-14",
+          "what": "Aero Club post of 7 July, seen in search results only: tandem jumps on 12 July at the aerodrome, €180, from 11,000 ft. The related-video list on the club's public Facebook video pages shows a 'Saltos Tandem' video dated 12 July (2026)."
+        },
+        {
+          "url": "https://cavok.pt/2025/06/18/careto-airshow-2025-2",
+          "checked_on": "2026-11-14",
+          "what": "2025 edition (20–22 June 2025) programme, as issued by the Aero Club, lists the 'saltos de paraquedistas Caretos'."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/videos/a-decorrer-no-aer%C3%B3dromo-de-bragan%C3%A7a-o-curso-de-paraquedistas-uma-iniciativa-da-a/416715934854202",
+          "checked_on": "2026-11-14",
+          "what": "Public post dated 18 August 2024: an Associação de Paraquedistas do Nordeste parachuting course under way at Bragança aerodrome."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/posts/a-associa%C3%A7%C3%A3o-de-paraquedismo-do-nordeste-j%C3%A1-tem-inscri%C3%A7%C3%A3o-abertas-para-o-pr%C3%B3ximo/1381828253977176",
+          "checked_on": "2026-11-14",
+          "what": "Public post dated 5 May 2026: the association is taking sign-ups for its next civil parachuting course. The post text does not name where the jumps take place."
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "The federation's list of clubs includes the Associação de Paraquedistas do Nordeste, with a Bragança address."
         }
-      ]
+      ],
+      "season": "Occasional event weekends; tandem programme on 12 July 2026 at Careto Air Show"
     },
     {
       "key": "pt-ponte-de-sor",
@@ -727,7 +778,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Municipal minutes confirm a resident school in 2006; no 2025+ evidence of continuing regular jumps was found.",
+      "status_evidence": "Municipal minutes confirm a resident school in 2006; no 2025+ evidence of continuing regular jumps was found. Re-checked 2026-11-14: Municipal minutes of 13 September 2006 identify Sky Medley facilities at Ponte de Sor aerodrome. Portuguese searches did not establish a 2025+ jump programme or a definitive cessation notice.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/portugal/sky-medley-skydive-center",

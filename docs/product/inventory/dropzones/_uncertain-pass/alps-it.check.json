@@ -1,0 +1,173 @@
+{
+  "group": "alps-it",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "ch-bressaucourt",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "The Swissboogie calendar page embeds Google calendar 6bb8966d…@group.calendar.google.com (the embed src decodes to that ID), and the page defines 'Bressaucourt' as jumping at Bressaucourt airfield. The public ICS lists 9 Bressaucourt days in 2025 (16 Mar–28 Sep) and 8 in 2026 (22 Mar–18 Oct), all Sundays and none marked cancelled; the airfield's own homepage says it offers parachute jumps, and the recorded LSZQ coordinates are within about 40 m of the OSM aerodrome.",
+      "sources": [
+        {
+          "url": "https://swissboogie.ch/de/pages/fallschirmsprungkalender",
+          "what": "Operator page: defines Bressaucourt as a jump activity at Bressaucourt airfield; HTML embeds the Google calendar below."
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/6bb8966d4131daec907c12cf3d95e904357732da959e3036a0603efc7af65dd1@group.calendar.google.com/public/basic.ics",
+          "what": "Downloaded and parsed: 17 'Bressaucourt' events, 2025-03-16 to 2026-10-18, all Sundays, STATUS CONFIRMED, none in the 'Annulé' entries."
+        },
+        {
+          "url": "https://aerojura.ch/",
+          "what": "Aérodrome du Jura (Bressaucourt) homepage: lists parachute jumps among its activities (undated)."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/738339471",
+          "what": "OSM aerodrome LSZQ Bressaucourt, centre 47.39272, 7.02882 (matches record within ~40 m)."
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ch-le-chable-verbier",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "uncertain",
+      "reason": "Alpskydive offers helicopter tandem skydives, not paragliding. But no source names its heliport, exit area or landing area. Its site has no dated content and does not mention the aircraft training Codex cites. Its booking page shows no sessions, it is not on Swiss Skydive's school/club list, and its last own Instagram post visible without login is dated 14 Nov 2024. The 7 May 2026 Verbier Tourisme entry is a directory listing with a generic 'Toute l'année, 09:00–17:00 daily, horaires non garantis' field. Customer reels tagging @alpskydive, dated 2 Feb 2025 and 16 Dec 2025 (the second also tags @verbier), suggest the business operated in 2025. They do not show regular jumps at an identified place, and nothing supports the 'year-round' season correction.",
+      "sources": [
+        {
+          "url": "https://www.alpskydive.com/",
+          "what": "Operator: helicopter tandem from 4000 m 'based in Verbier', office address Le Châble; no dates, no heliport or landing site, no aeroplane or aircraft training mentioned."
+        },
+        {
+          "url": "https://www.verbier.ch/decouvrir/pause-activites-indoor-wellness/alpskydive-le-chable-fr-2921695/",
+          "what": "Tourism directory entry 'mis à jour le 07 mai 2026': opening 'Toute l'année', 09:00–17:00 every day, 'Horaires non garantis'; no landing site."
+        },
+        {
+          "url": "https://bookme.name/Alpskydive/tandem-parachute",
+          "what": "Operator booking page: 'Aucun horaire disponible' on 2026-11-14; no location beyond the general region."
+        },
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "what": "Swiss Skydive school and club list: no Alpskydive and no Valais entry."
+        },
+        {
+          "url": "https://www.instagram.com/alpskydive",
+          "what": "Public profile without login: newest own posts dated Oct–14 Nov 2024; newest item is a 2 Feb 2025 reel by another account."
+        },
+        {
+          "url": "https://www.instagram.com/tomleponge_/reel/DFk4W4ut5se/",
+          "what": "2 Feb 2025 customer reel tagging @alpskydive with a helicopter emoji; location not stated."
+        },
+        {
+          "url": "https://www.instagram.com/reel/DSVCgwWkV3w",
+          "what": "16 Dec 2025 reel by jesse_grylls tagging @alpskydive and @verbier; content not visible without login, Meta's search summary describes skydiving over snowy Alps."
+        },
+        {
+          "url": "https://www.heliskiing-switzerland.com/en/helicopter-taxi-flight-geneva-verbier/panoramic-flight.html",
+          "what": "Shows a Le Châble heliport exists below Verbier; no source links Alpskydive's jumps to it."
+        }
+      ],
+      "corrections_ok": false
+    },
+    {
+      "key": "at-trieben",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "Codex's evidence does not show jumps at Trieben. The ÖAeC register (issued 3 Feb 2026) only records that Internationaler Pink Parachute Club holds a school authorisation with LOGI as its training site, and no Pink Skyvan schedule from Jan 2025 to Nov 2026 lists Trieben (13 archived versions checked, plus the live page). The jumps are run by Airgasmo, the airfield's listed parachute operator in 2024. Its own 2026 'Wann und Wo' schedule lists nine Trieben weekends from 14–17 May to 3–4 Oct 2026, its 16 Jun 2026 Instagram reel is tagged #trieben, and customer reviews dated 27 Jun 2025 and 2 Jul 2026 name Trieben as the jump site. That is weekend operation in season, which AT.json records as seasonal; the recorded coordinates are within about 50 m of the OSM aerodrome.",
+      "sources": [
+        {
+          "url": "https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf",
+          "what": "Register 'Ausgabedatum 2026 02 03': IPPC, training site LOGI Flugplatz Trieben, GB/BB/SNB/AFF. It is an authorisation list, not a jump record."
+        },
+        {
+          "url": "https://pink.at/schedule.htm",
+          "what": "Pink Skyvan schedule 'Stand 2026-11-13': events through 2027, none at Trieben."
+        },
+        {
+          "url": "https://web.archive.org/cdx/search/cdx?url=pink.at/schedule.htm&from=2024&to=2026",
+          "what": "Archived versions dated 2025-01-17 to 2026-07-14 (13 checked) and three 2024 versions: no Trieben entry in any."
+        },
+        {
+          "url": "https://airgasmo.com/wann-und-wo/",
+          "what": "Operator's 2026 schedule: Trieben 14-17 May, 13-14 Jun, 20-21 Jun, 18-19 Jul, 25-26 Jul, 15-16 Aug, 22-23 Aug, 26-27 Sep, 03-04 Oct."
+        },
+        {
+          "url": "https://www.instagram.com/reel/DZpl5XMCy4s",
+          "what": "Airgasmo skydiving reel dated 16 Jun 2026, tagged #trieben #tandem."
+        },
+        {
+          "url": "https://adac.regiondo.de/fallschirm-tandemsprung-trieben?vendor=36008&subid=maps",
+          "what": "Airgasmo 'Fallschirm Tandemsprung Trieben' booking listing (reseller storefront; supporting only): reviews dated 22 May 2025 to 1 Oct 2026, those of 27 Jun 2025, 2 Jul 2026 and 1 Oct 2026 naming Trieben; operator replies on the 2025 reviews."
+        },
+        {
+          "url": "https://fly1.logi.at/news-and-events/",
+          "what": "Airfield operator (Union Sportfliegerclub Trieben) calendar: past events 'Fallschirmspringen mit Airgasmo' on 21 Apr, 1 May and 4 May 2024; no 2025–2026 events published."
+        },
+        {
+          "url": "https://www.fallschirmspringen-wien.at/trieben",
+          "what": "Tandem team lists Trieben as a dropzone but shows no dates (same in its May 2025 archived version)."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/30520625",
+          "what": "OSM aerodrome LOGI Trieben, centre 47.49307, 14.49506 (matches record within ~50 m)."
+        }
+      ],
+      "corrections_ok": null,
+      "suggested_corrections": {
+        "operators": "Add Airgasmo (https://airgasmo.com/), which publishes the Trieben jump dates. Keep Internationaler Pink Parachute Club only as the ÖAeC-authorised school at LOGI; no Pink schedule shows Trieben jumps.",
+        "season": "Selected weekends, May–October (Airgasmo 2026 schedule)"
+      }
+    },
+    {
+      "key": "at-lienz-nikolsdorf",
+      "codex_verdict": "uncertain",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "Airgasmo's 'Lienz' is this airfield: the 'Flugplatz Lienz' pin on its own dropzone map (46.80032, 12.87523) lies inside the OSM outline of LOKL, and its Lienz ticket is listed at 'lienz-nikolsdorf', location Lengberg, the airfield's postal address. Its 2026 schedule, a published season calendar that the README accepts, lists jumps there on 27–28 Jun and 12–13 Sep 2026; take-off is the 500 m runway 12/30 and the AIP lists parachuting as an admitted activity. No source states the landing area, and I found no post, review or airfield notice showing either weekend took place: the Lienz ticket has 0 reviews (Airgasmo's Trieben ticket has 132) and the airfield site does not mention parachuting, so this is a two-weekend site whose seasonal status rests on the schedule alone. The recorded operator (Fallschirmzentrum Kärnten) no longer lists the site, and the coordinates match the AIP reference point within about 30 m.",
+      "sources": [
+        {
+          "url": "https://airgasmo.com/wann-und-wo/",
+          "what": "Operator's 2026 schedule: 'Lienz' on 27-28 Juni and 12-13 September 2026 (all other Airgasmo sites listed separately)."
+        },
+        {
+          "url": "https://www.google.com/maps/d/kml?mid=1YoaQohOsNw-5-V_uzVldaSBZKCY&forcekml=1",
+          "what": "KML of the 'Alle unsere Sprungplätze' map linked from the schedule page: 'Airgasmo.com @ Flugplatz Lienz' at 46.8003204, 12.8752338."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/104922766",
+          "what": "OSM aerodrome 'Flugplatz Lienz - Nikolsdorf' (LOKL); both the Airgasmo pin and the recorded point fall inside its outline; centre 46.79881, 12.87810."
+        },
+        {
+          "url": "https://airgasmo.regiondo.de/fallschirm-tandemsprung-lienz-nikolsdorf",
+          "what": "Airgasmo's own ticket shop: 'TANDEMSPRUNG LIENZ', listed location Lengberg, ab 279,99 €; '0 Bewertungen'; no dates visible without choosing one."
+        },
+        {
+          "url": "https://eaip.austrocontrol.at/lo/261126/PART_3/AD_2/SRY/AD_2_LOKL/LO_AD_2_LOKL_en.pdf",
+          "what": "AIP Austria LOKL AD 2-1, 30 Oct 2026: ARP 46 47 54N 012 52 42E, RWY 12/30 500 x 18 m asphalt, aerodrome admissible for 'Fallschirm/parachute'."
+        },
+        {
+          "url": "https://www.flugplatz-lienz.at/flugplatz",
+          "what": "Airfield site: postal address Lengberg 43, 9782 Nikolsdorf; winter closure from 1 Nov 2026; no parachuting mentioned."
+        },
+        {
+          "url": "https://www.facebook.com/Airgasmo/posts/-der-brandneue-2026-kalender-ist-live-alle-termine-f%C3%BCr-dein-airgasmo-sind-jetzt-/1323539913143477",
+          "what": "Search-result snippet only (post not visible): Airgasmo announcing its 2026 calendar, naming Lienz among the sites."
+        },
+        {
+          "url": "https://www.dolomitenstadt.at/2015/08/25/lust-auf-einen-sprung-aus-4-300-metern",
+          "what": "Historical only: Pink Boogie with Skyvan jumps from Flugplatz Nikolsdorf, 18–20 Sep 2015."
+        }
+      ],
+      "corrections_ok": null,
+      "suggested_corrections": {
+        "operators": "Add Airgasmo (https://airgasmo.com/), the only operator publishing 2026 dates here. Drop Fallschirmzentrum Kärnten, or mark it historical: its 2026 calendar and current directions page no longer list this airfield.",
+        "season": "Two scheduled weekends: 27–28 June and 12–13 September 2026 (Airgasmo 2026 schedule)",
+        "aircraft": "Not stated by Airgasmo; the current 'rear ramp' entry came from the former operator and is unverified for 2026.",
+        "note": "Landing area not stated by any source; the coordinates (AIP/OSM airfield) are kept. The schedule is the only 2025+ evidence; I found no proof that either 2026 weekend took place."
+      }
+    }
+  ]
+}

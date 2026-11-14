@@ -334,7 +334,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "psctriengen.ch now serves the Skydive Grenchen / DROPZONE 47 site, which says the club merged and the clubs are building their base at Grenchen (checked 2026-11-14). Swiss Skydive still lists PSC Triengen. Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed.",
+      "status_evidence": "psctriengen.ch now serves the Skydive Grenchen / DROPZONE 47 site, which says the club merged and the clubs are building their base at Grenchen (checked 2026-11-14). Swiss Skydive still lists PSC Triengen. Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed. Re-checked 2026-11-14: The successor operator states that Para-Sport-Club Triengen merged into DROPZONE 47 and identifies its operating base as Grenchen. As checked on 14 November 2026, no site-specific 2025+ programme or explicit cessation statement for this former airfield was established.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -374,7 +374,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "fgf.ch now serves the DROPZONE 47 (Grenchen) site, which says FG Freiamt merged into it (checked 2026-11-14). Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed.",
+      "status_evidence": "fgf.ch now serves the DROPZONE 47 (Grenchen) site, which says FG Freiamt merged into it (checked 2026-11-14). Codex cross-check: no recent site-specific jumps found; club merger alone does not prove the airfield closed. Re-checked 2026-11-14: The successor operator states that Fallschirm-Gruppe Freiamt merged into DROPZONE 47 and identifies its operating base as Grenchen. As checked on 14 November 2026, no site-specific 2025+ programme or explicit cessation statement for this former airfield was established.",
       "sources": [
         {
           "url": "https://home.swissskydive.org/schulen-clubs",
@@ -895,7 +895,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Uncertain: operator offers helicopter tandems; tourism listing displays all-year 2026 opening but is stamped last updated April 2024. No dated jump programme or confirmed landing area was established.",
+      "status_evidence": "Uncertain: operator offers helicopter tandems; tourism listing displays all-year 2026 opening but is stamped last updated April 2024. No dated jump programme or confirmed landing area was established. Re-checked 2026-11-14: Verbier Tourisme’s operator listing, explicitly updated 7 May 2026, describes the Verbier parachuting centre and helicopter tandems with year-round opening. The operator independently offers helicopter jumps over Verbier; the exact departure/landing coordinates remain unresolved.",
       "sources": [
         {
           "url": "https://www.alpskydive.com",
@@ -932,8 +932,8 @@
           "website": "https://swissboogie.ch/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator annual calendar names Bressaucourt as a jump location and Jura Tourisme offers tandems there, but no dated 2025+ Bressaucourt jump was visible.",
+      "status": "seasonal",
+      "status_evidence": "The Swissboogie calendar page embeds Google calendar 6bb8966d…@group.calendar.google.com (the embed src decodes to that ID), and the page defines 'Bressaucourt' as jumping at Bressaucourt airfield. The public ICS lists 9 Bressaucourt days in 2025 (16 Mar–28 Sep) and 8 in 2026 (22 Mar–18 Oct), all Sundays and none marked cancelled; the airfield's own homepage says it offers parachute jumps, and the recorded LSZQ coordinates are within about 40 m of the OSM aerodrome.",
       "sources": [
         {
           "url": "https://swissboogie.ch/de/pages/fallschirmsprungkalender",
@@ -949,9 +949,25 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "LSZQ coordinates"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/6bb8966d4131daec907c12cf3d95e904357732da959e3036a0603efc7af65dd1@group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Public calendar downloaded and read; confirmed Bressaucourt events in 2025 and 2026."
+        },
+        {
+          "url": "https://aerojura.ch/",
+          "checked_on": "2026-11-14",
+          "what": "Aérodrome du Jura (Bressaucourt) homepage: lists parachute jumps among its activities (undated)."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/738339471",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome LSZQ Bressaucourt, centre 47.39272, 7.02882 (matches record within ~40 m)."
         }
       ],
-      "note": "Added by Codex; embedded calendar events were not readable, so status remains uncertain."
+      "note": "Added by Codex; embedded calendar events were not readable, so status remains uncertain.",
+      "season": "Selected Sundays, March–October (2026 operator calendar)"
     },
     {
       "key": "ch-ambri",
@@ -974,7 +990,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Flight-1 lists Mountain Gravity at Ambrì Airport Hangar 6; no dated 2025-or-later edition or resumption was confirmed.",
+      "status_evidence": "Flight-1 lists Mountain Gravity at Ambrì Airport Hangar 6; no dated 2025-or-later edition or resumption was confirmed. Re-checked 2026-11-14: Flight-1 retains a Mountain Gravity listing at Ambrì, but no 2025+ boogie edition was found and the operator website was unreachable. Quinto’s 2026 airfield event programme updated 18 May lists other activities without a parachuting event; absence is not proof of closure.",
       "sources": [
         {
           "url": "https://www.flight-1.com/dropzones",

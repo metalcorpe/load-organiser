@@ -1,0 +1,271 @@
+{
+  "group": "nordic-baltic",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "no-kjevik",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "NLF’s 5 April 2025 meeting papers list Kjevik Fallskjermklubb, but do not establish jumps at Kjevik airport in 2025–2026. Norwegian searches found no dated site-specific operation; the operator website could not be retrieved.",
+      "sources": [
+        {
+          "url": "https://nlf.no/siteassets/dokumenter/seksjonsmoter-og-luftsportstinget-2025/seksjonsmotedokumenter/seksjonsmote-fallskjerm-2025---saksdokumenter.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Opened 2025 federation meeting papers: club membership, not an airport jumping schedule."
+        }
+      ]
+    },
+    {
+      "key": "no-leknes",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The club’s 20 December 2025 report confirms jumps at ten Lofoten locations during its boogie, but does not identify Leknes airport as a landing field. No 2025–2026 Leknes-specific jumping evidence was found.",
+      "sources": [
+        {
+          "url": "https://frittfall.org/artikkel/luke-20-troms-fallskjermklubb",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation magazine article authored by Troms Fallskjermklubb, dated 20 December 2025; Lofoten activity without Leknes identification."
+        }
+      ]
+    },
+    {
+      "key": "no-roros",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The air-sports centre’s undated NTNU page explicitly describes occasional jumping at Røros, alongside its main Oppdal operation. The operator advertises a 2026 boogie, but no dated 2025–2026 evidence was found for Røros itself.",
+      "sources": [
+        {
+          "url": "https://www.mfl.no/ntnufsk.html",
+          "checked_on": "2026-11-14",
+          "what": "Opened air-sports centre page names both Røros and Værnes as secondary jumping sites; no publication date."
+        },
+        {
+          "url": "https://skydiveoppdal.no/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator homepage advertises Sommerboogie 2026 at its Oppdal operation."
+        }
+      ]
+    },
+    {
+      "key": "no-vaernes",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The air-sports centre’s undated NTNU page explicitly describes occasional jumping at Værnes, alongside its main Oppdal operation. The operator advertises a 2026 boogie, but no dated 2025–2026 evidence was found for Værnes itself.",
+      "sources": [
+        {
+          "url": "https://www.mfl.no/ntnufsk.html",
+          "checked_on": "2026-11-14",
+          "what": "Opened air-sports centre page names both Røros and Værnes as secondary jumping sites; no publication date."
+        },
+        {
+          "url": "https://skydiveoppdal.no/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator homepage advertises Sommerboogie 2026 at its Oppdal operation."
+        }
+      ]
+    },
+    {
+      "key": "se-karlsborg",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The SFF club page checked on 14 November 2026 does not list Karlsborg. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation club list; no entry for this historical site, and no completeness inference made."
+        }
+      ]
+    },
+    {
+      "key": "se-kiruna",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The SFF club page checked on 14 November 2026 does not list Kiruna. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation club list; no entry for this historical site, and no completeness inference made."
+        }
+      ]
+    },
+    {
+      "key": "se-lulea-kallax",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The SFF club page checked on 14 November 2026 does not list Luleå/Kallax. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation club list; no entry for this historical site, and no completeness inference made."
+        }
+      ]
+    },
+    {
+      "key": "se-skavsta",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Search-visible copies of a 12 February 2024 club announcement report Nyköpings Fallskärmsklubb’s closure, and a business-register search result reports deregistration on 17 January 2025. Those pages returned access errors when opened, so closure remains a strong lead rather than a fully verified verdict.",
+      "sources": [
+        {
+          "url": "https://www.sverigesradio.se/artikel/grundades-1978-nu-riskerar-fallskarmklubben-att-laggas-ned",
+          "checked_on": "2026-11-14",
+          "what": "Opened 2 March 2023 report documents threatened closure, not completed closure."
+        },
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation list omits Nyköpings/Skavsta."
+        },
+        {
+          "url": "https://www.localgymsandfitness.com/SE/Nyk%C3%B6ping/218559674899883/Nyk%C3%B6pings-Fallsk%C3%A4rmsklubb",
+          "checked_on": "2026-11-14",
+          "what": "Search-result text only: reproduced 12 February 2024 closure announcement; opening returned 403, original Facebook page also inaccessible."
+        },
+        {
+          "url": "https://www.ratsit.se/8190009566-NYKOPINGS_FALLSKARMSKLUBB",
+          "checked_on": "2026-11-14",
+          "what": "Search-result text only: deregistered 17 January 2025; opening returned 403."
+        }
+      ],
+      "corrections": {
+        "operators": [
+          {
+            "name": "Nyköpings Fallskärmsklubb (historical operator)",
+            "website": "https://www.nyfk.se"
+          }
+        ]
+      }
+    },
+    {
+      "key": "fi-pirkkala",
+      "verdict": "active",
+      "confidence": "medium",
+      "evidence": "The operator’s price page explicitly includes 2026 membership fees and a Pirkkala tandem price of €490. Its location page describes weekday-evening and off-season jumping with an airport landing area near Terminal 1, including winter use.",
+      "sources": [
+        {
+          "url": "https://tamlk.org/hinnat/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator prices: Pirkkala tandem service and season 2026 membership fees."
+        },
+        {
+          "url": "https://tamlk.org/esittely/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator location page describes Pirkkala aircraft jumps, airport landing area and weekday/off-season use."
+        },
+        {
+          "url": "https://tamlk.org/kysymyksia/",
+          "checked_on": "2026-11-14",
+          "what": "Opened FAQ identifies Tampere-Pirkkala as a main jumping site and describes winter jumping."
+        }
+      ],
+      "corrections": {
+        "season": "Weekday evenings and outside the main Jämi season; some winter jumping, weather permitting"
+      }
+    },
+    {
+      "key": "fi-rovaniemi",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The federation’s 8 February 2026 presentation lists 2025 club jumping locations without Rovaniemi. Finnish searches found historical Napapiirin club material but no dated 2025–2026 operation or definitive closure at this airport.",
+      "sources": [
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Opened 2025 club/locality jump table presented on 8 February 2026; Rovaniemi absent, which is not proof of closure."
+        }
+      ]
+    },
+    {
+      "key": "lt-ignalina",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The opened airport record, updated 14 July 2025, confirms Ignalina airfield and its coordinates, not parachuting activity. Lithuanian and operator-name searches did not establish 2025–2026 jumps, and tandemjump.lv could not be retrieved.",
+      "sources": [
+        {
+          "url": "https://ourairports.com/airports/EYIG/",
+          "checked_on": "2026-11-14",
+          "what": "Opened EYIG airport record, last updated 14 July 2025; confirms the existing coordinates only."
+        }
+      ]
+    },
+    {
+      "key": "lt-seduva",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Marijampolės aeroklubas reported on 25 August 2026 that its parachutists performed at the Šeduva aviation festival. This confirms a display, but neither that report nor the 11 June 2026 AIP establishes recurring sport/student/tandem operation at Šeduva.",
+      "sources": [
+        {
+          "url": "https://marizone.lt/aviacijos-sventes-akimirkos-seduvos-aerodrome/",
+          "checked_on": "2026-11-14",
+          "what": "Opened directly over HTTPS: operator report dated 25 August 2026 describes its parachutists performing at Šeduva’s aviation festival."
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Opened 11 June 2026 AIP lists PJ6 SEDUVA AD; designation alone does not establish recurring operation."
+        }
+      ]
+    },
+    {
+      "key": "lt-zarasai",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The AIP effective 11 June 2026 lists PJ7 ZARASAI AD as a parachute-jumping site with contact numbers, but does not name an operator. Lithuanian searches found no 2025–2026 jumping calendar or dated activity establishing regular civilian operation.",
+      "sources": [
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Opened 2026 AIP: Zarasai parachuting coordinates and contacts, without a named operator or schedule."
+        }
+      ]
+    },
+    {
+      "key": "ee-nurmsi",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The Estonian sports register updated 1 April 2026 identifies parachuting at Nurmsi airfield. It does not establish recurring civilian club access, and Estonian searches did not resolve that requirement.",
+      "sources": [
+        {
+          "url": "https://www.spordiregister.ee/et/ehitis/1924/nurmsi_lennuvali",
+          "checked_on": "2026-11-14",
+          "what": "Opened sports-facility register, data dated 1 April 2026; parachuting listed, Defence League contact, no civilian jumping calendar."
+        }
+      ]
+    },
+    {
+      "key": "ee-olgina",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Avia Narva identifies Viru Langevarjuklubi and tandem jumping at Olgina, but the activity text is undated; the 2026 footer is not dated activity evidence. Estonian and Russian searches did not establish a 2025–2026 jumping programme.",
+      "sources": [
+        {
+          "url": "https://avianarva.ee/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator homepage identifies Olgina EENA, Viru Langevarjuklubi and tandem jumps; activity description has no date."
+        }
+      ]
+    },
+    {
+      "key": "lv-jelgava",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "Jelgava municipality’s 27 January 2023 announcement identifies the former airfield as a solar/industrial-park development site. The regional military-heritage tourism page explicitly says runway dismantling made it unusable for aviation and describes its transfer for industrial development.",
+      "sources": [
+        {
+          "url": "https://www.jelgava.lv/jaunumi/lidlauka-teritoriju-gatavos-industriala-parka-attistibai-attiris-no-krumiem-un-apauguma/",
+          "checked_on": "2026-11-14",
+          "what": "Opened municipal announcement dated 27 January 2023: clearance and redevelopment of the former airfield, including a nearly 112-hectare solar park."
+        },
+        {
+          "url": "https://militaryheritagetourism.info/lv/military/sites/view/937?lang=lv",
+          "checked_on": "2026-11-14",
+          "what": "Opened regional heritage page: historical Rīgas Aeroklubs parachuting, runway dismantling preventing aviation, and industrial-park use."
+        }
+      ]
+    }
+  ]
+}

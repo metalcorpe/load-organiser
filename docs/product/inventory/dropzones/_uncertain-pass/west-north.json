@@ -1,0 +1,341 @@
+{
+  "group": "west-north",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "gb-chiltern-park",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "Booker Gliding Club’s November 2021 newsletter confirms that Chiltern Park airfield closed at the end of September 2021 after its lease ended. No subsequent reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://bookergliding.co.uk/members/Newsletters/Nov21.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Former airfield tenant confirms closure and its own relocation; page 2."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "gb-errol",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "SBH Scotland’s Winter 2022 newsletter advertised Paragon skydiving at Errol, but no operator or federation evidence of jumping there in 2025–2026 was found. Modern directory and insurance-blog listings do not establish continued operation.",
+      "sources": [
+        {
+          "url": "https://www.sbhscotland.org.uk/content/about-resources/Fundraising-News-Xmas-2022-Web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2022 charity newsletter advertises Errol jumps; historical evidence only."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "gb-lewknor",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "BPA minutes dated 9 June 2011 state that London Parachute School could no longer use Lewknor and had obtained a new landing area at Chiltern Park. No reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://www.skydive-safety.com/Parachuting-Forms/BPA-Documents/Minutes/STC2011069.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 5 records loss of Lewknor and approval of the replacement site."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "gb-old-buckenham",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "UK Parachuting moved its operation to Beccles in 2010, according to its owner in an April 2019 aviation report. The 2020 Pooleys airfield plate explicitly says parachuting has ceased at Old Buckenham.",
+      "sources": [
+        {
+          "url": "https://www.businessairnews.com/mag_story.html?ident=15543",
+          "checked_on": "2026-11-14",
+          "what": "23 April 2019 report gives the operator’s relocation history."
+        },
+        {
+          "url": "https://www.pooleys.com/media/10033/old-buckenham-egsv_cropped.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2020 airfield guide explicitly states the aerodrome is no longer used for parachuting."
+        }
+      ]
+    },
+    {
+      "key": "gb-redlands",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "The airfield owner’s 29 July 2019 notice announced closure at the end of September 2019 and cessation of Skydive London’s business. No subsequent reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://www.redlandsairfield.co.uk/planning.htm",
+          "checked_on": "2026-11-14",
+          "what": "Owner’s dated notice of termination, airfield closure and skydive operator cessation."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "gb-south-cerney",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The RAF’s November 2026 South Cerney dropzone schedule lists no planned military sorties throughout that month; it does not confirm civilian sport jumping. Older closure material and a 2022 reopening lead do not establish whether a civilian-accessible dropzone operates in 2025–2026.",
+      "sources": [
+        {
+          "url": "https://www.raf.mod.uk/our-organisation/stations/raf-brize-norton/documents/south-cerney-local-flying-times/",
+          "checked_on": "2026-11-14",
+          "what": "Opened PDF is the November 2026 military schedule, with all dates marked Nil Planned."
+        },
+        {
+          "url": "https://airspacechange.caa.co.uk/documents/download/1872",
+          "checked_on": "2026-11-14",
+          "what": "Undated consultation response says resident parachuting ceased but occasional activity may remain; insufficient to settle later reopening."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "gb-teesside",
+      "verdict": "closed",
+      "confidence": "medium",
+      "evidence": "Teesside Airport Movements’ operator history dates Skydive St George’s airport operation to 2013–2016 and records its move to Shotton followed by shutdown. No resumption at Teesside was found.",
+      "sources": [
+        {
+          "url": "https://dtvmovements.co.uk/Info/History/Previous_Operators.htm",
+          "checked_on": "2026-11-14",
+          "what": "Local airport-history account explicitly records relocation and cessation."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list checked on 2026-11-14; this historical site is not listed, which alone does not establish closure."
+        }
+      ]
+    },
+    {
+      "key": "ie-birr",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Public 2026 SkydiveThru recruitment identifies Birr and a new operation, but does not establish that regular jumping commenced. The operator homepage yielded no readable activity details, and the USPA detail-page lead could not be retrieved.",
+      "sources": [
+        {
+          "url": "https://ie.linkedin.com/jobs/view/skydiving-instructor-at-skydivethru-4398149767",
+          "checked_on": "2026-11-14",
+          "what": "Public employer listing opened without login; four instructor positions at Birr, describing a brand-new operation."
+        },
+        {
+          "url": "https://skydivethruireland.ie/",
+          "checked_on": "2026-11-14",
+          "what": "Opened homepage returned a skydiving title but no readable body; not operational evidence."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "AIP edition valid from 11 June 2026 lists Clonbullogue, Donegal and Kilkenny parachuting, including operators; no Birr or Sligo entry."
+        }
+      ]
+    },
+    {
+      "key": "ie-kilkenny",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The 7 January 2026 court report describes disrupted bookings but also says the aircraft grounding order was lifted in March 2023; it does not establish resumed jumping. The June 2026 AIP still names Irish Skydiving Club at Kilkenny, while the operator’s indexed booking notice says flights are suspended, leaving actual operation unresolved.",
+      "sources": [
+        {
+          "url": "https://www.kilkennypeople.ie/news/high-court-weighs-in-on-skydiving-club-dispute-with-iaa-at-airfield-in-kilkenny-6660188",
+          "checked_on": "2026-11-14",
+          "what": "Opened 7 January 2026 report; historical grounding was lifted in March 2023, and future club implications remain unclear."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "AIP edition valid from 11 June 2026 lists Clonbullogue, Donegal and Kilkenny parachuting, including operators; no Birr or Sligo entry."
+        },
+        {
+          "url": "https://www.skydiveclub.ie/booking",
+          "checked_on": "2026-11-14",
+          "what": "Search-index text says flights/bookings suspended; attempted direct opening returned 404, so this is a disclosed lead rather than an opened confirmation."
+        }
+      ]
+    },
+    {
+      "key": "ie-sligo",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Sligo Airport’s indexed page advertises selected summer weekends but has no activity year; direct opening showed a verification page. No 2025–2026 airport-specific operation was confirmed, and the dated County Sligo charity event instead names Clonbullogue as its venue.",
+      "sources": [
+        {
+          "url": "https://www.sligoairport.com/Sligo-Airport-Skydiving-%20at-Sligo-Airport.html",
+          "checked_on": "2026-11-14",
+          "what": "Airport page attempted; indexed text describes summer weekends, but opened page is a verification screen."
+        },
+        {
+          "url": "https://www.airnav.ie/AIRAC_MAY_2026/2026-05-14-AIRAC/html/eAIP/EI-ENR-5.5-en-IE.html",
+          "checked_on": "2026-11-14",
+          "what": "AIP edition valid from 11 June 2026 lists Clonbullogue, Donegal and Kilkenny parachuting, including operators; no Birr or Sligo entry."
+        },
+        {
+          "url": "https://skydiveforlife.ie/?cty=1021",
+          "checked_on": "2026-11-14",
+          "what": "Indexed 7 September 2025 County Sligo fundraiser explicitly takes place at Clonbullogue; direct opening is a verification screen."
+        }
+      ]
+    },
+    {
+      "key": "is-sandskeid",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Iceland’s 2006 aircraft-investigation annual report records a flight carrying parachutists intending to jump over Sandskeið on 30 August 2006. Icelandic and English searches did not establish 2025–2026 civilian jumping or a closure notice.",
+      "sources": [
+        {
+          "url": "https://www.rnsa.is/media/1523/rnf-arsskyrsla_2006_a_vefinn.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Official 2006 report, page 48, describes intended Sandskeið parachuting abandoned because of weather; historical evidence only."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Sandskei%C3%B0",
+          "checked_on": "2026-11-14",
+          "what": "Identifies the airfield as a gliding centre; does not establish contemporary skydiving."
+        }
+      ]
+    },
+    {
+      "key": "nl-baarn",
+      "verdict": "active",
+      "confidence": "high",
+      "evidence": "The Dutch AIP effective 29 October 2026 explicitly lists Baarn (EHAAPJA002) for parachute jumping with Skydive Hilversum as operator. The operator describes Baarn as its weather-dependent alternative landing site.",
+      "sources": [
+        {
+          "url": "https://eaip.lvnl.nl/AIRAC%20AMDT%2011-2026_2026_10_29/eAIP/EH-ENR%205.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "Opened current AIP, section 2.2 Cluster Utrecht, names Baarn, operator, FL060 ceiling and UDP activity."
+        },
+        {
+          "url": "https://eaip.lvnl.nl/",
+          "checked_on": "2026-11-14",
+          "what": "Issue index identifies 29 October 2026 as the currently effective issue on the check date."
+        },
+        {
+          "url": "https://www.skydivehilversum.nl/en/im-a-skydiver/",
+          "checked_on": "2026-11-14",
+          "what": "Fetched successfully through curl after web-tool timeouts; describes Baarn as a second site used according to weather."
+        }
+      ]
+    },
+    {
+      "key": "be-saint-ghislain",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "RTBF’s 17 October 2023 report says jumps were transferred to France and Cerfontaine while Saint-Ghislain awaited regulatory resolution, with an intention to use both Belgian sites. No 2025–2026 resumption or definitive permanent closure at Saint-Ghislain was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.rtbf.be/article/baptemes-en-parachute-la-saga-skydive-saint-ghislain-en-approche-de-conclusion-11269479",
+          "checked_on": "2026-11-14",
+          "what": "Opened report distinguishes relocated jumps from hoped-for Saint-Ghislain resumption."
+        },
+        {
+          "url": "https://fwcp.be/",
+          "checked_on": "2026-11-14",
+          "what": "Live Walloon federation lists Spa, Cerfontaine and Namur; absence alone is not closure evidence."
+        }
+      ]
+    },
+    {
+      "key": "dk-ejstrupholm",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "ØFK’s 14 March 2026 AGM minutes explicitly confirm that the club moved out of Ejstrupholm in 2025 and continues its partnership with Skydive Viborg in 2026. DFU reports that the airfield owner terminated the club’s tenancy to reuse its building.",
+      "sources": [
+        {
+          "url": "https://oefk.dk/wp-content/uploads/2026/04/Generalforsamling-den-14.-marts-2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Pages 3–4 confirm ongoing Viborg partnership and completed 2025 move from Ejstrupholm."
+        },
+        {
+          "url": "https://dfu.dk/nyheder/%C3%B8stjyllands-faldsk%C3%A6rmsklub-m%C3%A5-vige-bryllupper",
+          "checked_on": "2026-11-14",
+          "what": "DFU account of eviction for guest-room development and replacement operations at Viborg."
+        }
+      ]
+    },
+    {
+      "key": "dk-ronne",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The DFU club list checked on 14 November 2026 names Faldskærmsklubben Bornholm in Rønne, but does not establish jumping at Rønne airport. Its linked operator website could not be accessed, and Danish searches found no dated 2025–2026 airport-specific sport schedule.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Current federation list identifies Faldskærmsklubben Bornholm (FKB/Rønne); no airport venue or jumping calendar."
+        },
+        {
+          "url": "https://www.fkr.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Federation-linked operator website attempted but inaccessible; no activity evidence obtained."
+        }
+      ],
+      "corrections": {
+        "operators": [
+          {
+            "name": "Faldskærmsklubben Bornholm",
+            "website": "https://www.fkr.dk/"
+          }
+        ]
+      }
+    },
+    {
+      "key": "dk-roskilde",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Danish searches did not identify a regular civilian operator or 2025–2026 jump schedule at Roskilde airport. Airshow parachute-display references do not establish an operating sport dropzone, and the live DFU list does not name one here.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Current federation list checked for a Roskilde operator; none named, which does not prove closure."
+        }
+      ]
+    },
+    {
+      "key": "dk-sundbylille",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "DFU’s club description explicitly says Nordsjællands Faldskærms Klub shares Aversi’s field at Haslev from 2026 after its historical Sundbylille base. The federation’s current club list likewise places its jumping field in Haslev.",
+      "sources": [
+        {
+          "url": "https://skydive.dk/om-os/klubber?page=1",
+          "checked_on": "2026-11-14",
+          "what": "DFU booking portal gives historical Sundbylille base and the 2026 move to Aversi at Tornelundsvej 8, Haslev."
+        },
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Current NFK entry explicitly identifies its jumping field in Haslev."
+        }
+      ]
+    }
+  ]
+}

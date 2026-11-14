@@ -1,0 +1,378 @@
+{
+  "group": "alps-it",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "it-cecina",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Reports dated 19 June and 16 July 2025 confirm military parachuting at Cecina/Paduletto. They do not establish civilian access or continued Skydive Kalifornia operation; no 2025+ civilian programme was found.",
+      "sources": [
+        {
+          "url": "https://www.iltirreno.it/cecina/cronaca/2025/06/19/news/cecina-seconda-pista-all-aviosuperficie-richiesto-l-utilizzo-al-ministero-1.100723822",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclub president describes military parachute activity and the two adjacent strips."
+        },
+        {
+          "url": "https://www.iltirreno.it/cecina/cronaca/2025/07/16/news/cecina-malore-durante-il-lancio-ferito-un-para-1.100735783",
+          "checked_on": "2026-11-14",
+          "what": "16 July 2025 military exercise accident, not a civilian tandem operation."
+        }
+      ]
+    },
+    {
+      "key": "it-costa-volpino",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Skydive Iseo identifies Costa Volpino and advertises Friday activity, but the page has no operating year. Its opened blog supplied no dated 2025+ event or jump report.",
+      "sources": [
+        {
+          "url": "https://www.skydiveiseo.it/trovaci-costa-volpino",
+          "checked_on": "2026-11-14",
+          "what": "Operator lists Costa Volpino on Fridays and Cremona on weekends."
+        },
+        {
+          "url": "https://www.skydiveiseo.it/blog",
+          "checked_on": "2026-11-14",
+          "what": "No dated posts visible in retrieved page."
+        }
+      ]
+    },
+    {
+      "key": "it-latina-comani",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The 19 September 2012 newspaper identifies the Aero Club Latina parachute school at Comani. Italian searches found no 2025+ civilian jump programme or definitive closure evidence.",
+      "sources": [
+        {
+          "url": "https://www.lecitta.it/pdf_settimanale/LCIT_N.26_19_9_2012.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 15 identifies Comani, Aero Club Latina and attached parachute school; historical evidence only."
+        }
+      ]
+    },
+    {
+      "key": "it-lavello",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The operator still gives Lavello/Melfi directions without dates. Its linked Campania event feed returned null on 14 November 2026, and no 2025+ Lavello operation was established.",
+      "sources": [
+        {
+          "url": "https://www.paracadutismonapoli.it/",
+          "checked_on": "2026-11-14",
+          "what": "Undated operator tandem offer and Lavello/Melfi directions."
+        },
+        {
+          "url": "https://www.sunflyers.it/eventi/",
+          "checked_on": "2026-11-14",
+          "what": "Operator page embeds regional event calendars."
+        },
+        {
+          "url": "https://www.sunflyers.it/eventi_ifram/dateEventi.php?id_location=1",
+          "checked_on": "2026-11-14",
+          "what": "Public Campania calendar endpoint returned null."
+        }
+      ]
+    },
+    {
+      "key": "it-massa-cinquale",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The operator explicitly schedules tandems for 27 December 2024–6 January 2025, but July 2025 reporting documents the failed agreement for the subsequent summer stage. No later resumption was established, so the January dates do not settle continuing access.",
+      "sources": [
+        {
+          "url": "https://www.skydivecinquale.it/tandem.html",
+          "checked_on": "2026-11-14",
+          "what": "Dated winter event and tandem prices; dates extend into January 2025."
+        },
+        {
+          "url": "https://www.lanazione.it/massa-carrara/cronaca/nessun-mega-incasso-ne-danni-63c83805",
+          "checked_on": "2026-11-14",
+          "what": "19 July 2025 operator response describing the summer access dispute."
+        },
+        {
+          "url": "https://aeroportodeimarmi.com/wp-content/uploads/2025/07/TRUESTAR-CS-n.1-Skydive-luglio-2025.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airport statement dated 16 July 2025 documents unsuccessful negotiations for August–September jumping; PDF fetched and text read directly."
+        }
+      ]
+    },
+    {
+      "key": "it-melendugno",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The operator retains undated Melendugno directions, while an aviation-information digest says the parachuting area was deleted effective 20 February 2025. The public Puglia calendar feed returned null; the opened airfield sheet is actually dated 2019, not fresh evidence.",
+      "sources": [
+        {
+          "url": "https://www.paracadutismopuglia.it/info-e-contatti",
+          "checked_on": "2026-11-14",
+          "what": "Undated directions include Melendugno and older Fondone text."
+        },
+        {
+          "url": "https://aeronauticalinformation.it/index.php/2024/10/02/aeroporti-di-belluno-e-lecce-lepore/",
+          "checked_on": "2026-11-14",
+          "what": "Reports deletion under AIRAC A2/25; secondary digest, not proof of permanent operator closure."
+        },
+        {
+          "url": "https://www.volaresalento.com/wp-content/uploads/LE11_aerodrome_data_sheet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2019 chart identifies Sunflyers and historical weekend parachuting."
+        },
+        {
+          "url": "https://www.sunflyers.it/eventi_ifram/dateEventi.php?id_location=3",
+          "checked_on": "2026-11-14",
+          "what": "Public Puglia calendar endpoint returned null."
+        }
+      ]
+    },
+    {
+      "key": "it-panicarola",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The municipal services plan available as a 2016 document identifies a parachute school at Panicarola airfield. No dated 2025+ operation or closure was found in Italian searches.",
+      "sources": [
+        {
+          "url": "https://municipium-images-production.s3-eu-west-1.amazonaws.com/s3/1790/allegati/ps-1_allegato-1_pcs_piano-comunale-servizi_2016.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Municipal plan page 11 describes the private airfield and local parachute school."
+        }
+      ]
+    },
+    {
+      "key": "it-pontinia-pegaso",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The ANSV report confirms aircraft parachuting at Pegaso Club 2000 on 3 September 2017; TuttiAffari flags The Drop as closed without a date. No corroborating operator closure notice or 2025+ activity was found, so the directory flag alone does not settle status.",
+      "sources": [
+        {
+          "url": "https://www.tuttiaffari.com/skydive-the-drop",
+          "checked_on": "2026-11-14",
+          "what": "Undated closed-business flag, historical website and Casanello address; not sufficient alone for a closed verdict."
+        },
+        {
+          "url": "https://ansv.it/wp-content/uploads/2020/07/Relazione-I-SCAP.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Official historical jump-flight report and airfield identification; successfully fetched directly after web-tool HTTP 401."
+        }
+      ]
+    },
+    {
+      "key": "it-rimini",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Rimini municipal tourism documents Aerosports tandem sessions at Federico Fellini airport from 24 December 2006 to 7 January 2007. No 2025+ programme at this airport was established.",
+      "sources": [
+        {
+          "url": "https://riminiturismo.it/press/comunicati-stampa-assessorato-al-turismo/rimini-il-calendario-degli-eventi-di-gennaio",
+          "checked_on": "2026-11-14",
+          "what": "Municipal historical event page successfully read directly after web-tool fetch failed."
+        }
+      ]
+    },
+    {
+      "key": "it-villanova-albenga",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The opened Albatros announcement concerns a 2 June 2026 demonstration landing on Albenga beach. It does not establish regular jumping at Villanova airport, and no dated 2025+ airport programme was found.",
+      "sources": [
+        {
+          "url": "https://aeroclub-albatros.it/2026/05/21/paracadutisti-in-azione-alla-festa-della-repubblica/",
+          "checked_on": "2026-11-14",
+          "what": "Operator announcement specifically locates the display on Lungomare Cristoforo Colombo beach."
+        }
+      ]
+    },
+    {
+      "key": "ch-ambri",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Flight-1 retains a Mountain Gravity listing at Ambrì, but no 2025+ boogie edition was found and the operator website was unreachable. Quinto’s 2026 airfield event programme updated 18 May lists other activities without a parachuting event; absence is not proof of closure.",
+      "sources": [
+        {
+          "url": "https://www.flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Undated Mountain Gravity listing at Ambri Airport Hangar 6; lead only."
+        },
+        {
+          "url": "https://www.tiquinto.ch/wp-content/uploads/2026/05/azi_Aerodromo-programmaaggiornato2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Municipal 2026 event programme for the airfield area."
+        }
+      ]
+    },
+    {
+      "key": "ch-bressaucourt",
+      "verdict": "seasonal",
+      "confidence": "high",
+      "evidence": "Swissboogie’s embedded public calendar confirms Bressaucourt jump days on 22 March, 19 April, 17 May, 21 June, 26 July, 9 August, 27 September and 18 October 2026. It also contains Bressaucourt dates in 2025; this is an occasional scheduled operation.",
+      "sources": [
+        {
+          "url": "https://swissboogie.ch/de/pages/fallschirmsprungkalender",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly defines Bressaucourt as jumping at Bressaucourt airfield and embeds this Google calendar."
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/6bb8966d4131daec907c12cf3d95e904357732da959e3036a0603efc7af65dd1@group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Public calendar downloaded and read; confirmed Bressaucourt events in 2025 and 2026."
+        }
+      ],
+      "corrections": {
+        "season": "Selected Sundays, March–October (2026 operator calendar)"
+      }
+    },
+    {
+      "key": "ch-buttwil",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The successor operator states that Fallschirm-Gruppe Freiamt merged into DROPZONE 47 and identifies its operating base as Grenchen. As checked on 14 November 2026, no site-specific 2025+ programme or explicit cessation statement for this former airfield was established.",
+      "sources": [
+        {
+          "url": "https://skydivegrenchen.ch/",
+          "checked_on": "2026-11-14",
+          "what": "Operator confirms three-club merger and Grenchen base; homepage carries a 14 November 2026 weather decision."
+        },
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Federation lists clubs; a club identity alone does not establish continued jumping at its former airfield."
+        }
+      ]
+    },
+    {
+      "key": "ch-triengen",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The successor operator states that Para-Sport-Club Triengen merged into DROPZONE 47 and identifies its operating base as Grenchen. As checked on 14 November 2026, no site-specific 2025+ programme or explicit cessation statement for this former airfield was established.",
+      "sources": [
+        {
+          "url": "https://skydivegrenchen.ch/",
+          "checked_on": "2026-11-14",
+          "what": "Operator confirms three-club merger and Grenchen base; homepage carries a 14 November 2026 weather decision."
+        },
+        {
+          "url": "https://home.swissskydive.org/schulen-clubs",
+          "checked_on": "2026-11-14",
+          "what": "Federation lists clubs; a club identity alone does not establish continued jumping at its former airfield."
+        }
+      ]
+    },
+    {
+      "key": "ch-le-chable-verbier",
+      "verdict": "active",
+      "confidence": "medium",
+      "evidence": "Verbier Tourisme’s operator listing, explicitly updated 7 May 2026, describes the Verbier parachuting centre and helicopter tandems with year-round opening. The operator independently offers helicopter jumps over Verbier; the exact departure/landing coordinates remain unresolved.",
+      "sources": [
+        {
+          "url": "https://www.verbier.ch/decouvrir/pause-activites-indoor-wellness/alpskydive-le-chable-fr-2921695/",
+          "checked_on": "2026-11-14",
+          "what": "Tourism-office operator entry updated 7 May 2026, distinct from the older April 2024 activity listing."
+        },
+        {
+          "url": "https://www.alpskydive.com/",
+          "checked_on": "2026-11-14",
+          "what": "Operator describes helicopter tandems and aircraft-based training over Verbier."
+        }
+      ],
+      "corrections": {
+        "season": "Year-round, per tourism-office entry updated 7 May 2026"
+      }
+    },
+    {
+      "key": "at-friesach-hirt",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Fallschirmzentrum Kärnten’s opened 2026 calendar gives no Friesach-Hirt jump dates, and the reopened directions page no longer lists this place. German searches did not establish 2025+ civilian operation or an explicit closure.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 operator schedule lists other named sites."
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "Current retrieved directions omit this airfield, unlike the earlier inventory observation."
+        }
+      ]
+    },
+    {
+      "key": "at-lienz-nikolsdorf",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Fallschirmzentrum Kärnten’s opened 2026 calendar gives no Lienz-Nikolsdorf jump dates, and the reopened directions page no longer lists this place. German searches did not establish 2025+ civilian operation or an explicit closure.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 operator schedule lists other named sites."
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "Current retrieved directions omit this airfield, unlike the earlier inventory observation."
+        }
+      ]
+    },
+    {
+      "key": "at-trieben",
+      "verdict": "active",
+      "confidence": "medium",
+      "evidence": "The Austrian Aero Club school register issued 3 February 2026 names Internationaler Pink Parachute Club and explicitly gives LOGI/Flugplatz Trieben as its training location. This meets the current federation-list criterion, although the opened operator schedule supplies no Trieben dates.",
+      "sources": [
+        {
+          "url": "https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 2: current dated school register, training site LOGI Trieben, including AFF authorization."
+        },
+        {
+          "url": "https://pink.at/schedule.htm",
+          "checked_on": "2026-11-14",
+          "what": "Operator schedule updated 9 November 2026; no Trieben date in retrieved schedule."
+        },
+        {
+          "url": "https://www.fallschirmspringen-wien.at/trieben",
+          "checked_on": "2026-11-14",
+          "what": "Tandem team advertises the airfield but says no matching dates are available."
+        }
+      ]
+    },
+    {
+      "key": "at-wolfsberg",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The regional Aero Club page names Wolfsberg as a parachuting zone but does not date that information. Fallschirmzentrum Kärnten’s 2026 calendar and reopened directions omit Wolfsberg, and no dated 2025+ jumping was established.",
+      "sources": [
+        {
+          "url": "https://aeroclub.at/de/sportverband/landesverbaende/kaernten/sektionen",
+          "checked_on": "2026-11-14",
+          "what": "Undated regional description names Wolfsberg; freshness of that paragraph is not established."
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 schedule has no Wolfsberg dates."
+        },
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
+          "checked_on": "2026-11-14",
+          "what": "Reopened directions no longer list Wolfsberg."
+        }
+      ]
+    },
+    {
+      "key": "sm-torraccia",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The national Olympic committee’s 2012 report says parachuting was performed abroad apart from the annual 6 January Torraccia demonstration. No dated 2025+ regular civilian jump operation was found in Italian searches.",
+      "sources": [
+        {
+          "url": "https://www.cons.sm/wp-content/uploads/2020/03/panorama_2012_web2.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Historical national Olympic committee account; public PDF fetched directly because web reader rejected its size."
+        }
+      ]
+    }
+  ]
+}

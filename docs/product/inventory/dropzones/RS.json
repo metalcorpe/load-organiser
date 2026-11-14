@@ -208,7 +208,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Airfield site ecka.aero (footer 2026) offers tandem jumps but gives no dates; local news says the tandem offer started 23 Aug 2021. No dated 2025+ jump activity found.",
+      "status_evidence": "Airfield site ecka.aero (footer 2026) offers tandem jumps but gives no dates; local news says the tandem offer started 23 Aug 2021. No dated 2025+ jump activity found. Re-checked 2026-11-14: The airfield still has an undated tandem offer, while an 18 August 2026 local retrospective says competitions like the August 2021 event no longer occur. That report does not prove all tandem jumping has stopped, and no 2025+ jump operation was confirmed.",
       "sources": [
         {
           "url": "https://serbia.com/?p=33499",
@@ -247,11 +247,11 @@
       "icao": "LYKI",
       "operators": [
         {
-          "name": "Aeroklub \"Mileta Protić\" (airfield operator per OSM)"
+          "name": "Aero klub Kikinda"
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Named as a tandem jump location only on an undated tourism page and an old voucher listing; no 2025+ evidence found.",
+      "status_evidence": "Named as a tandem jump location only on an undated tourism page and an old voucher listing; no 2025+ evidence found. Re-checked 2026-11-14: A 21 July 2016 report identifies tandem flights from Kikinda, but no 2025+ aircraft jumping was confirmed. The current Vojvodina federation directory names Aero klub Kikinda at Bašaidski drum, without confirming a current parachuting operation.",
       "sources": [
         {
           "url": "https://serbia.com/?p=33499",

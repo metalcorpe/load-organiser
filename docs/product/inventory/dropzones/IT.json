@@ -1514,7 +1514,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator pages remain live but undated; no 2025–2026 site-specific operating calendar or jump report was established.",
+      "status_evidence": "Operator pages remain live but undated; no 2025–2026 site-specific operating calendar or jump report was established. Re-checked 2026-11-14: Skydive Iseo identifies Costa Volpino and advertises Friday activity, but the page has no operating year. Its opened blog supplied no dated 2025+ event or jump report.",
       "sources": [
         {
           "url": "https://www.skydiveiseo.it",
@@ -1608,7 +1608,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator offers remain undated, while an AIRAC digest reports removal of the Melendugno parachuting area effective 20 February 2025; continued regular jumping is unconfirmed.",
+      "status_evidence": "Operator offers remain undated, while an AIRAC digest reports removal of the Melendugno parachuting area effective 20 February 2025; continued regular jumping is unconfirmed. Re-checked 2026-11-14: The operator retains undated Melendugno directions, while an aviation-information digest says the parachuting area was deleted effective 20 February 2025. The public Puglia calendar feed returned null; the opened airfield sheet is actually dated 2019, not fresh evidence.",
       "sources": [
         {
           "url": "http://www.paracadutismopuglia.it",
@@ -1650,7 +1650,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The operator event page was reopened but yielded no dated 2025–2026 Lavello jumping; copyright dates do not establish activity.",
+      "status_evidence": "The operator event page was reopened but yielded no dated 2025–2026 Lavello jumping; copyright dates do not establish activity. Re-checked 2026-11-14: The operator still gives Lavello/Melfi directions without dates. Its linked Campania event feed returned null on 14 November 2026, and no 2025+ Lavello operation was established.",
       "sources": [
         {
           "url": "http://paracadutismonapoli.it/",
@@ -1686,7 +1686,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical ENAC accident evidence identifies the site, but no reliable 2025–2026 activity or definitive operator closure notice was established.",
+      "status_evidence": "Historical ENAC accident evidence identifies the site, but no reliable 2025–2026 activity or definitive operator closure notice was established. Re-checked 2026-11-14: Reports dated 19 June and 16 July 2025 confirm military parachuting at Cecina/Paduletto. They do not establish civilian access or continued Skydive Kalifornia operation; no 2025+ civilian programme was found.",
       "sources": [
         {
           "url": "https://www.enac.gov.it/app/uploads/2024/04/FACTOR_06_2019.pdf",
@@ -1726,7 +1726,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator advertises a Christmas boogie without a year; airport statement dated 16 July 2025 documents unsuccessful negotiations for the summer session, so continuing access is unresolved.",
+      "status_evidence": "Operator advertises a Christmas boogie without a year; airport statement dated 16 July 2025 documents unsuccessful negotiations for the summer session, so continuing access is unresolved. Re-checked 2026-11-14: The operator explicitly schedules tandems for 27 December 2024–6 January 2025, but July 2025 reporting documents the failed agreement for the subsequent summer stage. No later resumption was established, so the January dates do not settle continuing access.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/skydive-cinquale",
@@ -1765,7 +1765,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical dropzone and school are documented; no 2025+ jumping evidence was found.",
+      "status_evidence": "Historical dropzone and school are documented; no 2025+ jumping evidence was found. Re-checked 2026-11-14: The municipal services plan available as a 2016 document identifies a parachute school at Panicarola airfield. No dated 2025+ operation or closure was found in Italian searches.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/skydive-ttasmeno",
@@ -1808,7 +1808,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical directories describe a regular dropzone; no 2025+ evidence of regular civilian jumping at this airfield was found.",
+      "status_evidence": "Historical directories describe a regular dropzone; no 2025+ evidence of regular civilian jumping at this airfield was found. Re-checked 2026-11-14: The opened Albatros announcement concerns a 2 June 2026 demonstration landing on Albenga beach. It does not establish regular jumping at Villanova airport, and no dated 2025+ airport programme was found.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/paracadutistica",
@@ -1890,7 +1890,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical civilian parachute-school use is documented in a 2012 publication; no 2025+ civilian dropzone programme was found.",
+      "status_evidence": "Historical civilian parachute-school use is documented in a 2012 publication; no 2025+ civilian dropzone programme was found. Re-checked 2026-11-14: The 19 September 2012 newspaper identifies the Aero Club Latina parachute school at Comani. Italian searches found no 2025+ civilian jump programme or definitive closure evidence.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/aero-club-latina",
@@ -1930,7 +1930,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Municipal tourism calendar documents repeated public tandem sessions in 2006–2007; no 2025+ regular skydiving programme was found.",
+      "status_evidence": "Municipal tourism calendar documents repeated public tandem sessions in 2006–2007; no 2025+ regular skydiving programme was found. Re-checked 2026-11-14: Rimini municipal tourism documents Aerosports tandem sessions at Federico Fellini airport from 24 December 2006 to 7 January 2007. No 2025+ programme at this airport was established.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/aerosports-italia",
@@ -1964,7 +1964,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical jump operation is confirmed by the ANSV report; business directory reports closure without a date, and no 2025+ reopening evidence was found.",
+      "status_evidence": "Historical jump operation is confirmed by the ANSV report; business directory reports closure without a date, and no 2025+ reopening evidence was found. Re-checked 2026-11-14: The ANSV report confirms aircraft parachuting at Pegaso Club 2000 on 3 September 2017; TuttiAffari flags The Drop as closed without a date. No corroborating operator closure notice or 2025+ activity was found, so the directory flag alone does not settle status.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/italy/skydive-the-drop",

@@ -348,7 +348,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Târgu Mureș, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Târgu Mureș, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty. Re-checked 2026-11-14: The national aeroclub notice dated 30 December 2025 assigns Cluj school jumps in 2026 to Targu Mures. Romanian-language searches found no dated 2025+ jumps at this airfield; the transfer of school activity does not establish that all other jumping stopped.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -485,7 +485,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Suceava, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Suceava, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty. Re-checked 2026-11-14: The national aeroclub notice dated 30 December 2025 assigns Iasi school jumps in 2026 to Suceava. Romanian-language searches found no dated 2025+ jumps at this airfield; the transfer of school activity does not establish that all other jumping stopped.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -527,7 +527,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Pitești is not in Aeroclubul României's 2026 list of clubs taking parachuting students (posted 2025-12-30), although the club's course menu lists 'Parasutism'. No dated jump found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "status_evidence": "Pitești is not in Aeroclubul României's 2026 list of clubs taking parachuting students (posted 2025-12-30), although the club's course menu lists 'Parasutism'. No dated jump found Codex cross-check: no dated local jump evidence resolved the existing uncertainty. Re-checked 2026-11-14: The national aeroclub notice dated 30 December 2025 lists Pitesti for other flight disciplines but not its 2026 parachuting intake. Romanian-language searches did not establish dated 2025+ local jumps or a closure; an undated general service description is insufficient.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -615,8 +615,8 @@
           "website": "https://aeroclubulromaniei.ro/sibiu"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Deva, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "status": "seasonal",
+      "status_evidence": "Dated sources show club tandem events at the Turnișor aerodrome on 6-7 Sep 2025, 30 May-1 Jun 2026 (local news names 'Aerodromul din Turnișor') and 16-18 Oct 2026 (article 15 Oct 2026). Only school jumps moved to Deva. The aerodrome reference point 45°46'56\"N 24°05'29\"E matches the record. The season correction is accurate but leaves out the 16-18 Oct 2026 event.",
       "sources": [
         {
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
@@ -642,9 +642,35 @@
           "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
           "checked_on": "2026-11-14",
           "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        },
+        {
+          "url": "https://mesageruldesibiu.ro/adrenalina-la-maxim-salturi-in-tandem-cu-parasuta-la-aeroclubul-teritorial-sibiu-hermann-oberth/",
+          "checked_on": "2026-11-14",
+          "what": "Dated news report reproduces the club announcement of the September 2025 tandem weekend."
+        },
+        {
+          "url": "https://www.hellosibiu.ro/p/19-mai-2026",
+          "checked_on": "2026-11-14",
+          "what": "Dated local bulletin names the club and three tandem days in May–June 2026; linked Facebook event could not be fetched."
+        },
+        {
+          "url": "https://www.stiridesibiu.ro/stiri/air-show-si-salturi-in-tandem-cu-parasuta-la-sibiu-de-ziua-copilului",
+          "checked_on": "2026-11-14",
+          "what": "Undated (matches 2026 dates): tandem jumps 30-31 May + 1 Jun, hosted at Aerodromul din Turnișor"
+        },
+        {
+          "url": "https://mesageruldesibiu.ro/adrenalina-la-inaltime-sibienii-sunt-invitati-sa-sara-cu-parasuta-in-tandem",
+          "checked_on": "2026-11-14",
+          "what": "15 Oct 2026: tandem event 16-18 Oct 2026 at Aeroclubul Sibiu 'Hermann Oberth', str. George Topârceanu"
+        },
+        {
+          "url": "https://ro.scribd.com/doc/56020606/aeroclub-SIBIU",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul Romaniei aerodrome sheet TURNISOR/SIBIU: reference point 24°05'29\"E 45°46'56\"N (search-result snippet)"
         }
       ],
-      "note": "Coordinates from OurAirports RO-0089 (airports.csv: 'Sibiu Hermann Oberth Airfield', Turnișor). A separate lead says tandems are also flown at Măgura/Cisnădie (LRCD); not confirmed. Check: downgraded from active; the club enrols parachuting students but jumps them at Deva."
+      "note": "Coordinates from OurAirports RO-0089 (airports.csv: 'Sibiu Hermann Oberth Airfield', Turnișor). A separate lead says tandems are also flown at Măgura/Cisnădie (LRCD); not confirmed. Check: downgraded from active; the club enrols parachuting students but jumps them at Deva.",
+      "season": "Occasional advertised tandem weekends; confirmed 6–7 September 2025 and 30 May–1 June 2026"
     },
     {
       "key": "ro-suceava-salcea",
@@ -746,8 +772,8 @@
           "facebook": "https://www.facebook.com/Aeroclubul-Teritorial-Smaranda-Br%C4%83escu-Oradea-105438664456456"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Listed as a territorial aeroclub on aeroclubulromaniei.ro (2026), with a Facebook page only; parachuting not confirmed; Oradea is not in Aeroclubul României's 2026 parachuting enrolment list Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "status": "closed",
+      "status_evidence": "The club commander said in a 6 Nov 2022 report that the club has had no runway since 2012 and does its practical parachuting at Arad. A dated 1 Feb 2025 article repeats that Oradea has had no suitable flying field since 2012, with only theory taught locally and the jumps made at Arad. The 30 Dec 2025 national notice leaves Oradea out of the 2026 parachuting locations. This is positive evidence that jumping stopped, not just a lack of evidence. A TripAdvisor listing for 'Ultimate High' in Oradea offering tandems could not be opened (HTTP 403) and has no dated activity, so it does not change the verdict.",
       "sources": [
         {
           "url": "https://www.aeroclubulromaniei.ro/",
@@ -763,6 +789,16 @@
           "url": "https://aeroclubulromaniei.ro/media/MOPL2web.pdf",
           "checked_on": "2026-11-14",
           "what": "National aeroclub operational manual: Oradea airfield reference point N47°02′00″ E21°54′07″."
+        },
+        {
+          "url": "https://www.ebihoreanul.ro/stiri/campioana-la-inaltime-povestea-biancai-cret-tanara-oradeanca-de-numai-40-de-kilograme-campioana-nationala-la-parasutism-foto-video-174757.html",
+          "checked_on": "2026-11-14",
+          "what": "Dated report with club commander testimony about loss of runway and training in Arad."
+        },
+        {
+          "url": "https://www.bihon.ro/stirile-judetului-bihor/oradea-si-fascinatia-pentru-zbor-de-la-planoare-primare-la-aerocluburi-moderne-si-provocarile-infrastructurii-4819975",
+          "checked_on": "2026-11-14",
+          "what": "1 Feb 2025: no adequate flying field since 2012; theory in Oradea, jumps at Arad"
         }
       ],
       "note": "Historical club airfield reference point from the national aeroclub manual; current parachuting remains unconfirmed. This is not the international airport reference point."
@@ -819,7 +855,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator confirms tandem jumps at Măgura and May–October booking season; no dated 2025+ jump or season calendar was established.",
+      "status_evidence": "Operator confirms tandem jumps at Măgura and May–October booking season; no dated 2025+ jump or season calendar was established. Re-checked 2026-11-14: Benzoi names Magura and offers tandem booking with a May–October season, but the offer is undated. Its 28 February 2025 blog item concerns parachute certification rather than local jumps; no dated 2025+ Magura activity or calendar was established.",
       "sources": [
         {
           "url": "https://www.benzoi.ro/despre-noi/",

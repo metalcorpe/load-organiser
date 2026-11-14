@@ -1,0 +1,65 @@
+{
+  "group": "balkans-east",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "bg-erden",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "The organiser bulletin puts the 60th Bulgarian Championship / EEAL round at Dropzone Erden (N43 29.955 E23 18.281, matching the record) on 4-7 Sep 2025 with Cessna and An-2 jump aircraft and pre-event training from 29 Aug. The EEAL results file (created 14 Sep 2025) and a Ministry of Defence report dated 11 Sep 2025 confirm the jumps took place on 5-6 Sep. Caveat: in 2026 the national championship moved to Dolna Mitropolia and the Bulgarian EEAL round to Pleven, 'for the first time' away from Montana, so no 2026 jumping at Erden is confirmed. Erden tandems in 2026 appear only on gift resellers, which do not count.",
+      "sources": [
+        {"url": "https://www.eeal.eu/storage/app/media/2025_EEAL_Montana-bulletin.pdf", "what": "Bulletin Nr. 1: venue Dropzone Erden, 04-07.09.2025, aircraft, pre-event training 29.08-04.09.2025"},
+        {"url": "https://www.eeal.eu/storage/app/media/2025_EEAL_Montana-results.pdf", "what": "EEAL Montana 2025 team ranking over 8 jumps; PDF creation date 14 Sep 2025"},
+        {"url": "https://armymedia.bg/2025/09/11/%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%BD%D0%B8%D1%82%D0%B5-%D1%81%D0%B8%D0%BB%D0%B8-%D1%81-%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B8-%D0%BC%D0%B5%D1%81%D1%82%D0%B0-%D0%B2-60-%D0%BE%D1%82", "what": "MoD report 11 Sep 2025: 60th championship and EEAL round held 5-6 Sep 2025, 13 teams"},
+        {"url": "https://www.eeal.eu", "what": "2025 post: 'jumps will take place at Erden airport'; 2026 post: Bulgarian round moved to Pleven"},
+        {"url": "https://www.topnovini.com/story/445417369", "what": "61st national championship (2026) held at Dolna Mitropolia, not Erden"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "gr-polykastro-nea-kavala",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Closed holds, but Codex's reasoning is out of date. The camp no longer sits on the runway: OSM shows the refugee site about 500 m NE of the runway, and a 13 Jun 2023 local report and the AELPO aero club page say the camp moved and the runway was freed, with the municipality leasing it to reopen. The 'former airstrip' in the ministry address is only a location label. Jumping did stop when the camp took over the strip in 2016. The club's page, last modified 1 Jul 2025, says restoration is still pending, and Hellenic Skydivers' northern tandems are now sold at Chortero, so there is no sign of a restart. Re-check later, because the airfield may reopen.",
+      "sources": [
+        {"url": "https://aelpo.gr/", "what": "Aero club page 'FREE AT LAST' (WP modified 2025-07-01): runway freed; camp moved east of runway; remaining works before aerodrome reopens"},
+        {"url": "https://www.eidisis.gr/topika-nea-toy-n-kilkis/apokleistiko-to-aerodromio-neas-kabalas-polykastroy-etoimazetai-n-anoiksei-ta-ftera-toy.html", "what": "13 Jun 2023: camp moved off runway, runway in poor condition, municipality of Paionia leasing 44 stremmata to reopen; future plans only"},
+        {"url": "https://www.openstreetmap.org/way/776069872", "what": "OSM aerodrome closed=yes (edited 2025-02-21), note 'refugee camp relocated in adjacent land' (2022); runway way 27747885 disused=yes; refugee_site way 1028876921 at 40.9902, 22.6297"},
+        {"url": "https://migration.gov.gr/ris/perifereiakes-monades/domes/domi-polykastroy/", "what": "Facility address 'Nea Kavala ... (Πρώην Αεροδιάδρομος)'; undated, address label only"},
+        {"url": "https://www.unlimited-adrenaline.gr/hellenic-skydivers/p/en/316", "what": "Hellenic Skydivers northern tandem now listed at Chortero, Serres (reseller lead)"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ro-oradea",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "The club commander said in a 6 Nov 2022 report that the club has had no runway since 2012 and does its practical parachuting at Arad. A dated 1 Feb 2025 article repeats that Oradea has had no suitable flying field since 2012, with only theory taught locally and the jumps made at Arad. The 30 Dec 2025 national notice leaves Oradea out of the 2026 parachuting locations. This is positive evidence that jumping stopped, not just a lack of evidence. A TripAdvisor listing for 'Ultimate High' in Oradea offering tandems could not be opened (HTTP 403) and has no dated activity, so it does not change the verdict.",
+      "sources": [
+        {"url": "https://www.ebihoreanul.ro/stiri/campioana-la-inaltime-povestea-biancai-cret-tanara-oradeanca-de-numai-40-de-kilograme-campioana-nationala-la-parasutism-foto-video-174757.html", "what": "6 Nov 2022: commander Sergiu Tabuia, no runway since 2012, practical courses at Arad"},
+        {"url": "https://www.bihon.ro/stirile-judetului-bihor/oradea-si-fascinatia-pentru-zbor-de-la-planoare-primare-la-aerocluburi-moderne-si-provocarile-infrastructurii-4819975", "what": "1 Feb 2025: no adequate flying field since 2012; theory in Oradea, jumps at Arad"},
+        {"url": "https://ar.ro/articol/cursuri-gratuite-2026", "what": "30 Dec 2025: 2026 parachuting locations omit Oradea"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ro-sibiu",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Dated sources show club tandem events at the Turnișor aerodrome on 6-7 Sep 2025, 30 May-1 Jun 2026 (local news names 'Aerodromul din Turnișor') and 16-18 Oct 2026 (article 15 Oct 2026). Only school jumps moved to Deva. The aerodrome reference point 45°46'56\"N 24°05'29\"E matches the record. The season correction is accurate but leaves out the 16-18 Oct 2026 event.",
+      "sources": [
+        {"url": "https://mesageruldesibiu.ro/adrenalina-la-maxim-salturi-in-tandem-cu-parasuta-la-aeroclubul-teritorial-sibiu-hermann-oberth/", "what": "20 Aug 2025: club tandem jumps 6-7 Sep 2025 at Sibiu from 3000 m"},
+        {"url": "https://www.hellosibiu.ro/p/19-mai-2026", "what": "19 May 2026 bulletin: tandem jumps at Aeroclubul Sibiu 30 May-1 Jun 2026"},
+        {"url": "https://www.stiridesibiu.ro/stiri/air-show-si-salturi-in-tandem-cu-parasuta-la-sibiu-de-ziua-copilului", "what": "Undated (matches 2026 dates): tandem jumps 30-31 May + 1 Jun, hosted at Aerodromul din Turnișor"},
+        {"url": "https://mesageruldesibiu.ro/adrenalina-la-inaltime-sibienii-sunt-invitati-sa-sara-cu-parasuta-in-tandem", "what": "15 Oct 2026: tandem event 16-18 Oct 2026 at Aeroclubul Sibiu 'Hermann Oberth', str. George Topârceanu"},
+        {"url": "https://ro.scribd.com/doc/56020606/aeroclub-SIBIU", "what": "Aeroclubul Romaniei aerodrome sheet TURNISOR/SIBIU: reference point 24°05'29\"E 45°46'56\"N (search-result snippet)"}
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

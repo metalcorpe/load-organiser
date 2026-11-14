@@ -113,7 +113,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Tandemowe.pl now responds and advertises Jelenia Góra, but no dated 2025–2026 calendar or field-specific jump report was established.",
+      "status_evidence": "Tandemowe.pl now responds and advertises Jelenia Góra, but no dated 2025–2026 calendar or field-specific jump report was established. Re-checked 2026-11-14: Tandemowe advertises weekend jumps and the aeroclub advertises tandem/AFF, both undated. The 22 May 2026 ULC register lists EPJG for Skydive Wrocław, but that operator directs current jumps to Leszno; actual 2025+ EPJG jumping remains unresolved.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -343,7 +343,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "SkyFun contact page explicitly names Lądowisko Chyżne, but no dated 2025–2026 jumping or unambiguous coordinate source was established.",
+      "status_evidence": "SkyFun contact page explicitly names Lądowisko Chyżne, but no dated 2025–2026 jumping or unambiguous coordinate source was established. Re-checked 2026-11-14: SkyFun explicitly lists Lądowisko Chyżne as a dropzone, but its contact and offer pages are undated. No 2025+ field-specific jump evidence or reliable coordinates were established.",
       "sources": [
         {
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
@@ -1029,7 +1029,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Skydive Wrocław still explicitly suspends Szymanów jumps and uses Leszno; no dated 2025–2026 evidence resolved the conflicting PL Strefa listing.",
+      "status_evidence": "Skydive Wrocław still explicitly suspends Szymanów jumps and uses Leszno; no dated 2025–2026 evidence resolved the conflicting PL Strefa listing. Re-checked 2026-11-14: Skydive Wrocław explicitly suspends Szymanów jumps, while PL Strefa still advertises this field. The 22 May 2026 ULC register retains EPWS training entries, which do not resolve the conflicting undated operating notices.",
       "sources": [
         {
           "url": "https://plstrefa.pl/lokalizacje",
@@ -1258,8 +1258,8 @@
           "name": "Flyfast Zamość"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Aeroklub Ziemi Zamojskiej currently sells tandems at Mokre, but no opened dated 2025–2026 evidence establishes a regular jumping schedule.",
+      "status": "seasonal",
+      "status_evidence": "Promoting the place to operating is supported. PKBWL records a parachute accident at EPZA on 30 Aug 2025 (PD Navigator 280 canopy, serious injury), so an aircraft jump was made there in 2025. The ULC register dated 22 May 2026 lists Aeroklub Ziemi Zamojskiej's parachute training (PJ to D, instructor) at EPZA, and the club's current product page and Instagram bio sell tandems from EPZA. 'Seasonal' fits better than 'active': the club's posts tie jumping to the spring season, nothing shows winter jumping, and the PL file labels similar aero clubs 'seasonal'.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/europe/poland",
@@ -1275,6 +1275,36 @@
           "url": "https://www.aeroklubzamosc.pl",
           "checked_on": "2026-11-14",
           "what": "Codex cross-check: Operator homepage sells tandems and names Mokre; unrelated dated news was not treated as jumping evidence."
+        },
+        {
+          "url": "https://pkbwl.gov.pl/raporty/2025-0117/",
+          "checked_on": "2026-11-14",
+          "what": "Official occurrence record: PD Navigator 280 parachute, EPZA, 30 August 2025."
+        },
+        {
+          "url": "https://ulc.gov.pl/_download/2026/rps_stan_na_22_05_2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 37: resident aeroclub registered for practical parachute training at EPZA."
+        },
+        {
+          "url": "https://aeroklubzamosc.pl/kategoria/aktualnosci/",
+          "checked_on": "2026-11-14",
+          "what": "Resident aeroclub at Mokre; links to its jump shop and parachute training."
+        },
+        {
+          "url": "https://aeroklubzamosc.pl/produkt/skok-spadochronowy/",
+          "checked_on": "2026-11-14",
+          "what": "Operator tandem product: jump made at EPZA Zamość-Mokre from 3000 m; undated"
+        },
+        {
+          "url": "https://www.instagram.com/aeroklubziemizamojskiej",
+          "checked_on": "2026-11-14",
+          "what": "Search-result view: bio 'LOTY WIDOKOWE | SKOKI W TANDEMIE', posts dated to Nov 2026"
+        },
+        {
+          "url": "https://www.facebook.com/AeroklubZamosc/videos/skok-ze-spadochronem-to-przygoda-kt%C3%B3rej-nie-da-si%C4%99-por%C3%B3wna%C4%87-z-niczym-innym-zobac/641845351651592",
+          "checked_on": "2026-11-14",
+          "what": "Search-result view: club urges booking jumps 'for spring', showing a seasonal operation (undated)"
         }
       ],
       "note": "Lead from skydivingsource and Facebook search result; needs confirmation. Check 2026-11-14: the aero club's name is Aeroklub Ziemi Zamojskiej. A 2024 EEAL round was held at Mokre (search view); the 2026 round moved to Hrubieszów. Still no dated 2025/2026 jumping at Mokre."
@@ -1371,7 +1401,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator describes weekend jumps from April to October at Rybnik, but no dated 2025+ local jump evidence was established.",
+      "status_evidence": "Operator describes weekend jumps from April to October at Rybnik, but no dated 2025+ local jump evidence was established. Re-checked 2026-11-14: Omega explicitly advertises weekend jumps at Rybnik from April through October, but no dated 2025+ operator activity was established. Recent directory updates and company financial dates do not date the jumps.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/omega-skydive/",

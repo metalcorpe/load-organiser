@@ -1,0 +1,97 @@
+{
+  "group": "nordic-baltic",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "fi-pirkkala",
+      "codex_verdict": "active",
+      "agree": true,
+      "final_verdict": "active",
+      "reason": "Codex's own sources are undated apart from the 2026 membership fee, but dated club posts confirm aircraft jumping: an Instagram post from 29 June 2025 (date decoded from the post ID, and consistent with its 'tomorrow (Monday) the course starts', 30 June being a Monday only in 2025) reports jumping at Pirkkala that weekend. A Facebook post announces jumps into Santalahti on 13-17 July 2026, and the operator says Pirkkala tandems land there. The 2025 federation table lists one location per club (TamLK under Jämi), so Pirkkala's absence there is not evidence against it.",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/p/DLfZov4hE6F/",
+          "what": "Club Instagram post (posted 2025-06-29 per its media ID): jumping took place at Pirkkala this weekend despite cloud; next weekend back at Jämi."
+        },
+        {
+          "url": "https://www.facebook.com/TamLK/videos/ensi-viikolla-13-1772026-hyp%C3%A4t%C3%A4%C3%A4n-santiksessa-tamperelaiset-laskuvarjohypp%C3%A4%C3%A4j%C3%A4t-/2068439867077997",
+          "what": "Club Facebook post: jumps with landings at Santalahti park all week 13-17.7.2026, tandems bookable."
+        },
+        {
+          "url": "https://tamlk.org/tandemkurssi/",
+          "what": "Operator: Pirkkala tandem 490 EUR; Pirkkala tandems land at Santalahti park weather permitting, otherwise at the landing area beside Pirkkala airport."
+        },
+        {
+          "url": "https://tamlk.org/esittely/",
+          "what": "Operator: jumps at Pirkkala on weekday evenings and outside the active season; landing on lake ice in winter or near Terminal 1."
+        },
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "what": "SIL 2025 jump table (8.2.2026): one location per club, Tampereen LK under Jämi with 1572 jumps."
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "lv-jelgava",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "The municipality's own 2023 industrial-park strategy calls the site a 'former airfield', a degraded, overgrown, unbuilt territory not in economic use, and English Wikipedia says the skydiving operation shut down in 2010. Skydive Latvia operates at Limbaži instead. One correction to Codex's evidence: the municipality later terminated the SP Austrumi solar-park contract because construction never began, so the site is disused rather than built over; that does not change the closure.",
+      "sources": [
+        {
+          "url": "https://www.jelgava.lv/wp-content/uploads/2023/07/7_1-PIELIKUMS.pdf",
+          "what": "Jelgava municipality, Zemgale industrial park strategy (July 2023): 'bijušā lidlauka teritorija', degraded, overgrown and unbuilt, the only large free municipal industrial territory not yet in economic use."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Jelgava_Air_Base",
+          "what": "Skydiving operation shut down in 2010 after the dropzone owner's death; runway cut to 800 m; airfield condition listed as abandoned (that sentence is unsourced)."
+        },
+        {
+          "url": "https://militaryheritagetourism.info/lv/military/sites/view/937?lang=lv",
+          "what": "Former Rīgas Aeroklubs parachuting site; runway slabs removed; territory handed over for industrial-park development."
+        },
+        {
+          "url": "https://zz.lv/vietejas-zinas/pasvaldiba-izbeidz-ligumu-ar-sp-austrumi-par-tiesibam-buvet-saules-energijas-razosanas-parku",
+          "what": "Municipality terminated the solar-park building-rights contract because no construction had started (late 2023)."
+        },
+        {
+          "url": "https://www.jelgava.lv/jelgavas-vestnesis-arhivs/brivais-kritiens-un-lidojums-no-4000-metru-augstuma",
+          "what": "Older municipal newspaper article (prices in lats, so before 2014) confirming the site was once an active weekend dropzone."
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "se-skavsta",
+      "codex_verdict": "uncertain",
+      "agree": false,
+      "final_verdict": "closed",
+      "reason": "The operator's own Instagram post, dated 12 February 2024 (decoded from the post ID, matching the date on the profile grid), announces the decision to shut down Nyköpings Fallskärmsklubb because operations can no longer continue. The same text appears on its Facebook page. The current SFF list has no club in Nyköping or Södermanland, and searches found no other operator jumping at Skavsta. The historical-operator correction is right: nyfk.se was the club's domain (info@nyfk.se, nyfk.se/tandemhopp), though it now serves only a self-signed certificate.",
+      "sources": [
+        {
+          "url": "https://www.instagram.com/skydive_nykoping/p/C3PnG39sCbO/",
+          "what": "Opened: club closure announcement, 2024-02-12; operations can no longer be run; inbox kept open for a while for questions."
+        },
+        {
+          "url": "https://www.facebook.com/SkydiveNykoping/posts/det-%C3%A4r-med-tungt-hj%C3%A4rta-som-vi-beslutat-att-l%C3%A4gga-ner-nyk%C3%B6pings-fallsk%C3%A4rmsklubb-/769190105233558",
+          "what": "Same closure text on the club's Facebook page (visible in search results; the post itself is behind the login wall)."
+        },
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "what": "Current SFF club list: no Nyköping/Skavsta or Södermanland club."
+        },
+        {
+          "url": "https://www.sn.se/sport/fallskarmshopp/artikel/fallskarmsklubben-krisar-saknar-flygplan/jp3zyeql",
+          "what": "Local paper: the club had had no leased aircraft since autumn 2021 and might have to close."
+        },
+        {
+          "url": "https://www.nykopingsguiden.se/verksamheter/nykopings-fallskarmsklubb",
+          "what": "Municipal tourism page (outdated): club address Norra Banänden, Skavsta airport; email info@nyfk.se."
+        }
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

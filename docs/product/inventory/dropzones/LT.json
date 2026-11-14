@@ -222,7 +222,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular sport operation was established and the listed operator website was inaccessible.",
+      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular sport operation was established and the listed operator website was inaccessible. Re-checked 2026-11-14: Marijampolės aeroklubas reported on 25 August 2026 that its parachutists performed at the Šeduva aviation festival. This confirms a display, but neither that report nor the 11 June 2026 AIP establishes recurring sport/student/tandem operation at Šeduva.",
       "sources": [
         {
           "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
@@ -254,7 +254,7 @@
       "icao": null,
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular civilian operator or jumping calendar was established.",
+      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular civilian operator or jumping calendar was established. Re-checked 2026-11-14: The AIP effective 11 June 2026 lists PJ7 ZARASAI AD as a parachute-jumping site with contact numbers, but does not name an operator. Lithuanian searches found no 2025–2026 jumping calendar or dated activity establishing regular civilian operation.",
       "sources": [
         {
           "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
@@ -286,7 +286,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The historical operator listing and airfield location are established, but no 2025–2026 regular jumping activity was verified.",
+      "status_evidence": "The historical operator listing and airfield location are established, but no 2025–2026 regular jumping activity was verified. Re-checked 2026-11-14: The opened airport record, updated 14 July 2025, confirms Ignalina airfield and its coordinates, not parachuting activity. Lithuanian and operator-name searches did not establish 2025–2026 jumps, and tandemjump.lv could not be retrieved.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/lithuania/dz-ignalina",

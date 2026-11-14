@@ -1,0 +1,171 @@
+{
+  "group": "balkans-west",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "si-lesce",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "The only dated 2025+ jumping found at Lesce is the annual Skydive World Cup accuracy meet (36th edition, 26-28 June 2026, ALC aircraft plus a Slovenian Army aircraft; the 37th is announced for next year). The ALC parachute-section news category holds only a 2026 result from Slovakia and a 2024 display jump, and its student-course page is marked as a test page, so regular jumping outside the meet is not shown. This inventory classes recurring single-meet sites (e.g. Thalgau, Olomouc) as seasonal.",
+      "sources": [
+        {
+          "url": "https://rezultat.si/2026/06/28/sportni-padalci-tekmovali-na-tekmi-svetovnega-pokala-na-letaliscu-lesce/amp/",
+          "what": "28 Jun 2026 report: 36th World Cup meet at Lesce, organised by ALC Lesce, two jump aircraft; next edition announced for next year"
+        },
+        {
+          "url": "https://www.alc.si/category/padalska-sekcija",
+          "what": "ALC parachute-section news: only a 28 Aug 2026 CISM result (Slovakia) and a 2024 display jump; no regular jump days"
+        },
+        {
+          "url": "https://www.alc.si/solanje-padalcev",
+          "what": "Undated student-course page, flagged on the page as a test page"
+        },
+        {
+          "url": "https://www.prostipad.si/sl/lokacije-skok-s-padalom-lesce",
+          "what": "Prostipad does not run tandems at Lesce until further notice (operator-specific)"
+        }
+      ],
+      "corrections_ok": true,
+      "corrections_note": "Operator name is right. The meet organiser is the aeroclub (Aeroklub Alpski letalski center Lesce); the airfield is managed by a separate municipal institute, JGZ ALC Lesce-Bled."
+    },
+    {
+      "key": "si-murska-sobota",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "All dated jumping at Rakičan comes from a visiting Austrian club (HSV Red Bull Salzburg) holding a spring training camp: 30 Apr-4 May 2025, which the press called an internal event, and again around 30 Apr-1 May 2026 with a Pilatus PC-6. The resident aeroclub's statement that it runs jumps, tandems and student training carries no date. So jumps recur each year, but regular or public operation is not shown.",
+      "sources": [
+        {
+          "url": "https://www.pomurec.com/vsebina/87848/",
+          "what": "May 2025 report: jumps and training at Murska Sobota airfield 30 Apr-4 May, described as an internal event"
+        },
+        {
+          "url": "https://svet24.si/lokalno/pomurje/sport/padalci-red-bull-letalisce-rakican-1896253",
+          "what": "30 Apr 2026: HSV Red Bull Salzburg again training at Rakičan with a PC-6, also there early May the previous year"
+        },
+        {
+          "url": "https://svet24.si/novice/kronika/pums-padalec-hude-poskodbe-rakican-1896501",
+          "what": "2 May 2026: a jumper injured landing at Rakičan after an aircraft jump from about 4,000 m"
+        },
+        {
+          "url": "https://www.aeroklub-ms.si/",
+          "what": "Resident club: undated statement that its parachute section runs jumps, tandems and training"
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "si-ptuj",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "Dated evidence is the yearly Ptuj parachuting cup at Moškanjci (45th on 17-18 Aug 2024; 46th on 14-15 Jun 2025, held with five teams) and tandems at the club open day on 6 Sep 2025. The club's Cessna 206 tandem offer has no dates, and an independent tandem pilot books Moškanjci only on request; no 2026 jump date was found. That is recurring club and event jumping, which this inventory classes as seasonal, not a regularly operating dropzone.",
+      "sources": [
+        {
+          "url": "https://www.ptuj.si/dogodek/1115927",
+          "what": "Municipal listing (9 Jun 2025): 46th Ptuj parachuting cup at Moškanjci 95a, 14-15 Jun 2025"
+        },
+        {
+          "url": "https://www.petv.tv/novice/sport/46-ptujski-padalski-pokal",
+          "what": "20 Jun 2025 report: cup held at Moškanjci, five teams, accuracy jumps"
+        },
+        {
+          "url": "https://ptujinfo.com/dogodek/45-ptujski-padalski-pokal/249893",
+          "what": "45th cup at Moškanjci, 17-18 Aug 2024 (recurrence)"
+        },
+        {
+          "url": "https://www.ptuj.si/objava/1149559",
+          "what": "29 Aug 2025: open day 6 Sep 2025 with tandem jumps"
+        },
+        {
+          "url": "https://www.ak-ptuj.com/",
+          "what": "Club site (2026): tandem from a Cessna 206 at 3,000 m, no dates"
+        },
+        {
+          "url": "https://www.tandemskydive.si/termini-za-skok-v-tandemu",
+          "what": "Tandem pilot: Moškanjci dates set only on request"
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "si-sentvid-pri-sticni",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Ljubljana police (via Radio Tomi, 17 Jul 2026) and national media report a fatal landing at Šentvid pri Stični airfield after a jump from an aircraft, which confirms 2026 jumping there. Prostipad calls the airfield its home and jumps there April-October.",
+      "sources": [
+        {
+          "url": "https://www.radiotomi.si/novice/policijska-porocila/nesreca-pri-skoku-s-padalom-v-kateri-je-umrl-32-letni-padalec",
+          "what": "Police statement published 17 Jul 2026: jumper died landing on the airfield grass after a jump from an aircraft"
+        },
+        {
+          "url": "https://www.rtvslo.si/crna-kronika/v-sentvidu-pri-sticni-umrl-padalec/788471",
+          "what": "RTV SLO report of the same accident (independent confirmation)"
+        },
+        {
+          "url": "https://www.prostipad.si/sl/lokacije-skok-s-padalom-sentvid-pri-sticni",
+          "what": "Operator home field; season April-October, weekends plus Wednesday and Friday afternoons"
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ba-bihac-golubic",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Aero centar Panorama has held the Para Challenge Cup at Golubić airfield every year: Sep 2022, Jul 2024, the weekend before 22 Jul 2025 (with a Cessna from Hungary), and 25-26 Jul 2026, when RTV USK called it traditional and reported tandems offered to the public. That is recurring event-based jumping.",
+      "sources": [
+        {
+          "url": "https://www.rtvusk.ba/clanak/poslijepodne-uz-rtv-usk-prica-padobranci-iz-regije-i-evrope-osvojili-nebo-iznad-bihaca/7434",
+          "what": "22 Jul 2025: two-day Para Challenge Cup at Golubić, Cessna from Hungary"
+        },
+        {
+          "url": "https://www.rtvusk.ba/clanak/padobranski-spektakl-u-bihacu-odrzan-tradicionalni-para-challenge-cup-2026/16570",
+          "what": "25 Jul 2026: the traditional cup held again at Golubić, competition jumps and public tandems"
+        },
+        {
+          "url": "https://www.walar-skydive.com/events/para-challenge-cup-biha%C4%87-2024-bosnia-and-herzegovina-biha%C4%87",
+          "what": "Event listing for the 13-14 Jul 2024 edition at Golubić (recurrence lead)"
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ba-visoko",
+      "codex_verdict": "seasonal",
+      "agree": false,
+      "final_verdict": "uncertain",
+      "reason": "The only evidence is one Slobodan Pad booking page offering tandems at Visoko airfield on 28-31 May 2026 from its Cessna 182 9A-DTD. No report shows the jumps took place, and no earlier or later jump days there were found in Bosnian or Croatian searches. Under the recurrence rule, a single visiting event does not make the place seasonal.",
+      "sources": [
+        {
+          "url": "https://slobodanpad.hr/tandem-skok-padobranom-sarajevo",
+          "what": "Operator booking page: tandems at Aerodrom Visoko, 28-31 May 2026, Cessna 182 9A-DTD; no other dates"
+        }
+      ],
+      "corrections_ok": false,
+      "corrections_note": "The season text 'Scheduled visiting tandem days; 28-31 May 2026 documented' overstates the evidence. The dates were offered, not shown to have happened, and nothing shows repeat visits. Suggest: 'One visiting tandem event offered 28-31 May 2026; no recurrence found'."
+    },
+    {
+      "key": "rs-kikinda",
+      "codex_verdict": "uncertain",
+      "agree": true,
+      "final_verdict": "uncertain",
+      "reason": "Checked only for its operator correction, since the verdict is uncertain. The current Vojvodina aviation federation member list names Aero klub \"Kikinda\" at Bašaidski drum bb, and a 2019 N1 report names Aeroklub \"Kikinda\" as the airfield's club, so the correction is supported. In 2019 the club and the city disputed ownership of the airfield land.",
+      "sources": [
+        {
+          "url": "https://vsvojvodine.org/clanstvo/clanovi/",
+          "what": "Federation member list: Aero klub \"Kikinda\", Bašaidski drum bb, 23300 Kikinda"
+        },
+        {
+          "url": "https://n1info.rs/biznis/a544653-Aeroklub-Kikinda-tvrdi-da-im-je-aerodrom-otet-Grad-ih-krivi-za-nelegalnu-zaradu",
+          "what": "17 Nov 2019 news: Aeroklub \"Kikinda\" runs the airfield and disputes the land with the City (dated, background only)"
+        }
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

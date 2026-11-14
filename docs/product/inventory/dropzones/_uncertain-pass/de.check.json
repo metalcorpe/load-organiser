@@ -1,0 +1,80 @@
+{
+  "group": "de",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "de-bad-duerkheim",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "Aircraft jumping at EDRF from 2025 is confirmed: a solo jumper left a Cessna at about 3,000 m over the In den Almen field on Saturday 2025-08-30 (police/dpa), and the club's 13–14 June 2026 airfield festival programme lists tandem jumps. All dated jumps fall in June–September and Skyhopping (which names Bad Dürkheim as its recommended site) publishes no dates, so nothing supports 'active' (all-year); Codex inferred it from an absence of weekend restrictions.",
+      "sources": [
+        {"url": "https://www.wochenblatt-reporter.de/bad-duerkheim/c-blaulicht/fallschirmspringer-muss-nach-sturz-notoperiert-werden_a668871", "what": "Report dated 2025-09-01: jump from a Cessna at the In den Almen airfield on Saturday 30 August 2025."},
+        {"url": "https://www.swr.de/swraktuell/rheinland-pfalz/ludwigshafen/fallschirmspringer-stuerzt-in-bad-duerkheim-ab-schwer-verletzt-100.html", "what": "SWR (seen in search results; direct fetch blocked): jumper left an aircraft at about 3,000 m over the In den Almen glider field; corroborated by zeit.de/dpa 2025-08-31."},
+        {"url": "https://www.edrf.de/blogs/aktuelles-flugsportverein-bad-durkheim", "what": "Airfield club news: festival 13–14 June 2026 with 'Fallschirmsprung (Tandem)'; homepage calls the field the home of parachuting."},
+        {"url": "https://skyhopping.com", "what": "Tandem operator recommends Bad Dürkheim as its jump site (surcharge location); calendar shows no dates."},
+        {"url": "https://skyhopping.com/termineorte/terminkalender/range.listevents/-", "what": "Calendar 2026-11-13 to 2028-11-14: 'Keine Termine'."}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "de-breitscheid",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "This rests on dated evidence that jumping stopped, not on an absence of evidence. The former tandem operator Springwerk states (notice dated 2024-10-20) that it has run no tandems at Breitscheid since 2023-05-01 and will not resume. The club's status page, marked [Update 2026-10], says there are still no sport, training or tandem jumps, citing unresolved hurdles with the municipality; Facebook also says the jump aircraft was lost after a change of owner. The club hopes to restart with no date. An August 2026 gliding-competition briefing repeats a 'Breitscheid Sprungbetrieb' NOTAM line but shows no actual jumps.",
+      "sources": [
+        {"url": "https://skydive-westerwald.de/status", "what": "FSV Breitscheid board notice, [Update 2026-10]: 'noch immer keinen Sprungbetrieb', no tandems, no courses, restart at an unspecified later time."},
+        {"url": "https://springwerk.de", "what": "Springwerk notice dated 2024-10-20: no tandem jumps at Breitscheid since 2023-05-01; business will not resume."},
+        {"url": "https://www.facebook.com/skydivewesterwald/posts/in-den-vergangenen-wochen-wurde-es-schon-viel-diskutiert-und-nun-m%C3%B6chten-wir-auc/749900857115004", "what": "Search-result snippet only (post date not visible): no jumping at Breitscheid because the jump aircraft is no longer available after a change of owner."},
+        {"url": "https://www.soaringspot.com/de/lahn-dill-bergland-cup-2026/tasks/standard/task-1-on-2026-08-01", "what": "Gliding briefing at Marburg-Schönstadt, 2026-08-01, lists a 'Breitscheid Sprungbetrieb' NOTAM line; it shows no actual jumps and comes before the October 2026 club update."}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "de-burgheim",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "LSG Burgheim jumps from its own Cessna 182 (D-EADM). Parachute jumps are documented at the Fliegerfest 2025 (Augsburger Allgemeine photo captions; club videos May–September 2025), a Burgheim jump week on 2026-08-07, and the Fliegerfest on 2026-09-13, announced with parachute jumps. The operator page gives Friday, Saturday and Sunday/holiday hours but no months, so replacing the unsourced 'all year' with the day pattern is correct.",
+      "sources": [
+        {"url": "https://lsg-burgheim.de/fallschirmspringen/", "what": "Operator page: jump hours Fri 15:00–20:30, Sat and Sun/holidays 10:00–20:00; Cessna Skylane 182 D-EADM; tandem, training and licensed jumps; no months stated."},
+        {"url": "https://www.augsburger-allgemeine.de/neuburg/burgheim-fliegerfest-2025-in-burgheim-das-sind-die-bilder-110713498", "what": "'Fliegerfest 2025 in Burgheim' photo gallery; captions mention parachute jumps (read via extraction)."},
+        {"url": "https://www.instagram.com/bavarian_skydive", "what": "Search-result view (login wall on direct open): 'Tandem & Funjumps am Wochenende'; club videos dated May, June and September 2025 and September 2026."},
+        {"url": "https://www.facebook.com/LsgBurgheim", "what": "Search-result snippet: Fliegerfest Burgheim on Sunday 13 September 2026 with parachute jumps."},
+        {"url": "https://www.instagram.com/reel/DbyE-zqIn8L", "what": "Search-result snippet, 2026-08-08: visit to the Burgheim jump week (Sprungwoche) on 07.08."}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "de-finsterwalde-schacksdorf",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "The LuBB decision of 2025-02-18 revokes the EDUS operating approval, takes the land out of aviation planning, and orders closure markings. It records that the sole user, Aircraft Maintenance & Consulting GmbH (the dropzone operator named in DFV), agreed to the closure and returned its Part 145 approval on 2024-12-02. The new owner is a solar company with no aviation purpose, and 2025 municipal plans for a solar park on 'Flugplatz Schacksdorf' corroborate this.",
+      "sources": [
+        {"url": "https://lubb.berlin-brandenburg.de/wp-content/uploads/Widerruf-der-Genehmigung-vom-18.02.2025.pdf", "what": "Official revocation of the EDUS approval dated 2025-02-18 (read in full); operation allowed at most until 2025-04-30 to remove aircraft."},
+        {"url": "https://www.amt-kleine-elster.de/wirtschaft/aktuelle-planverfahren/oeffentliche-auslegung-des-entwurfes-der-23-aenderung-des-flaechennutzungsplans-des-amtes-kleine-elster-niederlausitz-fuer-den-bereich-des-vorhabenbezogenen-bebauungsplans-solarpark-finsterwalde-schacksdorf-flugplatz-schacksdorf", "what": "Municipal 2025 land-use change for the 'Solarpark Finsterwalde/Schacksdorf - Flugplatz Schacksdorf'."},
+        {"url": "https://www.rbb24.de/wirtschaft/beitrag/2025/12/brandenburg-schacksdorf-solarpark-batteriespeicher.html", "what": "rbb 2025-12-05: solar park and battery storage planned on the former airfield."}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "de-schwaebisch-hall-weckrieden",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Haller Tagblatt/SWP of 2023-05-04 report that the local motor-flying club won an eviction action and the Para-Club is leaving Weckrieden. The club's own pages say it currently cannot practise its sport and is looking for a landing meadow. The second listed operator, Blue Sky Adventures (same contact as the Para Club), now takes off from Würth Airport (EDTY) and lands near Brachbach, Untermünkheim (OSM 49.1847, 9.7242, about 8 km from Weckrieden), and advertises 2026 tandem dates 'in Schwäbisch Hall'. That operation is a lead for a separate record; it is not jumping at Weckrieden.",
+      "sources": [
+        {"url": "https://www.swp.de/lokales/gaildorf/luftsport-in-schwaebisch-hall-fallschirmspringer-ziehen-die-reissleine-70513901.html", "what": "Search-result lead: motor flyers enforce an eviction action; Para-Club leaves Weckrieden airfield."},
+        {"url": "https://airpeace-sha.de/wp-content/uploads/2023/05/20230504_Bericht_HT-Fallschirmspringer.pdf", "what": "Haller Tagblatt article dated 4 May 2023, same headline and lead (scanned PDF; text read from search result)."},
+        {"url": "https://www.paraclub.de/der-para-club", "what": "Club history: '2023 das vorläufige Aus' after MFC SHA's eviction action."},
+        {"url": "https://www.paraclub.de/news", "what": "Club news: currently cannot practise its sport; seeking a 100 x 200 m landing area."},
+        {"url": "https://www.skydive-stuttgart.de/tandem-skydive", "what": "Blue Sky Adventures: take-off usually at Würth Airport Schwäbisch Hall, landing on a meadow at the edge of Brachbach (undated)."},
+        {"url": "https://www.facebook.com/p/Blue-Sky-Adventures-100051072594870", "what": "Search-result snippet only: 'SPRUNGTERMINE 2026' tandem dates in Schwäbisch Hall."}
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

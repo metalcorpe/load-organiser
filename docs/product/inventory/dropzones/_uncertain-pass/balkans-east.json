@@ -1,0 +1,276 @@
+{
+  "group": "balkans-east",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "mk-bitola-logovardi",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The CAA lists Mirko Todorovski and parachuting at Bitola–Logovardi, but gives no activity date. Macedonian-language searches did not establish aircraft jumps here in 2025 or 2026.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Undated official listing links Mirko Todorovski, parachuting and Bitola–Logovardi."
+        }
+      ]
+    },
+    {
+      "key": "mk-kumanovo-rezanovce",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The CAA lists Done Bozinov and parachuting at Adzipe–Rezanovce, but gives no activity date. Macedonian-language searches did not establish aircraft jumps here in 2025 or 2026.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Undated official listing links Done Bozinov, parachuting and Adzipe–Rezanovce."
+        }
+      ]
+    },
+    {
+      "key": "mk-prilep-malo-konjari",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The CAA lists Prilep and parachuting at Malo Konari, but gives no activity date. Macedonian-language searches did not establish aircraft jumps here in 2025 or 2026.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Undated official listing links Prilep, parachuting and Malo Konari."
+        }
+      ]
+    },
+    {
+      "key": "mk-stenkovec-skopje",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The club offers tandem jumps and spring/autumn beginner courses without a dated 2025+ programme. A July 2026 adventure announcement starts with a flight from Stenkovec but places its parachute jump over Galicica, so it does not confirm jumps at this dropzone.",
+      "sources": [
+        {
+          "url": "https://aeroklubskopje.mk/en/training-center/",
+          "checked_on": "2026-11-14",
+          "what": "Undated club parachuting and tandem offer."
+        },
+        {
+          "url": "https://panoptikum.mk/utre-zapochnuva-24-chasa/",
+          "checked_on": "2026-11-14",
+          "what": "26 July 2026 itinerary: Stenkovec departure; parachute jump over Galicica."
+        }
+      ]
+    },
+    {
+      "key": "mk-stip-susevo",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The CAA lists Stip and parachuting at Susevo, but gives no activity date. Macedonian-language searches did not establish aircraft jumps here in 2025 or 2026.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Undated official listing links Stip, parachuting and Susevo."
+        }
+      ]
+    },
+    {
+      "key": "bg-erden",
+      "verdict": "seasonal",
+      "confidence": "high",
+      "evidence": "The September 2025 national championship/EEAL bulletin names Dropzone Erden for 4–7 September 2025, with training from 29 August. It specifies Cessna and An-2 jump aircraft and training jump prices; the verified programme covers these dates only.",
+      "sources": [
+        {
+          "url": "https://www.eeal.eu/storage/app/media/2025_EEAL_Montana-bulletin.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Organiser bulletin: Erden venue, 2025 dates, aircraft, jump prices and Aero Club Montana."
+        }
+      ],
+      "corrections": {
+        "season": "Confirmed training/competition period: 29 August–7 September 2025; wider schedule unverified"
+      }
+    },
+    {
+      "key": "bg-primorsko",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Skydive Sofia describes past operations at Primorsko and a 2025 shift toward courses at various locations, without assigning a 2025+ programme to Primorsko. LAND BG offers parachuting by arrangement but is undated; no dated local jump programme was established.",
+      "sources": [
+        {
+          "url": "https://skydivesofia.com/dropzone/",
+          "checked_on": "2026-11-14",
+          "what": "Operator history names Primorsko and describes its 2025 change of focus."
+        },
+        {
+          "url": "https://www.landbg.info/bg/airport/primorsko",
+          "checked_on": "2026-11-14",
+          "what": "Undated airfield service listing includes parachuting by arrangement."
+        }
+      ]
+    },
+    {
+      "key": "gr-polykastro-nea-kavala",
+      "verdict": "closed",
+      "confidence": "medium",
+      "evidence": "The Ministry of Migration identifies its Polykastro accommodation facility at Nea Kavala as the former airstrip. This corroborates the airport directory closure and its 2 March 2016 report of conversion to a refugee camp; no subsequent jump resumption was found.",
+      "sources": [
+        {
+          "url": "https://migration.gov.gr/ris/perifereiakes-monades/domes/domi-polykastroy/",
+          "checked_on": "2026-11-14",
+          "what": "Official facility address explicitly says former airstrip (Πρώην Αεροδιάδρομος)."
+        },
+        {
+          "url": "https://ourairports.com/airports/GR-0004/",
+          "checked_on": "2026-11-14",
+          "what": "Closed airfield listing and dated 2016 conversion report; corroborating lead, not sole evidence."
+        }
+      ]
+    },
+    {
+      "key": "gr-thiva-perneri",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "A club report confirms parachute training at Perneri in spring 2024, completed on 15 June 2024. No 2025+ local jumping evidence was found; the former Skydive Greece homepage now redirects to Skydive Megara, which alone does not prove Perneri closed.",
+      "sources": [
+        {
+          "url": "https://katadromeispierias.blogspot.com/",
+          "checked_on": "2026-11-14",
+          "what": "Club account identifies Perneri and dates the training to 2024, despite a later page publication."
+        },
+        {
+          "url": "https://skydivegreece.gr/",
+          "checked_on": "2026-11-14",
+          "what": "Opened URL redirects to the operator site for Megara."
+        }
+      ]
+    },
+    {
+      "key": "ro-cluj-dezmir",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The national aeroclub notice dated 30 December 2025 assigns Cluj school jumps in 2026 to Targu Mures. Romanian-language searches found no dated 2025+ jumps at this airfield; the transfer of school activity does not establish that all other jumping stopped.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "2026 course notice explicitly assigns Cluj practical parachuting to Targu Mures."
+        }
+      ]
+    },
+    {
+      "key": "ro-iasi-sud",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The national aeroclub notice dated 30 December 2025 assigns Iasi school jumps in 2026 to Suceava. Romanian-language searches found no dated 2025+ jumps at this airfield; the transfer of school activity does not establish that all other jumping stopped.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "2026 course notice explicitly assigns Iasi practical parachuting to Suceava."
+        }
+      ]
+    },
+    {
+      "key": "ro-magura-cisnadie",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Benzoi names Magura and offers tandem booking with a May–October season, but the offer is undated. Its 28 February 2025 blog item concerns parachute certification rather than local jumps; no dated 2025+ Magura activity or calendar was established.",
+      "sources": [
+        {
+          "url": "https://www.benzoi.ro/despre-noi/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies its Magura base and skydiving activities."
+        },
+        {
+          "url": "https://www.benzoi.ro/bookings/services/view/1",
+          "checked_on": "2026-11-14",
+          "what": "Undated tandem offer and May–October season; footer year is not an activity date."
+        },
+        {
+          "url": "https://www.benzoi.ro/blog/",
+          "checked_on": "2026-11-14",
+          "what": "2025 certification article does not document jumps at Magura."
+        }
+      ]
+    },
+    {
+      "key": "ro-oradea",
+      "verdict": "closed",
+      "confidence": "medium",
+      "evidence": "A 6 November 2022 report quotes the club commander explaining that its runway was lost in 2012 and practical parachuting moved to Arad. Oradea is absent from the 2026 national parachuting intake list, and no reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://www.ebihoreanul.ro/stiri/campioana-la-inaltime-povestea-biancai-cret-tanara-oradeanca-de-numai-40-de-kilograme-campioana-nationala-la-parasutism-foto-video-174757.html",
+          "checked_on": "2026-11-14",
+          "what": "Dated report with club commander testimony about loss of runway and training in Arad."
+        },
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "2026 parachuting intake locations omit Oradea."
+        }
+      ]
+    },
+    {
+      "key": "ro-pitesti-geamana",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The national aeroclub notice dated 30 December 2025 lists Pitesti for other flight disciplines but not its 2026 parachuting intake. Romanian-language searches did not establish dated 2025+ local jumps or a closure; an undated general service description is insufficient.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Pitesti appears for gliding and PPL but not parachuting in the 2026 course list."
+        }
+      ]
+    },
+    {
+      "key": "ro-sibiu",
+      "verdict": "seasonal",
+      "confidence": "high",
+      "evidence": "A 20 August 2025 report relays the Hermann Oberth club announcement of tandem jumps at Sibiu on 6–7 September 2025. A 19 May 2026 local bulletin also lists tandem days at the same club on 30 May–1 June 2026, establishing occasional jumping despite school training being assigned to Deva.",
+      "sources": [
+        {
+          "url": "https://mesageruldesibiu.ro/adrenalina-la-maxim-salturi-in-tandem-cu-parasuta-la-aeroclubul-teritorial-sibiu-hermann-oberth/",
+          "checked_on": "2026-11-14",
+          "what": "Dated news report reproduces the club announcement of the September 2025 tandem weekend."
+        },
+        {
+          "url": "https://www.hellosibiu.ro/p/19-mai-2026",
+          "checked_on": "2026-11-14",
+          "what": "Dated local bulletin names the club and three tandem days in May–June 2026; linked Facebook event could not be fetched."
+        },
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "2026 school transfer to Deva applies to school activity, not all tandem events."
+        }
+      ],
+      "corrections": {
+        "season": "Occasional advertised tandem weekends; confirmed 6–7 September 2025 and 30 May–1 June 2026"
+      }
+    },
+    {
+      "key": "md-horesti",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The 19 July 2025 article confirms Aero Team Moldova sells tandem and solo jumps but gives no jumping airfield. Its /ro page names Horesti while /ro2 names Vaduleni–Vadul lui Voda; neither establishes dated jumps at Horesti or proves a reseller-only operation.",
+      "sources": [
+        {
+          "url": "https://diez.md/2025/07/19/cat-costa-sa-sari-cu-parasuta-in-moldova-si-unde-poti-face-asta/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2025 operator jump prices without a site."
+        },
+        {
+          "url": "https://aeroteam.md/ro",
+          "checked_on": "2026-11-14",
+          "what": "Operator page gives Horesti contact address alongside a parachuting offer."
+        },
+        {
+          "url": "https://aeroteam.md/ro2",
+          "checked_on": "2026-11-14",
+          "what": "Operator page instead identifies Vaduleni–Vadul lui Voda in its header."
+        }
+      ]
+    }
+  ]
+}
