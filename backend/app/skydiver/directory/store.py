@@ -28,6 +28,7 @@ from app.skydiver.directory.service import (
     StoreFactory,
     Venue,
     VenueEvent,
+    VenuePoint,
 )
 from app.skydiver.directory.tables import (
     SkydiverProvisionalPlace,
@@ -82,15 +83,12 @@ class SqlDirectoryStore:
         row = self._s.execute(query).scalars().first()
         return self._venue(row) if row else None
 
-    def search(
-        self,
-        *,
-        key: str,
-        country: str | None,
-        after: tuple[str, uuid.UUID] | None,
-        limit: int,
-    ) -> list[tuple[str, Venue]]:
-        query = select(SkydiverVenue).where(
+    @staticmethod
+    def _public(
+        query: Any, key: str, country: str | None, after: tuple[str, uuid.UUID] | None
+    ) -> Any:
+        """Filters shared by the public list and the map: the same venues in both."""
+        query = query.where(
             col(SkydiverVenue.status).in_([s.value for s in PUBLIC_STATUSES])
         )
         if key:
@@ -114,9 +112,56 @@ class SqlDirectoryStore:
             query = query.where(
                 tuple_(col(SkydiverVenue.name_key), col(SkydiverVenue.id)) > after
             )
-        query = query.order_by(col(SkydiverVenue.name_key), col(SkydiverVenue.id))
+        return query.order_by(col(SkydiverVenue.name_key), col(SkydiverVenue.id))
+
+    def search(
+        self,
+        *,
+        key: str,
+        country: str | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, Venue]]:
+        query = self._public(select(SkydiverVenue), key, country, after)
         rows = self._s.execute(query.limit(limit)).scalars().all()
         return [(row.name_key, self._venue(row)) for row in rows]
+
+    def points(
+        self,
+        *,
+        key: str,
+        country: str | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, VenuePoint]]:
+        # Columns only: no alias query per row, unlike `search`.
+        columns = select(
+            col(SkydiverVenue.name_key),
+            col(SkydiverVenue.id),
+            col(SkydiverVenue.name),
+            col(SkydiverVenue.country),
+            col(SkydiverVenue.locality),
+            col(SkydiverVenue.latitude),
+            col(SkydiverVenue.longitude),
+            col(SkydiverVenue.status),
+        ).where(col(SkydiverVenue.latitude).is_not(None))
+        query = self._public(columns, key, country, after)
+        rows = self._s.execute(query.limit(limit)).all()
+        return [
+            (
+                row.name_key,
+                VenuePoint(
+                    id=row.id,
+                    name=row.name,
+                    country=row.country,
+                    locality=row.locality,
+                    latitude=float(row.latitude),
+                    longitude=float(row.longitude),
+                    closed=row.status == VenueStatus.CLOSED.value,
+                ),
+            )
+            for row in rows
+        ]
 
     def review_venues(
         self,

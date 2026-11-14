@@ -18,6 +18,7 @@
 		<li><a href="#sharing">What you can share</a></li>
 		<li><a href="#reviewers">Reports and reviewers</a></li>
 		<li><a href="#account">Your account and sign-in</a></li>
+		<li><a href="#map">The dropzone map</a></li>
 		<li><a href="#data">Export and restore</a></li>
 		<li><a href="#deletion">Deleting your account</a></li>
 		<li><a href="#recovery">Backups and recovery</a></li>
@@ -101,6 +102,16 @@
 		</li>
 		<li>No advertising or analytics scripts run on these pages.</li>
 	</ul>
+</section>
+
+<section aria-labelledby="map">
+	<h2 id="map">The dropzone map</h2>
+	<p>
+		The map loads only when you choose "Show map". Your browser then fetches map images from the
+		OpenStreetMap tile servers, which receive your IP address, browser details, this site's address
+		(not the page) and which area of the map you look at, which follows your search. The choice
+		lasts until you close the browser tab. The list shows the same dropzones without any of this.
+	</p>
 </section>
 
 <section aria-labelledby="data">

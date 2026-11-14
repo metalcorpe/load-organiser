@@ -12,8 +12,8 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.core.db import engine
 from app.skydiver import devdata
-from app.skydiver.directory.policy import SOURCE_NOTE_MAX
-from app.skydiver.directory.service import DirectoryService
+from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
+from app.skydiver.directory.service import DirectoryService, VenueInput
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.opportunities.store import sql_listing_store_factory
@@ -116,6 +116,249 @@ def test_loads_through_the_rules_once_and_leaves_undated_listings_in_review(tmp_
     assert again["skipped"] == 4
 
 
+FIXTURES = Path(__file__).parent / "fixtures" / "dropzones"
+
+
+def _only_this_run(monkeypatch: pytest.MonkeyPatch, tag: str) -> None:
+    """The test database is shared: other tests' venues sit at the fixture's places."""
+    real = devdata._stored_venues
+
+    def tagged(engine: Any) -> dict[str, list[devdata.StoredVenue]]:
+        with engine.connect() as conn:
+            ids = set(conn.execute(text("SELECT id FROM skydiver_venue WHERE name LIKE :t"), {"t": f"%{tag}%"}).scalars())  # fmt: skip
+        return {c: [v for v in vs if v.id in ids] for c, vs in real(engine).items()}
+
+    monkeypatch.setattr(devdata, "_stored_venues", tagged)
+
+
+def test_loads_the_dropzone_inventory_with_coordinates_once(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Country files load as venues; `_` files are skipped; known dropzones are not doubled."""
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    clock = lambda: datetime.now(UTC)  # noqa: E731
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=clock)  # fmt: skip
+    listings = OpportunityService(stores=sql_listing_store_factory(engine), clock=clock)  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    # The fixture with this run's tag, so runs sharing the database stay independent.
+    for source in FIXTURES.iterdir():
+        text_in = source.read_text(encoding="utf-8").replace("TAG", tag)
+        (folder / source.name).write_text(text_in, encoding="utf-8")
+    path = tmp_path / "dev.json"
+    path.write_text(json.dumps(_fixture(tag)))  # "Dev DZ <tag>", ES, no coordinates
+
+    first = devdata.load(engine, path, actor, directory, listings)
+    report = first["dropzones"]
+    dev_dz = directory.search(query=f"Dev DZ {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
+    active_dz = directory.search(query=f"Active Field {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
+    assert {k: v for k, v in report.items() if k != "refused"} == {
+        "files": 1, "added": 5, "closed": 1, "skipped": 0, "resumed": 0,
+        "duplicates": [
+            # ~500 m from a dropzone this run added, under another name.
+            {"key": f"es-{tag}-near-active", "matched": str(active_dz.id), "by": "distance"},
+            # "Aeródromo Dev DZ" is the listings' "Dev DZ": the same place words.
+            {"key": f"es-{tag}-listed-already", "matched": str(dev_dz.id), "by": "name"},
+        ],
+        "located": 1, "aliases_dropped": 0,
+    }  # fmt: skip
+    # Bad records and a broken file are refused one by one; everything else loaded.
+    refused = report["refused"]
+    assert refused[-1]["file"] == "PT.json"  # files load in name order
+    assert refused[:-1] == [
+        {"key": f"es-{tag}-unsourced", "reason": "source_required"},
+        {"key": f"es-{tag}-bad-status", "reason": "status_invalid"},
+        {"key": f"Bad Key {tag}", "reason": "key_invalid"},
+        {"key": f"es-{tag}-bad-coordinates", "reason": "coordinates_invalid"},
+    ]
+    # Nothing was left behind for refused records, not even a draft.
+    for name in ("Unsourced Field", "Bad Status", "Bad Coordinates"):
+        with engine.connect() as conn:
+            found = conn.execute(text("SELECT count(*) FROM skydiver_venue WHERE name = :n"), {"n": f"{name} {tag}"}).scalar_one()  # fmt: skip
+        assert found == 0, name
+
+    def venue(name: str) -> dict[str, Any]:
+        page = directory.search(query=name, country="ES", cursor=None, limit=None)
+        assert len(page.items) == 1, name
+        v = page.items[0]
+        return {
+            "status": v.status.value, "lat": v.latitude, "lon": v.longitude,
+            "aliases": sorted(a.name for a in v.aliases), "note": v.source_note,
+            "url": v.source_url, "checked_on": v.checked_on.isoformat() if v.checked_on else None,
+        }  # fmt: skip
+
+    active = venue(f"Active Field {tag}")
+    assert active["status"] == "listed" and (active["lat"], active["lon"]) == (42.25857, 3.137)  # fmt: skip
+    assert active["aliases"] == ["LEXX", f"Skydive Active {tag}"]
+    assert (active["url"], active["checked_on"]) == ("https://example.org/federation", "2026-11-13")  # fmt: skip
+    assert active["note"].startswith(f"dev-data:es-{tag}-active ")
+    assert venue(f"Closed Field {tag}")["status"] == "closed"
+    unplaced = venue(f"Unplaced Field {tag}")
+    assert (unplaced["status"], unplaced["lat"]) == ("listed", None)
+    assert unplaced["checked_on"] == "2026-11-14"  # the file's research day
+    assert unplaced["note"].endswith("Research status: uncertain.")
+    # The listings' own venue, found by the dropzone's name, got the coordinates.
+    known = venue(f"Dev DZ {tag}")
+    assert (known["lat"], known["lon"]) == (41.5, 2.1)
+    assert directory.search(query=f"Aeródromo Dev {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
+    # An alias shared with another dropzone (an operator brand) does not make it the same one.
+    second = venue(f"Second Field {tag}")
+    assert (second["status"], second["aliases"]) == ("listed", [f"Skydive Active {tag}"])  # fmt: skip
+    points = directory.map_points(query=tag, country="ES", cursor=None, limit=None)
+    assert sorted(p.name for p in points.items) == sorted(
+        [
+            f"Active Field {tag}",
+            f"Second Field {tag}",
+            f"Closed Field {tag}",
+            f"Active {tag} West Field",  # shares Active Field's words, 400 km away
+            f"Dev DZ {tag}",
+        ]  # fmt: skip
+    )
+
+    again = devdata.load(engine, path, actor, directory, listings)["dropzones"]
+    assert (again["added"], again["skipped"], again["located"]) == (0, 5, 0)
+    assert [d["key"] for d in again["duplicates"]] == [f"es-{tag}-near-active", f"es-{tag}-listed-already"]  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    ("stored", "record", "expected"),
+    [
+        # The cases found in the 2026-11-14 seed: older listings' venues, renamed.
+        ("Skydive Madrid (Aeródromo de Lillo)", "Aeródromo de Lillo", "name"),
+        (
+            "Skydive Bulgaria dropzone, Ihtiman Airfield (LBHT)",
+            "Ihtiman Airfield",
+            "name",
+        ),
+        ("Sapareva Banya Airport", "Sapareva Banya Airfield (Kraynitsi)", "name"),
+        ("Shumen Airfield (Gradishte)", "Shumen Gradishte Airfield", "name"),
+        (
+            "Aeródromo de Proença-a-Nova",
+            "Aeródromo Municipal de Proença-a-Nova (Moitas)",
+            "name",
+        ),
+        ("Kopaida Airfield", "Kopaida Airfield (Kastro)", "name"),
+        # Two airfields of one town; generic words alone; different places.
+        ("Wiener Neustadt West Airfield", "Wiener Neustadt Ost Airfield", None),
+        ("Aeródromo Municipal", "Skydive Centre", None),
+        ("Aeródromo de Évora", "Aeródromo de Portimão", None),
+    ],
+)
+def test_same_place_by_place_words(stored: str, record: str, expected: str | None) -> None:  # fmt: skip
+    venue = devdata.StoredVenue(uuid.uuid4(), devdata.place_words(stored), None)
+    found = devdata.same_place(devdata.place_words(record), (40.0, -3.0), [venue])
+    assert (found[1] if found else None) == expected
+
+
+def test_an_alias_only_one_record_carries_finds_the_venue_it_names(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """An operator's office stored as a venue is the airfield whose record names it; a
+    brand two records carry identifies neither."""
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC))  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    office, brand = (
+        directory.create_venue(
+            actor,
+            VenueInput(
+                name=name,
+                country="ES",
+                source_url="https://example.org/office",
+                checked_on=datetime.now(UTC).date(),
+            ),
+        )  # fmt: skip
+        for name in (f"Jump Office {tag}", f"Shared Brand {tag}")
+    )
+
+    def record(key: str, name: str, aliases: list[str], lat: float) -> dict[str, Any]:
+        return {
+            "key": f"es-{tag}-{key}", "name": f"{name} {tag}", "aliases": aliases,
+            "country": "ES", "latitude": lat, "longitude": -15.5, "status": "active",
+            "sources": [{"url": "https://example.org/airfield", "checked_on": "2026-11-14"}],
+        }  # fmt: skip
+
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    (folder / "ES.json").write_text(
+        json.dumps(
+            {
+                "country": "ES",
+                "dropzones": [
+                    record("airfield", "Real Airfield", [f"Jump Office {tag}"], 27.78),
+                    record("north", "North Strip", [f"Shared Brand {tag}"], 28.4),
+                    record("south", "South Strip", [f"Shared Brand {tag}"], 27.9),
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    report = devdata.load_dropzones(engine, folder, actor, directory)
+    assert report["duplicates"] == [{"key": f"es-{tag}-airfield", "matched": str(office.id), "by": "alias"}]  # fmt: skip
+    assert (report["added"], report["located"]) == (2, 1)
+    located, _ = directory.reviewer_venue(actor, office.id)
+    assert (located.latitude, located.longitude) == (27.78, -15.5)
+    untouched, _ = directory.reviewer_venue(actor, brand.id)
+    assert untouched.latitude is None
+
+
+def test_same_place_by_distance_and_its_limit_on_names() -> None:
+    here = (38.355397, 21.479198)
+    venue = devdata.StoredVenue(uuid.uuid4(), devdata.place_words("Mesolongi Civil Airfield"), here)  # fmt: skip
+    near = (38.3600, 21.4792)  # ~500 m, spelled differently
+    assert devdata.same_place(devdata.place_words("Messolonghi Civil Airfield"), near, [venue]) == (venue.id, "distance")  # fmt: skip
+    # The same words 50 km away name another place; without coordinates, they match.
+    far = (38.80, 21.48)
+    words = devdata.place_words("Mesolongi Airfield")
+    assert devdata.same_place(words, far, [venue]) is None
+    assert devdata.same_place(words, None, [venue]) == (venue.id, "name")
+
+
+def test_an_unfinished_dropzone_stays_a_draft_and_the_next_run_finishes_it(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    clock = lambda: datetime.now(UTC)  # noqa: E731
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=clock)  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    record = json.loads((FIXTURES / "ES.json").read_text(encoding="utf-8").replace("TAG", tag))  # fmt: skip
+    record["dropzones"] = [d for d in record["dropzones"] if d["key"] == f"es-{tag}-closed"]  # fmt: skip
+    (folder / "ES.json").write_text(json.dumps(record), encoding="utf-8")
+
+    real = directory.set_status
+
+    def interrupted(*_args: Any, **_kwargs: Any) -> Any:
+        raise DirectoryRuleError("interrupted")
+
+    monkeypatch.setattr(directory, "set_status", interrupted)
+    first = devdata.load_dropzones(engine, folder, actor, directory)
+    assert first["refused"] == [{"key": f"es-{tag}-closed", "reason": "left as draft: interrupted"}]  # fmt: skip
+    assert directory.search(query=f"Closed Field {tag}", country=None, cursor=None, limit=None).items == []  # fmt: skip
+
+    monkeypatch.setattr(directory, "set_status", real)
+    second = devdata.load_dropzones(engine, folder, actor, directory)
+    assert (second["resumed"], second["added"], second["closed"]) == (1, 1, 1)
+    [closed] = directory.search(query=f"Closed Field {tag}", country=None, cursor=None, limit=None).items  # fmt: skip
+    assert closed.status.value == "closed"
+
+
+def test_dropzone_files_skip_notes(tmp_path: Path) -> None:
+    for name in ("FR.json", "_coverage.json", "_osm-sweep.json", "README.md"):
+        (tmp_path / name).write_text("{}")
+    assert [p.name for p in devdata.dropzone_files(tmp_path)] == ["FR.json"]
+    assert devdata.dropzone_files(tmp_path / "missing") == []
+
+
 def test_needs_a_reviewer() -> None:
     accounts = Accounts.create()
     with pytest.raises(devdata.DevDataError):
@@ -123,8 +366,37 @@ def test_needs_a_reviewer() -> None:
 
 
 def test_refuses_outside_local(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SKYDIVER_DEV_DATA", "1")
     monkeypatch.setattr(settings, "ENVIRONMENT", "production")
     assert devdata.main(["load", "x.json", "--reviewer", "a@example.com"]) == 2
+
+
+def test_refuses_without_the_explicit_opt_in(monkeypatch: pytest.MonkeyPatch) -> None:
+    """ENVIRONMENT defaults to local in settings, so that alone must not be enough."""
+    monkeypatch.setattr(settings, "ENVIRONMENT", "local")
+    monkeypatch.delenv("SKYDIVER_DEV_DATA", raising=False)
+    assert devdata.main(["load", "x.json", "--reviewer", "a@example.com"]) == 2
+
+    local = {"SKYDIVER_DEV_DATA": "1", "ENVIRONMENT": "local"}
+    assert devdata.dev_data_refusal(local, "local", "127.0.0.1") is None
+    assert devdata.dev_data_refusal(local, "local", "::1") is None
+    assert devdata.dev_data_refusal({"ENVIRONMENT": "local"}, "local", "localhost")
+    # The setting's default without the variable itself.
+    assert devdata.dev_data_refusal({"SKYDIVER_DEV_DATA": "1"}, "local", "127.0.0.1")
+    assert devdata.dev_data_refusal({**local, "SKYDIVER_DEV_DATA": "yes"}, "local", "127.0.0.1")  # fmt: skip
+    assert devdata.dev_data_refusal(local, "local", "db.example.org")
+
+
+def test_refuses_a_dropzones_path_that_is_not_a_folder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("SKYDIVER_DEV_DATA", "1")
+    monkeypatch.setenv("ENVIRONMENT", "local")
+    monkeypatch.setattr(settings, "ENVIRONMENT", "local")
+    monkeypatch.setattr(settings, "POSTGRES_SERVER", "127.0.0.1")
+    missing = str(tmp_path / "nowhere")
+    args = ["load", "x.json", "--reviewer", "a@example.com", "--dropzones", missing]
+    assert devdata.main(args) == 2
 
 
 def test_the_dev_listings_file_matches_what_the_loader_reads() -> None:

@@ -289,6 +289,7 @@ ANONYMOUS_ALLOWED = {
     ("GET", "/opportunities"),
     ("GET", "/opportunities/countries"),
     ("GET", "/venues"),
+    ("GET", "/venue-points"),  # the same public venues, as map points
 }
 
 

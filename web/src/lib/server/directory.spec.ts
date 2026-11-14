@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import type { ApiTransport, TransportResult } from './api/transport.ts';
-import { getVenue, isVenueOut, searchVenues, updatePlace } from './directory.ts';
+import {
+	getVenue,
+	isVenueOut,
+	isVenuePoint,
+	listVenuePoints,
+	searchVenues,
+	updatePlace
+} from './directory.ts';
 
 const VENUE = {
 	id: '0b3e4f0c-1d2e-4f5a-8b6c-7d8e9f0a1b2c',
@@ -48,6 +55,34 @@ describe('directory client', () => {
 				options: { query: { q: 'sky', country: 'ES', cursor: undefined, limit: '10' } }
 			}
 		]);
+	});
+
+	it('loads one bounded page of map points with the list filters', async () => {
+		const point = {
+			id: VENUE.id,
+			name: VENUE.name,
+			locality: null,
+			country: 'ES',
+			lat: 42.25,
+			lon: 3.13,
+			closed: false
+		};
+		const api = fake(ok({ items: [point], next_cursor: 'more' }));
+		const outcome = await listVenuePoints(api, { q: 'sky', country: 'ES' });
+		expect(outcome).toEqual({ ok: true, value: { points: [point], truncated: true } });
+		expect(api.calls).toEqual([
+			{
+				operation: 'listVenuePoints',
+				options: { query: { q: 'sky', country: 'ES', limit: '1000' } }
+			}
+		]);
+		expect(isVenuePoint({ ...point, lat: 91 })).toBe(false);
+		expect(isVenuePoint({ ...point, lon: Number.NaN })).toBe(false);
+		expect(isVenuePoint({ ...point, closed: 'no' })).toBe(false);
+		expect(await listVenuePoints(fake(ok({ items: [{ ...point, lat: null }] })), {})).toEqual({
+			ok: false,
+			reason: 'unavailable'
+		});
 	});
 
 	it('rejects malformed pages instead of rendering them', async () => {

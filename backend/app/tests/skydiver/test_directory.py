@@ -171,6 +171,93 @@ def test_pagination_is_stable_and_complete(api: Api) -> None:
     assert bad.status_code == 422 and bad.json() == {"detail": "cursor_invalid"}
 
 
+# ---------------------------------------------------------------- map points
+
+
+def points(api: Api, **params: Any) -> dict[str, Any]:
+    response = api.call("GET", "/venue-points", **params)
+    assert response.status_code == 200, response.text
+    assert response.headers["cache-control"] == "no-store"
+    return dict(response.json())
+
+
+def test_map_points_are_the_public_venues_with_coordinates(api: Api) -> None:
+    base = token()
+    here: dict[str, Any] = {"latitude": 42.258571, "longitude": 3.137}
+    listed = api.venue(f"{base} Listed", locality="Field", **here)
+    closed = api.venue(f"{base} Closed", **here)
+    closing = api.call("POST", f"/directory/venues/{closed['id']}/status", api.reviewer,
+                       {"status": "closed"})  # fmt: skip
+    assert closing.status_code == 200, closing.text
+    api.venue(f"{base} Nowhere")  # no coordinates: in the list, not on the map
+    draft = api.call("POST", "/directory/venues", api.reviewer,
+                     {"name": f"{base} Draft", "country": "ES", "listed": False, **here})  # fmt: skip
+    assert draft.status_code == 201 and draft.json()["status"] == "draft", draft.text
+    merged = api.venue(f"{base} Merged", **here)
+    merging = api.call("POST", f"/directory/venues/{merged['id']}/merge", api.reviewer,
+                       {"into": listed["id"]})  # fmt: skip
+    assert merging.status_code == 200, merging.text
+
+    page = points(api, q=base)
+    assert page["next_cursor"] is None
+    assert page["items"] == [
+        {"id": closed["id"], "name": f"{base} Closed", "locality": None,
+         "country": "ES", "lat": 42.258571, "lon": 3.137, "closed": True},
+        {"id": listed["id"], "name": f"{base} Listed", "locality": "Field",
+         "country": "ES", "lat": 42.258571, "lon": 3.137, "closed": False},
+    ]  # fmt: skip
+    # Exactly what the list shows, less the venue without coordinates.
+    assert {v["id"] for v in api.search(base)} - {p["id"] for p in page["items"]} == {
+        v["id"] for v in api.search(f"{base} Nowhere")
+    }
+
+
+def test_map_points_filter_like_the_list(api: Api) -> None:
+    base = token()
+    here: dict[str, Any] = {"latitude": 50.0, "longitude": 4.0}
+    spain = api.venue(f"{base} Field", country="ES", **here)
+    api.call("POST", f"/directory/venues/{spain['id']}/aliases", api.reviewer,
+             {"name": f"{base} Alias Ñame"})  # fmt: skip
+    belgium = api.venue(f"{base} Field", country="BE", **here)
+
+    assert [p["id"] for p in points(api, q=f"{base} alias name")["items"]] == [
+        spain["id"]
+    ]
+    assert [p["id"] for p in points(api, q=base, country="be")["items"]] == [
+        belgium["id"]
+    ]
+    assert {p["id"] for p in points(api, q=base)["items"]} == {
+        spain["id"], belgium["id"]
+    }  # fmt: skip
+    bad = api.call("GET", "/venue-points", country="XX")
+    assert bad.status_code == 422 and bad.json() == {"detail": "country_invalid"}
+
+
+def test_map_points_are_bounded_and_paged(api: Api) -> None:
+    base = token()
+    created = {
+        api.venue(f"{base} {i}", latitude=10.0 + i, longitude=20.0)["id"]
+        for i in range(5)
+    }
+    seen: list[str] = []
+    cursor = None
+    while True:
+        params: dict[str, Any] = {"q": base, "limit": 2}
+        if cursor:
+            params["cursor"] = cursor
+        page = points(api, **params)
+        assert len(page["items"]) <= 2
+        seen += [p["id"] for p in page["items"]]
+        cursor = page["next_cursor"]
+        if not cursor:
+            break
+    assert len(seen) == len(set(seen)) == 5 and set(seen) == created
+    assert api.call("GET", "/venue-points", limit=1001).status_code == 422
+    assert api.call("GET", "/venue-points", cursor="!!!").json() == {
+        "detail": "cursor_invalid"
+    }
+
+
 # ----------------------------------------------------------------- identity
 
 

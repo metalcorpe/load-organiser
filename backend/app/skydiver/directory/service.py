@@ -81,6 +81,25 @@ class VenuePage:
 
 
 @dataclass(frozen=True)
+class VenuePoint:
+    """A public venue with coordinates, as drawn on the map."""
+
+    id: uuid.UUID
+    name: str
+    country: str
+    locality: str | None
+    latitude: float
+    longitude: float
+    closed: bool
+
+
+@dataclass(frozen=True)
+class VenuePointPage:
+    items: list[VenuePoint]
+    next_cursor: str | None
+
+
+@dataclass(frozen=True)
 class ResolvedVenue:
     venue: Venue
     # Set when the requested ID was merged into `venue`.
@@ -127,6 +146,17 @@ class DirectoryStore(Protocol):
         limit: int,
     ) -> list[tuple[str, Venue]]:
         """Public venues whose name or alias key contains `key`, ordered by name key."""
+        ...
+
+    def points(
+        self,
+        *,
+        key: str,
+        country: str | None,
+        after: tuple[str, uuid.UUID] | None,
+        limit: int,
+    ) -> list[tuple[str, VenuePoint]]:
+        """The same public venues as `search`, only those with coordinates."""
         ...
 
     def insert_venue(self, values: dict[str, Any], now: datetime) -> uuid.UUID: ...
@@ -237,6 +267,33 @@ class DirectoryService:
             last_key, last = rows[size - 1]
             next_cursor = encode_cursor(last_key, last.id)
         return VenuePage(items=items, next_cursor=next_cursor)
+
+    def map_points(
+        self,
+        *,
+        query: str | None,
+        country: str | None,
+        cursor: str | None,
+        limit: int | None,
+    ) -> VenuePointPage:
+        """What `search` finds, reduced to map points; venues without coordinates are left out."""
+        key = policy.search_key(query or "")[: policy.QUERY_MAX]
+        code = policy.country_code(country) if country else None
+        after = decode_cursor(cursor) if cursor else None
+        size = policy.page_size(
+            limit,
+            default=policy.POINTS_PAGE_DEFAULT,
+            maximum=policy.POINTS_PAGE_MAX,
+        )
+        with self._stores() as store:
+            rows = store.points(key=key, country=code, after=after, limit=size + 1)
+        next_cursor = None
+        if len(rows) > size:
+            last_key, last = rows[size - 1]
+            next_cursor = encode_cursor(last_key, last.id)
+        return VenuePointPage(
+            items=[point for _, point in rows[:size]], next_cursor=next_cursor
+        )
 
     def public_venue(self, venue_id: uuid.UUID) -> ResolvedVenue:
         with self._stores() as store:
