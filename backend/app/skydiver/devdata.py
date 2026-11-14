@@ -66,6 +66,7 @@ from app.skydiver.directory.policy import (
     web_url,
 )
 from app.skydiver.directory.service import (
+    MAX_MERGE_HOPS,
     DirectoryService,
     EditConflict,
     VenueChanges,
@@ -317,6 +318,24 @@ def _venue_status(engine: Engine, venue_id: uuid.UUID) -> str:
         )
 
 
+def _surviving(engine: Engine, venue_id: uuid.UUID) -> uuid.UUID | None:
+    """The venue `venue_id` resolves to through merges (itself if not merged)."""
+    with engine.connect() as conn:
+        for _ in range(MAX_MERGE_HOPS):
+            row = conn.execute(
+                text(
+                    "SELECT status, merged_into_id FROM skydiver_venue WHERE id = :id"
+                ),
+                {"id": venue_id},
+            ).one_or_none()
+            if row is None:
+                return None
+            if row.status != "merged":
+                return venue_id
+            venue_id = row.merged_into_id
+    return None
+
+
 DROPZONE_STATUSES = frozenset({"active", "seasonal", "uncertain", "closed"})
 # The local load shows what the research confirmed; `uncertain` leads stay drafts.
 LOCAL_PUBLISH = DROPZONE_STATUSES - {"uncertain"}
@@ -544,10 +563,12 @@ def load_dropzones(
             if resumed:
                 if _venue_status(engine, loaded[key]) != "draft":
                     report["skipped"] += 1
-                    # Loaded before the details existed: add them where it may publish.
-                    if publishes(dz):
+                    # Loaded before the details existed: add them where it may publish,
+                    # to the surviving venue when this one was merged into another.
+                    target = _surviving(engine, loaded[key]) if publishes(dz) else None
+                    if target is not None:
                         report["detailed"] += _fill_details(
-                            directory, actor, loaded[key], dz
+                            directory, actor, target, dz
                         )
                     continue
                 venue_id = loaded[key]  # a draft an earlier run left, or kept

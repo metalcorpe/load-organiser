@@ -485,6 +485,42 @@ def test_a_venue_loaded_before_details_existed_gets_them_on_the_next_run(
     assert again["detailed"] == 0
 
 
+def test_details_of_a_merged_research_venue_go_to_the_surviving_one(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The research copy of an older venue was merged into it: the older one gets them."""
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC))  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    today = datetime.now(UTC).date()
+    older = directory.create_venue(actor, VenueInput(
+        name=f"Older Field {tag}", country="GR", source_url="https://example.org/older", checked_on=today,
+    ))  # fmt: skip
+    copy = directory.create_venue(actor, VenueInput(
+        name=f"Older Field {tag} (Copy)", country="GR", source_url="https://example.org/copy",
+        checked_on=today, source_note=f"dev-data:gr-{tag}-older Unreviewed candidate, local development only.",
+    ))  # fmt: skip
+    directory.merge(actor, copy.id, older.id)
+    record = {
+        "key": f"gr-{tag}-older", "name": f"Older Field {tag} (Copy)", "aliases": [], "country": "GR",
+        "latitude": 38.45, "longitude": 23.14, "status": "active",
+        "operators": [{"name": f"Skydive {tag}", "website": "https://skydive.example/"}],
+        "sources": [{"url": "https://example.org/copy", "checked_on": "2026-11-14"}],
+    }  # fmt: skip
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    (folder / "GR.json").write_text(json.dumps({"country": "GR", "dropzones": [record]}), encoding="utf-8")  # fmt: skip
+
+    report = devdata.load_dropzones(engine, folder, actor, directory)
+    assert (report["skipped"], report["detailed"]) == (1, 1)
+    survivor, _ = directory.reviewer_venue(actor, older.id)
+    assert survivor.operators == (
+        Operator(f"Skydive {tag}", "https://skydive.example/"),
+    )
+
+
 def test_details_drop_a_quirk_instead_of_the_record() -> None:
     long_name = "N" * 200
     details = devdata._details({
