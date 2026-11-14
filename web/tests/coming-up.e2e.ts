@@ -91,8 +91,11 @@ test.describe('coming up on the logbook', () => {
 		await expect(items.nth(1)).toContainText(`Autumn boogie ${tag}`);
 		await expect(list).not.toContainText('Cancelled camp');
 
-		await expect(page.getByRole('link', { name: 'See all saved' })).toHaveAttribute('href', '/saved');
-		await expect(page.getByRole('link', { name: 'See all plans' })).toHaveAttribute('href', '/plans');
+		// Managed in one place, from Me: plans and saved events.
+		await expect(page.getByRole('link', { name: 'Plans and saved events' })).toHaveAttribute(
+			'href',
+			'/plans'
+		);
 		await items.nth(1).getByRole('link', { name: `Autumn boogie ${tag}` }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/events/${boogie}`);
 

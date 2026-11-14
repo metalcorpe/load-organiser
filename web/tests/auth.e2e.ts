@@ -50,7 +50,8 @@ test.describe('registration and verification', () => {
 
 		await page.getByRole('link', { name: 'Sign in' }).last().click();
 		await signIn(page, email);
-		await expect(page).toHaveURL(`${ORIGIN}/`);
+		// No destination named: the Logbook.
+		await expect(page).toHaveURL(`${ORIGIN}/jumps`);
 		await expect(page.getByTestId('current-account')).toHaveText(email);
 
 		const cookie = await sessionCookie(context);
@@ -58,7 +59,7 @@ test.describe('registration and verification', () => {
 		expect(cookie?.domain).toBe('127.0.0.1'); // host-only: no Domain attribute
 
 		await page.goto('/profile');
-		await expect(page.getByTestId('email-status')).toHaveText('Confirmed');
+		await expect(page.getByTestId('email-status')).toHaveText('Email confirmed');
 		// The secret is never rendered or serialised into page data.
 		expect(await page.content()).not.toContain(cookie!.value);
 		const data = await page.request.get('/profile/__data.json');

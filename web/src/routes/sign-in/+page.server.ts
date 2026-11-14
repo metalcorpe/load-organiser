@@ -19,7 +19,8 @@ const NOTICES = new Set([
 
 export const load: PageServerLoad = ({ locals, url }) => {
 	const returnTo = safeReturnPath(url.searchParams.get('returnTo'));
-	if (locals.viewer) redirect(303, returnTo ?? '/profile');
+	// Signed in already, or just now, without a destination: the Logbook.
+	if (locals.viewer) redirect(303, returnTo ?? '/jumps');
 	const notice = url.searchParams.get('notice');
 	return {
 		returnTo,
@@ -56,6 +57,6 @@ export const actions: Actions = {
 		storeSession(cookies, outcome.value.secret, new Date(outcome.value.viewer.sessionExpiresAt));
 		// Drop any cached pages (including back/forward cache) from a previous account.
 		locals.clearSiteCache = true;
-		redirect(303, safeReturnPath(url.searchParams.get('returnTo')) ?? '/');
+		redirect(303, safeReturnPath(url.searchParams.get('returnTo')) ?? '/jumps');
 	}
 };
