@@ -74,7 +74,8 @@ test.describe('maintenance tools', () => {
 		await guestPage.goto(`/?q=${base}`);
 		await expect(guestPage.getByRole('link', { name: `${base} Boogie` })).toHaveAttribute(
 			'href',
-			`/events/${id}`
+			// The link carries the search, for "Back to results".
+			`/events/${id}?results=${encodeURIComponent(`/?q=${base}`)}`
 		);
 		await guest.close();
 	});

@@ -4,8 +4,8 @@ const PLACEHOLDER_ORIGIN = 'https://return.invalid';
  * Returns a same-origin relative path (path + query) or `null`.
  * Rejects absolute/protocol-relative URLs, backslash tricks and control characters.
  */
-export function safeReturnPath(raw: string | null | undefined): string | null {
-	if (!raw || raw.length > 512) return null;
+export function safeReturnPath(raw: string | null | undefined, max = 512): string | null {
+	if (!raw || raw.length > max) return null;
 	if (!raw.startsWith('/') || raw.startsWith('//')) return null;
 	// eslint-disable-next-line no-control-regex
 	if (/[\u0000-\u001f\u007f\\]/.test(raw)) return null;

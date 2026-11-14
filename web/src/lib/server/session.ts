@@ -7,6 +7,11 @@ function config() {
 	return sessionCookieConfig(SESSION_COOKIE_MODE, APP_ORIGIN);
 }
 
+/** Whether cookies must be Secure here (false only in the loopback dev mode). */
+export function cookieSecure(): boolean {
+	return config().secure;
+}
+
 export function readSessionSecret(cookies: Cookies): string | undefined {
 	const value = cookies.get(config().name);
 	// Opaque URL-safe secret; anything else is not ours.

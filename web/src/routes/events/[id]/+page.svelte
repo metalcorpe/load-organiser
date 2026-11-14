@@ -59,13 +59,15 @@
 			!price && !item.price_note && 'price'
 		].filter((v): v is string => Boolean(v))
 	);
-	const signInToSave = $derived(
-		`/sign-in?returnTo=${encodeURIComponent(`/events/${item.id}?save=1`)}`
-	);
+	// The board search this was opened from stays with the page through sign-in and saving.
+	const signInToSave = $derived(data.signInToSave);
+	const actionHref = (name: string) =>
+		data.results ? `?/${name}&results=${encodeURIComponent(data.results)}` : `?/${name}`;
 </script>
 
 <svelte:head>
 	<title>{item.title} · Events · Load Organiser</title>
+	<link rel="canonical" href={data.canonical} />
 	<meta
 		name="description"
 		content="{CATEGORY_LABEL[item.category]} in {countryName(item.country)}, {formatRange(
@@ -76,7 +78,13 @@
 </svelte:head>
 
 <section class="hero type-{item.category}" aria-labelledby="listing-title">
-	<a class="back" href="/">All listings</a>
+	<!-- "Back to results" only with a search to return to; "All events" always starts afresh. -->
+	<p class="back-links">
+		{#if data.results}
+			<a class="back" href={data.results}>Back to results</a>
+		{/if}
+		<a class="back" href="/">All events</a>
+	</p>
 	<p class="pills">
 		<span class="type-pill"><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]}</span>
 		{#if status}<span class="badge status">{status}</span>{/if}
@@ -155,7 +163,7 @@
 		<a class="button secondary" href={signInToSave} data-sign-in>Sign in to save this privately</a>
 	{:else if isSaved}
 		<p role="status" class="ok">Saved privately — you are not registered.</p>
-		<form method="POST" action="?/unsave">
+		<form method="POST" action={actionHref('unsave')}>
 			<button class="button secondary" type="submit">Remove from saved</button>
 		</form>
 	{:else}
@@ -165,7 +173,7 @@
 				still want to.
 			</p>
 		{/if}
-		<form method="POST" action="?/save">
+		<form method="POST" action={actionHref('save')}>
 			<button class="button secondary" type="submit">Save privately</button>
 		</form>
 	{/if}
@@ -242,8 +250,13 @@
 		margin: 0;
 	}
 
+	.back-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.25rem;
+	}
+
 	.back {
-		justify-self: start;
 		display: inline-flex;
 		align-items: center;
 		min-height: 44px;

@@ -37,16 +37,22 @@
 
 <section class="card" aria-labelledby="export-heading">
 	<h2 id="export-heading">Export</h2>
-	<p>
-		One JSON file (format version 1) with your jumps and their history, gear with rigs and service
-		entries, your prior jump count, licence, private places, saved listings and visit plans, plus the names of
-		the public dropzones and listings they point to.
-	</p>
+	<p>All your private records in one JSON file.</p>
 	<p class="hint">
-		It holds your private notes and serial numbers, so store it somewhere safe. It does not contain
-		your password, sessions, email address or any other person's records. One export every five
-		minutes.
+		It holds your private notes and serial numbers, so store it somewhere safe. One export every
+		five minutes.
 	</p>
+	<details class="included">
+		<summary>What's included?</summary>
+		<p>
+			Format version 1: your jumps and their history, gear with rigs and service entries, your
+			prior jump count, licence, private places, saved listings and visit plans, plus the names of
+			the public dropzones and listings they point to.
+		</p>
+		<p>
+			It does not contain your password, sessions, email address or any other person's records.
+		</p>
+	</details>
 	{#if data.exportRefused}
 		<p class="form-error" role="alert">{recordsMessage(data.exportRefused)}</p>
 	{/if}
@@ -157,6 +163,11 @@
 </section>
 
 <style>
+	.included p {
+		margin: 0 0 0.5rem;
+		font-size: 0.95rem;
+	}
+
 	.card {
 		border: 1px solid var(--border);
 		border-radius: var(--radius);

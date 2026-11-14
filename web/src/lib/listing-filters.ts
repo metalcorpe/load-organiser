@@ -1,5 +1,6 @@
 /** Board filters parsed from the URL: only known values pass; everything else is dropped. */
 import { isCountryCode } from '#lib/countries.ts';
+import { safeReturnPath } from '#lib/safe-return.ts';
 
 export const CATEGORY_VALUES = ['event', 'boogie', 'camp', 'course'] as const;
 export const DISCIPLINE_VALUES = [
@@ -59,4 +60,56 @@ export function boardHref(filters: BoardFilters, cursor?: string): string {
 	if (cursor) params.set('cursor', cursor);
 	const search = params.toString();
 	return search ? `/?${search}` : '/';
+}
+
+/**
+ * Longest board search accepted as a context. A search of 80 characters of text, every
+ * filter and a page cursor fits; the same local-path checks apply as for any return path.
+ */
+export const RESULTS_LIMIT = 2048;
+
+/** Any absolute base works: only the path and query of a checked local path are read. */
+const BOARD_BASE = 'https://board.invalid';
+
+/**
+ * The board search an event was opened from ("Back to results"), from an untrusted `results`
+ * parameter. Only a local path to the board itself passes (no other page, host, scheme or
+ * backslash: safeReturnPath first), and it is rebuilt from its known filters and page cursor,
+ * so nothing else in it survives. The plain board (no filters, first page) is not a search
+ * context: null, and the event page offers only "All events".
+ */
+export function resultsPath(raw: string | null | undefined): string | null {
+	const path = safeReturnPath(raw, RESULTS_LIMIT);
+	if (!path) return null;
+	const url = new URL(path, BOARD_BASE);
+	if (url.pathname !== '/') return null;
+	const cursor = (url.searchParams.get('cursor') ?? '').slice(0, 512);
+	const href = boardHref(parseFilters(url.searchParams), cursor || undefined);
+	return href === '/' ? null : href;
+}
+
+/** Longest return path the sign-in pages accept (safeReturnPath checks the decoded value). */
+const RETURN_LIMIT = 512;
+/** A sane cap for an ordinary link: the board URL is encoded twice inside it. */
+const LINK_LIMIT = 4096;
+
+/**
+ * An event's address, optionally carrying the board search it was opened from and the
+ * "sign in to save" intent. The context is dropped when the address would be too long: for
+ * the sign-in return path (`save`), past what sign-in accepts, so the return itself is never
+ * lost (the server then carries the context another way: results-context.ts); for an
+ * ordinary link, only past a generous cap.
+ */
+export function eventHref(
+	id: string,
+	{ results, save = false }: { results?: string | null; save?: boolean } = {}
+): string {
+	const params = new URLSearchParams();
+	if (save) params.set('save', '1');
+	const context = resultsPath(results);
+	if (context) params.set('results', context);
+	const search = params.toString();
+	const href = search ? `/events/${id}?${search}` : `/events/${id}`;
+	const limit = save ? RETURN_LIMIT : LINK_LIMIT;
+	return href.length > limit && context ? eventHref(id, { save }) : href;
 }

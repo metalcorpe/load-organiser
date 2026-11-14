@@ -44,16 +44,29 @@
 
 <section class="sheet" aria-labelledby="sheet-heading">
 	<h2 id="sheet-heading">Download as spreadsheet (CSV)</h2>
-	<p>
-		Your jumps in one file for Excel, Numbers or Google Sheets: date, jump number, place, country,
-		type, aircraft, altitudes and unit, freefall seconds, notes and gear used.
-	</p>
+	<p>Your jumps in one file for Excel, Numbers or Google Sheets.</p>
 	<p class="hint">
-		The columns are the ones the spreadsheet import reads, so the file can be imported into another
-		account. Gear used comes back as text, not as links to your gear, cut to 200 characters. A jump
-		number used twice comes back only once (the import skips the repeat). Exit time, time zone and
-		links are only in the full export. If a download fails, you can try again straight away.
+		Not a full copy: exit time, time zone and the links on your jumps are left out, and gear is
+		plain text. For everything, use <a href="/profile/data">Export</a>.
 	</p>
+	<details class="included">
+		<summary>What's included?</summary>
+		<div class="included-body">
+			<p>
+				Date, jump number, place, country, type, aircraft, altitudes and unit, freefall seconds,
+				notes and gear used.
+			</p>
+			<p>
+				The columns are the ones the spreadsheet import reads, so the file can be imported into
+				another account. On the way back:
+			</p>
+			<ul>
+				<li>gear used comes back as text, not as links to your gear, cut to 200 characters;</li>
+				<li>a jump number used twice comes back only once (the import skips the repeat).</li>
+			</ul>
+			<p>If a download fails, you can try again straight away.</p>
+		</div>
+	</details>
 	{#if sheetError}<p class="form-error" role="alert" id="sheet-error">{sheetError}</p>{/if}
 	<!-- novalidate: the server checks the dates and explains. -->
 	<form method="POST" action="/records/spreadsheet" class="form sheet-form" novalidate>
@@ -115,6 +128,19 @@
 
 	.sheet p {
 		margin: 0 0 0.5rem;
+	}
+
+	.included {
+		margin: 0 0 0.5rem;
+	}
+
+	.included-body {
+		font-size: 0.95rem;
+	}
+
+	.included-body ul {
+		margin: 0 0 0.5rem;
+		padding-left: 1.25rem;
 	}
 
 	.sheet-form {

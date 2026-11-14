@@ -25,10 +25,15 @@
 			page.url.pathname.startsWith(p)
 		)
 	);
+	// A page may name its own return path (an event page keeps a long board search that way).
 	const signInHref = $derived(
 		onAccountPage
 			? '/sign-in'
-			: `/sign-in?returnTo=${encodeURIComponent(page.url.pathname + page.url.search)}`
+			: `/sign-in?returnTo=${encodeURIComponent(
+					typeof page.data.signInReturn === 'string'
+						? page.data.signInReturn
+						: page.url.pathname + page.url.search
+				)}`
 	);
 	// Two initials from a display name; from an email address only its first letter
 	// ("firstuse-1794@…" is not "F1").

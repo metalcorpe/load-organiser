@@ -70,3 +70,8 @@ export const Cancelled: Story = {
 export const Ended: Story = {
 	args: { item: listing({ ended: true }) }
 };
+
+/** On the board after a search: the link carries the search, for "Back to results". */
+export const InSearchResults: Story = {
+	args: { results: '/?country=ES&from=2026-12-01' }
+};

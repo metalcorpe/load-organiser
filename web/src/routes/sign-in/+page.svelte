@@ -1,10 +1,20 @@
 <script lang="ts">
 	import Notice from '#lib/components/Notice.svelte';
+	import PasswordInput from '#lib/components/PasswordInput.svelte';
 	import { authMessage } from '#lib/auth-messages.ts';
+	import { errorSummary, fieldMessage, type FieldErrors } from '#lib/account-form.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
-	const error = $derived(authMessage(form?.error));
+	const fields: FieldErrors = $derived(form?.fields ?? {});
+	const error = $derived(errorSummary(fields) ?? authMessage(form?.error));
+	// As in the sign-in sheet: a field problem marks and describes only that field; refused
+	// details mark both (the answer never says which) and point them at the alert. Throttling or
+	// an outage says nothing about the fields.
+	const refused = $derived(form?.error === 'invalid_credentials');
+	const invalid = (name: 'email' | 'password') => Boolean(fields[name] || refused);
+	const describedBy = (name: 'email' | 'password') =>
+		fields[name] ? `${name}-error` : refused ? 'sign-in-error' : undefined;
 	const registerHref = $derived(
 		data.returnTo ? `/register?returnTo=${encodeURIComponent(data.returnTo)}` : '/register'
 	);
@@ -72,22 +82,25 @@
 			required
 			maxlength="254"
 			defaultValue={form?.email ?? ''}
-			aria-invalid={error ? 'true' : undefined}
-			aria-describedby={error ? 'sign-in-error' : undefined}
+			aria-invalid={invalid('email') ? 'true' : undefined}
+			aria-describedby={describedBy('email')}
 		/>
+		{#if fields.email}<p class="field-error" id="email-error">{fieldMessage(fields.email)}</p>{/if}
 	</div>
 	<div class="field">
 		<label for="password">Password</label>
-		<input
+		<PasswordInput
 			id="password"
 			name="password"
-			type="password"
 			autocomplete="current-password"
 			required
-			maxlength="1024"
-			aria-invalid={error ? 'true' : undefined}
-			aria-describedby={error ? 'sign-in-error' : undefined}
+			maxlength={1024}
+			invalid={invalid('password')}
+			describedby={describedBy('password')}
 		/>
+		{#if fields.password}
+			<p class="field-error" id="password-error">{fieldMessage(fields.password)}</p>
+		{/if}
 	</div>
 	<div class="form-actions">
 		<button class="button" type="submit">Sign in</button>

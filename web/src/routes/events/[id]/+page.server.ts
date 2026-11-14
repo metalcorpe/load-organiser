@@ -1,4 +1,6 @@
 import { error, fail, redirect } from '@sveltejs/kit';
+import { APP_ORIGIN } from '$app/env/private';
+import { parseAppOrigin } from '#lib/server/api/origin.ts';
 import { listingStatus } from '#lib/listings.ts';
 import { signInPath } from '#lib/safe-return.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
@@ -9,8 +11,18 @@ import {
 	saveOpportunity,
 	unsaveOpportunity
 } from '#lib/server/opportunities.ts';
-import { readSessionSecret } from '#lib/server/session.ts';
+import { recallResults, signInReturns } from '#lib/server/results-context.ts';
+import { cookieSecure, readSessionSecret } from '#lib/server/session.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
+
+/** The configured public origin, or undefined (unset or invalid: the request's own origin is used). */
+function appOrigin(): string | undefined {
+	try {
+		return parseAppOrigin(APP_ORIGIN);
+	} catch {
+		return undefined;
+	}
+}
 
 export const load: PageServerLoad = async ({ params, url, locals, cookies }) => {
 	if (!isUuid(params.id)) error(404, 'Not found');
@@ -33,16 +45,26 @@ export const load: PageServerLoad = async ({ params, url, locals, cookies }) => 
 		const state = await getSaved(api, secret, item.id);
 		saved = state.ok ? { known: true, savedAt: state.value?.saved_at ?? null } : saved;
 	}
+	// The board search this was opened from ("Back to results"); null for a direct link.
+	const results = recallResults(cookies, url);
+	const returns = signInReturns(cookies, item.id, results, cookieSecure());
 	return {
 		item,
 		saved,
+		// One address per event for search engines and sharing, without the search context.
+		canonical: new URL(`/events/${item.id}`, appOrigin() ?? url.origin).href,
+		results,
+		// Where signing in from this page comes back to, with the search kept.
+		signInToSave: `/sign-in?returnTo=${encodeURIComponent(returns.save)}`,
+		signInReturn: returns.plain,
 		// Set after signing in from "Sign in to save": offer the save, do not perform it.
 		saveIntent: url.searchParams.get('save') === '1'
 	};
 };
 
 function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies' | 'params'>): string {
-	const back = new URL(`/events/${event.params.id}?save=1`, event.url);
+	const results = recallResults(event.cookies, event.url);
+	const back = new URL(signInReturns(event.cookies, event.params.id, results, cookieSecure()).save, event.url);
 	if (!event.locals.viewer) redirect(303, signInPath(back));
 	const secret = readSessionSecret(event.cookies);
 	if (!secret) redirect(303, signInPath(back));
