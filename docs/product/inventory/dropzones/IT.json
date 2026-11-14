@@ -1710,6 +1710,278 @@
         }
       ],
       "note": "Check 2026-11-14: coordinates added from the OSM node; the operator-to-airstrip link comes from the ENAC 2019 report (2016 event). Activity after 2016 is unconfirmed."
+    },
+    {
+      "key": "it-massa-cinquale",
+      "name": "Aeroporto dei Marmi / Massa-Cinquale",
+      "country": "IT",
+      "locality": "Massa, Toscana",
+      "latitude": 43.98598,
+      "longitude": 10.143785,
+      "coordinates_source": "https://ourairports.com/airports/LILQ/",
+      "icao": "LILQ",
+      "operators": [
+        {
+          "name": "ASD Skydive Cinquale"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator advertises a Christmas boogie without a year; airport statement dated 16 July 2025 documents unsuccessful negotiations for the summer session, so continuing access is unresolved.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-cinquale",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://www.skydivecinquale.it/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Massa-Cinquale and recurring boogie"
+        },
+        {
+          "url": "https://aeroportodeimarmi.com/wp-content/uploads/2025/07/TRUESTAR-CS-n.1-Skydive-luglio-2025.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airport explains 2025 access dispute"
+        },
+        {
+          "url": "https://ourairports.com/airports/LILQ/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-panicarola",
+      "name": "Aviosuperficie Panicarola",
+      "country": "IT",
+      "locality": "Panicale, Umbria",
+      "latitude": 43.064444,
+      "longitude": 12.100556,
+      "coordinates_source": "https://ourairports.com/airports/IT-0388/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Trasimeno"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical dropzone and school are documented; no 2025+ jumping evidence was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-ttasmeno",
+          "checked_on": "2026-11-14",
+          "what": "Historical listing, misspelled Ttasmeno"
+        },
+        {
+          "url": "https://skydivelocations.com/country/italy/umbria/360/skydive-ttasmeno",
+          "checked_on": "2026-11-14",
+          "what": "Explicit Panicarola airfield address"
+        },
+        {
+          "url": "https://www.lanazione.it/umbria/cronaca/e-di-massimo-giua-il-corpo-individuato-tra-le-prealpi-7fd11af5",
+          "checked_on": "2026-11-14",
+          "what": "2022 article confirms historical Panicarola school"
+        },
+        {
+          "url": "https://ourairports.com/airports/IT-0388/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "aliases": [
+        "Skydive Ttasmeno",
+        "Skydive Trasimeno"
+      ]
+    },
+    {
+      "key": "it-villanova-albenga",
+      "name": "Aeroporto di Villanova d’Albenga",
+      "country": "IT",
+      "locality": "Villanova d’Albenga, Liguria",
+      "latitude": 44.050598,
+      "longitude": 8.12743,
+      "coordinates_source": "https://ourairports.com/airports/LIMG/",
+      "icao": "LIMG",
+      "operators": [
+        {
+          "name": "Paracadutistica Albenga"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directories describe a regular dropzone; no 2025+ evidence of regular civilian jumping at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/paracadutistica",
+          "checked_on": "2026-11-14",
+          "what": "Historical Ligurian dropzone listing"
+        },
+        {
+          "url": "https://www.skydiveworld.com/english/italy.html",
+          "checked_on": "2026-11-14",
+          "what": "Identifies Paracadutistica at Albenga"
+        },
+        {
+          "url": "https://assopar.it/2024/06/05/ultimo-lancio-del-paracadutista-philippe-leroy/",
+          "checked_on": "2026-11-14",
+          "what": "Public historical recollection of airport jumps; not current activity evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIMG/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-aosta",
+      "name": "Aeroporto Corrado Gex",
+      "country": "IT",
+      "locality": "Saint-Christophe, Valle d’Aosta",
+      "latitude": 45.738552,
+      "longitude": 7.3683,
+      "coordinates_source": "https://ourairports.com/airports/LIMW/",
+      "icao": "LIMW",
+      "operators": [
+        {
+          "name": "Sky Dream Center"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Dated announcements advertise recurring jump weekends on 30–31 August 2025 and 24–25 October 2026 at Corrado Gex; the 2025 article calls it the fifth edition since 2021.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aosta",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://aostasera.it/notizie/pubbliredazionali/un-fine-settimana-dedicato-al-paracadutismo-allaeroporto-di-aosta/",
+          "checked_on": "2026-11-14",
+          "what": "2025 operator-sponsored announcement of recurring weekend operation"
+        },
+        {
+          "url": "https://aostasera.it/notizie/pubbliredazionali/paracadutismo-ad-aosta-due-giorni-di-adrenalina-nel-cielo-della-valle/",
+          "checked_on": "2026-11-14",
+          "what": "24–25 October 2026 tandem weekend at the airport"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIMW/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "Selected event weekends; the operator also runs the separate Cumiana site."
+    },
+    {
+      "key": "it-latina-comani",
+      "name": "Aeroporto Enrico Comani",
+      "country": "IT",
+      "locality": "Latina Scalo, Lazio",
+      "latitude": 41.5424,
+      "longitude": 12.909,
+      "coordinates_source": "https://ourairports.com/airports/LIRL/",
+      "icao": "LIRL",
+      "operators": [
+        {
+          "name": "Aero Club Latina"
+        },
+        {
+          "name": "Skydive Latina"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical civilian parachute-school use is documented in a 2012 publication; no 2025+ civilian dropzone programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aero-club-latina",
+          "checked_on": "2026-11-14",
+          "what": "Historical civilian dropzone listing"
+        },
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-latina",
+          "checked_on": "2026-11-14",
+          "what": "Second alias for the same airport area"
+        },
+        {
+          "url": "https://www.lecitta.it/pdf_settimanale/LCIT_N.26_19_9_2012.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2012 report names Comani airport and attached aeroclub parachute school"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIRL/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "Military airport; historical civilian school is recorded, current civilian access is unconfirmed."
+    },
+    {
+      "key": "it-rimini",
+      "name": "Aeroporto Federico Fellini",
+      "country": "IT",
+      "locality": "Rimini, Emilia-Romagna",
+      "latitude": 44.020024,
+      "longitude": 12.612198,
+      "coordinates_source": "https://ourairports.com/airports/LIPR/",
+      "icao": "LIPR",
+      "operators": [
+        {
+          "name": "Aerosports Italia"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipal tourism calendar documents repeated public tandem sessions in 2006–2007; no 2025+ regular skydiving programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aerosports-italia",
+          "checked_on": "2026-11-14",
+          "what": "Historical aggregator lead"
+        },
+        {
+          "url": "https://riminiturismo.it/press/comunicati-stampa-assessorato-al-turismo/rimini-il-calendario-degli-eventi-di-gennaio",
+          "checked_on": "2026-11-14",
+          "what": "Municipal calendar explicitly locates winter tandem sessions at Federico Fellini airport"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIPR/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-pontinia-pegaso",
+      "name": "Aviosuperficie Pegaso Club 2000",
+      "country": "IT",
+      "locality": "Pontinia, Lazio",
+      "latitude": 41.358333,
+      "longitude": 13.15,
+      "coordinates_source": "https://ansv.it/wp-content/uploads/2020/07/Relazione-I-SCAP.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive The Drop"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical jump operation is confirmed by the ANSV report; business directory reports closure without a date, and no 2025+ reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-the-drop",
+          "checked_on": "2026-11-14",
+          "what": "Historical school listing"
+        },
+        {
+          "url": "https://ansv.it/wp-content/uploads/2020/07/Relazione-I-SCAP.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Official investigation identifies parachuting landing site and ENAC airfield coordinates"
+        },
+        {
+          "url": "https://www.tuttiaffari.com/skydive-the-drop",
+          "checked_on": "2026-11-14",
+          "what": "Undated closure flag and Casanello address"
+        }
+      ]
     }
   ]
 }

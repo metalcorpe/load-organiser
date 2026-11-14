@@ -186,3 +186,28 @@ Each remaining uncertain record has a one-line reason in `status_evidence`:
 - `dk-samso-besser`: ØFK's recurring event gives Samsø Efterskole, Besser Kirkevej 30, as its venue; neither the precise landing field nor its departure airfield was established. School/address or unrelated Samsø-airport coordinates were not substituted, so both coordinates remain null.
 
 All eight JSON files validated with `python3 -m json.tool`; required fields, unique place keys, coordinate pairing, status values and source presence also passed. All coordinate sources used were opened. The two remaining coordinate gaps and 21 uncertain statuses are research limitations, not claims of inactivity. No commit was made.
+
+## Aggregator sweep — Codex, 2026-11-14
+
+Started from [Skydiving Source Europe](https://skydivingsource.com/dropzones/europe/) and its country tables, then independently read the [Skydiving.com international directory](https://skydiving.com/find-a-skydiving-center/) country tables and compared names, addresses and airfields with the inventory. [Skyderby places](https://skyderby.io/places) supplied another cross-check; its BASE exits were excluded. Directory names alone were not treated as evidence of current activity. Dropzone.com `/dropzones/europe/` returned 404, and dropzones.eu did not resolve; these sources were unavailable, not empty. USPA's public Mirosławice entry, DropzoneFinder, operator calendars and local-language follow-ups were used for specific leads. No sign-in, contact, form submission or Overpass queries were used.
+
+New coordinate pairs came from the opened [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv), except Kyiv-South's opened airport article. These are airfield reference points, not purportedly precise parachute landing targets. An undated offer stays uncertain even when its website is reachable. This is a directory reconciliation with documented gaps, not a guarantee of exhaustive current operation.
+
+- NO: Bergen, Bodø, Grenland, HaGL/Hamar, Kjevik, Nimbus, NTNU/Oppdal, Oslo/Østre Æra, Voss, Stavanger, Tønsberg, Troms and Tromsø resolve to existing places; Lesja resolves to Bjorli. No new airfield established.
+- SE: Aros, Cirrus, Dala, Halmstad, Linköping/Motala, Nyköping, Örebro, Östersund, Gotland, Skåne, Stockholm, Sundsvall, SYD, Småland, Söderhamn and Umeå match existing places. City labels are not extra dropzones.
+- FI: Hämeenlinna is the club mailing locality, with Vesivehmaa already recorded; SkyXperience's former Malmi base is already recorded. Other directory airfields match the inventory. [Operator history](https://skydivehame.fi/pages/historia) and [Malmi company list](https://www.malmiairport.fi/toiminta/yrityksia/) were found as additional leads; neither establishes a missing current place.
+- DK: Århus, Aversi, Herning, Odense, DFC/Faxe, Kolding, West Jump/Skive, Rødby/Maribo, Lindtorp, Aars, Nordsjælland, Stauning, Viborg, Ejstrupholm and Varde already match. IS Hella, EE Rapla/Nurmsi, LV Limbazi/Grīva and LT Pociūnai/Klaipėda/Sasnava/Šerkšnėnai/Šeduva/Kyviškės also match.
+- Coordinate retries: the opened [Stavanger landing-field directions](https://www.sfsk.no/hoppfelt) identify a portion of farmland at Søredalen 29 but do not supply a usable coordinate. The reopened [ØFK 2026 calendar](https://oefk.dk/kalender/liste/?eventDisplay=past&tribe-bar-date=2026-08-16) identifies Samsø Efterskole as the event venue, without locating the actual landing field. Both pairs remain null; neither Sola nor the school centroid was substituted.
+
+| Country | Added | Keys added | Existing coordinate pairs filled | Active / seasonal / uncertain / closed |
+|---|---:|---|---:|---|
+| NO | 0 | — | 0 | 11 / 5 / 4 / 0 |
+| SE | 0 | — | 0 | 10 / 6 / 4 / 1 |
+| FI | 0 | — | 0 | 12 / 0 / 2 / 1 |
+| DK | 0 | — | 0 | 12 / 2 / 4 / 1 |
+| IS | 0 | — | 0 | 0 / 1 / 1 / 0 |
+| EE | 0 | — | 0 | 1 / 1 / 2 / 0 |
+| LV | 0 | — | 0 | 0 / 2 / 1 / 0 |
+| LT | 0 | — | 0 | 6 / 0 / 3 / 0 |
+
+All listed country JSON files passed `python3 -m json.tool`; new keys are unique and coordinate pairs are present for every addition. No commit was made.

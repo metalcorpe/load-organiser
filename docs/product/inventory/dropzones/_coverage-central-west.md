@@ -267,3 +267,30 @@ Coordinate method: opened the [OurAirports airport dataset](https://davidmeggins
 | NL | 8 | 1 | 1 | 0 | 2 | 0 | 0 | 0 | 0 | 0 |
 
 Validation: each country file passed `python3 -m json.tool`; unique keys, status values, source presence and paired coordinates checked. Countries with fewer than ten records were checked in full.
+
+## Aggregator sweep
+
+
+### Directory coverage and limits
+
+Checked on 2026-11-14 by Codex, starting from external listings rather than the inventory. Opened the country listings on [SkydivingSource](https://skydivingsource.com/locations/europe/) and [Skydiving.com](https://skydiving.com/dropzone/location/), then compared names, physical places, operator aliases and ICAO codes with the JSON. Also opened [Flight-1's international dropzone/course-host directory](https://www.flight-1.com/dropzones), which exposed former operations and boogie sites absent from the first pass. These directories are leads, not evidence that every listed operation is still open.
+
+The [dropzone.com Europe URL](https://www.dropzone.com/dropzones/europe/) redirected to unrelated content, [dropzones.eu](https://dropzones.eu/) did not return usable content, and the [USPA locator](https://www.uspa.org/dzlocator) returned a page shell without a usable international export. Their entries could not be exhaustively reconciled. No Overpass queries were made. Opened airport pages on OurAirports supplied sourced airfield coordinates for new airport records; exact off-airfield landing coordinates were not inferred from town centres or office addresses. No sign-in or contact was used. The sweep does not establish that the inaccessible directories or legacy office-only club entries contain no further sites.
+
+Country pages opened on both directories: [AT source](https://skydivingsource.com/locations/europe/austria/), [AT directory](https://skydiving.com/dropzone/location/austria/), [CH source](https://skydivingsource.com/locations/europe/switzerland/), [CH directory](https://skydiving.com/dropzone/location/switzerland/), [NL source](https://skydivingsource.com/locations/europe/netherlands/), [NL directory](https://skydiving.com/dropzone/location/netherlands/), [BE source](https://skydivingsource.com/locations/europe/belgium/), [BE directory](https://skydiving.com/dropzone/location/belgium/), [LU source](https://skydivingsource.com/locations/europe/luxembourg/), [LU directory](https://skydiving.com/dropzone/location/luxembourg/).
+
+- **AT:** added `at-thalgau`, seasonal recurring accuracy-competition landing area. The opened HSV Red Bull Salzburg bulletin confirms helicopter jumps and training on 10–13 September 2026; exact field coordinates remain unverified. [Thalgau's history](https://de.wikipedia.org/wiki/Thalgau) corroborates its recurring World Cup role. Fly2095/Mayrhofen is paragliding, not an aircraft dropzone; Vienna federation headquarters is not a jump field. Reopened the Krumpendorf operator directions: the Jerolitschstraße meeting-building pin still cannot establish the landing area. 0 existing coordinate pairs filled.
+- **CH:** added `ch-ambri` (Mountain Gravity, LSPM), uncertain because no 2025+ boogie edition was verified, and `ch-grindelwald`, active based on the operator's 2025 Eiger Jump brochure explicitly naming a separate Grindelwald landing area. Its departure at Gsteigwiler is not the landing point, so coordinates remain null. Office-labelled listings such as EPCO/Château-d’Œx and GPS Bex/Saint-Maurice did not establish additional fields. Alpskydive's reopened Le Châble pages still give an address without an exact identified departure/landing point. 0 existing coordinate pairs filled.
+- **NL:** added `nl-oostwold` (EHOW), closed. Flight-1 still lists Skydive Blauwestad, but the opened KNVvL 2022 technical annual report explicitly lists it among dissolved/inactive centres; no later reopening was found. Current Oostwold airport aviation activity is not proof of current parachuting. All other identifiable directory fields already have records. 0 existing missing coordinates.
+- **BE:** 0 added; Spa, Moorsele, Schaffen, Zwartberg, Cerfontaine, Saint-Ghislain, Namur and Hoevenen account for the identifiable physical sites. No existing missing coordinates.
+- **LU:** 0 added; Noertrange/Wiltz is the existing ELNT record, not two dropzones. No existing missing coordinates.
+
+| Country | Added | Active | Seasonal | Uncertain | Closed | Total | Missing coordinates |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| AT | 1 | 3 | 17 | 4 | 0 | 24 | 2 |
+| CH | 2 | 12 | 7 | 5 | 0 | 24 | 2 |
+| NL | 1 | 8 | 1 | 1 | 1 | 11 | 0 |
+| BE | 0 | 6 | 1 | 1 | 0 | 8 | 0 |
+| LU | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
+
+Open leads: exact Thalgau and Grindelwald landing-field positions, Mountain Gravity's last/recent edition, possible Blauwestad successor, and the previously unresolved Krumpendorf and Le Châble locations. No new entry was created merely for a federation or operator office.

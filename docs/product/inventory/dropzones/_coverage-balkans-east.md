@@ -200,3 +200,30 @@ Still doubtful:
 
 Counts after the check (active / seasonal / uncertain / closed): RS 6 (4/0/2/0), BA 4 (0/1/3/0), ME 2 (1/0/1/0),
 MK 1 (0/0/1/0), AL 0, XK 0, MD 2 (1/0/1/0), UA 10 (0/0/9/1). All eight JSON files pass `python3 -m json.tool`.
+
+## Aggregator sweep — Codex, 2026-11-14
+
+Started from [Skydiving Source Europe](https://skydivingsource.com/dropzones/europe/) and its country tables, then independently read the [Skydiving.com international directory](https://skydiving.com/find-a-skydiving-center/) country tables and compared names, addresses and airfields with the inventory. [Skyderby places](https://skyderby.io/places) supplied another cross-check; its BASE exits were excluded. Directory names alone were not treated as evidence of current activity. Dropzone.com `/dropzones/europe/` returned 404, and dropzones.eu did not resolve; these sources were unavailable, not empty. USPA's public Mirosławice entry, DropzoneFinder, operator calendars and local-language follow-ups were used for specific leads. No sign-in, contact, form submission or Overpass queries were used.
+
+New coordinate pairs came from the opened [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv), except Kyiv-South's opened airport article. These are airfield reference points, not purportedly precise parachute landing targets. An undated offer stays uncertain even when its website is reachable. This is a directory reconciliation with documented gaps, not a guarantee of exhaustive current operation.
+
+- RS: Belgrade, Ivan Sarić/Subotica, Zrenjanin, Novi Sad and Paraćin directory entries match existing places. BA Banja Luka matches Zalužani. MD federation/Vadul lui Vodă matches the existing airfield.
+- ME: Skydiving.com country URL was absent (404), while [DropzoneFinder](https://dropzonefinder.com/dropzones/montenegro) explicitly had no entries. Neither overrides the two existing researched places. Skyderby's Montenegrin entries are BASE locations. The prior Skydive Montenegro/Tivat exact-field lead remains unresolved.
+- MK: the aggregator's Kumanovo lead is confirmed by the [CAA's official sport-flight list](https://www.caa.gov.mk/en/aircraft-operations/), which also expressly associates parachuting with Bitola-Logovardi, Štip-Suševo and Prilep-Malo Konjari. Added **mk-kumanovo-rezanovce, mk-bitola-logovardi, mk-stip-susevo, mk-prilep-malo-konjari**, all uncertain because the CAA activity list is undated. The [CAA airfield network page](https://www.caa.gov.mk/en/airports-in-republic-of-north-macedonia/) confirms these sport airfields. Suševo is distinct from the other Štip strip; its sourced point is LWST.
+- UA: added **ua-valerianivka, ua-krupske, ua-ksaverivka-kyiv-south**, all uncertain. [Valerianivka history](https://zabytki.in.ua/ru/2673/aerodrom-v-valeryanovke) says flights stopped in 2014; [Krupske reporting](https://report.if.ua/lyudy/parashutysty-komentuyut-zagybel-ivanofrankivcya-pid-chas-strybka-pid-lvovom/) establishes historical training; [5 Ocean](https://bestcity.kyiv.ua/ru/centr-parashjutnogo-sporta-5-okean/) is at Kyiv-South, not Chayka. Odessa-Liman's sourced airport point matches existing Hidroport, so it is not duplicated. SWS/Progress resolve to the already-recorded Chernihiv-area lead.
+- UA Crimea: Skyderby files Koktebel and Yukharina Balka under Russia, but these places belong in the UA inventory. Added **ua-koktebel, ua-yukharina-balka, ua-zavodske**, uncertain, following the opened [2020 regional tourism article](https://travelcrimea.com/sport_interesno/20200812/1344091.html) explicitly identifying aircraft parachuting at all three and [Koktebel marketplace directions](https://turnado.net/tour/33/). No 2025+ civilian jump activity was established; these records are historical and not a claim of bookability.
+- AL: the zero result was overturned by **al-gjirokaster (seasonal)**; [DropzoneFinder](https://dropzonefinder.com/dropzones/albania/skydive-albania), the [operator](https://www.skydivealbania.al/index?lang=en), and [1 May 2026 season-opening report](https://euronews.al/en/50-parachutists-from-italy-open-the-tourist-season-at-the-citys-aerodrome/) identify repeated aircraft jumping at Gjirokastër.
+- XK: no current civilian dropzone confirmed. Added historical **xk-batllava-dumosh (uncertain)** because the [24 January 2020 local account](https://www.llapi.info/aeroporti-i-harruar-ne-podujeve/) specifically documents frequent former aircraft parachuting at Batllava/Dumosh and says the field is disused. No 2025+ reopening was found. This avoids silently losing a former place while preserving the zero-current-operation conclusion. See `_coverage-zero-se.md`.
+
+| Country | Added | Keys added | Existing coordinate pairs filled | Active / seasonal / uncertain / closed |
+|---|---:|---|---:|---|
+| RS | 0 | — | 0 | 4 / 0 / 2 / 0 |
+| BA | 0 | — | 0 | 0 / 1 / 3 / 0 |
+| ME | 0 | — | 0 | 1 / 0 / 1 / 0 |
+| MK | 4 | `mk-kumanovo-rezanovce`, `mk-bitola-logovardi`, `mk-stip-susevo`, `mk-prilep-malo-konjari` | 0 | 0 / 0 / 5 / 0 |
+| MD | 0 | — | 0 | 1 / 0 / 1 / 0 |
+| UA | 6 | `ua-valerianivka`, `ua-krupske`, `ua-ksaverivka-kyiv-south`, `ua-koktebel`, `ua-yukharina-balka`, `ua-zavodske` | 0 | 0 / 0 / 15 / 1 |
+| AL | 1 | `al-gjirokaster` | 0 | 0 / 1 / 0 / 0 |
+| XK | 1 | `xk-batllava-dumosh` | 0 | 0 / 0 / 1 / 0 |
+
+All listed country JSON files passed `python3 -m json.tool`; new keys are unique and coordinate pairs are present for every addition. No commit was made.

@@ -4010,6 +4010,87 @@
         }
       ],
       "note": "Recurring seasonal visiting operations at one airfield; not a year-round resident centre."
+    },
+    {
+      "key": "de-muencheberg-eggersdorf",
+      "name": "Flugplatz Eggersdorf",
+      "aliases": [
+        "Berliner Fallschirmsportverband",
+        "EDCE"
+      ],
+      "country": "DE",
+      "locality": "Müncheberg-Eggersdorf, Brandenburg",
+      "latitude": 52.482825,
+      "longitude": 14.090838,
+      "coordinates_source": "https://www.flugplatz-eggersdorf.de/amplatz.html",
+      "icao": "EDCE",
+      "operators": [
+        {
+          "name": "Berliner Fallschirmsportverband",
+          "website": "https://skydive-berlin.de/",
+          "facebook": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator brochure with prices dated May 2025 advertises year-round weekend and holiday jumping at Eggersdorf.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/dropzones/berliner-fallschirmsportverband/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator identifies Eggersdorf EDCE."
+        },
+        {
+          "url": "https://skydive-berlin.de/info.pdf",
+          "checked_on": "2026-11-14",
+          "what": "May 2025 operator brochure: location and jumping schedule."
+        },
+        {
+          "url": "https://www.flugplatz-eggersdorf.de/amplatz.html",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ]
+    },
+    {
+      "key": "de-wesel-roemerwardt",
+      "name": "Flugplatz Wesel-Römerwardt",
+      "aliases": [
+        "My SkyConcept",
+        "EDLX"
+      ],
+      "country": "DE",
+      "locality": "Wesel, Nordrhein-Westfalen",
+      "latitude": 51.662777,
+      "longitude": 6.595833,
+      "coordinates_source": "https://ourairports.com/airports/EDLX/",
+      "icao": "EDLX",
+      "operators": [
+        {
+          "name": "My SkyConcept",
+          "website": null,
+          "facebook": null
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Wesel municipal report FB 1/505/22 states that My SkyConcept withdrew completely from the airfield after commercial flight restrictions. No successor jumping operation was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Legacy course-directory entry identifies the Wesel site."
+        },
+        {
+          "url": "https://ris.wesel.de/sdnetrim/UGhVM0hpd2NXNFdFcExjZYylhgv9R9Yj6QihJHcoXZrMDVUdji32ym1SCUh8stMN/Beschlussvorlage_FB_1-505-22.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Municipal report explicitly records the parachuting operator leaving the airfield."
+        },
+        {
+          "url": "https://ourairports.com/airports/EDLX/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ],
+      "note": "Closed refers to the documented parachuting operation, not the airport."
     }
   ]
 }

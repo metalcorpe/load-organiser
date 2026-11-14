@@ -381,6 +381,47 @@
         }
       ],
       "note": "Added by Codex; weather-dependent secondary landing area, separate from Hilversum and Westbroek."
+    },
+    {
+      "key": "nl-oostwold",
+      "name": "Oostwold Airport",
+      "aliases": [
+        "Skydive Blauwestad",
+        "EHOW"
+      ],
+      "country": "NL",
+      "locality": "Oostwold, Groningen",
+      "latitude": 53.208775,
+      "longitude": 7.033053,
+      "coordinates_source": "https://ourairports.com/airports/EHOW/",
+      "icao": "EHOW",
+      "operators": [
+        {
+          "name": "Skydive Blauwestad",
+          "website": "https://www.skydiveblauwestad.nl/",
+          "facebook": null
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "KNVvL Springtechnisch Jaarverslag 2022 appendix A explicitly classifies Skydive Blauwestad among dissolved or no-longer-active parachute centres; no subsequent reopening was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Legacy directory places Skydive Blauwestad at Polderweg, Oostwold."
+        },
+        {
+          "url": "https://parachute.nl/wp-content/uploads/2024/02/Springtechnisch-jaarverslag-2022.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Federation report names SBS among dissolved or inactive centres."
+        },
+        {
+          "url": "https://ourairports.com/airports/EHOW/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ],
+      "note": "The airport remains open; closed denotes the former parachuting operation."
     }
   ]
 }

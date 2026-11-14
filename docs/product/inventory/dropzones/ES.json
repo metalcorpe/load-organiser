@@ -838,6 +838,117 @@
         }
       ],
       "note": "Former Skydive León jumping operation closed; this does not establish that the aerodrome itself is closed."
+    },
+    {
+      "key": "es-villamartin",
+      "name": "Aeródromo La Antigua Estación / Tomás Fernández Espada",
+      "country": "ES",
+      "locality": "Villamartín, Cádiz",
+      "latitude": 36.871793,
+      "longitude": -5.648775,
+      "coordinates_source": "https://ourairports.com/airports/LETF/",
+      "icao": "LETF",
+      "operators": [
+        {
+          "name": "SkyFarm"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipality confirms a March 2022 opening and marketplace still lists jumps; no dated 2025+ operation at the airfield was established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/location/spain/",
+          "checked_on": "2026-11-14",
+          "what": "SkyFarm lead at Villamartín"
+        },
+        {
+          "url": "https://www.villamartin.es/actualidad/noticias/292-villamartin-contara-con-un-centro-de-paracaidismo",
+          "checked_on": "2026-11-14",
+          "what": "Municipal opening announcement and tandem/AFF activity"
+        },
+        {
+          "url": "https://www.yumping.com/paracaidismo/skyfarm--e19749930",
+          "checked_on": "2026-11-14",
+          "what": "Undated offer and 2019 review; year in title is not activity evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/LETF/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "es-ventas-de-huelma",
+      "name": "Aeródromo Juan Espadafor",
+      "country": "ES",
+      "locality": "Ventas de Huelma, Granada",
+      "latitude": 37.089933,
+      "longitude": -3.7886,
+      "coordinates_source": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2013-26488",
+      "icao": "LEJE",
+      "operators": [
+        {
+          "name": "Skydive Granada / Air Maap Aviation"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Marketplace retains a historical listing, while a regional seller says jumping stopped in 2019; no dated 2025+ reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://www.yumping.com/paracaidismo/skydive-granada--e19744048",
+          "checked_on": "2026-11-14",
+          "what": "Identifies the airfield, school and operating company"
+        },
+        {
+          "url": "https://paraisoandaluz.es/en/skydive-andalucia/",
+          "checked_on": "2026-11-14",
+          "what": "Reports historical jumps through 2019 and no current Granada tandem company"
+        },
+        {
+          "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2013-26488",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "es-alhama-de-murcia",
+      "name": "Campo de Vuelo de Alhama de Murcia",
+      "country": "ES",
+      "locality": "Alhama de Murcia",
+      "latitude": 37.751738,
+      "longitude": -1.299374,
+      "coordinates_source": "https://famur.org/site/promocion-especial-aspamur-skydive-costa-calida-para-federados-famur/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive España"
+        },
+        {
+          "name": "Skydive Costa Cálida / ASPAMUR"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Federation confirms jumps in 2015; a February 2017 voucher correction reports closure, and no reliable 2025+ evidence tied to this field was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/spain/skydive-espana",
+          "checked_on": "2026-11-14",
+          "what": "Historical aggregator lead"
+        },
+        {
+          "url": "https://famur.org/site/promocion-especial-aspamur-skydive-costa-calida-para-federados-famur/",
+          "checked_on": "2026-11-14",
+          "what": "Federation event and linked location map"
+        },
+        {
+          "url": "https://media.smartbox.com/media/es/cms_img/pdf/erratum/caducidad_2018/march/T057VD_Maxima_Emocion.pdf",
+          "checked_on": "2026-11-14",
+          "what": "February 2017 correction reports Costa Cálida closure"
+        }
+      ],
+      "note": "Coordinates transcribed from the federation directions map link. Later Skydive España reviews and Skydiving Source mix this Murcia address with La Juliana in Seville; they do not establish reopening here."
     }
   ]
 }

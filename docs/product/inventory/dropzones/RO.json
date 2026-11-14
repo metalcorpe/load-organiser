@@ -736,9 +736,9 @@
       "aliases": [],
       "country": "RO",
       "locality": "Oradea, Bihor County",
-      "latitude": null,
-      "longitude": null,
-      "coordinates_source": null,
+      "latitude": 47.033333,
+      "longitude": 21.901944,
+      "coordinates_source": "https://aeroclubulromaniei.ro/media/MOPL2web.pdf (section C, Oradea airfield reference point)",
       "icao": null,
       "operators": [
         {
@@ -758,9 +758,14 @@
           "url": "https://ar.ro/articol/cursuri-gratuite-2026",
           "checked_on": "2026-11-14",
           "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/media/MOPL2web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "National aeroclub operational manual: Oradea airfield reference point N47°02′00″ E21°54′07″."
         }
       ],
-      "note": "Coordinates null: which aerodrome the club uses was not found (possibly Oradea International LROD). Named after a Romanian parachutist; parachuting likely but unconfirmed."
+      "note": "Historical club airfield reference point from the national aeroclub manual; current parachuting remains unconfirmed. This is not the international airport reference point."
     },
     {
       "key": "ro-ianca",

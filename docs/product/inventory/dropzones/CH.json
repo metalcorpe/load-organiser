@@ -952,6 +952,77 @@
         }
       ],
       "note": "Added by Codex; embedded calendar events were not readable, so status remains uncertain."
+    },
+    {
+      "key": "ch-ambri",
+      "name": "Aeroporto di Ambrì",
+      "aliases": [
+        "Mountain Gravity",
+        "LSPM"
+      ],
+      "country": "CH",
+      "locality": "Quinto, Ticino",
+      "latitude": 46.512501,
+      "longitude": 8.68978,
+      "coordinates_source": "https://ourairports.com/airports/LSPM/",
+      "icao": "LSPM",
+      "operators": [
+        {
+          "name": "Mountain Gravity",
+          "website": "https://mountaingravity.ch/",
+          "facebook": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Flight-1 lists Mountain Gravity at Ambrì Airport Hangar 6; no dated 2025-or-later edition or resumption was confirmed.",
+      "sources": [
+        {
+          "url": "https://www.flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "Mountain Gravity boogie/course host listed at Ambrì Airport."
+        },
+        {
+          "url": "https://ourairports.com/airports/LSPM/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ],
+      "note": "Historical boogie location; a standing daily operation is not established."
+    },
+    {
+      "key": "ch-grindelwald",
+      "name": "Grindelwald landing area",
+      "aliases": [
+        "Eiger Jump Grindelwald"
+      ],
+      "country": "CH",
+      "locality": "Grindelwald, Bern",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Interlaken",
+          "website": "https://www.skydiveinterlaken.ch/",
+          "facebook": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator 2025 Eiger Jump brochure explicitly offers helicopter skydives landing at its Grindelwald dropzone.",
+      "sources": [
+        {
+          "url": "https://www.skydiveinterlaken.ch/wp-content/uploads/2025/07/Helicopter-Skydive-EIGER-Grindelwald-2025_FR.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2025 product brochure distinguishes Grindelwald landing from Gsteigwiler departure."
+        },
+        {
+          "url": "https://www.skydiveinterlaken.ch/about-us/",
+          "checked_on": "2026-11-14",
+          "what": "Operator distinguishes its Grindelwald, Lauterbrunnen and Interlaken locations."
+        }
+      ],
+      "note": "Separate landing area from Wilderswil and Lauterbrunnen; helicopter departs Gsteigwiler. Coordinates null because an exact landing-field position was not verified."
     }
   ]
 }

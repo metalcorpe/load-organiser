@@ -930,6 +930,39 @@
         }
       ],
       "note": "Added by Codex; current training authorization does not establish recent regular jumping."
+    },
+    {
+      "key": "at-thalgau",
+      "name": "Thalgau accuracy landing area",
+      "aliases": [],
+      "country": "AT",
+      "locality": "Thalgau, Salzburg",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "HSV Red Bull Salzburg",
+          "website": "https://hsv-redbull.at/",
+          "facebook": null
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "HSV Red Bull Salzburg bulletin schedules the Thalgau World Cup for 11–13 September 2026, with helicopter training on 10 September.",
+      "sources": [
+        {
+          "url": "https://hsv-redbull.at/wp-content/uploads/2026/07/BulletinThalgau2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2026 accuracy competition bulletin specifying Thalgau, helicopter and jump programme."
+        },
+        {
+          "url": "https://de.wikipedia.org/wiki/Thalgau",
+          "checked_on": "2026-11-14",
+          "what": "Town history identifies a recurring accuracy World Cup host since 2010."
+        }
+      ],
+      "note": "Recurring competition landing area, not a daily tandem centre. Coordinates null: the opened bulletin does not give the exact landing-area position."
     }
   ]
 }

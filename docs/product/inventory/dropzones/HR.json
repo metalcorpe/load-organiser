@@ -441,6 +441,90 @@
         }
       ],
       "note": "Club airfield assumed to be Čepin (Osijek sport aerodrome); not stated in the source."
+    },
+    {
+      "key": "hr-medulin",
+      "name": "Aerodrom Medulin-Campanož",
+      "aliases": [
+        "Skydive Adria",
+        "Skydive Medulin"
+      ],
+      "country": "HR",
+      "locality": "Medulin",
+      "latitude": 44.843878,
+      "longitude": 13.904376,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LDPM)",
+      "icao": "LDPM",
+      "operators": [
+        {
+          "name": "Padobranski sportski klub Pulaštro",
+          "website": "https://skydivemedulin.wixsite.com/skydivemedulin/home"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Local club website advertises tandem, training and a Medulin boogie, but no 2025+ activity evidence was established.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/locations/skydive-adria/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead naming Medulin."
+        },
+        {
+          "url": "https://skydivemedulin.wixsite.com/skydivemedulin/home",
+          "checked_on": "2026-11-14",
+          "what": "Local skydiving club site with training and boogie offers."
+        },
+        {
+          "url": "https://aeroklubcumulus.wixsite.com/cumulus/en/reports",
+          "checked_on": "2026-11-14",
+          "what": "Historical North Adriatic tour names aircraft jumps at Medulin; not recent evidence."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LDPM airfield coordinates."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "key": "hr-hvar-stari-grad",
+      "name": "Aerodrom Hvar",
+      "aliases": [
+        "Skydiving Tandem Group Hvar"
+      ],
+      "country": "HR",
+      "locality": "Stari Grad, Hvar",
+      "latitude": 43.181702,
+      "longitude": 16.633301,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LDSH)",
+      "icao": "LDSH",
+      "operators": [
+        {
+          "name": "Skydiving Tandem Group",
+          "website": "http://skydivingtandem.eu/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Jelsa tourism board identifies tandem skydiving at the Hvar airfield, but the page is undated and no reliable 2025+ operating dates were established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/skydiving-tandem-group-hvar/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://visitjelsa.hr/en/6989/skydiving-hvar/",
+          "checked_on": "2026-11-14",
+          "what": "Tourism board specifies the small airfield east of Stari Grad, Put Gospojice."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LDSH airfield coordinates."
+        }
+      ],
+      "note": ""
     }
   ]
 }

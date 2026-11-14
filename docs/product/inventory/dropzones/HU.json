@@ -459,6 +459,45 @@
           "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
         }
       ]
+    },
+    {
+      "key": "hu-ocseny",
+      "name": "Őcsény repülőtér",
+      "aliases": [
+        "Hungary Skydive Őcsény"
+      ],
+      "country": "HU",
+      "locality": "Őcsény",
+      "latitude": 46.306138,
+      "longitude": 18.767386,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LHOY)",
+      "icao": "LHOY",
+      "operators": [
+        {
+          "name": "Hungary Skydive",
+          "website": "https://www.hungaryskydive.hu/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator provides an Őcsény dropzone page with aircraft jump prices and gate directions, but the opening-date notice is undated and no 2025+ operation was established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/hungary-skydive-ocseny/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://www.hungaryskydive.hu/dropzone-ocseny/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Őcsény airfield and Cessna 182 jump offer."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LHOY airfield coordinates."
+        }
+      ],
+      "note": ""
     }
   ]
 }

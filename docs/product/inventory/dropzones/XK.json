@@ -1,6 +1,37 @@
 {
   "country": "XK",
   "researched_on": "2026-11-14",
-  "researcher": "claude",
-  "dropzones": []
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "xk-batllava-dumosh",
+      "name": "Aeroporti i Batllavës",
+      "aliases": [
+        "Batlava-Donja Penduha",
+        "Dumosh"
+      ],
+      "country": "XK",
+      "locality": "Dumosh, Podujevë",
+      "latitude": 42.849898,
+      "longitude": 21.221705,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident XK-0009)",
+      "icao": null,
+      "operators": [],
+      "status": "uncertain",
+      "status_evidence": "A dated 24 January 2020 local report identifies former recurring civilian sport parachuting and says the airfield is inactive; no 2025+ reopening evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.llapi.info/aeroporti-i-harruar-ne-podujeve/",
+          "checked_on": "2026-11-14",
+          "what": "Former sport/military airfield with frequent aircraft parachuting, now disused according to 2020 report."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; XK-0009 airfield coordinates."
+        }
+      ],
+      "note": "Historical place only; no current civilian dropzone confirmed in Kosovo."
+    }
+  ]
 }

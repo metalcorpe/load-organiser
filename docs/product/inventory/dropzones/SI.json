@@ -365,6 +365,42 @@
         }
       ],
       "note": "Added in check 2026-11-14. The operator says only 'aerodrom u Metlici'; matched to the only mapped aerodrome there."
+    },
+    {
+      "key": "si-libelice",
+      "name": "Vzletišče Libeliče",
+      "aliases": [
+        "Lavamünd",
+        "Libelice",
+        "Gorče"
+      ],
+      "country": "SI",
+      "locality": "Gorče, Libeliče",
+      "latitude": 46.623795,
+      "longitude": 14.954946,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident SI-0023)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten",
+          "website": "https://www.fallschirmspringen-kaernten.at/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Opened indexed operator season calendar explicitly lists 31 May 2026 jumps at Flugplatz Lavamünd / Libelice, Gorče 23, Slovenia.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar and exact Slovenian venue for Lavamünd jump days."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; SI-0023 airfield coordinates."
+        }
+      ],
+      "note": "Visiting operator, scheduled jumping rather than a daily resident centre; the live HTML now announces the 2027 calendar while the opened indexed page retains the 2026 schedule."
     }
   ]
 }

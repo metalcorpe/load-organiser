@@ -162,3 +162,26 @@ Checked all keys and non-null ICAO codes for repetition, and compared every avai
 The uncertain rows above each retain a specific one-line reason in FR.json. Public Facebook pages for Reims and FL140 did not supply accessible dated evidence; no sign-in was attempted. Vichy’s operator image explicitly announces the end of the 2026 season and an April 2027 restart, so temporary winter closure was treated as seasonal. The 2027 calendars at Albi, Fayence and Montargis are published plans rather than proof of completed future jumps. Occitan bases have an explicit 2026 operator presentation, but exact session dates remain unverified. Booking-site evidence for Colmar, Dijon and La Roche is weaker than operator calendars and should be confirmed with direct dated schedules in a future review. Sissonne remains the sole coordinate gap.
 
 Validation: python3 -m json.tool FR.json; unique keys and ICAO codes, coordinate pairing/ranges, nonempty sources and status evidence checked. Only FR.json and this coverage file were edited in this follow-up.
+
+## Aggregator sweep
+
+
+### Directory coverage and limits
+
+Checked on 2026-11-14 by Codex, starting from external listings rather than the inventory. Opened the country listings on [SkydivingSource](https://skydivingsource.com/locations/europe/) and [Skydiving.com](https://skydiving.com/dropzone/location/), then compared names, physical places, operator aliases and ICAO codes with the JSON. Also opened [Flight-1's international dropzone/course-host directory](https://www.flight-1.com/dropzones), which exposed former operations and boogie sites absent from the first pass. These directories are leads, not evidence that every listed operation is still open.
+
+The [dropzone.com Europe URL](https://www.dropzone.com/dropzones/europe/) redirected to unrelated content, [dropzones.eu](https://dropzones.eu/) did not return usable content, and the [USPA locator](https://www.uspa.org/dzlocator) returned a page shell without a usable international export. Their entries could not be exhaustively reconciled. No Overpass queries were made. Opened airport pages on OurAirports supplied sourced airfield coordinates for new airport records; exact off-airfield landing coordinates were not inferred from town centres or office addresses. No sign-in or contact was used. The sweep does not establish that the inaccessible directories or legacy office-only club entries contain no further sites.
+
+Opened [SkydivingSource France](https://skydivingsource.com/locations/europe/france/), [Skydiving.com France](https://skydiving.com/dropzone/location/france/) and the legacy [SkydiveWorld France list](https://www.skydiveworld.com/english/france.html). Followed operator products and physical-site descriptions, including Air Mauss's public shop, rather than treating every city/office label as a new place.
+
+Added five records:
+
+- `fr-ales-deaux` (LFMS), uncertain: the aggregator has conflicting Deaux/Nîmes labels, but opened local reporting confirms Azurxtrem moved its jumping to Alès in 2015. No recent operation verified.
+- `fr-charleville-mezieres-belval` (LFQV), uncertain: an opened FFP article dated 22 July 2019 confirms the school at Belval. No 2025+ jumping dates verified.
+- `fr-courchevel-le-praz`, seasonal: official tourism listing explicitly gives 6 December 2026–30 April 2027 and landing at Le Praz. The altiport mailing/meeting address was not used as the landing coordinate; exact coordinates remain null.
+- `fr-la-mole-saint-tropez` (LFTZ), seasonal: the operator names La Môle airport and 18/24/25 October 2026 jump sessions. This is separate from the existing Le Luc record.
+- `fr-le-castellet` (LFMQ), uncertain: operator product and airport partnership establish the place, but the undated shop and footer copyright do not prove 2025+ site-specific activity.
+
+All four new airport records have coordinates from opened airport pages. Reopened Sissonne's EXTRM listing: its 49.5968, 3.6325 pin still points to Laon, so it was rejected again. 0 previously missing coordinate pairs filled. New total: 115 records — 52 active, 39 seasonal, 21 uncertain, 3 closed; 2 without coordinates.
+
+Unresolved legacy-directory leads: Château-Thierry/Belleau, Bergerac-Roumanière, Bastia-Poretta, Guéret-Saint-Laurent, Valenciennes/Denain, Belfort, Metz and La Ferté-Bernard need confirmation of the actual historical/current jump field rather than a club address or a later move to an already-listed field. Caen airport's opened leisure page mentions parachuting generically, but did not establish a regular aircraft jump operator distinct from ascensionnel activity. These are coverage gaps, not confirmed new records. Aucun's listed school is paragliding; Paris-area office clubs are not additional fields. Overseas French territories were not assigned to metropolitan FR merely because an old directory groups them under France.

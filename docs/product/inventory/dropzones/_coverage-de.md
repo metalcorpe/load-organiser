@@ -271,3 +271,20 @@ German-language searches checked “Fallschirmspringen”, “Sprungbetrieb”, 
 No dated recurring operations were confirmed for the other missing-place leads: Pfullendorf, Mühlacker/Hangensteiner Hof, Giengen/Brenz, Schopfheim/Seven Sky, or Diepholz. [Jump & Fun Factory's booking calendar](https://www.sky-dive.de/termint1.html) says site-specific 2027 dates will appear in February; it does not yet establish those sites. Paderborn-Haxterberg remains an earlier open lead; no confirmed recurring civilian operation was added. The 27 uncertain records remain explicit research gaps, not assumed closures.
 
 Validation: JSON syntax, required fields, unique keys, coordinate pairing and status totals checked after editing; no commit made.
+
+## Aggregator sweep
+
+
+### Directory coverage and limits
+
+Checked on 2026-11-14 by Codex, starting from external listings rather than the inventory. Opened the country listings on [SkydivingSource](https://skydivingsource.com/locations/europe/) and [Skydiving.com](https://skydiving.com/dropzone/location/), then compared names, physical places, operator aliases and ICAO codes with the JSON. Also opened [Flight-1's international dropzone/course-host directory](https://www.flight-1.com/dropzones), which exposed former operations and boogie sites absent from the first pass. These directories are leads, not evidence that every listed operation is still open.
+
+The [dropzone.com Europe URL](https://www.dropzone.com/dropzones/europe/) redirected to unrelated content, [dropzones.eu](https://dropzones.eu/) did not return usable content, and the [USPA locator](https://www.uspa.org/dzlocator) returned a page shell without a usable international export. Their entries could not be exhaustively reconciled. No Overpass queries were made. Opened airport pages on OurAirports supplied sourced airfield coordinates for new airport records; exact off-airfield landing coordinates were not inferred from town centres or office addresses. No sign-in or contact was used. The sweep does not establish that the inaccessible directories or legacy office-only club entries contain no further sites.
+
+Opened country lists: [SkydivingSource Germany](https://skydivingsource.com/locations/europe/germany/) and [Skydiving.com Germany](https://skydiving.com/dropzone/location/germany/).
+
+- Added `de-muencheberg-eggersdorf` (EDCE), active: the Berliner Fallschirmsportverband operator brochure has May 2025 prices and a year-round weekend/holiday schedule. The airport's resident-clubs page supplies precise coordinates.
+- Added `de-wesel-roemerwardt` (EDLX), closed: the Flight-1 My SkyConcept entry is historical; an opened Wesel municipal report explicitly records the operator withdrawing from the field. This does not mean the airport closed.
+- Other identifiable directory places matched existing records, including Paderborn-Haxterberg; club/brand entries were not automatically treated as new airfields.
+- Existing coordinate retries: reopened DFV Flying Bears/Grafenau and FSG Hangelar pages. They still provide postal/office addresses, not a verified landing site. Grafenau/possible Elsenthal and Hangelar/possible Soest remain unresolved; 0 previously missing pairs filled.
+- New total: 109 records — 16 active, 61 seasonal, 27 uncertain, 5 closed; 2 without coordinates.

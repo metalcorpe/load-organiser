@@ -265,3 +265,25 @@ Coordinate method: opened the [OurAirports airport dataset](https://davidmeggins
 | BG | 3 | 0 | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 
 Validation: each country file passed `python3 -m json.tool`; unique keys, status values, source presence and paired coordinates checked. Countries with fewer than ten records were checked in full.
+
+## Aggregator sweep — Codex, 2026-11-14
+
+Started from [Skydiving Source Europe](https://skydivingsource.com/dropzones/europe/) and its country tables, then independently read the [Skydiving.com international directory](https://skydiving.com/find-a-skydiving-center/) country tables and compared names, addresses and airfields with the inventory. [Skyderby places](https://skyderby.io/places) supplied another cross-check; its BASE exits were excluded. Directory names alone were not treated as evidence of current activity. Dropzone.com `/dropzones/europe/` returned 404, and dropzones.eu did not resolve; these sources were unavailable, not empty. USPA's public Mirosławice entry, DropzoneFinder, operator calendars and local-language follow-ups were used for specific leads. No sign-in, contact, form submission or Overpass queries were used.
+
+New coordinate pairs came from the opened [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv), except Kyiv-South's opened airport article. These are airfield reference points, not purportedly precise parachute landing targets. An undated offer stays uncertain even when its website is reachable. This is a directory reconciliation with documented gaps, not a guarantee of exhaustive current operation.
+
+- RO: Clubul Benzoi→Măgura/Cisnădie, Transilvania→Luncani, Timișoara→Sânmihaiu German and TNT→Clinceni are already present. Satu Mare's 2025/2026 training publicity does not establish a separate current jumping field: the previously sourced national 2026 course notice explicitly places its practical jumps at Baia Mare. No addition.
+- RO: filled **ro-oradea** from the opened [national aeroclub operational manual](https://aeroclubulromaniei.ro/media/MOPL2web.pdf), section C, Oradea: N47°02′00″ E21°54′07″. This is a historical club airfield reference point, not the international-airport reference point. Status remains uncertain; no claim of resumed parachuting.
+- BG: Erden, Shumen, AVA/Ihtiman and Sapareva Banya match existing places; no new airfield established. GR: Athens→Kopaida, Attica/Greece→Megara, Thessaloniki→Chortero; no new place established.
+- CY checked carefully: both international directories resolve their association/centre entry to **Kingsfield**. The opened [current operator site](https://skydivecyprus.co.uk/) explicitly welcomes civilians (with nationality restrictions) and describes itself as the only skydiving centre in Cyprus. Updated the operator URL and removed the earlier unresolved civilian-access note. CPA/CCSPC names are aliases, not extra dropzones; no separate Pegasos jumping field was established.
+- TR: the Source directory's Efes entry is already recorded; Skydiving.com's turkey URL returned 404. Missing coordinates were retried: [THK Erzincan](https://thk.org.tr/ehem) gives its training-campus address and disciplines but no aircraft jumping-field location; [Skydive Cappadocia](https://www.skydivecappadocia.org) likewise did not identify a georeferenced landing/departure field. Both pairs remain null. No office centroid was substituted.
+
+| Country | Added | Keys added | Existing coordinate pairs filled | Active / seasonal / uncertain / closed |
+|---|---:|---|---:|---|
+| RO | 0 | — | 1 | 11 / 2 / 6 / 0 |
+| BG | 0 | — | 0 | 3 / 0 / 2 / 0 |
+| GR | 0 | — | 0 | 4 / 0 / 2 / 0 |
+| CY | 0 | — | 0 | 1 / 0 / 0 / 0 |
+| TR | 0 | — | 0 | 2 / 0 / 4 / 0 |
+
+All listed country JSON files passed `python3 -m json.tool`; new keys are unique and coordinate pairs are present for every addition. No commit was made.

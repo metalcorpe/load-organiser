@@ -1,6 +1,51 @@
 {
   "country": "AL",
   "researched_on": "2026-11-14",
-  "researcher": "claude",
-  "dropzones": []
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "al-gjirokaster",
+      "name": "Aerodromi i Gjirokastrës",
+      "aliases": [
+        "Skydive Albania"
+      ],
+      "country": "AL",
+      "locality": "Gjirokastër",
+      "latitude": 40.087301,
+      "longitude": 20.152302,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident AL-0012)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Albania",
+          "website": "https://www.skydivealbania.al/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Euronews Albania reported on 1 May 2026 that 50 Italian parachutists opened the season at this airfield; the report describes repeated visits during the year.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/albania/skydive-albania",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead locating the operator at Gjirokastër airfield."
+        },
+        {
+          "url": "https://www.skydivealbania.al/index?lang=en",
+          "checked_on": "2026-11-14",
+          "what": "Operator offers aircraft jumps and gives Gjirokastër airfield address."
+        },
+        {
+          "url": "https://euronews.al/en/50-parachutists-from-italy-open-the-tourist-season-at-the-citys-aerodrome/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 report of recurring skydiving visits and season opening."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; AL-0012 airfield coordinates."
+        }
+      ],
+      "note": "Visits and organised jumping periods; a daily year-round operation is not established."
+    }
+  ]
 }

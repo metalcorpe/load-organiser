@@ -893,6 +893,83 @@
         }
       ],
       "note": "Recurring tandem and individual jumps; airport reference coordinate."
+    },
+    {
+      "key": "cz-zabreh-dolni-benesov",
+      "name": "Letiště Zábřeh Dolní Benešov",
+      "aliases": [
+        "Paraklub Zábřeh"
+      ],
+      "country": "CZ",
+      "locality": "Dolní Benešov",
+      "latitude": 49.928258,
+      "longitude": 18.075557,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LKZA)",
+      "icao": "LKZA",
+      "operators": [
+        {
+          "name": "Slezský aeroklub Zábřeh",
+          "website": "https://lkza.cz/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "National aeroclub published the 6–7 June 2026 Slezské kopačky programme with training jumps on 5 June; the local club offers parachuting instruction.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/paraklub-zabreh/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://lkza.cz/parasutismus/",
+          "checked_on": "2026-11-14",
+          "what": "Local operator training and jump offer."
+        },
+        {
+          "url": "https://www.aeroklub.cz/2026/05/15/propozice-slezske-kopacky-2026/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2026 programme for the recurring competition."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LKZA airfield coordinates."
+        }
+      ],
+      "note": "The older Paraklub legal entity is not assumed to remain the operator; the current source names Slezský aeroklub."
+    },
+    {
+      "key": "cz-olomouc-neredin",
+      "name": "Letiště Olomouc-Neředín",
+      "aliases": [
+        "Hanácký paraklub"
+      ],
+      "country": "CZ",
+      "locality": "Olomouc",
+      "latitude": 49.587712,
+      "longitude": 17.209275,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LKOL)",
+      "icao": "LKOL",
+      "operators": [
+        {
+          "name": "Hanácký paraklub"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "National aeroclub report dated 9 September 2026 records completed jumps at the recurring Olomouc Cup using an An-2.",
+      "sources": [
+        {
+          "url": "https://www.aeroklub.cz/2026/09/09/pohar-mesta-olomouce-2026-a-moravsky-pohar-jsou-za-nami/",
+          "checked_on": "2026-11-14",
+          "what": "Completed 2026 competition and aircraft jumps at the club airfield."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LKOL airfield coordinates."
+        }
+      ],
+      "note": "Recurring sport jumping established; daily tandem availability not established."
     }
   ]
 }

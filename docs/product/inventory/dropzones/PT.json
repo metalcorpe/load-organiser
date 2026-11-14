@@ -624,6 +624,127 @@
       ],
       "note": "Added by Codex as a recurring competition landing place, not a daily tandem centre. Exact training-field coordinates were not established; a town or sports-complex office point is not substituted.",
       "season": "Annual competition; 7–8 November in 2026"
+    },
+    {
+      "key": "pt-espinho",
+      "name": "Aeródromo de Espinho",
+      "country": "PT",
+      "locality": "Paramos, Espinho",
+      "latitude": 40.9775,
+      "longitude": -8.641944,
+      "coordinates_source": "https://ais.nav.pt/wp-content/uploads/AIS_Files/eVFR_Current/eVFR_Online/eAIP/html/eAIP/LP-ENR-5.5-pt-PT.html",
+      "icao": "LPIN",
+      "operators": [
+        {
+          "name": "Skydive Europe / Queda Livre"
+        },
+        {
+          "name": "Skydive Porto"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "2026 AIP retains the parachuting area and a booking listing was updated in August 2026, but the operator describes special-event use and a seller reports runway-maintenance closure; actual resumption at Espinho is unconfirmed.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/locations/europe/portugal/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://visitporto.travel/pt-PT/poi/5cd04b54f979e000012c9a35",
+          "checked_on": "2026-11-14",
+          "what": "Tourism authority identifies the Espinho airfield operation"
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "Operator says Espinho is used for special events; main jumps elsewhere"
+        },
+        {
+          "url": "https://godiscoverportugal.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "Undated closure notice and alternative at Maia"
+        },
+        {
+          "url": "https://www.yumping.com/en/skydiving/skydive-porto-espinho--e19758951",
+          "checked_on": "2026-11-14",
+          "what": "Booking listing identifies Espinho; last update August 2026"
+        },
+        {
+          "url": "https://ais.nav.pt/wp-content/uploads/AIS_Files/eVFR_Current/eVFR_Online/eAIP/html/eAIP/LP-ENR-5.5-pt-PT.html",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "AIP area designation does not prove current jump operations. Historical and advertised operators are retained for identification."
+    },
+    {
+      "key": "pt-braganca",
+      "name": "Aeródromo Municipal de Bragança",
+      "country": "PT",
+      "locality": "Bragança",
+      "latitude": 41.8578,
+      "longitude": -6.70713,
+      "coordinates_source": "https://ourairports.com/airports/LPBG/",
+      "icao": "LPBG",
+      "operators": [
+        {
+          "name": "Centro de Paracaidismo Galsur / Skydive Bragança"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historic directories identify the airport operation; no dated 2025+ civilian jump programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/portugal/centro-de-paracaidismo-galsur-skydive-braganca",
+          "checked_on": "2026-11-14",
+          "what": "Historical dropzone listing"
+        },
+        {
+          "url": "https://skydivelocations.com/country/portugal/braganca/150/centro-de-paracaidismo-galsur-skydive-braganca",
+          "checked_on": "2026-11-14",
+          "what": "Explicit Bragança Airport address; listing last updated nine years ago"
+        },
+        {
+          "url": "https://ourairports.com/airports/LPBG/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "pt-ponte-de-sor",
+      "name": "Aeródromo Municipal de Ponte de Sor",
+      "country": "PT",
+      "locality": "Ponte de Sor",
+      "latitude": 39.211545,
+      "longitude": -8.057787,
+      "coordinates_source": "https://ourairports.com/airports/LPSO/",
+      "icao": "LPSO",
+      "operators": [
+        {
+          "name": "Sky Medley Escola de Pára-Quedismo"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipal minutes confirm a resident school in 2006; no 2025+ evidence of continuing regular jumps was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/portugal/sky-medley-skydive-center",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://www.cm-pontedesor.pt/wp-content/uploads/2019/03/ata-n_37_2006_13_09_2006.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Municipal minutes dated 13 September 2006 identify school facilities at this airfield"
+        },
+        {
+          "url": "https://ourairports.com/airports/LPSO/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
     }
   ]
 }

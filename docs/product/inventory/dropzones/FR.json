@@ -4671,6 +4671,197 @@
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator."
+    },
+    {
+      "key": "fr-ales-deaux",
+      "name": "Aérodrome Alès-Cévennes",
+      "aliases": [
+        "Azurxtrem Deaux",
+        "LFMS"
+      ],
+      "country": "FR",
+      "locality": "Deaux, Gard",
+      "latitude": 44.069698,
+      "longitude": 4.14212,
+      "coordinates_source": "https://ourairports.com/airports/LFMS/",
+      "icao": "LFMS",
+      "operators": [
+        {
+          "name": "Azurxtrem Parachutisme",
+          "website": null,
+          "facebook": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Local reporting confirms Azurxtrem moved from Nîmes to Alès in spring 2015 and made regular weekend jumps; no 2025-or-later jumping evidence was confirmed.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/dropzones/azurxtrem-parachutisme/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead with a Deaux address but an inconsistent Nîmes airport label."
+        },
+        {
+          "url": "https://www.objectifsud.fr/a-la-une/fait-du-jour-securite-nuisances-sonores-les-bemols-de-laerodrome-de-deaux-59331.php",
+          "checked_on": "2026-11-14",
+          "what": "Local report establishes actual jumping at Alès after the 2015 move."
+        },
+        {
+          "url": "https://ourairports.com/airports/LFMS/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ]
+    },
+    {
+      "key": "fr-charleville-mezieres-belval",
+      "name": "Aérodrome Étienne-Riché de Belval",
+      "aliases": [
+        "Charleville Parachutisme",
+        "LFQV"
+      ],
+      "country": "FR",
+      "locality": "Belval, Ardennes",
+      "latitude": 49.783901,
+      "longitude": 4.64708,
+      "coordinates_source": "https://ourairports.com/airports/LFQV/",
+      "icao": "LFQV",
+      "operators": [
+        {
+          "name": "Charleville Parachutisme",
+          "website": null,
+          "facebook": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "FFP article dated 22 July 2019 describes Charleville Parachutisme opening at Belval that May; no 2025-or-later jumping dates were confirmed.",
+      "sources": [
+        {
+          "url": "https://www.skydiveworld.com/english/france.html",
+          "checked_on": "2026-11-14",
+          "what": "Legacy French club-directory lead."
+        },
+        {
+          "url": "https://www.ffp.asso.fr/en/lardennais-le-club-deploie-ses-ailes/",
+          "checked_on": "2026-11-14",
+          "what": "Federation article confirms the school at Belval in 2019."
+        },
+        {
+          "url": "https://ourairports.com/airports/LFQV/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ]
+    },
+    {
+      "key": "fr-courchevel-le-praz",
+      "name": "Courchevel Le Praz landing area",
+      "aliases": [
+        "Air Mauss Courchevel"
+      ],
+      "country": "FR",
+      "locality": "Courchevel Le Praz, Savoie",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Air Mauss",
+          "website": "https://air-mauss.com/",
+          "facebook": null
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Official Courchevel tourism listing gives the Air Mauss winter season as 6 December 2026–30 April 2027 and explicitly identifies landing at Le Praz.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/location/france/",
+          "checked_on": "2026-11-14",
+          "what": "Air Mauss Courchevel directory lead."
+        },
+        {
+          "url": "https://courchevel.com/fr/a/air-mauss-parachutisme-courchevel-5083350/",
+          "checked_on": "2026-11-14",
+          "what": "Official tourism listing with dated winter season and Le Praz landing description."
+        }
+      ],
+      "note": "Helicopter jumps associated with Courchevel altiport, but the landing area is Le Praz. Coordinates null: the tourism address is the altiport and no exact Le Praz landing-field pin was verified."
+    },
+    {
+      "key": "fr-la-mole-saint-tropez",
+      "name": "Aéroport du Golfe de Saint-Tropez",
+      "aliases": [
+        "Air Mauss Saint-Tropez",
+        "LFTZ"
+      ],
+      "country": "FR",
+      "locality": "La Môle, Var",
+      "latitude": 43.205399,
+      "longitude": 6.482,
+      "coordinates_source": "https://ourairports.com/airports/LFTZ/",
+      "icao": "LFTZ",
+      "operators": [
+        {
+          "name": "Air Mauss",
+          "website": "https://air-mauss.com/",
+          "facebook": null
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Air Mauss explicitly advertises Saint-Tropez jump dates on 18, 24 and 25 October 2026 and names its partnership with La Môle airport.",
+      "sources": [
+        {
+          "url": "https://air-mauss.com/saut-parachute-saint-tropez/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies La Môle airport and dated October 2026 jump sessions."
+        },
+        {
+          "url": "https://ourairports.com/airports/LFTZ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ],
+      "note": "Occasional scheduled sessions rather than a daily dropzone."
+    },
+    {
+      "key": "fr-le-castellet",
+      "name": "Aéroport du Castellet",
+      "aliases": [
+        "Air Mauss Le Castellet",
+        "LFMQ"
+      ],
+      "country": "FR",
+      "locality": "Le Castellet, Var",
+      "latitude": 43.252499,
+      "longitude": 5.78519,
+      "coordinates_source": "https://ourairports.com/airports/LFMQ/",
+      "icao": "LFMQ",
+      "operators": [
+        {
+          "name": "Air Mauss",
+          "website": "https://air-mauss.com/",
+          "facebook": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Air Mauss offers a Le Castellet tandem product and identifies an airport partnership, but no site-specific 2025-or-later jump date was found; a copyright year alone is not dated activity evidence.",
+      "sources": [
+        {
+          "url": "https://air-mauss.com/saut-parachute/saut-tandem-le-castellet/",
+          "checked_on": "2026-11-14",
+          "what": "Operator tandem product explicitly located at Le Castellet beside Circuit Paul Ricard."
+        },
+        {
+          "url": "https://air-mauss.com/saut-parachute-saint-tropez/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies partnership with Le Castellet airport."
+        },
+        {
+          "url": "https://ourairports.com/airports/LFMQ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport page giving the airfield coordinates."
+        }
+      ]
     }
   ]
 }

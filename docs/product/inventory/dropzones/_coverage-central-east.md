@@ -287,3 +287,24 @@ The only missing pair is still **Chyżne**. The [operator contact page](https://
 Completeness searches included Polish aero-club and regional jumping leads (Rybnik, Krosno, Toruń, Zamość and Gryźliny), Czech scheduled tandem locations, Slovak club/calendar searches, and Hungarian parachuting-club/airfield searches. Rybnik's found 2026 event is a display and does not establish a recurring dropzone. A nationwide Polish parachuting tour also does not establish permanent operation at every stop. Other prior open leads remain unresolved rather than silently treated as absent. No claim of exhaustive completeness is made.
 
 Validation: all four JSON files passed `python3 -m json.tool` and checks for required fields, unique keys, status values, source presence and paired valid coordinates. Existing schema and researcher attribution were preserved; this section records Codex's contribution. No commit was made.
+
+## Aggregator sweep — Codex, 2026-11-14
+
+Started from [Skydiving Source Europe](https://skydivingsource.com/dropzones/europe/) and its country tables, then independently read the [Skydiving.com international directory](https://skydiving.com/find-a-skydiving-center/) country tables and compared names, addresses and airfields with the inventory. [Skyderby places](https://skyderby.io/places) supplied another cross-check; its BASE exits were excluded. Directory names alone were not treated as evidence of current activity. Dropzone.com `/dropzones/europe/` returned 404, and dropzones.eu did not resolve; these sources were unavailable, not empty. USPA's public Mirosławice entry, DropzoneFinder, operator calendars and local-language follow-ups were used for specific leads. No sign-in, contact, form submission or Overpass queries were used.
+
+New coordinate pairs came from the opened [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv), except Kyiv-South's opened airport article. These are airfield reference points, not purportedly precise parachute landing targets. An undated offer stays uncertain even when its website is reachable. This is a directory reconciliation with documented gaps, not a guarantee of exhaustive current operation.
+
+- PL: added **pl-miroslawice (closed)**. The [airfield's 23 June 2025 notice](https://aeroklubdolnoslaski.pl/dane-kontaktowe-do-podmiotow-swiadczacych-uslugi-na-lotnisku-miroslawice/) explicitly says no parachuting occurs there, overriding stale Olimpic/USPA listings. Added **pl-rybnik-gotartowice (uncertain)** because [Omega's own page](https://spadochrony.com.pl/) specifies recurring weekend jumps at this airfield; this is stronger place evidence than the previously found display event, but still lacks dated 2025+ activity.
+- PL aliases: Sky Force→Piotrków, Reaktor24→Krosno, Xjumpers→Szymanów, Baltic/PL Strefa→Elbląg, SkyCamp→Bednary, and [Skydive Toruń's current booking page](https://www.skydive-torun.pl/zamow-skok) explicitly directs jumps to Debrzno. Rzeszów remains a lead rather than a new assumed active airfield: older training listings name Jasionka and Krosno, while current local tandem offers often resolve to Mielec. Chyżne's reopened [operator contact](https://skyfun.pl/kontakt) still lacks coordinates.
+- CZ: added **cz-zabreh-dolni-benesov** and **cz-olomouc-neredin**, both seasonal, with national aeroclub [2026 Zábřeh programme](https://www.aeroklub.cz/2026/05/15/propozice-slezske-kopacky-2026/) and [completed Olomouc event report](https://www.aeroklub.cz/2026/09/09/pohar-mesta-olomouce-2026-a-moravsky-pohar-jsou-za-nami/). L.S.D.→Jihlava, Skywalkers→Most; Nový Bor and Prague/Letňany directory addresses were not assumed to be landing fields. Hranice historical tandem activity is an open lead, with recurring current operation not established.
+- SK: Compact, Očová, Slavnica, Relax and Zoskok resolve to existing fields; Volnypad's Bratislava street address is not an extra airfield.
+- HU: added **hu-ocseny (uncertain)** from the explicit [operator airfield/directions page](https://www.hungaryskydive.hu/dropzone-ocseny/); it still has an undated opening notice. Tandem Team's Veszprém address resolves through its [contact directions](https://tandemskydivinginhungary.com/contact/) to already-recorded Börgönd. No new coordinates remain missing.
+
+| Country | Added | Keys added | Existing coordinate pairs filled | Active / seasonal / uncertain / closed |
+|---|---:|---|---:|---|
+| PL | 2 | `pl-miroslawice`, `pl-rybnik-gotartowice` | 0 | 5 / 27 / 5 / 1 |
+| CZ | 2 | `cz-zabreh-dolni-benesov`, `cz-olomouc-neredin` | 0 | 0 / 22 / 3 / 1 |
+| SK | 0 | — | 0 | 2 / 12 / 2 / 0 |
+| HU | 1 | `hu-ocseny` | 0 | 1 / 7 / 3 / 0 |
+
+All listed country JSON files passed `python3 -m json.tool`; new keys are unique and coordinate pairs are present for every addition. No commit was made.

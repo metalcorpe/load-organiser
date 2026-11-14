@@ -1,7 +1,37 @@
 {
   "country": "AD",
   "researched_on": "2026-11-14",
-  "researcher": "claude",
-  "dropzones": [],
-  "note": "No dropzone found. Andorra has no fixed-wing airfield (heliports only); skydiving searches returned nothing in Andorra. The nearest airfield, La Seu d'Urgell (LESU), is in Spain and no jump operation was found there."
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "ad-borda-mateu",
+      "name": "Prats de la Borda Mateu",
+      "country": "AD",
+      "locality": "Santa Coloma, Andorra la Vella",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Andorra la Vella"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "RTVA documents repeated helicopter-jump events in 2019 and 2021 and a second Andorra from Above edition planned for October 2022; no 2025+ continuation was found.",
+      "sources": [
+        {
+          "url": "https://www.rtva.ad/esports/segona-edicio-andorra-from-above-tindra",
+          "checked_on": "2026-11-14",
+          "what": "17 August 2022 report names recurring event and landing meadows"
+        },
+        {
+          "url": "https://associacions.andorralavella.ad/node/316",
+          "checked_on": "2026-11-14",
+          "what": "Municipal register confirms club identity"
+        }
+      ],
+      "note": "Recurring event landing site, not an airfield or daily tandem centre. Exact meadow coordinates were not established; club-office and stadium coordinates are not substituted."
+    }
+  ]
 }

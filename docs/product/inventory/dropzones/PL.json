@@ -1312,6 +1312,84 @@
         }
       ],
       "note": "Site included for the resident operator activity; the visiting Sky Magic display is not counted as a separate dropzone."
+    },
+    {
+      "key": "pl-miroslawice",
+      "name": "Lotnisko Mirosławice",
+      "aliases": [
+        "Olimpic Skydive"
+      ],
+      "country": "PL",
+      "locality": "Mirosławice, Sobótka",
+      "latitude": 50.957802,
+      "longitude": 16.7703,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident EPMR)",
+      "icao": "EPMR",
+      "operators": [
+        {
+          "name": "Olimpic Skydive",
+          "website": "https://olimpic-skydive.pl/"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Airfield operator notice dated 23 June 2025 explicitly states that parachute jumps do not take place at Mirosławice.",
+      "sources": [
+        {
+          "url": "https://www.uspa.org/DZdetails?accountnumber=225481",
+          "checked_on": "2026-11-14",
+          "what": "International directory lead for Olimpic at Mirosławice."
+        },
+        {
+          "url": "https://aeroklubdolnoslaski.pl/dane-kontaktowe-do-podmiotow-swiadczacych-uslugi-na-lotnisku-miroslawice/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield operator explicitly rules out parachuting at the site in June 2025."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; EPMR airfield coordinates."
+        }
+      ],
+      "note": "Historical place retained; operator activity at Michałków is already a separate record."
+    },
+    {
+      "key": "pl-rybnik-gotartowice",
+      "name": "Lotnisko Rybnik-Gotartowice",
+      "aliases": [
+        "Omega Skydive"
+      ],
+      "country": "PL",
+      "locality": "Rybnik",
+      "latitude": 50.070801,
+      "longitude": 18.6283,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident EPRG)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Omega Skydive",
+          "website": "https://spadochrony.com.pl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator describes weekend jumps from April to October at Rybnik, but no dated 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/omega-skydive/",
+          "checked_on": "2026-11-14",
+          "what": "Directory names Rybnik Airport despite mixed city labels."
+        },
+        {
+          "url": "https://spadochrony.com.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly identifies recurring aircraft skydiving at Rybnik."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; EPRG airfield coordinates."
+        }
+      ],
+      "note": ""
     }
   ]
 }

@@ -9,7 +9,9 @@
       "aliases": [
         "Skydive Cyprus",
         "JSPC Cyprus",
-        "Kingsfield Air Base"
+        "Kingsfield Air Base",
+        "Cyprus Parachute Association",
+        "CCSPC"
       ],
       "country": "CY",
       "locality": "Kingsfield, near Xylotymbou, Dhekelia Sovereign Base Area",
@@ -20,7 +22,7 @@
       "operators": [
         {
           "name": "Cyprus Combined Services Parachute Centre (Skydive Cyprus)",
-          "website": "http://www.skydivecyprus.org"
+          "website": "https://skydivecyprus.co.uk/"
         }
       ],
       "status": "active",
@@ -40,9 +42,19 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident CY-0004)",
           "checked_on": "2026-11-14",
           "what": "OurAirports CY-0004 Kingsfield Air Base LCRE, 35.014275, 33.715851"
+        },
+        {
+          "url": "https://skydivecyprus.co.uk/",
+          "checked_on": "2026-11-14",
+          "what": "Operator names Kingsfield, explicitly welcomes civilian enthusiasts subject to nationality restrictions, and describes itself as the only centre in Cyprus."
+        },
+        {
+          "url": "https://skydiving.com/dropzone/cyprus-parachute-association/",
+          "checked_on": "2026-11-14",
+          "what": "Directory resolves Cyprus Parachute Association to Kingsfield rather than a second place."
         }
       ],
-      "note": "Military (British Forces) centre in a UK Sovereign Base Area; ISO has no separate code, so filed under CY. Whether civilians can jump is not confirmed: the operator site had a TLS error and the AIP PDF did not download. A directory mentions a Britten-Norman Islander (old)."
+      "note": "British Sovereign Base Area, filed under CY. Operator explicitly welcomes civilians, subject to restrictions for certain nationalities and advance arrangements; association names do not establish additional airfields."
     }
   ]
 }

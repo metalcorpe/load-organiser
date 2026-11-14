@@ -252,3 +252,53 @@ Completeness searches covered Italian-language 2025/2026 parachuting, calendars,
 Ten existing points were compared against individually opened OurAirports pages: LIPN Verona, LIDB Belluno, LILM Casale, LILI Vercelli, LILR Cremona, LIDR Ravenna, LIDE Reggio Emilia, LIQL Lucca, LIQB Arezzo and LIDH Thiene. All correspond to the stated airport, with differences of about 0.03–0.19 km from the airport reference points. Original OSM geometry points were retained; all ten audit-source URLs were added to the records. There were no missing IT coordinates and no coordinate corrections.
 
 Validation: IT.json passed `python3 -m json.tool` and structural checks for source presence, unique keys, allowed status values and paired coordinates. No commit was made.
+
+## Aggregator sweep — Codex, 2026-11-14
+
+Started from [Skydiving Source Europe](https://skydivingsource.com/dropzones/europe/) and its country tables, then independently read the [Skydiving.com international directory](https://skydiving.com/find-a-skydiving-center/) country tables and compared names, addresses and airfields with the inventory. [Skyderby places](https://skyderby.io/places) supplied another cross-check; its BASE exits were excluded. Directory names alone were not treated as evidence of current activity. Dropzone.com `/dropzones/europe/` returned 404, and dropzones.eu did not resolve; these sources were unavailable, not empty. USPA's public Mirosławice entry, DropzoneFinder, operator calendars and local-language follow-ups were used for specific leads. No sign-in, contact, form submission or Overpass queries were used.
+
+New coordinate pairs came from the opened [OurAirports airport dataset](https://davidmegginson.github.io/ourairports-data/airports.csv), except Kyiv-South's opened airport article. These are airfield reference points, not purportedly precise parachute landing targets. An undated offer stays uncertain even when its website is reachable. This is a directory reconciliation with documented gaps, not a guarantee of exhaustive current operation.
+
+This subsection covers SI and HR only; IT, MT and SM were outside this dispatch.
+
+- SI: added **si-libelice (seasonal)**. The opened indexed [operator 2026 calendar](https://www.fallschirmspringen-kaernten.at/de/termine.html) names 31 May at Flugplatz Lavamünd / Libelice, Gorče 23, Slovenia. The live HTML now announces the 2027 schedule; the indexed page still exposes the 2026 date. Lavamünd must not be filed as an Austrian place. Aviofun's Dravograd/Libeliče office alone was not used to infer another dropzone. Prostipad/Ljubljana, Xtreme/Maribor, Ptuj, Murska Sobota, Lesce and Bovec match existing places.
+- HR: added **hr-medulin** and **hr-hvar-stari-grad**, both uncertain. The [Medulin club](https://skydivemedulin.wixsite.com/skydivemedulin/home) has tandem, school and boogie pages; the [Jelsa tourism board](https://visitjelsa.hr/en/6989/skydiving-hvar/) locates Hvar jumps at the small airfield east of Stari Grad. Neither yielded dated 2025+ operation. Zagreb resellers/operators resolve to Lučko; Split listings resolve to Sinj, and Zadar/Grobnik were already recorded.
+- [Cumulus reports](https://aeroklubcumulus.wixsite.com/cumulus/en/reports) describe an older North Adriatic tour including Unije and Medulin. Unije remains an event-only lead without a confirmed recurring operation; its historical tour mention was not represented as recent activity. No pre-existing coordinate gaps in SI/HR.
+
+| Country | Added | Keys added | Existing coordinate pairs filled | Active / seasonal / uncertain / closed |
+|---|---:|---|---:|---|
+| SI | 1 | `si-libelice` | 0 | 1 / 3 / 6 / 0 |
+| HR | 2 | `hr-medulin`, `hr-hvar-stari-grad` | 0 | 2 / 5 / 6 / 0 |
+
+All listed country JSON files passed `python3 -m json.tool`; new keys are unique and coordinate pairs are present for every addition. No commit was made.
+
+## Aggregator sweep
+
+Codex, 2026-11-14. Compared physical places and aliases rather than counting directory brands. Opened Skydiving Source country tables, DropzoneFinder country listings and relevant detail pages, SKYDIVINGDOTCOM country lists, [Flight-1 host directory](https://www.flight-1.com/dropzones), and [Curlie Europe](https://www.curlie.org/en/Recreation/Aviation/Skydiving/Dropzones/Europe) and its relevant country subcategories. The old [dropzone.com Europe URL](https://www.dropzone.com/dropzones/europe/) redirected to an unrelated site; dropzones.eu failed DNS. [USPA locator](https://www.uspa.org/dzlocator) opened but returned no dropzone records in the static response, so its dynamic membership data was not reconciled. Wikipedia's general drop-zone page was blocked in the HTTP client; airport pages were used where available. Directory presence and a current year in a marketplace title were not treated as recent activity evidence. No Overpass queries, sign-ins, messages to operators, or commits.
+
+### IT reconciliation
+
+Opened [Skydiving Source Italy](https://skydivingsource.com/locations/europe/italy/) (23 entries), [DropzoneFinder Italy](https://dropzonefinder.com/dropzones/italy/) (53 linked entries), [SKYDIVINGDOTCOM Italy](https://skydiving.com/dropzone/location/italy/) (30), [Skydive World Italy](https://www.skydiveworld.com/english/italy.html) (historical clubs and sites), Curlie's Italy listing, and the Flight-1 host directory.
+
+Added **7**: `it-aosta` **seasonal** (recurring Sky Dream Center weekends, explicitly dated 2025 and 2026); `it-massa-cinquale`, `it-panicarola`, `it-villanova-albenga`, `it-latina-comani`, `it-rimini`, `it-pontinia-pegaso` **uncertain** (historical place confirmed, current operation unresolved). Every addition has coordinates from an opened airport page or official investigation. Cinquale's July 2025 airport statement records a summer access dispute; an undated Christmas banner is not proof of reopening. Pontinia's undated business-directory closure flag is retained in the evidence, not promoted to a dated closure finding.
+
+Matched existing sites: Casale/Accademia/Area Delta 47/Skydive Milano; Vercelli/VZone; Reggio/BFU/Italia Skydive; Nettuno/Crazy Fly; Arezzo/Etruria/Tortuga/Costa d'Oro; Cumiana/Sky Dream/Blu Sky; Garzigliana/Skydive Torino/Verticalfly; Lucca/Tassignano; Ravenna/Pull Out; Paestum/Salerno's current location; Serdiana/Skydive Sardegna; Siracusa/Skydive Sicilia; Caltagirone/Sunflyers Sicilia; Fermo/Sunrise; Thiene; San Stino/Skydive Venice/CPV; Verona; Belluno; Molinella/FlyGang; Monte Compatri/Paracadutismo Roma; Terni/The Zoo Roma; Sibari/Calabria; Orbetello/Costa d'Argento/The Zoo Argentario; Costa Volpino/Iseo; Loreto-Recanati/Fly Zone; Melendugno/Sunflyers Puglia; Cecina/Kalifornia; Novi Ligure/Skydive Milan; Fano/Alimarche/Fano Sky Team; Campoformido/UPnGO; Acqui Terme already closed. Shared brands were not added as duplicate physical sites.
+
+Unresolved or excluded directory entries:
+
+| Entry | Disposition |
+| --- | --- |
+| Skydive San Marino | Separate country SM, historical uncertain Torraccia record; not IT. |
+| Skydive Italia | Directory address is Casale but prose describes Lake Bilancino; do not invent a Bilancino airfield without corroboration. |
+| Skydive Marche | Directory prose and marker point to Arezzo, while old Skydive World says Montegiorgio; no separate confirmed airfield yet. |
+| Dolianova | Explicitly doubtful historical listing; may overlap Parteolla/Serdiana, no distinct location established. |
+| Skydive X | Marker near Turriaco/Ronchi; exact aircraft operating field unconfirmed. |
+| Sicily / The Zoo Sicily / Skydive Palermo | Conflicting Catania/Palermo markers and Rome text; no reliable separate airfield established. |
+| The Zoo Malta / Pozzallo | Listing says temporarily on Sicilian coast near Pozzallo; exact historic field still unresolved. |
+| Scuola Paracadutismo A.S. / ScuolaDiParacadutismo.it | Rimini and Cerveteri-area listings conflict; Rimini is now recorded from municipal evidence, Cerveteri needs field verification. |
+| Skydive Dream Florence | Street address in Florence; no aircraft operation demonstrated there. |
+| VolareInsieme, Letojanni | Flying-experience lead without confirmed aircraft dropzone; not added. |
+| Skydive World: Jump & Fly Santonuovo, Pratoni del Vivaro, Flyin' Village Cuneo, Blue Sky Team Milano, Condor Team Montespina | Old club/locality labels without verified distinct landing fields; retained as leads. |
+| Former Salgareda and Salerno-Pontecagnano | Historical predecessor-field leads need their own place/status evidence; do not create duplicates from current San Stino/Paestum addresses. |
+
+Final IT **44** = active 32, seasonal 1, uncertain 10, closed 1. Missing coordinates **0**; no pre-existing coordinate gaps to fill. These historical additions do not imply seven newly operating commercial centres.
