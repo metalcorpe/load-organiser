@@ -1,9 +1,15 @@
 """Load the candidate listings as local development data (#162).
 
     python -m app.skydiver.devdata load PATH --reviewer EMAIL [--dropzones DIR]
+    python -m app.skydiver.devdata dropzones DIR --reviewer EMAIL [--publish STATUSES]
+
+`dropzones` is the one exception to the rule below (owner request 2026-11-14): the
+researched dropzone inventory into the hosted database, run only by the owner
+through `scripts/staging.sh load-dropzones`. New dropzones are drafts until the
+owner names the research statuses to publish; see `load_dropzones`.
 
 Owner decision 2026-11-09: the researched candidate records are for local testing
-only and are never loaded into production. This refuses to run unless
+only and are never loaded into production. `load` refuses to run unless
 ENVIRONMENT=local and SKYDIVER_DEV_DATA=1 are both set explicitly (scripts/dev.sh
 seed sets them) and the database is on this machine. Records go through the same services and publication rules as
 `/review`, acting as EMAIL, an account with the reviewer role. A record the rules
@@ -35,7 +41,7 @@ import sys
 import unicodedata
 import uuid
 from collections import Counter
-from collections.abc import Iterable, Mapping, Sequence
+from collections.abc import Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
@@ -98,6 +104,15 @@ def _note(key: str, extra: str | None = None) -> str:
     return f"{note} {extra}"[:SOURCE_NOTE_MAX] if extra else note
 
 
+# The source note shows on the public dropzone page, so a hosted record says what it is
+# in words and carries its inventory key at the end (how a later run finds it).
+HOSTED_REF = re.compile(r"Inventory ref ([a-z0-9-]+)\.$")
+
+
+def _hosted_note(key: str, status: str) -> str:
+    return f"Research status: {status}. Inventory ref {key}."
+
+
 def reviewer_actor(engine: Engine, email: str) -> Actor:
     with Session(engine) as session:
         user = session.execute(
@@ -127,16 +142,23 @@ def reviewer_actor(engine: Engine, email: str) -> Actor:
 
 
 def _loaded(engine: Engine, table: str) -> dict[str, uuid.UUID]:
-    """Records loaded before, by key."""
+    """Records loaded before, by key: local (`dev-data:`) or hosted (`Inventory ref`)."""
     with engine.connect() as conn:
         rows = conn.execute(
             text(
                 f"SELECT id, source_note FROM {table} "  # noqa: S608 - fixed table names
-                "WHERE source_note LIKE :mark"
+                "WHERE source_note LIKE :mark OR source_note LIKE :ref"
             ),
-            {"mark": f"{MARK}%"},
+            {"mark": f"{MARK}%", "ref": "%Inventory ref %"},
         ).all()
-    return {str(note).split()[0].removeprefix(MARK): row_id for row_id, note in rows}
+    loaded: dict[str, uuid.UUID] = {}
+    for row_id, note in rows:
+        hosted = HOSTED_REF.search(str(note))
+        if hosted:
+            loaded[hosted.group(1)] = row_id
+        elif str(note).startswith(MARK):
+            loaded[str(note).split()[0].removeprefix(MARK)] = row_id
+    return loaded
 
 
 def dropzone_files(folder: Path) -> list[Path]:
@@ -380,7 +402,11 @@ def _publish(
 
 
 def load_dropzones(
-    engine: Engine, folder: Path, actor: Actor, directory: DirectoryService
+    engine: Engine,
+    folder: Path,
+    actor: Actor,
+    directory: DirectoryService,
+    publish: Collection[str] | None = None,
 ) -> dict[str, Any]:
     """Every country file; a bad file or record is refused, never the whole load.
 
@@ -389,6 +415,12 @@ def load_dropzones(
     or by one of its aliases matching a stored name or alias when no other record of
     that country carries the alias. Shared aliases (often operator brands of several
     airfields) never identify a dropzone.
+
+    `publish` None is the local development load: everything is made public. Given
+    (the hosted load), only records whose research status is in it and that have
+    coordinates are made public, and only they fill in a stored venue's missing
+    coordinates; every other new record stays a draft that a later run with its
+    status publishes. An empty set changes nothing public.
     """
     report: dict[str, Any] = {
         "files": 0,
@@ -396,11 +428,16 @@ def load_dropzones(
         "closed": 0,
         "skipped": 0,
         "resumed": 0,
+        "drafted": 0,
         "duplicates": [],
         "located": 0,
         "aliases_dropped": 0,
         "refused": [],
     }
+
+    def publishes(dz: Mapping[str, Any]) -> bool:
+        return publish is None or (dz["status"] in publish and _point(dz) is not None)
+
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
     stored = _stored_venues(engine)
@@ -429,12 +466,12 @@ def load_dropzones(
             key = dz["key"]
             status = dz["status"]
             aliases = [a for a in dz.get("aliases") or [] if a.strip()]
-            if key in loaded:
+            resumed = key in loaded
+            if resumed:
                 if _venue_status(engine, loaded[key]) != "draft":
                     report["skipped"] += 1
                     continue
-                venue_id = loaded[key]  # a draft an earlier run left unfinished
-                report["resumed"] += 1
+                venue_id = loaded[key]  # a draft an earlier run left, or kept
             else:
                 country = dz["country"].upper()
                 words, point = place_words(dz["name"]), _point(dz)
@@ -452,7 +489,8 @@ def load_dropzones(
                     report["duplicates"].append(
                         {"key": key, "matched": str(match[0]), "by": match[1]}
                     )
-                    report["located"] += _locate(directory, actor, match[0], dz)
+                    if publishes(dz):
+                        report["located"] += _locate(directory, actor, match[0], dz)
                     continue
                 try:
                     url, checked = _source(dz, data.get("researched_on"))
@@ -465,7 +503,11 @@ def load_dropzones(
                             latitude=dz.get("latitude"),
                             longitude=dz.get("longitude"),
                             source_url=url,
-                            source_note=_note(key, f"Research status: {status}."),
+                            source_note=(
+                                _note(key, f"Research status: {status}.")
+                                if publish is None
+                                else _hosted_note(key, status)
+                            ),
                             checked_on=checked,
                             listed=False,
                         ),
@@ -479,6 +521,10 @@ def load_dropzones(
                 stored.setdefault(country, []).append(
                     StoredVenue(venue_id, words, point)
                 )
+            if not publishes(dz):
+                report["drafted"] += 1
+                continue
+            report["resumed"] += resumed
             try:
                 report["aliases_dropped"] += _publish(
                     directory, actor, venue_id, aliases, status
@@ -620,10 +666,64 @@ def dev_data_refusal(
     return None
 
 
+def hosted_refusal(environ: Mapping[str, str]) -> str | None:
+    """Why the hosted dropzone load must not run here, or None.
+
+    Only `scripts/staging.sh load-dropzones` runs it: ENVIRONMENT=staging and the
+    operator's DATABASE_URL, both set explicitly in a cleared environment.
+    """
+    if environ.get("ENVIRONMENT") != "staging" or not environ.get("DATABASE_URL"):
+        return (
+            "the hosted dropzone load runs only from scripts/staging.sh load-dropzones"
+        )
+    return None
+
+
+def _statuses(value: str | None) -> frozenset[str]:
+    chosen = frozenset(s.strip() for s in (value or "").split(",") if s.strip())
+    unknown = chosen - DROPZONE_STATUSES
+    if unknown:
+        raise argparse.ArgumentTypeError(
+            f"unknown status {', '.join(sorted(unknown))}; "
+            f"choose from {', '.join(sorted(DROPZONE_STATUSES))}"
+        )
+    return chosen
+
+
+def load_hosted(folder: Path, reviewer: str, publish: frozenset[str]) -> int:
+    """The researched dropzones into the hosted database (owner request 2026-11-14).
+
+    Drafts only unless `publish` names research statuses; see `load_dropzones`.
+    """
+    from datetime import UTC, datetime
+
+    from app.core.db import engine
+    from app.skydiver.directory.store import sql_directory_store_factory
+
+    directory = DirectoryService(
+        stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC)
+    )
+    try:
+        actor = reviewer_actor(engine, reviewer)
+    except DevDataError as error:
+        print(error, file=sys.stderr)
+        return 1
+    report = load_dropzones(engine, folder, actor, directory, publish=publish)
+    print(json.dumps(report, indent=1))
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Load local development listings.")
-    parser.add_argument("command", choices=["load"])
-    parser.add_argument("path", type=Path)
+    parser = argparse.ArgumentParser(
+        description="Load local development listings, or the researched dropzones "
+        "into the hosted database."
+    )
+    parser.add_argument("command", choices=["load", "dropzones"])
+    parser.add_argument(
+        "path",
+        type=Path,
+        help="load: the listings file; dropzones: the dropzone inventory folder",
+    )
     parser.add_argument(
         "--reviewer", required=True, help="account with the reviewer role"
     )
@@ -631,9 +731,26 @@ def main(argv: Sequence[str] | None = None) -> int:
         "--dropzones",
         type=Path,
         default=None,
-        help="dropzone inventory folder (default: dropzones/ next to PATH)",
+        help="load: dropzone inventory folder (default: dropzones/ next to PATH)",
+    )
+    parser.add_argument(
+        "--publish",
+        type=_statuses,
+        default=frozenset(),
+        help="dropzones: research statuses to make public, comma-separated "
+        "(default: none; new dropzones stay drafts)",
     )
     args = parser.parse_args(argv)
+
+    if args.command == "dropzones":
+        refusal = hosted_refusal(os.environ)
+        if refusal:
+            print(refusal, file=sys.stderr)
+            return 2
+        if not args.path.is_dir():
+            print(f"{args.path} is not a directory", file=sys.stderr)
+            return 2
+        return load_hosted(args.path, args.reviewer, args.publish)
 
     from app.core.config import settings  # settings are read only when run
 
