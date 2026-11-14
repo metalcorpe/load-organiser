@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { randomBytes } from 'node:crypto';
 import { expect, test, type Page, type Request } from '@playwright/test';
-import { apiCall, reviewerSession } from './support/accounts.ts';
+import { PASSWORD, apiCall, createAccount, reviewerSession } from './support/accounts.ts';
 
 // The Map view of the dropzone directory (/dz?view=map). Tiles are never fetched from the real
 // OpenStreetMap servers here: every tile request is answered with a 1x1 PNG.
@@ -265,6 +265,113 @@ test.describe('dropzone map', () => {
 			'href',
 			'https://www.openstreetmap.org/?mlat=64.13&mlon=-21.94#map=13/64.13/-21.94'
 		);
+	});
+
+	test('the tab bar stays above the map: painted on top, and every tab takes its tap', async ({
+		page
+	}) => {
+		const { base, alpha } = shared;
+		// A phone 390px wide, short enough that a marker can be scrolled under the tab bar.
+		await page.setViewportSize({ width: 390, height: 560 });
+		await page.goto('/sign-in');
+		await page.getByLabel('Email', { exact: true }).fill(await createAccount({ label: 'dzmaptabs' }));
+		await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.getByTestId('current-account')).toBeVisible();
+		const tabs = page.getByRole('navigation', { name: 'Primary' });
+		const targets: [string, RegExp][] = [
+			['Explore', /\/$/],
+			['Logbook', /\/jumps$/],
+			['Friends', /\/activity$/],
+			['Me', /\/profile$/]
+		];
+		const names = targets.map(([name]) => name);
+		const tap = async (x: number, y: number) => page.touchscreen.tap(x, y);
+
+		async function mapPage() {
+			await page.goto(`/dz?view=map&q=${base}`);
+			// The choice to show the map is remembered for the visit after the first time.
+			const ask = page.getByRole('button', { name: 'Show map' });
+			const marker = page.locator('.dz-marker').first();
+			await expect(ask.or(marker)).toBeVisible();
+			if (await ask.isVisible()) await showMap(page);
+			await expect(marker).toBeVisible();
+		}
+
+		/** Scroll the page by the difference between a box's centre and the tab bar's centre. */
+		async function scrollUnderTabs(box: { y: number; height: number }) {
+			const bar = (await tabs.boundingBox())!;
+			await page.evaluate((dy) => window.scrollBy(0, dy), box.y + box.height / 2 - (bar.y + bar.height / 2));
+		}
+
+		/** The map under the whole tab bar: its top a third of the way down the screen. */
+		async function mapUnderTabs() {
+			await mapPage();
+			const map = (await page.getByTestId('dz-map').boundingBox())!;
+			await page.evaluate((dy) => window.scrollBy(0, dy), map.y - 560 / 3);
+			const [after, bar] = [(await page.getByTestId('dz-map').boundingBox())!, (await tabs.boundingBox())!];
+			expect(after.y + after.height, 'the map runs under the tab bar').toBeGreaterThan(bar.y + bar.height);
+		}
+
+		/**
+		 * What is painted on top at the centre of each tab. Leaflet's tiles let taps through
+		 * (pointer-events: none), so for this measurement only every map layer takes them: the
+		 * hit test then follows the painting order, tiles included.
+		 */
+		async function painted(): Promise<string[]> {
+			return tabs.getByRole('link').evaluateAll((links) => {
+				// Set through the style object: the site's CSP refuses an added <style>.
+				const layers = [...document.querySelectorAll<HTMLElement>('.leaflet-container, .leaflet-container *')];
+				for (const layer of layers) layer.style.setProperty('pointer-events', 'auto', 'important');
+				const found = links.map((link) => {
+					const box = link.getBoundingClientRect();
+					const hit = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
+					return hit && link.contains(hit) ? link.textContent!.trim() : `covered by ${hit?.className}`;
+				});
+				for (const layer of layers) layer.style.removeProperty('pointer-events');
+				return found;
+			});
+		}
+
+		for (const scheme of ['light', 'dark'] as const) {
+			await page.emulateMedia({ colorScheme: scheme });
+			await mapUnderTabs();
+			expect(await painted(), scheme).toEqual(names);
+			// With a popup open (the map's highest layer), scrolled under the bar.
+			await page.getByRole('button', { name: alpha.name, exact: true }).click();
+			const popup = page.locator('.leaflet-popup', { hasText: alpha.name });
+			await expect(popup).toBeVisible();
+			await scrollUnderTabs((await popup.boundingBox())!);
+			expect(await painted(), `${scheme}, popup open`).toEqual(names);
+		}
+
+		// A marker right under the bar: tapping there opens the tab, not the marker's popup.
+		await mapPage();
+		const marker = page.getByRole('button', { name: alpha.name, exact: true });
+		await scrollUnderTabs((await marker.boundingBox())!);
+		const spot = (await marker.boundingBox())!;
+		const bar = (await tabs.boundingBox())!;
+		const x = spot.x + spot.width / 2;
+		const y = bar.y + bar.height / 2;
+		expect(y, 'the marker is under the tab bar').toBeGreaterThan(spot.y);
+		expect(y).toBeLessThan(spot.y + spot.height);
+		const under = await tabs.getByRole('link').evaluateAll(
+			(links, px) => links.findIndex((link) => {
+				const box = link.getBoundingClientRect();
+				return px >= box.left && px < box.right;
+			}),
+			x
+		);
+		await tap(x, y);
+		await expect(page).toHaveURL(targets[under][1]);
+
+		// Each tab, tapped with the map under the whole bar.
+		for (const [name, url] of targets) {
+			await mapUnderTabs();
+			const box = (await tabs.getByRole('link', { name }).boundingBox())!;
+			await tap(box.x + box.width / 2, box.y + box.height / 2);
+			await expect(page).toHaveURL(url);
+		}
 	});
 
 	test('without JavaScript the Map view points to the list', async ({ browser }) => {
