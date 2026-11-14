@@ -1,0 +1,321 @@
+{
+  "country": "BE",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "be-spa",
+      "name": "Spa-La Sauvenière Airfield",
+      "aliases": [
+        "Skydive Spa",
+        "EBSP"
+      ],
+      "country": "BE",
+      "locality": "Spa, Liège",
+      "latitude": 50.478496,
+      "longitude": 5.912722,
+      "coordinates_source": "https://www.openstreetmap.org/way/158434772 (sport=parachuting, name Skydive SPA)",
+      "icao": "EBSP",
+      "operators": [
+        {
+          "name": "Skydive Spa",
+          "website": "https://skydivespa.be/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site footer 2026 and a note citing figures consulted on 11 October 2026; RTBF 2025 article describes it as a major centre.",
+      "sources": [
+        {
+          "url": "https://skydivespa.be/fr",
+          "checked_on": "2026-11-14",
+          "what": "operator site, Aérodrome de Spa La Sauvenière, Rue de la Sauvenière 122"
+        },
+        {
+          "url": "https://www.rtbf.be/article/et-si-vous-sautiez-le-parachutisme-en-wallonie-entre-ciel-frissons-et-liberte-11573284",
+          "checked_on": "2026-11-14",
+          "what": "RTBF article on Walloon dropzones (Spa, Namur/Temploux, Cerfontaine)"
+        }
+      ]
+    },
+    {
+      "key": "be-moorsele",
+      "name": "Moorsele Airfield",
+      "aliases": [
+        "Skydive Flanders Moorsele",
+        "EBMO"
+      ],
+      "country": "BE",
+      "locality": "Moorsele, Wevelgem, West-Vlaanderen",
+      "latitude": 50.848721,
+      "longitude": 3.146507,
+      "coordinates_source": "https://www.openstreetmap.org/node/6373851834 (sport=parachuting, Skydive Flanders dropzone Moorsele)",
+      "icao": "EBMO",
+      "operators": [
+        {
+          "name": "Skydive Flanders (Paracentrum Vlaanderen vzw)",
+          "website": "https://skydiveflanders.be/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Flanders booking page (checked 2026-11-14) says 2026 is fully booked and offers tandem and AFF at Moorsele, Schaffen and Zwartberg; 2027 bookings open in January.",
+      "sources": [
+        {
+          "url": "https://www.pcv.be/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Flanders site: lists its three dropzones Moorsele, Schaffen and Zwartberg with addresses; footer 2026"
+        },
+        {
+          "url": "https://skydiveflanders.be/reserveren",
+          "checked_on": "2026-11-14",
+          "what": "booking page: tandem and AFF bookings per dropzone (Moorsele, Schaffen, Zwartberg); '2026 is volledig volzet', 2027 bookings open in January"
+        }
+      ]
+    },
+    {
+      "key": "be-schaffen",
+      "name": "Schaffen-Diest Airfield",
+      "aliases": [
+        "Skydive Flanders Schaffen",
+        "EBDT"
+      ],
+      "country": "BE",
+      "locality": "Schaffen, Diest, Vlaams-Brabant",
+      "latitude": 51.002396,
+      "longitude": 5.068232,
+      "coordinates_source": "https://www.openstreetmap.org/way/172613470 (sport=parachuting area on the airfield)",
+      "icao": "EBDT",
+      "operators": [
+        {
+          "name": "Skydive Flanders (Paracentrum Vlaanderen vzw)",
+          "website": "https://skydiveflanders.be/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Flanders booking page (checked 2026-11-14) says 2026 is fully booked and offers tandem and AFF at Moorsele, Schaffen and Zwartberg; 2027 bookings open in January. Open Dutch and Belgian Nationals 2026 held at Schaffen (organiser post 27 August 2026).",
+      "sources": [
+        {
+          "url": "https://www.pcv.be/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Flanders site: lists its three dropzones Moorsele, Schaffen and Zwartberg with addresses; footer 2026"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBDT, used for coordinates"
+        },
+        {
+          "url": "https://skydiveflanders.be/reserveren",
+          "checked_on": "2026-11-14",
+          "what": "booking page: tandem and AFF bookings per dropzone (Moorsele, Schaffen, Zwartberg); '2026 is volledig volzet', 2027 bookings open in January"
+        },
+        {
+          "url": "https://www.skydiveflanders.be/odbn2026",
+          "checked_on": "2026-11-14",
+          "what": "Open Dutch and Belgian National Skydiving Championships 2026 at Skydive Flanders – Schaffen (post dated 27 August 2026)"
+        }
+      ],
+      "note": "Schaffen is also the Belgian Defence parachute training centre."
+    },
+    {
+      "key": "be-zwartberg",
+      "name": "Genk Zwartberg Airfield",
+      "aliases": [
+        "Skydive Flanders Zwartberg",
+        "EBZW"
+      ],
+      "country": "BE",
+      "locality": "Genk, Limburg",
+      "latitude": 51.0154,
+      "longitude": 5.52647,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EBZW)",
+      "icao": "EBZW",
+      "operators": [
+        {
+          "name": "Skydive Flanders (Paracentrum Vlaanderen vzw)",
+          "website": "https://skydiveflanders.be/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Flanders booking page (checked 2026-11-14) says 2026 is fully booked and offers tandem and AFF at Moorsele, Schaffen and Zwartberg; 2027 bookings open in January. Facebook search snippet: 'Weekend @ Skydive Flanders DZ Zwartberg', 27 September 2026.",
+      "sources": [
+        {
+          "url": "https://www.pcv.be/",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Flanders site: lists its three dropzones Moorsele, Schaffen and Zwartberg with addresses; footer 2026"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBZW, used for coordinates"
+        },
+        {
+          "url": "https://skydiveflanders.be/reserveren",
+          "checked_on": "2026-11-14",
+          "what": "booking page: tandem and AFF bookings per dropzone (Moorsele, Schaffen, Zwartberg); '2026 is volledig volzet', 2027 bookings open in January"
+        }
+      ],
+      "note": "Address Vliegplein 1, 3600 Genk."
+    },
+    {
+      "key": "be-cerfontaine",
+      "name": "Cerfontaine Airfield",
+      "aliases": [
+        "Skydive Cerfontaine",
+        "EBCF"
+      ],
+      "country": "BE",
+      "locality": "Cerfontaine, Namur (near the Lacs de l'Eau d'Heure)",
+      "latitude": 50.152802,
+      "longitude": 4.38722,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EBCF)",
+      "icao": "EBCF",
+      "operators": [
+        {
+          "name": "Skydive Cerfontaine",
+          "website": "https://www.skydivecerfontaine.be/",
+          "facebook": "https://www.facebook.com/SkydiveCerfontaine"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Booking calendar shows November 2026; Instagram profile snippets show posts from March to 8 October 2026; Highfly Rodeo Festival 2026 at Skydive Cerfontaine on 23 May 2026 (Facebook event snippet).",
+      "sources": [
+        {
+          "url": "https://www.skydivecerfontaine.be/",
+          "checked_on": "2026-11-14",
+          "what": "operator site: dropzone on the Cerfontaine aerodrome; tandem, AFF and licensed jumpers"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBCF, used for coordinates"
+        },
+        {
+          "url": "https://app.webhero-bookings.com/skydive-cerfontaine/reservez-votre-saut-en-tandem",
+          "checked_on": "2026-11-14",
+          "what": "tandem booking calendar, November 2026"
+        }
+      ],
+      "note": "The operator's Facebook page is titled 'Skydive St-Ghislain - Cerfontaine': the Saint-Ghislain company returned to Cerfontaine in 2023 (RTBF, 17 October 2023). A 2024 dhnet.be headline about Skydive2fly returning to Cerfontaine probably refers to the same group; not confirmed. See be-saint-ghislain."
+    },
+    {
+      "key": "be-saint-ghislain",
+      "name": "Saint-Ghislain Airfield",
+      "aliases": [
+        "Skydive Saint-Ghislain",
+        "Skydive St-Ghislain",
+        "EBSG"
+      ],
+      "country": "BE",
+      "locality": "Saint-Ghislain, Hainaut",
+      "latitude": 50.458009,
+      "longitude": 3.821,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EBSG)",
+      "icao": "EBSG",
+      "operators": [
+        {
+          "name": "Skydive Saint-Ghislain (now operating as Skydive Cerfontaine)",
+          "facebook": "https://www.facebook.com/SkydiveCerfontaine"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "RTBF (17 October 2023): the centre opened at Saint-Ghislain in October 2022, jump altitudes were limited by skeyes, and the company moved its jumps back to Cerfontaine and to France; Saint-Ghislain awaited a decision by the authorities. No 2025+ evidence of jumps at Saint-Ghislain found. Codex cross-check found no dated resumption; remains uncertain rather than inferring closure from directory absence.",
+      "sources": [
+        {
+          "url": "https://www.rtbf.be/article/baptemes-en-parachute-la-saga-skydive-saint-ghislain-en-approche-de-conclusion-11269479",
+          "checked_on": "2026-11-14",
+          "what": "RTBF article, 17 October 2023, on the Saint-Ghislain dropzone and the return to Cerfontaine"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBSG, used for coordinates"
+        },
+        {
+          "url": "https://fwcp.be/",
+          "checked_on": "2026-11-14",
+          "what": "Current Walloon federation lists Spa, Cerfontaine and Namur; absence does not establish closure"
+        }
+      ],
+      "note": "Probably no longer used for jumps; kept as uncertain rather than closed because no closure notice was found."
+    },
+    {
+      "key": "be-namur-temploux",
+      "name": "Namur-Suarlée Airfield (Temploux)",
+      "aliases": [
+        "Paraclub Namur",
+        "EBNM"
+      ],
+      "country": "BE",
+      "locality": "Suarlée/Temploux, Namur",
+      "latitude": 50.489705,
+      "longitude": 4.769697,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EBNM)",
+      "icao": "EBNM",
+      "operators": [
+        {
+          "name": "Paraclub Namur",
+          "website": "https://paraclubnamur.be/en",
+          "facebook": "https://www.facebook.com/paraclubnamur"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator site footer 2026; RTBF reported an accident during the Paraclub Namur 'Temploux Festival 2026'; Belgian-Dutch nationals held there September 2025 (dhnet.be headline).",
+      "sources": [
+        {
+          "url": "https://paraclubnamur.be/en",
+          "checked_on": "2026-11-14",
+          "what": "operator site: Aérodrome de Namur, Rue Capitaine Aviateur Jacquet 44, 5020 Suarlée; opening hours"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBNM, used for coordinates"
+        }
+      ],
+      "season": "Weekends and public holidays, March to mid-December"
+    },
+    {
+      "key": "be-hoevenen",
+      "name": "Hoevenen Airfield",
+      "aliases": [
+        "Skydive Antwerp",
+        "Sportparachutistenclub Hoevenen",
+        "EBHN"
+      ],
+      "country": "BE",
+      "locality": "Hoevenen, Stabroek, Antwerpen",
+      "latitude": 51.306099,
+      "longitude": 4.38722,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident EBHN)",
+      "icao": "EBHN",
+      "operators": [
+        {
+          "name": "Skydive Antwerp (Sportparachutistenclub Hoevenen)",
+          "website": "https://skydiveantwerp.be",
+          "facebook": "https://www.facebook.com/SkydiveAntwerp"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator booking calendar lists tandem slots every weekend of November 2026 (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://skydiveantwerp.be",
+          "checked_on": "2026-11-14",
+          "what": "operator site, address Dijkstraat, 2940 Hoevenen"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row EBHN, used for coordinates"
+        },
+        {
+          "url": "https://skydiveantwerp.be/calendar",
+          "checked_on": "2026-11-14",
+          "what": "tandem booking calendar, slots 1–29 November 2026"
+        }
+      ],
+      "aircraft": "turbine aircraft (type not stated)",
+      "note": "Operator gives Dijkstraat, Hoevenen and a turbine aircraft; it does not name the airfield. Hoevenen airfield (EBHN, Vliegclub Hoevenen) is the only airfield there, so the link is by place. Not on the Walloon lists; found via manawa.com and a web search."
+    }
+  ]
+}

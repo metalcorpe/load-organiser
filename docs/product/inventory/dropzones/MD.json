@@ -1,0 +1,109 @@
+{
+  "country": "MD",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "md-vadul-lui-voda",
+      "name": "Aerodromul Vadul lui Vodă",
+      "aliases": [
+        "LUKV",
+        "Skydive Moldova"
+      ],
+      "country": "MD",
+      "locality": "Văduleni / Vadul lui Vodă, Chișinău",
+      "latitude": 47.06553,
+      "longitude": 29.09396,
+      "coordinates_source": "https://www.openstreetmap.org/way/1279069009 (OSM aerodrome way centre; g0.md map pin 47.06694, 29.09321 agrees)",
+      "icao": "LUKV",
+      "operators": [
+        {
+          "name": "Federația de Parașutism din Republica Moldova (Skydive Moldova)",
+          "website": "https://skydive.md/"
+        },
+        {
+          "name": "DZM Skydive MoldAVIA",
+          "website": "https://dzm.md/ro"
+        }
+      ],
+      "season": "Friday afternoon and weekends (listing); season from early April (older article)",
+      "status": "active",
+      "status_evidence": "Diez.md article of 19 Jul 2025 lists Skydive Moldova tandem jumps with current prices; federation site links a 2025 annual report uploaded 2026-06.",
+      "sources": [
+        {
+          "url": "https://skydive.md/",
+          "checked_on": "2026-11-14",
+          "what": "Federation site: tandem jumps from 3,000 m, 2025 report"
+        },
+        {
+          "url": "https://diez.md/2025/07/19/cat-costa-sa-sari-cu-parasuta-in-moldova-si-unde-poti-face-asta/",
+          "checked_on": "2026-11-14",
+          "what": "2025 article listing Moldovan tandem operators"
+        },
+        {
+          "url": "https://g0.md/en/explore/federatia-de-parasutism-a-republicii-moldova",
+          "checked_on": "2026-11-14",
+          "what": "Listing placing the federation at Vadul lui Vodă aerodrome, opening hours"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1279069009",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Vadul lui Vodă LUKV"
+        },
+        {
+          "url": "https://dzm.md/ro",
+          "checked_on": "2026-11-14",
+          "what": "Operator site: tandem jumps at Aerodromul sportiv Vadul lui Vodă (footer 2025)"
+        }
+      ],
+      "note": "dzm.md names the Vadul lui Vodă sport airfield and uses the same phone number (+373 69 498 565) that diez.md gives for Skydive Moldova, so the two brands appear to be one operation; not confirmed."
+    },
+    {
+      "key": "md-horesti",
+      "name": "Aerodromul Horești",
+      "aliases": [
+        "LUKH",
+        "Aero Team Moldova"
+      ],
+      "country": "MD",
+      "locality": "Horești, Ialoveni",
+      "latitude": 46.83656,
+      "longitude": 28.90164,
+      "coordinates_source": "https://www.openstreetmap.org/way/701982115 (OSM aerodrome way centre)",
+      "icao": "LUKH",
+      "operators": [
+        {
+          "name": "Aero Team Moldova",
+          "website": "https://aeroteam.md/ro2",
+          "facebook": "https://www.facebook.com/aero.team.moldova"
+        }
+      ],
+      "season": "all year (operator site)",
+      "status": "uncertain",
+      "status_evidence": "Diez.md 19 Jul 2025 lists AERO TEAM Moldova tandem and solo prices, but does not say where the jumps are made. The operator site gives 'aerodromul Horesti' as contact address and also 'Vaduleni - Vadul lui Vodă' in its header; the listed fleet (Sting, Pipistrel, Cessna, per g0.md) is for pleasure flights. No dated post showing jumps at Horești was found.",
+      "sources": [
+        {
+          "url": "https://aeroteam.md/ro2",
+          "checked_on": "2026-11-14",
+          "what": "Operator site: flights and tandem/solo parachute jumps at Horești aerodrome"
+        },
+        {
+          "url": "https://diez.md/2025/07/19/cat-costa-sa-sari-cu-parasuta-in-moldova-si-unde-poti-face-asta/",
+          "checked_on": "2026-11-14",
+          "what": "2025 article listing AERO TEAM Moldova jump prices"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/701982115",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Horești LUKH"
+        },
+        {
+          "url": "https://g0.md/explore/aero-team-moldova-zboruri-sportive",
+          "checked_on": "2026-11-14",
+          "what": "Listing: Aero Team Moldova pleasure flights from Horești aerodrome (Sting, Pipistrel, Cessna)"
+        }
+      ],
+      "note": "Downgraded from active in the check: the jump offer is real in 2025, but whether jumps are made at Horești or at Vadul lui Vodă is unresolved."
+    }
+  ]
+}

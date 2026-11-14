@@ -1,0 +1,1395 @@
+{
+  "country": "PL",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "pl-lubin",
+      "name": "Lotnisko Lubin",
+      "country": "PL",
+      "locality": "Lubin, Dolnośląskie",
+      "latitude": 51.42333,
+      "longitude": 16.19535,
+      "coordinates_source": "https://www.openstreetmap.org/way/278840601 (OSM aerodrome)",
+      "icao": "EPLU",
+      "operators": [
+        {
+          "name": "Skydive Polska",
+          "website": "https://www.skydivepolska.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Polska identifies Lubin airfield as its base; its partner page has site-specific tandem reports dated 19 April, 31 May, 9 August and 10 August 2026.",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://www.skykrawiec.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        },
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage notice: jumps currently at Leszno; Lubin and Jelenia Góra not named as jump sites"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLU/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://prezentmarzen.com/wykonawca/skydive-polska-pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated customer reports explicitly refer to the Lubin tandem product, corroborating regular 2026 operation."
+        },
+        {
+          "url": "https://www.skydivepolska.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator names Aeroklub Zagłębia Miedziowego, Spacerowa 9, Lubin."
+        }
+      ],
+      "note": "Earlier SkyKrawiec attribution was not confirmed; the directly identified local operator is Skydive Polska."
+    },
+    {
+      "key": "pl-leszno",
+      "name": "Lotnisko Leszno-Strzyżewice",
+      "country": "PL",
+      "locality": "Leszno, Wielkopolskie",
+      "latitude": 51.83514,
+      "longitude": 16.52424,
+      "coordinates_source": "https://www.openstreetmap.org/way/81403405 (OSM aerodrome)",
+      "icao": "EPLS",
+      "operators": [
+        {
+          "name": "Skydive Wrocław",
+          "website": "https://skydive.wroclaw.pl/"
+        },
+        {
+          "name": "SkyKrawiec",
+          "website": "https://www.skykrawiec.pl/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Wrocław homepage (opened 2026-11-14) states jumps are currently organised at Leszno airfield because jumps in Wrocław are not possible",
+      "sources": [
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage notice about moving jumps to Leszno"
+        },
+        {
+          "url": "https://www.skykrawiec.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-jelenia-gora",
+      "name": "Lotnisko Jelenia Góra",
+      "country": "PL",
+      "locality": "Jelenia Góra, Dolnośląskie",
+      "latitude": 50.89885,
+      "longitude": 15.78409,
+      "coordinates_source": "https://www.openstreetmap.org/way/237599078 (OSM aerodrome)",
+      "icao": "EPJG",
+      "operators": [
+        {
+          "name": "Tandemowe.pl",
+          "website": "https://tandemowe.pl/"
+        },
+        {
+          "name": "Skydive Wrocław",
+          "website": "https://skydive.wroclaw.pl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Tandemowe.pl now responds and advertises Jelenia Góra, but no dated 2025–2026 calendar or field-specific jump report was established.",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage notice: jumps currently at Leszno; Lubin and Jelenia Góra not named as jump sites"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPJG/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://tandemowe.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Website reopened successfully; locality named, but copyright year alone does not prove recent jumps."
+        }
+      ],
+      "note": "Operator site of Tandemowe.pl not opened; Skydive Wrocław listing for Jelenia Góra may be outdated (see pl-leszno). Check 2026-11-14: downgraded from seasonal."
+    },
+    {
+      "key": "pl-radawiec",
+      "name": "Lotnisko Lublin-Radawiec",
+      "country": "PL",
+      "locality": "Radawiec Duży, Lubelskie",
+      "latitude": 51.2216,
+      "longitude": 22.39674,
+      "coordinates_source": "https://www.openstreetmap.org/way/62382411 (OSM aerodrome)",
+      "icao": "EPLR",
+      "operators": [
+        {
+          "name": "Aeroklub Lubelski",
+          "website": "https://www.aeroklub.lublin.pl/"
+        }
+      ],
+      "aircraft": "An-2 (per fajnewypady)",
+      "season": "weekends, mostly May to mid-November (per fajnewypady)",
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; Aeroklub Lubelski shop sells tandem jumps (page opened 2026-11-14)",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://www.aeroklub.lublin.pl/kategoria-produktu/oferta/skoki-spadochronowe/",
+          "checked_on": "2026-11-14",
+          "what": "aero club shop page for parachute jumps"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPLR/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-zielona-gora-przylep",
+      "name": "Lotnisko Zielona Góra-Przylep",
+      "country": "PL",
+      "locality": "Przylep, Zielona Góra, Lubuskie",
+      "latitude": 51.97855,
+      "longitude": 15.46145,
+      "coordinates_source": "https://www.openstreetmap.org/node/1042034080 (OSM aerodrome node)",
+      "icao": "EPZP",
+      "operators": [
+        {
+          "name": "SkyKrawiec",
+          "website": "https://www.skykrawiec.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://www.skykrawiec.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPZP/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-piotrkow-trybunalski",
+      "name": "Lotnisko Piotrków Trybunalski-Bujny",
+      "aliases": [
+        "SkyForce",
+        "PeTe Skydive"
+      ],
+      "country": "PL",
+      "locality": "Piotrków Trybunalski, Łódzkie",
+      "latitude": 51.38357,
+      "longitude": 19.68349,
+      "coordinates_source": "https://www.openstreetmap.org/node/9896346016 (OSM node for the SkyForce skydive centre, ul. Przemysłowa 48A)",
+      "icao": "EPPT",
+      "operators": [
+        {
+          "name": "Sky Force – Polskie Centrum Spadochronowe",
+          "website": "https://skyforce.pl/"
+        }
+      ],
+      "aircraft": "Skyvan SC-7",
+      "status": "active",
+      "status_evidence": "skyforce.pl homepage (© 2026) with a 2025 customer review dated 21.06.2025 and live booking",
+      "sources": [
+        {
+          "url": "https://skyforce.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPPT/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-strzelce-male",
+      "name": "Lądowisko Strzelce Małe-Szczurowa",
+      "country": "PL",
+      "locality": "Strzelce Małe, gm. Szczurowa, Małopolskie",
+      "latitude": 50.11918,
+      "longitude": 20.60103,
+      "coordinates_source": "https://www.openstreetmap.org/way/1283307738 (OSM aerodrome)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Szkoła Spadochronowa TandemyPL",
+          "website": "https://tandemy.pl/"
+        }
+      ],
+      "aircraft": "Cessna 182",
+      "season": "May to end of October (per fajnewypady)",
+      "status": "seasonal",
+      "status_evidence": "tandemy.pl page (opened 2026-11-14) states jumps for Kraków take place at Strzelce Małe; team does about 1,784 jumps a year; 2026 jump calendar published",
+      "sources": [
+        {
+          "url": "https://tandemy.pl/gdzie-skaczemy/skoki-spadochronowe-krakow/",
+          "checked_on": "2026-11-14",
+          "what": "operator page naming the Strzelce Małe landing strip"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-nowy-targ",
+      "name": "Lotnisko Nowy Targ",
+      "country": "PL",
+      "locality": "Nowy Targ, Małopolskie",
+      "latitude": 49.46306,
+      "longitude": 20.05018,
+      "coordinates_source": "https://www.openstreetmap.org/way/231816801 (OSM aerodrome)",
+      "icao": "EPNT",
+      "operators": [
+        {
+          "name": "Szkoła Spadochronowa Skoczek",
+          "website": "https://skoczek.eu/"
+        },
+        {
+          "name": "Szkoła Spadochronowa TandemyPL",
+          "website": "https://tandemy.pl/"
+        }
+      ],
+      "aircraft": "PAC 750 XL (per fajnewypady)",
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; skoczek.eu says it operates at Nowy Targ airfield",
+      "sources": [
+        {
+          "url": "https://skoczek.eu/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPNT/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-chyzne",
+      "name": "Lądowisko Chyżne",
+      "country": "PL",
+      "locality": "Chyżne, gm. Jabłonka, Małopolskie",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": "none: no OSM feature found; operator contact page gives address ul. Chyżnik 2 only",
+      "icao": null,
+      "operators": [
+        {
+          "name": "SkyFun",
+          "website": "https://www.skyfun.pl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "SkyFun contact page explicitly names Lądowisko Chyżne, but no dated 2025–2026 jumping or unambiguous coordinate source was established.",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://www.skyfun.pl/kontakt",
+          "checked_on": "2026-11-14",
+          "what": "operator contact page with strip address"
+        },
+        {
+          "url": "https://skyfun.pl/kontakt",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator explicitly names the strip and street address; no coordinate-bearing map supplied."
+        }
+      ],
+      "note": "Coordinates unknown; no source gave a position. Check 2026-11-14: OSM places street 'Chyżnik' (the contact address) in Jabłonka village, about 49.449, 19.667, not in Chyżne; neither OSM nor OurAirports has a strip there, so coordinates stay null."
+    },
+    {
+      "key": "pl-lososina-dolna",
+      "name": "Lotnisko Nowy Sącz-Łososina Dolna",
+      "country": "PL",
+      "locality": "Łososina Dolna, Małopolskie",
+      "latitude": 49.74557,
+      "longitude": 20.62427,
+      "coordinates_source": "https://www.openstreetmap.org/way/95142845 (OSM aerodrome)",
+      "icao": "EPNL",
+      "operators": [
+        {
+          "name": "KrakSky",
+          "website": "https://kraksky.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "kraksky.pl (opened 2026-11-14) names Łososina (Aeroklub Podhalański airfield) as a jump site and reports its 2025 jump count",
+      "sources": [
+        {
+          "url": "https://kraksky.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPNL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-krakow-pobiednik",
+      "name": "Lotnisko Kraków-Pobiednik Wielki",
+      "country": "PL",
+      "locality": "Pobiednik Wielki, Małopolskie",
+      "latitude": 50.0878,
+      "longitude": 20.20237,
+      "coordinates_source": "https://www.openstreetmap.org/way/218821049 (OSM aerodrome)",
+      "icao": "EPKP",
+      "operators": [
+        {
+          "name": "KrakSky",
+          "website": "https://kraksky.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "kraksky.pl (opened 2026-11-14) names Pobiednik Wielki as its main base; 2025 jump count reported",
+      "sources": [
+        {
+          "url": "https://kraksky.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPKP/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-przasnysz",
+      "name": "Lądowisko Przasnysz-Sierakowo",
+      "country": "PL",
+      "locality": "Sierakowo, Przasnysz, Mazowieckie",
+      "latitude": 53.00915,
+      "longitude": 20.93237,
+      "coordinates_source": "https://www.openstreetmap.org/way/1498326501 (OSM aerodrome)",
+      "icao": "EPPZ",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        }
+      ],
+      "season": "April–October (per skydive.pl)",
+      "status": "seasonal",
+      "status_evidence": "Listed as a current location on skydive.pl (2026 site; jumps every weekend April–October)",
+      "sources": [
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ],
+      "note": "Skydive.pl training base."
+    },
+    {
+      "key": "pl-wloclawek-kruszyn",
+      "name": "Lotnisko Włocławek-Kruszyn",
+      "country": "PL",
+      "locality": "Kruszyn, Włocławek, Kujawsko-Pomorskie",
+      "latitude": 52.58343,
+      "longitude": 19.01276,
+      "coordinates_source": "https://www.openstreetmap.org/way/169211351 (OSM aerodrome)",
+      "icao": "EPWK",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/",
+          "facebook": "https://www.facebook.com/skaczemy"
+        }
+      ],
+      "season": "April–October",
+      "status": "active",
+      "status_evidence": "Listed as a current location on skydive.pl (2026 site; jumps every weekend April–October); Skydive.pl Facebook (search view) has a 'season 2026' summary post",
+      "sources": [
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://ourairports.com/airports/EPWK/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "pl-czestochowa-rudniki",
+      "name": "Lotnisko Częstochowa-Rudniki",
+      "country": "PL",
+      "locality": "Rudniki, Częstochowa, Śląskie",
+      "latitude": 50.88756,
+      "longitude": 19.20314,
+      "coordinates_source": "https://www.openstreetmap.org/way/133848454 (OSM aerodrome)",
+      "icao": "EPRU",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        }
+      ],
+      "season": "April–October",
+      "status": "seasonal",
+      "status_evidence": "Listed as a current location on skydive.pl (2026 site; jumps every weekend April–October)",
+      "sources": [
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-gryzliny",
+      "name": "Lotnisko Gryźliny",
+      "country": "PL",
+      "locality": "Gryźliny, Warmińsko-Mazurskie",
+      "latitude": 53.60887,
+      "longitude": 20.34829,
+      "coordinates_source": "https://www.openstreetmap.org/node/2171225630 (OSM aerodrome)",
+      "icao": "EPGR",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        },
+        {
+          "name": "Skocz na Olsztyn"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive.pl sells a location-specific Gryźliny voucher, and Skocz na Olsztyn has a customer report dated 21 September 2026 explicitly for the Gryźliny tandem product.",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://prezentmarzen.com/wykonawca/skocz-na-olsztyn/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: 2026 customer report explicitly identifies Gryźliny rather than generic Olsztyn."
+        },
+        {
+          "url": "https://skydive.pl/lokalizacja/mazury-gryzliny/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened operator location-specific booking offer; generic site-wide reviews were not treated as field-specific evidence."
+        }
+      ],
+      "note": "One Gryźliny airfield record; marketing brands consolidated."
+    },
+    {
+      "key": "pl-suwalki",
+      "name": "Lotnisko Suwałki",
+      "country": "PL",
+      "locality": "Suwałki, Podlaskie",
+      "latitude": 54.07305,
+      "longitude": 22.89365,
+      "coordinates_source": "https://www.openstreetmap.org/relation/14923843 (OSM aerodrome)",
+      "icao": "EPSU",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        }
+      ],
+      "season": "April–October",
+      "status": "seasonal",
+      "status_evidence": "Listed as a current location on skydive.pl (2026 site; jumps every weekend April–October)",
+      "sources": [
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-slupsk-krepa",
+      "name": "Lotnisko Słupsk-Krępa",
+      "country": "PL",
+      "locality": "Krępa, Słupsk, Pomorskie",
+      "latitude": 54.40924,
+      "longitude": 17.09803,
+      "coordinates_source": "https://www.openstreetmap.org/way/305777891 (OSM aerodrome)",
+      "icao": "EPSK",
+      "operators": [
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        }
+      ],
+      "season": "April–October",
+      "status": "seasonal",
+      "status_evidence": "Listed as a current location on skydive.pl (2026 site; jumps every weekend April–October)",
+      "sources": [
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ],
+      "note": "skydive.pl says 'Słupsk'; fajnewypady names Krępa. A second strip, Słupsk-Pałowo, exists in OSM."
+    },
+    {
+      "key": "pl-ostrow-michalkow",
+      "name": "Lotnisko Ostrów Wielkopolski-Michałków",
+      "aliases": [
+        "Pyrlandia Boogie"
+      ],
+      "country": "PL",
+      "locality": "Michałków, Ostrów Wielkopolski, Wielkopolskie",
+      "latitude": 51.7006,
+      "longitude": 17.84751,
+      "coordinates_source": "https://www.openstreetmap.org/way/432764338 (OSM aerodrome)",
+      "icao": "EPOM",
+      "operators": [
+        {
+          "name": "Olimpic Skydive",
+          "website": "https://olimpic-skydive.pl/"
+        },
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; also on skydive.pl location list; Olimpic Skydive publishes a live departure board for Michałków",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://skokispadochronowe.com.pl",
+          "checked_on": "2026-11-14",
+          "what": "Olimpic Skydive page naming Ostrów Wielkopolski / Michałków as its base"
+        }
+      ]
+    },
+    {
+      "key": "pl-chojna",
+      "name": "Lądowisko Chojna",
+      "country": "PL",
+      "locality": "Chojna, Zachodniopomorskie",
+      "latitude": 52.94085,
+      "longitude": 14.42106,
+      "coordinates_source": "https://www.openstreetmap.org/node/3088430274 (OSM aerodrome)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Lecim na Szczecin"
+        },
+        {
+          "name": "Skydive.pl",
+          "website": "https://skydive.pl/"
+        },
+        {
+          "name": "SkyKrawiec",
+          "website": "https://www.skykrawiec.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; also on skydive.pl location list",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydive.pl/szkola-spadochronowa/gdzie-skaczemy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive.pl current list of its locations (season April–October)"
+        },
+        {
+          "url": "https://www.skykrawiec.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage (opened 2026-11-14): names three locations, Zielona Góra, Leszno and Chojna; no dated 2025/2026 content"
+        }
+      ]
+    },
+    {
+      "key": "pl-chrcynno",
+      "name": "Lotnisko Chrcynno",
+      "aliases": [
+        "Skydive Warszawa"
+      ],
+      "country": "PL",
+      "locality": "Chrcynno, near Nasielsk, Mazowieckie",
+      "latitude": 52.57263,
+      "longitude": 20.87168,
+      "coordinates_source": "https://www.openstreetmap.org/way/181194701 (OSM aerodrome)",
+      "icao": "EPNC",
+      "operators": [
+        {
+          "name": "Aeroklub Warszawski – Skydive Warszawa",
+          "website": "https://skydive.waw.pl/",
+          "facebook": "https://www.facebook.com/SkyDiveWarszawa"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "skydive.waw.pl news posts dated 2026-09, 2026-10 (AFF course schedule) and 2026-11; site names Chrcynno as the jump airfield",
+      "sources": [
+        {
+          "url": "https://skydive.waw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage with 2026 news"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "pl-opole-polska-nowa-wies",
+      "name": "Lotnisko Opole-Polska Nowa Wieś",
+      "country": "PL",
+      "locality": "Polska Nowa Wieś, Opolskie",
+      "latitude": 50.6322,
+      "longitude": 17.781,
+      "coordinates_source": "https://www.openstreetmap.org/way/187379210 (OSM aerodrome)",
+      "icao": "EPOP",
+      "operators": [
+        {
+          "name": "Skoki Spadochronowe Opole (Para Med & Rigging)"
+        }
+      ],
+      "aircraft": "An-2 (per fajnewypady)",
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-mielec",
+      "name": "Lotnisko Mielec",
+      "country": "PL",
+      "locality": "Mielec, Podkarpackie",
+      "latitude": 50.32327,
+      "longitude": 21.46439,
+      "coordinates_source": "https://www.openstreetmap.org/way/33761011 (OSM aerodrome)",
+      "icao": "EPML",
+      "operators": [
+        {
+          "name": "SkyDive Club Rzeszów",
+          "website": "https://skydiveclub.pl/"
+        },
+        {
+          "name": "Szkoła Spadochronowa TandemyPL",
+          "website": "https://tandemy.pl/"
+        }
+      ],
+      "season": "from 9 May 2026",
+      "status": "seasonal",
+      "status_evidence": "skydiveclub.pl post dated 2026-03-01: 2026 season starts 9 May",
+      "sources": [
+        {
+          "url": "https://skydiveclub.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage with 2026 season post"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-bialystok-krywlany",
+      "name": "Lotnisko Białystok-Krywlany",
+      "aliases": [
+        "Spadochrony Białystok"
+      ],
+      "country": "PL",
+      "locality": "Białystok, Podlaskie",
+      "latitude": 53.1043,
+      "longitude": 23.16396,
+      "coordinates_source": "https://www.openstreetmap.org/way/1232848101 (OSM area for the Aeroklub Białostocki parachute section tent at Krywlany)",
+      "icao": "EPBK",
+      "operators": [
+        {
+          "name": "Aeroklub Białostocki",
+          "website": "https://aeroklub.bialystok.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "pl-debrzno",
+      "name": "Lądowisko Debrzno",
+      "country": "PL",
+      "locality": "Debrzno, Pomorskie",
+      "latitude": 53.52481,
+      "longitude": 17.25783,
+      "coordinates_source": "https://www.openstreetmap.org/node/3088443396 (OSM lądowisko node, ULC ref 286)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Toruń (TARM)",
+          "website": "http://www.skydive-torun.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl (organiser page checked 2026-10-08); Skydive Toruń homepage (opened 2026-11-14) says it jumps at Debrzno airfield and has a season-start post dated 2025-04-26",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "http://www.skydive-torun.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage: jumps at Debrzno; news post 2025-04-26; 2025 jump calendar image"
+        }
+      ],
+      "note": "A second OSM feature 'DOL Debrzno (Słupia)' is a highway strip at 53.5715,17.2622; the ULC-registered strip was used here."
+    },
+    {
+      "key": "pl-pruszcz-gdanski",
+      "name": "Lotnisko Pruszcz Gdański",
+      "country": "PL",
+      "locality": "Pruszcz Gdański, Pomorskie",
+      "latitude": 54.24709,
+      "longitude": 18.67409,
+      "coordinates_source": "https://www.openstreetmap.org/way/592098622 (OSM aerodrome, 49th Air Base)",
+      "icao": "EPPR",
+      "operators": [
+        {
+          "name": "Aeroklub Gdański – sekcja spadochronowa (Skydive Gdańsk)",
+          "website": "https://spadochrony.aeroklub.gda.pl"
+        }
+      ],
+      "season": "March/April to end of October, weekends",
+      "status": "seasonal",
+      "status_evidence": "spadochrony.aeroklub.gda.pl published a 2025 season calendar (post 2025-02-21) and AFF course posts dated 2025",
+      "sources": [
+        {
+          "url": "https://spadochrony.aeroklub.gda.pl",
+          "checked_on": "2026-11-14",
+          "what": "operator page with 2025 season calendar"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ],
+      "note": "Military air base shared with the aero club."
+    },
+    {
+      "key": "pl-jastarnia",
+      "name": "Lądowisko Jastarnia",
+      "country": "PL",
+      "locality": "Jastarnia, Hel Peninsula, Pomorskie",
+      "latitude": 54.71084,
+      "longitude": 18.64405,
+      "coordinates_source": "https://www.openstreetmap.org/way/99725676 (OSM aerodrome)",
+      "icao": "EPJA",
+      "operators": [
+        {
+          "name": "Skydive Hel",
+          "website": "https://skydivehel.pl/"
+        },
+        {
+          "name": "PL Strefa Hel",
+          "website": "https://plstrefa.pl/"
+        },
+        {
+          "name": "Szkoła Spadochronowa TandemyPL",
+          "website": "https://tandemy.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed as an active zone on plstrefa.pl (2026); also on fajnewypady.pl (checked 2026-10-08)",
+      "sources": [
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "PL Strefa list of its 5 active zones with airfield addresses"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        }
+      ]
+    },
+    {
+      "key": "pl-gliwice",
+      "name": "Lotnisko Gliwice-Trynek",
+      "aliases": [
+        "Strefa Silesia"
+      ],
+      "country": "PL",
+      "locality": "Gliwice, Śląskie",
+      "latitude": 50.26916,
+      "longitude": 18.67219,
+      "coordinates_source": "https://www.openstreetmap.org/relation/3193806 (OSM aerodrome)",
+      "icao": "EPGL",
+      "operators": [
+        {
+          "name": "PL Strefa Silesia",
+          "website": "https://plstrefa.pl/"
+        },
+        {
+          "name": "Aeroklub Gliwicki",
+          "website": "https://aeroklub.gliwice.pl/"
+        },
+        {
+          "name": "Skoki Spadochronowe Opole (Para Med & Rigging)"
+        }
+      ],
+      "aircraft": "Cessna Grand Caravan (per PL Strefa)",
+      "season": "March–October, Friday–Sunday (PL Strefa)",
+      "status": "seasonal",
+      "status_evidence": "Listed as an active zone on plstrefa.pl (2026); Aeroklub Gliwicki also listed on fajnewypady.pl (checked 2026-10-08)",
+      "sources": [
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "PL Strefa list of its 5 active zones with airfield addresses"
+        },
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "pl-wroclaw-szymanow",
+      "name": "Lotnisko Wrocław-Szymanów",
+      "country": "PL",
+      "locality": "Szymanów, Dolnośląskie",
+      "latitude": 51.2065,
+      "longitude": 16.99773,
+      "coordinates_source": "https://www.openstreetmap.org/way/637964384 (OSM aerodrome)",
+      "icao": "EPWS",
+      "operators": [
+        {
+          "name": "PL Strefa Wrocław",
+          "website": "https://plstrefa.pl/"
+        },
+        {
+          "name": "Skydive Wrocław",
+          "website": "https://skydive.wroclaw.pl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Skydive Wrocław still explicitly suspends Szymanów jumps and uses Leszno; no dated 2025–2026 evidence resolved the conflicting PL Strefa listing.",
+      "sources": [
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "PL Strefa list of its 5 active zones with airfield addresses"
+        },
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "operator notice that Szymanów jumps are suspended; Codex cross-check: Current suspension notice reopened."
+        }
+      ]
+    },
+    {
+      "key": "pl-elblag",
+      "name": "Lotnisko Elbląg",
+      "aliases": [
+        "Skydive Club 3miasto"
+      ],
+      "country": "PL",
+      "locality": "Elbląg, Warmińsko-Mazurskie",
+      "latitude": 54.14413,
+      "longitude": 19.42204,
+      "coordinates_source": "https://www.openstreetmap.org/node/12067697654 (OSM node 'PL Strefa Baltic', sport=parachuting)",
+      "icao": "EPEL",
+      "operators": [
+        {
+          "name": "PL Strefa Baltic",
+          "website": "https://plstrefa.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed as an active zone on plstrefa.pl (2026)",
+      "sources": [
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "PL Strefa list of its 5 active zones with airfield addresses"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "pl-olsztyn-dajtki",
+      "name": "Lotnisko Olsztyn-Dajtki",
+      "country": "PL",
+      "locality": "Olsztyn, Warmińsko-Mazurskie",
+      "latitude": 53.77282,
+      "longitude": 20.41363,
+      "coordinates_source": "https://www.openstreetmap.org/way/1010768830 (OSM aerodrome)",
+      "icao": "EPOD",
+      "operators": [
+        {
+          "name": "Aeroklub Warmińsko-Mazurski",
+          "website": "https://aeroklub.olsztyn.pl/"
+        },
+        {
+          "name": "PL Strefa Mazury",
+          "website": "https://plstrefa.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; PL Strefa lists an Olsztyn/Mazury zone (May–September)",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "PL Strefa list of its 5 active zones with airfield addresses"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ],
+      "note": "PL Strefa does not name its Olsztyn airfield, so its presence at Dajtki is not confirmed."
+    },
+    {
+      "key": "pl-bielsko-biala",
+      "name": "Lotnisko Bielsko-Biała-Aleksandrowice",
+      "country": "PL",
+      "locality": "Bielsko-Biała, Śląskie",
+      "latitude": 49.80504,
+      "longitude": 19.00306,
+      "coordinates_source": "https://www.openstreetmap.org/way/85568096 (OSM aerodrome)",
+      "icao": "EPBA",
+      "operators": [
+        {
+          "name": "Skoki BB – Ośrodek Szkolenia Lotniczego",
+          "website": "https://www.skokibielsko.pl"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://www.skokibielsko.pl",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage: tandem jumps in Bielsko-Biała; no dated 2025/2026 content"
+        }
+      ]
+    },
+    {
+      "key": "pl-kielce-maslow",
+      "name": "Lotnisko Kielce-Masłów",
+      "country": "PL",
+      "locality": "Masłów Pierwszy, Świętokrzyskie",
+      "latitude": 50.89868,
+      "longitude": 20.73183,
+      "coordinates_source": "https://www.openstreetmap.org/way/512967994 (OSM aerodrome)",
+      "icao": "EPKA",
+      "operators": [
+        {
+          "name": "Skoki Kielce"
+        },
+        {
+          "name": "Aeroklub Kielecki / 38 Oddział ZPS Kielce"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl (organiser page checked 2026-10-08); dlapilota.pl reports the XXVII ZPS accuracy championships at Masłów on 21–23 August 2026, jumps from an M28",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://dlapilota.pl/wiadomosci/polska/xxvii-mistrzostwa-zwiazku-polskich-spadochroniarzy-w-celnosci-ladowania-0",
+          "checked_on": "2026-11-14",
+          "what": "news report, parachute accuracy championships at Masłów, 21–23 August 2026"
+        }
+      ]
+    },
+    {
+      "key": "pl-poznan-kobylnica",
+      "name": "Lotnisko Poznań-Kobylnica",
+      "country": "PL",
+      "locality": "Kobylnica (Janikowo), Wielkopolskie",
+      "latitude": 52.43542,
+      "longitude": 17.04547,
+      "coordinates_source": "https://www.openstreetmap.org/way/664846932 (OSM aerodrome)",
+      "icao": "EPPK",
+      "operators": [
+        {
+          "name": "Sky Camp",
+          "website": "https://skycamp.pl/"
+        }
+      ],
+      "aircraft": "PAC 750 XSTOL (per fajnewypady)",
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; skycamp.pl says it jumps at Kobylnica and Bednary",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skycamp.pl/skok-spadochronowy-w-tandemie",
+          "checked_on": "2026-11-14",
+          "what": "operator page (seen as search excerpt)"
+        }
+      ]
+    },
+    {
+      "key": "pl-poznan-bednary",
+      "name": "Lądowisko Poznań-Bednary",
+      "country": "PL",
+      "locality": "Bednary, Wielkopolskie",
+      "latitude": 52.53455,
+      "longitude": 17.21703,
+      "coordinates_source": "https://www.openstreetmap.org/way/50701732 (OSM aerodrome)",
+      "icao": "EPPB",
+      "operators": [
+        {
+          "name": "Sky Camp",
+          "website": "https://skycamp.pl/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Listed with current prices on fajnewypady.pl, organiser page checked 2026-10-08; skycamp.pl says it jumps at Kobylnica and Bednary",
+      "sources": [
+        {
+          "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
+          "checked_on": "2026-11-14",
+          "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        }
+      ]
+    },
+    {
+      "key": "pl-zamosc",
+      "name": "Lotnisko Zamość-Mokre",
+      "country": "PL",
+      "locality": "Mokre, Zamość, Lubelskie",
+      "latitude": 50.70196,
+      "longitude": 23.20189,
+      "coordinates_source": "https://www.openstreetmap.org/relation/16413510 (OSM aerodrome)",
+      "icao": "EPZA",
+      "operators": [
+        {
+          "name": "Aeroklub Ziemi Zamojskiej",
+          "website": "https://www.aeroklubzamosc.pl",
+          "facebook": "https://www.facebook.com/AeroklubZamosc"
+        },
+        {
+          "name": "Flyfast Zamość"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aeroklub Ziemi Zamojskiej currently sells tandems at Mokre, but no opened dated 2025–2026 evidence establishes a regular jumping schedule.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/poland",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Polish dropzones (lead)"
+        },
+        {
+          "url": "https://dlapilota.pl/wiadomosci/polska/spadochronowe-zawody-eeal-w-hrubieszowie-0",
+          "checked_on": "2026-11-14",
+          "what": "news: EEAL accuracy competition 31 July–2 August 2026, co-organised by Aeroklub Ziemi Zamojskiej, but jumps at Metelin strip and Hrubieszów, not at Mokre"
+        },
+        {
+          "url": "https://www.aeroklubzamosc.pl",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator homepage sells tandems and names Mokre; unrelated dated news was not treated as jumping evidence."
+        }
+      ],
+      "note": "Lead from skydivingsource and Facebook search result; needs confirmation. Check 2026-11-14: the aero club's name is Aeroklub Ziemi Zamojskiej. A 2024 EEAL round was held at Mokre (search view); the 2026 round moved to Hrubieszów. Still no dated 2025/2026 jumping at Mokre."
+    },
+    {
+      "key": "pl-krosno",
+      "name": "Lotnisko Krosno",
+      "aliases": [
+        "EPKR"
+      ],
+      "country": "PL",
+      "locality": "Krosno, Podkarpackie",
+      "latitude": 49.683807,
+      "longitude": 21.740953,
+      "coordinates_source": "https://ourairports.com/airports/EPKR/",
+      "icao": "EPKR",
+      "operators": [
+        {
+          "name": "Grupa Spadochronowa REAKTOR24",
+          "website": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "An operator statement concerning 20 September 2026, published by dlapilota, confirms REAKTOR24 operates at EPKR and made ordinary jumps there before the separate airshow.",
+      "sources": [
+        {
+          "url": "https://dlapilota.pl/wiadomosci/polska/sky-magic-wykonalo-wspanialy-pokaz-podczas-nocnego-airshow-w-krosnie",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: dated activity and operator evidence."
+        },
+        {
+          "url": "https://ourairports.com/airports/EPKR/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport reference coordinates."
+        }
+      ],
+      "note": "Site included for the resident operator activity; the visiting Sky Magic display is not counted as a separate dropzone."
+    },
+    {
+      "key": "pl-miroslawice",
+      "name": "Lotnisko Mirosławice",
+      "aliases": [
+        "Olimpic Skydive"
+      ],
+      "country": "PL",
+      "locality": "Mirosławice, Sobótka",
+      "latitude": 50.957802,
+      "longitude": 16.7703,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident EPMR)",
+      "icao": "EPMR",
+      "operators": [
+        {
+          "name": "Olimpic Skydive",
+          "website": "https://olimpic-skydive.pl/"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Airfield operator notice dated 23 June 2025 explicitly states that parachute jumps do not take place at Mirosławice.",
+      "sources": [
+        {
+          "url": "https://www.uspa.org/DZdetails?accountnumber=225481",
+          "checked_on": "2026-11-14",
+          "what": "International directory lead for Olimpic at Mirosławice."
+        },
+        {
+          "url": "https://aeroklubdolnoslaski.pl/dane-kontaktowe-do-podmiotow-swiadczacych-uslugi-na-lotnisku-miroslawice/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield operator explicitly rules out parachuting at the site in June 2025."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; EPMR airfield coordinates."
+        }
+      ],
+      "note": "Historical place retained; operator activity at Michałków is already a separate record."
+    },
+    {
+      "key": "pl-rybnik-gotartowice",
+      "name": "Lotnisko Rybnik-Gotartowice",
+      "aliases": [
+        "Omega Skydive"
+      ],
+      "country": "PL",
+      "locality": "Rybnik",
+      "latitude": 50.070801,
+      "longitude": 18.6283,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident EPRG)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Omega Skydive",
+          "website": "https://spadochrony.com.pl/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator describes weekend jumps from April to October at Rybnik, but no dated 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/omega-skydive/",
+          "checked_on": "2026-11-14",
+          "what": "Directory names Rybnik Airport despite mixed city labels."
+        },
+        {
+          "url": "https://spadochrony.com.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly identifies recurring aircraft skydiving at Rybnik."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; EPRG airfield coordinates."
+        }
+      ],
+      "note": ""
+    }
+  ]
+}

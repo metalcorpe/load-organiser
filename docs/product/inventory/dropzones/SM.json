@@ -1,0 +1,47 @@
+{
+  "country": "SM",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "sm-torraccia",
+      "name": "Aviosuperficie Torraccia",
+      "country": "SM",
+      "locality": "Torraccia, Domagnano",
+      "latitude": 43.948895,
+      "longitude": 12.511411,
+      "coordinates_source": "https://ourairports.com/airports/LIKD/",
+      "icao": "LIKD",
+      "operators": [
+        {
+          "name": "Skydive San Marino"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical international directories list a tandem/AFF dropzone at Torraccia, but no 2025+ operation was found; the national Olympic committee’s 2012 report describes most parachuting abroad and only an annual demonstration locally.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-san-marino",
+          "checked_on": "2026-11-14",
+          "what": "Historical dropzone listing incorrectly grouped under Italy"
+        },
+        {
+          "url": "https://extrevity.com/listing/skydive-san-marino/",
+          "checked_on": "2026-11-14",
+          "what": "Explicit Torraccia location and historical aircraft-based school offering"
+        },
+        {
+          "url": "https://www.cons.sm/wp-content/uploads/2020/03/panorama_2012_web2.pdf",
+          "checked_on": "2026-11-14",
+          "what": "National Olympic committee historical account of local demonstration versus overseas activity"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIKD/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "Historical directory claim retained as uncertain, not a confirmed operating school; regular local operation needs verification. San Marino is a separate country from Italy."
+    }
+  ]
+}

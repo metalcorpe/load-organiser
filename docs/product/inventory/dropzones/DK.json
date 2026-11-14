@@ -1,0 +1,697 @@
+{
+  "country": "DK",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "dk-maribo",
+      "name": "Lolland-Falster Maribo airport",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Rødby",
+      "latitude": 54.699447,
+      "longitude": 11.438163,
+      "coordinates_source": "https://ourairports.com/airports/EKMB/",
+      "icao": "EKMB",
+      "operators": [
+        {
+          "name": "Faldskærmsklubben",
+          "website": "https://www.faldskaermsklubben.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKMB/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-sindal",
+      "name": "Sindal airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Sindal",
+      "latitude": 57.503502,
+      "longitude": 10.2294,
+      "coordinates_source": "https://ourairports.com/airports/EKSN/",
+      "icao": "EKSN",
+      "operators": [
+        {
+          "name": "Faldskærmsklubben Nordenfjords",
+          "website": "https://fknf.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKSN/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-aars",
+      "name": "Års airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Års",
+      "latitude": 56.846613,
+      "longitude": 9.460602,
+      "coordinates_source": "https://ourairports.com/airports/EKVH/",
+      "icao": "EKVH",
+      "operators": [
+        {
+          "name": "Nordjysk Faldskærmsklub",
+          "website": "https://www.njfk.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKVH/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-faxe",
+      "name": "Faxe dropzone",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Faxe",
+      "latitude": 55.343834,
+      "longitude": 12.110574,
+      "coordinates_source": "https://www.openstreetmap.org/node/9634422256",
+      "icao": null,
+      "operators": [
+        {
+          "name": "DFC Paraclub",
+          "website": "https://www.dfcparaclub.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes a 2026 calendar containing student, licensed and tandem jumping dates.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/9634422256",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://dfcskydive.dk/wp-content/uploads/2026/07/kalender-2026-01-2-1-1.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-skive",
+      "name": "Skive airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Skive",
+      "latitude": 56.550201,
+      "longitude": 9.17298,
+      "coordinates_source": "https://ourairports.com/airports/EKSV/",
+      "icao": "EKSV",
+      "operators": [
+        {
+          "name": "West Jump",
+          "website": "https://www.westjump.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKSV/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-beldringe",
+      "name": "Beldringe airport",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Odense",
+      "latitude": 55.475307,
+      "longitude": 10.327206,
+      "coordinates_source": "https://ourairports.com/airports/EKOD/",
+      "icao": "EKOD",
+      "operators": [
+        {
+          "name": "Odense Faldskærmscenter",
+          "website": "https://ofc.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKOD/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-ronne",
+      "name": "Rønne airport",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Bornholm",
+      "latitude": 55.063301,
+      "longitude": 14.7596,
+      "coordinates_source": "https://ourairports.com/airports/EKRN/",
+      "icao": "EKRN",
+      "operators": [
+        {
+          "name": "Faldskærmsklubben Rønne",
+          "website": "https://www.fkr.dk/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The January 2026 DFU roll includes the Rønne club, but its website failed and recent jumping at Bornholm airport remains unverified.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKRN/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2026 club roll; only five members, and field activity remains unverified"
+        }
+      ]
+    },
+    {
+      "key": "dk-tirstrup",
+      "name": "Tirstrup airport",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Aarhus",
+      "latitude": 56.303331,
+      "longitude": 10.618286,
+      "coordinates_source": "https://ourairports.com/airports/EKAH/",
+      "icao": "EKAH",
+      "operators": [
+        {
+          "name": "Århus Faldskærms Club",
+          "website": "https://www.aafc.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Club public calendar lists multiple 2025–2026 jumping weekends at Tirstrup.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKAH/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/dgcak68r70f1bn8rh65ceuj99s%40group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-vamdrup",
+      "name": "Vamdrup airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Kolding",
+      "latitude": 55.436298,
+      "longitude": 9.33092,
+      "coordinates_source": "https://ourairports.com/airports/EKVD/",
+      "icao": "EKVD",
+      "operators": [
+        {
+          "name": "Kolding Faldskærmsklub",
+          "website": "https://www.koldingfaldskaermsklub.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "DFU club roll dated 9 January 2026 confirms the operator; DFU location list and operator site identify this field.",
+      "sources": [
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKVD/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_rep_mode_2026_samlet.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "dk-aversi",
+      "name": "Aversi airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Haslev",
+      "latitude": 55.342295,
+      "longitude": 11.832681,
+      "coordinates_source": "https://ourairports.com/airports/DK-0015/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aversi Faldskærms Club",
+          "website": "https://www.aversi.dk/"
+        },
+        {
+          "name": "Nordsjællands Faldskærms Klub",
+          "website": "https://www.nfk.dk/"
+        },
+        {
+          "name": "Skydive Copenhagen",
+          "website": "https://skydivecopenhagen.dk/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Joint operator announces 2026 season; DFU booking portal confirms the two clubs share Aversi from 2026.",
+      "sources": [
+        {
+          "url": "https://skydivecopenhagen.dk/om-os/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Federation location list"
+        },
+        {
+          "url": "https://skydive.dk/om-os/klubber?page=1",
+          "checked_on": "2026-11-14",
+          "what": "DFU booking portal explicitly confirms Nordsjælland shares Aversi from 2026"
+        },
+        {
+          "url": "https://ourairports.com/airports/DK-0015/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ],
+      "note": "Nordsjælland shares the Skydive Copenhagen operation; its old northern Zealand listing is retained separately as uncertain."
+    },
+    {
+      "key": "dk-lindtorp",
+      "name": "Lindtorp airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Holstebro",
+      "latitude": 56.396868,
+      "longitude": 8.444061,
+      "coordinates_source": "https://ourairports.com/airports/EKHO/",
+      "icao": "EKHO",
+      "operators": [
+        {
+          "name": "Holstebro-Lindtorp Faldskærmsklub",
+          "website": "https://www.hlf-skydive.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes 2026 courses.",
+      "sources": [
+        {
+          "url": "https://www.hlf-skydive.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKHO/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "season": "Even-numbered weekends all year; Wednesday jumping in summer"
+    },
+    {
+      "key": "dk-herning",
+      "name": "Herning Skinderholm airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Herning",
+      "latitude": 56.182808,
+      "longitude": 9.042404,
+      "coordinates_source": "https://www.openstreetmap.org/node/4483974645",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Dropzone Denmark",
+          "website": "https://dropzonedenmark.dk/"
+        },
+        {
+          "name": "Herning Faldskærmsklub",
+          "website": "https://herningfk.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Club publishes 2026 events at the shared Herning field.",
+      "sources": [
+        {
+          "url": "https://herningfk.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dropzonedenmark.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Second operator at the same airfield"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/4483974645",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "dk-viborg",
+      "name": "Viborg airfield",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Viborg",
+      "latitude": 56.409992,
+      "longitude": 9.409277,
+      "coordinates_source": "https://ourairports.com/airports/EKVB/",
+      "icao": "EKVB",
+      "operators": [
+        {
+          "name": "Skydive Viborg",
+          "website": "https://www.skydiveviborg.dk/"
+        },
+        {
+          "name": "Østjyllands Faldskærms Klub (temporary base)",
+          "website": "https://oefk.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Published calendar lists jumping events at Vedsøvej 10A on 25–26 April 2026.",
+      "sources": [
+        {
+          "url": "https://oefk.dk/kalender/liste/?eventDisplay=past&tribe-bar-date=2026-08-16",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKVB/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://oefk.dk/find-vej/",
+          "checked_on": "2026-11-14",
+          "what": "Second operator explicitly gives the same Vedsøvej 10A airfield address"
+        }
+      ]
+    },
+    {
+      "key": "dk-ejstrupholm",
+      "name": "Ejstrupholm dropzone",
+      "aliases": [
+        "SkydiveX"
+      ],
+      "country": "DK",
+      "locality": "Ejstrupholm",
+      "latitude": 55.990993,
+      "longitude": 9.267537,
+      "coordinates_source": "https://ourairports.com/airports/DK-0017/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Østjyllands Faldskærms Klub",
+          "website": "https://oefk.dk/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "ØFK directions now give temporary operations at Viborg while its contact page retains Ejstrupholm; the airport directory marks Ejstrupholm closed and ongoing jumping here is unverified.",
+      "sources": [
+        {
+          "url": "https://oefk.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Federation names Ejstrupholm and Samsø"
+        },
+        {
+          "url": "https://oefk.dk/find-vej/",
+          "checked_on": "2026-11-14",
+          "what": "Operator now directs jumpers to a temporary base at Viborg"
+        },
+        {
+          "url": "https://ourairports.com/airports/DK-0017/",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; Historical airfield reference, not an exact landing target; airport directory marks the airfield closed, while ØFK lists temporary operations at Viborg and retains an old Ejstrupholm contact address."
+        }
+      ],
+      "note": "Historical airfield reference, not an exact landing target; airport directory marks the airfield closed, while ØFK lists temporary operations at Viborg and retains an old Ejstrupholm contact address."
+    },
+    {
+      "key": "dk-samso-besser",
+      "name": "Samsø seasonal jumping area",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Besser, Samsø",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Østjyllands Faldskærms Klub",
+          "website": "https://oefk.dk/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Calendar lists two recurring spring jumping weekends in May 2026.",
+      "sources": [
+        {
+          "url": "https://oefk.dk/kalender/liste/?eventDisplay=past&tribe-bar-date=2026-08-16",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        }
+      ],
+      "note": "Calendar venue is Samsø Efterskole, Besser Kirkevej 30; exact landing field and departure airfield have not been established. Coordinates not established from an opened coordinate source; left null.",
+      "season": "Recurring spring weekends"
+    },
+    {
+      "key": "dk-varde",
+      "name": "Varde dropzone",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Varde",
+      "latitude": 55.60868,
+      "longitude": 8.443429,
+      "coordinates_source": "https://www.openstreetmap.org/node/8971222891",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Varde Faldskærmsklub",
+          "website": "https://www.vaf13.dk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator posts dated January and July 2026 announce jumping camps.",
+      "sources": [
+        {
+          "url": "https://www.vaf13.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/8971222891",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "dk-stauning",
+      "name": "Stauning former dropzone",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Stauning",
+      "latitude": 55.990101,
+      "longitude": 8.35391,
+      "coordinates_source": "https://ourairports.com/airports/EKVJ/",
+      "icao": "EKVJ",
+      "operators": [
+        {
+          "name": "Skydive Stauning",
+          "website": "https://www.skydivestauning.dk/"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Operator states that the club closed on 31 December 2024.",
+      "sources": [
+        {
+          "url": "https://www.skydivestauning.dk/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKVJ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Definitive operator closure statement, although closure itself predates the recent-activity cutoff; no replacement operation was established."
+    },
+    {
+      "key": "dk-roskilde",
+      "name": "Roskilde airport historical dropzone",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Tune",
+      "latitude": 55.585602,
+      "longitude": 12.1314,
+      "coordinates_source": "https://ourairports.com/airports/EKRK/",
+      "icao": "EKRK",
+      "operators": [
+        {
+          "name": "Skydive Roskilde",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The AIP permits parachuting here, but no 2025–2026 operator or regular jumping schedule was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/denmark",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EKRK/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Historical directory location; continued regular jumping here is unconfirmed."
+    },
+    {
+      "key": "dk-sundbylille",
+      "name": "Sundbylille historical dropzone",
+      "aliases": [],
+      "country": "DK",
+      "locality": "Frederikssund",
+      "latitude": 55.833333,
+      "longitude": 12.116667,
+      "coordinates_source": "https://aim.naviair.dk/media/files/iui0dmciy25/EK_ENR_5_5_en.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Nordsjællands Faldskærms Klub",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "NFK shares Aversi from 2026; the historical Sundbylille site remains in an older AIP, without evidence of continued regular jumping.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/denmark",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://skydive.dk/om-os/klubber?page=1",
+          "checked_on": "2026-11-14",
+          "what": "Former Sundbylille base and 2026 move to Haslev"
+        },
+        {
+          "url": "https://aim.naviair.dk/media/files/iui0dmciy25/EK_ENR_5_5_en.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; AIP parachuting-area reference published to whole minutes; not an exact landing target. NFK lists Aversi as its shared field from 2026; continued use here is unconfirmed."
+        }
+      ],
+      "note": "AIP parachuting-area reference published to whole minutes; not an exact landing target. NFK lists Aversi as its shared field from 2026; continued use here is unconfirmed."
+    }
+  ]
+}

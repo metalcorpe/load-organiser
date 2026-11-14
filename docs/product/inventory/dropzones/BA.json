@@ -1,0 +1,176 @@
+{
+  "country": "BA",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "ba-prijedor-urije",
+      "name": "Aerodrom Urije (Prijedor)",
+      "aliases": [
+        "LQPD",
+        "Prijedor Open"
+      ],
+      "country": "BA",
+      "locality": "Urije, Prijedor, Republika Srpska",
+      "latitude": 44.99256,
+      "longitude": 16.73734,
+      "coordinates_source": "https://www.openstreetmap.org/way/1049406763 (OSM aerodrome way centre)",
+      "icao": "LQPD",
+      "operators": [
+        {
+          "name": "Aero-klub Prijedor"
+        },
+        {
+          "name": "Vazduhoplovni klub Skydive Banjaluka (tandem jumps at Urije, 4 Jul 2025, per a YouTube title seen in search results)"
+        }
+      ],
+      "aircraft": "Pilatus PC-6, Cessna 182 (2025 competition bulletin)",
+      "season": "Summer: annual boogie and competition week (late June to early July)",
+      "status": "seasonal",
+      "status_evidence": "Prijedor Boogie 29 Jun-3 Jul 2026 at Urije with public tandem jumps from 4,000 m from a Pilatus PC-6 (infoprijedor.ba, 29 Jun 2026), followed by Prijedor Open 2026 (Kozarski vjesnik); 29th Prijedor Open held at Urije 4-6 Jul 2025 (bulletin, SeeSrpska 7 Jul 2025).",
+      "sources": [
+        {
+          "url": "https://aeroclub.at/uploads/download/Prijedor_2025.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Competition bulletin 2025: place Airport Urije LQPD, aircraft, organiser Aero-klub Prijedor"
+        },
+        {
+          "url": "https://seesrpska.com/en/avantura/takmicari-iz-12-zemalja-na-nebu-iznad-urija-7-7-2025",
+          "checked_on": "2026-11-14",
+          "what": "Report of the 2025 competition at Urije"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1049406763",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Urije LQPD"
+        },
+        {
+          "url": "https://infoprijedor.ba/prijedor-boogie-2026-skokovi-koji-ostavljaju-bez-daha",
+          "checked_on": "2026-11-14",
+          "what": "News 29 Jun 2026: Prijedor Boogie 2026 at Urije, tandem from 4,000 m, PC-6, organiser Aero-klub Prijedor"
+        },
+        {
+          "url": "https://kozarski.com/otvoren-medjunarodni-padobranski-kup-prijedor-open-2026",
+          "checked_on": "2026-11-14",
+          "what": "News: Prijedor Open 2026 international parachuting cup opened"
+        }
+      ],
+      "note": "Jumping is confirmed for the annual boogie and competition week in 2025 and 2026; regular jumping outside that week is not confirmed."
+    },
+    {
+      "key": "ba-banja-luka-zaluzani",
+      "name": "Sportski aerodrom Zalužani (Banja Luka)",
+      "aliases": [
+        "LQBZ",
+        "Tandem Centre Banja Luka"
+      ],
+      "country": "BA",
+      "locality": "Zalužani, Banja Luka, Republika Srpska",
+      "latitude": 44.8482,
+      "longitude": 17.22283,
+      "coordinates_source": "https://www.openstreetmap.org/node/3026720551 (OSM aerodrome node)",
+      "icao": "LQBZ",
+      "operators": [
+        {
+          "name": "Padobranski klub \"Banjaluka\""
+        },
+        {
+          "name": "Vazduhoplovni klub \"Skydive\" Banja Luka"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Club and tandem-centre information found only on an undated tourism page (latest event mentioned 2014); no 2025+ evidence found.",
+      "sources": [
+        {
+          "url": "https://hotelviktorija.com/en/parachute-club-banjaluka/",
+          "checked_on": "2026-11-14",
+          "what": "Undated tourism page: Parachute Club Banjaluka (founded 2008) runs Tandem Centre Banja Luka at Zalužani airport, jumps from 900 m or 3,000 m"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/3026720551",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Zalužani LQBZ"
+        }
+      ]
+    },
+    {
+      "key": "ba-bihac-golubic",
+      "name": "Sportski aerodrom Golubić (Bihać)",
+      "aliases": [
+        "LQBI",
+        "Bihać Golubić Airport"
+      ],
+      "country": "BA",
+      "locality": "Golubić, Bihać, Una-Sana Canton",
+      "latitude": 44.79669,
+      "longitude": 15.90449,
+      "coordinates_source": "https://www.openstreetmap.org/way/198730611 (OSM aerodrome way centre)",
+      "icao": "LQBI",
+      "operators": [
+        {
+          "name": "Aero centar Panorama Bihać",
+          "facebook": "https://www.facebook.com/aerocentarpanoramabihac"
+        },
+        {
+          "name": "Aero klub \"Bihać\" (airfield operator per OSM)",
+          "website": "http://aeroclub-bihac.com"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aero centar Panorama Bihać describes tandem jumps at Golubić only for groups of at least 15 people; its newest dated jump video is 24 Sep 2022 (search snippet). No 2025+ evidence found.",
+      "sources": [
+        {
+          "url": "https://www.facebook.com/aerocentarpanoramabihac/videos/video-materijal-tandem-skokovi-padobranom-izvedeni-24092022g-u-biha%C4%87u-na-sportsk/1207935676424263",
+          "checked_on": "2026-11-14",
+          "what": "Facebook video: tandem jumps at sport airfield Golubić, 24 Sep 2022 (title from search snippet)"
+        },
+        {
+          "url": "https://www.facebook.com/aerocentarpanoramabihac",
+          "checked_on": "2026-11-14",
+          "what": "Club page: parachuting, events, tandem jumps for groups of 15 or more (page title/description only)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/198730611",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Golubić LQBI, operator Aero klub Bihać"
+        }
+      ],
+      "note": "Added in the check. Event-based club jumping; not a regular dropzone on current evidence."
+    },
+    {
+      "key": "ba-visoko",
+      "name": "Sportski aerodrom \"Kenan Jusufbašić\" (Visoko)",
+      "aliases": [
+        "LQVI",
+        "Visoko Sport Airfield"
+      ],
+      "country": "BA",
+      "locality": "Visoko, Zenica-Doboj Canton",
+      "latitude": 44.02527,
+      "longitude": 18.09729,
+      "coordinates_source": "https://www.openstreetmap.org/way/709685883 (OSM aerodrome way centre)",
+      "icao": "LQVI",
+      "operators": [
+        {
+          "name": "Slobodan Pad (visiting tandem team from Croatia)",
+          "website": "https://slobodanpad.hr/tandem-skok-padobranom-sarajevo"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Slobodan Pad offered tandem jumps at Visoko airfield on 28-31 May 2026 (booking page), from a Cessna 182. This is a scheduled visit; no resident dropzone or regular season found.",
+      "sources": [
+        {
+          "url": "https://slobodanpad.hr/tandem-skok-padobranom-sarajevo",
+          "checked_on": "2026-11-14",
+          "what": "Operator page: tandem jumps 'Sarajevo' at Aerodrom Visoko, dates 28-31 May 2026"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/709685883",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Visoko LQVI"
+        }
+      ],
+      "note": "Added in the check. A visiting operator's jump days, not a resident dropzone; show only if the app wants event locations."
+    }
+  ]
+}

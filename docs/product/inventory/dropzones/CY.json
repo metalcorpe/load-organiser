@@ -1,0 +1,60 @@
+{
+  "country": "CY",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "cy-kingsfield",
+      "name": "Kingsfield Airfield (Dhekelia)",
+      "aliases": [
+        "Skydive Cyprus",
+        "JSPC Cyprus",
+        "Kingsfield Air Base",
+        "Cyprus Parachute Association",
+        "CCSPC"
+      ],
+      "country": "CY",
+      "locality": "Kingsfield, near Xylotymbou, Dhekelia Sovereign Base Area",
+      "latitude": 35.0139531,
+      "longitude": 33.7152371,
+      "coordinates_source": "https://www.openstreetmap.org/way/1301354619",
+      "icao": "LCRE",
+      "operators": [
+        {
+          "name": "Cyprus Combined Services Parachute Centre (Skydive Cyprus)",
+          "website": "https://skydivecyprus.co.uk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on British Skydiving's current 'find a drop zone' page; a charity of that name (working name Skydive Cyprus) was registered with the UK Charity Commission on 2025-09-26 (seen in search results)",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "British Skydiving affiliated DZ: Kingsfield, Xylotymbou, Cyprus 7510; www.skydivecyprus.org"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1301354619",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Kingsfield Airfield' (via Nominatim)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident CY-0004)",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports CY-0004 Kingsfield Air Base LCRE, 35.014275, 33.715851"
+        },
+        {
+          "url": "https://skydivecyprus.co.uk/",
+          "checked_on": "2026-11-14",
+          "what": "Operator names Kingsfield, explicitly welcomes civilian enthusiasts subject to nationality restrictions, and describes itself as the only centre in Cyprus."
+        },
+        {
+          "url": "https://skydiving.com/dropzone/cyprus-parachute-association/",
+          "checked_on": "2026-11-14",
+          "what": "Directory resolves Cyprus Parachute Association to Kingsfield rather than a second place."
+        }
+      ],
+      "note": "British Sovereign Base Area, filed under CY. Operator explicitly welcomes civilians, subject to restrictions for certain nationalities and advance arrangements; association names do not establish additional airfields."
+    }
+  ]
+}

@@ -1,0 +1,762 @@
+{
+  "country": "SE",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "se-umea",
+      "name": "Umeå airport",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Umeå",
+      "latitude": 63.79194,
+      "longitude": 20.28278,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Ume%C3%A5_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Umeå Fallskärmsklubb",
+          "website": "https://skydiveumea.se/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator advertises its 2026 skydiving course and states April–October jumping.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Ume%C3%A5_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://skydiveumea.se/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "season": "April–October"
+    },
+    {
+      "key": "se-optand",
+      "name": "Optand airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Östersund",
+      "latitude": 63.128601,
+      "longitude": 14.8028,
+      "coordinates_source": "https://ourairports.com/airports/ESNM/",
+      "icao": "ESNM",
+      "operators": [
+        {
+          "name": "Östersunds Fallskärmsklubb",
+          "website": "https://www.ofsk.net/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "The public calendar linked by Östersunds Fallskärmsklubb schedules jumping on 18–22 June 2025; the operator identifies Optand as its field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESNM/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/ofsknet%40gmail.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Public operator calendar contains Hoppning event dated 18–22 June 2025."
+        },
+        {
+          "url": "https://www.ofsk.net/kalender/",
+          "checked_on": "2026-11-14",
+          "what": "Operator page embeds the public calendar."
+        }
+      ],
+      "season": "Scheduled club jumping; June 2025 dates verified."
+    },
+    {
+      "key": "se-bankas",
+      "name": "Bänkås landing area",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Sundsvall",
+      "latitude": 62.388119,
+      "longitude": 17.450958,
+      "coordinates_source": "https://www.openstreetmap.org/node/1955222298",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Sundsvalls Fallskärmsklubb",
+          "website": "https://frifall.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of SUFK operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1955222298",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-mohed",
+      "name": "Mohed airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Söderhamn",
+      "latitude": 61.291199,
+      "longitude": 16.8463,
+      "coordinates_source": "https://ourairports.com/airports/ESUM/",
+      "icao": "ESUM",
+      "operators": [
+        {
+          "name": "Söderhamns Fallskärmsklubb",
+          "website": "https://skydivemohed.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of SÖFK operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESUM/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-romme",
+      "name": "Romme airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Borlänge",
+      "latitude": 60.429667,
+      "longitude": 15.488944,
+      "coordinates_source": "https://www.frittfall.nu/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Dala Fallskärmsklubb",
+          "website": "https://www.frittfall.nu/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of FKD operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.frittfall.nu/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-gryttjom",
+      "name": "Gryttjom airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Tierp",
+      "latitude": 60.286999,
+      "longitude": 17.4217,
+      "coordinates_source": "https://ourairports.com/airports/ESKG/",
+      "icao": "ESKG",
+      "operators": [
+        {
+          "name": "Stockholms Fallskärmsklubb",
+          "website": "https://www.skydive.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report documents July 2025 championships at Gryttjom.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESKG/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-johannisberg",
+      "name": "Johannisberg airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Västerås",
+      "latitude": 59.575802,
+      "longitude": 16.503201,
+      "coordinates_source": "https://ourairports.com/airports/ESSX/",
+      "icao": "ESSX",
+      "operators": [
+        {
+          "name": "Fallskärmsklubben Aros",
+          "website": "https://www.fkaros.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report documents the September championship hosted by Aros in Västerås.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESSX/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-skarstad",
+      "name": "Skärstad airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Motala",
+      "latitude": 58.49494,
+      "longitude": 15.1024,
+      "coordinates_source": "https://ourairports.com/airports/SE-0066/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Linköpings Fallskärmsklubb",
+          "website": "https://www.linkopingsfallskarmsklubb.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of LFK operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/SE-0066/",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; Motala flygklubb airfield at Skärstad."
+        }
+      ],
+      "note": "Motala flygklubb airfield at Skärstad."
+    },
+    {
+      "key": "se-visby",
+      "name": "Visby airport",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Visby, Gotland",
+      "latitude": 57.66278,
+      "longitude": 18.34611,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Visby_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Gotlands Fallskärmsklubb",
+          "website": "https://www.skydivegotland.se/"
+        },
+        {
+          "name": "Skydive Aros (visiting boogie operator)",
+          "website": "https://www.fkaros.se/"
+        },
+        {
+          "name": "Stockholm/Västerås Fallskärmscenter (boogie tandem operator)",
+          "website": "https://fallskarmscenter.se/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Public event listing advertises Let’s Rauk Boogie at Gotlands Fallskärmsklubb in Visby on 29 June–5 July 2026, with sport, tandem and student jumping.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Visby_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://happeningnext.com/event/let%E2%80%99s-rauk-boogie-experience-magic-gotland-eid3a0dcnwsb4",
+          "checked_on": "2026-11-14",
+          "what": "Public 2026 event announcement; secondary source reproduces organizer details and Visby venue."
+        }
+      ],
+      "season": "Seasonal club operation; 29 June–5 July 2026 boogie verified."
+    },
+    {
+      "key": "se-feringe",
+      "name": "Feringe airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Vittaryd",
+      "latitude": 56.950298,
+      "longitude": 13.9217,
+      "coordinates_source": "https://ourairports.com/airports/ESMG/",
+      "icao": "ESMG",
+      "operators": [
+        {
+          "name": "Smålands Fallskärmsklubb",
+          "website": "https://www.frifall.nu/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Public calendar linked by the club lists Feringe jumping on 28 March and multiple May–June dates in 2026.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESMG/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/stodell.se_g3t2knpbt95ifdcc9q8o0upnt0%40group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-everod",
+      "name": "Kristianstad Everöd airport",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Kristianstad",
+      "latitude": 55.91194,
+      "longitude": 14.08333,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Kristianstad_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skånes Fallskärmsklubb",
+          "website": "https://www.skydiveskane.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of SFK operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kristianstad_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-eslov",
+      "name": "Eslöv airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Eslöv",
+      "latitude": 55.848923,
+      "longitude": 13.329935,
+      "coordinates_source": "https://ourairports.com/airports/ESME/",
+      "icao": "ESME",
+      "operators": [
+        {
+          "name": "Fallskärmsklubben Syd",
+          "website": "https://www.skydivesyd.se/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "SFF 2025 annual report records in-season inspection of SYD operations; SFF club directory identifies this home field.",
+      "sources": [
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESME/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://sff.se/wp-content/uploads/2026/02/2025-Verksamhetsberattelse-SFF.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "se-vargarda",
+      "name": "Vårgårda airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Vårgårda",
+      "latitude": 58.039306,
+      "longitude": 12.785781,
+      "coordinates_source": "https://ourairports.com/airports/ESGO/",
+      "icao": "ESGO",
+      "operators": [
+        {
+          "name": "Fallskärmsklubben Cirrus-Göteborg",
+          "website": "https://www.hoppafallskarm.se/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Published 2027 course calendar names this field; Näsinge has a July course and Vårgårda has April–August dates.",
+      "sources": [
+        {
+          "url": "https://www.hoppafallskarm.se/kurs/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESGO/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "season": "Published course season; Näsinge summer detachment"
+    },
+    {
+      "key": "se-nasinge",
+      "name": "Näsinge airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Strömstad",
+      "latitude": 59.01676,
+      "longitude": 11.341344,
+      "coordinates_source": "https://ourairports.com/airports/ESGS/",
+      "icao": "ESGS",
+      "operators": [
+        {
+          "name": "Fallskärmsklubben Cirrus-Göteborg",
+          "website": "https://www.hoppafallskarm.se/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Published 2027 course calendar names this field; Näsinge has a July course and Vårgårda has April–August dates.",
+      "sources": [
+        {
+          "url": "https://www.hoppafallskarm.se/kurs/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESGS/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ],
+      "season": "Published course season; Näsinge summer detachment"
+    },
+    {
+      "key": "se-halmstad",
+      "name": "Halmstad airport",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Halmstad",
+      "latitude": 56.69083,
+      "longitude": 12.82,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Halmstad_Airport",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Halmstads Fallskärmsklubb",
+          "website": "https://www.hfsk.se/"
+        },
+        {
+          "name": "Smålands Fallskärmsklubb",
+          "website": "https://www.frifall.nu/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Halmstad club announces its 2026 cooperation with Smålands club.",
+      "sources": [
+        {
+          "url": "https://www.hfsk.se/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Halmstad_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "se-kiruna",
+      "name": "Kiruna airport historical dropzone",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Kiruna",
+      "latitude": 67.821999,
+      "longitude": 20.3368,
+      "coordinates_source": "https://ourairports.com/airports/ESNQ/",
+      "icao": "ESNQ",
+      "operators": [
+        {
+          "name": "Kiruna Fallskärmsklubb",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/sweden",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESNQ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Directory lead absent from the opened SFF club page; recent activity and exact landing field are unconfirmed."
+    },
+    {
+      "key": "se-lulea-kallax",
+      "name": "Kallax airport historical dropzone",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Luleå",
+      "latitude": 65.5438,
+      "longitude": 22.122,
+      "coordinates_source": "https://ourairports.com/airports/ESPA/",
+      "icao": "ESPA",
+      "operators": [
+        {
+          "name": "Luleå Fallskärmsklubb",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/sweden",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESPA/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Directory lead absent from the opened SFF club page; recent activity and exact landing field are unconfirmed."
+    },
+    {
+      "key": "se-karlsborg",
+      "name": "Karlsborg historical dropzone",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Karlsborg",
+      "latitude": 58.513802,
+      "longitude": 14.5071,
+      "coordinates_source": "https://ourairports.com/airports/ESIA/",
+      "icao": "ESIA",
+      "operators": [
+        {
+          "name": "Karlsborgs Fallskärmsklubb",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/sweden",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESIA/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Directory lead absent from the opened SFF club page; recent activity and exact landing field are unconfirmed."
+    },
+    {
+      "key": "se-skavsta",
+      "name": "Skavsta airport historical dropzone",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Nyköping",
+      "latitude": 58.789656,
+      "longitude": 16.911479,
+      "coordinates_source": "https://ourairports.com/airports/ESKN/",
+      "icao": "ESKN",
+      "operators": [
+        {
+          "name": "Skavsta directory listing",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/sweden",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESKN/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Directory lead absent from the opened SFF club page; recent activity and exact landing field are unconfirmed."
+    },
+    {
+      "key": "se-orebro",
+      "name": "Örebro airport former dropzone",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Örebro",
+      "latitude": 59.223701,
+      "longitude": 15.038,
+      "coordinates_source": "https://ourairports.com/airports/ESOE/",
+      "icao": "ESOE",
+      "operators": [
+        {
+          "name": "Örebro Fallskärmsklubb",
+          "website": null
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "SVT reported on 5 May 2025 that the club was being dissolved.",
+      "sources": [
+        {
+          "url": "https://www.svt.se/nyheter/lokalt/orebro/fallskarmsklubben-i-orebro-avvecklas-efter-flygolyckan",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESOE/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Closure concerns the parachuting club, not the airport."
+    },
+    {
+      "key": "se-borglanda",
+      "name": "Borglanda airfield",
+      "aliases": [],
+      "country": "SE",
+      "locality": "Borgholm, Öland",
+      "latitude": 56.862999,
+      "longitude": 16.656099,
+      "coordinates_source": "https://ourairports.com/airports/ESMB/",
+      "icao": "ESMB",
+      "operators": [
+        {
+          "name": "Smålands Fallskärmsklubb",
+          "website": "https://www.frifall.nu/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club public calendar lists Öland tandem weeks starting 4 July in both 2025 and 2026; operator directions identify Borglanda.",
+      "sources": [
+        {
+          "url": "https://www.oland.se/fallskarmshoppning-over-borgholm",
+          "checked_on": "2026-11-14",
+          "what": "Annual visiting-club jumping week at Borglanda"
+        },
+        {
+          "url": "https://www.frifall.nu/",
+          "checked_on": "2026-11-14",
+          "what": "Operator describes Öland visits"
+        },
+        {
+          "url": "https://ourairports.com/airports/ESMB/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/stodell.se_g3t2knpbt95ifdcc9q8o0upnt0%40group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        },
+        {
+          "url": "https://www.frifall.nu/kontakt",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Borglanda as the Öland site"
+        }
+      ],
+      "note": "Recurring summer satellite of Smålands Fallskärmsklubb."
+    }
+  ]
+}

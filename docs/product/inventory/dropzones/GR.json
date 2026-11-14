@@ -1,0 +1,280 @@
+{
+  "country": "GR",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "gr-kopaida",
+      "name": "Kopaida Airfield (Kastro)",
+      "aliases": [
+        "Skydive Athens",
+        "Akraifnia"
+      ],
+      "country": "GR",
+      "locality": "Kastro, Boeotia (Αεροδρόμιο Κωπαΐδας)",
+      "latitude": 38.454792,
+      "longitude": 23.137314,
+      "coordinates_source": "https://www.skydive-athens.gr/ (operator page gives 38°27'17.3\"N 23°08'14.3\"E; OSM way 583594427 'Κωπαϊδα-Δήμητρα' agrees within 300 m)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Athens",
+          "website": "https://www.skydive-athens.gr/",
+          "facebook": "https://www.facebook.com/Skydive-Athens"
+        }
+      ],
+      "season": "all year",
+      "status": "active",
+      "status_evidence": "Operator site (footer 2026) states the centre is open all year, daily from 08:00 to sunset; third-party guides describe it as the only Greek DZ operating every day all year",
+      "sources": [
+        {
+          "url": "https://www.skydive-athens.gr/",
+          "checked_on": "2026-11-14",
+          "what": "operator: address Kopaida airfield, Kastro Voiotias; coordinates; open all year 08:00–sunset"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/583594427",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield Kopaida-Dimitra"
+        },
+        {
+          "url": "https://manawa.com/en/providers/2011-skydive-athens",
+          "checked_on": "2026-11-14",
+          "what": "booking listing for tandem at Kastro (lead)"
+        }
+      ],
+      "note": "dev-listings key gr-kopaida-airfield-skydive-athens. One reseller describes an 18-seat turbine aircraft to 14,000 ft; not stated on the operator page."
+    },
+    {
+      "key": "gr-megara",
+      "name": "Megara / Pachi Civil Aviation Airport",
+      "aliases": [
+        "Skydive Greece",
+        "Hellenic Skydivers",
+        "Pachi",
+        "Skydive Attica"
+      ],
+      "country": "GR",
+      "locality": "Megara, West Attica",
+      "latitude": 37.98076,
+      "longitude": 23.36472,
+      "coordinates_source": "https://www.openstreetmap.org/node/428151392",
+      "icao": "LGMG",
+      "operators": [
+        {
+          "name": "Skydive Megara (Skydive Greece / Hellenic Skydivers)",
+          "website": "https://skydivemegara.gr/en",
+          "facebook": "https://www.facebook.com/skydivegreece"
+        },
+        {
+          "name": "Skydive Attica",
+          "website": "https://skydiveattica.gr",
+          "facebook": "https://www.facebook.com/Skydive-Attica-419283508440623/"
+        }
+      ],
+      "season": "Fridays (afternoon), weekends and public holidays (per booking listings)",
+      "status": "active",
+      "status_evidence": "Operator site live (footer 2026; skydivegreece.gr now redirects to skydivemegara.gr); current booking listings give a schedule of Friday afternoons, weekends and public holidays at Megara; a second operator, Skydive Attica, says it is based at Pachi-Megara and posted a tandem video from Megara on 2025-12-16 (Facebook, seen in search results only)",
+      "sources": [
+        {
+          "url": "https://skydivemegara.gr/en",
+          "checked_on": "2026-11-14",
+          "what": "operator: Civil Aviation Airport of Pachi, Megara (LGMG)"
+        },
+        {
+          "url": "https://www.skydivegreece.gr/",
+          "checked_on": "2026-11-14",
+          "what": "301 redirect to skydivemegara.gr, so Skydive Greece and Skydive Megara are one operator"
+        },
+        {
+          "url": "https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers",
+          "checked_on": "2026-11-14",
+          "what": "Hellenic Skydivers: base in Megara plus a northern base"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/428151392",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome LGMG"
+        },
+        {
+          "url": "https://skydiveattica.gr",
+          "checked_on": "2026-11-14",
+          "what": "operator Skydive Attica: site live (2026), tandem jumps, Instagram feed; base not named on the home page"
+        },
+        {
+          "url": "https://www.tiktok.com/@skydive_attica",
+          "checked_on": "2026-11-14",
+          "what": "search result only: profile says the club is based in Pachi-Megaron, Attica"
+        },
+        {
+          "url": "https://www.facebook.com/100063680825465/videos/skydiveattica-skydive-freefall-tandem-skydiving-megara-sake-aff-wingsuit-dz/2193055657429282",
+          "checked_on": "2026-11-14",
+          "what": "search result only: Skydive Attica video 'Best way to say goodbye to 2025', 2025-12-16, tagged Megara"
+        }
+      ],
+      "note": "dev-listings key gr-megara-pachi-civil-aviation-airport-lgmg; its coordinates (37.9833, 23.3667) replaced with the OSM point. Operator claims school since 1988. Check: Skydive Attica added as a second operator at the same airfield."
+    },
+    {
+      "key": "gr-chortero",
+      "name": "Chortero Airfield",
+      "aliases": [],
+      "country": "GR",
+      "locality": "Chortero, near Sidirokastro, Serres",
+      "latitude": 41.22473,
+      "longitude": 23.36357,
+      "coordinates_source": "https://www.openstreetmap.org/way/553210200",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Thessaloniki",
+          "website": "https://www.skydive-thessaloniki.gr/",
+          "facebook": "https://www.facebook.com/SkydiveThessaloniki/"
+        }
+      ],
+      "aircraft": "Cessna 182",
+      "status": "active",
+      "status_evidence": "Operator site (2026) says the school operates on a permanent basis at Chortero airfield with an EASA-registered Cessna 182; no dated post found (Facebook showed only the page title without login)",
+      "sources": [
+        {
+          "url": "https://www.skydive-thessaloniki.gr/index-en",
+          "checked_on": "2026-11-14",
+          "what": "operator: permanent base at Chortero airport, Sidirokastro; Cessna 182"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/553210200",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Πεδίο Προσγείωσης Χορτερού' landing field"
+        },
+        {
+          "url": "https://www.facebook.com/SkydiveThessaloniki/",
+          "checked_on": "2026-11-14",
+          "what": "Facebook page title 'Skydive Thessaloniki | Sidirókastro'; posts not visible without login"
+        }
+      ],
+      "note": "dev-listings key gr-chortero-airfield-skydive-thessaloniki (had null coordinates). Status rests on the operator's own current site only."
+    },
+    {
+      "key": "gr-thiva-perneri",
+      "name": "Thiva Aeropark (Perneri airfield)",
+      "aliases": [
+        "Perneri",
+        "Thebes"
+      ],
+      "country": "GR",
+      "locality": "Near Thiva, between lakes Yliki and Paralimni, Boeotia",
+      "latitude": 38.37602,
+      "longitude": 23.25708,
+      "coordinates_source": "https://www.openstreetmap.org/node/1519762845",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Greece (per booking listing)",
+          "website": "https://skydivemegara.gr/en"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Only resellers (Manawa, unlimited-adrenaline.gr, discover-greece-tours) mention tandems at Perneri; one Skydive Greece listing names Perneri, another names Megara. No operator page or dated post found Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
+      "sources": [
+        {
+          "url": "https://discover-greece-tours.com/skydiving/",
+          "checked_on": "2026-11-14",
+          "what": "dev-listings source: skydiving at Thiva/Perneri"
+        },
+        {
+          "url": "https://manawa.com/en-GB/view-activity/11470?loc=en-GB",
+          "checked_on": "2026-11-14",
+          "what": "booking listing; meeting point 'Skydive Greece, Airport Perneri' in one version"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1519762845",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Αεραθλητικό πάρκο Θήβας' (Thiva Aeropark)"
+        }
+      ],
+      "note": "dev-listings key gr-thiva-perneri-airfield (38.3756, 23.2575 agrees with OSM). May be an occasional second site of the Megara operator."
+    },
+    {
+      "key": "gr-messolonghi",
+      "name": "Messolonghi Civil Airfield",
+      "aliases": [],
+      "country": "GR",
+      "locality": "Messolonghi, Aitoloakarnania",
+      "latitude": 38.3553973,
+      "longitude": 21.4791977,
+      "coordinates_source": "https://skydivemessolonghi.gr/ (operator page; OSM way 462552303 'Αεροδρόμιο Μεσολογγίου' agrees within 200 m)",
+      "icao": "LGMS",
+      "operators": [
+        {
+          "name": "Skydive Messolonghi",
+          "website": "https://skydivemessolonghi.gr/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Messolonghi News dated 10 November 2026 reports the official opening of the tandem, AFF and sport-jumping centre at Messolonghi Civil Airfield.",
+      "sources": [
+        {
+          "url": "https://skydivemessolonghi.gr/",
+          "checked_on": "2026-11-14",
+          "what": "operator: Messolonghi airfield, coordinates, Instagram instagram.com/skydivemessolonghi"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/462552303",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield LGMS"
+        },
+        {
+          "url": "https://messolonghinews.gr/skydive-messolonghi-kentro-eleftheris-ptosis/",
+          "checked_on": "2026-11-14",
+          "what": "Dated centre-opening report, location and services"
+        }
+      ],
+      "note": "dev-listings key gr-mesolongi-civil-airfield. Codex found a dated centre-opening report on 10 November 2026."
+    },
+    {
+      "key": "gr-polykastro-nea-kavala",
+      "name": "Nea Kavala Polykastro Airfield",
+      "aliases": [
+        "Thessaloniki (Hellenic Skydivers)",
+        "Lagadas"
+      ],
+      "country": "GR",
+      "locality": "Nea Kavala, Polykastro, Kilkis",
+      "latitude": 40.98567,
+      "longitude": 22.62611,
+      "coordinates_source": "https://www.openstreetmap.org/way/776069872",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Hellenic Skydivers (Skydive Greece)",
+          "website": "https://skydivemegara.gr/en"
+        }
+      ],
+      "season": "occasional, about one weekend a month (per listing)",
+      "status": "uncertain",
+      "status_evidence": "Booking listings (Manawa/Greeka, undated) say the northern base is Nea Kavala airport at Polykastro, sometimes Lagadas, about one weekend per month; OurAirports lists the airfield as closed. No 2025+ evidence Codex Greek-language cross-check found no 2025+ local jump evidence; remains uncertain.",
+      "sources": [
+        {
+          "url": "https://greeka.com/macedonia/thessaloniki/sports/sky-diving/town-centre/hellenic-skydivers",
+          "checked_on": "2026-11-14",
+          "what": "tandems around Polykastro or Lagadas"
+        },
+        {
+          "url": "https://www.manawa.com/en/countries/3408-greece/1170-skydiving",
+          "checked_on": "2026-11-14",
+          "what": "Hellenic Skydivers tandem 'in Thessaloniki' (no airfield named)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/776069872",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Αεροδρόμιο Πολυκάστρου'"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident GR-0004)",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports GR-0004, type closed"
+        }
+      ],
+      "note": "Not in dev-listings. Possibly superseded by Chortero (Skydive Thessaloniki)."
+    }
+  ]
+}

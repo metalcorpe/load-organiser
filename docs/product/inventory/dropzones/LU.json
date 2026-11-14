@@ -1,0 +1,47 @@
+{
+  "country": "LU",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "lu-noertrange",
+      "name": "Wiltz-Noertrange Airfield",
+      "aliases": [
+        "Skydive Luxembourg",
+        "Cercle Parachutiste Luxembourgeois",
+        "ELNT"
+      ],
+      "country": "LU",
+      "locality": "Noertrange, Wiltz/Winseler",
+      "latitude": 49.981098,
+      "longitude": 5.91778,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (OurAirports data, ident ELNT)",
+      "icao": "ELNT",
+      "operators": [
+        {
+          "name": "Skydive Luxembourg a.s.b.l.",
+          "website": "https://skydive.lu/en"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site © 2026 describes tandem, AFF and sport jumping at Noertrange (checked 2026-11-14).",
+      "sources": [
+        {
+          "url": "https://skydive.lu/en",
+          "checked_on": "2026-11-14",
+          "what": "operator site: club founded 1965, home is Noertrange airfield near Wiltz"
+        },
+        {
+          "url": "https://skydive.lu/de/aff",
+          "checked_on": "2026-11-14",
+          "what": "operator AFF page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airport data, row ELNT, used for coordinates"
+        }
+      ]
+    }
+  ]
+}

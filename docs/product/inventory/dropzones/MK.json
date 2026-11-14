@@ -1,0 +1,207 @@
+{
+  "country": "MK",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "mk-stenkovec-skopje",
+      "name": "Sportski aerodrom Stenkovec",
+      "aliases": [
+        "LWSN",
+        "Aeroklub Skopje"
+      ],
+      "country": "MK",
+      "locality": "Stenkovec, Skopje",
+      "latitude": 42.05925,
+      "longitude": 21.38822,
+      "coordinates_source": "https://www.openstreetmap.org/way/444244457 (OSM aerodrome way centre)",
+      "icao": "LWSN",
+      "operators": [
+        {
+          "name": "Aeroklub Skopje",
+          "website": "https://aeroklubskopje.mk/en/training-center/"
+        }
+      ],
+      "season": "beginner courses spring and autumn; tandem on request (club site)",
+      "status": "uncertain",
+      "status_evidence": "Club pages (aeroklubskopje.mk, aeroclub.mk, lwsn.mk) offer tandem jumps and say beginner courses run each spring and autumn, but none is dated; aeroclub.mk footer reads 2023. The newest dated jumping evidence found is a March 2023 training report (fakulteti.mk). Airfield documents revised in 2025 are not evidence of jumps.",
+      "sources": [
+        {
+          "url": "https://aeroklubskopje.mk/en/training-center/",
+          "checked_on": "2026-11-14",
+          "what": "Club page: tandem jumps, parachuting courses, instructor"
+        },
+        {
+          "url": "https://aeroclub.mk/services-2/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield page: airfield used for training parachutists"
+        },
+        {
+          "url": "https://umno.mk/100-godini-od-osnovanjeto-na-aeroklubot-skopje/",
+          "checked_on": "2026-11-14",
+          "what": "2023 centenary event at Stenkovec including parachute jumps"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/444244457",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Stenkovec LWSN, operator Aeroklub Skopje"
+        },
+        {
+          "url": "https://www.fakulteti.mk/news/17032023/aeroklubot-skopje-ja-pochna-obukata-za-novi-padobranci-po-prviot-skok-pochetnicite-plovat-po-oblaci-iako-vekje-sletale",
+          "checked_on": "2026-11-14",
+          "what": "News 17 Mar 2023: Aeroklub Skopje starts training new parachutists"
+        },
+        {
+          "url": "https://lwsn.mk/elementor-485",
+          "checked_on": "2026-11-14",
+          "what": "Airfield site: skydiving courses and tandem jumps (undated)"
+        }
+      ],
+      "note": "Downgraded from active in the check: the club is clearly a parachuting club, but no 2025+ dated jump activity was found."
+    },
+    {
+      "key": "mk-kumanovo-rezanovce",
+      "name": "Sport airfield Adži Tepe-Režanovce",
+      "aliases": [],
+      "country": "MK",
+      "locality": "Kumanovo",
+      "latitude": 42.154242,
+      "longitude": 21.699328,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LW67)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aero klub Done Božinov"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Civil Aviation Agency explicitly associates this club and sport airfield with parachuting, but the listing is undated and no 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Official club, sport-airfield and parachuting activity listing."
+        },
+        {
+          "url": "https://www.caa.gov.mk/en/airports-in-republic-of-north-macedonia/",
+          "checked_on": "2026-11-14",
+          "what": "Official network of sport airfields."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LW67 airfield coordinates."
+        }
+      ],
+      "note": "Airport identifiers LW66/LW67/LW74 are dataset identifiers, not assumed ICAO codes; activity needs dated confirmation."
+    },
+    {
+      "key": "mk-bitola-logovardi",
+      "name": "Sport aerodrom Logovardi",
+      "aliases": [],
+      "country": "MK",
+      "locality": "Bitola, Logovardi",
+      "latitude": 41.017721,
+      "longitude": 21.426186,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LW74)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aero klub Mirko Todorovski"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Civil Aviation Agency explicitly associates this club and sport airfield with parachuting, but the listing is undated and no 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Official club, sport-airfield and parachuting activity listing."
+        },
+        {
+          "url": "https://www.caa.gov.mk/en/airports-in-republic-of-north-macedonia/",
+          "checked_on": "2026-11-14",
+          "what": "Official network of sport airfields."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LW74 airfield coordinates."
+        }
+      ],
+      "note": "Airport identifiers LW66/LW67/LW74 are dataset identifiers, not assumed ICAO codes; activity needs dated confirmation."
+    },
+    {
+      "key": "mk-stip-susevo",
+      "name": "Sport airfield Suševo",
+      "aliases": [],
+      "country": "MK",
+      "locality": "Štip, Suševo",
+      "latitude": 41.759745,
+      "longitude": 22.147781,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LWST)",
+      "icao": "LWST",
+      "operators": [
+        {
+          "name": "Aero klub Štip"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Civil Aviation Agency explicitly associates this club and sport airfield with parachuting, but the listing is undated and no 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Official club, sport-airfield and parachuting activity listing."
+        },
+        {
+          "url": "https://www.caa.gov.mk/en/airports-in-republic-of-north-macedonia/",
+          "checked_on": "2026-11-14",
+          "what": "Official network of sport airfields."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LWST airfield coordinates."
+        }
+      ],
+      "note": "Airport identifiers LW66/LW67/LW74 are dataset identifiers, not assumed ICAO codes; activity needs dated confirmation."
+    },
+    {
+      "key": "mk-prilep-malo-konjari",
+      "name": "Sport airfield Malo Konjari",
+      "aliases": [],
+      "country": "MK",
+      "locality": "Prilep",
+      "latitude": 41.333099,
+      "longitude": 21.4491,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LW66)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aero klub Prilep"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Civil Aviation Agency explicitly associates this club and sport airfield with parachuting, but the listing is undated and no 2025+ local jump evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.caa.gov.mk/en/aircraft-operations/",
+          "checked_on": "2026-11-14",
+          "what": "Official club, sport-airfield and parachuting activity listing."
+        },
+        {
+          "url": "https://www.caa.gov.mk/en/airports-in-republic-of-north-macedonia/",
+          "checked_on": "2026-11-14",
+          "what": "Official network of sport airfields."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LW66 airfield coordinates."
+        }
+      ],
+      "note": "Airport identifiers LW66/LW67/LW74 are dataset identifiers, not assumed ICAO codes; activity needs dated confirmation."
+    }
+  ]
+}

@@ -1,0 +1,844 @@
+{
+  "country": "RO",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "ro-clinceni",
+      "name": "Clinceni Aerodrome",
+      "aliases": [
+        "TNT Brothers",
+        "Cornetu",
+        "Skydiving București"
+      ],
+      "country": "RO",
+      "locality": "Clinceni, Ilfov (near Bucharest)",
+      "latitude": 44.36074,
+      "longitude": 25.93215,
+      "coordinates_source": "https://www.openstreetmap.org/node/620110508",
+      "icao": "LRCN",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Aurel Vlaicu\" București",
+          "website": "http://aerodromclinceni.ro/"
+        },
+        {
+          "name": "TNT Brothers",
+          "website": "https://tnt-brothers.ro/",
+          "facebook": "https://www.facebook.com/tntbrothers/"
+        }
+      ],
+      "aircraft": "Pilatus (TNT Brothers; model not stated)",
+      "season": "TNT Brothers: about March–September, Thursday–Sunday (per 2024 review on its site)",
+      "status": "active",
+      "status_evidence": "Aerodrome site (2026, images from Dec 2025) offers parachute jumps and a parachuting school; TNT Brothers site lists Clinceni as its Bucharest base with a Pilatus; national team trains here (TVR, 2025)",
+      "sources": [
+        {
+          "url": "http://aerodromclinceni.ro/",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome/aeroclub: Parașutism school, 'Salturi cu parașuta'"
+        },
+        {
+          "url": "https://tnt-brothers.ro/",
+          "checked_on": "2026-11-14",
+          "what": "TNT Brothers: bases Aerodrom Clinceni and Aerodrom Tuzla; Pilatus; reviews say Thursday–Sunday, March–September"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/620110508",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul Clinceni' LRCN, operator Aeroclubul Romaniei"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Check: in 2026 the București aeroclub's school jumps are held at Ploiești (national notice); Clinceni stays active on the aerodrome site and TNT Brothers."
+    },
+    {
+      "key": "ro-tuzla",
+      "name": "Tuzla Airport \"Alexandru Podgoreanu\"",
+      "aliases": [
+        "Constanța",
+        "Skydive Tuzla"
+      ],
+      "country": "RO",
+      "locality": "Tuzla, Constanța County",
+      "latitude": 43.9847,
+      "longitude": 28.60978,
+      "coordinates_source": "https://www.openstreetmap.org/way/251368424",
+      "icao": "LRTZ",
+      "operators": [
+        {
+          "name": "TNT Brothers",
+          "website": "https://tnt-brothers.ro/",
+          "facebook": "https://www.facebook.com/tntbrothers/"
+        }
+      ],
+      "season": "summer (coastal season; exact dates not published in what was read)",
+      "status": "seasonal",
+      "status_evidence": "Puterea.ro report of a skydiver injured on landing at Tuzla airport on 2025-07-12; TNT Brothers site (2026) lists Aerodrom Tuzla as its Constanța base",
+      "sources": [
+        {
+          "url": "https://tnt-brothers.ro/",
+          "checked_on": "2026-11-14",
+          "what": "TNT Brothers: Constanța base Aerodrom Tuzla"
+        },
+        {
+          "url": "https://www.puterea.ro/?p=507911",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-07-12: skydiver injured after landing at Tuzla airport"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/251368424",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome LRTZ"
+        }
+      ]
+    },
+    {
+      "key": "ro-luncani",
+      "name": "Luncani Airfield",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Luncani, Luna, Cluj County",
+      "latitude": 46.4820876,
+      "longitude": 23.9306418,
+      "coordinates_source": "https://www.openstreetmap.org/node/8568610460",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Transilvania",
+          "website": "https://www.skydivetransilvania.ro/",
+          "facebook": "https://www.facebook.com/SkydiveTransilvania"
+        }
+      ],
+      "season": "spring to autumn",
+      "status": "active",
+      "status_evidence": "Operator site lists Safety Day on 2025-03-15 and World Skydiving Day on 2026-07-11; Cotidianul reports a 12-hour jump marathon on 2025-08-15",
+      "sources": [
+        {
+          "url": "https://www.skydivetransilvania.ro/",
+          "checked_on": "2026-11-14",
+          "what": "operator: Luncani 407362, Cluj; season starts in spring; 2025/2026 events"
+        },
+        {
+          "url": "https://www.cotidianul.ro/12-ore-intre-cer-si-pamant/",
+          "checked_on": "2026-11-14",
+          "what": "news: 12-hour jump marathon at Luncani, 15 Aug 2025"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/8568610460",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul Luncani', operator Skydive Transilvania"
+        },
+        {
+          "url": "https://www.revistabiz.ro/se-deschide-prima-scoala-privata-de-parasutism-din-transilvania/",
+          "checked_on": "2026-11-14",
+          "what": "2023: first private parachuting school in Transylvania opens"
+        }
+      ]
+    },
+    {
+      "key": "ro-sanmihaiu-german",
+      "name": "Sânmihaiu German Airstrip",
+      "aliases": [
+        "GoJump",
+        "Timisoara Skydiving Club"
+      ],
+      "country": "RO",
+      "locality": "Sânmihaiu German, Timiș County (near Timișoara)",
+      "latitude": 45.703433,
+      "longitude": 21.051869,
+      "coordinates_source": "https://gojump.ro/aerodrom/informatii-piloti (operator ARP 45°42'12.36\"N 21°03'06.73\"E; OSM node 13280077342 agrees within 30 m)",
+      "icao": "LRSG",
+      "operators": [
+        {
+          "name": "GoJump.ro (Timisoara Skydiving Club)",
+          "website": "https://gojump.ro/",
+          "facebook": "https://www.facebook.com/gojump.ro"
+        }
+      ],
+      "aircraft": "Cessna 172 (per directory)",
+      "status": "seasonal",
+      "status_evidence": "Operator's aerodrome page (site footer 2026) publishes LRSG opening hours: most weekends April–October. No dated jump post found",
+      "sources": [
+        {
+          "url": "https://gojump.ro/aerodrom/informatii-piloti",
+          "checked_on": "2026-11-14",
+          "what": "operator aerodrome page: LRSG, Sânmihaiu German, ARP, grass runway 01/19 1600 ft, summer and winter hours"
+        },
+        {
+          "url": "https://gojump.ro/",
+          "checked_on": "2026-11-14",
+          "what": "operator home page: tandem jumps, courses; 'our aerodrome'"
+        },
+        {
+          "url": "https://www.learn-atc.com/tools/flightschool/gojumpro",
+          "checked_on": "2026-11-14",
+          "what": "directory: Sânmihaiu German 307381, 45.7034459, 21.0517032, Cessna 172S; FAQ also mentions Siria"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/13280077342",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Airstrip Sânmihaiu German', operator Timisoara Skydiving Club"
+        }
+      ],
+      "note": "Check: the operator's own aerodrome page names LRSG Sânmihaiu German, so the directory's Șiria mention is not used.",
+      "season": "April–October, most weekends from 09:00 to sunset; November–March by arrangement (operator)"
+    },
+    {
+      "key": "ro-arad",
+      "name": "Arad Airport (Aeroclubul Teritorial Arad)",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Arad",
+      "latitude": 46.17548,
+      "longitude": 21.25907,
+      "coordinates_source": "https://www.openstreetmap.org/way/84575444",
+      "icao": "LRAR",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Traian Vuia\" Arad",
+          "website": "https://aeroclubulromaniei.ro/arad"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/arad",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-arad-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Aleea Aeroport nr. 2, 4 km from Arad, runway 09/27 2000 m"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/84575444",
+          "checked_on": "2026-11-14",
+          "what": "OSM Arad International Airport LRAR"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Club address and the 2000 m 09/27 runway match Arad International Airport."
+    },
+    {
+      "key": "ro-baia-mare",
+      "name": "Baia Mare Aerodrome (Tăuții-Măgherăuș)",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Tăuții-Măgherăuș, Maramureș",
+      "latitude": 47.659081,
+      "longitude": 23.474513,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident RO-0138)",
+      "icao": "LRMM",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Baia Mare",
+          "website": "https://aeroclubulromaniei.ro/baia-mare"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and names Baia Mare as the jump centre for the Satu Mare section too; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/baia-mare",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-baia-mare-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Aerodrom Tăuții-Măgherăuș LRMM, 500 m runway 09/27"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Coordinates from OurAirports (RO-0138, airports.csv); not found in OSM. The club also covers Satu Mare."
+    },
+    {
+      "key": "ro-brasov-ghimbav",
+      "name": "Ghimbav Aerodrome",
+      "aliases": [
+        "Brașov"
+      ],
+      "country": "RO",
+      "locality": "Ghimbav, Brașov County",
+      "latitude": 45.70062,
+      "longitude": 25.53003,
+      "coordinates_source": "https://www.openstreetmap.org/way/1184013656",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Iosif Șilimon\" Brașov",
+          "website": "https://aeroclubulromaniei.ro/brasov"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found March 2025 reporting explicitly locates parachuting at Ghimbav rather than Sânpetru.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/brasov",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-brasov-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Ghimbav (1000 m 03/21) and Sânpetru LRSP (600 m 12/30)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1184013656",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodrom Ghimbav', operator Aeroclubul Romaniei"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        },
+        {
+          "url": "https://infrapress.ro/2025/03/18/ministerul-transporturilor-infiinteaza-doua-aerocluburi-teritoriale-aeroclubul-teritorial-aurel-raican-braila-ianca-si-aeroclubul-teritorial-mircea-zorileanu-brasov/",
+          "checked_on": "2026-11-14",
+          "what": "18 March 2025 report distinguishes Ghimbav aircraft/parachuting from Sânpetru gliding"
+        }
+      ],
+      "note": "March 2025 report identifies Ghimbav as the aircraft/parachuting site and Sânpetru as the gliding site. These coordinates are the sport aerodrome, not Brașov-Ghimbav International Airport; Sânpetru is a separate airfield."
+    },
+    {
+      "key": "ro-cluj-dezmir",
+      "name": "Dezmir Aerodrome",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Dezmir, Cluj County",
+      "latitude": 46.77897,
+      "longitude": 23.71259,
+      "coordinates_source": "https://www.openstreetmap.org/way/369424889",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Traian Dârjan\" Cluj",
+          "website": "https://aeroclubulromaniei.ro/cluj"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Târgu Mureș, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/cluj",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/369424889",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul Dezmir', operator Aeroclubul Teritorial Traian Dârjan"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Check: downgraded from active; the club enrols parachuting students but jumps them at Târgu Mureș."
+    },
+    {
+      "key": "ro-craiova",
+      "name": "Craiova-Sud Aerodrome (Balta Verde)",
+      "aliases": [
+        "Balta Verde"
+      ],
+      "country": "RO",
+      "locality": "Podari, Dolj County",
+      "latitude": 44.28584,
+      "longitude": 23.79154,
+      "coordinates_source": "https://www.openstreetmap.org/way/221607850",
+      "icao": "LRCW",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Craiova",
+          "website": "https://aeroclubulromaniei.ro/craiova"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/craiova",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-craiova-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Craiova-Sud LRCW, Str. Calafatului 2G, Podari"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/221607850",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aeroclubul Balta-Verde' LRCW"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ]
+    },
+    {
+      "key": "ro-deva-saulesti",
+      "name": "Deva-Săulești Aerodrome",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Sântandrei, Hunedoara County",
+      "latitude": 45.86378,
+      "longitude": 22.96507,
+      "coordinates_source": "https://www.openstreetmap.org/node/638793877",
+      "icao": "LRDV",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Deva",
+          "website": "https://aeroclubulromaniei.ro/deva"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and names Deva as the jump centre for Sibiu trainees too; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/deva",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-deva-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Deva-Săulești LRDV, 700 m runway"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/638793877",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul Săulești' LRDV"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Aeroclubul României also lists the 'Cupa Togănel Ștefan' precision event at Deva."
+    },
+    {
+      "key": "ro-iasi-sud",
+      "name": "Iași-Sud Aerodrome",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Iași",
+      "latitude": 47.15886,
+      "longitude": 27.63699,
+      "coordinates_source": "https://www.openstreetmap.org/way/28721307",
+      "icao": "LRIS",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Iași",
+          "website": "https://aeroclubulromaniei.ro/iasi"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Suceava, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/iasi",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/28721307",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodrom Iași-Sud' LRIS, operator Aeroclubul 'Alexandru Matei' Moldova Iași"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Club address Str. Aviației nr. 2, Iași. Aerodrome assumed from the OSM operator tag; the club's own aerodrome page returned 404. Check: downgraded from active; the club enrols parachuting students but jumps them at Suceava."
+    },
+    {
+      "key": "ro-pitesti-geamana",
+      "name": "Pitești-Geamăna Aerodrome",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Geamăna, Bradu, Argeș County",
+      "latitude": 44.81748,
+      "longitude": 24.89771,
+      "coordinates_source": "https://www.openstreetmap.org/way/1051388355",
+      "icao": "LRPT",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Pitești",
+          "website": "https://aeroclubulromaniei.ro/pitesti"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Pitești is not in Aeroclubul României's 2026 list of clubs taking parachuting students (posted 2025-12-30), although the club's course menu lists 'Parasutism'. No dated jump found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/pitesti",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-pitesti-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: Geamăna LRPT, 560 m runway"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1051388355",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul Geamăna' LRPT"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Check: downgraded from active; absent from the 2026 parachuting list."
+    },
+    {
+      "key": "ro-ploiesti-strejnic",
+      "name": "Ploiești-Strejnic Aerodrome",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Strejnicu, Prahova County",
+      "latitude": 44.92547,
+      "longitude": 25.96161,
+      "coordinates_source": "https://www.openstreetmap.org/way/785765306",
+      "icao": "LRPW",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Ploiești",
+          "website": "https://aeroclubulromaniei.ro/ploiesti"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and names Ploiești as the jump centre for București trainees too; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/ploiesti",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/785765306",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aerodromul George Valentin Bibescu - Strejnicu'"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Club address 'Strada Aerodrom Strejnic'. OurAirports gives ident LRPV for the same field; OSM gives LRPW."
+    },
+    {
+      "key": "ro-sibiu",
+      "name": "Sibiu \"Hermann Oberth\" Aeroclub Airfield",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Turnișor, Sibiu",
+      "latitude": 45.78231,
+      "longitude": 24.09139,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident RO-0089)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Hermann Oberth\" Sibiu",
+          "website": "https://aeroclubulromaniei.ro/sibiu"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) says this club's parachuting school jumps take place at Deva, not here. No dated jump at this aerodrome found Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/sibiu",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-sibiu-informatii-176",
+          "checked_on": "2026-11-14",
+          "what": "aerodrome info: 5 km from Sibiu, 444 m, runway 09/27 900 m"
+        },
+        {
+          "url": "http://aeroclubulromaniei.ro/page/aeroclub-teritorial-hermann-oberth-sibiu-parasutism-27",
+          "checked_on": "2026-11-14",
+          "what": "parachuting school page with per-altitude jump prices (undated)"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Coordinates from OurAirports RO-0089 (airports.csv: 'Sibiu Hermann Oberth Airfield', Turnișor). A separate lead says tandems are also flown at Măgura/Cisnădie (LRCD); not confirmed. Check: downgraded from active; the club enrols parachuting students but jumps them at Deva."
+    },
+    {
+      "key": "ro-suceava-salcea",
+      "name": "Suceava Airport (Salcea)",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Salcea, Suceava County",
+      "latitude": 47.68779,
+      "longitude": 26.35429,
+      "coordinates_source": "https://www.openstreetmap.org/way/84575549",
+      "icao": "LRSV",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Grigore Baștan\" Suceava",
+          "website": "https://aeroclubulromaniei.ro/suceava"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and names Suceava as the jump centre for Iași trainees too; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/suceava",
+          "checked_on": "2026-11-14",
+          "what": "territorial aeroclub page; 'Parasutism' in its course menu"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/84575549",
+          "checked_on": "2026-11-14",
+          "what": "OSM Suceava 'Ștefan cel Mare' airport LRSV, Salcea"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Club address DC62, Salcea; assumed to fly from the Salcea airport. Not confirmed on the club's aerodrome page."
+    },
+    {
+      "key": "ro-targu-mures",
+      "name": "Târgu Mureș \"Elie Carafoli\" Sport Airfield",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Târgu Mureș",
+      "latitude": 46.53441,
+      "longitude": 24.53464,
+      "coordinates_source": "https://www.openstreetmap.org/node/1788396501",
+      "icao": "LRMS",
+      "operators": [
+        {
+          "name": "Aeroclubul Mureș",
+          "website": "http://aeroclubul-mures.ro"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting at Târgu Mureș and names it the jump centre for Cluj trainees; practical module from May",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "http://aeroclubul-mures.ro",
+          "checked_on": "2026-11-14",
+          "what": "club site; could not be opened (TLS error)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1788396501",
+          "checked_on": "2026-11-14",
+          "what": "OSM 'Aeroportul Sportiv Elie Carafoli' LRMS, operator Aeroclubul Elie Carafoli"
+        },
+        {
+          "url": "https://stirileprotv.ro/divers/aeroclubul-romaniei-atrage-un-numar-record-de-cursanti-800-de-tineri-se-pregatesc-pentru-a-sari-cu-parasuta.html",
+          "checked_on": "2026-11-14",
+          "what": "news 2025-04-07: about 800 young trainees in Aeroclubul României parachuting courses (no aerodromes named)"
+        }
+      ],
+      "note": "Coordinates are the club's sport airfield per OSM. Check: upgraded from uncertain on the 2026 national list."
+    },
+    {
+      "key": "ro-oradea",
+      "name": "Oradea (Aeroclubul Teritorial \"Smaranda Brăescu\")",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Oradea, Bihor County",
+      "latitude": 47.033333,
+      "longitude": 21.901944,
+      "coordinates_source": "https://aeroclubulromaniei.ro/media/MOPL2web.pdf (section C, Oradea airfield reference point)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial \"Smaranda Brăescu\" Oradea",
+          "facebook": "https://www.facebook.com/Aeroclubul-Teritorial-Smaranda-Br%C4%83escu-Oradea-105438664456456"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed as a territorial aeroclub on aeroclubulromaniei.ro (2026), with a Facebook page only; parachuting not confirmed; Oradea is not in Aeroclubul României's 2026 parachuting enrolment list Codex cross-check: no dated local jump evidence resolved the existing uncertainty.",
+      "sources": [
+        {
+          "url": "https://www.aeroclubulromaniei.ro/",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României list of territorial aeroclubs (Oradea links to Facebook)"
+        },
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://aeroclubulromaniei.ro/media/MOPL2web.pdf",
+          "checked_on": "2026-11-14",
+          "what": "National aeroclub operational manual: Oradea airfield reference point N47°02′00″ E21°54′07″."
+        }
+      ],
+      "note": "Historical club airfield reference point from the national aeroclub manual; current parachuting remains unconfirmed. This is not the international airport reference point."
+    },
+    {
+      "key": "ro-ianca",
+      "name": "Ianca Airfield",
+      "aliases": [
+        "Brăila"
+      ],
+      "country": "RO",
+      "locality": "Ianca, Brăila County",
+      "latitude": 45.158655,
+      "longitude": 27.43093,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LR79, gps_code LRIC)",
+      "icao": "LRIC",
+      "operators": [
+        {
+          "name": "Aeroclubul Teritorial Ianca",
+          "website": "https://aeroclubulromaniei.ro/"
+        }
+      ],
+      "season": "practical module from May (national course notice)",
+      "status": "active",
+      "status_evidence": "Aeroclubul României 2026 course notice (posted 2025-12-30) lists parachuting enrolment at this territorial club and does not move its school jumps elsewhere; practical module from May. No dated jump at this aerodrome found",
+      "sources": [
+        {
+          "url": "https://ar.ro/articol/cursuri-gratuite-2026",
+          "checked_on": "2026-11-14",
+          "what": "Aeroclubul României, posted 2025-12-30: 2026 free courses. Parachuting enrolment at Arad, Baia Mare (with Satu Mare section), Brașov, București, Cluj, Craiova, Deva, Ianca, Iași, Ploiești, Sibiu, Suceava, Târgu Mureș; practical module from May. School jumps for București are held at Ploiești, Iași at Suceava, Sibiu at Deva, Cluj at Târgu Mureș, Satu Mare at Baia Mare"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LR79)",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports 'Ianca Airfield' LRIC, small_airport"
+        }
+      ],
+      "note": "Added in check. List-based status like the other territorial clubs; not checked in OSM (Overpass unreachable). The researcher had found no parachuting on the club's course menu."
+    },
+    {
+      "key": "ro-magura-cisnadie",
+      "name": "Măgura Airfield",
+      "aliases": [],
+      "country": "RO",
+      "locality": "Cisnădie, Sibiu",
+      "latitude": 45.737222,
+      "longitude": 24.165278,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LRCD)",
+      "icao": "LRCD",
+      "operators": [
+        {
+          "name": "Club Sportiv Benzoi / Benzoi Aviation",
+          "website": "https://www.benzoi.ro/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator confirms tandem jumps at Măgura and May–October booking season; no dated 2025+ jump or season calendar was established.",
+      "sources": [
+        {
+          "url": "https://www.benzoi.ro/despre-noi/",
+          "checked_on": "2026-11-14",
+          "what": "Operator locates its aircraft and parachuting activities at Măgura"
+        },
+        {
+          "url": "https://www.benzoi.ro/bookings/services/view/1",
+          "checked_on": "2026-11-14",
+          "what": "Tandem booking page identifies Măgura and May–October season"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "LRCD coordinates"
+        }
+      ],
+      "note": "Added by Codex; distinct from the territorial Sibiu aeroclub airfield.",
+      "season": "May–October (operator booking page)"
+    }
+  ]
+}

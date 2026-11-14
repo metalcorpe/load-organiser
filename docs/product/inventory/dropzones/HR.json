@@ -1,0 +1,530 @@
+{
+  "country": "HR",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "hr-zagreb-lucko",
+      "name": "Aerodrom Lučko",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Lučko, Zagreb",
+      "latitude": 45.76783,
+      "longitude": 15.84917,
+      "coordinates_source": "https://www.openstreetmap.org/way/239203118",
+      "icao": "LDZL",
+      "operators": [
+        {
+          "name": "Skydive Croatia (PK Skydive Croatia)",
+          "website": "https://www.skydivecroatia.com"
+        },
+        {
+          "name": "Padobranski klub Zagreb"
+        },
+        {
+          "name": "Tandem Experti",
+          "website": "https://www.tandem-experti.com"
+        },
+        {
+          "name": "ADV Adventure Driven Vacations",
+          "website": "https://adventure-driven-vacations.com/skydiving-croatia/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Croatia news: last planned jump weekend of 2026 season 31 Oct–1 Nov 2026, return March 2027",
+      "sources": [
+        {
+          "url": "https://www.skydivecroatia.com/termini-skokova.php",
+          "checked_on": "2026-11-14",
+          "what": "operator: main location Lučko, jumps most days except Monday in season"
+        },
+        {
+          "url": "https://www.skydivecroatia.com/aktualno.php",
+          "checked_on": "2026-11-14",
+          "what": "operator news, autumn 2026"
+        },
+        {
+          "url": "https://www.caf.hr/popis-clanica",
+          "checked_on": "2026-11-14",
+          "what": "Hrvatski zrakoplovni savez member list (PK Zagreb, Lučko; PK Skydive Croatia)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/239203118",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "season": "early March to end of October / early November"
+    },
+    {
+      "key": "hr-varazdin",
+      "name": "Zračno pristanište Varaždin",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Varaždin",
+      "latitude": 46.29518,
+      "longitude": 16.38196,
+      "coordinates_source": "https://www.openstreetmap.org/way/184818841",
+      "icao": "LDVA",
+      "operators": [
+        {
+          "name": "Padobranski klub Apollo"
+        },
+        {
+          "name": "Skydive Croatia / Skydive Varaždin",
+          "website": "https://www.skydivevarazdin.com"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Croatia 2026 schedule page: jumps at Varaždin occasionally, on announced dates",
+      "sources": [
+        {
+          "url": "https://www.skydivecroatia.com/termini-skokova.php",
+          "checked_on": "2026-11-14",
+          "what": "operator: Varaždin occasional"
+        },
+        {
+          "url": "https://www.caf.hr/popis-clanica",
+          "checked_on": "2026-11-14",
+          "what": "federation member list: Padobranski klub Apollo, Varaždin"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/184818841",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ]
+    },
+    {
+      "key": "hr-porec-skagacer",
+      "name": "Sportski aerodrom Poreč (Škagacer)",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Poreč, Istria",
+      "latitude": 45.218419,
+      "longitude": 13.610065,
+      "coordinates_source": "https://www.openstreetmap.org/node/12288191925",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fly Club Poreč / FLYClub CRO (Skydive Poreč)",
+          "website": "https://www.flyclubcro.com"
+        },
+        {
+          "name": "Aeroklub Cumulus"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator site lists Skydive Boogie Poreč events monthly February–October 2026",
+      "sources": [
+        {
+          "url": "https://www.flyclubcro.com",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandems from 4000 m, 2026 boogie calendar, registered landing area Poreč Škagacer"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports HR-0027 Poreč-Škagacer Airfield, keywords 'Drop Zone Poreč, Fly Club Poreč' (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/12288191925",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome \"Poreč-Škagacer Airfield\", website flyclubcro.com"
+        }
+      ],
+      "aircraft": "Pilatus PC-6 (event listings)"
+    },
+    {
+      "key": "hr-mali-losinj",
+      "name": "Aerodrom Mali Lošinj",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Mali Lošinj",
+      "latitude": 44.56698,
+      "longitude": 14.39321,
+      "coordinates_source": "https://www.openstreetmap.org/way/244676073",
+      "icao": "LDLO",
+      "operators": [
+        {
+          "name": "Fly Club Poreč / FLYClub CRO",
+          "website": "https://www.flyclubcro.com"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "FLYClub CRO calendar lists Skydive Boogie Lošinj in May 2026 and September 2026",
+      "sources": [
+        {
+          "url": "https://www.flyclubcro.com",
+          "checked_on": "2026-11-14",
+          "what": "operator 2026 events calendar"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/244676073",
+          "checked_on": "2026-11-14",
+          "what": "OSM airport geometry"
+        }
+      ],
+      "note": "Boogie (event) site, not a permanent dropzone."
+    },
+    {
+      "key": "hr-sinj",
+      "name": "Sportski aerodrom Sinj",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Sinj, Split-Dalmatia",
+      "latitude": 43.70068,
+      "longitude": 16.67129,
+      "coordinates_source": "https://www.openstreetmap.org/way/39207385",
+      "icao": "LDSS",
+      "operators": [
+        {
+          "name": "Aeroklub Sinj"
+        },
+        {
+          "name": "Padobranski klub Graviton (Split)"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Padobranstvo.com (20 May 2025) lists Sinj as seasonally available for tandems; 2025 competition calendar lists Alkarski padobranski kup at Sinj",
+      "sources": [
+        {
+          "url": "https://www.padobranstvo.com/objave/159/tandem-skok-padobranom-iskustvo-koje-mijenja-sve",
+          "checked_on": "2026-11-14",
+          "what": "portal, 20 May 2025: tandem locations incl. Sinj (seasonal)"
+        },
+        {
+          "url": "https://www.padobranstvo.com/objave/156/najava-padobranskih-natjecanja-za-2025-godinu",
+          "checked_on": "2026-11-14",
+          "what": "2025 competition calendar"
+        },
+        {
+          "url": "http://www.aeroklubsinj.hr/hr/263-sinjski-padobranci-opet-obranili-naslov-drzavnih-prvaka",
+          "checked_on": "2026-11-14",
+          "what": "club news: national accuracy championship at Sinj (undated)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/39207385",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ]
+    },
+    {
+      "key": "hr-zadar",
+      "name": "Zračna luka Zadar (take-off) / beach landing at Rtina",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Zemunik Donji / Ražanac, Zadar",
+      "latitude": 44.09984,
+      "longitude": 15.34441,
+      "coordinates_source": "https://www.openstreetmap.org/way/372828272",
+      "icao": "LDZD",
+      "operators": [
+        {
+          "name": "ADV Skydive Zadar (Adventure Driven Vacations)",
+          "website": "https://adventure-driven-vacations.com/tour/skydiving-zadar-tandem-jump/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Padobranstvo.com (20 May 2025) lists Zadar as seasonally available; operator states season February–November",
+      "sources": [
+        {
+          "url": "https://adventure-driven-vacations.com/tour/skydiving-zadar-tandem-jump/",
+          "checked_on": "2026-11-14",
+          "what": "operator: take-off office Zadar Airport, dropzone office Rtina 113, Ražanac; beach landing"
+        },
+        {
+          "url": "https://www.padobranstvo.com/objave/159/tandem-skok-padobranom-iskustvo-koje-mijenja-sve",
+          "checked_on": "2026-11-14",
+          "what": "portal 2025"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/372828272",
+          "checked_on": "2026-11-14",
+          "what": "OSM airport geometry"
+        }
+      ],
+      "season": "February–November (operator)",
+      "note": "Coordinates are the take-off airport; landing is on a beach near Rtina (Ražanac), position not published."
+    },
+    {
+      "key": "hr-cakovec",
+      "name": "Zračno pristanište Čakovec",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Pribislavec, Čakovec",
+      "latitude": 46.3916,
+      "longitude": 16.49962,
+      "coordinates_source": "https://www.openstreetmap.org/relation/18090908",
+      "icao": "LDVC",
+      "operators": [
+        {
+          "name": "Aeroklub Međimurje"
+        },
+        {
+          "name": "Skydive Croatia",
+          "website": "https://www.skydivecroatia.com"
+        },
+        {
+          "name": "Aeroklub Slobodan Pad",
+          "website": "https://slobodanpad.hr"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Padobranstvo.com (20 May 2025) lists Čakovec as seasonal; Skydive Croatia and Slobodan Pad offer tandems at Pribislavec but show no dated 2025+ jump day",
+      "sources": [
+        {
+          "url": "https://www.padobranstvo.com/objave/159/tandem-skok-padobranom-iskustvo-koje-mijenja-sve",
+          "checked_on": "2026-11-14",
+          "what": "portal 2025: Čakovec seasonal"
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/18090908",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        },
+        {
+          "url": "https://www.skydivecroatia.com/skok-padobranom-cakovec.php",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Croatia: tandem weekends at the Pribislavec airfield, dates announced separately (page refers to 2020)"
+        },
+        {
+          "url": "https://slobodanpad.hr/tandem-skok-padobranom-medimurje",
+          "checked_on": "2026-11-14",
+          "what": "Slobodan Pad: Međimurje tandems at Pribislavec airfield, dates \"coming soon\", none listed"
+        }
+      ]
+    },
+    {
+      "key": "hr-vrsar",
+      "name": "Aerodrom Vrsar (Crljenka)",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Vrsar, Istria",
+      "latitude": 45.14146,
+      "longitude": 13.62916,
+      "coordinates_source": "https://www.openstreetmap.org/way/159246019",
+      "icao": "LDPV",
+      "operators": [
+        {
+          "name": "Aeroklub Slobodan Pad / Skydive Adria",
+          "website": "https://slobodanpad.hr/tandem-skok-padobranom-istra"
+        },
+        {
+          "name": "Skydive Vrsar / Aeroklub Vrsar"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Slobodan Pad lists a tandem event at Aerodrom Vrsar on 13–14 June 2026 (Cessna 182 9A-DTD). No regular jump calendar.",
+      "sources": [
+        {
+          "url": "https://slobodanpad.hr/tandem-skok-padobranom-istra",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandem jumps at Aerodrom Vrsar, 13–14.6.2026"
+        },
+        {
+          "url": "https://skydiveadria.com/tandem-skydive-croatia-istra",
+          "checked_on": "2026-11-14",
+          "what": "operator (© 2019): take-off and landing at Vrsar airfield, same Cessna 9A-DTD"
+        },
+        {
+          "url": "https://adventuresportsholidays.com/?p=102803",
+          "checked_on": "2026-11-14",
+          "what": "promo page: Skydive Vrsar, 2 km SE of Vrsar"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/159246019",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "aircraft": "Cessna 182 9A-DTD",
+      "note": "Event site in 2026, not a daily dropzone."
+    },
+    {
+      "key": "hr-otocac",
+      "name": "Zračno pristanište Otočac",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Otočac, Lika",
+      "latitude": 44.84562,
+      "longitude": 15.28801,
+      "coordinates_source": "https://www.openstreetmap.org/way/228212013",
+      "icao": "LDRO",
+      "operators": [
+        {
+          "name": "ADV Adventure Driven Vacations",
+          "website": "https://adventure-driven-vacations.com/tour/tandem-skydiving-otocac/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator offers group tandem dates on request (min. 10); no dated jump day; airfield not named by operator",
+      "sources": [
+        {
+          "url": "https://adventure-driven-vacations.com/tour/tandem-skydiving-otocac/",
+          "checked_on": "2026-11-14",
+          "what": "operator tour page"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/228212013",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "note": "Airfield inferred from the town name; operator does not name it."
+    },
+    {
+      "key": "hr-grobnik",
+      "name": "Sportski aerodrom Grobničko polje",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Soboli / Čavle, Rijeka",
+      "latitude": 45.37927,
+      "longitude": 14.50449,
+      "coordinates_source": "https://www.openstreetmap.org/way/228741357",
+      "icao": "LDRG",
+      "operators": [
+        {
+          "name": "Padobranski klub Krila Kvarnera",
+          "website": "https://www.padobranstvo.hr"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Club in 2026 federation member list; club site news ends 2023; no 2025+ jump evidence",
+      "sources": [
+        {
+          "url": "https://www.caf.hr/popis-clanica",
+          "checked_on": "2026-11-14",
+          "what": "federation member list"
+        },
+        {
+          "url": "https://www.padobranstvo.hr",
+          "checked_on": "2026-11-14",
+          "what": "club site (courses on demand)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/228741357",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "note": "Club's airfield assumed from its Rijeka base; not stated on the club page."
+    },
+    {
+      "key": "hr-osijek-cepin",
+      "name": "Sportski aerodrom Osijek-Čepin",
+      "aliases": [],
+      "country": "HR",
+      "locality": "Čepin, Osijek",
+      "latitude": 45.54254,
+      "longitude": 18.63379,
+      "coordinates_source": "https://www.openstreetmap.org/way/16134212",
+      "icao": "LDOC",
+      "operators": [
+        {
+          "name": "Aeroklub Osijek"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Aeroklub Osijek parachutists take part in national accuracy championships (undated club report); no tandem/student activity confirmed",
+      "sources": [
+        {
+          "url": "http://www.aeroklubsinj.hr/hr/263-sinjski-padobranci-opet-obranili-naslov-drzavnih-prvaka",
+          "checked_on": "2026-11-14",
+          "what": "Aeroklub Osijek team at national championship"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/16134212",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "note": "Club airfield assumed to be Čepin (Osijek sport aerodrome); not stated in the source."
+    },
+    {
+      "key": "hr-medulin",
+      "name": "Aerodrom Medulin-Campanož",
+      "aliases": [
+        "Skydive Adria",
+        "Skydive Medulin"
+      ],
+      "country": "HR",
+      "locality": "Medulin",
+      "latitude": 44.843878,
+      "longitude": 13.904376,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LDPM)",
+      "icao": "LDPM",
+      "operators": [
+        {
+          "name": "Padobranski sportski klub Pulaštro",
+          "website": "https://skydivemedulin.wixsite.com/skydivemedulin/home"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Local club website advertises tandem, training and a Medulin boogie, but no 2025+ activity evidence was established.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/locations/skydive-adria/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead naming Medulin."
+        },
+        {
+          "url": "https://skydivemedulin.wixsite.com/skydivemedulin/home",
+          "checked_on": "2026-11-14",
+          "what": "Local skydiving club site with training and boogie offers."
+        },
+        {
+          "url": "https://aeroklubcumulus.wixsite.com/cumulus/en/reports",
+          "checked_on": "2026-11-14",
+          "what": "Historical North Adriatic tour names aircraft jumps at Medulin; not recent evidence."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LDPM airfield coordinates."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "key": "hr-hvar-stari-grad",
+      "name": "Aerodrom Hvar",
+      "aliases": [
+        "Skydiving Tandem Group Hvar"
+      ],
+      "country": "HR",
+      "locality": "Stari Grad, Hvar",
+      "latitude": 43.181702,
+      "longitude": 16.633301,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LDSH)",
+      "icao": "LDSH",
+      "operators": [
+        {
+          "name": "Skydiving Tandem Group",
+          "website": "http://skydivingtandem.eu/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Jelsa tourism board identifies tandem skydiving at the Hvar airfield, but the page is undated and no reliable 2025+ operating dates were established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/skydiving-tandem-group-hvar/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://visitjelsa.hr/en/6989/skydiving-hvar/",
+          "checked_on": "2026-11-14",
+          "what": "Tourism board specifies the small airfield east of Stari Grad, Put Gospojice."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LDSH airfield coordinates."
+        }
+      ],
+      "note": ""
+    }
+  ]
+}

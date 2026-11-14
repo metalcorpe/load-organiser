@@ -1,0 +1,584 @@
+{
+  "country": "SK",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "sk-senica",
+      "name": "Letisko Senica",
+      "country": "SK",
+      "locality": "Senica, Trnavský kraj",
+      "latitude": 48.65798,
+      "longitude": 17.32936,
+      "coordinates_source": "https://www.openstreetmap.org/way/89658011 (OSM aerodrome)",
+      "icao": "LZSE",
+      "operators": [
+        {
+          "name": "Záhorácky Aeroklub Senica"
+        },
+        {
+          "name": "SkyAdventure s.r.o.",
+          "website": "https://www.tandemovezoskoky.sk"
+        },
+        {
+          "name": "tandemovyzoskok.sk",
+          "website": "https://tandemovyzoskok.sk"
+        },
+        {
+          "name": "volnýpád.cz",
+          "website": "https://www.volnypad.cz"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "tandemovyzoskok.sk event calendar shows a jump day at Senica on 23.05.2026 (search view); volnypad.cz offers 6,000 m jumps here",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://www.volnypad.cz",
+          "checked_on": "2026-11-14",
+          "what": "Czech operator listing Senica"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZSE/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-slavnica",
+      "name": "Letisko Slávnica (Dubnica nad Váhom)",
+      "country": "SK",
+      "locality": "Slavnica, Trenčiansky kraj",
+      "latitude": 48.99704,
+      "longitude": 18.19235,
+      "coordinates_source": "https://www.openstreetmap.org/way/38249083 (OSM aerodrome)",
+      "icao": "LZDB",
+      "operators": [
+        {
+          "name": "Aeroklub Dubnica nad Váhom"
+        },
+        {
+          "name": "SkyAdventure s.r.o.",
+          "website": "https://www.tandemovezoskoky.sk"
+        },
+        {
+          "name": "tandemovyzoskok.sk",
+          "website": "https://tandemovyzoskok.sk"
+        },
+        {
+          "name": "SKY TAXI (SkyTaxi s.r.o.)",
+          "website": "https://flyskytaxi.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "leteckezazitky.sk lists 4,000 m tandems at Slávnica (2026); tandemovyzoskok.sk names Slávnica as a parachute operation (search view)",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://flyskytaxi.sk",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage: tandems from 4,000 m with a PC-6 at Slávnica (and Kráľová pri Senci); no dated content"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZDB/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "aircraft": "Pilatus PC-6 (per flyskytaxi.sk)"
+    },
+    {
+      "key": "sk-holic",
+      "name": "Letisko Holíč",
+      "country": "SK",
+      "locality": "Holíč, Trnavský kraj",
+      "latitude": 48.81357,
+      "longitude": 17.13695,
+      "coordinates_source": "https://www.openstreetmap.org/way/224003583 (OSM aerodrome LZHL, centre of the outline)",
+      "icao": "LZHL",
+      "operators": [
+        {
+          "name": "Aeroklub Holíč o.z."
+        },
+        {
+          "name": "tandemovyzoskokpadakom.sk",
+          "website": "https://www.tandemovyzoskokpadakom.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator page (opened 2026-11-14) lists Holíč as its jump airfield; tandemove-seskoky.cz 2026 calendar has a garbled 'HOL… / HODON…' entry for 9–10 May 2026",
+      "sources": [
+        {
+          "url": "https://www.tandemovyzoskokpadakom.sk/odkial-skocime",
+          "checked_on": "2026-11-14",
+          "what": "operator airfield list"
+        },
+        {
+          "url": "https://www.tandemove-seskoky.cz/terminy-seskoku",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar (garbled place name)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZHL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "Check 2026-11-14: the operator page GPS (48.81931, 17.13825) lies about 130 m north of the OSM aerodrome outline (lat 48.8058–48.8181), so the OSM centre is used."
+    },
+    {
+      "key": "sk-boleraz",
+      "name": "Letisko Boleráz (Trnava)",
+      "country": "SK",
+      "locality": "Boleráz, Trnavský kraj",
+      "latitude": 48.454687,
+      "longitude": 17.524301,
+      "coordinates_source": "https://www.tandemovyzoskokpadakom.sk/airport/letisko-boleraz (operator page GPS; OSM way 150206416 at 48.4518,17.5318)",
+      "icao": "LZTR",
+      "operators": [
+        {
+          "name": "tandemovyzoskokpadakom.sk",
+          "website": "https://www.tandemovyzoskokpadakom.sk"
+        },
+        {
+          "name": "SKY TAXI (SkyTaxi s.r.o.)",
+          "website": "https://flyskytaxi.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Bookable on leteckezazitky.sk (2026 site); SKY TAXI voucher on zlavomat.sk (opened 2026-11-14) valid to April 2027 names Trnava (Boleráz) airfield",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://www.zlavomat.sk/akcia/887902-tandemovy-zoskok-z-neuveritelnej-vysky-3000-ci-3500-metrov",
+          "checked_on": "2026-11-14",
+          "what": "voucher offer by SKY TAXI (Cessna 182P): Nové Zámky, Trnava (Boleráz) or Kvetoslavov airfield; valid to 30 April 2027"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZTR/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-nove-zamky",
+      "name": "Letisko Nové Zámky",
+      "country": "SK",
+      "locality": "Nové Zámky, Nitriansky kraj",
+      "latitude": 47.96177,
+      "longitude": 18.18429,
+      "coordinates_source": "https://www.openstreetmap.org/way/252256315 (OSM aerodrome)",
+      "icao": "LZNZ",
+      "operators": [
+        {
+          "name": "Aeroklub Nové Zámky"
+        },
+        {
+          "name": "SKY TAXI (SkyTaxi s.r.o.)",
+          "website": "https://flyskytaxi.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Bookable on leteckezazitky.sk (2026 site); SKY TAXI voucher on zlavomat.sk (opened 2026-11-14) valid to April 2027 names Nové Zámky airfield",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://www.zlavomat.sk/akcia/887902-tandemovy-zoskok-z-neuveritelnej-vysky-3000-ci-3500-metrov",
+          "checked_on": "2026-11-14",
+          "what": "voucher offer by SKY TAXI (Cessna 182P): Nové Zámky, Trnava (Boleráz) or Kvetoslavov airfield; valid to 30 April 2027"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZNZ/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "SKY TAXI's own site names only Slávnica and Kráľová pri Senci; Aeroklub Nové Zámky's role is unconfirmed."
+    },
+    {
+      "key": "sk-nitra-janikovce",
+      "name": "Letisko Nitra-Janíkovce",
+      "country": "SK",
+      "locality": "Janíkovce, Nitra, Nitriansky kraj",
+      "latitude": 48.27964,
+      "longitude": 18.13213,
+      "coordinates_source": "https://www.openstreetmap.org/way/122278284 (OSM aerodrome)",
+      "icao": "LZNI",
+      "operators": [
+        {
+          "name": "Skydive Club Nitra",
+          "website": "https://skydivenitra.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Club Nitra site describes tandems at Janíkovce (search view); also sold on najzazitky.sk (2026)",
+      "sources": [
+        {
+          "url": "https://www.najzazitky.sk/adrenalinove-darceky/tandemovy-zoskok-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing incl. Nitra (Janíkovce)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZNI/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-prievidza",
+      "name": "Letisko Prievidza",
+      "country": "SK",
+      "locality": "Prievidza, Trenčiansky kraj",
+      "latitude": 48.76611,
+      "longitude": 18.58772,
+      "coordinates_source": "https://www.openstreetmap.org/way/70812567 (OSM aerodrome)",
+      "icao": "LZPE",
+      "operators": [
+        {
+          "name": "Zoskok.sk",
+          "website": "https://www.zoskok.sk",
+          "facebook": "https://www.facebook.com/zoskok.sk"
+        },
+        {
+          "name": "Aeroklub Prievidza"
+        }
+      ],
+      "aircraft": "Cessna C-206 (operator site menu)",
+      "status": "active",
+      "status_evidence": "zoskok.sk news post 'Leto 2026' with photos (file names dated 2026-07-16) from Prievidza",
+      "sources": [
+        {
+          "url": "https://www.zoskok.sk/aktualita/14/0/Leto-2026-plne-adrenalinu-a-usmevov",
+          "checked_on": "2026-11-14",
+          "what": "operator news post, summer 2026"
+        },
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZPE/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-martin-tomcany",
+      "name": "Letisko Martin (Tomčany)",
+      "country": "SK",
+      "locality": "Martin, Žilinský kraj",
+      "latitude": 49.06488,
+      "longitude": 18.94981,
+      "coordinates_source": "https://www.openstreetmap.org/way/108245289 (OSM aerodrome)",
+      "icao": "LZMA",
+      "operators": [
+        {
+          "name": "Aeroklub Martin",
+          "facebook": "https://www.facebook.com/aeroklubMT"
+        },
+        {
+          "name": "Vertical Jump"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Instagram post (search view) announces tandem jumps at Tomčany 13–14 June 2026",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZMA/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-ruzomberok-liskova",
+      "name": "Letisko Ružomberok-Lisková",
+      "country": "SK",
+      "locality": "Lisková, Žilinský kraj",
+      "latitude": 49.08438,
+      "longitude": 19.36772,
+      "coordinates_source": "https://www.openstreetmap.org/way/243306800 (OSM aerodrome)",
+      "icao": "LZRU",
+      "operators": [
+        {
+          "name": "COMPACT Skydive",
+          "website": "https://www.compact.sk",
+          "facebook": "https://www.facebook.com/COMPACT-Skydive-261049281592/"
+        },
+        {
+          "name": "Aeroklub Ružomberok"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "compact.sk (opened 2026-11-14) lists Lisková as one of its three sites; also on leteckezazitky.sk 2026",
+      "sources": [
+        {
+          "url": "https://www.compact.sk",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZRU/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-ocova",
+      "name": "Letisko Očová",
+      "country": "SK",
+      "locality": "Očová, Banskobystrický kraj",
+      "latitude": 48.59501,
+      "longitude": 19.26593,
+      "coordinates_source": "https://www.openstreetmap.org/way/295601934 (OSM aerodrome)",
+      "icao": "LZOC",
+      "operators": [
+        {
+          "name": "Skydive sport Očová (padaj.sk)",
+          "website": "https://www.padaj.sk/skydive-ocova"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "padaj.sk describes a parachute school at Očová; leteckezazitky.sk sells tandems there (2026)",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LZOC/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "sk-bolkovce",
+      "name": "Letisko Boľkovce (Lučenec)",
+      "country": "SK",
+      "locality": "Boľkovce, Banskobystrický kraj",
+      "latitude": 48.34128,
+      "longitude": 19.73351,
+      "coordinates_source": "https://www.openstreetmap.org/way/103195894 (OSM aerodrome)",
+      "icao": "LZLU",
+      "operators": [
+        {
+          "name": "Aeroklub Lučenec"
+        },
+        {
+          "name": "Letecké športové centrum Lučenec"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Hosted the 48th CISM military world parachuting championships 14–23 August 2026 (bolkovce.sk, mosr.sk); tandems sold on leteckezazitky.sk",
+      "sources": [
+        {
+          "url": "https://www.bolkovce.sk/oznamy/majstrovstva-sveta-v-parasutizme.html",
+          "checked_on": "2026-11-14",
+          "what": "municipality notice of the August 2026 world championships"
+        },
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        }
+      ]
+    },
+    {
+      "key": "sk-spisska-nova-ves",
+      "name": "Letisko Spišská Nová Ves",
+      "country": "SK",
+      "locality": "Spišská Nová Ves, Košický kraj",
+      "latitude": 48.94053,
+      "longitude": 20.53458,
+      "coordinates_source": "https://www.openstreetmap.org/way/252154507 (OSM aerodrome)",
+      "icao": "LZSV",
+      "operators": [
+        {
+          "name": "COMPACT Skydive",
+          "website": "https://www.compact.sk",
+          "facebook": "https://www.facebook.com/COMPACT-Skydive-261049281592/"
+        }
+      ],
+      "aircraft": "aircraft and Mi-8 helicopter (operator)",
+      "status": "seasonal",
+      "status_evidence": "compact.sk (opened 2026-11-14) names Spišská Nová Ves as its base and links WSC 2026",
+      "sources": [
+        {
+          "url": "https://www.compact.sk",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        }
+      ]
+    },
+    {
+      "key": "sk-kosice-bidovce",
+      "name": "Športové letisko Bidovce",
+      "country": "SK",
+      "locality": "Bidovce, Košický kraj",
+      "latitude": 48.74305,
+      "longitude": 21.44808,
+      "coordinates_source": "https://www.openstreetmap.org/relation/16205136 (OSM sports airfield)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "COMPACT Skydive",
+          "website": "https://www.compact.sk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "compact.sk (opened 2026-11-14) names Bidovce as its Košice site",
+      "sources": [
+        {
+          "url": "https://www.compact.sk",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        }
+      ]
+    },
+    {
+      "key": "sk-presov-raznany",
+      "name": "Letisko Ražňany",
+      "country": "SK",
+      "locality": "Ražňany, Prešovský kraj",
+      "latitude": 49.07851,
+      "longitude": 21.09809,
+      "coordinates_source": "https://www.openstreetmap.org/way/52941580 (OSM aerodrome)",
+      "icao": "LZRY",
+      "operators": [
+        {
+          "name": "COMPACT Skydive & Flying",
+          "website": "https://www.compact.sk"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Current operator booking page names Lisková, Spišská Nová Ves and Bidovce, not Ražňany; the voucher lead lacks site-specific dated jumping evidence.",
+      "sources": [
+        {
+          "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://www.zlavomat.sk/akcia/898234-ovladni-oblohu-tandemovy-zoskok-s-padakom",
+          "checked_on": "2026-11-14",
+          "what": "voucher offer by COMPACT Skydive & Flying at Ražňany, valid to 31 July 2027"
+        },
+        {
+          "url": "https://www.compact.sk/rezervacny-system",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Current operator booking page names Lisková, Spišská Nová Ves and Bidovce, not Ražňany; the voucher lead lacks site-specific dated jumping evidence."
+        }
+      ]
+    },
+    {
+      "key": "sk-kvetoslavov",
+      "name": "Letisko Kvetoslavov",
+      "country": "SK",
+      "locality": "Kvetoslavov, Trnavský kraj",
+      "latitude": 48.04563,
+      "longitude": 17.34997,
+      "coordinates_source": "https://www.openstreetmap.org/way/1118575661 (OSM aerodrome LZKV, centre of the outline; 630 m grass runway)",
+      "icao": "LZKV",
+      "operators": [
+        {
+          "name": "SKY TAXI (SkyTaxi s.r.o.)",
+          "website": "https://flyskytaxi.sk"
+        }
+      ],
+      "aircraft": "Cessna 182P (per voucher)",
+      "status": "uncertain",
+      "status_evidence": "Current operator site names Slávnica and Kráľová pri Senci, not Kvetoslavov; voucher availability does not resolve regular operation here.",
+      "sources": [
+        {
+          "url": "https://www.zlavomat.sk/akcia/887902-tandemovy-zoskok-z-neuveritelnej-vysky-3000-ci-3500-metrov",
+          "checked_on": "2026-11-14",
+          "what": "voucher offer by SKY TAXI (Cessna 182P): Nové Zámky, Trnava (Boleráz) or Kvetoslavov airfield; valid to 30 April 2027"
+        },
+        {
+          "url": "https://flyskytaxi.sk",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Current operator site names Slávnica and Kráľová pri Senci, not Kvetoslavov; voucher availability does not resolve regular operation here."
+        }
+      ],
+      "note": "Added by the 2026-11-14 check. Near Bratislava."
+    },
+    {
+      "key": "sk-kosice-barca",
+      "name": "Letisko Košice-Barca – Aeroklub landing area",
+      "aliases": [
+        "LZKZ"
+      ],
+      "country": "SK",
+      "locality": "Košice-Barca",
+      "latitude": 48.663101,
+      "longitude": 21.2411,
+      "coordinates_source": "https://ourairports.com/airports/LZKZ/",
+      "icao": "LZKZ",
+      "operators": [
+        {
+          "name": "Aeroklub Košice – Paraklub",
+          "website": "https://paraklub.aeroklubkosice.sk/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Club publishes its annual Cassovia accuracy competition at Košice-Barca on 12 September 2026, with civilian licensed entrants and a 2025 results archive.",
+      "sources": [
+        {
+          "url": "https://paraklub.aeroklubkosice.sk/aktuality/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: dated activity and operator evidence."
+        },
+        {
+          "url": "https://ourairports.com/airports/LZKZ/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport reference coordinates."
+        }
+      ],
+      "note": "Recurring annual club competition; airport reference coordinate, not the exact accuracy target in the aeroclub area. Distinct from Bidovce."
+    }
+  ]
+}

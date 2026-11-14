@@ -1,0 +1,151 @@
+{
+  "country": "EE",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "ee-rapla-kuusiku",
+      "name": "Rapla Kuusiku airfield",
+      "aliases": [],
+      "country": "EE",
+      "locality": "Iira, Rapla",
+      "latitude": 58.98639,
+      "longitude": 24.72444,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Rapla_Airfield",
+      "icao": "EERA",
+      "operators": [
+        {
+          "name": "Eesti Langevarjuklubi",
+          "website": "https://skydive.ee/"
+        },
+        {
+          "name": "Eesti Lennuklubi",
+          "website": "https://airsport.ee/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes July 2026 jumping news; contact page identifies Rapla Kuusiku.",
+      "sources": [
+        {
+          "url": "https://skydive.ee/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://skydive.ee/kontakt/",
+          "checked_on": "2026-11-14",
+          "what": "Physical airfield address"
+        },
+        {
+          "url": "https://airsport.ee/",
+          "checked_on": "2026-11-14",
+          "what": "Second operator identifies Kuusiku"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Rapla_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "ee-kihnu",
+      "name": "Kihnu airfield",
+      "aliases": [],
+      "country": "EE",
+      "locality": "Kihnu",
+      "latitude": 58.14833,
+      "longitude": 24.0025,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Kihnu_Airfield",
+      "icao": "EEKU",
+      "operators": [
+        {
+          "name": "Eesti Langevarjuklubi",
+          "website": "https://skydive.ee/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "1 July 2026 report describes the recurring Kihnu camp held 19–23 June.",
+      "sources": [
+        {
+          "url": "https://skydive.ee/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Kihnu_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "ee-nurmsi",
+      "name": "Nurmsi airfield",
+      "aliases": [],
+      "country": "EE",
+      "locality": "Järva",
+      "latitude": 58.865002,
+      "longitude": 25.73,
+      "coordinates_source": "https://ourairports.com/airports/EENI/",
+      "icao": "EENI",
+      "operators": [
+        {
+          "name": "Estonian Army Parachute Club (directory listing)",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Airfield and parachuting references remain, but no 2025–2026 evidence established regular civilian-access club jumping.",
+      "sources": [
+        {
+          "url": "https://www.spordiregister.ee/et/ehitis/1924/nurmsi_lennuvali",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dropzonefinder.com/dropzones/estonia",
+          "checked_on": "2026-11-14",
+          "what": "Army club listing"
+        },
+        {
+          "url": "https://ourairports.com/airports/EENI/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ],
+      "note": "Retained as a possible civilian-access club dropzone, not asserted to be generally open."
+    },
+    {
+      "key": "ee-olgina",
+      "name": "Narva Olgina airfield",
+      "aliases": [],
+      "country": "EE",
+      "locality": "Olgina, Narva",
+      "latitude": 59.38944,
+      "longitude": 28.11139,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Narva_Airfield",
+      "icao": "EENA",
+      "operators": [
+        {
+          "name": "Viru Langevarjuklubi / Narva Skydiving Centre",
+          "website": "https://avianarva.ee/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The aviation operator describes parachuting, but no dated 2025–2026 calendar or activity evidence was established.",
+      "sources": [
+        {
+          "url": "https://avianarva.ee/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Narva_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    }
+  ]
+}

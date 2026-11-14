@@ -1,0 +1,1987 @@
+{
+  "country": "IT",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "it-verona-boscomantico",
+      "name": "Aeroporto di Verona-Boscomantico",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Verona, Veneto",
+      "latitude": 45.47308,
+      "longitude": 10.92829,
+      "coordinates_source": "https://www.openstreetmap.org/way/101154997",
+      "icao": "LIPN",
+      "operators": [
+        {
+          "name": "Skydive Verona",
+          "website": "https://www.paracadutismoverona.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-003 SKYDIVE VERONA, Boscomantico (VR)",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/101154997",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory lead: Skydive Verona, Via Turbina, Verona"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIPN/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.paracadutismoverona.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator site opened; no separate dated calendar found."
+        }
+      ]
+    },
+    {
+      "key": "it-belluno",
+      "name": "Aeroporto di Belluno 'Arturo Dell'Oro'",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Belluno, Veneto",
+      "latitude": 46.16612,
+      "longitude": 12.24883,
+      "coordinates_source": "https://www.openstreetmap.org/way/140837753",
+      "icao": "LIDB",
+      "operators": [
+        {
+          "name": "Aero Club Paracadutismo Belluno ASD"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-005 ASD BELLUNO; AeCI national sporting calendar lists Dolomiti Cup 2–3 May 2026 and Belluno Trophy 7–9 August 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/140837753",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.visitdolomitibellunesi.com/en/eventi/dolomiti-cup",
+          "checked_on": "2026-11-14",
+          "what": "tourism page (via search): Dolomiti Cup accuracy event at the airport, 2 May 2026"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIDB/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated parachuting competition at this location: Dolomiti Cup 2–3 May 2026 and Belluno Trophy 7–9 August 2026."
+        }
+      ],
+      "note": "Long-running precision-landing (accuracy) centre; hosts Trofeo Città di Belluno / Dolomiti Cup."
+    },
+    {
+      "key": "it-casale-monferrato",
+      "name": "Aeroporto Francesco Cappa",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Casale Monferrato (AL), Piemonte",
+      "latitude": 45.11048,
+      "longitude": 8.4565,
+      "coordinates_source": "https://www.openstreetmap.org/way/80504166",
+      "icao": "LILM",
+      "operators": [
+        {
+          "name": "Area Delta 47 - Accademia di Paracadutismo"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-006 AREA DELTA 47, Casale M.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/80504166",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: Area Delta 47, Aeroporto F. Cappa, Casale Monferrato"
+        },
+        {
+          "url": "https://ourairports.com/airports/LILM/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://accademiadiparacadutismo.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Current booking offer and weekly opening pattern; retained with ENAC 2026 authorization, not treated as a dated jump report."
+        }
+      ]
+    },
+    {
+      "key": "it-serdiana-parteolla",
+      "name": "Aviosuperficie del Parteolla",
+      "aliases": [
+        "CASER"
+      ],
+      "country": "IT",
+      "locality": "Serdiana (SU), Sardegna",
+      "latitude": 39.40019,
+      "longitude": 9.13952,
+      "coordinates_source": "https://www.openstreetmap.org/node/4393260611",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Sardegna",
+          "website": "https://skydivesardegna.it/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-016 SKYDIVE SARDEGNA, Serdiana; Operator-linked public calendar schedules regular activity on multiple 2025–2026 weekends, including 13–14 June and 14–15 November 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/4393260611",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0413 Aviosuperficie del Parteolla, keywords 'Skydive Sardegna'"
+        },
+        {
+          "url": "https://skydivesardegna.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://calendar.google.com/calendar/ical/ti6bij98scv2hlvq3gg7mumbdc%40group.calendar.google.com/public/basic.ics",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator-linked public calendar schedules regular activity on multiple 2025–2026 weekends, including 13–14 June and 14–15 November 2026."
+        }
+      ]
+    },
+    {
+      "key": "it-vercelli",
+      "name": "Aeroporto Carlo Del Prete",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Vercelli, Piemonte",
+      "latitude": 45.30981,
+      "longitude": 8.4183,
+      "coordinates_source": "https://www.openstreetmap.org/way/58323423",
+      "icao": "LILI",
+      "operators": [
+        {
+          "name": "VZone Skydive",
+          "website": "https://www.vzone.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-023 VZONE SKYDIVE, Vercelli",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/58323423",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: ASD Vzone Skydive, Viale dell'Aeronautica, Vercelli"
+        },
+        {
+          "url": "https://ourairports.com/airports/LILI/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.vzone.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-cremona-migliaro",
+      "name": "Aeroporto di Cremona Migliaro",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Cremona, Lombardia",
+      "latitude": 45.1677,
+      "longitude": 10.00326,
+      "coordinates_source": "https://www.openstreetmap.org/way/240474220",
+      "icao": "LILR",
+      "operators": [
+        {
+          "name": "Skyteam Cremona",
+          "website": "https://skyteamcremona.it"
+        },
+        {
+          "name": "Skydive Iseo",
+          "website": "https://www.skydiveiseo.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-026 SKYTEAM CREMONA",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/240474220",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/337201853",
+          "checked_on": "2026-11-14",
+          "what": "OSM parachuting area 'Skyteam' next to the airfield"
+        },
+        {
+          "url": "https://www.skydiveiseo.it",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Iseo lists Aeroporto Migliaro (Cremona) as second operating site; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://ourairports.com/airports/LILR/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://skyteamcremona.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-nettuno-arma",
+      "name": "Aviosuperficie ARMA",
+      "aliases": [
+        "RMNET"
+      ],
+      "country": "IT",
+      "locality": "Nettuno (RM), Lazio",
+      "latitude": 41.46407,
+      "longitude": 12.74593,
+      "coordinates_source": "https://www.openstreetmap.org/way/41662127",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Crazy Fly (Paracadutismo Nettuno)",
+          "website": "https://www.paracadutismonettuno.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-029 CRAZY FLY, Nettuno; AeCI national sporting calendar lists classic disciplines championship 8–15 July 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/41662127",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.paracadutismonettuno.it/drop-zone.html",
+          "checked_on": "2026-11-14",
+          "what": "operator: school at Aviosuperficie ARMA, Nettuno"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/5809326491",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Crazy Fly Nettuno' sport=parachuting"
+        },
+        {
+          "url": "https://www.paracadutismonettuno.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated parachuting competition at this location: classic disciplines championship 8–15 July 2026."
+        }
+      ]
+    },
+    {
+      "key": "it-ravenna",
+      "name": "Aeroporto di Ravenna 'Gastone Novelli'",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Ravenna, Emilia-Romagna",
+      "latitude": 44.36266,
+      "longitude": 12.2243,
+      "coordinates_source": "https://www.openstreetmap.org/relation/20995754",
+      "icao": "LIDR",
+      "operators": [
+        {
+          "name": "Skydive Pull Out (AC Pullout)",
+          "website": "https://www.pullout.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-032 AC PULLOUT, Ravenna",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/20995754",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.pullout.it/chi-siamo/il-centro",
+          "checked_on": "2026-11-14",
+          "what": "operator: sport parachuting school at Ravenna since 1989"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIDR/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.pullout.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-reggio-emilia",
+      "name": "Aeroporto di Reggio Emilia",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Reggio Emilia, Emilia-Romagna",
+      "latitude": 44.69766,
+      "longitude": 10.66375,
+      "coordinates_source": "https://www.openstreetmap.org/way/164016759",
+      "icao": "LIDE",
+      "operators": [
+        {
+          "name": "BFU Dropzone (Body Fly University)",
+          "facebook": "https://www.facebook.com/BFUDROPZONE"
+        },
+        {
+          "name": "Italia Skydive",
+          "website": "https://www.lanciointandem.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-033 BFU, Reggio E.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/164016759",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: BFU Dropzone, Via Pinotto Pinotti, Reggio Emilia"
+        },
+        {
+          "url": "https://www.tripadvisor.it/Attraction_Review-g194875-d32998386-Reviews-Italia_Skydive_Paracadutismo-Reggio_Emilia_Province_of_Reggio_Emilia_Emilia_Roma.html",
+          "checked_on": "2026-11-14",
+          "what": "Italia Skydive at Via dell'Aeronautica, Reggio Emilia (same airport)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIDE/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.lanciointandem.com",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-cumiana",
+      "name": "Aviosuperficie di Cumiana",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Cumiana (TO), Piemonte",
+      "latitude": 44.93764,
+      "longitude": 7.43026,
+      "coordinates_source": "https://www.openstreetmap.org/node/4947478031",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Sky Dream Center",
+          "website": "https://www.skydreamcenter.it/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-034 SKYDREAMCENTER, Cumiana; AeCI national sporting calendar lists Italian FS/VFS championships 6–9 August 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/4947478031",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/10904856424",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Sky Dream Center' sport=parachuting"
+        },
+        {
+          "url": "https://www.skydreamcenter.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated parachuting competition at this location: Italian FS/VFS championships 6–9 August 2026."
+        }
+      ]
+    },
+    {
+      "key": "it-lucca-tassignano",
+      "name": "Aeroporto di Lucca-Tassignano",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Capannori (LU), Toscana",
+      "latitude": 43.82555,
+      "longitude": 10.57794,
+      "coordinates_source": "https://www.openstreetmap.org/way/76739278",
+      "icao": "LIQL",
+      "operators": [
+        {
+          "name": "Associazione Paracadutisti Toscani (Skydive Lucca)"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-035 ASS. PARAC. TOSCANI, Tassignano (LU)",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/76739278",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1079605477",
+          "checked_on": "2026-11-14",
+          "what": "OSM sport=parachuting landing area beside the runway"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/italy",
+          "checked_on": "2026-11-14",
+          "what": "directory lead: Skydive Lucca, Capannori"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIQL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "it-arezzo",
+      "name": "Aeroporto di Arezzo-Molin Bianco",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Arezzo, Toscana",
+      "latitude": 43.45591,
+      "longitude": 11.84765,
+      "coordinates_source": "https://www.openstreetmap.org/way/98350110",
+      "icao": "LIQB",
+      "operators": [
+        {
+          "name": "Paracadutismo Etruria"
+        },
+        {
+          "name": "Skydive Costa d'Oro"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-036 PARAC. ETRURIA, Arezzo; AeCI national sporting calendar lists style competition 16–18 June 2026 and ANPDI championship 3–4 October 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/98350110",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: Skydive Costa D'Oro, Via Francesco Baracca, Arezzo"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIQB/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated parachuting competition at this location: style competition 16–18 June 2026 and ANPDI championship 3–4 October 2026."
+        }
+      ]
+    },
+    {
+      "key": "it-thiene",
+      "name": "Aeroporto di Thiene 'Arturo Ferrarin'",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Thiene (VI), Veneto",
+      "latitude": 45.67848,
+      "longitude": 11.49584,
+      "coordinates_source": "https://www.openstreetmap.org/way/80376708",
+      "icao": "LIDH",
+      "operators": [
+        {
+          "name": "Skydive Thiene",
+          "website": "https://www.skydivethiene.it/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-045 SKYDIVE THIENE",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/80376708",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/12064900932",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Skydive Thiene' sport=parachuting"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIDH/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.skydivethiene.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-acqui-terme",
+      "name": "Aviosuperficie di Acqui Terme",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Acqui Terme (AL), Piemonte",
+      "latitude": 44.67616,
+      "longitude": 8.50216,
+      "coordinates_source": "https://www.openstreetmap.org/way/355523680",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aero Club Albatros SSD",
+          "website": "https://aeroclub-albatros.it/paracadutismo"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "AcquiNews, 24 June 2026, reports the airstrip closed and quotes its operator confirming that jumps and aircraft moved to Novi Ligure; Albatros announced the move on 16 March 2026.",
+      "sources": [
+        {
+          "url": "https://acquinews.ilpiccolo.net/2026/01/03/pista-dellaviosuperficie-da-giugno-addio-il-paracadutismo",
+          "checked_on": "2026-11-14",
+          "what": "local news 3 Jan 2026: lease not renewed, parachuting leaves Acqui Terme from June 2026 for Novi Ligure"
+        },
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/355523680",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://aeroclub-albatros.it/paracadutismo",
+          "checked_on": "2026-11-14",
+          "what": "operator page: tandem/AFF, NOTAM Acqui Terme; terms dated 13 Jan 2026 name Aeroporto F. Mossi, Novi Ligure as venue"
+        },
+        {
+          "url": "https://acquinews.ilpiccolo.net/2026/06/24/acqui-una-croce-bianca-sulla-pista-aviosuperficie-chiusa-resta-la-speranza/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Post-June closure and transfer confirmed, resolving the earlier uncertainty."
+        },
+        {
+          "url": "https://aeroclub-albatros.it/category/news-eventi/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated March 2026 announcement of departure from Acqui and transfer to Novi Ligure."
+        }
+      ],
+      "note": "Historical skydiving location; Albatros is also listed at its replacement field, Novi Ligure."
+    },
+    {
+      "key": "it-loreto",
+      "name": "Aviosuperficie Madonna di Loreto",
+      "aliases": [
+        "MCREC"
+      ],
+      "country": "IT",
+      "locality": "Recanati / Villa Musone (MC), Marche",
+      "latitude": 43.44116,
+      "longitude": 13.56989,
+      "coordinates_source": "https://www.openstreetmap.org/way/351331103",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fly Zone (paracadutismo.com)",
+          "website": "https://www.paracadutismo.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-048 FLYZONE, Loreto",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/351331103",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.yumping.com/en/air-sports/fly-zone-loreto--e19627774",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Fly Zone school at 'Madonna di Loreto' airfield since 2001"
+        },
+        {
+          "url": "https://www.paracadutismo.com",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-ferrara",
+      "name": "Aeroporto di Ferrara-San Luca",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Ferrara, Emilia-Romagna",
+      "latitude": 44.80944,
+      "longitude": 11.61217,
+      "coordinates_source": "https://www.openstreetmap.org/way/107544813",
+      "icao": "LIPF",
+      "operators": [
+        {
+          "name": "ASD Scuola Paracadutismo Ferrara",
+          "website": "https://www.byst.it/ScuolaParacadutismoFerrara/index.htm"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-049 SC. PARAC FERRARA",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/107544813",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.byst.it/ScuolaParacadutismoFerrara/index.htm",
+          "checked_on": "2026-11-14",
+          "what": "operator: 'Drop Zone Ferrara', live wind at Ferrara airport; school since 1972; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-san-stino-di-livenza",
+      "name": "Aviosuperficie Skydive Venice",
+      "aliases": [
+        "VE18"
+      ],
+      "country": "IT",
+      "locality": "San Stino di Livenza (VE), Veneto",
+      "latitude": 45.70019,
+      "longitude": 12.76395,
+      "coordinates_source": "https://www.openstreetmap.org/way/299297028",
+      "icao": "LIVS",
+      "operators": [
+        {
+          "name": "Skydive Venice",
+          "website": "https://www.skydive-venice.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-050 SKYDIVE VENICE, Stino di Liv.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/299297028",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.skydive-venice.com/it/lancio-in-tandem-con-paracadute-venezia",
+          "checked_on": "2026-11-14",
+          "what": "operator FAQ: open Saturdays, Sundays and holidays"
+        },
+        {
+          "url": "https://www.skydive-venice.com/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ],
+      "season": "weekends and public holidays (operator FAQ)"
+    },
+    {
+      "key": "it-molinella",
+      "name": "Aviosuperficie di Molinella",
+      "aliases": [
+        "BOMOL"
+      ],
+      "country": "IT",
+      "locality": "Molinella (BO), Emilia-Romagna",
+      "latitude": 44.59944,
+      "longitude": 11.65739,
+      "coordinates_source": "https://www.openstreetmap.org/way/142392300",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Moli-DZone"
+        },
+        {
+          "name": "Skydive FlyGang"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-052 MOLI-DZONE, Molinella; Report dated 5 October 2026 describes Flygang school jumps continuing during the 3–4 October event.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/142392300",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: Skydive FlyGang, Via Madonna Bottarda 1, Molinella"
+        },
+        {
+          "url": "https://www.ecodellapista.it/allaviosuperficie-di-molinella-il-flyinmoli-vintage-festival-40s-2026/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Report dated 5 October 2026 describes Flygang school jumps continuing during the 3–4 October event."
+        }
+      ]
+    },
+    {
+      "key": "it-udine-campoformido",
+      "name": "Aeroporto di Udine-Campoformido",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Pasian di Prato / Campoformido (UD), Friuli-Venezia Giulia",
+      "latitude": 46.03181,
+      "longitude": 13.1877,
+      "coordinates_source": "https://www.openstreetmap.org/way/254907238",
+      "icao": "LIPD",
+      "operators": [
+        {
+          "name": "UPnGO Centro di Paracadutismo"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-053 UPnGO, Udine",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/254907238",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: UPnGO, via Campoformido 144, Pasian di Prato"
+        },
+        {
+          "url": "https://www.upngo.it",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator site opened; no separate dated operating calendar found."
+        }
+      ]
+    },
+    {
+      "key": "it-caltagirone-massarotti",
+      "name": "Aviosuperficie Massarotti",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Caltagirone (CT), Sicilia",
+      "latitude": 37.191437,
+      "longitude": 14.551492,
+      "coordinates_source": "https://www.openstreetmap.org/node/11115877986",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Sunflyers (Paracadutismo Sicilia)",
+          "website": "https://www.sunflyers.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-056 SUNFLYERS, Catania; aggregator reviews of Caltagirone tandems run to April 2026",
+      "sources": [
+        {
+          "url": "https://www.sunflyers.it/aviosuperficie-massarotti-caltagirone-catania",
+          "checked_on": "2026-11-14",
+          "what": "operator page titled \"Aviosuperficie Massarotti – Caltagirone - Catania\" with airstrip drawings; ties Sunflyers to this airstrip"
+        },
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0720 Aviosuperficie Massarotti (coordinates)"
+        },
+        {
+          "url": "https://freedome.it/paracadutismo/caltagirone/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: tandem jumps at Caltagirone"
+        },
+        {
+          "url": "https://www.sunflyers.it",
+          "checked_on": "2026-11-14",
+          "what": "operator site (Sunflyers SSD, Catania); Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/11115877986",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome node \"Aviosuperficie Massarotti\" (local_ref CT12)"
+        }
+      ],
+      "note": "Coordinates from OurAirports, not OSM; directory places Sunflyers at Contrada Caudarella, Caltagirone, which a dropzone directory equates with Aviosuperficie Massarotti. Not cross-checked on the ground. Check 2026-11-14: coordinates moved from OurAirports to the OSM node (about 0.1 km apart); the operator's own page names Aviosuperficie Massarotti, so the link no longer rests on a directory alone."
+    },
+    {
+      "key": "it-siracusa",
+      "name": "Aviosuperficie Anto Quercioli Dessena",
+      "aliases": [
+        "SRSIR"
+      ],
+      "country": "IT",
+      "locality": "Siracusa, Sicilia",
+      "latitude": 37.02875,
+      "longitude": 15.24374,
+      "coordinates_source": "https://www.openstreetmap.org/way/245844877",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Sicilia",
+          "website": "https://skydivesicilia.it/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-058 SKYDIVE SICILIA, Siracusa; Operator calendar advertises tandem and sport jumping on 28–29 November, 5–6 December and a 28 December 2026–4 January 2027 boogie.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/245844877",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/12126293202",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Skydive Sicilia' sport=parachuting on the airstrip"
+        },
+        {
+          "url": "https://skydivesicilia.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://skydivesicilia.it/calendario-lanci/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator calendar advertises tandem and sport jumping on 28–29 November, 5–6 December and a 28 December 2026–4 January 2027 boogie."
+        }
+      ]
+    },
+    {
+      "key": "it-paestum",
+      "name": "Aviosuperficie Templare Paestum",
+      "aliases": [
+        "SALAU"
+      ],
+      "country": "IT",
+      "locality": "Capaccio Paestum (SA), Campania",
+      "latitude": 40.47284,
+      "longitude": 14.96073,
+      "coordinates_source": "https://www.openstreetmap.org/way/1027191854",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Salerno",
+          "website": "https://www.skydivesalerno.it/",
+          "facebook": "https://www.facebook.com/skydivesalernoflyfast"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-060 SKYDIVE SALERNO, Paestum; Operator events page advertises its 2025 New Year boogie; this corroborates recent use, not every operating day.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1027191854",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/9469804513",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Skydive Salerno' sport=skydiving"
+        },
+        {
+          "url": "https://www.skydivesalerno.it/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.skydivesalerno.it/eventi/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator events page advertises its 2025 New Year boogie; this corroborates recent use, not every operating day."
+        }
+      ]
+    },
+    {
+      "key": "it-novi-ligure",
+      "name": "Aeroporto di Novi Ligure 'F. Mossi'",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Novi Ligure (AL), Piemonte",
+      "latitude": 44.77972,
+      "longitude": 8.78766,
+      "coordinates_source": "https://www.openstreetmap.org/node/1042047041",
+      "icao": "LIMR",
+      "operators": [
+        {
+          "name": "Paraclub Novi Ligure"
+        },
+        {
+          "name": "Aero Club Albatros SSD",
+          "website": "https://aeroclub-albatros.it/paracadutismo"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-061 PARACLUB, Novi Ligure; Albatros independently announced its move here in March 2026, confirmed by the June closure report at Acqui.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1042047041",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://aeroclub-albatros.it/paracadutismo",
+          "checked_on": "2026-11-14",
+          "what": "Albatros terms of 13 Jan 2026 name Aeroporto F. Mossi, Novi Ligure as activity venue"
+        },
+        {
+          "url": "https://aeroclub-albatros.it/category/news-eventi/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: March 2026 operator announcement confirms relocation here; retained as a shared field."
+        }
+      ]
+    },
+    {
+      "key": "it-fermo",
+      "name": "Aviosuperficie del Fermano",
+      "aliases": [
+        "APFRM"
+      ],
+      "country": "IT",
+      "locality": "Fermo, Marche",
+      "latitude": 43.22704,
+      "longitude": 13.74277,
+      "coordinates_source": "https://www.openstreetmap.org/way/1412426518",
+      "icao": "LINF",
+      "operators": [
+        {
+          "name": "Skydive Sunrise",
+          "website": "https://www.skydivesunrise.com/"
+        },
+        {
+          "name": "FlyZone (paracadutismo.com)",
+          "website": "https://www.paracadutismo.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-066 SKYDIVE SUNRISE, Fermo; Operator homepage advertises a canopy course on 11–12 November 2026 and displays customer jump reports dated August–October 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1412426518",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.skydivesunrise.com",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandem at Aviosuperficie del Fermano"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/945724485",
+          "checked_on": "2026-11-14",
+          "what": "OSM sport=parachuting area 'Skydive Sunrise'"
+        },
+        {
+          "url": "https://www.skydivesunrise.com/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence.; Codex cross-check: Operator homepage advertises a canopy course on 11–12 November 2026 and displays customer jump reports dated August–October 2026."
+        },
+        {
+          "url": "https://www.paracadutismo.com",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-orbetello",
+      "name": "Aviosuperficie Costa d'Argento",
+      "aliases": [
+        "GRORB"
+      ],
+      "country": "IT",
+      "locality": "Orbetello (GR), Toscana",
+      "latitude": 42.495,
+      "longitude": 11.23877,
+      "coordinates_source": "https://www.openstreetmap.org/node/6593527170",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Costa d'Argento",
+          "website": "https://skydivecostadargento.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-067 SKYDIVE COSTADARG., Orbetello; Operator homepage displays a customer account explicitly dating the jump to 28 September 2025.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/6593527170",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://skydivecostadargento.com",
+          "checked_on": "2026-11-14",
+          "what": "operator site; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence.; Codex cross-check: Operator homepage displays a customer account explicitly dating the jump to 28 September 2025."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0272 Costa d'Argento Airfield"
+        }
+      ]
+    },
+    {
+      "key": "it-sibari",
+      "name": "Aviosuperficie Sibari Fly",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Cassano allo Ionio (CS), Calabria",
+      "latitude": 39.75779,
+      "longitude": 16.43742,
+      "coordinates_source": "https://www.openstreetmap.org/way/350820524",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Calabria",
+          "website": "https://www.skydivecalabria.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-070 SKYDIVE CALABRIA, Sibari",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/350820524",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.skydivecalabria.it",
+          "checked_on": "2026-11-14",
+          "what": "operator site (2025 content); Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0179 Sibari Fly, keywords 'Skydive Calabria'"
+        }
+      ]
+    },
+    {
+      "key": "it-fano",
+      "name": "Aeroporto di Fano",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Fano (PU), Marche",
+      "latitude": 43.82418,
+      "longitude": 13.02565,
+      "coordinates_source": "https://www.openstreetmap.org/relation/6029931",
+      "icao": "LIDF",
+      "operators": [
+        {
+          "name": "Skydive Fano / Fano Skyteam",
+          "website": "https://www.skydivefano.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-072 FANO SKYTEAM, Fano; AeCI national sporting calendar lists speed/wingsuit championships 29–31 May 2026 and POPs trophy 11–13 September 2026.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/6029931",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.skydivefano.com/drop-zone",
+          "checked_on": "2026-11-14",
+          "what": "operator: tandem, AFF, packing at Fano airport"
+        },
+        {
+          "url": "https://www.skydivefano.com",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Dated parachuting competition at this location: speed/wingsuit championships 29–31 May 2026 and POPs trophy 11–13 September 2026."
+        }
+      ],
+      "note": "Rimini-based tandem groups (Paracadutisti Rimini, scuoladiparacadutismo.it) are reported to jump at Fano."
+    },
+    {
+      "key": "it-garzigliana",
+      "name": "Aviosuperficie Merlo Romano",
+      "aliases": [
+        "TOGAR"
+      ],
+      "country": "IT",
+      "locality": "Garzigliana (TO), Piemonte",
+      "latitude": 44.83404,
+      "longitude": 7.36419,
+      "coordinates_source": "https://www.openstreetmap.org/way/161362856",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Garz",
+          "website": "https://www.skydivegarz.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-073 SKYDIVE GARZ, Garzigliana",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/161362856",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.skydivegarz.it",
+          "checked_on": "2026-11-14",
+          "what": "operator: sport parachuting and tandem at Garzigliana; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-alessandria",
+      "name": "Aeroporto di Alessandria 'Massimo Bovone'",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Alessandria, Piemonte",
+      "latitude": 44.92535,
+      "longitude": 8.62623,
+      "coordinates_source": "https://www.openstreetmap.org/way/82077019",
+      "icao": "LILA",
+      "operators": [
+        {
+          "name": "Primolancio",
+          "website": "https://www.primolancio.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-074 PRIMOLANCIO, Alessandria",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/82077019",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.primolancio.it",
+          "checked_on": "2026-11-14",
+          "what": "operator: 'Dove siamo' Aeroporto Massimo Bovone di Alessandria; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        }
+      ]
+    },
+    {
+      "key": "it-monte-compatri",
+      "name": "Aviosuperficie Fly Roma",
+      "aliases": [
+        "RMOSA",
+        "Skydive Roma"
+      ],
+      "country": "IT",
+      "locality": "Monte Compatri (RM), Lazio",
+      "latitude": 41.8845,
+      "longitude": 12.71769,
+      "coordinates_source": "https://www.openstreetmap.org/relation/14256396",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive (Montecompatri) - ENAC I-075"
+        },
+        {
+          "name": "Fly Zone Roma",
+          "website": "https://www.flyzoneroma.com"
+        },
+        {
+          "name": "Paracentro Roma"
+        },
+        {
+          "name": "Sunflyers / Paracadutismo Roma",
+          "website": "https://www.paracadutismoroma.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-075 SKYDIVE, Montecompatri",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/14256396",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://www.paracadutismoroma.com",
+          "checked_on": "2026-11-14",
+          "what": "Sunflyers Roma: aviosuperficie at Via Prenestina Nuova km 2; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/5809390460",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Fly Roma' parachuting"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/5809390461",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Paracentro Roma' parachuting"
+        }
+      ]
+    },
+    {
+      "key": "it-san-vincenzo",
+      "name": "Aviosuperficie Il Gabbiano",
+      "aliases": [
+        "LISVC"
+      ],
+      "country": "IT",
+      "locality": "San Vincenzo (LI), Toscana",
+      "latitude": 43.05183,
+      "longitude": 10.55201,
+      "coordinates_source": "https://www.openstreetmap.org/way/1504089046",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive San Vincenzo"
+        },
+        {
+          "name": "Sunflyers Paracadutismo Toscana"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-076 SKYDIVE SAN VINCENZO",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1504089046",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0180 Il Gabbiano Airfield, keywords 'SkyDive San Vincenzo'"
+        },
+        {
+          "url": "https://www.yumping.com/en/skydiving/sunflyers-paracadutismo-toscana--e19752869",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Sunflyers Toscana at San Vincenzo, listing since March 2025"
+        }
+      ]
+    },
+    {
+      "key": "it-scarlino",
+      "name": "Aviosuperficie Aliscarlino",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Scarlino (GR), Toscana",
+      "latitude": 42.91213,
+      "longitude": 10.81622,
+      "coordinates_source": "https://www.openstreetmap.org/relation/18579207",
+      "icao": "LIQY",
+      "operators": [
+        {
+          "name": "Maremma Fly",
+          "website": "https://maremmafly.it"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed in ENAC 'Elenco scuole paracadutismo 2026' (national authority list for the current year): I-077 MAREMMA FLY, Scarlino (GR); July 2026 report describes a tandem jump with Maremma Fly on 11 July 2026; operator site locates the school at Scarlino.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/09/ELENCO-SCUOLE-PARACADUTISMO-2026.xlsx",
+          "checked_on": "2026-11-14",
+          "what": "ENAC list of authorised parachuting schools 2026 (Elenco scuole di paracadutismo 2026); Codex cross-check: Workbook reopened and school/locality checked; authorization alone does not establish a particular operating day."
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/18579207",
+          "checked_on": "2026-11-14",
+          "what": "OpenStreetMap airfield geometry (coordinates)"
+        },
+        {
+          "url": "https://maremmafly.it",
+          "checked_on": "2026-11-14",
+          "what": "operator site (2025 content): tandem over the sea; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/12517190002",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Maremmafly' parachuting"
+        },
+        {
+          "url": "https://www.lanazione.it/pisa/cronaca/paracadute-91-anni-s0yydk5h",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: July 2026 report describes a tandem jump with Maremma Fly on 11 July 2026; operator site locates the school at Scarlino."
+        }
+      ]
+    },
+    {
+      "key": "it-costa-volpino",
+      "name": "Aviosuperficie Costa Volpino (Skydive Iseo)",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Costa Volpino (BG), Lombardia",
+      "latitude": 45.81514,
+      "longitude": 10.09552,
+      "coordinates_source": "https://www.openstreetmap.org/node/11012004680",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Iseo",
+          "website": "https://www.skydiveiseo.it"
+        },
+        {
+          "name": "Skydive Milano",
+          "website": "https://www.skydivemilan.it/paracadutismo-iseo"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator pages remain live but undated; no 2025–2026 site-specific operating calendar or jump report was established.",
+      "sources": [
+        {
+          "url": "https://www.skydiveiseo.it",
+          "checked_on": "2026-11-14",
+          "what": "operator: sede operativa Aviosuperficie Costa Volpino, Via Baiguini; also Aeroporto Migliaro; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.skydivemilan.it/paracadutismo-iseo",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Milano runs special events at Costa Volpino airstrip; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/11012004680",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome node 'Skydive Iseo'"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports IT-0715 Skydive Iseo Airfield"
+        }
+      ],
+      "note": "Event-based tandem site over Lake Iseo."
+    },
+    {
+      "key": "it-terni",
+      "name": "Aviosuperficie Alvaro Leonardi",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Terni (Maratta), Umbria",
+      "latitude": 42.57243,
+      "longitude": 12.58465,
+      "coordinates_source": "https://www.openstreetmap.org/way/134583574",
+      "icao": "LIAA",
+      "operators": [
+        {
+          "name": "ASD VoliaMO (sede distaccata)"
+        },
+        {
+          "name": "Scuola di paracadutismo ASD Terni (2023)"
+        },
+        {
+          "name": "The Zoo Skydive (former)"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Airstrip operator's 2026 service charter (Terni Reti, March 2026) says ASD \"VoliaMO\" has a branch at the airstrip running a sport parachuting school (tandems, AFF). Comune di Terni press release 31 Aug 2026: tandem jumps and a display jump at the Festival del Cielo, 5 Sep 2026. Not a separate school on the ENAC 2026 list.",
+      "sources": [
+        {
+          "url": "https://www.ternireti.it/wp-content/uploads/2026/03/CARTA-SERVIZI-AVIOSUPERFICIE-2026-.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Carta dei servizi Aviosuperficie 2026: ASD VoliaMO parachuting school based at the airstrip"
+        },
+        {
+          "url": "https://www.comune.terni.it/novita/comunicati/laviosuperficie-leonardi-ospita-il-festival-del-cielo",
+          "checked_on": "2026-11-14",
+          "what": "municipality, 31 Aug 2026: tandem jumps at Festival del Cielo, 5 Sep 2026"
+        },
+        {
+          "url": "https://umbriaon.it/?p=898147",
+          "checked_on": "2026-11-14",
+          "what": "local news 24 Nov 2023: school reopening at Terni aviosuperficie"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/134583574",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/italy",
+          "checked_on": "2026-11-14",
+          "what": "directory lead: The Zoo Skydive, Terni"
+        }
+      ],
+      "note": "Check 2026-11-14: upgraded from uncertain on the 2026 airstrip charter. Regular jump days were not seen; it may run under another school's ENAC authorisation."
+    },
+    {
+      "key": "it-melendugno",
+      "name": "Aviosuperficie di Melendugno",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Melendugno (LE), Puglia",
+      "latitude": 40.24765,
+      "longitude": 18.43612,
+      "coordinates_source": "https://www.openstreetmap.org/way/350787161",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Sunflyers / Paracadutismo Puglia",
+          "website": "http://www.paracadutismopuglia.it"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator offers remain undated, while an AIRAC digest reports removal of the Melendugno parachuting area effective 20 February 2025; continued regular jumping is unconfirmed.",
+      "sources": [
+        {
+          "url": "http://www.paracadutismopuglia.it",
+          "checked_on": "2026-11-14",
+          "what": "operator: drop zone at Contrada Giammarino, Melendugno (LE); Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/350787161",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        },
+        {
+          "url": "https://nominatim.openstreetmap.org/search?q=Giammarino,+Melendugno&format=json",
+          "checked_on": "2026-11-14",
+          "what": "OSM: Masseria Giammarino on SP148 lies about 0.7 km from this airstrip"
+        },
+        {
+          "url": "https://aeronauticalinformation.it/index.php/2024/10/02/aeroporti-di-belluno-e-lecce-lepore/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Secondary AIP digest reports parachuting-area deletion in AIRAC A2/25; insufficient alone to assert permanent operator closure."
+        }
+      ],
+      "note": "Directories also say \"Melpignano LE\" or \"Fondone\"; the operator page gives Contrada Giammarino, SP148, Melendugno. OSM puts Masseria Giammarino about 0.7 km from this airstrip, which supports the match. The operator Instagram's newest visible post is from 2023."
+    },
+    {
+      "key": "it-lavello",
+      "name": "Aviosuperficie Falcone",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Lavello (PZ), Basilicata",
+      "latitude": 41.10505,
+      "longitude": 15.87635,
+      "coordinates_source": "https://www.openstreetmap.org/way/164757893",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Sunflyers / Skydive Napoli",
+          "website": "http://paracadutismonapoli.it/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The operator event page was reopened but yielded no dated 2025–2026 Lavello jumping; copyright dates do not establish activity.",
+      "sources": [
+        {
+          "url": "http://paracadutismonapoli.it/",
+          "checked_on": "2026-11-14",
+          "what": "operator: access via Melfi station or Lavello bus stop to the drop zone; Codex cross-check: Operator page reopened; undated offers or copyright years were not treated as dated jump evidence."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/164757893",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield 'Aviosuperficie Falcone', addr:city Lavello"
+        },
+        {
+          "url": "https://www.paracadutismonapoli.it/eventi/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: No dated Lavello event was visible."
+        }
+      ],
+      "note": "Airfield identified as the only mapped airstrip at Lavello; operator does not name it."
+    },
+    {
+      "key": "it-cecina",
+      "name": "Aviosuperficie Cecina \"Porta della Maremma\"",
+      "aliases": [],
+      "country": "IT",
+      "locality": "Cecina (LI), Toscana",
+      "latitude": 43.284864,
+      "longitude": 10.523331,
+      "coordinates_source": "https://www.openstreetmap.org/node/3147491515",
+      "icao": "LIQG",
+      "operators": [
+        {
+          "name": "Skydive Toscana (Skydive Kalifornia ASD)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical ENAC accident evidence identifies the site, but no reliable 2025–2026 activity or definitive operator closure notice was established.",
+      "sources": [
+        {
+          "url": "https://www.enac.gov.it/app/uploads/2024/04/FACTOR_06_2019.pdf",
+          "checked_on": "2026-11-14",
+          "what": "ENAC FACTOR 06/2019: jump flight of ASD Skydive Kalifornia at aviosuperficie \"Porta della Maremma\", Cecina, 11 Jun 2016"
+        },
+        {
+          "url": "https://www.yumping.com/en/skydiving/skydive-toscana--e17296",
+          "checked_on": "2026-11-14",
+          "what": "aggregator listing: Località Paduletto, Cecina"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/3147491515",
+          "checked_on": "2026-11-14",
+          "what": "OSM airstrip \"Aviosuperficie Cecina Porta della Maremma\", icao LIQG, about 1 km south of Loc. Paduletto"
+        },
+        {
+          "url": "https://www.congedatifolgore.com/it/cecina-apre-ai-lanci-col-paracadute",
+          "checked_on": "2026-11-14",
+          "what": "news 13 Aug 2014: jumps at the Cecina airstrip at Paduletto"
+        }
+      ],
+      "note": "Check 2026-11-14: coordinates added from the OSM node; the operator-to-airstrip link comes from the ENAC 2019 report (2016 event). Activity after 2016 is unconfirmed."
+    },
+    {
+      "key": "it-massa-cinquale",
+      "name": "Aeroporto dei Marmi / Massa-Cinquale",
+      "country": "IT",
+      "locality": "Massa, Toscana",
+      "latitude": 43.98598,
+      "longitude": 10.143785,
+      "coordinates_source": "https://ourairports.com/airports/LILQ/",
+      "icao": "LILQ",
+      "operators": [
+        {
+          "name": "ASD Skydive Cinquale"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator advertises a Christmas boogie without a year; airport statement dated 16 July 2025 documents unsuccessful negotiations for the summer session, so continuing access is unresolved.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-cinquale",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://www.skydivecinquale.it/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Massa-Cinquale and recurring boogie"
+        },
+        {
+          "url": "https://aeroportodeimarmi.com/wp-content/uploads/2025/07/TRUESTAR-CS-n.1-Skydive-luglio-2025.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airport explains 2025 access dispute"
+        },
+        {
+          "url": "https://ourairports.com/airports/LILQ/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-panicarola",
+      "name": "Aviosuperficie Panicarola",
+      "country": "IT",
+      "locality": "Panicale, Umbria",
+      "latitude": 43.064444,
+      "longitude": 12.100556,
+      "coordinates_source": "https://ourairports.com/airports/IT-0388/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Trasimeno"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical dropzone and school are documented; no 2025+ jumping evidence was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-ttasmeno",
+          "checked_on": "2026-11-14",
+          "what": "Historical listing, misspelled Ttasmeno"
+        },
+        {
+          "url": "https://skydivelocations.com/country/italy/umbria/360/skydive-ttasmeno",
+          "checked_on": "2026-11-14",
+          "what": "Explicit Panicarola airfield address"
+        },
+        {
+          "url": "https://www.lanazione.it/umbria/cronaca/e-di-massimo-giua-il-corpo-individuato-tra-le-prealpi-7fd11af5",
+          "checked_on": "2026-11-14",
+          "what": "2022 article confirms historical Panicarola school"
+        },
+        {
+          "url": "https://ourairports.com/airports/IT-0388/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "aliases": [
+        "Skydive Ttasmeno",
+        "Skydive Trasimeno"
+      ]
+    },
+    {
+      "key": "it-villanova-albenga",
+      "name": "Aeroporto di Villanova d’Albenga",
+      "country": "IT",
+      "locality": "Villanova d’Albenga, Liguria",
+      "latitude": 44.050598,
+      "longitude": 8.12743,
+      "coordinates_source": "https://ourairports.com/airports/LIMG/",
+      "icao": "LIMG",
+      "operators": [
+        {
+          "name": "Paracadutistica Albenga"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directories describe a regular dropzone; no 2025+ evidence of regular civilian jumping at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/paracadutistica",
+          "checked_on": "2026-11-14",
+          "what": "Historical Ligurian dropzone listing"
+        },
+        {
+          "url": "https://www.skydiveworld.com/english/italy.html",
+          "checked_on": "2026-11-14",
+          "what": "Identifies Paracadutistica at Albenga"
+        },
+        {
+          "url": "https://assopar.it/2024/06/05/ultimo-lancio-del-paracadutista-philippe-leroy/",
+          "checked_on": "2026-11-14",
+          "what": "Public historical recollection of airport jumps; not current activity evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIMG/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-aosta",
+      "name": "Aeroporto Corrado Gex",
+      "country": "IT",
+      "locality": "Saint-Christophe, Valle d’Aosta",
+      "latitude": 45.738552,
+      "longitude": 7.3683,
+      "coordinates_source": "https://ourairports.com/airports/LIMW/",
+      "icao": "LIMW",
+      "operators": [
+        {
+          "name": "Sky Dream Center"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Dated announcements advertise recurring jump weekends on 30–31 August 2025 and 24–25 October 2026 at Corrado Gex; the 2025 article calls it the fifth edition since 2021.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aosta",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://aostasera.it/notizie/pubbliredazionali/un-fine-settimana-dedicato-al-paracadutismo-allaeroporto-di-aosta/",
+          "checked_on": "2026-11-14",
+          "what": "2025 operator-sponsored announcement of recurring weekend operation"
+        },
+        {
+          "url": "https://aostasera.it/notizie/pubbliredazionali/paracadutismo-ad-aosta-due-giorni-di-adrenalina-nel-cielo-della-valle/",
+          "checked_on": "2026-11-14",
+          "what": "24–25 October 2026 tandem weekend at the airport"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIMW/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "Selected event weekends; the operator also runs the separate Cumiana site."
+    },
+    {
+      "key": "it-latina-comani",
+      "name": "Aeroporto Enrico Comani",
+      "country": "IT",
+      "locality": "Latina Scalo, Lazio",
+      "latitude": 41.5424,
+      "longitude": 12.909,
+      "coordinates_source": "https://ourairports.com/airports/LIRL/",
+      "icao": "LIRL",
+      "operators": [
+        {
+          "name": "Aero Club Latina"
+        },
+        {
+          "name": "Skydive Latina"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical civilian parachute-school use is documented in a 2012 publication; no 2025+ civilian dropzone programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aero-club-latina",
+          "checked_on": "2026-11-14",
+          "what": "Historical civilian dropzone listing"
+        },
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-latina",
+          "checked_on": "2026-11-14",
+          "what": "Second alias for the same airport area"
+        },
+        {
+          "url": "https://www.lecitta.it/pdf_settimanale/LCIT_N.26_19_9_2012.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2012 report names Comani airport and attached aeroclub parachute school"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIRL/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "Military airport; historical civilian school is recorded, current civilian access is unconfirmed."
+    },
+    {
+      "key": "it-rimini",
+      "name": "Aeroporto Federico Fellini",
+      "country": "IT",
+      "locality": "Rimini, Emilia-Romagna",
+      "latitude": 44.020024,
+      "longitude": 12.612198,
+      "coordinates_source": "https://ourairports.com/airports/LIPR/",
+      "icao": "LIPR",
+      "operators": [
+        {
+          "name": "Aerosports Italia"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipal tourism calendar documents repeated public tandem sessions in 2006–2007; no 2025+ regular skydiving programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/aerosports-italia",
+          "checked_on": "2026-11-14",
+          "what": "Historical aggregator lead"
+        },
+        {
+          "url": "https://riminiturismo.it/press/comunicati-stampa-assessorato-al-turismo/rimini-il-calendario-degli-eventi-di-gennaio",
+          "checked_on": "2026-11-14",
+          "what": "Municipal calendar explicitly locates winter tandem sessions at Federico Fellini airport"
+        },
+        {
+          "url": "https://ourairports.com/airports/LIPR/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "it-pontinia-pegaso",
+      "name": "Aviosuperficie Pegaso Club 2000",
+      "country": "IT",
+      "locality": "Pontinia, Lazio",
+      "latitude": 41.358333,
+      "longitude": 13.15,
+      "coordinates_source": "https://ansv.it/wp-content/uploads/2020/07/Relazione-I-SCAP.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive The Drop"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical jump operation is confirmed by the ANSV report; business directory reports closure without a date, and no 2025+ reopening evidence was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/italy/skydive-the-drop",
+          "checked_on": "2026-11-14",
+          "what": "Historical school listing"
+        },
+        {
+          "url": "https://ansv.it/wp-content/uploads/2020/07/Relazione-I-SCAP.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Official investigation identifies parachuting landing site and ENAC airfield coordinates"
+        },
+        {
+          "url": "https://www.tuttiaffari.com/skydive-the-drop",
+          "checked_on": "2026-11-14",
+          "what": "Undated closure flag and Casanello address"
+        }
+      ]
+    }
+  ]
+}

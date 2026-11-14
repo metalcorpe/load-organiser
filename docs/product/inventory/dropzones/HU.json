@@ -1,0 +1,503 @@
+{
+  "country": "HU",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "hu-borgond",
+      "name": "Börgönd repülőtér (Alba Airport)",
+      "country": "HU",
+      "locality": "Börgönd, Székesfehérvár, Fejér",
+      "latitude": 47.12693,
+      "longitude": 18.49846,
+      "coordinates_source": "https://www.openstreetmap.org/relation/5518240 (OSM aerodrome)",
+      "icao": "LHBD",
+      "operators": [
+        {
+          "name": "Tandem Team (Tandemcentrum)",
+          "website": "https://tandemteam.hu",
+          "facebook": "https://www.facebook.com/tandemteam.hu/"
+        },
+        {
+          "name": "Hungary Skydive",
+          "website": "https://www.hungaryskydive.hu",
+          "facebook": "https://www.facebook.com/HungarySkydive"
+        },
+        {
+          "name": "Jump4Fun",
+          "website": "https://jump4fun.hu",
+          "facebook": "https://www.facebook.com/jump4fun"
+        },
+        {
+          "name": "Albatrosz Repülő Egyesület"
+        }
+      ],
+      "aircraft": "PAC 750 XL, Cessna 182 (Tandem Team)",
+      "season": "March–November",
+      "status": "seasonal",
+      "status_evidence": "Tandem Team, Hungary Skydive and Jump4Fun sites (opened 2026-11-14, © 2026) all name Börgönd; season mid-March to end of November",
+      "sources": [
+        {
+          "url": "https://tandemteam.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page naming Börgönd"
+        },
+        {
+          "url": "https://www.hungaryskydive.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page naming Börgönd"
+        },
+        {
+          "url": "https://jump4fun.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page naming Börgönd and Kaposújlak"
+        },
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://api.openstreetmap.org/api/0.6/relation/5518240/full.json",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened named OSM aerodrome geometry; stored point is within the airfield bounds."
+        }
+      ],
+      "note": "skydivingsource lists Tandem Team under Veszprém, which looks outdated."
+    },
+    {
+      "key": "hu-kaposujlak",
+      "name": "Kaposvár-Kaposújlak repülőtér",
+      "country": "HU",
+      "locality": "Kaposújlak, Somogy",
+      "latitude": 46.38944,
+      "longitude": 17.73444,
+      "coordinates_source": "https://www.openstreetmap.org/node/348145992 (OSM aerodrome)",
+      "icao": "LHKV",
+      "operators": [
+        {
+          "name": "Kapos DropZone",
+          "website": "https://kaposdz.hu",
+          "facebook": "https://www.facebook.com/kaposdz"
+        },
+        {
+          "name": "Jump4Fun",
+          "website": "https://jump4fun.hu"
+        }
+      ],
+      "aircraft": "An-2 and Cessna (Kapos DZ)",
+      "status": "seasonal",
+      "status_evidence": "sonline.hu article April 2025 on the first training weekend of the 2025 season; Jump4Fun (2026 site) lists Kaposújlak",
+      "sources": [
+        {
+          "url": "https://jump4fun.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page"
+        },
+        {
+          "url": "https://www.sonline.hu/helyi-kozelet/2025/04/ejtoernyos-kaposujlak-ugras",
+          "checked_on": "2026-11-14",
+          "what": "local news, April 2025 (search view)"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/hungary",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHKV/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "hu-siofok-kiliti",
+      "name": "Siófok-Kiliti repülőtér",
+      "aliases": [
+        "Skydive Balaton",
+        "Kiliti DZ"
+      ],
+      "country": "HU",
+      "locality": "Siófok, Somogy",
+      "latitude": 46.85719,
+      "longitude": 18.09639,
+      "coordinates_source": "https://www.openstreetmap.org/relation/3904284 (OSM aerodrome)",
+      "icao": "LHSK",
+      "operators": [
+        {
+          "name": "Skydive Balaton (Kiliti DZ)",
+          "website": "https://skydivebalaton.com",
+          "facebook": "https://www.facebook.com/Kiliti.DZ/events"
+        },
+        {
+          "name": "Ugrani Jó",
+          "website": "https://ugranijo.hu"
+        }
+      ],
+      "aircraft": "Mi-8 helicopters (HA-HSA, HA-HSE)",
+      "status": "seasonal",
+      "status_evidence": "Facebook event 'Intrudair Boogie 2026' at Kiliti, 22 June 2026 (search view, 101 going)",
+      "sources": [
+        {
+          "url": "https://skydivebalaton.com/en",
+          "checked_on": "2026-11-14",
+          "what": "operator site: dropzone 5 km south of Siófok on Route 65"
+        },
+        {
+          "url": "https://ugranijo.hu/Hu",
+          "checked_on": "2026-11-14",
+          "what": "tandem operator at Siófok-Kiliti"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/hungary",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHSK/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "hu-dunaujvaros",
+      "name": "Dunaújváros repülőtér (Kisapostag)",
+      "aliases": [
+        "Skydiving Budapest"
+      ],
+      "country": "HU",
+      "locality": "Kisapostag / Dunaújváros, Fejér",
+      "latitude": 46.89593,
+      "longitude": 18.91528,
+      "coordinates_source": "https://www.openstreetmap.org/way/956316346 (OSM aerodrome)",
+      "icao": "LHDV",
+      "operators": [
+        {
+          "name": "Millennium Tandem Team (Millennium Ejtőernyős Egyesület)",
+          "website": "https://www.tandemugras.hu",
+          "facebook": "https://www.facebook.com/tandemugras"
+        },
+        {
+          "name": "Baracs Repülőklub"
+        }
+      ],
+      "season": "March–October",
+      "status": "seasonal",
+      "status_evidence": "tandemugras.hu says the 2026 tandem season has ended (season March–October); its location page names Dunaújváros airfield",
+      "sources": [
+        {
+          "url": "https://www.tandemugras.hu/tandemugras-dunaujvaros",
+          "checked_on": "2026-11-14",
+          "what": "operator location page"
+        },
+        {
+          "url": "https://www.tandemugras.hu/kulonleges-program/unalmasak-az-atlagos-hetvegi-programok-probald-ki-az-ejtoernyos-ugrast",
+          "checked_on": "2026-11-14",
+          "what": "operator page with end-of-2026-season notice (search view)"
+        },
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHDV/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "skydivingsource lists Millennium under Siófok; its own site now names Dunaújváros."
+    },
+    {
+      "key": "hu-szeged",
+      "name": "Szegedi repülőtér",
+      "country": "HU",
+      "locality": "Szeged, Csongrád-Csanád",
+      "latitude": 46.24509,
+      "longitude": 20.09233,
+      "coordinates_source": "https://www.openstreetmap.org/relation/3175188 (OSM aerodrome)",
+      "icao": "LHUD",
+      "operators": [
+        {
+          "name": "TandemSzeged / Tandemzóna",
+          "website": "https://www.tandemzona.hu",
+          "facebook": "https://www.facebook.com/tandemszeged.hu"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Facebook post (search view) announces tandem and sport jumps at Szeged airfield 25–26 October 2025",
+      "sources": [
+        {
+          "url": "https://www.tandemzona.hu/service-page/tandemugr%C3%A1s-szeged",
+          "checked_on": "2026-11-14",
+          "what": "operator tandem page naming Szeged airfield (Bajai út); booking widget says the service is not currently available"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/hungary",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://www.tandemzona.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage: names Szeged airfield (Bajai út) and Szolnok; no suspension notice; no dates"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHUD/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "Booking page shows the service as unavailable (likely off-season); recheck in spring 2027."
+    },
+    {
+      "key": "hu-szolnok-szandaszolos",
+      "name": "Szolnok-Szandaszőlős repülőtér",
+      "country": "HU",
+      "locality": "Szolnok, Jász-Nagykun-Szolnok",
+      "latitude": 47.14301,
+      "longitude": 20.19221,
+      "coordinates_source": "https://www.openstreetmap.org/way/1051319271 (OSM aerodrome)",
+      "icao": "LHSS",
+      "operators": [
+        {
+          "name": "Szolnoki Honvéd Ejtőernyős Sportegyesület",
+          "website": "https://www.szhese.hu",
+          "facebook": "https://www.facebook.com/szhese"
+        },
+        {
+          "name": "Tandemzóna",
+          "website": "https://www.tandemzona.hu"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Honvéd Kadét Ejtőernyős Program trains at Szandaszőlős sports airfield; SZHESE Facebook (search view) reports the 2026 competition season",
+      "sources": [
+        {
+          "url": "https://www.hosesz.hu/honved-kadet-ejtoernyos-program",
+          "checked_on": "2026-11-14",
+          "what": "programme page naming Szolnok-Szandaszőlős (search view)"
+        },
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHSS/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "Club/military sport parachuting; civilian tandems via Tandemzóna (Szeged–Szolnok)."
+    },
+    {
+      "key": "hu-nyiregyhaza",
+      "name": "Nyíregyházi repülőtér",
+      "country": "HU",
+      "locality": "Nyíregyháza, Szabolcs-Szatmár-Bereg",
+      "latitude": 47.98312,
+      "longitude": 21.69104,
+      "coordinates_source": "https://www.openstreetmap.org/relation/5975501 (OSM aerodrome)",
+      "icao": "LHNY",
+      "operators": [
+        {
+          "name": "Nyírségi Ejtőernyős Klub",
+          "website": "https://nyiregyhazadropzone.hu",
+          "facebook": "https://www.facebook.com/ejtoernyozes.tandemugras"
+        },
+        {
+          "name": "Adrenalin Tandem",
+          "website": "https://adrenalintandem.hu"
+        }
+      ],
+      "aircraft": "An-2 (club-owned); Skyvan on event weekends",
+      "status": "active",
+      "status_evidence": "Club Facebook (search view): 'Skyvan Weekend 6 way Speed Star 2026' competition on 5 July 2026; club site (© 2026) announces a Skyvan weekend in July 2027",
+      "sources": [
+        {
+          "url": "https://nyiregyhazadropzone.hu",
+          "checked_on": "2026-11-14",
+          "what": "club site"
+        },
+        {
+          "url": "https://adrenalintandem.hu",
+          "checked_on": "2026-11-14",
+          "what": "tandem operator naming Nyíregyháza and Hajdúszoboszló"
+        },
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHNY/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "hu-hajduszoboszlo",
+      "name": "Hajdúszoboszló repülőtér",
+      "country": "HU",
+      "locality": "Hajdúszoboszló, Hajdú-Bihar",
+      "latitude": 47.45989,
+      "longitude": 21.39051,
+      "coordinates_source": "https://www.openstreetmap.org/relation/3289716 (OSM aerodrome)",
+      "icao": "LHHO",
+      "operators": [
+        {
+          "name": "Aero Club Hajdúszoboszló"
+        },
+        {
+          "name": "Adrenalin Tandem",
+          "website": "https://adrenalintandem.hu"
+        },
+        {
+          "name": "Fly Jump Tandemugrás",
+          "website": "https://flyjumptandemugras.hu"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "flyjumptandemugras.hu (2025 prices) says Nyíregyháza and Hajdúszoboszló are its current sites; Adrenalin Tandem names both",
+      "sources": [
+        {
+          "url": "https://adrenalintandem.hu",
+          "checked_on": "2026-11-14",
+          "what": "tandem operator page"
+        },
+        {
+          "url": "https://flyjumptandemugras.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page: Tököl is its base; current sites Nyíregyháza and Hajdúszoboszló; 2025 prices"
+        },
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/europe/hungary",
+          "checked_on": "2026-11-14",
+          "what": "aggregator list of Hungarian dropzones (lead)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHHO/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "hu-godollo",
+      "name": "Gödöllői repülőtér",
+      "country": "HU",
+      "locality": "Gödöllő, Pest",
+      "latitude": 47.57176,
+      "longitude": 19.33834,
+      "coordinates_source": "https://www.openstreetmap.org/way/282885391 (OSM aerodrome)",
+      "icao": "LHGD",
+      "operators": [
+        {
+          "name": "Sky Escort Hungary Aero Club Gödöllő"
+        },
+        {
+          "name": "Ejtőernyőzés Tandemugrás",
+          "facebook": "https://www.facebook.com/tandemugras.ejtoernyozes"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Federation membership and historical parachuting references remain, but 2025–2026 searches did not establish regular civilian jumping at Gödöllő.",
+      "sources": [
+        {
+          "url": "https://skydive.hu/tagszervezetek",
+          "checked_on": "2026-11-14",
+          "what": "Magyar Ejtőernyős Szövetség member list (names only)"
+        },
+        {
+          "url": "https://ais-en.hungarocontrol.hu/vfrmanual/LHGD",
+          "checked_on": "2026-11-14",
+          "what": "HungaroControl VFR manual: aerodrome operator Sky Escort Hungary Aero Club (search view)"
+        },
+        {
+          "url": "https://ourairports.com/airports/LHGD/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ],
+      "note": "Check 2026-11-14: a search for 2026 tandem jumps at Gödöllő found nothing."
+    },
+    {
+      "key": "hu-tokol",
+      "name": "Tököli repülőtér",
+      "country": "HU",
+      "locality": "Tököl, Pest",
+      "latitude": 47.34606,
+      "longitude": 18.97835,
+      "coordinates_source": "https://www.openstreetmap.org/node/1042046970 (OSM aerodrome)",
+      "icao": "LHTL",
+      "operators": [
+        {
+          "name": "Fly Jump Tandemugrás",
+          "website": "https://flyjumptandemugras.hu"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló.",
+      "sources": [
+        {
+          "url": "https://flyjumptandemugras.hu",
+          "checked_on": "2026-11-14",
+          "what": "operator page: Tököl is its base; current sites Nyíregyháza and Hajdúszoboszló; 2025 prices; Codex cross-check: Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló."
+        },
+        {
+          "url": "https://ourairports.com/airports/LHTL/",
+          "checked_on": "2026-11-14",
+          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        }
+      ]
+    },
+    {
+      "key": "hu-ocseny",
+      "name": "Őcsény repülőtér",
+      "aliases": [
+        "Hungary Skydive Őcsény"
+      ],
+      "country": "HU",
+      "locality": "Őcsény",
+      "latitude": 46.306138,
+      "longitude": 18.767386,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident LHOY)",
+      "icao": "LHOY",
+      "operators": [
+        {
+          "name": "Hungary Skydive",
+          "website": "https://www.hungaryskydive.hu/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator provides an Őcsény dropzone page with aircraft jump prices and gate directions, but the opening-date notice is undated and no 2025+ operation was established.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/hungary-skydive-ocseny/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://www.hungaryskydive.hu/dropzone-ocseny/",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Őcsény airfield and Cessna 182 jump offer."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; LHOY airfield coordinates."
+        }
+      ],
+      "note": ""
+    }
+  ]
+}

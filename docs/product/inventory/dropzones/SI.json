@@ -1,0 +1,406 @@
+{
+  "country": "SI",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "si-portoroz",
+      "name": "Letališče Portorož",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Sečovlje, Piran",
+      "latitude": 45.47256,
+      "longitude": 13.61531,
+      "coordinates_source": "https://www.openstreetmap.org/way/89725598",
+      "icao": "LJPZ",
+      "operators": [
+        {
+          "name": "Prostipad",
+          "website": "https://prostipad.com"
+        },
+        {
+          "name": "Skydiving Paranoia"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Prostipad tandem page carries a dated 'skydiving plan 7.4.–13.4.2025'; airport page says jumps throughout the year by arrangement",
+      "sources": [
+        {
+          "url": "https://www.portoroz-airport.si/en/visitors/tandem-jumps",
+          "checked_on": "2026-11-14",
+          "what": "airport page: tandem jumps, contact Skydiving Paranoia"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/skydive-locations-portoroz",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad location page (mirror)"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/tandem-skydive",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad tandem page with 2025 plan"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/89725598",
+          "checked_on": "2026-11-14",
+          "what": "OSM airport geometry"
+        }
+      ],
+      "season": "April–October (Prostipad); airport says all year by arrangement"
+    },
+    {
+      "key": "si-sentvid-pri-sticni",
+      "name": "Šentvid pri Stični airfield",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Šentvid pri Stični, Ivančna Gorica",
+      "latitude": 45.943911,
+      "longitude": 14.850862,
+      "coordinates_source": "https://www.openstreetmap.org/node/1040115393",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Prostipad"
+        },
+        {
+          "name": "Skydive Croatia",
+          "website": "https://www.skydivecroatia.com"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Prostipad (prostipad.si, current: \"2026 season has ended\") and Skydive Croatia list it as a tandem location by arrangement; no dated jump day found",
+      "sources": [
+        {
+          "url": "https://www.skydivecroatia.com/skok-padobranom-lokacije.php",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Croatia: occasional jumps near Ljubljana at Šentvid pri Stični"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/skydive-locations-sentvid-pri-sticni",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad location page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports SI-0011 Šentvid pri Stični Airfield (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1040115393",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome \"Vzletišče Šentvid pri Stični\""
+        },
+        {
+          "url": "https://www.prostipad.si/en/tandem-skydive",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad main site: 2026 season ended, next from April 2027; Šentvid among its tandem locations"
+        }
+      ]
+    },
+    {
+      "key": "si-maribor",
+      "name": "Letališče Edvarda Rusjana Maribor",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Skoke, Miklavž na Dravskem polju",
+      "latitude": 46.4784,
+      "longitude": 15.68754,
+      "coordinates_source": "https://www.openstreetmap.org/way/105679162",
+      "icao": "LJMB",
+      "operators": [
+        {
+          "name": "Letalski center Maribor - padalska sekcija (Skydive Maribor)"
+        },
+        {
+          "name": "Skydive Croatia",
+          "website": "https://www.skydivecroatia.com"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Club parachuting section and tourism listing exist; no dated 2025+ jump activity found",
+      "sources": [
+        {
+          "url": "https://flight-1.com/dropzones",
+          "checked_on": "2026-11-14",
+          "what": "directory: Skydive Maribor, Padalska sekcija LCM, Letališka cesta 30, Skoke"
+        },
+        {
+          "url": "https://www.skydivecroatia.com/skok-padobranom-lokacije.php",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Croatia lists Maribor as a tandem location"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/105679162",
+          "checked_on": "2026-11-14",
+          "what": "OSM airport geometry"
+        }
+      ]
+    },
+    {
+      "key": "si-lesce",
+      "name": "Letališče Lesce-Bled",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Lesce, Radovljica",
+      "latitude": 46.35931,
+      "longitude": 14.17389,
+      "coordinates_source": "https://www.openstreetmap.org/way/449353042",
+      "icao": "LJBL",
+      "operators": [
+        {
+          "name": "Altitude Activities (tandem reseller/operator)",
+          "website": "https://www.altitude-activities.com/jump-fall-and-fly/skydiving"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Still conflicting: the prostipad.si tandem page (2026 season) lists Lesce as a location, but Prostipad's own Lesce page says it has been closed to tandem activity since 2015 until further notice. No dated 2025+ jump found.",
+      "sources": [
+        {
+          "url": "https://www.prostipad.si/en/tandem-skydive",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad main site: 2026 season ended, next from April 2027; lists Portorož, Šentvid, Postojna, Bovec, Lesce"
+        },
+        {
+          "url": "https://www.prostipad.si/en/skydive-locations-lesce",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad: Lesce closed for tandem activity since 2015 until further notice"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/skydive-locations-lesce",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad: former home dropzone"
+        },
+        {
+          "url": "https://www.altitude-activities.com/jump-fall-and-fly/skydiving",
+          "checked_on": "2026-11-14",
+          "what": "reseller page (via search)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/449353042",
+          "checked_on": "2026-11-14",
+          "what": "OSM sport=parachuting pitch at Lesce airfield"
+        }
+      ],
+      "note": "Coordinates are the mapped parachuting landing area at the airfield."
+    },
+    {
+      "key": "si-bovec",
+      "name": "Letališče Bovec",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Bovec",
+      "latitude": 46.33007,
+      "longitude": 13.54868,
+      "coordinates_source": "https://www.openstreetmap.org/way/287496493",
+      "icao": "LJBO",
+      "operators": [
+        {
+          "name": "Skydive Bovec (Aviofun d.o.o.)",
+          "website": "https://www.skydivebovec.com",
+          "facebook": "https://www.facebook.com/skydivebovec"
+        },
+        {
+          "name": "Prostipad",
+          "website": "https://www.prostipad.si"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Skydive Bovec site has a news item of 7 Mar 2025 announcing its 2025 season calendar; its Facebook post \"Season 2026\" (Feb 2026, via search snippet) lists dates from 7 May 2026; Prostipad's 2026 page lists Bovec.",
+      "sources": [
+        {
+          "url": "https://www.skydivebovec.com",
+          "checked_on": "2026-11-14",
+          "what": "operator: dropzone at Rupa 17, Bovec (OSM places it at the airfield edge); 2025 season calendar news, 7 Mar 2025"
+        },
+        {
+          "url": "https://www.facebook.com/skydivebovec/posts/season-2026-is-officially-on-the-horizon-over-the-past-years-skydive-bovec-has-g/1517815883687280",
+          "checked_on": "2026-11-14",
+          "what": "Facebook post \"Season 2026\" with dates from 7 May (seen in search results; login wall hides the date)"
+        },
+        {
+          "url": "https://www.prostipad.si/en/tandem-skydive",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad 2026: Bovec a tandem location"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/skydive-locations-bovec",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad location page"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/287496493",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ],
+      "season": "May–September (2026 date list)"
+    },
+    {
+      "key": "si-postojna",
+      "name": "Letališče Postojna",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Postojna",
+      "latitude": 45.75129,
+      "longitude": 14.19526,
+      "coordinates_source": "https://www.openstreetmap.org/node/1042047080",
+      "icao": "LJPO",
+      "operators": [
+        {
+          "name": "Prostipad"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Prostipad (prostipad.si, current season page) lists Postojna as a tandem location by arrangement; no dated jump day found",
+      "sources": [
+        {
+          "url": "https://www.prostipad.si/en/tandem-skydive",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad main site: 2026 season ended, next from April 2027; lists Portorož, Šentvid, Postojna, Bovec, Lesce"
+        },
+        {
+          "url": "https://prostipad.services.knife-market.com/en/skydive-locations-postojna",
+          "checked_on": "2026-11-14",
+          "what": "Prostipad location page (search result)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1042047080",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome node"
+        }
+      ]
+    },
+    {
+      "key": "si-ptuj",
+      "name": "Športno letališče Ptuj (Moškanjci)",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Moškanjci, Gorišnica",
+      "latitude": 46.42639,
+      "longitude": 15.98925,
+      "coordinates_source": "https://www.openstreetmap.org/way/171147886",
+      "icao": "LJPT",
+      "operators": [
+        {
+          "name": "Aeroklub Ptuj"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipality notice 29 Aug 2025: club open day 6 Sep 2025 offered tandem jumps; no regular jump operation confirmed",
+      "sources": [
+        {
+          "url": "https://www.ptuj.si/objava/1149559",
+          "checked_on": "2026-11-14",
+          "what": "Mestna občina Ptuj: Aeroklub Ptuj open day with tandem jumps, 6 Sep 2025"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/171147886",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ]
+    },
+    {
+      "key": "si-murska-sobota",
+      "name": "Letališče Murska Sobota (Rakičan)",
+      "aliases": [],
+      "country": "SI",
+      "locality": "Rakičan, Murska Sobota",
+      "latitude": 46.62735,
+      "longitude": 16.17342,
+      "coordinates_source": "https://www.openstreetmap.org/way/172395847",
+      "icao": "LJMS",
+      "operators": [
+        {
+          "name": "Aeroklub Murska Sobota"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Svet24/Vestnik report (photo dated May 2025): visiting Red Bull skydiving team trains at Rakičan; jumper injured on landing. Not shown to be a public dropzone.",
+      "sources": [
+        {
+          "url": "https://svet24.si/novice/kronika/letalisce-rakican-padalec-ukc-maribor-1896486",
+          "checked_on": "2026-11-14",
+          "what": "news: parachutist injured landing at Rakičan during Red Bull team training"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/172395847",
+          "checked_on": "2026-11-14",
+          "what": "OSM airfield geometry"
+        }
+      ]
+    },
+    {
+      "key": "si-metlika",
+      "name": "Vzletišče Prilozje - Metlika",
+      "aliases": [
+        "Aerodrom Metlika"
+      ],
+      "country": "SI",
+      "locality": "Prilozje, Metlika",
+      "latitude": 45.589908,
+      "longitude": 15.26036,
+      "coordinates_source": "https://www.openstreetmap.org/node/1042066789",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Aeroklub Tandem (Croatian club)",
+          "website": "https://tandem.hr"
+        }
+      ],
+      "aircraft": "Cessna 182 9A-EEE, Cessna 210 9A-MMM (club fleet)",
+      "season": "April–June weekends (2026 list)",
+      "status": "seasonal",
+      "status_evidence": "Aeroklub Tandem lists 2026 tandem weekends at the Metlika airfield: 18–19 Apr, 25–26 Apr, 1–2 May, 16–17 May, 23–24 May, 13–14 Jun, 20–21 Jun",
+      "sources": [
+        {
+          "url": "https://tandem.hr/index.php/akcija-tandem-skok-padobranom",
+          "checked_on": "2026-11-14",
+          "what": "operator: 2026 tandem dates at the airfield in Metlika, on the Croatia–Slovenia border"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/1042066789",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome \"Vzletišče Prilozje - Metlika\", the only aerodrome at Metlika"
+        }
+      ],
+      "note": "Added in check 2026-11-14. The operator says only 'aerodrom u Metlici'; matched to the only mapped aerodrome there."
+    },
+    {
+      "key": "si-libelice",
+      "name": "Vzletišče Libeliče",
+      "aliases": [
+        "Lavamünd",
+        "Libelice",
+        "Gorče"
+      ],
+      "country": "SI",
+      "locality": "Gorče, Libeliče",
+      "latitude": 46.623795,
+      "longitude": 14.954946,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident SI-0023)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Fallschirmzentrum Kärnten",
+          "website": "https://www.fallschirmspringen-kaernten.at/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Opened indexed operator season calendar explicitly lists 31 May 2026 jumps at Flugplatz Lavamünd / Libelice, Gorče 23, Slovenia.",
+      "sources": [
+        {
+          "url": "https://www.fallschirmspringen-kaernten.at/de/termine.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar and exact Slovenian venue for Lavamünd jump days."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; SI-0023 airfield coordinates."
+        }
+      ],
+      "note": "Visiting operator, scheduled jumping rather than a daily resident centre; the live HTML now announces the 2027 calendar while the opened indexed page retains the 2026 schedule."
+    }
+  ]
+}

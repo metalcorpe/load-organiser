@@ -1,0 +1,305 @@
+{
+  "country": "LT",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "lt-pociunai",
+      "name": "Pociūnai airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Prienai",
+      "latitude": 54.653611,
+      "longitude": 24.056389,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Kauno parašiutininkų klubas",
+          "website": "https://skydive.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-klaipeda",
+      "name": "Klaipėda airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Dirvupiai",
+      "latitude": 55.711944,
+      "longitude": 21.242778,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Klaipėdos parašiutininkų klubas",
+          "website": "https://skydiving.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-sasnava",
+      "name": "Sasnava airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Marijampolė",
+      "latitude": 54.664444,
+      "longitude": 23.455278,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Marijampolės aeroklubas",
+          "website": "https://marizone.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-serksnenai",
+      "name": "Mažeikiai Šerkšnėnai airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Mažeikiai",
+      "latitude": 56.230556,
+      "longitude": 22.259444,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Mažeikių aviacijos sporto klubas",
+          "website": "https://skydive.puslapiai.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://mke.lt/Ma%C5%BEeiki%C5%B3_aviacijos_sporto_klubas",
+          "checked_on": "2026-11-14",
+          "what": "Club location at Šerkšnėnai airfield"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-barysiai",
+      "name": "Barysiai airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Šiauliai region",
+      "latitude": 56.070278,
+      "longitude": 23.553889,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Šiaulių parašiutininkų klubas",
+          "website": "https://suoliai.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-kyviskes",
+      "name": "Kyviškės airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Vilnius region",
+      "latitude": 54.668056,
+      "longitude": 25.515833,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Vilniaus Dariaus ir Girėno aeroklubas",
+          "website": "https://dropzone.lt"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Federation lists the club with a parachuting permit valid until 14 February 2027; the 2026 AIP lists this parachuting site.",
+      "sources": [
+        {
+          "url": "https://lpsf.lt/nariai-ir-nariu-leidimai/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://www.dovanusala.lt/lt/1172-tandem-suolis-parasiutu-su-instruktoriumi-vilniuje.html",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check of Vilnius operator at Kyviškės; reseller is not a separate operator"
+        }
+      ],
+      "note": "AIP parachuting-area reference point; permit validity establishes authorized operation, not a daily jumping schedule."
+    },
+    {
+      "key": "lt-seduva",
+      "name": "Šeduva airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Šeduva",
+      "latitude": 55.746389,
+      "longitude": 23.804722,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Šiaulių parašiutininkų klubas (historical location)",
+          "website": "https://suoliai.lt"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular sport operation was established and the listed operator website was inaccessible.",
+      "sources": [
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://dropzonefinder.com/dropzones/lithuania",
+          "checked_on": "2026-11-14",
+          "what": "Historical club location"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "Continued regular sport operation at Šeduva remains unconfirmed."
+    },
+    {
+      "key": "lt-zarasai",
+      "name": "Zarasai airfield",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Zarasai",
+      "latitude": 55.751667,
+      "longitude": 26.261944,
+      "coordinates_source": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+      "icao": null,
+      "operators": [],
+      "status": "uncertain",
+      "status_evidence": "An AIP parachuting designation remains, but no 2025–2026 regular civilian operator or jumping calendar was established.",
+      "sources": [
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.ans.lt/a1/aip/03_11Jun2026/2026-06-11-000000/html/eAIP/EY-ENR-5.5-lt-LT.html?amdt=show",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "AIP-only lead; inclusion does not imply an available tandem service."
+    },
+    {
+      "key": "lt-ignalina",
+      "name": "Ignalina dropzone",
+      "aliases": [],
+      "country": "LT",
+      "locality": "Ignalina region",
+      "latitude": 55.244167,
+      "longitude": 26.172222,
+      "coordinates_source": "https://ourairports.com/airports/EYIG/",
+      "icao": "EYIG",
+      "operators": [
+        {
+          "name": "DZ Ignalina",
+          "website": "https://tandemjump.lv"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The historical operator listing and airfield location are established, but no 2025–2026 regular jumping activity was verified.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/lithuania/dz-ignalina",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/EYIG/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ],
+      "note": "Historical dropzone listing associated with Ignalina airfield; dated operator continuity remains unresolved."
+    }
+  ]
+}

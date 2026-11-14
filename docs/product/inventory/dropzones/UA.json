@@ -1,0 +1,525 @@
+{
+  "country": "UA",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "ua-chayka-kyiv",
+      "name": "Aerodrom Chayka",
+      "aliases": [
+        "Chaika",
+        "Kyiv Chaika Airfield"
+      ],
+      "country": "UA",
+      "locality": "Petropavlivska Borshchahivka, Kyiv Oblast",
+      "latitude": 50.43049,
+      "longitude": 30.30075,
+      "coordinates_source": "https://www.openstreetmap.org/way/764192652 (OSM aerodrome way centre)",
+      "icao": "UKKJ",
+      "operators": [
+        {
+          "name": "Aerobatic club Chayka Aero",
+          "website": "https://chayka.aero/ua/price-jump-parachute"
+        },
+        {
+          "name": "Para-Skuf association",
+          "website": "https://paraskuf.com.ua/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Para-Skuf's newest news item (24 Feb 2022) says the Chayka airfield is not working.",
+      "sources": [
+        {
+          "url": "https://chayka.aero/ua/price-jump-parachute",
+          "checked_on": "2026-11-14",
+          "what": "Operator parachute price page (prices from May 2018; no war or season notice)"
+        },
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/764192652",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Chayka UKKJ"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        },
+        {
+          "url": "https://paraskuf.com.ua/pro-nas/pro-paraskuf",
+          "checked_on": "2026-11-14",
+          "what": "Para-Skuf site: club based at Chayka, season April-November; newest news item 24 Feb 2022 'Chayka airfield is not working'"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-borodianka",
+      "name": "Navchalnyi aerodrom Borodianka",
+      "aliases": [
+        "DZ Boro",
+        "Para-Skuf"
+      ],
+      "country": "UA",
+      "locality": "Borodianka, Kyiv Oblast",
+      "latitude": 50.66186,
+      "longitude": 29.93321,
+      "coordinates_source": "https://www.openstreetmap.org/way/462681417 (OSM 'Парашутний клуб DZ Boro', sport=Skydive;Tandem;AFF, on the airfield; aerodrome relation 8376381 centre 50.66585, 29.9245)",
+      "icao": "UKKB",
+      "operators": [
+        {
+          "name": "Para-Skuf association (based at Chayka; ran jumps at Borodianka per t1.ua)",
+          "website": "https://paraskuf.com.ua/"
+        },
+        {
+          "name": "DZ Boro (OSM parachute club building)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/462681417",
+          "checked_on": "2026-11-14",
+          "what": "OSM parachute club building DZ Boro"
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/8376381",
+          "checked_on": "2026-11-14",
+          "what": "OSM training aerodrome Borodianka UKKB"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-korotych-kharkiv",
+      "name": "Aerodrom Korotych",
+      "aliases": [
+        "Kharkiv Aeroclub Hryzodubova"
+      ],
+      "country": "UA",
+      "locality": "Korotych, Kharkiv Oblast",
+      "latitude": 49.97362,
+      "longitude": 36.01791,
+      "coordinates_source": "https://www.openstreetmap.org/way/56031932 (OSM aerodrome way centre)",
+      "icao": "UKEK",
+      "operators": [
+        {
+          "name": "Kharkiv Aeroclub im. V.S. Hryzodubova (TSOU)",
+          "website": "https://aeroclub.net.ua/services/ua/skydiving.html"
+        }
+      ],
+      "aircraft": "An-2 (club championship reports, pre-war)",
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://aeroclub.net.ua/events/ua/skydiving.html",
+          "checked_on": "2026-11-14",
+          "what": "Club parachuting news: latest items 2023 (members jumping abroad); no 2024-2026 jump reports at Korotych"
+        },
+        {
+          "url": "https://aeroclub.net.ua/services/ua/skydiving.html",
+          "checked_on": "2026-11-14",
+          "what": "Club skydiving service page"
+        },
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/56031932",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Korotych UKEK"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war venue of national championships. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-chemer-chernihiv",
+      "name": "Aerodrom Chemer (Progres)",
+      "aliases": [
+        "Progres",
+        "Chernihiv aviation sports club"
+      ],
+      "country": "UA",
+      "locality": "Chemer, Chernihiv Oblast",
+      "latitude": 51.115,
+      "longitude": 31.14832,
+      "coordinates_source": "https://www.openstreetmap.org/way/321535100 (OSM aerodrome way centre)",
+      "icao": "UKAC",
+      "operators": [
+        {
+          "name": "Chernihiv parachute club \"Progres\" (ASK)",
+          "website": "https://skok.kiev.ua/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://skok.kiev.ua/",
+          "checked_on": "2026-11-14",
+          "what": "Operator page for the Chernihiv club at Progres airfield; says the 2021 season ended, nothing later"
+        },
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/321535100",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Chemer, operator Progres Chernihiv parachute club"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-tsuniv-lviv",
+      "name": "Aerodrom Tsuniv",
+      "aliases": [
+        "Tsuniv Airfield"
+      ],
+      "country": "UA",
+      "locality": "Zavereshytsia, Horodok district, Lviv Oblast",
+      "latitude": 49.82492,
+      "longitude": 23.69018,
+      "coordinates_source": "https://www.openstreetmap.org/way/434880012 (OSM aerodrome way centre)",
+      "icao": "UKGC",
+      "operators": [
+        {
+          "name": "Tsuniv aviation school",
+          "website": "https://aviaschool.com.ua/"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Operator page states parachute jumps are temporarily not conducted (undated); Ukrainian airspace closed to civil aviation since 24 Feb 2022 (EASA bulletin valid to Jan 2027).",
+      "sources": [
+        {
+          "url": "https://aviaschool.com.ua/%D0%A1%D1%82%D1%80%D0%B8%D0%B1%D0%BE%D0%BA-%D0%B7-%D0%BF%D0%B0%D1%80%D0%B0%D1%88%D1%83%D1%82%D0%BE%D0%BC/",
+          "checked_on": "2026-11-14",
+          "what": "Operator page: 'parachute jumps are temporarily not conducted' (undated)"
+        },
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/434880012",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Tsuniv UKGC"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-maiske-dnipro",
+      "name": "Aerodrom Maiske (Avia-Soyuz)",
+      "aliases": [
+        "Avia-Soyuz",
+        "Maiske"
+      ],
+      "country": "UA",
+      "locality": "Maiske, Dnipropetrovsk Oblast",
+      "latitude": 48.49162,
+      "longitude": 35.62603,
+      "coordinates_source": "https://www.openstreetmap.org/way/813417705 (OSM aerodrome way centre)",
+      "icao": "UKDQ",
+      "operators": [
+        {
+          "name": "Avia-Soyuz skydiving centre"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://kava.ua/uk/certificates/skydiving-tandem-dnepr",
+          "checked_on": "2026-11-14",
+          "what": "Gift-certificate reseller page: tandem at Maiske marked as not operating; latest review 2021"
+        },
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/813417705",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Maiske UKDQ"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-hidroport-odesa",
+      "name": "Sportyvnyi aerodrom Hidroport",
+      "aliases": [
+        "Hydroport",
+        "X-sport"
+      ],
+      "country": "UA",
+      "locality": "Odesa",
+      "latitude": 46.57878,
+      "longitude": 30.70246,
+      "coordinates_source": "https://www.openstreetmap.org/relation/2754813 (OSM aerodrome relation centre)",
+      "icao": "UKOE",
+      "operators": [
+        {
+          "name": "X-sport.org"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/relation/2754813",
+          "checked_on": "2026-11-14",
+          "what": "OSM sport aerodrome Hidroport UKOE"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-voroniv-rivne",
+      "name": "Aerodrom Voroniv",
+      "aliases": [
+        "Voroniv"
+      ],
+      "country": "UA",
+      "locality": "Voroniv, Rivne Oblast",
+      "latitude": 50.69883,
+      "longitude": 26.704,
+      "coordinates_source": "https://www.openstreetmap.org/way/128839597 (OSM aerodrome way centre)",
+      "icao": "UKGW",
+      "operators": [],
+      "status": "uncertain",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Pre-war overview (image paths 2020-03) of Ukrainian dropzones"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/128839597",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Voroniv UKGW"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/7680158285",
+          "checked_on": "2026-11-14",
+          "what": "OSM node 'Парашутна ланка' near the airfield"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Pre-war lead from one overview article; operator not identified."
+    },
+    {
+      "key": "ua-filiutka",
+      "name": "Aerodrom Filiutka",
+      "aliases": [
+        "Filiutka"
+      ],
+      "country": "UA",
+      "locality": "Filiutka, Vinnytsia Oblast",
+      "latitude": 49.33249,
+      "longitude": 29.26524,
+      "coordinates_source": "https://www.openstreetmap.org/way/760411372 (OSM aerodrome way centre)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Pravoslavno-desantna parashutna shkola im. tsesarevycha Oleksiia (per OSM operator tag)"
+        }
+      ],
+      "status": "closed",
+      "status_evidence": "Investigative article (published 21 Feb 2022, updated 9 May 2023): the only public jump offer dates from 2015; the camp's An-2 UR-71206 was removed from the state register in 2018 and was still standing in the yard in late 2021. Ukrainian civil airspace has been closed since 24 Feb 2022.",
+      "sources": [
+        {
+          "url": "https://www.depytaty.pro/post/best-podcasts-to-listen-to-when-traveling",
+          "checked_on": "2026-11-14",
+          "what": "Article on khutir Filiutka: youth military-patriotic camp, 2015 jump advert, An-2 deregistered 2018"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/760411372",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome with a parachute school as operator"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        }
+      ],
+      "note": "Set to closed in the check. A youth military-patriotic camp that advertised jumps in 2015, not a civilian dropzone; do not show on the map."
+    },
+    {
+      "key": "ua-sutysky",
+      "name": "Aerodrom Sutysky",
+      "aliases": [
+        "Сутиски"
+      ],
+      "country": "UA",
+      "locality": "Sutysky, Vinnytsia Oblast",
+      "latitude": 49.06838,
+      "longitude": 28.44549,
+      "coordinates_source": "https://www.openstreetmap.org/way/1371244258 (OSM aerodrome way centre)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Club group (Facebook group named in the article)",
+          "facebook": "https://www.facebook.com/groups/744553278901178"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Undated local article (prices suggest about 2021) says tandem and solo jumps are made every weekend at Sutysky, 30 km from Vinnytsia. Ukrainian civil airspace has been closed since 24 Feb 2022 (EASA bulletin valid to Jan 2027); no 2025+ evidence found.",
+      "sources": [
+        {
+          "url": "https://vn.20minut.ua/Groshi/pidkoryuemo-nebo-skilki-koshtue-stribnuti-z-parashutom-ta-politati-na--11265091.html",
+          "checked_on": "2026-11-14",
+          "what": "Local article (undated): weekend tandem and solo jumps at Sutysky aerodrome, prices"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1371244258",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome Sutysky"
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "EASA conflict zone bulletin for Ukraine (valid to 31 Jan 2027)"
+        }
+      ],
+      "note": "Added in the check. Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
+    },
+    {
+      "key": "ua-krupske",
+      "name": "Aerodrom Krupske",
+      "aliases": [
+        "DZ Krups’ke"
+      ],
+      "country": "UA",
+      "locality": "Krupske, Lviv Oblast",
+      "latitude": 49.451556,
+      "longitude": 24.043866,
+      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident UA-0077)",
+      "icao": null,
+      "operators": [
+        {
+          "name": "West Ukrainian Parachute Association"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/dz-krupske/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory airfield lead."
+        },
+        {
+          "url": "https://report.if.ua/lyudy/parashutysty-komentuyut-zagybel-ivanofrankivcya-pid-chas-strybka-pid-lvovom/",
+          "checked_on": "2026-11-14",
+          "what": "Historical account confirms training jumps at Krupske."
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport dataset; UA-0077 airfield coordinates."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "key": "ua-ksaverivka-kyiv-south",
+      "name": "Aerodrom Kyiv-Pivdennyi",
+      "aliases": [
+        "DZ 5 Ocean",
+        "Kyiv-South",
+        "Kiev-Yuzhny"
+      ],
+      "country": "UA",
+      "locality": "Ksaverivka, Kyiv Oblast",
+      "latitude": 50.003611,
+      "longitude": 30.196667,
+      "coordinates_source": "https://de.wikipedia.org/wiki/Flugplatz_Kiew-S%C3%BCd",
+      "icao": "UKBD",
+      "operators": [
+        {
+          "name": "5 Ocean"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
+      "sources": [
+        {
+          "url": "https://skydiving.com/dropzone/dz-5-ocean/",
+          "checked_on": "2026-11-14",
+          "what": "International-directory lead."
+        },
+        {
+          "url": "https://bestcity.kyiv.ua/ru/centr-parashjutnogo-sporta-5-okean/",
+          "checked_on": "2026-11-14",
+          "what": "Identifies parachute centre within Kyiv-South airfield."
+        },
+        {
+          "url": "https://de.wikipedia.org/wiki/Flugplatz_Kiew-S%C3%BCd",
+          "checked_on": "2026-11-14",
+          "what": "Airport page with coordinate 50°00′13″N 30°11′48″E and UKBD."
+        }
+      ],
+      "note": ""
+    }
+  ]
+}

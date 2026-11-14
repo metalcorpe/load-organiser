@@ -1,0 +1,673 @@
+{
+  "country": "NO",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "no-rognan",
+      "name": "Rognan airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Rognan",
+      "latitude": 67.0977,
+      "longitude": 15.411,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Rognan_Airport",
+      "icao": "ENRG",
+      "operators": [
+        {
+          "name": "Bodø Fallskjermklubb",
+          "website": "https://bofsk.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator advertises a 2026 course and describes weekend jumping at Rognan.",
+      "sources": [
+        {
+          "url": "https://bofsk.com",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Rognan_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "no-stend",
+      "name": "Stend landing area",
+      "aliases": [
+        "Titlestad landing area"
+      ],
+      "country": "NO",
+      "locality": "Bergen",
+      "latitude": 60.275196,
+      "longitude": 5.323262,
+      "coordinates_source": "https://www.google.com/maps/d/kml?mid=1OC7cCeHV2LuxWDtu4WKnMxMqKFnvH1ab&forcekml=1",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Bergen Fallskjermklubb",
+          "website": "https://www.bfsk.no/v3/index.php"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "NLF magazine report dated 4 December 2025 documents Easter, summer and autumn jumps at Stend and summer jumping at Titlestad.",
+      "sources": [
+        {
+          "url": "https://www.bfsk.no/v3/index.php",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://frittfall.org/artikkel/luke-4-bergen-fallskjermklubb",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        },
+        {
+          "url": "https://www.google.com/maps/d/kml?mid=1OC7cCeHV2LuxWDtu4WKnMxMqKFnvH1ab&forcekml=1",
+          "checked_on": "2026-11-14",
+          "what": "Coordinate source opened during follow-up; Named landing-area point from the public map linked by Bergen Fallskjermklubb; distinct from the Flesland departure airport."
+        },
+        {
+          "url": "https://www.bfsk.no/v3/index.php?catid=37&id=502&option=com_content&view=article",
+          "checked_on": "2026-11-14",
+          "what": "Operator landing-field directions link the public map containing named Stend and Titlestad points."
+        }
+      ],
+      "note": "One dropzone: Bergen Fallskjermklubb's two landing areas, Stend and Titlestad (60.277058, 5.355084, about 1.8 km east, used in summer), named on the public map the club links. The aircraft departs from Flesland. Merged from no-titlestad on 2026-11-14.",
+      "season": "All year: Stend in autumn, winter and spring; Titlestad in summer"
+    },
+    {
+      "key": "no-molde-aro",
+      "name": "Molde Årø parachuting area",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Molde",
+      "latitude": 62.74745,
+      "longitude": 7.264254,
+      "coordinates_source": "https://www.openstreetmap.org/way/1218780094",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Føniks Fallskjermklubb",
+          "website": "https://skydivemolde.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator course page explicitly schedules jumping on the 10–12 April 2026 course at Årø.",
+      "sources": [
+        {
+          "url": "https://www.skydivemolde.com/om-oss.html",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/1218780094",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://www.skydivemolde.com/linekurs.html",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "note": "OSM parachuting-area centre, not the club office."
+    },
+    {
+      "key": "no-geiteryggen",
+      "name": "Geiteryggen airfield",
+      "aliases": [
+        "Skydive Telemark"
+      ],
+      "country": "NO",
+      "locality": "Skien",
+      "latitude": 59.185001,
+      "longitude": 9.56694,
+      "coordinates_source": "https://ourairports.com/airports/ENSN/",
+      "icao": "ENSN",
+      "operators": [
+        {
+          "name": "Grenland Fallskjermklubb / Skydive Telemark",
+          "website": "https://frittfall.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes plans for the 2026 season.",
+      "sources": [
+        {
+          "url": "https://frittfall.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENSN/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "no-stafsberg",
+      "name": "Stafsberg airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Hamar",
+      "latitude": 60.8181,
+      "longitude": 11.068,
+      "coordinates_source": "https://ourairports.com/airports/ENHA/",
+      "icao": "ENHA",
+      "operators": [
+        {
+          "name": "HaGL Fallskjermklubb",
+          "website": "https://skydivehamar.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes 2026 tandem dates.",
+      "sources": [
+        {
+          "url": "https://skydivehamar.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENHA/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "no-kjevik",
+      "name": "Kjevik airport dropzone",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Kristiansand",
+      "latitude": 58.204201,
+      "longitude": 8.08537,
+      "coordinates_source": "https://ourairports.com/airports/ENCN/",
+      "icao": "ENCN",
+      "operators": [
+        {
+          "name": "Kjevik Fallskjermklubb",
+          "website": "https://fallskjerm.net"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The 2025 NLF membership record confirms the club, but no 2025–2026 Kjevik jumping calendar or booking evidence was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/norway",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENCN/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://nlf.no/siteassets/dokumenter/seksjonsmoter-og-luftsportstinget-2025/seksjonsmotedokumenter/seksjonsmote-fallskjerm-2025---saksdokumenter.pdf",
+          "checked_on": "2026-11-14",
+          "what": "2025 federation membership list confirms club, but not jumping at Kjevik"
+        }
+      ],
+      "note": "Directory lead; operator website could not be reached. Landing-field boundary remains unconfirmed."
+    },
+    {
+      "key": "no-bjorli",
+      "name": "Bjorli airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Lesja",
+      "latitude": 62.234754,
+      "longitude": 8.245797,
+      "coordinates_source": "https://ourairports.com/airports/NO-0019/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Lesja Fallskjermklubb",
+          "website": "https://lesjafsk.no"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator states the 2026 season has ended and announces Easter 2027.",
+      "sources": [
+        {
+          "url": "https://www.lesjafsk.no/tandem/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://lesjafsk.no",
+          "checked_on": "2026-11-14",
+          "what": "Club-owned Bjorli airfield"
+        },
+        {
+          "url": "https://ourairports.com/airports/NO-0019/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: opened airfield coordinate source"
+        }
+      ]
+    },
+    {
+      "key": "no-oppdal",
+      "name": "Oppdal airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Oppdal",
+      "latitude": 62.650284,
+      "longitude": 9.854634,
+      "coordinates_source": "https://www.openstreetmap.org/node/6191066397",
+      "icao": null,
+      "operators": [
+        {
+          "name": "NTNU Fallskjermklubb",
+          "website": "https://skydiveoppdal.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator advertises summer boogie 2026.",
+      "sources": [
+        {
+          "url": "https://skydiveoppdal.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/6191066397",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ]
+    },
+    {
+      "key": "no-rakkestad",
+      "name": "Rakkestad airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Rakkestad",
+      "latitude": 59.397499,
+      "longitude": 11.3469,
+      "coordinates_source": "https://ourairports.com/airports/ENRK/",
+      "icao": "ENRK",
+      "operators": [
+        {
+          "name": "Nimbus Fallskjermklubb / Skydive Viken",
+          "website": "https://skydiveviken.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator reports four courses held April–August 2026 and publishes its 2027 course plan.",
+      "sources": [
+        {
+          "url": "https://skydiveviken.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENRK/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.skydiveviken.no/kurs/",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "season": "All year"
+    },
+    {
+      "key": "no-ostre-aera",
+      "name": "Østre Æra airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Åmot",
+      "latitude": 61.257937,
+      "longitude": 11.669833,
+      "coordinates_source": "https://ourairports.com/airports/ENAE/",
+      "icao": "ENAE",
+      "operators": [
+        {
+          "name": "Oslo Fallskjermklubb",
+          "website": "https://fallskjerm.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Official event site identifies Østre Æra as the 2026 Norwegian championship venue.",
+      "sources": [
+        {
+          "url": "https://www.nmfallskjerm.no/",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://fallskjerm.no",
+          "checked_on": "2026-11-14",
+          "what": "Operator"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENAE/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ]
+    },
+    {
+      "key": "no-sviland",
+      "name": "Sviland landing area",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Sandnes",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Stavanger Fallskjermklubb",
+          "website": "https://sfsk.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "NLF magazine report dated 11 December 2025 confirms three courses and continued club jumping during 2025; operator directions identify Sviland.",
+      "sources": [
+        {
+          "url": "https://www.sfsk.no/hoppfelt",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://frittfall.org/artikkel/luke-11-stavanger-fallskjermklubb",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "note": "Landing field at Søredalen 29; flights depart Sola. Sola airport is not used as the landing-field coordinate. Coordinates not established from an opened coordinate source; left null."
+    },
+    {
+      "key": "no-bardufoss",
+      "name": "Bardufoss airport",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Bardufoss",
+      "latitude": 69.05583,
+      "longitude": 18.54028,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Bardufoss_Airport",
+      "icao": "ENDU",
+      "operators": [
+        {
+          "name": "Troms Fallskjermklubb",
+          "website": "https://trofsk.no"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator names both operating fields and publishes 2026 course dates.",
+      "sources": [
+        {
+          "url": "https://trofsk.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Bardufoss_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "season": "April–October"
+    },
+    {
+      "key": "no-elvenes",
+      "name": "Elvenes airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Salangen",
+      "latitude": 68.87111,
+      "longitude": 17.98444,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Salangen_Airport,_Elvenes",
+      "icao": "ENLV",
+      "operators": [
+        {
+          "name": "Troms Fallskjermklubb",
+          "website": "https://trofsk.no"
+        },
+        {
+          "name": "Tromsø Fallskjermklubb (visiting courses)",
+          "website": "https://www.tromsofallskjermklubb.no/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator names both operating fields and publishes 2026 course dates.",
+      "sources": [
+        {
+          "url": "https://trofsk.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Salangen_Airport,_Elvenes",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://www.tromsofallskjermklubb.no/aktivitet",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar confirms visiting Tromsø activity at the shared Elvenes field"
+        }
+      ],
+      "season": "April–October"
+    },
+    {
+      "key": "no-leknes",
+      "name": "Leknes airport",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Lofoten",
+      "latitude": 68.1525,
+      "longitude": 13.60944,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Leknes_Airport",
+      "icao": "ENLK",
+      "operators": [
+        {
+          "name": "Troms Fallskjermklubb",
+          "website": "https://trofsk.no"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The operator mentions an annual Lofoten boogie, but no 2025–2026 event explicitly at Leknes was established.",
+      "sources": [
+        {
+          "url": "https://trofsk.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Leknes_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "Operator describes an annual Lofoten boogie; a dated Leknes-specific event was not established."
+    },
+    {
+      "key": "no-tromso-langnes",
+      "name": "Tromsø Langnes airport dropzone",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Tromsø",
+      "latitude": 69.683296,
+      "longitude": 18.9189,
+      "coordinates_source": "https://ourairports.com/airports/ENTC/",
+      "icao": "ENTC",
+      "operators": [
+        {
+          "name": "Tromsø Fallskjermklubb",
+          "website": "https://tromsofallskjermklubb.no"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator 2026 calendar specifies Saturday jumping from 18 April through 10 October.",
+      "sources": [
+        {
+          "url": "https://tromsofallskjermklubb.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENTC/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.tromsofallskjermklubb.no/aktivitet",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "note": "The homepage coordinate appeared to describe the city rather than the airfield and was not used.",
+      "season": "18 April–10 October 2026; Saturdays"
+    },
+    {
+      "key": "no-jarlsberg",
+      "name": "Jarlsberg airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Tønsberg",
+      "latitude": 59.298067,
+      "longitude": 10.367151,
+      "coordinates_source": "https://www.openstreetmap.org/way/132664616",
+      "icao": "ENJB",
+      "operators": [
+        {
+          "name": "Tønsberg Fallskjermklubb",
+          "website": "https://skydivetonsberg.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Operator publishes its 2026 sport-jump, tandem and student rates for the Jarlsberg operation.",
+      "sources": [
+        {
+          "url": "https://skydivetonsberg.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/132664616",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://www.skydivetonsberg.no/priser-2",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ]
+    },
+    {
+      "key": "no-bomoen",
+      "name": "Bømoen airfield",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Voss",
+      "latitude": 60.63861,
+      "longitude": 6.50139,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Voss_Airport,_B%C3%B8moen",
+      "icao": "ENBM",
+      "operators": [
+        {
+          "name": "Voss Fallskjermklubb",
+          "website": "https://skydivevoss.no"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Club director confirms continuing Bømoen jumping in the NLF magazine on 6 July 2026.",
+      "sources": [
+        {
+          "url": "https://skydivevoss.no",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Voss_Airport,_B%C3%B8moen",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        },
+        {
+          "url": "https://frittfall.org/artikkel/kom-til-voss-og-hopp-driften-pa-bomoen-fortsetter",
+          "checked_on": "2026-11-14",
+          "what": "Follow-up: dated status evidence"
+        }
+      ],
+      "note": "July 2026 report explicitly confirms continued operations despite an unresolved land-tenure dispute."
+    },
+    {
+      "key": "no-vaernes",
+      "name": "Værnes airport historical dropzone",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Stjørdal",
+      "latitude": 63.457802,
+      "longitude": 10.924,
+      "coordinates_source": "https://ourairports.com/airports/ENVA/",
+      "icao": "ENVA",
+      "operators": [
+        {
+          "name": "NTNU Fallskjermklubb (historical listing)",
+          "website": "https://skydiveoppdal.no"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory location; the current operator identifies Oppdal, with no 2025–2026 regular jumping at Værnes established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/norway",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENVA/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Older directory listing; the current operator identifies Oppdal as its base. Continued regular use here is not confirmed."
+    },
+    {
+      "key": "no-roros",
+      "name": "Røros airport historical dropzone",
+      "aliases": [],
+      "country": "NO",
+      "locality": "Røros",
+      "latitude": 62.5784,
+      "longitude": 11.3423,
+      "coordinates_source": "https://ourairports.com/airports/ENRO/",
+      "icao": "ENRO",
+      "operators": [
+        {
+          "name": "NTNU Fallskjermklubb (historical listing)",
+          "website": "https://skydiveoppdal.no"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory location; the current operator identifies Oppdal, with no 2025–2026 regular jumping at Røros established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/norway",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/ENRO/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Older directory listing; the current operator identifies Oppdal as its base. Continued regular use here is not confirmed."
+    }
+  ]
+}

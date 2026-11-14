@@ -1,0 +1,73 @@
+{
+  "country": "IS",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "is-hella",
+      "name": "Hella airfield",
+      "aliases": [
+        "FFF Skydive Iceland"
+      ],
+      "country": "IS",
+      "locality": "Hella",
+      "latitude": 63.8358,
+      "longitude": -20.377501,
+      "coordinates_source": "https://ourairports.com/airports/BIHL/",
+      "icao": "BIHL",
+      "operators": [
+        {
+          "name": "Iceland Skydive",
+          "website": "https://icelandskydive.com"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Operator advertises a recurring Hella tandem event on 8–10 August 2026.",
+      "sources": [
+        {
+          "url": "https://icelandskydive.com/tandem-event",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://ourairports.com/airports/BIHL/",
+          "checked_on": "2026-11-14",
+          "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        }
+      ],
+      "note": "Limited annual event operation; year-round availability is not established."
+    },
+    {
+      "key": "is-sandskeid",
+      "name": "Sandskeið airfield",
+      "aliases": [],
+      "country": "IS",
+      "locality": "Near Reykjavík",
+      "latitude": 64.06,
+      "longitude": -21.574,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Sandskei%C3%B0",
+      "icao": "BISS",
+      "operators": [
+        {
+          "name": "FFF / Reykjavík parachute club (directory listing)",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory listing; no 2025–2026 calendar, booking page or dated public activity at Sandskeið was established.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/iceland",
+          "checked_on": "2026-11-14",
+          "what": "Dropzone location and operator evidence"
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Sandskei%C3%B0",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or parachuting-site coordinates; OSM objects were read through Overpass where applicable"
+        }
+      ],
+      "note": "Directory listing has no dated evidence of continued regular operation."
+    }
+  ]
+}

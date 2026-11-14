@@ -1,0 +1,750 @@
+{
+  "country": "PT",
+  "researched_on": "2026-11-14",
+  "researcher": "claude",
+  "dropzones": [
+    {
+      "key": "pt-portimao",
+      "name": "Aeródromo Municipal de Portimão",
+      "aliases": [
+        "Penina / Montes de Alvor",
+        "Skydive Algarve",
+        "Skydive Seven",
+        "LPPM"
+      ],
+      "country": "PT",
+      "locality": "Montes de Alvor, Portimão, Algarve",
+      "latitude": 37.1493,
+      "longitude": -8.58396,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPPM; page https://ourairports.com/airports/LPPM/",
+      "icao": "LPPM",
+      "operators": [
+        {
+          "name": "Skydive Algarve (Paralvor)",
+          "website": "https://www.skydivealgarve.com/"
+        },
+        {
+          "name": "Skydive Seven (Treino Avançado / Aero Vip)",
+          "website": "https://skydiveseven.pt/"
+        }
+      ],
+      "season": "all year (Skydive Seven)",
+      "status": "active",
+      "status_evidence": "Skydive Algarve site embeds Instagram posts tagged #Halloween2026; FPPq dropzone list names both operators here.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://www.skydivealgarve.com/pt",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://skydiveseven.pt/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Skydive Seven's 'Skydive Lisboa' is a shuttle from Lisbon to this airfield, not a separate dropzone."
+    },
+    {
+      "key": "pt-evora",
+      "name": "Aeródromo Municipal de Évora",
+      "aliases": [
+        "Skydive Portugal",
+        "LPEV"
+      ],
+      "country": "PT",
+      "locality": "Évora",
+      "latitude": 38.533501,
+      "longitude": -7.88964,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPEV; page https://ourairports.com/airports/LPEV/",
+      "icao": "LPEV",
+      "operators": [
+        {
+          "name": "Skydive Portugal (CAPA / Come Fly)",
+          "website": "https://skydiveportugal.pt/"
+        },
+        {
+          "name": "Aero Clube de Évora"
+        },
+        {
+          "name": "Aero Clube Universitário de Lisboa"
+        },
+        {
+          "name": "Skydive Vertical",
+          "website": "https://www.skydivevertical.pt/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Skydive Portugal homepage updated 2026-11-12 with a current 'Black Month' offer; FPPq dropzone list.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://skydiveportugal.pt/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-vertical-escola-de-paraquedismo/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator: Skydive Vertical at Évora"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "pt-proenca-a-nova",
+      "name": "Aeródromo Municipal de Proença-a-Nova (Moitas)",
+      "aliases": [
+        "Sky Fun Center",
+        "Skydive Proença",
+        "LPPN"
+      ],
+      "country": "PT",
+      "locality": "Moitas, Proença-a-Nova, Castelo Branco",
+      "latitude": 39.731217,
+      "longitude": -7.87495,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident PT-0040; page https://ourairports.com/airports/PT-0040/",
+      "icao": "LPPN",
+      "operators": [
+        {
+          "name": "Sky Fun Center / Skydive Porto (GoXtreme)",
+          "website": "https://skydiveporto.com/skydive-proenca/",
+          "facebook": "https://www.facebook.com/SkyFunCenter"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Instagram (public view via search) shows a Skydive Porto post dated 2026-11-05 about Sky Fun Center Proença-a-Nova; FPPq dropzone list.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-proenca/",
+          "checked_on": "2026-11-14",
+          "what": "operator page"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DbXwFN8q1cF",
+          "checked_on": "2026-11-14",
+          "what": "Instagram post 2026-11-05"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "pt-braga",
+      "name": "Aeródromo Municipal de Braga (Palmeira)",
+      "aliases": [
+        "Associação de Paraquedistas do Minho",
+        "LPBR"
+      ],
+      "country": "PT",
+      "locality": "Palmeira, Braga",
+      "latitude": 41.587,
+      "longitude": -8.445189,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPBR; page https://ourairports.com/airports/LPBR/",
+      "icao": "LPBR",
+      "operators": [
+        {
+          "name": "Associação de Paraquedistas do Minho"
+        },
+        {
+          "name": "Skydive Porto (Sky Fun Center)",
+          "website": "https://skydiveporto.com/skydive-porto/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Associação de Paraquedistas do Minho ran a landing-accuracy round of the national parachuting competition at Braga aerodrome on 31 October and 1 November 2026 (public Instagram and Facebook posts seen through search results). Skydive Porto says its jumps are mainly at Proença-a-Nova and only occasionally at Braga (AFF theory is taught at Braga). FPPq dropzone list.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DfK6soNiD16",
+          "checked_on": "2026-11-14",
+          "what": "APM post 2026-10-31: competition at Braga aerodrome (search-result view)"
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "operator page"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Mainly a club dropzone (APM); the commercial operator Skydive Porto jumps here only occasionally."
+    },
+    {
+      "key": "pt-sao-jacinto",
+      "name": "Aeródromo de São Jacinto",
+      "aliases": [
+        "Skydive Dunas",
+        "RI10",
+        "LPAV"
+      ],
+      "country": "PT",
+      "locality": "São Jacinto, Aveiro (inside Infantry Regiment No. 10)",
+      "latitude": 40.656741,
+      "longitude": -8.741544,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPAV; page https://ourairports.com/airports/LPAV/",
+      "icao": "LPAV",
+      "operators": [
+        {
+          "name": "Skydive Dunas (APDA)",
+          "website": "https://skydivedunas.com/",
+          "facebook": "https://www.facebook.com/p/Skydive-Dunas-61575228403840"
+        }
+      ],
+      "season": "weekends and national holidays (operator)",
+      "status": "active",
+      "status_evidence": "Diário de Aveiro article 2025-12-04 on civil skydiving at São Jacinto; Instagram post dated 2026-09-13.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://skydivedunas.com/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://www.diarioaveiro.pt/2025/12/04/um-salto-nos-ceus-de-aveiro-esta-ao-alcance-de-qualquer-pessoa",
+          "checked_on": "2026-11-14",
+          "what": "press 2025-12-04"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Military airfield used by a civilian operator."
+    },
+    {
+      "key": "pt-tancos",
+      "name": "Base Aérea de Tancos",
+      "aliases": [
+        "Paraclube Nacional Os Boinas Verdes",
+        "LPTN"
+      ],
+      "country": "PT",
+      "locality": "Tancos, Vila Nova da Barquinha, Santarém",
+      "latitude": 39.475101,
+      "longitude": -8.36458,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPTN; page https://ourairports.com/airports/LPTN/",
+      "icao": "LPTN",
+      "operators": [
+        {
+          "name": "Paraclube Nacional 'Os Boinas Verdes'"
+        },
+        {
+          "name": "Skydive Cerval",
+          "website": "https://www.skydivecerval.pt/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "O MIRANTE report dated 9 June 2026 describes beginners and experienced jumpers at the Boinas Verdes club in Tancos; Skydive Cerval also advertises Tancos as its jump zone.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://omirante.pt/cultura-e-lazer/2026-06-09-boinas-verdes-de-tancos-continuam-a-ensinar-a-voar-e-a-guardar-a-memoria-dos-paraquedistas-909a5e93",
+          "checked_on": "2026-11-14",
+          "what": "Dated report on civilian club parachuting at Tancos"
+        },
+        {
+          "url": "https://www.skydivecerval.pt/",
+          "checked_on": "2026-11-14",
+          "what": "Operator homepage explicitly identifies TANCOS as its jump zone"
+        }
+      ],
+      "note": "Military airfield with civilian club jumping supported by the 2026 O MIRANTE report and Skydive Cerval offer; access arrangements should be confirmed with the operator."
+    },
+    {
+      "key": "pt-vila-real",
+      "name": "Aeródromo Municipal de Vila Real",
+      "aliases": [
+        "Falcões do Marão",
+        "LPVR"
+      ],
+      "country": "PT",
+      "locality": "Vila Real",
+      "latitude": 41.2743,
+      "longitude": -7.72047,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPVR; page https://ourairports.com/airports/LPVR/",
+      "icao": "LPVR",
+      "operators": [
+        {
+          "name": "Associação de Paraquedismo 'Falcões do Marão'"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Listed on the FPPq dropzone page (undated); no 2025-2026 activity evidence found. A Yumping customer review dated 2026-06-06 (on the Skydive Porto Chaves page) regrets that there are no parachute jumps in Vila Real. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://www.yumping.com/pt/paraquedismo/skydive-porto-chaves--e19758946",
+          "checked_on": "2026-11-14",
+          "what": "customer review 2026-06-06 mentioning no jumps in Vila Real"
+        }
+      ]
+    },
+    {
+      "key": "pt-cerval",
+      "name": "Aeródromo do Cerval",
+      "aliases": [
+        "Skydive Cerval",
+        "Skydive Minho"
+      ],
+      "country": "PT",
+      "locality": "Vila Nova de Cerveira, Viana do Castelo",
+      "latitude": 41.972958,
+      "longitude": -8.673806,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident PT-0022; page https://ourairports.com/airports/PT-0022/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Cerval (Skydive Minho, Lda.)",
+          "website": "https://www.skydivecerval.pt/",
+          "facebook": "https://www.facebook.com/p/Skydive-Cerval-100063541482323"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Uncertain: operator website identifies Tancos as its jump zone while retaining the Cerval address; no dated recent jumps at Cerval itself confirmed.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of member associations, clubs and schools"
+        },
+        {
+          "url": "https://www.skydivecerval.pt/",
+          "checked_on": "2026-11-14",
+          "what": "operator homepage"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "pt-coimbra",
+      "name": "Aeródromo Municipal Bissaya Barreto",
+      "aliases": [
+        "Fly Skydive Coimbra",
+        "LPCO"
+      ],
+      "country": "PT",
+      "locality": "Antanhol, Coimbra",
+      "latitude": 40.158758,
+      "longitude": -8.470815,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPCO; page https://ourairports.com/airports/LPCO/",
+      "icao": "LPCO",
+      "operators": [
+        {
+          "name": "Fly Air Sports and Tourism - Skydive Coimbra"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Trip.com lists it as temporarily closed; not on the FPPq lists; operator site did not respond on 2026-11-14. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/dropzones/fly-skydive-coimbra/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator"
+        },
+        {
+          "url": "https://www.visitportugal.com/en/content/fly-air-sports-and-tourism-skydive-coimbra",
+          "checked_on": "2026-11-14",
+          "what": "tourism board listing"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ]
+    },
+    {
+      "key": "pt-maia",
+      "name": "Aeródromo de Vilar de Luz (Maia)",
+      "aliases": [
+        "Skydive Maia",
+        "LPVL"
+      ],
+      "country": "PT",
+      "locality": "Folgosa, Maia, Porto",
+      "latitude": 41.27729,
+      "longitude": -8.516209,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPVL; page https://ourairports.com/airports/LPVL/",
+      "icao": "LPVL",
+      "operators": [
+        {
+          "name": "Skydive Maia (Skydive Ibéria group)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Uncertain: May 2026 reporting traces the former operator from Maia to Spain and its eventual cessation; no evidence establishes whether another operator now jumps at Maia.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://skydivingsource.com/dropzones/skydive-maia/",
+          "checked_on": "2026-11-14",
+          "what": "aggregator"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        },
+        {
+          "url": "https://www.openstreetmap.org/node/8421707775",
+          "checked_on": "2026-11-14",
+          "what": "OSM: Skydive Maia, sport=parachuting"
+        },
+        {
+          "url": "https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 report traces former Maia operation to León and Valladolid; no evidence of a replacement Maia operator"
+        }
+      ],
+      "note": "Probably closed. OSM node 8421707775 'Skydive Maia' (41.28049, -8.51706) agrees with the airfield point."
+    },
+    {
+      "key": "pt-agueda-casarao",
+      "name": "Aeródromo do Casarão",
+      "aliases": [
+        "Paraclube de Águeda"
+      ],
+      "country": "PT",
+      "locality": "Aguada de Cima, Águeda, Aveiro",
+      "latitude": 40.548704,
+      "longitude": -8.40548,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident PT-0026; page https://ourairports.com/airports/PT-0026/",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Paraclube de Águeda",
+          "website": "http://www.paraclube.pt"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The Águeda entry is commented out (hidden) in the FPPq dropzone page source; no recent activity found. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Probably no longer used."
+    },
+    {
+      "key": "pt-figueira-dos-cavaleiros",
+      "name": "Aeródromo de Figueira dos Cavaleiros",
+      "aliases": [
+        "Aero Vip",
+        "LPFC"
+      ],
+      "country": "PT",
+      "locality": "Figueira dos Cavaleiros, Ferreira do Alentejo, Beja",
+      "latitude": 38.077502,
+      "longitude": -8.235832,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident ES-0025; page https://ourairports.com/airports/ES-0025/ (OurAirports files it under ES by mistake; the point is in Portugal)",
+      "icao": "LPFC",
+      "operators": [
+        {
+          "name": "Aero Vip (Skydive Seven)"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "The entry is commented out (hidden) in the FPPq dropzone page source; Skydive Seven now flies from Portimão. Codex cross-check: local-language 2025/2026 searches did not establish recent jumping at this airfield.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "FPPq list of dropzones in Portugal"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Probably no longer used."
+    },
+    {
+      "key": "pt-chaves",
+      "name": "Aeródromo Municipal de Chaves",
+      "aliases": [
+        "Skydive Porto Chaves",
+        "LPCH"
+      ],
+      "country": "PT",
+      "locality": "Chaves, Vila Real",
+      "latitude": 41.722356,
+      "longitude": -7.463064,
+      "coordinates_source": "OurAirports data (https://davidmegginson.github.io/ourairports-data/airports.csv), ident LPCH. The operator's Yumping map point (41.7261, -7.46687) is about 0.5 km away.",
+      "icao": "LPCH",
+      "operators": [
+        {
+          "name": "Skydive Porto (GoXtreme - Actividades Turísticas e Desportivas, Lda.)",
+          "website": "https://skydiveporto.com/"
+        }
+      ],
+      "season": "on announced weekends, mainly in season (customer review); no calendar published",
+      "status": "seasonal",
+      "status_evidence": "Yumping listing (last updated 23 September 2026) sells tandems from Chaves aerodrome, with a verified customer review dated 2026-06-06 for a 5000 m jump at Chaves. Search results also show a Skydive Portugal Instagram reel announcing a return to Chaves on 19-20 September (2026 per the search view; not opened, login wall).",
+      "sources": [
+        {
+          "url": "https://www.yumping.com/pt/paraquedismo/skydive-porto-chaves--e19758946",
+          "checked_on": "2026-11-14",
+          "what": "operator listing with dated reviews"
+        },
+        {
+          "url": "https://www.instagram.com/reel/DdbDCAUsEJy",
+          "checked_on": "2026-11-14",
+          "what": "Skydive Portugal reel about jumps at Chaves (search-result view only)"
+        },
+        {
+          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
+          "checked_on": "2026-11-14",
+          "what": "OurAirports airfield data (coordinates)"
+        }
+      ],
+      "note": "Visiting operation, not a resident dropzone: Skydive Porto and Skydive Portugal bring aircraft and instructors on announced weekends. Not on the FPPq dropzone page."
+    },
+    {
+      "key": "pt-rio-maior",
+      "name": "Complexo Desportivo de Rio Maior landing area",
+      "aliases": [],
+      "country": "PT",
+      "locality": "Rio Maior, Santarém",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "Pára-Clube Nacional Os Boinas Verdes"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Report dated 11 August 2026 announces the recurring Portugal precision-landing cup at the sports-complex training fields on 7–8 November 2026, identifying the organiser and previous annual editions.",
+      "sources": [
+        {
+          "url": "https://noticiasdosorraia.sapo.pt/taca-de-portugal-de-paraquedismo-passa-para-novembro-em-rio-maior/",
+          "checked_on": "2026-11-14",
+          "what": "Dated annual competition announcement and named landing grounds"
+        }
+      ],
+      "note": "Added by Codex as a recurring competition landing place, not a daily tandem centre. Exact training-field coordinates were not established; a town or sports-complex office point is not substituted.",
+      "season": "Annual competition; 7–8 November in 2026"
+    },
+    {
+      "key": "pt-espinho",
+      "name": "Aeródromo de Espinho",
+      "country": "PT",
+      "locality": "Paramos, Espinho",
+      "latitude": 40.9775,
+      "longitude": -8.641944,
+      "coordinates_source": "https://ais.nav.pt/wp-content/uploads/AIS_Files/eVFR_Current/eVFR_Online/eAIP/html/eAIP/LP-ENR-5.5-pt-PT.html",
+      "icao": "LPIN",
+      "operators": [
+        {
+          "name": "Skydive Europe / Queda Livre"
+        },
+        {
+          "name": "Skydive Porto"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "2026 AIP retains the parachuting area and a booking listing was updated in August 2026, but the operator describes special-event use and a seller reports runway-maintenance closure; actual resumption at Espinho is unconfirmed.",
+      "sources": [
+        {
+          "url": "https://skydivingsource.com/locations/europe/portugal/",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://visitporto.travel/pt-PT/poi/5cd04b54f979e000012c9a35",
+          "checked_on": "2026-11-14",
+          "what": "Tourism authority identifies the Espinho airfield operation"
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "Operator says Espinho is used for special events; main jumps elsewhere"
+        },
+        {
+          "url": "https://godiscoverportugal.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "Undated closure notice and alternative at Maia"
+        },
+        {
+          "url": "https://www.yumping.com/en/skydiving/skydive-porto-espinho--e19758951",
+          "checked_on": "2026-11-14",
+          "what": "Booking listing identifies Espinho; last update August 2026"
+        },
+        {
+          "url": "https://ais.nav.pt/wp-content/uploads/AIS_Files/eVFR_Current/eVFR_Online/eAIP/html/eAIP/LP-ENR-5.5-pt-PT.html",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ],
+      "note": "AIP area designation does not prove current jump operations. Historical and advertised operators are retained for identification."
+    },
+    {
+      "key": "pt-braganca",
+      "name": "Aeródromo Municipal de Bragança",
+      "country": "PT",
+      "locality": "Bragança",
+      "latitude": 41.8578,
+      "longitude": -6.70713,
+      "coordinates_source": "https://ourairports.com/airports/LPBG/",
+      "icao": "LPBG",
+      "operators": [
+        {
+          "name": "Centro de Paracaidismo Galsur / Skydive Bragança"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historic directories identify the airport operation; no dated 2025+ civilian jump programme was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/portugal/centro-de-paracaidismo-galsur-skydive-braganca",
+          "checked_on": "2026-11-14",
+          "what": "Historical dropzone listing"
+        },
+        {
+          "url": "https://skydivelocations.com/country/portugal/braganca/150/centro-de-paracaidismo-galsur-skydive-braganca",
+          "checked_on": "2026-11-14",
+          "what": "Explicit Bragança Airport address; listing last updated nine years ago"
+        },
+        {
+          "url": "https://ourairports.com/airports/LPBG/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    },
+    {
+      "key": "pt-ponte-de-sor",
+      "name": "Aeródromo Municipal de Ponte de Sor",
+      "country": "PT",
+      "locality": "Ponte de Sor",
+      "latitude": 39.211545,
+      "longitude": -8.057787,
+      "coordinates_source": "https://ourairports.com/airports/LPSO/",
+      "icao": "LPSO",
+      "operators": [
+        {
+          "name": "Sky Medley Escola de Pára-Quedismo"
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Municipal minutes confirm a resident school in 2006; no 2025+ evidence of continuing regular jumps was found.",
+      "sources": [
+        {
+          "url": "https://dropzonefinder.com/dropzones/portugal/sky-medley-skydive-center",
+          "checked_on": "2026-11-14",
+          "what": "Aggregator lead"
+        },
+        {
+          "url": "https://www.cm-pontedesor.pt/wp-content/uploads/2019/03/ata-n_37_2006_13_09_2006.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Municipal minutes dated 13 September 2006 identify school facilities at this airfield"
+        },
+        {
+          "url": "https://ourairports.com/airports/LPSO/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield position"
+        }
+      ]
+    }
+  ]
+}

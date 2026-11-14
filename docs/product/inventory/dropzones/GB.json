@@ -1,0 +1,1108 @@
+{
+  "country": "GB",
+  "researched_on": "2026-11-14",
+  "researcher": "codex",
+  "dropzones": [
+    {
+      "key": "gb-beccles",
+      "name": "Beccles Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Ellough, Beccles, Suffolk",
+      "latitude": 52.43528,
+      "longitude": 1.61833,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Beccles_Airfield",
+      "icao": "EGSM",
+      "operators": [
+        {
+          "name": "Beccles Skydivers / UK Parachuting",
+          "website": "https://ukparachuting.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Official operator publishes jump prices effective 1 March 2026 at Beccles and Sibson; federation lists the site.",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Beccles_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://ukparachuting.co.uk/contact/",
+          "checked_on": "2026-11-14",
+          "what": "Operating days and winter closure."
+        },
+        {
+          "url": "https://ukparachuting.co.uk/our-facilities-prices/",
+          "checked_on": "2026-11-14",
+          "what": "Jump prices effective 1 March 2026 at both airfields."
+        }
+      ]
+    },
+    {
+      "key": "gb-cark",
+      "name": "Cark Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Flookburgh, Cumbria",
+      "latitude": 54.1625,
+      "longitude": -2.95833,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_Cark",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Northwest",
+          "website": "http://www.skydivenorthwest.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_Cark",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-chatteris",
+      "name": "Chatteris Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Wimblington, Cambridgeshire",
+      "latitude": 52.4873,
+      "longitude": 0.0891,
+      "coordinates_source": "https://www.pilotnav.com/airport/airport-13325",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Chatteris Club",
+          "website": "http://www.ukskydiving.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://www.pilotnav.com/airport/airport-13325",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-chiltern-park",
+      "name": "Chiltern Park Aerodrome",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Ipsden, Oxfordshire",
+      "latitude": 51.55278,
+      "longitude": -1.10056,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Chiltern_Park_Aerodrome",
+      "icao": null,
+      "operators": [
+        {
+          "name": "London Parachute School",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Airport article records closure on 24 September 2021. No dated 2025+ jumping evidence found; retained as uncertain under the inventory recency rule.",
+      "sources": [
+        {
+          "url": "https://en.wikipedia.org/wiki/Chiltern_Park_Aerodrome",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-cockerham",
+      "name": "Cockerham parachute landing field",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Cockerham, Lancashire",
+      "latitude": 53.9622,
+      "longitude": -2.83278,
+      "coordinates_source": "https://mapcarta.com/W179720888",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Black Knights Parachute Club",
+          "website": "http://www.bkpc.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://mapcarta.com/W179720888",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-dunkeswell",
+      "name": "Dunkeswell Aerodrome",
+      "aliases": [
+        "Skydive Buzz",
+        "Skydive UK"
+      ],
+      "country": "GB",
+      "locality": "Dunkeswell, Devon",
+      "latitude": 50.86,
+      "longitude": -3.23472,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Dunkeswell_Aerodrome",
+      "icao": "EGTU",
+      "operators": [
+        {
+          "name": "Skydive Southwest",
+          "website": "https://skydivesouthwest.com/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Dunkeswell_Aerodrome",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "June 2025 federation PDF names Skydive Buzz; live federation list names Skydive Southwest at the same airfield."
+    },
+    {
+      "key": "gb-errol",
+      "name": "Errol Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Errol, Perth and Kinross",
+      "latitude": 56.40556,
+      "longitude": -3.18,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_Errol",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Paragon Skydiving Club",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Historical directory lists Paragon; absent from the live federation list. No dated 2025+ jumping or closure evidence found.",
+      "sources": [
+        {
+          "url": "https://www.skydiveworld.com/english/greatbrit.html",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_Errol",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-glenrothes",
+      "name": "Fife Airport",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Glenrothes, Fife",
+      "latitude": 56.18333,
+      "longitude": -3.22028,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Fife_Airport",
+      "icao": "EGPJ",
+      "operators": [
+        {
+          "name": "Skydive St Andrews",
+          "website": "http://www.skydivestandrews.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Fife_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-grindale",
+      "name": "East Leys Farm Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Grindale, East Yorkshire",
+      "latitude": 54.1207,
+      "longitude": -0.2365,
+      "coordinates_source": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive GB",
+          "website": "http://www.skydivegb.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-headcorn",
+      "name": "Headcorn Aerodrome",
+      "aliases": [
+        "Skydive Headcorn",
+        "Headcorn Parachute Club"
+      ],
+      "country": "GB",
+      "locality": "Headcorn, Kent",
+      "latitude": 51.15667,
+      "longitude": 0.6425,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Headcorn_Aerodrome",
+      "icao": "EGKH",
+      "operators": [
+        {
+          "name": "GoSkydive Headcorn",
+          "website": "https://www.goskydive.com/locations"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Headcorn_Aerodrome",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://www.goskydive.com/locations",
+          "checked_on": "2026-11-14",
+          "what": "Operator lists Headcorn, Old Sarum and Swansea."
+        }
+      ]
+    },
+    {
+      "key": "gb-hibaldstow",
+      "name": "Hibaldstow Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Hibaldstow, North Lincolnshire",
+      "latitude": 53.49722,
+      "longitude": -0.52278,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_Hibaldstow",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Hibaldstow",
+          "website": "http://www.skydiving.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_Hibaldstow",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-hinton-in-the-hedges",
+      "name": "Hinton-in-the-Hedges Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Steane, Brackley, Northamptonshire",
+      "latitude": 52.02833,
+      "longitude": -1.21,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Hinton-in-the-Hedges_Airfield",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Hinton",
+          "website": "http://www.skydive.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Hinton-in-the-Hedges_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-langar",
+      "name": "Langar Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Langar, Nottinghamshire",
+      "latitude": 52.89167,
+      "longitude": -0.90194,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_Langar",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Langar",
+          "website": "http://www.skydivelangar.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_Langar",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-lewknor",
+      "name": "Lewknor former parachute landing area",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Lewknor, Oxfordshire",
+      "latitude": null,
+      "longitude": null,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [
+        {
+          "name": "London Parachute School",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "June 2011 federation minutes say the school could no longer use Lewknor and moved to Chiltern Park. No dated 2025+ evidence found.",
+      "sources": [
+        {
+          "url": "https://www.skydive-safety.com/Parachuting-Forms/BPA-Documents/Minutes/STC2011069.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates are null: no opened source established the former landing-area position."
+    },
+    {
+      "key": "gb-movenis",
+      "name": "Movenis Airfield",
+      "aliases": [
+        "Wild Geese Parachute Centre"
+      ],
+      "country": "GB",
+      "locality": "Garvagh, County Londonderry, Northern Ireland",
+      "latitude": 54.98617,
+      "longitude": -6.64417,
+      "coordinates_source": "https://mapcarta.com/35768412",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Ireland",
+          "website": "http://www.skydiveireland.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://mapcarta.com/35768412",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Northern Ireland is GB. Airfield coordinates are from the opened Mapcarta/GeoNames page."
+    },
+    {
+      "key": "gb-netheravon",
+      "name": "Netheravon Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Netheravon, Wiltshire",
+      "latitude": 51.24528,
+      "longitude": -1.75889,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Netheravon_Airfield",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Army Parachute Association",
+          "website": "https://www.netheravon.com"
+        },
+        {
+          "name": "Army Adventure Training Air Wing",
+          "website": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Netheravon_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Shared military and civilian sport site; the federation lists two training organisations at one airfield."
+    },
+    {
+      "key": "gb-old-buckenham",
+      "name": "Old Buckenham Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Old Buckenham, Norfolk",
+      "latitude": 52.4975,
+      "longitude": 1.052,
+      "coordinates_source": "https://www.pooleys.com/media/10033/old-buckenham-egsv_cropped.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "UK Parachuting",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "2019 report says the operation moved to Beccles in 2010; 2020 Pooleys plate says parachuting ceased. No dated 2025+ confirmation found.",
+      "sources": [
+        {
+          "url": "https://www.businessairnews.com/mag_story.html?ident=15543",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://www.pooleys.com/media/10033/old-buckenham-egsv_cropped.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-old-sarum",
+      "name": "Old Sarum Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Salisbury, Wiltshire",
+      "latitude": 51.09889,
+      "longitude": -1.78417,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Old_Sarum_Airfield",
+      "icao": "EGLS",
+      "operators": [
+        {
+          "name": "GoSkydive",
+          "website": "https://www.goskydive.com/locations"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "June 2025 federation Form 192 lists this dropzone; GoSkydive locations page checked 2026-11-14 continues to advertise it.",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Old_Sarum_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://www.goskydive.com/locations",
+          "checked_on": "2026-11-14",
+          "what": "Official operator lists this airfield."
+        }
+      ],
+      "note": "General-airfield closure in the airport article does not describe GoSkydive cessation; operator still lists skydiving here."
+    },
+    {
+      "key": "gb-perranporth",
+      "name": "Perranporth Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Higher Trevellas, Cornwall",
+      "latitude": 50.33056,
+      "longitude": -5.17944,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Perranporth_Airfield",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Cornish Parachute Club",
+          "website": "http://www.cornishparachuteclub.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Perranporth_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-redlands",
+      "name": "Redlands Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Wanborough, Wiltshire",
+      "latitude": 51.5633,
+      "longitude": -1.7019,
+      "coordinates_source": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive London",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Airfield owner announced September 2019 closure and Skydive London cessation. No dated 2025+ confirmation found; retained as an uncertain historical site rather than active.",
+      "sources": [
+        {
+          "url": "https://www.redlandsairfield.co.uk/planning.htm",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-sandown",
+      "name": "Sandown Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Sandown, Isle of Wight",
+      "latitude": 50.65306,
+      "longitude": -1.18222,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Isle_of_Wight/Sandown_Airport",
+      "icao": "EGHN",
+      "operators": [
+        {
+          "name": "Skydive Sandown",
+          "website": "https://skydivesandown.com"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Isle_of_Wight/Sandown_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-shotton",
+      "name": "Shotton Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Shotton Colliery, County Durham",
+      "latitude": 54.7664,
+      "longitude": -1.3825,
+      "coordinates_source": "https://mapcarta.com/W113117547",
+      "icao": null,
+      "operators": [
+        {
+          "name": "SkyHigh Skydiving",
+          "website": "https://skyhighskydiving.co.uk/"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Federation lists the site; operator booking page announces a winter closure and February 2026 reopening.",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://mapcarta.com/W113117547",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://book.skyhighskydiving.co.uk/",
+          "checked_on": "2026-11-14",
+          "what": "Seasonal booking notice with February 2026 reopening."
+        }
+      ],
+      "note": "Booking closure banner refers to the preceding winter; exact 2026–27 winter dates were not established."
+    },
+    {
+      "key": "gb-sibson",
+      "name": "Peterborough/Sibson Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Sibson, Cambridgeshire",
+      "latitude": 52.55583,
+      "longitude": -0.38639,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Peterborough/Sibson_Airfield",
+      "icao": "EGSP",
+      "operators": [
+        {
+          "name": "Sibson Skydivers / UK Parachuting",
+          "website": "https://ukparachuting.co.uk"
+        }
+      ],
+      "status": "seasonal",
+      "status_evidence": "Official operator publishes jump prices effective 1 March 2026 at Beccles and Sibson; federation lists the site.",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Peterborough/Sibson_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://ukparachuting.co.uk/contact/",
+          "checked_on": "2026-11-14",
+          "what": "Operating days and winter closure."
+        },
+        {
+          "url": "https://ukparachuting.co.uk/our-facilities-prices/",
+          "checked_on": "2026-11-14",
+          "what": "Jump prices effective 1 March 2026 at both airfields."
+        }
+      ],
+      "season": "March–November; December–February closed (operator contact page)."
+    },
+    {
+      "key": "gb-south-cerney",
+      "name": "South Cerney Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "South Cerney, Gloucestershire",
+      "latitude": 51.69083,
+      "longitude": -1.92444,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_South_Cerney",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive South Cerney",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Older directory lists the site; no dated 2025+ civilian jumping confirmation found. Directory closure claims do not establish the status of all military activity.",
+      "sources": [
+        {
+          "url": "https://www.skydiveworld.com/english/greatbrit.html",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_South_Cerney",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-strathallan",
+      "name": "Strathallan Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Auchterarder, Perthshire",
+      "latitude": 56.3248,
+      "longitude": -3.7463,
+      "coordinates_source": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive Strathallan",
+          "website": "https://skydivestrathallan.co.uk/"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://skydivestrathallan.co.uk/contact-us/",
+          "checked_on": "2026-11-14",
+          "what": "Weekend operation and dated 2026/2027 availability."
+        }
+      ],
+      "season": "Weekends"
+    },
+    {
+      "key": "gb-swansea",
+      "name": "Swansea Airport",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Fairwood Common, Swansea, Wales",
+      "latitude": 51.60528,
+      "longitude": -4.06778,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Swansea_Airport",
+      "icao": "EGFH",
+      "operators": [
+        {
+          "name": "GoSkydive Swansea",
+          "website": "https://www.goskydive.com/locations"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Airport notice dated 25 August 2026 explicitly confirms skydiving continues; GoSkydive lists Swansea.",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Swansea_Airport",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://www.goskydive.com/locations",
+          "checked_on": "2026-11-14",
+          "what": "Official operator lists this airfield."
+        },
+        {
+          "url": "https://www.swansea-airport.wales/news/",
+          "checked_on": "2026-11-14",
+          "what": "25 August 2026 airport notice explicitly says skydiving remains open."
+        }
+      ]
+    },
+    {
+      "key": "gb-teesside",
+      "name": "Teesside International Airport parachute site",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Middleton St George, County Durham",
+      "latitude": 54.5094,
+      "longitude": -1.429,
+      "coordinates_source": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+      "icao": null,
+      "operators": [
+        {
+          "name": "Skydive St George",
+          "website": null
+        }
+      ],
+      "status": "uncertain",
+      "status_evidence": "Airport-history site dates this operation 2013–2016 and says it moved to Shotton then stopped. No dated 2025+ DZ evidence found.",
+      "sources": [
+        {
+          "url": "https://dtvmovements.co.uk/Info/History/Previous_Operators.htm",
+          "checked_on": "2026-11-14",
+          "what": "Historical operation or cessation evidence; not proof of present activity."
+        },
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
+    },
+    {
+      "key": "gb-tilstock",
+      "name": "Whitchurch (Tilstock) Airfield",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Tilstock, Shropshire",
+      "latitude": 52.931,
+      "longitude": -2.651,
+      "coordinates_source": "https://en.wikipedia.org/wiki/Whitchurch_(Tilstock)_Airfield",
+      "icao": "EGCT",
+      "operators": [
+        {
+          "name": "Skydive Tilstock Freefall Club",
+          "website": "http://www.skydivetilstock.co.uk"
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Whitchurch_(Tilstock)_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ]
+    },
+    {
+      "key": "gb-weston-on-the-green",
+      "name": "RAF Weston-on-the-Green",
+      "aliases": [],
+      "country": "GB",
+      "locality": "Weston-on-the-Green, Oxfordshire",
+      "latitude": 51.87917,
+      "longitude": -1.22639,
+      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_Weston-on-the-Green",
+      "icao": null,
+      "operators": [
+        {
+          "name": "RAF Sport Parachute Association",
+          "website": null
+        }
+      ],
+      "status": "active",
+      "status_evidence": "Listed on the British Skydiving live affiliated-dropzone list checked 2026-11-14; corroborated by Form 192 issue 33 (June 2025).",
+      "sources": [
+        {
+          "url": "https://britishskydiving.org/find-drop-zone/",
+          "checked_on": "2026-11-14",
+          "what": "Live federation list: place and operator."
+        },
+        {
+          "url": "https://britishskydiving.org/wp-content/uploads/2025/06/Form-192-DZ-Frequencies-and-contacts-issue-33.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Dated June 2025 federation dropzone list."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/RAF_Weston-on-the-Green",
+          "checked_on": "2026-11-14",
+          "what": "Airfield or landing-area coordinates."
+        }
+      ],
+      "note": "Military site with sport parachuting; civilian eligibility and access conditions need checking with the club. Federation entries consolidated at the same airfield."
+    }
+  ]
+}
