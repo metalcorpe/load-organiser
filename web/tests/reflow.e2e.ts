@@ -44,6 +44,13 @@ async function world(): Promise<World> {
 		country: 'IS',
 		...source
 	});
+	// A dropzone whose name has one long word, as the directory's list shows it.
+	await created('/directory/venues', reviewer, {
+		name: `Reflow ${tag} ${LONG}`,
+		locality: LONG,
+		country: 'IS',
+		...source
+	});
 	const provider = await created('/directory/providers', reviewer, {
 		name: `Reflow Club ${tag}`,
 		kind: 'organization',
@@ -147,6 +154,7 @@ async function world(): Promise<World> {
 			guest: [
 				'/',
 				'/dz',
+				`/dz?q=${tag}`,
 				'/dz?view=map',
 				`/dz/${venue.id}`,
 				`/events/${listing.id}`,

@@ -585,6 +585,14 @@ legend {
 	text-decoration: none;
 }
 
+/* Each row is a grid of its own, so one long word in a name (a compound place name) would keep
+   its whole width and push the row past the screen; it breaks instead, only when it alone does
+   not fit a line. */
+.results.rows > li > .title,
+.results.rows > li > .meta {
+	overflow-wrap: anywhere;
+}
+
 .results.rows > li > a.title::after {
 	content: '';
 	position: absolute;
