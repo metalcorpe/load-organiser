@@ -11,9 +11,10 @@ import {
 	uniqueEmail
 } from './support/accounts.ts';
 import { PRIVATE_PATHS } from './support/paths.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Production cookie path: HTTPS workerd preview with the __Host- Secure cookie.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 const COOKIE = '__Host-organiser_session';
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 

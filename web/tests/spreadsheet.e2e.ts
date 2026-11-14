@@ -2,9 +2,10 @@ import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { expect, test, type Page } from '@playwright/test';
 import { PASSWORD, apiCall, apiSession, createAccount } from './support/accounts.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Same production-cookie preview as the account tests.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 
 async function signIn(page: Page, email: string, returnTo = '/records') {

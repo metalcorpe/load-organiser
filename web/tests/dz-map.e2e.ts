@@ -2,10 +2,11 @@ import AxeBuilder from '@axe-core/playwright';
 import { randomBytes } from 'node:crypto';
 import { expect, test, type Page, type Request } from '@playwright/test';
 import { apiCall, reviewerSession } from './support/accounts.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // The Map view of the dropzone directory (/dz?view=map). Tiles are never fetched from the real
 // OpenStreetMap servers here: every tile request is answered with a 1x1 PNG.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 
 const SOURCE = { source_url: 'https://example.org/dz-map', checked_on: '2026-11-01' };

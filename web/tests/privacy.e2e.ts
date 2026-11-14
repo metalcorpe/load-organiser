@@ -1,9 +1,10 @@
 import { randomBytes } from 'node:crypto';
 import { expect, test, type Page } from '@playwright/test';
 import { PASSWORD, createAccount } from './support/accounts.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Privacy page and beta feedback (#162) on the production-cookie preview.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 
 async function signIn(page: Page, email: string, password: string, returnTo: string) {

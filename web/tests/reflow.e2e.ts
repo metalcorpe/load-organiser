@@ -8,13 +8,14 @@ import {
 	reviewerCredentials,
 	reviewerSession
 } from './support/accounts.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Reflow with enlarged text (WCAG 1.4.4 and 1.4.10): 320 CSS px wide, text at 200%. The page
 // text keeps its words whole (overflow-wrap: break-word, app.css), so the long unbroken strings
 // (web addresses, emails, handles) need overflow-wrap: anywhere where they are shown. Here each
 // one is as long as allowed or longer, and the page content must still not reach past the
 // right edge of the screen.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true, viewport: { width: 320, height: 640 } });
 
 /** Forty letters with no break opportunity, repeated in addresses and messages below. */

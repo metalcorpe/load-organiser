@@ -7,7 +7,13 @@
 #   E2E_ARGS="tests/logbook.e2e.ts --project=chromium-320" scripts/verify.sh e2e
 #     passes Playwright options through: one file, one device, -g 'test name'...
 #     (shell-evaluated: a developer convenience, not for untrusted input).
-#   E2E_WORKERS=N sets parallel browsers (default 1; more was not faster here, see playwright.config.ts).
+#   E2E_STACKS=N runs the e2e suite as N Playwright shards side by side, each against its own
+#     stack: database, API, mail outbox, reviewer account and three previews (default 2 for a
+#     full run, 1 when E2E_ARGS narrows it). Within a stack tests still run one at a time.
+#   E2E_PORT_BASE (default 4173) and VERIFY_API_PORT (default 8144): the first stack's preview
+#     and API ports; stack i adds 10 * (i - 1) and i - 1. Give a second checkout other values
+#     to run its gate at the same time.
+#   E2E_WORKERS=N sets parallel browsers within a stack (default 1; see playwright.config.ts).
 #   `web` before `e2e` in the same run builds once; e2e alone builds itself.
 #
 # Never reads the repository .env: backend commands run from an empty temporary
@@ -17,9 +23,9 @@
 #   - nothing set: a throwaway cluster is created with `initdb` (on PATH, or PG_BIN)
 #     and removed afterwards;
 #   - VERIFY_PG_HOST/PORT/USER/PASSWORD for an existing *disposable* server, plus
-#     VERIFY_PG_DISPOSABLE=yes. The databases verify_backend, verify_e2e,
-#     verify_recovery, verify_restored and verify_fresh on it are dropped and
-#     recreated; no other database is touched.
+#     VERIFY_PG_DISPOSABLE=yes. The databases verify_backend, verify_e2e (or
+#     verify_e2e_1 to _N with E2E_STACKS), verify_recovery, verify_restored and
+#     verify_fresh on it are dropped and recreated; no other database is touched.
 #
 # CI=true runs `npm ci` before the web stages. Playwright browsers must be installed
 # (`npx playwright install chromium webkit`). Nothing here deploys or contacts paid services.
@@ -34,10 +40,12 @@ for stage in $STAGES; do
 done
 
 SCRATCH=$(mktemp -d "${TMPDIR:-/tmp}/organiser-verify.XXXXXX")
-API_PID=""
+API_PIDS=""
+SHARD_PIDS=""
 PG_CLUSTER=""
 cleanup() {
-  [ -n "$API_PID" ] && kill "$API_PID" 2>/dev/null || true
+  local pid
+  for pid in $SHARD_PIDS $API_PIDS; do kill "$pid" 2>/dev/null || true; done
   [ -n "$PG_CLUSTER" ] && "$PG_BIN_DIR/pg_ctl" -D "$PG_CLUSTER" stop -m fast >/dev/null 2>&1 || true
   rm -rf "$SCRATCH"
 }
@@ -158,32 +166,39 @@ stage_storybook() {
   (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } && npm run storybook:build)
 }
 
-stage_e2e() {
-  log "e2e: fresh database verify_e2e and isolated API"
-  local env_file outbox proxy_key api_port=${VERIFY_API_PORT:-8144}
-  env_file=$(backend_env verify_e2e)
-  outbox="$SCRATCH/outbox"
+# One isolated e2e stack, $1 of $2: a fresh database (verify_e2e, or verify_e2e_<i> when there
+# are several), an API, a mail outbox and a reviewer account. Stack i's previews use ports from
+# E2E_PORT_BASE + 10 * (i - 1) and its API VERIFY_API_PORT + i - 1. Leaves the environment of
+# its Playwright run in $SCRATCH/e2e-<i>.env.
+e2e_stack() {
+  local i=$1 n=$2 db=verify_e2e env_file outbox proxy_key api_port port_base
+  [ "$n" -gt 1 ] && db="verify_e2e_$i"
+  api_port=$((${VERIFY_API_PORT:-8144} + i - 1))
+  port_base=$((${E2E_PORT_BASE:-4173} + 10 * (i - 1)))
+  log "e2e: stack $i of $n: fresh database $db, API on :$api_port, previews from :$port_base"
+  env_file=$(backend_env "$db")
+  outbox="$SCRATCH/outbox-$i"
   proxy_key=$(secret 24)
   mkdir -p "$outbox"
   cat >>"$env_file" <<EOF
 export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_SUBMISSIONS_OPEN=true SKYDIVER_PUBLISHING_OPEN=true SKYDIVER_MAX_ACCOUNTS=1000
-export SKYDIVER_WEB_ORIGIN=https://127.0.0.1:4175 SKYDIVER_WEB_PROXY_KEY=$proxy_key
+export SKYDIVER_WEB_ORIGIN=https://127.0.0.1:$((port_base + 2)) SKYDIVER_WEB_PROXY_KEY=$proxy_key
 export SKYDIVER_MAIL_OUTBOX_DIR=$outbox
 EOF
-  recreate_db "$env_file" verify_e2e
+  recreate_db "$env_file" "$db"
   (cd "$SCRATCH/empty" && exec env -i PATH="$PATH" HOME="$HOME" bash -c \
     ". '$env_file'; exec uv run --project '$B' uvicorn app.main:app --host 127.0.0.1 --port $api_port --app-dir '$B'") \
-    >"$SCRATCH/api.log" 2>&1 &
-  API_PID=$!
+    >"$SCRATCH/api-$i.log" 2>&1 &
+  API_PIDS="$API_PIDS $!"
   for _ in $(seq 1 60); do
     curl -sf "http://127.0.0.1:$api_port/api/skydiver/v1/health" >/dev/null && break
     sleep 0.5
   done
   curl -sf "http://127.0.0.1:$api_port/api/skydiver/v1/health" >/dev/null || {
-    tail -20 "$SCRATCH/api.log" >&2
+    tail -20 "$SCRATCH/api-$i.log" >&2
     exit 1
   }
-  log "e2e: reviewer account (registered through the API, role granted by the operator command)"
+  # The reviewer is registered through the API; the role is granted by the operator command.
   local reviewer_email reviewer_password
   reviewer_email="reviewer-$(secret 6)@example.com"
   reviewer_password=$(secret 16)
@@ -192,16 +207,53 @@ EOF
     -H 'x-organiser-client-ip: 10.99.0.1' \
     -d "{\"email\":\"$reviewer_email\",\"password\":\"$reviewer_password\"}"
   in_backend "$env_file" "PYTHONPATH='$B' uv run --project '$B' python -m app.skydiver.access.grant reviewer '$reviewer_email'"
+  cat >"$SCRATCH/e2e-$i.env" <<EOF
+export E2E_API_ORIGIN=http://127.0.0.1:$api_port E2E_MAIL_OUTBOX=$outbox E2E_API_PROXY_KEY=$proxy_key
+export E2E_REVIEWER_EMAIL=$reviewer_email E2E_REVIEWER_PASSWORD=$reviewer_password
+export E2E_PORT_BASE=$port_base
+EOF
+  [ "$n" -gt 1 ] && echo "export E2E_OUTPUT_DIR=test-results/stack-$i" >>"$SCRATCH/e2e-$i.env"
+  return 0
+}
 
-  log "e2e: Playwright against workerd previews"
+# Measured 2026-11-14 on an 8-core M3 with other work using about 3.5 cores: one stack used
+# about 1.5 cores, its parts waiting on each other; the full suite took about 15 minutes. Two
+# stacks took 11.5 minutes including setup. Three left no spare CPU, and slow tests (axe on
+# WebKit) ran into their timeouts. Shards never share a database, so no test meets another's
+# data mid-run.
+stage_e2e() {
+  local n=${E2E_STACKS:-} i failed=""
+  [ -n "$n" ] || { [ -n "${E2E_ARGS:-}" ] && n=1 || n=2; }
+  case "$n" in '' | *[!0-9]* | 0) echo "E2E_STACKS must be a whole number from 1" >&2; exit 2 ;; esac
+  for i in $(seq 1 "$n"); do e2e_stack "$i" "$n"; done
+
   (cd "$W" && { [ -z "${CI:-}" ] || [ -d node_modules ] || npm ci; } &&
-    E2E_API_ORIGIN="http://127.0.0.1:$api_port" E2E_MAIL_OUTBOX="$outbox" \
-      E2E_API_PROXY_KEY="$proxy_key" E2E_REVIEWER_EMAIL="$reviewer_email" \
-      E2E_REVIEWER_PASSWORD="$reviewer_password" bash -c \
-      "if [ '${WEB_BUILT:-}' = yes ]; then npx playwright test ${E2E_ARGS:-}; else npm run build && npx playwright test ${E2E_ARGS:-}; fi")
-  if grep -q 'HTTP/1.1" 5' "$SCRATCH/api.log"; then
+    if [ "${WEB_BUILT:-}" != yes ]; then npm run build; fi)
+  # E2E_ARGS is shell-evaluated (see the top of this file).
+  local run="exec ./node_modules/.bin/playwright test ${E2E_ARGS:-}"
+  if [ "$n" -eq 1 ]; then
+    log "e2e: Playwright against workerd previews"
+    (cd "$W" && bash -c ". '$SCRATCH/e2e-1.env'; $run")
+  else
+    log "e2e: Playwright against workerd previews, $n shards side by side (output follows each shard)"
+    for i in $(seq 1 "$n"); do
+      (cd "$W" && exec bash -c ". '$SCRATCH/e2e-$i.env'; $run --shard=$i/$n --pass-with-no-tests") \
+        >"$SCRATCH/e2e-$i.log" 2>&1 &
+      SHARD_PIDS="$SHARD_PIDS $!"
+    done
+    i=0
+    for pid in $SHARD_PIDS; do
+      i=$((i + 1))
+      wait "$pid" || failed="$failed $i"
+      log "e2e: shard $i of $n"
+      cat "$SCRATCH/e2e-$i.log"
+    done
+    SHARD_PIDS=""
+    [ -z "$failed" ] || { echo "e2e: shard(s)$failed failed (output above)" >&2; exit 1; }
+  fi
+  if grep -q 'HTTP/1.1" 5' "$SCRATCH"/api-*.log; then
     echo "API answered 5xx during e2e:" >&2
-    grep 'HTTP/1.1" 5' "$SCRATCH/api.log" >&2
+    grep 'HTTP/1.1" 5' "$SCRATCH"/api-*.log >&2
     exit 1
   fi
 }

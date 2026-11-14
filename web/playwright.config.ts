@@ -1,11 +1,14 @@
 import { defineConfig, devices } from '@playwright/test';
+import { PLAIN_ORIGIN, PLAIN_PORT, SECURE_PORT, UNREACHABLE_PORT } from './tests/support/origins.ts';
 
 // Exercises the production Cloudflare build in local workerd previews
 // (`wrangler dev`), not the Vite dev server. Run through `npm run test:e2e`,
 // which builds first. Origins and keys are explicit; no .env file is loaded.
-//   :4173 http  -> E2E_API_ORIGIN (an isolated FastAPI + disposable PostgreSQL)
-//   :4174 http  -> a closed loopback port, to exercise the upstream-failure path
-//   :4175 https -> E2E_API_ORIGIN with the production __Host- Secure cookie (#145)
+// Ports from E2E_PORT_BASE (default 4173; tests/support/origins.ts):
+//   base     http  -> E2E_API_ORIGIN (an isolated FastAPI + disposable PostgreSQL)
+//   base + 1 http  -> a closed loopback port, to exercise the upstream-failure path
+//   base + 2 https -> E2E_API_ORIGIN with the production __Host- Secure cookie (#145)
+// Each preview's inspector listens on its port + 5071 (9244 to 9246 by default).
 const apiOrigin = process.env.E2E_API_ORIGIN ?? 'http://127.0.0.1:8144';
 const unreachableOrigin = 'http://127.0.0.1:9';
 const proxyKey = process.env.E2E_API_PROXY_KEY ?? '';
@@ -38,11 +41,14 @@ const preview = ({ port, api, inspector, https = false }: Preview) => {
 export default defineConfig({
 	testDir: 'tests',
 	testMatch: '**/*.e2e.ts',
-	// One browser at a time by default. Measured 2026-11-11: 4 workers were not faster on an
-	// 8-core machine (previews, API and database compete for the same CPU) and exposed
-	// timing assumptions in several tests. E2E_WORKERS=N to experiment.
+	// One browser at a time against one database and API. Measured 2026-11-11: 4 workers were
+	// not faster on an 8-core machine and exposed timing assumptions in several tests (they
+	// share one database). scripts/verify.sh runs shards side by side instead (E2E_STACKS),
+	// each with its own database and API. E2E_WORKERS=N to experiment.
 	workers: Number(process.env.E2E_WORKERS) || 1,
-	use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
+	// Separate per run, so shards running side by side do not clear each other's results.
+	outputDir: process.env.E2E_OUTPUT_DIR || 'test-results',
+	use: { baseURL: PLAIN_ORIGIN, trace: 'retain-on-failure' },
 	projects: [
 		{ name: 'pixel-7', use: { ...devices['Pixel 7'] } },
 		// Mobile Safari's engine (WebKit) with iPhone viewport, touch and user agent.
@@ -54,8 +60,8 @@ export default defineConfig({
 		}
 	],
 	webServer: [
-		preview({ port: 4173, api: apiOrigin, inspector: 9244 }),
-		preview({ port: 4174, api: unreachableOrigin, inspector: 9245 }),
-		preview({ port: 4175, api: apiOrigin, inspector: 9246, https: true })
+		preview({ port: PLAIN_PORT, api: apiOrigin, inspector: PLAIN_PORT + 5071 }),
+		preview({ port: UNREACHABLE_PORT, api: unreachableOrigin, inspector: UNREACHABLE_PORT + 5071 }),
+		preview({ port: SECURE_PORT, api: apiOrigin, inspector: SECURE_PORT + 5071, https: true })
 	]
 });
