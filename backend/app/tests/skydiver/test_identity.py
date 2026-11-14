@@ -31,6 +31,7 @@ from app.skydiver.identity.service import (
     IdentityService,
     RegistrationBusy,
     RegistrationClosed,
+    Throttled,
 )
 from app.skydiver.identity.store import sql_store_factory
 from app.skydiver.identity.tables import SkydiverAccountToken, SkydiverSession
@@ -818,6 +819,28 @@ def test_concurrent_registrations_respect_account_cap() -> None:
         list(pool.map(attempt, range(6)))
     assert sorted(outcomes) == ["closed"] * 5 + ["created"]
     assert _user_count() == before + 1
+
+
+def test_concurrent_attempts_never_pass_more_than_the_limit() -> None:
+    """The general limiter (exports, imports, posts, follows) under a burst."""
+    service = _service()
+    rule = policy.ThrottleRule(f"test_burst_{uuid.uuid4().hex[:8]}", 3, timedelta(hours=1))  # fmt: skip
+    key = uuid.uuid4().hex
+    outcomes: list[str] = []
+
+    def attempt(_: int) -> None:
+        try:
+            service.consume(rule=rule, key=key)
+            outcomes.append("passed")
+        except Throttled:
+            outcomes.append("throttled")
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(attempt, range(8)))
+    # A loser that keeps losing is throttled too, so fewer may pass; never more.
+    assert 1 <= outcomes.count("passed") <= rule.limit
+    with pytest.raises(Throttled):
+        service.consume(rule=rule, key=key)
 
 
 def _gate_version() -> int:
