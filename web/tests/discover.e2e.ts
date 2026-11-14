@@ -606,6 +606,17 @@ test.describe('search context and the filter panel', () => {
 			starts_on: '2027-12-30',
 			ends_on: '2028-01-02'
 		});
+		// On the board each card shows its start and finish in short; the full dates are what a
+		// screen reader hears.
+		await page.goto(`/?q=${base}`);
+		for (const [listing, short] of [
+			[months, '28 Jun – 3 Jul'],
+			[years, '30 Dec 2027 – 2 Jan 2028']
+		] as const) {
+			const card = page.getByRole('article').filter({ hasText: listing.title });
+			await expect(card.getByText(short, { exact: true })).toBeVisible();
+			await expect(card.getByText(short, { exact: true })).toHaveAttribute('aria-hidden', 'true');
+		}
 		for (const [listing, text] of [
 			[months, '28 June – 3 July 2027'],
 			[years, '30 December 2027 – 2 January 2028']
