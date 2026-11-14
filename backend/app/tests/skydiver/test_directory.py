@@ -183,7 +183,7 @@ def points(api: Api, **params: Any) -> dict[str, Any]:
 
 def test_map_points_are_the_public_venues_with_coordinates(api: Api) -> None:
     base = token()
-    here = {"latitude": 42.258571, "longitude": 3.137}
+    here: dict[str, Any] = {"latitude": 42.258571, "longitude": 3.137}
     listed = api.venue(f"{base} Listed", locality="Field", **here)
     closed = api.venue(f"{base} Closed", **here)
     api.call("POST", f"/directory/venues/{closed['id']}/status", api.reviewer,
@@ -211,7 +211,7 @@ def test_map_points_are_the_public_venues_with_coordinates(api: Api) -> None:
 
 def test_map_points_filter_like_the_list(api: Api) -> None:
     base = token()
-    here = {"latitude": 50.0, "longitude": 4.0}
+    here: dict[str, Any] = {"latitude": 50.0, "longitude": 4.0}
     spain = api.venue(f"{base} Field", country="ES", **here)
     api.call("POST", f"/directory/venues/{spain['id']}/aliases", api.reviewer,
              {"name": f"{base} Alias Ñame"})  # fmt: skip
