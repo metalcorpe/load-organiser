@@ -179,7 +179,7 @@
 	{/if}
 	{#if signedIn}
 		<p class="hint">
-			Saved items are visible only to you. <a href="/saved">Your saved listings</a> ·
+			Saved items are visible only to you. <a href="/plans#saved">Your plans and saved events</a> ·
 			<a href="/plans?opportunity={item.id}">Plan a visit</a>
 		</p>
 	{/if}

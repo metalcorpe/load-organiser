@@ -223,8 +223,10 @@ test.describe('discover board', () => {
 		await page.reload();
 		await expect(page.getByRole('button', { name: 'Remove from saved' })).toBeVisible();
 
+		// The old address of the saved list leads to its place beside the plans.
 		await page.goto('/saved');
-		const saved = page.getByRole('list', { name: 'Saved listings' });
+		await expect(page).toHaveURL(`${ORIGIN}/plans#saved`);
+		const saved = page.getByRole('list', { name: 'Saved events' });
 		await expect(saved.getByRole('link', { name: listing.title })).toHaveCount(1);
 
 		// Plan a visit from the saved item, with dates starting from the listing.
@@ -234,14 +236,21 @@ test.describe('discover board', () => {
 		await page.getByLabel('First day').fill('2027-07-11');
 		await page.getByRole('button', { name: 'Save plan' }).click();
 		await expect(page.getByText('Plan saved privately.')).toBeVisible();
+		// Back to the event the plan was made for.
+		await expect(page.getByRole('link', { name: 'Back to the event' })).toHaveAttribute(
+			'href',
+			`/events/${listing.id}`
+		);
 		const plans = page.getByRole('list', { name: 'Your plans' });
 		await expect(plans.getByText('Your dates: 11–14 July 2027')).toBeVisible();
 		await expect(plans.getByText("The listing's dates are 10–14 July 2027")).toBeVisible();
 
-		await page.goto('/saved');
-		await page.getByRole('button', { name: 'Remove' }).click();
+		// Removing the saved event keeps the plan: saving and planning are separate.
+		await page.goto('/plans');
+		await page.getByRole('list', { name: 'Saved events' }).getByRole('button', { name: 'Remove' }).click();
 		await expect(page.getByText('Removed from saved.')).toBeVisible();
-		await expect(page.getByText('You have not saved any listings')).toBeVisible();
+		await expect(page.getByText('Nothing saved.')).toBeVisible();
+		await expect(plans.getByText('Your dates: 11–14 July 2027')).toBeVisible();
 	});
 
 	test('saves are not visible to anyone else', async ({ page, browser }) => {
@@ -257,8 +266,8 @@ test.describe('discover board', () => {
 		const otherPage = await other.newPage();
 		await otherPage.goto('/sign-in?returnTo=%2Fsaved');
 		await signInHere(otherPage, await createAccount({ label: 'other' }));
-		await expect(otherPage).toHaveURL(`${ORIGIN}/saved`);
-		await expect(otherPage.getByText('You have not saved any listings')).toBeVisible();
+		await expect(otherPage).toHaveURL(`${ORIGIN}/plans#saved`);
+		await expect(otherPage.getByText('Nothing saved.')).toBeVisible();
 		await otherPage.goto(`/events/${listing.id}`);
 		await expect(otherPage.getByRole('button', { name: 'Save privately' })).toBeVisible();
 		await other.close();
