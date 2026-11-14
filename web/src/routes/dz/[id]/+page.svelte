@@ -58,6 +58,25 @@
 {/if}
 
 <dl>
+	<!-- Who runs it, the season and the aircraft are what the source states; the note
+	     under the list says so. -->
+	{#if venue.operators.length}
+		<dt>Run by</dt>
+		<dd>
+			{#each venue.operators as operator, i (operator.name)}{#if i}, {/if}{#if operator.url}<a
+						href={operator.url}
+						rel="external noopener noreferrer nofollow">{operator.name}</a
+					>{:else}{operator.name}{/if}{/each}
+		</dd>
+	{/if}
+	{#if venue.season}
+		<dt>Season</dt>
+		<dd>{venue.season}</dd>
+	{/if}
+	{#if venue.aircraft}
+		<dt>Aircraft</dt>
+		<dd>{venue.aircraft}</dd>
+	{/if}
 	<dt>Country</dt>
 	<dd>{countryName(venue.country)}</dd>
 	{#if venue.locality}
@@ -88,9 +107,9 @@
 </dl>
 
 <p class="hint">
-	This is a directory listing, maintained from the source above. It does not mean the dropzone
-	endorses, operates with or has confirmed anything in Load Organiser, and jumps recorded here are
-	the jumpers' own records.
+	This is a directory listing, maintained from the source above{#if venue.operators.length || venue.season || venue.aircraft}; who runs it, the season and the aircraft are as that source states them{/if}.
+	It does not mean the dropzone endorses, operates with or has confirmed anything in Load Organiser,
+	and jumps recorded here are the jumpers' own records.
 </p>
 
 <p>

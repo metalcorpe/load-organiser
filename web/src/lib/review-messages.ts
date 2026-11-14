@@ -31,7 +31,13 @@ export const REVIEW_MESSAGES: Record<string, string> = {
 	target_not_allowed: 'Feedback about the beta is not about a listing. Send it without one.',
 	message_required: 'Describe the suggestion or problem.',
 	message_too_long: 'Use at most 1,000 characters.',
-	source_url_invalid: 'Use a full http(s) link, or leave it empty.'
+	source_url_invalid: 'Use a full http(s) link, or leave it empty.',
+	operators_too_many: 'Name at most 4 operators.',
+	operator_repeated: 'Each operator once: two rows have the same name.',
+	operator_url_invalid: "Use a full http(s) link for the operator's website, or leave it empty.",
+	operator_name_too_long: 'Use at most 120 characters for an operator name.',
+	season_too_long: 'Use at most 160 characters for the season.',
+	aircraft_too_long: 'Use at most 160 characters for the aircraft.'
 };
 
 export function reviewMessage(code: string | undefined): string | undefined {

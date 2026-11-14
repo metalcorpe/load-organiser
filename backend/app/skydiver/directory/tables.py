@@ -6,6 +6,7 @@ from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import (
+    JSON,
     CheckConstraint,
     Column,
     Date,
@@ -16,6 +17,7 @@ from sqlalchemy import (
     Numeric,
     Text,
     UniqueConstraint,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlmodel import Field, SQLModel
@@ -26,7 +28,11 @@ def _instant() -> Column:  # type: ignore[type-arg]
 
 
 class SkydiverVenue(SQLModel, table=True):
-    """Public directory identity. No operator, endorsement or verification fields."""
+    """Public directory identity. No claim, endorsement or verification fields.
+
+    `operators`, `season` and `aircraft` are what the source states (owner decision
+    2026-11-14): they name who runs the place, not that it takes part in anything.
+    """
 
     __tablename__ = "skydiver_venue"
     __table_args__ = (
@@ -47,6 +53,8 @@ class SkydiverVenue(SQLModel, table=True):
             name="skydiver_venue_coordinates_pair",
         ),
         CheckConstraint("merged_into_id <> id", name="skydiver_venue_not_self"),
+        # skydiver_venue_operators_list (an array of at most 4) is created by migration
+        # e8bcedce6f4a only: its JSONB functions are PostgreSQL-specific.
         Index("ix_skydiver_venue_search", "status", "name_key", "id"),
     )
 
@@ -73,6 +81,17 @@ class SkydiverVenue(SQLModel, table=True):
     source_url: str | None = Field(default=None, max_length=2048)
     source_note: str | None = Field(default=None, max_length=280)
     checked_on: date | None = Field(default=None, sa_column=Column(Date, nullable=True))
+    # [{"name": str, "url": str | None}, ...], at most 4 (policy.operators).
+    operators: list[dict[str, Any]] = Field(
+        default_factory=list,
+        sa_column=Column(
+            JSONB().with_variant(JSON(), "sqlite"),
+            nullable=False,
+            server_default=text("'[]'"),
+        ),
+    )
+    season: str | None = Field(default=None, max_length=160)
+    aircraft: str | None = Field(default=None, max_length=160)
     created_at: datetime = Field(sa_column=_instant())
     updated_at: datetime = Field(sa_column=_instant())
 

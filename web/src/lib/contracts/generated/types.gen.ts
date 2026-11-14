@@ -2328,6 +2328,36 @@ export type NumberedJumpOut = {
 };
 
 /**
+ * OperatorIn
+ */
+export type OperatorIn = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Url
+     */
+    url?: string | null;
+};
+
+/**
+ * OperatorOut
+ *
+ * Who runs the dropzone as its source states it. Not a claim or endorsement.
+ */
+export type OperatorOut = {
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Url
+     */
+    url: string | null;
+};
+
+/**
  * OpportunityCountriesOut
  */
 export type OpportunityCountriesOut = {
@@ -4181,6 +4211,10 @@ export type ReviewerProviderOut = {
  */
 export type ReviewerVenueOut = {
     /**
+     * Aircraft
+     */
+    aircraft: string | null;
+    /**
      * Aliases
      */
     aliases: Array<AliasOut>;
@@ -4220,6 +4254,14 @@ export type ReviewerVenueOut = {
      * Name
      */
     name: string;
+    /**
+     * Operators
+     */
+    operators: Array<OperatorOut>;
+    /**
+     * Season
+     */
+    season: string | null;
     /**
      * Source Note
      */
@@ -4948,6 +4990,10 @@ export type UpcomingOut = {
  */
 export type VenueCreateIn = {
     /**
+     * Aircraft
+     */
+    aircraft?: string | null;
+    /**
      * Checked On
      */
     checked_on?: string | null;
@@ -4978,6 +5024,16 @@ export type VenueCreateIn = {
      */
     name: string;
     /**
+     * Operators
+     *
+     * As the source states them; at most 4 are kept.
+     */
+    operators?: Array<OperatorIn>;
+    /**
+     * Season
+     */
+    season?: string | null;
+    /**
      * Source Note
      */
     source_note?: string | null;
@@ -5006,6 +5062,12 @@ export type VenueDetailOut = {
  * Public venue: source-backed identity only. No operator or endorsement data.
  */
 export type VenueOut = {
+    /**
+     * Aircraft
+     *
+     * As the source states it.
+     */
+    aircraft: string | null;
     /**
      * Aliases
      */
@@ -5040,6 +5102,18 @@ export type VenueOut = {
      * Name
      */
     name: string;
+    /**
+     * Operators
+     *
+     * Who runs it, as the source states; not a claim or endorsement.
+     */
+    operators: Array<OperatorOut>;
+    /**
+     * Season
+     *
+     * As the source states it.
+     */
+    season: string | null;
     /**
      * Source Note
      */
@@ -5151,6 +5225,10 @@ export type VenueRefOut = {
  */
 export type VenueUpdateIn = {
     /**
+     * Aircraft
+     */
+    aircraft?: string | null;
+    /**
      * Checked On
      */
     checked_on?: string | null;
@@ -5174,6 +5252,14 @@ export type VenueUpdateIn = {
      * Name
      */
     name?: string | null;
+    /**
+     * Operators
+     */
+    operators?: Array<OperatorIn> | null;
+    /**
+     * Season
+     */
+    season?: string | null;
     /**
      * Source Note
      */

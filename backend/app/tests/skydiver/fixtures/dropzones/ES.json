@@ -14,6 +14,8 @@
       "coordinates_source": "https://example.org/osm",
       "icao": "LEXX",
       "operators": [{ "name": "Skydive Active TAG", "website": "https://example.org/", "facebook": null }],
+      "aircraft": "Cessna 208 Caravan",
+      "season": "All year, weekends",
       "status": "active",
       "status_evidence": "Season calendar 2026",
       "sources": [{ "url": "https://example.org/federation", "checked_on": "2026-11-13", "what": "federation list" }],

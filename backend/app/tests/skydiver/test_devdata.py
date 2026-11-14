@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.core.db import engine
 from app.skydiver import devdata
 from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
-from app.skydiver.directory.service import DirectoryService, VenueInput
+from app.skydiver.directory.service import DirectoryService, Operator, VenueInput
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.opportunities.service import OpportunityService
 from app.skydiver.opportunities.store import sql_listing_store_factory
@@ -172,7 +172,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
             # "Aeródromo Dev DZ" is the listings' "Dev DZ": the same place words.
             {"key": f"es-{tag}-listed-already", "matched": str(dev_dz.id), "by": "name"},
         ],
-        "located": 1, "aliases_dropped": 0,
+        "located": 1, "detailed": 0, "aliases_dropped": 0,
     }  # fmt: skip
     # Bad records and a broken file are refused one by one; everything else loaded.
     refused = report["refused"]
@@ -204,6 +204,14 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     assert active["aliases"] == ["LEXX", f"Skydive Active {tag}"]
     assert (active["url"], active["checked_on"]) == ("https://example.org/federation", "2026-11-13")  # fmt: skip
     assert active["note"].startswith(f"dev-data:es-{tag}-active ")
+    # Operators, season and aircraft as the record states them.
+    assert active_dz.operators == (
+        Operator(f"Skydive Active {tag}", "https://example.org/"),
+    )
+    assert (active_dz.season, active_dz.aircraft) == (
+        "All year, weekends",
+        "Cessna 208 Caravan",
+    )
     assert venue(f"Closed Field {tag}")["status"] == "closed"
     # An uncertain lead is kept as a draft: not shown as a dropzone, here as on staging.
     assert directory.search(query=f"Unplaced Field {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
@@ -437,6 +445,66 @@ def test_the_hosted_load_drafts_first_and_publishes_only_the_chosen_statuses(
 
     again = devdata.load_dropzones(engine, folder, actor, directory, publish=frozenset({"active"}))  # fmt: skip
     assert counts(again) == (0, 0, 3, 3, 0)
+
+
+def test_a_venue_loaded_before_details_existed_gets_them_on_the_next_run(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC))  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    # As an earlier run left it: loaded by key, public, without details.
+    old = directory.create_venue(actor, VenueInput(
+        name=f"Old Field {tag}", country="ES", source_url="https://example.org/old",
+        checked_on=datetime.now(UTC).date(), latitude=40.9, longitude=-4.1,
+        source_note=f"dev-data:es-{tag}-old Unreviewed candidate, local development only.",
+    ))  # fmt: skip
+    record = {
+        "key": f"es-{tag}-old", "name": f"Old Field {tag}", "aliases": [], "country": "ES",
+        "latitude": 40.9, "longitude": -4.1, "status": "seasonal",
+        "operators": [{"name": f"Club {tag}", "website": None, "facebook": "https://www.facebook.com/club"}],
+        "season": "May–September", "aircraft": None,
+        "sources": [{"url": "https://example.org/old", "checked_on": "2026-11-14"}],
+    }  # fmt: skip
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    (folder / "ES.json").write_text(json.dumps({"country": "ES", "dropzones": [record]}), encoding="utf-8")  # fmt: skip
+
+    report = devdata.load_dropzones(engine, folder, actor, directory)
+    assert (report["skipped"], report["detailed"]) == (1, 1)
+    venue, events = directory.reviewer_venue(actor, old.id)
+    assert venue.operators == (
+        Operator(f"Club {tag}", "https://www.facebook.com/club"),
+    )
+    assert (venue.season, venue.aircraft) == ("May–September", None)
+    assert events[-1].kind == "details_updated"
+    # Never over details a reviewer has set: the next run leaves them alone.
+    again = devdata.load_dropzones(engine, folder, actor, directory)
+    assert again["detailed"] == 0
+
+
+def test_details_drop_a_quirk_instead_of_the_record() -> None:
+    long_name = "N" * 200
+    details = devdata._details({
+        "operators": [
+            {"name": long_name, "website": "https://long.example/"},  # too long: dropped
+            {"name": "Club", "website": "not a link", "facebook": "https://fb.example/club"},
+            {"name": "club", "website": "https://dup.example/"},  # the same name again
+            {"name": "Two", "website": None, "facebook": None},
+            {"name": "Three"}, {"name": "Four"}, {"name": "Five"},  # only four are kept
+        ],
+        "season": "  all   year ", "aircraft": "A" * 300,
+    })  # fmt: skip
+    assert details["operators"] == [
+        {"name": "Club", "url": "https://fb.example/club"},
+        {"name": "Two", "url": None},
+        {"name": "Three", "url": None},
+        {"name": "Four", "url": None},
+    ]
+    assert details["season"] == "all year"
+    assert len(details["aircraft"]) == 160 and details["aircraft"].endswith("…")
 
 
 def test_the_hosted_load_runs_only_from_the_staging_script(

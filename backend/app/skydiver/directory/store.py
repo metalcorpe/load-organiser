@@ -25,6 +25,7 @@ from app.skydiver.directory.service import (
     Alias,
     DirectoryStore,
     EditConflict,
+    Operator,
     StoreFactory,
     Venue,
     VenueEvent,
@@ -76,6 +77,12 @@ class SqlDirectoryStore:
             updated_at=row.updated_at,
             version=row.version,
             aliases=tuple(Alias(name=a, kind=AliasKind(k)) for a, k in aliases),
+            operators=tuple(
+                Operator(name=str(o["name"]), url=o.get("url"))
+                for o in row.operators or []
+            ),
+            season=row.season,
+            aircraft=row.aircraft,
         )
 
     def get_venue(self, venue_id: uuid.UUID) -> Venue | None:

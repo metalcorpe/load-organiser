@@ -55,10 +55,15 @@ from sqlmodel import Session, col
 from app.models import User
 from app.skydiver.access.policy import Actor, Role, actor_roles
 from app.skydiver.directory.policy import (
+    DETAIL_MAX,
+    OPERATOR_NAME_MAX,
+    OPERATORS_MAX,
     SOURCE_NOTE_MAX,
     DirectoryRuleError,
     VenueStatus,
+    clean_text,
     search_key,
+    web_url,
 )
 from app.skydiver.directory.service import (
     DirectoryService,
@@ -378,6 +383,66 @@ def _locate(
     return True
 
 
+def _details(dropzone: Mapping[str, Any]) -> dict[str, Any]:
+    """Operators, season and aircraft as the record states them, cleaned so a quirk
+    (an over-long name, a broken link) drops that detail instead of the record."""
+    operators: list[dict[str, str | None]] = []
+    for op in dropzone.get("operators") or []:
+        if not isinstance(op, dict) or len(operators) == OPERATORS_MAX:
+            continue
+        try:
+            name = clean_text(
+                str(op.get("name") or ""), field="operator", maximum=OPERATOR_NAME_MAX
+            )
+        except DirectoryRuleError:
+            continue
+        if any(search_key(o["name"] or "") == search_key(name) for o in operators):
+            continue
+        url = None
+        for candidate in (op.get("website"), op.get("facebook")):
+            try:
+                url = web_url(str(candidate), code="url") if candidate else None
+            except DirectoryRuleError:
+                url = None
+            if url:
+                break
+        operators.append({"name": name, "url": url})
+
+    def text(key: str) -> str | None:
+        value = " ".join(str(dropzone.get(key) or "").split())
+        return (
+            value[: DETAIL_MAX - 1] + "…" if len(value) > DETAIL_MAX else value or None
+        )
+
+    return {
+        "operators": operators,
+        "season": text("season"),
+        "aircraft": text("aircraft"),
+    }
+
+
+def _fill_details(
+    directory: DirectoryService,
+    actor: Actor,
+    venue_id: uuid.UUID,
+    dropzone: Mapping[str, Any],
+) -> bool:
+    """Give a venue the researched details if it has none of them (compare-and-swap)."""
+    details = _details(dropzone)
+    if not any(details.values()):
+        return False
+    try:
+        venue, _ = directory.reviewer_venue(actor, venue_id)
+        if venue.operators or venue.season or venue.aircraft:
+            return False
+        directory.update_venue(
+            actor, venue_id, VenueChanges(details), expected_version=venue.version
+        )
+    except EditConflict, DirectoryRuleError:
+        return False  # changed meanwhile, merged, or refused: left as it is
+    return True
+
+
 def _publish(
     directory: DirectoryService,
     actor: Actor,
@@ -423,8 +488,10 @@ def load_dropzones(
     made public (`LOCAL_PUBLISH`), with or without coordinates. Given (the hosted
     load), only records whose research status is in it and that have coordinates are
     made public. Only records made public fill in a stored venue's missing
-    coordinates; every other new record stays a draft that a later run with its
-    status publishes. An empty set changes nothing public.
+    coordinates or details (operators, season, aircraft: `_fill_details`, also for
+    venues an earlier run loaded before the details existed); every other new record
+    stays a draft that a later run with its status publishes. An empty set changes
+    nothing public.
     """
     report: dict[str, Any] = {
         "files": 0,
@@ -435,6 +502,7 @@ def load_dropzones(
         "drafted": 0,
         "duplicates": [],
         "located": 0,
+        "detailed": 0,
         "aliases_dropped": 0,
         "refused": [],
     }
@@ -476,8 +544,14 @@ def load_dropzones(
             if resumed:
                 if _venue_status(engine, loaded[key]) != "draft":
                     report["skipped"] += 1
+                    # Loaded before the details existed: add them where it may publish.
+                    if publishes(dz):
+                        report["detailed"] += _fill_details(
+                            directory, actor, loaded[key], dz
+                        )
                     continue
                 venue_id = loaded[key]  # a draft an earlier run left, or kept
+                report["detailed"] += _fill_details(directory, actor, venue_id, dz)
             else:
                 country = dz["country"].upper()
                 words, point = place_words(dz["name"]), _point(dz)
@@ -497,6 +571,9 @@ def load_dropzones(
                     )
                     if publishes(dz):
                         report["located"] += _locate(directory, actor, match[0], dz)
+                        report["detailed"] += _fill_details(
+                            directory, actor, match[0], dz
+                        )
                     continue
                 try:
                     url, checked = _source(dz, data.get("researched_on"))
@@ -516,6 +593,7 @@ def load_dropzones(
                             ),
                             checked_on=checked,
                             listed=False,
+                            **_details(dz),
                         ),
                     )
                 except (DirectoryRuleError, ValueError) as error:

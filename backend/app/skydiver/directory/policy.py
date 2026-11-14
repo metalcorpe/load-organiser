@@ -25,6 +25,11 @@ LOCALITY_MAX = 120
 ALIAS_MAX = 120
 SOURCE_URL_MAX = 2048
 SOURCE_NOTE_MAX = 280
+# Source-stated details (owner decision 2026-11-14): who runs the place, its season and
+# aircraft. They name the operator; they do not claim, endorse or verify anything.
+OPERATORS_MAX = 4
+OPERATOR_NAME_MAX = 120
+DETAIL_MAX = 160
 PAGE_DEFAULT = 20
 PAGE_MAX = 50
 # Map points are small (no aliases or sources); one page covers a continent's dropzones.
@@ -97,6 +102,11 @@ def coordinates(
 
 def source_url(value: str) -> str:
     """Listed venues are source-backed: an absolute http(s) URL is required."""
+    return web_url(value, code="source_url_invalid")
+
+
+def web_url(value: str, *, code: str) -> str:
+    """An absolute http(s) URL without credentials, refused with `code` otherwise."""
     url = value.strip()
     parts = urlsplit(url)
     if (
@@ -106,8 +116,38 @@ def source_url(value: str) -> str:
         or parts.username
         or parts.password
     ):
-        raise DirectoryRuleError("source_url_invalid")
+        raise DirectoryRuleError(code)
     return url
+
+
+def operators(raw: object) -> list[dict[str, str | None]]:
+    """Who runs the place, as its source states: up to OPERATORS_MAX names, each with
+    an optional web link. Repeated names (case- and accent-insensitive) are refused."""
+    if not isinstance(raw, list | tuple):
+        raise DirectoryRuleError("operators_invalid")
+    if len(raw) > OPERATORS_MAX:
+        raise DirectoryRuleError("operators_too_many")
+    cleaned: list[dict[str, str | None]] = []
+    seen: set[str] = set()
+    for item in raw:
+        if not isinstance(item, dict):
+            raise DirectoryRuleError("operators_invalid")
+        name = clean_text(
+            str(item.get("name") or ""),
+            field="operator_name",
+            maximum=OPERATOR_NAME_MAX,
+        )
+        if search_key(name) in seen:
+            raise DirectoryRuleError("operator_repeated")
+        seen.add(search_key(name))
+        url = item.get("url")
+        cleaned.append(
+            {
+                "name": name,
+                "url": web_url(str(url), code="operator_url_invalid") if url else None,
+            }
+        )
+    return cleaned
 
 
 def checked_on(value: date, today: date) -> date:

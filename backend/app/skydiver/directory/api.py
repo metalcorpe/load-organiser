@@ -59,6 +59,25 @@ class AliasOut(BaseModel):
     kind: Literal["alternate", "former", "merged"]
 
 
+class OperatorOut(BaseModel):
+    """Who runs the dropzone as its source states it. Not a claim or endorsement."""
+
+    name: str
+    url: str | None
+
+
+class OperatorIn(BaseModel):
+    name: Name
+    url: Url | None = None
+
+
+Detail = Annotated[str, Field(max_length=240)]
+Operators = Annotated[
+    list[OperatorIn],
+    Field(max_length=8, description="As the source states them; at most 4 are kept."),
+]
+
+
 class VenueOut(BaseModel):
     """Public venue: source-backed identity only. No operator or endorsement data."""
 
@@ -73,6 +92,11 @@ class VenueOut(BaseModel):
     source_url: str
     source_note: str | None
     checked_on: date
+    operators: list[OperatorOut] = Field(
+        description="Who runs it, as the source states; not a claim or endorsement."
+    )
+    season: str | None = Field(description="As the source states it.")
+    aircraft: str | None = Field(description="As the source states it.")
 
 
 class VenuePageOut(BaseModel):
@@ -160,6 +184,9 @@ class VenueCreateIn(BaseModel):
     source_url: Url | None = None
     source_note: Note | None = None
     checked_on: date | None = None
+    operators: Operators = []
+    season: Detail | None = None
+    aircraft: Detail | None = None
     listed: bool = Field(
         default=True, description="False creates a draft that is not public."
     )
@@ -174,6 +201,9 @@ class VenueUpdateIn(BaseModel):
     source_url: Url | None = None
     source_note: Note | None = None
     checked_on: date | None = None
+    operators: Operators | None = None
+    season: Detail | None = None
+    aircraft: Detail | None = None
     version: ExpectedVersion = None
 
 
@@ -211,6 +241,9 @@ class ReviewerVenueOut(BaseModel):
     source_url: str | None
     source_note: str | None
     checked_on: date | None
+    operators: list[OperatorOut]
+    season: str | None
+    aircraft: str | None
     updated_at: datetime
     version: int
     events: list[EventOut]
@@ -235,7 +268,14 @@ def _public(venue: Venue) -> VenueOut:
         source_url=venue.source_url,
         source_note=venue.source_note,
         checked_on=venue.checked_on,
+        operators=_operators(venue),
+        season=venue.season,
+        aircraft=venue.aircraft,
     )
+
+
+def _operators(venue: Venue) -> list[OperatorOut]:
+    return [OperatorOut(name=o.name, url=o.url) for o in venue.operators]
 
 
 def _place(place: Place) -> PlaceOut:
@@ -270,6 +310,9 @@ def _reviewer(venue: Venue, events: list[VenueEvent]) -> ReviewerVenueOut:
         source_url=venue.source_url,
         source_note=venue.source_note,
         checked_on=venue.checked_on,
+        operators=_operators(venue),
+        season=venue.season,
+        aircraft=venue.aircraft,
         updated_at=venue.updated_at,
         version=venue.version,
         events=[

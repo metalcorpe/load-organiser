@@ -50,6 +50,14 @@ class Alias:
 
 
 @dataclass(frozen=True)
+class Operator:
+    """Who runs the place, as its source states it; not a claim or endorsement."""
+
+    name: str
+    url: str | None = None
+
+
+@dataclass(frozen=True)
 class Venue:
     id: uuid.UUID
     name: str
@@ -65,6 +73,9 @@ class Venue:
     updated_at: datetime
     aliases: tuple[Alias, ...] = ()
     version: int = 1
+    operators: tuple[Operator, ...] = ()
+    season: str | None = None
+    aircraft: str | None = None
 
 
 @dataclass(frozen=True)
@@ -126,6 +137,10 @@ class VenueInput:
     longitude: float | None = None
     source_note: str | None = None
     listed: bool = True
+    # [{"name": ..., "url": ...}] as the source states them; see policy.operators.
+    operators: tuple[dict[str, Any], ...] | list[dict[str, Any]] = ()
+    season: str | None = None
+    aircraft: str | None = None
 
 
 @dataclass(frozen=True)
@@ -370,6 +385,9 @@ class DirectoryService:
                 "source_url": data.source_url,
                 "source_note": data.source_note,
                 "checked_on": data.checked_on,
+                "operators": list(data.operators),
+                "season": data.season,
+                "aircraft": data.aircraft,
             },
             now,
         )
@@ -432,6 +450,16 @@ class DirectoryService:
                     venue_id,
                     "source_updated",
                     {k: _json(changed[k]) for k in sorted(source)},
+                    actor,
+                    now,
+                )
+            # An operator change is its own fact: kept in the history, never inferred.
+            details = {"operators", "season", "aircraft"} & set(changed)
+            if details:
+                store.record_event(
+                    venue_id,
+                    "details_updated",
+                    {k: changed[k] for k in sorted(details)},
                     actor,
                     now,
                 )
@@ -664,6 +692,13 @@ class DirectoryService:
                 if raw["checked_on"]
                 else None
             )
+        if "operators" in raw:
+            values["operators"] = policy.operators(raw["operators"] or [])
+        for detail in ("season", "aircraft"):
+            if detail in raw:
+                values[detail] = policy.optional_text(
+                    raw[detail], field=detail, maximum=policy.DETAIL_MAX
+                )
         return values
 
     @staticmethod
@@ -702,6 +737,9 @@ def _venue_values(venue: Venue) -> dict[str, Any]:
         "source_url": venue.source_url,
         "source_note": venue.source_note,
         "checked_on": venue.checked_on,
+        "operators": [{"name": o.name, "url": o.url} for o in venue.operators],
+        "season": venue.season,
+        "aircraft": venue.aircraft,
     }
 
 

@@ -1,6 +1,12 @@
 import { randomBytes } from 'node:crypto';
 import { expect, test, type Page } from '@playwright/test';
-import { PASSWORD, apiCall, createAccount, reviewerSession } from './support/accounts.ts';
+import {
+	PASSWORD,
+	apiCall,
+	createAccount,
+	reviewerCredentials,
+	reviewerSession
+} from './support/accounts.ts';
 
 // Same production-cookie preview as the account tests.
 const ORIGIN = 'https://127.0.0.1:4175';
@@ -95,6 +101,48 @@ test.describe('public dropzone directory', () => {
 		for (const path of [`/dz/${draft.id}`, `/dz/${crypto.randomUUID()}`, '/dz/not-a-uuid']) {
 			expect((await request.get(path)).status(), path).toBe(404);
 		}
+	});
+
+	test('who runs it, its season and aircraft, as the source states; a reviewer edits them', async ({
+		page
+	}) => {
+		const reviewer = await reviewerSession();
+		const venue = await createVenue(reviewer, {
+			name: `${token()} Operator field`,
+			operators: [
+				{ name: 'Skydive Example', url: 'https://skydive.example/' },
+				{ name: 'Paraclub Example' }
+			],
+			season: 'April–October, weekends',
+			aircraft: 'Pilatus PC-6'
+		});
+		await page.goto(`/dz/${venue.id}`);
+		const operatorLink = page.getByRole('link', { name: 'Skydive Example' });
+		await expect(operatorLink).toHaveAttribute('href', 'https://skydive.example/');
+		await expect(operatorLink).toHaveAttribute('rel', /nofollow/);
+		await expect(page.getByText('Paraclub Example')).toBeVisible();
+		await expect(page.getByText('April–October, weekends')).toBeVisible();
+		await expect(page.getByText('Pilatus PC-6')).toBeVisible();
+		// Said to come from the source, not from the operator.
+		await expect(page.getByText(/as that source states them/)).toBeVisible();
+
+		const { email, password } = reviewerCredentials();
+		await page.goto('/sign-in');
+		await page.getByLabel('Email', { exact: true }).fill(email);
+		await page.getByLabel('Password', { exact: true }).fill(password);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page.getByTestId('current-account')).toBeVisible();
+		await page.goto(`/review/dropzones/${venue.id}`);
+		await page.getByLabel('Operator 1 name').fill('New Operator');
+		await page.getByLabel('Operator 1 website').fill('');
+		await page.getByLabel('Operator 2 name').fill('');
+		await page.getByRole('button', { name: 'Save', exact: true }).click();
+		await expect(page.getByRole('status').filter({ hasText: 'Saved.' })).toBeVisible();
+
+		await page.goto(`/dz/${venue.id}`);
+		await expect(page.getByText('New Operator')).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Skydive Example' })).toHaveCount(0);
+		await expect(page.getByText('Paraclub Example')).toHaveCount(0);
 	});
 });
 
