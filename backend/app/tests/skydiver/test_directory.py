@@ -25,6 +25,8 @@ SOURCE = {"source_url": "https://example.org/dz-list", "checked_on": "2026-11-01
 PUBLIC_FIELDS = {
     "id", "name", "country", "locality", "latitude", "longitude", "status",
     "aliases", "source_url", "source_note", "checked_on",
+    # As the source states them (owner decision 2026-11-14): not a claim or endorsement.
+    "operators", "season", "aircraft",
 }  # fmt: skip
 
 
@@ -120,10 +122,65 @@ def test_public_venue_exposes_only_source_backed_identity(api: Api) -> None:
     assert detail.status_code == 200
     body = detail.json()
     assert body["replaced_id"] is None
-    # No operator, endorsement, verification, counts or linked private records.
+    # Source-stated details only: no claim, endorsement, verification, counts or
+    # linked private records.
     assert set(body["venue"]) == PUBLIC_FIELDS
     assert body["venue"]["status"] == "listed"
+    assert (body["venue"]["operators"], body["venue"]["season"], body["venue"]["aircraft"]) == ([], None, None)  # fmt: skip
     assert detail.headers["cache-control"] == "no-store"
+
+
+def test_source_stated_operators_season_and_aircraft(api: Api) -> None:
+    venue = api.venue(
+        token(),
+        operators=[
+            {"name": "  Skydive   Example ", "url": "https://skydive.example/"},
+            {"name": "Paraclub Example"},
+        ],
+        season="April–October, weekends",
+        aircraft="Pilatus PC-6",
+    )
+    public = api.call("GET", f"/venues/{venue['id']}").json()["venue"]
+    assert public["operators"] == [
+        {"name": "Skydive Example", "url": "https://skydive.example/"},
+        {"name": "Paraclub Example", "url": None},
+    ]
+    assert (public["season"], public["aircraft"]) == ("April–October, weekends", "Pilatus PC-6")  # fmt: skip
+
+    # An operator change is recorded as its own event; clearing works with [] and null.
+    changed = api.call("PATCH", f"/directory/venues/{venue['id']}", api.reviewer,
+                       {"operators": [{"name": "New Operator"}], "season": None,
+                        "version": venue["version"]})  # fmt: skip
+    assert changed.status_code == 200, changed.text
+    body = changed.json()
+    assert body["operators"] == [{"name": "New Operator", "url": None}]
+    assert body["season"] is None and body["aircraft"] == "Pilatus PC-6"
+    assert body["events"][-1]["kind"] == "details_updated"
+    assert body["events"][-1]["detail"] == {
+        "operators": [{"name": "New Operator", "url": None}], "season": None,
+    }  # fmt: skip
+
+
+@pytest.mark.parametrize(
+    ("operators", "code"),
+    [
+        ([{"name": f"Op {i}"} for i in range(5)], "operators_too_many"),
+        ([{"name": "Same"}, {"name": "sáme"}], "operator_repeated"),
+        ([{"name": "Op", "url": "javascript:alert(1)"}], "operator_url_invalid"),
+        (
+            [{"name": "Op", "url": "https://user:pw@example.org/"}],
+            "operator_url_invalid",
+        ),
+        ([{"name": "   "}], "operator_name_required"),
+    ],
+)
+def test_operator_details_are_checked(
+    api: Api, operators: list[dict[str, Any]], code: str
+) -> None:
+    body = {"name": token(), "country": "ES", **SOURCE, "operators": operators}
+    response = api.call("POST", "/directory/venues", api.reviewer, body)
+    assert response.status_code == 422
+    assert response.json() == {"detail": code}
 
 
 def test_search_by_name_alias_accents_and_country(api: Api) -> None:

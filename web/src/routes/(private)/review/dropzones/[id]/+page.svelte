@@ -3,6 +3,7 @@
 	import ReviewHistory from '#lib/components/ReviewHistory.svelte';
 	import { COUNTRY_OPTIONS } from '#lib/countries.ts';
 	import { reviewMessage } from '#lib/review-messages.ts';
+	import { OPERATOR_ROWS } from '#lib/venue-details.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -82,6 +83,44 @@
 		<div class="field">
 			<label for="checked_on">Source last checked</label>
 			<input id="checked_on" name="checked_on" type="date" defaultValue={v('checked_on', venue?.checked_on)} />
+		</div>
+		<!-- What the source states. Shown publicly as facts from the source: never as a
+		     claim, endorsement or verification by the operator. -->
+		<fieldset>
+			<legend>Run by, as the source states (optional)</legend>
+			<p class="hint">Up to {OPERATOR_ROWS}. Leave a name empty to remove that row.</p>
+			{#each Array.from({ length: OPERATOR_ROWS }, (_, i) => i) as i (i)}
+				<div class="coords">
+					<div class="field">
+						<label for="operator_name_{i}">Operator {i + 1} name</label>
+						<input
+							id="operator_name_{i}"
+							name="operator_name_{i}"
+							maxlength="120"
+							defaultValue={v(`operator_name_${i}`, venue?.operators[i]?.name)}
+						/>
+					</div>
+					<div class="field">
+						<label for="operator_url_{i}">Operator {i + 1} website</label>
+						<input
+							id="operator_url_{i}"
+							name="operator_url_{i}"
+							type="url"
+							defaultValue={v(`operator_url_${i}`, venue?.operators[i]?.url)}
+						/>
+					</div>
+				</div>
+			{/each}
+		</fieldset>
+		<div class="coords">
+			<div class="field">
+				<label for="season">Season (optional)</label>
+				<input id="season" name="season" maxlength="160" defaultValue={v('season', venue?.season)} />
+			</div>
+			<div class="field">
+				<label for="aircraft">Aircraft (optional)</label>
+				<input id="aircraft" name="aircraft" maxlength="160" defaultValue={v('aircraft', venue?.aircraft)} />
+			</div>
 		</div>
 		{#if !venue}
 			<label class="choice"><input type="checkbox" name="listed" checked /> List publicly now (needs source and check date)</label>

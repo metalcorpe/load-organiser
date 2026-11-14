@@ -6,6 +6,7 @@ import { field } from '#lib/server/forms.ts';
 import { call, failStatus, isPage } from '#lib/server/maintenance.ts';
 import { requireReviewer } from '#lib/server/reviewer.ts';
 import { echo, text, version } from '#lib/server/review-forms.ts';
+import { OPERATOR_ROWS, type VenueOperator } from '#lib/venue-details.ts';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -38,6 +39,16 @@ export const load: PageServerLoad = async (event) => {
 	};
 };
 
+/** The operator rows in order; a row without a name is ignored. */
+function operators(data: FormData): VenueOperator[] {
+	const rows: VenueOperator[] = [];
+	for (let i = 0; i < OPERATOR_ROWS; i++) {
+		const name = text(data, `operator_name_${i}`, 200);
+		if (name) rows.push({ name, url: text(data, `operator_url_${i}`) });
+	}
+	return rows;
+}
+
 function number(data: FormData, name: string): number | null {
 	const raw = text(data, name, 24);
 	if (raw === null) return null;
@@ -57,7 +68,10 @@ export const actions: Actions = {
 			longitude: number(data, 'longitude'),
 			source_url: text(data, 'source_url'),
 			source_note: text(data, 'source_note', 400),
-			checked_on: text(data, 'checked_on', 10)
+			checked_on: text(data, 'checked_on', 10),
+			operators: operators(data),
+			season: text(data, 'season', 240),
+			aircraft: text(data, 'aircraft', 240)
 		};
 		if (!body.name || !body.country)
 			return fail(400, { form: 'save', error: 'missing', values: echo(data) });

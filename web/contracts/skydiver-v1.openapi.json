@@ -4519,6 +4519,59 @@
         "title": "NumberedJumpOut",
         "type": "object"
       },
+      "OperatorIn": {
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "maxLength": 2048,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "OperatorIn",
+        "type": "object"
+      },
+      "OperatorOut": {
+        "description": "Who runs the dropzone as its source states it. Not a claim or endorsement.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          }
+        },
+        "required": [
+          "name",
+          "url"
+        ],
+        "title": "OperatorOut",
+        "type": "object"
+      },
       "OpportunityCountriesOut": {
         "properties": {
           "countries": {
@@ -8511,6 +8564,17 @@
       },
       "ReviewerVenueOut": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "aliases": {
             "items": {
               "$ref": "#/components/schemas/AliasOut"
@@ -8595,6 +8659,24 @@
             "title": "Name",
             "type": "string"
           },
+          "operators": {
+            "items": {
+              "$ref": "#/components/schemas/OperatorOut"
+            },
+            "title": "Operators",
+            "type": "array"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          },
           "source_note": {
             "anyOf": [
               {
@@ -8650,6 +8732,9 @@
           "source_url",
           "source_note",
           "checked_on",
+          "operators",
+          "season",
+          "aircraft",
           "updated_at",
           "version",
           "events"
@@ -9948,6 +10033,18 @@
       },
       "VenueCreateIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 240,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "checked_on": {
             "anyOf": [
               {
@@ -10013,6 +10110,28 @@
             "title": "Name",
             "type": "string"
           },
+          "operators": {
+            "default": [],
+            "description": "As the source states them; at most 4 are kept.",
+            "items": {
+              "$ref": "#/components/schemas/OperatorIn"
+            },
+            "maxItems": 8,
+            "title": "Operators",
+            "type": "array"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "maxLength": 240,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
+          },
           "source_note": {
             "anyOf": [
               {
@@ -10074,6 +10193,18 @@
       "VenueOut": {
         "description": "Public venue: source-backed identity only. No operator or endorsement data.",
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "As the source states it.",
+            "title": "Aircraft"
+          },
           "aliases": {
             "items": {
               "$ref": "#/components/schemas/AliasOut"
@@ -10133,6 +10264,26 @@
             "title": "Name",
             "type": "string"
           },
+          "operators": {
+            "description": "Who runs it, as the source states; not a claim or endorsement.",
+            "items": {
+              "$ref": "#/components/schemas/OperatorOut"
+            },
+            "title": "Operators",
+            "type": "array"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "As the source states it.",
+            "title": "Season"
+          },
           "source_note": {
             "anyOf": [
               {
@@ -10168,7 +10319,10 @@
           "aliases",
           "source_url",
           "source_note",
-          "checked_on"
+          "checked_on",
+          "operators",
+          "season",
+          "aircraft"
         ],
         "title": "VenueOut",
         "type": "object"
@@ -10319,6 +10473,18 @@
       },
       "VenueUpdateIn": {
         "properties": {
+          "aircraft": {
+            "anyOf": [
+              {
+                "maxLength": 240,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aircraft"
+          },
           "checked_on": {
             "anyOf": [
               {
@@ -10391,6 +10557,34 @@
               }
             ],
             "title": "Name"
+          },
+          "operators": {
+            "anyOf": [
+              {
+                "description": "As the source states them; at most 4 are kept.",
+                "items": {
+                  "$ref": "#/components/schemas/OperatorIn"
+                },
+                "maxItems": 8,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Operators"
+          },
+          "season": {
+            "anyOf": [
+              {
+                "maxLength": 240,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Season"
           },
           "source_note": {
             "anyOf": [

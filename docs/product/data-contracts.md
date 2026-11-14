@@ -10,7 +10,7 @@ Use random internal UUIDs. Owner identity comes from the verified backend sessio
 | --- | --- |
 | Account/person/profile | Existing account identity may be reused; one stable person identity per account. Email/credentials/private settings separate from opted-in public handle/display name/bio. Roles server-granted, not registration input |
 | Session and recovery token | Hashed random secret, account, creation/expiry/revocation. Raw value is never a database field, response after browser session establishment, export or log value |
-| Public venue | Stable canonical identity, aliases, country/location/source/status and checked time; retain historical/closed attribution. No operator participation implied |
+| Public venue | Stable canonical identity, aliases, country/location/source/status and checked time; retain historical/closed attribution. Source-stated operators (name, optional link), season and aircraft (2026-11-14). No operator participation implied |
 | Private provisional place | Owner-scoped ID/name/country; usable immediately. Public suggestion is a separate reviewed submission |
 | Provider and dated opportunity | Provider identity differs from venue. Opportunity links provider and optional confirmed venue, sourced schedule/time zone/status and original registration/contact URL. Draft until publication fields/provenance are sufficient |
 | Personal jump | Owner, activity DATE, venue or provisional reference, type/unspecified, optional jump number/measurements/notes/links and revision/provenance. Never the legacy operational passenger/load row |
