@@ -36,6 +36,22 @@
       "note": "Shares an operator brand with Active Field: a different dropzone."
     },
     {
+      "key": "es-TAG-near-active",
+      "name": "Other Name TAG",
+      "aliases": [],
+      "country": "ES",
+      "locality": null,
+      "latitude": 42.2631,
+      "longitude": 3.137,
+      "coordinates_source": "https://example.org/osm",
+      "icao": null,
+      "operators": [],
+      "status": "active",
+      "status_evidence": "Season calendar 2026",
+      "sources": [{ "url": "https://example.org/near", "checked_on": "2026-11-14", "what": "operator" }],
+      "note": "About 500 m from Active Field under another name: the same dropzone."
+    },
+    {
       "key": "es-TAG-closed",
       "name": "Closed Field TAG",
       "aliases": [],
@@ -68,8 +84,24 @@
       "note": "No source gives the position."
     },
     {
+      "key": "es-TAG-active-west",
+      "name": "Active TAG West Field",
+      "aliases": [],
+      "country": "ES",
+      "locality": null,
+      "latitude": 40.5,
+      "longitude": -1.0,
+      "coordinates_source": "https://example.org/osm",
+      "icao": null,
+      "operators": [],
+      "status": "active",
+      "status_evidence": "Season calendar 2026",
+      "sources": [{ "url": "https://example.org/west", "checked_on": "2026-11-14", "what": "operator" }],
+      "note": "Its place words include Active Field's, but it is far away: a different dropzone."
+    },
+    {
       "key": "es-TAG-listed-already",
-      "name": "Dev DZ TAG",
+      "name": "Aeródromo Dev DZ TAG",
       "aliases": ["Aeródromo Dev TAG"],
       "country": "ES",
       "locality": "Somewhere",

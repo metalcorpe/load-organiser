@@ -15,23 +15,28 @@ carries `dev-data:<key>`.
 
 The researched dropzone inventory (`dropzones/<CC>.json` next to PATH, or DIR; files
 starting with `_` are notes and are skipped) loads as venues with coordinates and
-aliases. A dropzone already present, by key, or by its name matching a stored venue
-name or alias in the same country, is not added again; an existing venue without
-coordinates gets the researched ones. Its own aliases never match: they are often
-operator brands shared by several airfields. Each venue is created as a draft and
-made public (listed, or closed for researched `closed` dropzones) in one step at
-the end; `uncertain` ones stay listed, with the research status in the source note.
-Invalid records are refused and reported; the rest still load.
+aliases. A dropzone already present is not added again: by key, by its name matching
+a stored venue name or alias, by a stored venue in the same country within
+`NEAR_KM`, by place name (see `same_place`), or by an alias no other record of the
+country carries. An existing venue without coordinates gets the researched ones.
+Aliases several records share never match: they are often operator brands of
+several airfields. Each venue is created as a
+draft and made public (listed, or closed for researched `closed` dropzones) in one
+step at the end; `uncertain` ones stay listed, with the research status in the
+source note. Invalid records are refused and reported; the rest still load.
 """
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
 import unicodedata
 import uuid
-from collections.abc import Mapping, Sequence
+from collections import Counter
+from collections.abc import Iterable, Mapping, Sequence
+from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -156,6 +161,124 @@ def _venue_names(engine: Engine) -> dict[tuple[str, str], uuid.UUID]:
     return {(country, key): venue_id for country, key, venue_id in rows}
 
 
+# Two dropzones closer than this are one place: the inventory's own rule.
+NEAR_KM = 1.5
+# Names alone never match two places further apart than this.
+NAME_KM = 10.0
+# Words that say what a place is, not which one. Direction words stay: "West" and
+# "Ost" are two airfields of one town.
+GENERIC_WORDS = frozenset(
+    """
+    aerodrome aerodromo aerodrom aerodromas aerodromul aerodroom aeroport aeroporto
+    aeroportul aeropuerto airport airfield airstrip vliegveld flugplatz flughafen
+    landeplatz sonderlandeplatz verkehrslandeplatz lotnisko letiste letisko repuloter
+    flygplats flyplass lufthavn lentokentta lentopaikka aviosuperficie havaalani
+    aeroclub aeroklub civil municipal military base aviation international regional
+    field strip landing area site zone drop dropzone dz skydive skydiving parachute
+    parachuting parachutisme paracaidismo paracadutismo fallschirm fallschirmsport
+    fallskjerm fallskarm laskuvarjo centre center centro club klub school ecole escuela
+    de la le les du des el los las da do dos das di del della dei the of and und am an
+    der im bei sur en van het op
+    """.split()
+)
+
+
+def place_words(name: str) -> frozenset[str]:
+    """The words of a name that say which place it is."""
+    return frozenset(
+        w for w in search_key(name).split() if len(w) > 1 and w not in GENERIC_WORDS
+    )
+
+
+def _km(a: tuple[float, float], b: tuple[float, float]) -> float:
+    lat1, lon1, lat2, lon2 = map(math.radians, (*a, *b))
+    h = (
+        math.sin((lat2 - lat1) / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin((lon2 - lon1) / 2) ** 2
+    )
+    return 6371.0 * 2 * math.asin(math.sqrt(h))
+
+
+@dataclass(frozen=True)
+class StoredVenue:
+    id: uuid.UUID
+    words: frozenset[str]
+    point: tuple[float, float] | None
+
+
+def same_place(
+    words: frozenset[str],
+    point: tuple[float, float] | None,
+    candidates: Iterable[StoredVenue],
+) -> tuple[uuid.UUID, str] | None:
+    """The venue (of one country) a dropzone already is, and how that was decided.
+
+    Within `NEAR_KM` it is the same place whatever the names. Otherwise the place
+    words of one name must all be in the other ("Aeródromo de Lillo" and "Skydive
+    Madrid (Aeródromo de Lillo)"), unless both have coordinates more than `NAME_KM`
+    apart.
+    """
+    named: uuid.UUID | None = None
+    for venue in candidates:
+        if point is not None and venue.point is not None:
+            distance = _km(point, venue.point)
+            if distance <= NEAR_KM:
+                return venue.id, "distance"
+            if distance > NAME_KM:
+                continue
+        if named is None:
+            small, large = sorted((words, venue.words), key=len)
+            if small and small <= large:
+                named = venue.id
+    return (named, "name") if named is not None else None
+
+
+def _by_own_alias(
+    aliases: Sequence[str],
+    country: str,
+    point: tuple[float, float] | None,
+    names: Mapping[tuple[str, str], uuid.UUID],
+    carried: Mapping[tuple[str, str], int],
+    stored: Mapping[str, Sequence[StoredVenue]],
+) -> tuple[uuid.UUID, str] | None:
+    """A stored venue named by an alias only this record carries ("iJump Gran Canaria",
+    the operator's office, for the airfield it flies from), unless far apart."""
+    points = {v.id: v.point for v in stored.get(country, ())}
+    for alias in aliases:
+        key = (country, search_key(alias))
+        venue_id = names.get(key)
+        if venue_id is None or carried[key] != 1:
+            continue
+        there = points.get(venue_id)
+        if point is not None and there is not None and _km(point, there) > NAME_KM:
+            continue
+        return venue_id, "alias"
+    return None
+
+
+def _stored_venues(engine: Engine) -> dict[str, list[StoredVenue]]:
+    """Unmerged venues by country, as stored before this run."""
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text(
+                "SELECT id, country, name, latitude, longitude FROM skydiver_venue "
+                "WHERE status <> 'merged'"
+            )
+        ).all()
+    stored: dict[str, list[StoredVenue]] = {}
+    for venue_id, country, name, lat, lon in rows:
+        point = (float(lat), float(lon)) if lat is not None else None
+        stored.setdefault(country, []).append(
+            StoredVenue(venue_id, place_words(name), point)
+        )
+    return stored
+
+
+def _point(dropzone: Mapping[str, Any]) -> tuple[float, float] | None:
+    lat, lon = dropzone.get("latitude"), dropzone.get("longitude")
+    return (float(lat), float(lon)) if lat is not None and lon is not None else None
+
+
 def _venue_status(engine: Engine, venue_id: uuid.UUID) -> str:
     with engine.connect() as conn:
         return str(
@@ -261,10 +384,11 @@ def load_dropzones(
 ) -> dict[str, Any]:
     """Every country file; a bad file or record is refused, never the whole load.
 
-    A record is a duplicate only by its own name, matched against the names and
-    aliases stored before this run and the names of venues this run adds. Aliases
-    added here (often operator brands shared by several airfields) never identify
-    a dropzone.
+    A record is a duplicate by its own name matching a stored name or alias, by
+    `same_place` against the venues stored before this run and those this run adds,
+    or by one of its aliases matching a stored name or alias when no other record of
+    that country carries the alias. Shared aliases (often operator brands of several
+    airfields) never identify a dropzone.
     """
     report: dict[str, Any] = {
         "files": 0,
@@ -279,6 +403,7 @@ def load_dropzones(
     }
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
+    stored = _stored_venues(engine)
     for file in dropzone_files(folder):
         try:
             data = json.loads(file.read_text(encoding="utf-8"))
@@ -289,6 +414,12 @@ def load_dropzones(
             report["refused"].append({"file": file.name, "reason": str(error)[:200]})
             continue
         report["files"] += 1
+        carried = Counter(
+            (dz["country"].upper(), search_key(alias))
+            for dz in records
+            if _record_problem(dz) is None
+            for alias in {a for a in dz.get("aliases") or [] if a.strip()}
+        )
         for dz in records:
             problem = _record_problem(dz)
             if problem:
@@ -306,10 +437,22 @@ def load_dropzones(
                 report["resumed"] += 1
             else:
                 country = dz["country"].upper()
-                match = names.get((country, search_key(dz["name"])))
+                words, point = place_words(dz["name"]), _point(dz)
+                exact = names.get((country, search_key(dz["name"])))
+                match = (
+                    (exact, "name")
+                    if exact is not None
+                    else same_place(words, point, stored.get(country, ()))
+                )
+                if match is None:
+                    match = _by_own_alias(
+                        aliases, country, point, names, carried, stored
+                    )
                 if match is not None:
-                    report["duplicates"].append({"key": key, "matched": str(match)})
-                    report["located"] += _locate(directory, actor, match, dz)
+                    report["duplicates"].append(
+                        {"key": key, "matched": str(match[0]), "by": match[1]}
+                    )
+                    report["located"] += _locate(directory, actor, match[0], dz)
                     continue
                 try:
                     url, checked = _source(dz, data.get("researched_on"))
@@ -333,6 +476,9 @@ def load_dropzones(
                 venue_id = venue.id
                 loaded[key] = venue_id
                 names[(country, search_key(venue.name))] = venue_id
+                stored.setdefault(country, []).append(
+                    StoredVenue(venue_id, words, point)
+                )
             try:
                 report["aliases_dropped"] += _publish(
                     directory, actor, venue_id, aliases, status
