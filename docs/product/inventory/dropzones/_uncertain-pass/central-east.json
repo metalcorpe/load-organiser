@@ -1,0 +1,424 @@
+{
+  "group": "central-east",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "ua-borodianka",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Historical sources identify Borodianka jumping, but no site-specific 2025+ operation or closure announcement was found. EASA confirms civil airspace closure in July 2026.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Historical Ukrainian jumping locations; no 2025+ operating evidence."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-chayka-kyiv",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "Para-Skuf’s 24 February 2022 notice says jumps and aircraft flights at Chayka stopped during martial law; it remains the latest club notice. EASA’s July 2026 closure corroborates suspension, not permanent abandonment.",
+      "sources": [
+        {
+          "url": "https://paraskuf.com.ua/novini/aerodrom-chajka-ne-pratsiuie/",
+          "checked_on": "2026-11-14",
+          "what": "Operator suspension notice dated 24 February 2022, still published."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-chemer-chernihiv",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The Progres operator still announces the end of its 2021 season; no 2025+ site-specific jumping or closure notice was found.",
+      "sources": [
+        {
+          "url": "https://skok.kiev.ua/",
+          "checked_on": "2026-11-14",
+          "what": "Operator advertises Chernihiv club jumps but latest season notice is 2021."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-hidroport-odesa",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The opened overview identifies Hidroport as a historical jumping site; local-language searches did not establish 2025+ civilian activity or a site-specific closure.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Historical Ukrainian jumping locations; no 2025+ operating evidence."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-korotych-kharkiv",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The club’s latest visible parachuting news is from October 2023 and concerns jumping in the USA. No 2025+ civilian jumps at Korotych were established.",
+      "sources": [
+        {
+          "url": "https://aeroclub.net.ua/events/ua/skydiving.html",
+          "checked_on": "2026-11-14",
+          "what": "Latest visible parachuting reports concern members abroad in 2023."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-krupske",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "A 4 January 2016 report confirms training jumps at Krupske involving Sky-Group members. No 2025+ civilian operation or site-specific closure was established.",
+      "sources": [
+        {
+          "url": "https://report.if.ua/lyudy/parashutysty-komentuyut-zagybel-ivanofrankivcya-pid-chas-strybka-pid-lvovom/",
+          "checked_on": "2026-11-14",
+          "what": "Dated 2016 reporting on a training jump at Krupske."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-ksaverivka-kyiv-south",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The undated 5 Ocean directory entry locates the centre within Kyiv-South airfield at Ksaverivka; it is only a historical lead. No independent 2025+ jumping or site-specific closure evidence was established.",
+      "sources": [
+        {
+          "url": "https://bestcity.kyiv.ua/ru/centr-parashjutnogo-sporta-5-okean/",
+          "checked_on": "2026-11-14",
+          "what": "Undated directory links 5 Ocean to Kyiv-South; not evidence of current operation."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-maiske-dnipro",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Historical reporting identifies aircraft jumping at Maiske, but no dated 2025+ civilian activity or site-specific closure announcement was found.",
+      "sources": [
+        {
+          "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
+          "checked_on": "2026-11-14",
+          "what": "Historical Ukrainian jumping locations; no 2025+ operating evidence."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-sutysky",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "An undated local report describes weekend tandem and solo jumps at Sutysky. Searches found no qualifying 2025+ operator evidence; reseller voucher validity was not treated as proof.",
+      "sources": [
+        {
+          "url": "https://vn.20minut.ua/Groshi/pidkoryuemo-nebo-skilki-koshtue-stribnuti-z-parashutom-ta-politati-na--11265091.html",
+          "checked_on": "2026-11-14",
+          "what": "Undated local report describes Sutysky weekend jumping and quotes an instructor."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-tsuniv-lviv",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "The airfield’s published parachuting page explicitly says jumps are temporarily suspended. The undated notice is consistent with the July 2026 civil airspace closure; this verdict denotes suspension, not permanent abandonment.",
+      "sources": [
+        {
+          "url": "https://aviaschool.com.ua/Стрибок-з-парашутом/",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly states that parachute jumps are temporarily not conducted."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "ua-voroniv-rivne",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Historical public-broadcaster reporting documents tandem and solo jumping at Voroniv with Rivne aeroclub instructors. No 2025+ civilian jumping or site-specific closure evidence was established.",
+      "sources": [
+        {
+          "url": "https://suspilne.media/rivne/49322-dla-tih-hto-hoce-v-nebo-na-rivnenskomu-aerodromi-proveli-den-vidkritih-dverej/",
+          "checked_on": "2026-11-14",
+          "what": "Historical report identifies Rivne aeroclub and actual tandem jumping at Voroniv."
+        },
+        {
+          "url": "https://www.easa.europa.eu/en/node/136057",
+          "checked_on": "2026-11-14",
+          "what": "2026-07-24: civil airspace closure."
+        }
+      ]
+    },
+    {
+      "key": "pl-chyzne",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "SkyFun explicitly lists Lądowisko Chyżne as a dropzone, but its contact and offer pages are undated. No 2025+ field-specific jump evidence or reliable coordinates were established.",
+      "sources": [
+        {
+          "url": "https://skyfun.pl/kontakt",
+          "checked_on": "2026-11-14",
+          "what": "Operator identifies Chyżne and its street address, without a dated operating notice."
+        }
+      ]
+    },
+    {
+      "key": "pl-jelenia-gora",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Tandemowe advertises weekend jumps and the aeroclub advertises tandem/AFF, both undated. The 22 May 2026 ULC register lists EPJG for Skydive Wrocław, but that operator directs current jumps to Leszno; actual 2025+ EPJG jumping remains unresolved.",
+      "sources": [
+        {
+          "url": "https://tandemowe.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Undated Jelenia Góra weekend tandem offer."
+        },
+        {
+          "url": "https://aeroklub.jelenia.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Undated tandem/AFF description; dated 2026 news concerns other activities."
+        },
+        {
+          "url": "https://ulc.gov.pl/_download/2026/rps_stan_na_22_05_2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 89: EPJG is an additional registered training location for Skydive Wrocław."
+        },
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Operator directs its current jumping to Leszno."
+        }
+      ]
+    },
+    {
+      "key": "pl-rybnik-gotartowice",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Omega explicitly advertises weekend jumps at Rybnik from April through October, but no dated 2025+ operator activity was established. Recent directory updates and company financial dates do not date the jumps.",
+      "sources": [
+        {
+          "url": "https://spadochrony.com.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Undated Rybnik weekend offer; linked news index could not be fetched."
+        }
+      ]
+    },
+    {
+      "key": "pl-wroclaw-szymanow",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "Skydive Wrocław explicitly suspends Szymanów jumps, while PL Strefa still advertises this field. The 22 May 2026 ULC register retains EPWS training entries, which do not resolve the conflicting undated operating notices.",
+      "sources": [
+        {
+          "url": "https://skydive.wroclaw.pl/",
+          "checked_on": "2026-11-14",
+          "what": "Notice says Szymanów jumps cannot currently be performed and redirects to Leszno."
+        },
+        {
+          "url": "https://plstrefa.pl/lokalizacje",
+          "checked_on": "2026-11-14",
+          "what": "Undated active-location listing for Szymanów, April–October."
+        },
+        {
+          "url": "https://ulc.gov.pl/_download/2026/rps_stan_na_22_05_2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Pages 53 and 89 retain EPWS parachute training entries despite the suspension notice."
+        }
+      ]
+    },
+    {
+      "key": "pl-zamosc",
+      "verdict": "active",
+      "confidence": "high",
+      "evidence": "PKBWL records a parachute accident at EPZA on 30 August 2025, establishing actual recent jumping. The 22 May 2026 ULC register identifies Aeroklub Ziemi Zamojskiej’s practical parachute training at EPZA, and its website continues offering jumps.",
+      "sources": [
+        {
+          "url": "https://pkbwl.gov.pl/raporty/2025-0117/",
+          "checked_on": "2026-11-14",
+          "what": "Official occurrence record: PD Navigator 280 parachute, EPZA, 30 August 2025."
+        },
+        {
+          "url": "https://ulc.gov.pl/_download/2026/rps_stan_na_22_05_2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 37: resident aeroclub registered for practical parachute training at EPZA."
+        },
+        {
+          "url": "https://aeroklubzamosc.pl/kategoria/aktualnosci/",
+          "checked_on": "2026-11-14",
+          "what": "Resident aeroclub at Mokre; links to its jump shop and parachute training."
+        }
+      ]
+    },
+    {
+      "key": "cz-jicin",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "The aeroclub’s 24 May 2025 festival programme advertises parachute displays. That confirms a recent event offer, but not recurring tandem, student or sport dropzone operation.",
+      "sources": [
+        {
+          "url": "https://www.letistejicin.info/rockovy-hangar-2025/",
+          "checked_on": "2026-11-14",
+          "what": "Dated festival programme includes parachute displays; no regular jump schedule."
+        }
+      ]
+    },
+    {
+      "key": "cz-krnov",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Regional tourism material describes Krnov parachute training, but its surrounding dated entries are from 2016–2017. The listed tandem operator’s 2026 calendar omits Krnov; no qualifying recent operation was established.",
+      "sources": [
+        {
+          "url": "https://www.mikroregionkrnovsko.cz/cestovni-ruch/sport/",
+          "checked_on": "2026-11-14",
+          "what": "Historical regional tourism description of Krnov parachuting."
+        },
+        {
+          "url": "https://www.tandemove-seskoky.cz/terminy-seskoku/",
+          "checked_on": "2026-11-14",
+          "what": "2026 calendar contains no Krnov date."
+        }
+      ]
+    },
+    {
+      "key": "cz-strunkovice",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Paraservice still advertises aircraft jumps at Strunkovice but links a calendar labelled 2024. No 2025+ operation or definitive operator closure was established; an undated directory closure label is insufficient.",
+      "sources": [
+        {
+          "url": "https://paraservice.cz/",
+          "checked_on": "2026-11-14",
+          "what": "Operator offers tandem and training jumps; latest linked calendar is 2024, and its PDF could not be fetched."
+        }
+      ]
+    },
+    {
+      "key": "sk-kvetoslavov",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "SkyTaxi’s own landing-fee page explicitly includes Kvetoslavov under tandem jumps, strengthening the place attribution beyond reseller offers. The page is undated and links a 2022 airfield tariff; no 2025+ operation was established.",
+      "sources": [
+        {
+          "url": "https://flyskytaxi.sk/pristavacie-poplatky.html",
+          "checked_on": "2026-11-14",
+          "what": "Operator lists a Kvetoslavov tandem-jump landing charge of EUR 20; no effective date."
+        },
+        {
+          "url": "https://flyskytaxi.sk/",
+          "checked_on": "2026-11-14",
+          "what": "Homepage still names Slávnica and Kráľová pri Senci."
+        }
+      ]
+    },
+    {
+      "key": "sk-presov-raznany",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "COMPACT’s operator booking page lists Lisková, Spišská Nová Ves and Bidovce, without Ražňany. Local-language 2025–2026 searches returned Ražňany voucher offers but no independently dated operator activity.",
+      "sources": [
+        {
+          "url": "https://www.compact.sk/rezervacny-system",
+          "checked_on": "2026-11-14",
+          "what": "Operator’s named jump locations omit Ražňany; reseller dates are not treated as evidence."
+        }
+      ]
+    },
+    {
+      "key": "hu-godollo",
+      "verdict": "uncertain",
+      "confidence": "medium",
+      "evidence": "HungaroControl’s VFR entry, updated 27 November 2025, names Sky Escort as the airport operator but does not confirm parachuting activity. A separate dropzone airspace agreement is indexed, but no verified 2025+ jumping or dated jump schedule was established.",
+      "sources": [
+        {
+          "url": "https://ais-en.hungarocontrol.hu/vfrmanual/LHGD",
+          "checked_on": "2026-11-14",
+          "what": "Current official airport entry names Sky Escort Hungary Aero Club; no parachuting text."
+        },
+        {
+          "url": "https://www.godolloairport.hu/medias/246/lhgd-hcegyattmakadasimegallapodasloa2023.002.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Opened ten-page airspace-agreement PDF had no extractable text and screenshot fetch failed; search excerpt names LHGD Drop Zone, not recent jumps."
+        }
+      ]
+    },
+    {
+      "key": "hu-ocseny",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Hungary Skydive names Őcsény, offers Cessna 182 jumps and provides gate directions, but still says its opening date will be announced. No dated 2025+ operating evidence was established.",
+      "sources": [
+        {
+          "url": "https://www.hungaryskydive.hu/dropzone-ocseny/",
+          "checked_on": "2026-11-14",
+          "what": "Undated operator page with aircraft jump prices, airfield directions and an opening-date placeholder."
+        }
+      ]
+    },
+    {
+      "key": "hu-tokol",
+      "verdict": "not_a_dropzone",
+      "confidence": "high",
+      "evidence": "Fly Jump explicitly describes Tököl as its company base and a future tandem location, while current jumps are offered at Nyíregyháza and Hajdúszoboszló. The same page links 2025 prices; this record represents a base rather than an established jump site.",
+      "sources": [
+        {
+          "url": "https://flyjumptandemugras.hu/",
+          "checked_on": "2026-11-14",
+          "what": "Operator distinguishes its Tököl company base/future plans from its two current jump locations."
+        }
+      ]
+    }
+  ]
+}

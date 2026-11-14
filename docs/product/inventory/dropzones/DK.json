@@ -231,12 +231,12 @@
       "icao": "EKRN",
       "operators": [
         {
-          "name": "Faldskærmsklubben Rønne",
-          "website": "https://www.fkr.dk/"
+          "name": "Faldskærmsklubben Bornholm",
+          "website": "https://www.facebook.com/SkydiveBornholm"
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The January 2026 DFU roll includes the Rønne club, but its website failed and recent jumping at Bornholm airport remains unverified.",
+      "status_evidence": "The January 2026 DFU roll includes the Rønne club, but its website failed and recent jumping at Bornholm airport remains unverified. Re-checked 2026-11-14: The DFU club list checked on 14 November 2026 names Faldskærmsklubben Bornholm in Rønne, but does not establish jumping at Rønne airport. Its linked operator website could not be accessed, and Danish searches found no dated 2025–2026 airport-specific sport schedule.",
       "sources": [
         {
           "url": "https://dfu.dk/klubber/kluboversigt",
@@ -507,8 +507,8 @@
           "website": "https://oefk.dk/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "ØFK directions now give temporary operations at Viborg while its contact page retains Ejstrupholm; the airport directory marks Ejstrupholm closed and ongoing jumping here is unverified.",
+      "status": "closed",
+      "status_evidence": "ØFK's AGM minutes of 14 March 2026 say the club moved out of Ejstrupholm in 2025, paid clubhouse rent only until the notice ended, now operates from Viborg with Skydive Viborg, and is talking to Randers and Stauning about a new base. A DFU news item of 30 June 2025 says the airfield owner ended the club's agreement in order to convert the clubhouse. The DFU club list and its 2026 jump-site map still show ØFK at Ejstrupholm, but they conflict with the club's own dated minutes and are stale.",
       "sources": [
         {
           "url": "https://oefk.dk/",
@@ -529,6 +529,21 @@
           "url": "https://ourairports.com/airports/DK-0017/",
           "checked_on": "2026-11-14",
           "what": "Coordinate source opened during follow-up; Historical airfield reference, not an exact landing target; airport directory marks the airfield closed, while ØFK lists temporary operations at Viborg and retains an old Ejstrupholm contact address."
+        },
+        {
+          "url": "https://oefk.dk/wp-content/uploads/2026/04/Generalforsamling-den-14.-marts-2026.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Pages 3–4 confirm ongoing Viborg partnership and completed 2025 move from Ejstrupholm."
+        },
+        {
+          "url": "https://dfu.dk/nyheder/%C3%B8stjyllands-faldsk%C3%A6rmsklub-m%C3%A5-vige-bryllupper",
+          "checked_on": "2026-11-14",
+          "what": "DFU account of eviction for guest-room development and replacement operations at Viborg."
+        },
+        {
+          "url": "https://www.dfu.dk/sites/default/files/dfu_springpladser_2026.jpg",
+          "checked_on": "2026-11-14",
+          "what": "DFU 2026 jump-site map still marks ØFK at Ejstrupholm Flyveplads (stale)"
         }
       ],
       "note": "Historical airfield reference, not an exact landing target; airport directory marks the airfield closed, while ØFK lists temporary operations at Viborg and retains an old Ejstrupholm contact address."
@@ -641,7 +656,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "The AIP permits parachuting here, but no 2025–2026 operator or regular jumping schedule was established.",
+      "status_evidence": "The AIP permits parachuting here, but no 2025–2026 operator or regular jumping schedule was established. Re-checked 2026-11-14: Danish searches did not identify a regular civilian operator or 2025–2026 jump schedule at Roskilde airport. Airshow parachute-display references do not establish an operating sport dropzone, and the live DFU list does not name one here.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/denmark",
@@ -672,8 +687,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "NFK shares Aversi from 2026; the historical Sundbylille site remains in an older AIP, without evidence of continued regular jumping.",
+      "status": "closed",
+      "status_evidence": "Nordsjællands Faldskærms Klub's own notice says it moved its jump site from Frederikssund (Sundbylille) to Aversi, Tornelundsvej 8, 4690 Haslev, on 1 March 2026. The DFU booking portal and the federation club list say the same, and I found no other operator using Sundbylille.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/denmark",
@@ -689,6 +704,16 @@
           "url": "https://aim.naviair.dk/media/files/iui0dmciy25/EK_ENR_5_5_en.pdf",
           "checked_on": "2026-11-14",
           "what": "Coordinate source opened during follow-up; AIP parachuting-area reference published to whole minutes; not an exact landing target. NFK lists Aversi as its shared field from 2026; continued use here is unconfirmed."
+        },
+        {
+          "url": "https://dfu.dk/klubber/kluboversigt",
+          "checked_on": "2026-11-14",
+          "what": "Current NFK entry explicitly identifies its jumping field in Haslev."
+        },
+        {
+          "url": "https://skydive-nfk.dk/vi-har-flyttet-springplads",
+          "checked_on": "2026-11-14",
+          "what": "Operator: 'pr. 1. marts 2026 har flyttet springplads fra Frederikssund til Aversi', Tornelundsvej 8, Haslev"
         }
       ],
       "note": "AIP parachuting-area reference published to whole minutes; not an exact landing target. NFK lists Aversi as its shared field from 2026; continued use here is unconfirmed."

@@ -94,8 +94,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Historical directory evidence suggests closure, but no dated 2025–2026 operator activity or definitive closure statement was established.",
+      "status": "closed",
+      "status_evidence": "The municipality's own 2023 industrial-park strategy calls the site a 'former airfield', a degraded, overgrown, unbuilt territory not in economic use, and English Wikipedia says the skydiving operation shut down in 2010. Skydive Latvia operates at Limbaži instead. One correction to Codex's evidence: the municipality later terminated the SP Austrumi solar-park contract because construction never began, so the site is disused rather than built over; that does not change the closure.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/latvia",
@@ -106,6 +106,31 @@
           "url": "https://en.wikipedia.org/wiki/Jelgava_Air_Base",
           "checked_on": "2026-11-14",
           "what": "Follow-up: opened airfield coordinate source"
+        },
+        {
+          "url": "https://www.jelgava.lv/jaunumi/lidlauka-teritoriju-gatavos-industriala-parka-attistibai-attiris-no-krumiem-un-apauguma/",
+          "checked_on": "2026-11-14",
+          "what": "Opened municipal announcement dated 27 January 2023: clearance and redevelopment of the former airfield, including a nearly 112-hectare solar park."
+        },
+        {
+          "url": "https://militaryheritagetourism.info/lv/military/sites/view/937?lang=lv",
+          "checked_on": "2026-11-14",
+          "what": "Opened regional heritage page: historical Rīgas Aeroklubs parachuting, runway dismantling preventing aviation, and industrial-park use."
+        },
+        {
+          "url": "https://www.jelgava.lv/wp-content/uploads/2023/07/7_1-PIELIKUMS.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Jelgava municipality, Zemgale industrial park strategy (July 2023): 'bijušā lidlauka teritorija', degraded, overgrown and unbuilt, the only large free municipal industrial territory not yet in economic use."
+        },
+        {
+          "url": "https://zz.lv/vietejas-zinas/pasvaldiba-izbeidz-ligumu-ar-sp-austrumi-par-tiesibam-buvet-saules-energijas-razosanas-parku",
+          "checked_on": "2026-11-14",
+          "what": "Municipality terminated the solar-park building-rights contract because no construction had started (late 2023)."
+        },
+        {
+          "url": "https://www.jelgava.lv/jelgavas-vestnesis-arhivs/brivais-kritiens-un-lidojums-no-4000-metru-augstuma",
+          "checked_on": "2026-11-14",
+          "what": "Older municipal newspaper article (prices in lats, so before 2014) confirming the site was once an active weekend dropzone."
         }
       ],
       "note": "Possible closure retained as uncertain."

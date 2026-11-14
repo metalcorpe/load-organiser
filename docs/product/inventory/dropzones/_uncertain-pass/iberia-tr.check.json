@@ -1,0 +1,75 @@
+{
+  "group": "iberia-tr",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "pt-braganca",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Codex cited only a pre-event programme, but a TVI report dated 12 July 2026 and the Aero Clube de Bragança 'Saltos Tandem' video from that day show the air-show jumps went ahead. Jumps at the aerodrome also recur: the 2025 Careto AirShow programme lists the 'paraquedistas Caretos' jumps, the Associação de Paraquedistas do Nordeste ran a course at the aerodrome in August 2024, and it opened sign-ups for its next civil course on 5 May 2026. This is occasional club and event use, not a resident operation; the 2026 programme calls the tandem jumps the first in Bragança in over two decades.",
+      "sources": [
+        {
+          "url": "https://www.aeroclubedebraganca.pt/careto-air-show-2026/",
+          "what": "Programme published 2026-06-15: tandem jumps on 12 July 2026 with the Associação de Paraquedistas do Nordeste at Aeródromo Municipal de Bragança; it also says the 'Saltos dos Paraquedistas Caretos' are a recurring feature of the festival."
+        },
+        {
+          "url": "https://tvi.iol.pt/noticias/video/careto-airshow-junta-centenas-de-aeronaves-e-milhares-de-visitantes-em-braganca/6a538ed40cf2f6a1a1e70559",
+          "what": "TVI report dated 12 July 2026 (the object ID decodes to 2026-07-12) mentions parachute jumps at the air show that weekend."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/posts/saltos-de-paraquedas-com-instrutor-dia-12-de-julho-no-aer%C3%B3dromo-municipal-de-bra/1437065618453439",
+          "what": "Aero Club post of 7 July, seen in search results only: tandem jumps on 12 July at the aerodrome, €180, from 11,000 ft. The related-video list on the club's public Facebook video pages shows a 'Saltos Tandem' video dated 12 July (2026)."
+        },
+        {
+          "url": "https://cavok.pt/2025/06/18/careto-airshow-2025-2",
+          "what": "2025 edition (20–22 June 2025) programme, as issued by the Aero Club, lists the 'saltos de paraquedistas Caretos'."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/videos/a-decorrer-no-aer%C3%B3dromo-de-bragan%C3%A7a-o-curso-de-paraquedistas-uma-iniciativa-da-a/416715934854202",
+          "what": "Public post dated 18 August 2024: an Associação de Paraquedistas do Nordeste parachuting course under way at Bragança aerodrome."
+        },
+        {
+          "url": "https://www.facebook.com/aeroclubedebraganca/posts/a-associa%C3%A7%C3%A3o-de-paraquedismo-do-nordeste-j%C3%A1-tem-inscri%C3%A7%C3%A3o-abertas-para-o-pr%C3%B3ximo/1381828253977176",
+          "what": "Public post dated 5 May 2026: the association is taking sign-ups for its next civil parachuting course. The post text does not name where the jumps take place."
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/ace.html",
+          "what": "The federation's list of clubs includes the Associação de Paraquedistas do Nordeste, with a Bragança address."
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "pt-maia",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "NiT (22 January 2026) reports that Skydive Maia's premises at Vilar de Luz were abandoned and its website and social media deleted, and RTP (6 February 2026, date confirmed in the page metadata) says it shut its doors. The federation has commented out its Maia entry, and no other operator jumping at Vilar de Luz in 2025 or later was found; Skydive Porto jumps at Proença-a-Nova, Braga and Espinho, not Maia.",
+      "sources": [
+        {
+          "url": "https://www.rtp.pt/noticias/pais/skydive-empresa-de-saltos-de-para-quedas-alvo-de-acusacoes-de-burla_v1716912",
+          "what": "Dated 2026-02-06 22:15 (datePublished in the page HTML): Skydive Maia closed its doors and its websites without explanation to customers."
+        },
+        {
+          "url": "https://www.nit.pt/fora-de-casa/na-cidade/empresa-de-skydiving-na-maia-acusada-de-enganar-dezenas-de-clientes",
+          "what": "22 January 2026: the company's premises at Aeródromo Vilar de Luz abandoned, website and social media deleted, phone number disconnected."
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "what": "The federation's dropzone page: the Maia/Skydive Maia entry is inside an HTML comment and does not show on the page."
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "what": "The other operator in the region lists Proença-a-Nova, Braga and Espinho as its sites; Maia is not mentioned."
+        },
+        {
+          "url": "https://www.diariodevalladolid.es/valladolid/260531/283127/lyf-aviation-dos-anos-estafas-saltos-anulados-paracaidas-valladolid-leon-dos-accidentes-aterrizaje.html",
+          "what": "31 May 2026: the operating company started in Maia and later moved to León (Chozas de Abajo)."
+        }
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

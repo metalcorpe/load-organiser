@@ -410,7 +410,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Federation membership and historical parachuting references remain, but 2025–2026 searches did not establish regular civilian jumping at Gödöllő.",
+      "status_evidence": "Federation membership and historical parachuting references remain, but 2025–2026 searches did not establish regular civilian jumping at Gödöllő. Re-checked 2026-11-14: HungaroControl’s VFR entry, updated 27 November 2025, names Sky Escort as the airport operator but does not confirm parachuting activity. A separate dropzone airspace agreement is indexed, but no verified 2025+ jumping or dated jump schedule was established.",
       "sources": [
         {
           "url": "https://skydive.hu/tagszervezetek",
@@ -431,36 +431,6 @@
       "note": "Check 2026-11-14: a search for 2026 tandem jumps at Gödöllő found nothing."
     },
     {
-      "key": "hu-tokol",
-      "name": "Tököli repülőtér",
-      "country": "HU",
-      "locality": "Tököl, Pest",
-      "latitude": 47.34606,
-      "longitude": 18.97835,
-      "coordinates_source": "https://www.openstreetmap.org/node/1042046970 (OSM aerodrome)",
-      "icao": "LHTL",
-      "operators": [
-        {
-          "name": "Fly Jump Tandemugrás",
-          "website": "https://flyjumptandemugras.hu"
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló.",
-      "sources": [
-        {
-          "url": "https://flyjumptandemugras.hu",
-          "checked_on": "2026-11-14",
-          "what": "operator page: Tököl is its base; current sites Nyíregyháza and Hajdúszoboszló; 2025 prices; Codex cross-check: Operator describes Tököl as its company base and a future jumping ambition, while current jumps are offered only at Nyíregyháza and Hajdúszoboszló."
-        },
-        {
-          "url": "https://ourairports.com/airports/LHTL/",
-          "checked_on": "2026-11-14",
-          "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
-        }
-      ]
-    },
-    {
       "key": "hu-ocseny",
       "name": "Őcsény repülőtér",
       "aliases": [
@@ -479,7 +449,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator provides an Őcsény dropzone page with aircraft jump prices and gate directions, but the opening-date notice is undated and no 2025+ operation was established.",
+      "status_evidence": "Operator provides an Őcsény dropzone page with aircraft jump prices and gate directions, but the opening-date notice is undated and no 2025+ operation was established. Re-checked 2026-11-14: Hungary Skydive names Őcsény, offers Cessna 182 jumps and provides gate directions, but still says its opening date will be announced. No dated 2025+ operating evidence was established.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/hungary-skydive-ocseny/",

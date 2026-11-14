@@ -568,7 +568,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established. Re-checked 2026-11-14: The SFF club page checked on 14 November 2026 does not list Kiruna. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/sweden",
@@ -600,7 +600,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established. Re-checked 2026-11-14: The SFF club page checked on 14 November 2026 does not list Luleå/Kallax. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/sweden",
@@ -632,7 +632,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established. Re-checked 2026-11-14: The SFF club page checked on 14 November 2026 does not list Karlsborg. Swedish searches found no dated 2025–2026 civilian-access jumping schedule or definitive closure evidence; absence from this list alone does not establish closure.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/sweden",
@@ -659,12 +659,12 @@
       "icao": "ESKN",
       "operators": [
         {
-          "name": "Skavsta directory listing",
-          "website": null
+          "name": "Nyköpings Fallskärmsklubb (historical operator)",
+          "website": "https://www.nyfk.se"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Historical directory lead absent from the current SFF club page; no 2025–2026 regular civilian jumping was established.",
+      "status": "closed",
+      "status_evidence": "The operator's own Instagram post, dated 12 February 2024 (decoded from the post ID, matching the date on the profile grid), announces the decision to shut down Nyköpings Fallskärmsklubb because operations can no longer continue. The same text appears on its Facebook page. The current SFF list has no club in Nyköping or Södermanland, and searches found no other operator jumping at Skavsta. The historical-operator correction is right: nyfk.se was the club's domain (info@nyfk.se, nyfk.se/tandemhopp), though it now serves only a self-signed certificate.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/sweden",
@@ -675,6 +675,46 @@
           "url": "https://ourairports.com/airports/ESKN/",
           "checked_on": "2026-11-14",
           "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://www.sverigesradio.se/artikel/grundades-1978-nu-riskerar-fallskarmklubben-att-laggas-ned",
+          "checked_on": "2026-11-14",
+          "what": "Opened 2 March 2023 report documents threatened closure, not completed closure."
+        },
+        {
+          "url": "https://sff.se/borja-hoppa-fallskarm/fallskarmsklubbar-i-sverige/",
+          "checked_on": "2026-11-14",
+          "what": "Opened federation list omits Nyköpings/Skavsta."
+        },
+        {
+          "url": "https://www.localgymsandfitness.com/SE/Nyk%C3%B6ping/218559674899883/Nyk%C3%B6pings-Fallsk%C3%A4rmsklubb",
+          "checked_on": "2026-11-14",
+          "what": "Search-result text only: reproduced 12 February 2024 closure announcement; opening returned 403, original Facebook page also inaccessible."
+        },
+        {
+          "url": "https://www.ratsit.se/8190009566-NYKOPINGS_FALLSKARMSKLUBB",
+          "checked_on": "2026-11-14",
+          "what": "Search-result text only: deregistered 17 January 2025; opening returned 403."
+        },
+        {
+          "url": "https://www.instagram.com/skydive_nykoping/p/C3PnG39sCbO/",
+          "checked_on": "2026-11-14",
+          "what": "Opened: club closure announcement, 2024-02-12; operations can no longer be run; inbox kept open for a while for questions."
+        },
+        {
+          "url": "https://www.facebook.com/SkydiveNykoping/posts/det-%C3%A4r-med-tungt-hj%C3%A4rta-som-vi-beslutat-att-l%C3%A4gga-ner-nyk%C3%B6pings-fallsk%C3%A4rmsklubb-/769190105233558",
+          "checked_on": "2026-11-14",
+          "what": "Same closure text on the club's Facebook page (visible in search results; the post itself is behind the login wall)."
+        },
+        {
+          "url": "https://www.sn.se/sport/fallskarmshopp/artikel/fallskarmsklubben-krisar-saknar-flygplan/jp3zyeql",
+          "checked_on": "2026-11-14",
+          "what": "Local paper: the club had had no leased aircraft since autumn 2021 and might have to close."
+        },
+        {
+          "url": "https://www.nykopingsguiden.se/verksamheter/nykopings-fallskarmsklubb",
+          "checked_on": "2026-11-14",
+          "what": "Municipal tourism page (outdated): club address Norra Banänden, Skavsta airport; email info@nyfk.se."
         }
       ],
       "note": "Directory lead absent from the opened SFF club page; recent activity and exact landing field are unconfirmed."

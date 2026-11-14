@@ -1,0 +1,314 @@
+{
+  "group": "iberia-tr",
+  "checked_on": "2026-11-14",
+  "worker": "codex",
+  "verdicts": [
+    {
+      "key": "pt-agueda-casarao",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The federation hides its former Casarão entry in HTML comments. A 26 March 2026 report confirms airfield emergency exercises, but no 2025+ parachuting programme was found.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "Undated federation DZ page; HTML retrieved directly after browser fetch failed; Águeda, Maia and Figueira entries are commented out."
+        },
+        {
+          "url": "https://noticiasdeagueda.sapo.pt/simulacro-no-aerodromo-de-agueda-testa-resposta-a-acidente-com-aeronave/",
+          "checked_on": "2026-11-14",
+          "what": "26 March 2026 helicopter emergency exercise at Casarão; not a jumping report."
+        }
+      ]
+    },
+    {
+      "key": "pt-braganca",
+      "verdict": "seasonal",
+      "confidence": "high",
+      "evidence": "The Aero Clube de Bragança programme published 15 June 2026 advertises tandem jumps at the municipal aerodrome on 12 July 2026 with Associação de Paraquedistas do Nordeste. This establishes event-weekend use, not a resident daily operation.",
+      "sources": [
+        {
+          "url": "https://www.aeroclubedebraganca.pt/careto-air-show-2026/",
+          "checked_on": "2026-11-14",
+          "what": "Organizer programme names the airfield, date, tandem activity and collaborating parachute association."
+        }
+      ],
+      "corrections": {
+        "operators": [
+          {
+            "name": "Associação de Paraquedistas do Nordeste"
+          }
+        ],
+        "season": "Occasional event weekends; tandem programme on 12 July 2026 at Careto Air Show"
+      }
+    },
+    {
+      "key": "pt-cerval",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The operator homepage identifies Tancos as its jump zone while retaining the Cerval address. No dated 2025+ jumps at Cerval itself were established; the 2026 copyright footer is not activity evidence.",
+      "sources": [
+        {
+          "url": "https://www.skydivecerval.pt/",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly labels Tancos as zona de saltos; Cerval remains in its address."
+        }
+      ]
+    },
+    {
+      "key": "pt-coimbra",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The municipality announced a trial Skydive Portugal operation for May–October 2021, while the tourism board retains an undated Fly Skydive Coimbra listing. Neither establishes continuing jumps in 2025 or later.",
+      "sources": [
+        {
+          "url": "https://www.coimbra.pt/2021/04/coimbra-vai-ter-centro-de-paraquedismo-no-aerodromo-municipal-bissaya-barreto/",
+          "checked_on": "2026-11-14",
+          "what": "Municipal announcement of a 2021 trial, with permanent facilities conditional on results."
+        },
+        {
+          "url": "https://www.visitportugal.com/en/content/fly-air-sports-and-tourism-skydive-coimbra",
+          "checked_on": "2026-11-14",
+          "what": "Undated listing at Bissaya Barreto aerodrome."
+        }
+      ]
+    },
+    {
+      "key": "pt-espinho",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "NAV AIP effective 6 August 2026 lists the Espinho parachuting area but identifies only the airfield director, not a jumping operator. Skydive Porto reserves Espinho for special events on an undated activity page; no dated 2025+ event or resumption was established.",
+      "sources": [
+        {
+          "url": "https://ais.nav.pt/wp-content/uploads/AIS_Files/eVFR_Current/eVFR_Online/eAIP/html/eAIP/LP-ENR-5.5-pt-PT.html",
+          "checked_on": "2026-11-14",
+          "what": "2026 AIP designated parachuting area and airfield-director contact."
+        },
+        {
+          "url": "https://skydiveporto.com/skydive-porto/",
+          "checked_on": "2026-11-14",
+          "what": "Operator limits Espinho use to special events and places main jumping elsewhere."
+        }
+      ]
+    },
+    {
+      "key": "pt-figueira-dos-cavaleiros",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The federation entry is hidden in HTML comments, and the 2015 CAVOK airfield page describes historical parachuting use. No dated 2025+ local jump programme or definitive closure was established.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "Undated federation DZ page; HTML retrieved directly after browser fetch failed; Águeda, Maia and Figueira entries are commented out."
+        },
+        {
+          "url": "https://cavok.pt/2015/08/19/figueira-de-cavaleiros/",
+          "checked_on": "2026-11-14",
+          "what": "Historical airfield page describes parachuting and prior coordination."
+        }
+      ]
+    },
+    {
+      "key": "pt-maia",
+      "verdict": "closed",
+      "confidence": "high",
+      "evidence": "RTP reported on 6 February 2026 that Skydive Maia had closed its premises and internet pages after customers could not redeem jumps. This verdict concerns the recorded skydiving operation, not closure of Vilar de Luz airfield.",
+      "sources": [
+        {
+          "url": "https://www.rtp.pt/noticias/pais/skydive-empresa-de-saltos-de-para-quedas-alvo-de-acusacoes-de-burla_v1716912",
+          "checked_on": "2026-11-14",
+          "what": "Dated national broadcaster report explicitly states Skydive Maia closed."
+        },
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "Undated federation DZ page; HTML retrieved directly after browser fetch failed; Águeda, Maia and Figueira entries are commented out."
+        }
+      ]
+    },
+    {
+      "key": "pt-ponte-de-sor",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "Municipal minutes of 13 September 2006 identify Sky Medley facilities at Ponte de Sor aerodrome. Portuguese searches did not establish a 2025+ jump programme or a definitive cessation notice.",
+      "sources": [
+        {
+          "url": "https://www.cm-pontedesor.pt/wp-content/uploads/2019/03/ata-n_37_2006_13_09_2006.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Page 6 discusses Sky Medley school facilities at the municipal aerodrome in 2006."
+        }
+      ]
+    },
+    {
+      "key": "pt-vila-real",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The federation still names Falcões do Marão at Vila Real, but its page has no publication or season date. No independently dated 2025+ local jump programme was established.",
+      "sources": [
+        {
+          "url": "https://www.fppq.pt/saltar/dz.html",
+          "checked_on": "2026-11-14",
+          "what": "Undated visible Vila Real/Falcões do Marão entry; retrieved directly after browser fetch failed."
+        }
+      ]
+    },
+    {
+      "key": "es-alhama-de-murcia",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The federation documents historical Costa Cálida activity at Alhama; a February 2017 voucher erratum reports closure but is reseller evidence only. No qualifying 2025+ activity or independent closure confirmation was found.",
+      "sources": [
+        {
+          "url": "https://famur.org/site/promocion-especial-aspamur-skydive-costa-calida-para-federados-famur/",
+          "checked_on": "2026-11-14",
+          "what": "Historical federation promotion for ASPAMUR/Skydive Costa Cálida."
+        },
+        {
+          "url": "https://media.smartbox.com/media/es/cms_img/pdf/erratum/caducidad_2018/march/T057VD_Maxima_Emocion.pdf",
+          "checked_on": "2026-11-14",
+          "what": "February 2017 reseller correction; closure lead only, not decisive evidence."
+        }
+      ]
+    },
+    {
+      "key": "es-trebujena",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "ENAIRE SUP 119/25 imposed temporary airfield closure from 10 July 2025 until an estimated 10 July 2026, subject to formal cancellation. The airfield website describes general aviation under new management but does not establish resumed skydiving or the closure status after that estimated date.",
+      "sources": [
+        {
+          "url": "https://aip.enaire.es/recursos/descargas/SUP/LE_SUP_A_2025_119_es.html",
+          "checked_on": "2026-11-14",
+          "what": "Official temporary closure notice and cancellation condition."
+        },
+        {
+          "url": "https://www.aerodromodetrebujena.com/",
+          "checked_on": "2026-11-14",
+          "what": "Undated airfield page describes new management since 2019 and aerospace/aviation activities."
+        }
+      ]
+    },
+    {
+      "key": "es-ventas-de-huelma",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "An undated local listing places Skydive Granada at Juan Espadafor; a regional reseller says jumping ceased in 2019. No independent closure confirmation or dated 2025+ reopening evidence was established.",
+      "sources": [
+        {
+          "url": "https://granadaescultura.com/sitio/skydive-granada/",
+          "checked_on": "2026-11-14",
+          "what": "Undated local directory describes tandem jumps at Juan Espadafor."
+        },
+        {
+          "url": "https://paraisoandaluz.es/en/skydive-andalucia/",
+          "checked_on": "2026-11-14",
+          "what": "Reseller says sporadic Granada jumping lasted until 2019; lead only."
+        }
+      ]
+    },
+    {
+      "key": "es-villamartin",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The municipality announced Skyfarm opening at La Antigua Estación on 4 March 2022. Spanish searches found no dated 2025+ activity at this airfield; marketplace year labels do not establish operation.",
+      "sources": [
+        {
+          "url": "https://www.villamartin.es/actualidad/noticias/292-villamartin-contara-con-un-centro-de-paracaidismo",
+          "checked_on": "2026-11-14",
+          "what": "Municipal 2022 opening announcement names airfield, tandem and AFF activities."
+        }
+      ]
+    },
+    {
+      "key": "ad-borda-mateu",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "RTVA on 17 August 2022 described helicopter jumps into Borda Mateu in 2019 and 2021 and a further October 2022 event. Catalan searches did not establish continuation in 2025 or later or locate the precise landing meadows.",
+      "sources": [
+        {
+          "url": "https://www.rtva.ad/esports/segona-edicio-andorra-from-above-tindra",
+          "checked_on": "2026-11-14",
+          "what": "Dated report names the meadows, helicopter jumps and planned tandem participation."
+        }
+      ]
+    },
+    {
+      "key": "tr-cappadocia",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "The operator advertises skydiving but supplies no dated 2025+ jumping news or calendar on the opened pages; its 2025 copyright is insufficient. The contact page gives an Ürgüp office rather than an identified airfield or landing area.",
+      "sources": [
+        {
+          "url": "https://www.skydivecappadocia.org/",
+          "checked_on": "2026-11-14",
+          "what": "Undated operator skydiving offer and 2025 footer."
+        },
+        {
+          "url": "https://www.skydivecappadocia.org/contact-skydive-cappadocia",
+          "checked_on": "2026-11-14",
+          "what": "Operator contact page; no confirmed jumping-field location."
+        }
+      ]
+    },
+    {
+      "key": "tr-erzincan",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "THK lists parachute training at Erzincan without a dated jump programme or landing field. University records list April–May 2025 parachute training but do not identify aircraft jumps or their site, so recent operation at this record remains unverified.",
+      "sources": [
+        {
+          "url": "https://thk.org.tr/ehem",
+          "checked_on": "2026-11-14",
+          "what": "Undated centre page lists training disciplines and campus address."
+        },
+        {
+          "url": "https://sks.ebyu.edu.tr/genc-kanatlar-kulubu/",
+          "checked_on": "2026-11-14",
+          "what": "2025 training entries lack jump-site and aircraft details."
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "21 October 2026 notice names active THK centres without specifying aircraft parachuting at each."
+        }
+      ]
+    },
+    {
+      "key": "tr-etimesgut-turkkusu",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "A 17 June 2024 report includes Etimesgut among parachute course centres. Turkish searches and the 21 October 2026 THK notice did not establish 2025+ civilian aircraft jumps there; the latter names the Ankara museum/tower instead.",
+      "sources": [
+        {
+          "url": "https://www.aa.com.tr/tr/gundem/thk-ulke-insanina-havaciligi-sevdiriyor/3251797",
+          "checked_on": "2026-11-14",
+          "what": "17 June 2024 report names THK course centres and static-line jumping; predates required recent evidence."
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "21 October 2026 notice names active THK centres without specifying aircraft parachuting at each."
+        }
+      ]
+    },
+    {
+      "key": "tr-karain",
+      "verdict": "uncertain",
+      "confidence": "low",
+      "evidence": "A 17 June 2024 report names Karain for static-line courses, and a 21 October 2026 university notice confirms the aviation centre still exists. Neither establishes aircraft jumps at Karain in 2025 or later.",
+      "sources": [
+        {
+          "url": "https://www.aa.com.tr/tr/gundem/thk-ulke-insanina-havaciligi-sevdiriyor/3251797",
+          "checked_on": "2026-11-14",
+          "what": "17 June 2024 report names THK course centres and static-line jumping; predates required recent evidence."
+        },
+        {
+          "url": "https://anadolu.edu.tr/kurum-disi-duyurular/turk-hava-kurumu-thk-tanitim-faaliyetleri-1792586031",
+          "checked_on": "2026-11-14",
+          "what": "21 October 2026 notice names active THK centres without specifying aircraft parachuting at each."
+        }
+      ]
+    }
+  ]
+}

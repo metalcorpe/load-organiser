@@ -1,0 +1,192 @@
+{
+  "group": "fr",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "notes": "corrections_ok is null where Codex proposed no corrections. Both Pappers URLs cited for Annemasse returned HTTP 403 and the SIA VAC host for Le Blanc did not resolve from this environment; those sources were not re-opened and are not relied on below.",
+  "checks": [
+    {
+      "key": "fr-annemasse",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "In the Annemasse council session of 12 November 2025 (official city video), the mayor's side speaks of the parachute-jump company in the past tense: safety and management failures, then 'il est plus là'. A new school is only discussed as a possibility if conditions can be met. No 2026 restart was found in independent searches.",
+      "sources": [
+        {
+          "url": "https://www.youtube.com/watch?v=45AsYTrQZho",
+          "what": "Ville d'Annemasse channel, council of 12 November 2025, item 16 (aerodrome concession), transcript about 1:25:40 to 1:31:00: the former jump operator is gone; a return would be considered."
+        }
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "fr-charleville-mezieres-belval",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "uncertain",
+      "reason": "The 21 October 2025 Ardennes Développement article only lists parachuting in a generic list of leisure uses at the airfield. It names no operator and gives no jump dates. Press of May 2024 reports no parachute jumps at Belval since summer 2023 and the last operator unreachable, and a reseller marks the Charleville jump 'no longer offered'. No resumption in 2025 or later was found.",
+      "sources": [
+        {
+          "url": "https://www.ardennes-developpement.com/actualites/aerodrome-ardennes-potentiel-exploiter",
+          "what": "Dated 21 October 2025; 'activités de loisirs (parachutisme, aéromodélisme, ULM…)' only, with no operator or activity dates."
+        },
+        {
+          "url": "https://www.sudinfo.be/id832776/article/2024-05-04/lavenir-sassombrit-pour-les-clients-malheureux-de-sauter-en-parachute-le-club-de",
+          "what": "4 May 2024: 'Il n'y a plus de saut en parachute à l'aérodrome de Belval depuis l'été 2023.'"
+        },
+        {
+          "url": "https://www.lardennais.fr/id595640/article/2024-05-01/un-site-luxembourgeois-vend-toujours-des-sauts-en-parachute-belval-ou",
+          "what": "1–2 May 2024: the Belval operator 'Sauter en parachute' had been inactive for weeks and was not answering customers."
+        },
+        {
+          "url": "https://www.adrenactive.com/saut-en-parachute-charleville-mezieres-5926.htm",
+          "what": "Reseller page for Charleville marked 'Cette activité n'est plus proposée actuellement'."
+        }
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "fr-dinan-trelivan",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "uncertain",
+      "reason": "The FEPP map popup for Aero Tandem Celtic (Dinan) is undated marketing text. The operator's Dinan product page says Dinan dates are the days marked navy blue on its calendar (about one a month). The 2026 planning PDF has a navy 'TARIF DINAN' legend but no navy-marked day from April to October 2026; every session shown is Vannes. No dated jump at Dinan in 2025 or later was found.",
+      "sources": [
+        {
+          "url": "https://www.fepp.aero/ou-pratiquer",
+          "what": "Page HTML: marker 'Aero Tandem Celtic (Dinan)' at 48.4397, -2.1018 with undated promotional text."
+        },
+        {
+          "url": "https://www.saut-parachute-bretagne.com/wp-content/uploads/planning-2026-atc.pdf",
+          "what": "PLANNING 2026 (PDF created 25 June 2026), rendered and inspected: legend has a navy Dinan colour, but no calendar day uses it; the cells are Vannes (pink) or Vannes restreint (green)."
+        },
+        {
+          "url": "https://www.saut-parachute-bretagne.com/produit/saut-parachute-dinan-3000m/",
+          "what": "Dinan product at Trélivan: 'Dates limitées : Voir jour en bleu marine sur le calendrier'; 'une seule date disponible chaque mois'."
+        }
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "fr-lapalisse-perigny",
+      "codex_verdict": "not_a_dropzone",
+      "agree": true,
+      "final_verdict": "not_a_dropzone",
+      "reason": "CAE Aviation's live page describes its Lapalisse centre as dedicated to military parachutists, with 'Accès réservé aux armées et organisations d'état uniquement'. The page was last modified in September 2022, so 'high' confidence is generous. Still, no civilian offer dated 2025 or later was found: the civilian tandem listings are undated legacy directory entries, and Lapalisse is not on the FFP structure list.",
+      "sources": [
+        {
+          "url": "https://www.cae-aviation.com/activites/parachutisme-militaire/",
+          "what": "Lapalisse centre for military parachutists; access reserved to armed forces and state organisations; page metadata modified 2022-09-20."
+        },
+        {
+          "url": "https://www.loisirs.fr/Cavok-Sarl-Lapalisse",
+          "what": "Undated directory entry for a Cavok civilian tandem; no year, so it is not current evidence."
+        },
+        {
+          "url": "https://www.ffp.asso.fr/ou-pratiquer/liste-de-toutes-les-structures-ffp/",
+          "what": "No Lapalisse structure listed."
+        }
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "fr-le-blanc",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "closed",
+      "reason": "The school's own homepage still says it halted activity in 2023 and could not give a 2024 reopening date; its events calendar is empty. The Le Blanc municipal sports office page dated 24 September 2026 lists the school as 'Association en sommeil' (dormant). The FFP listing of school 3601 and an AIP mention are standing records, not proof of jumping. The only jumps traced since are military and state free-fall training on 11–14 November 2024. This is a dormant closure; a reopening is possible.",
+      "sources": [
+        {
+          "url": "https://www.efpleblanc.com/index.php",
+          "what": "Operator notice: activity stopped during 2023, no 2024 reopening date, 'Aucun événement trouvé'."
+        },
+        {
+          "url": "http://www.sports-leblanc.fr/pages/ecole-francaise-de-parachutisme-le-blanc",
+          "what": "Office municipal des sports du Blanc, page dated 24 September 2026: 'Ecole Française de Parachutisme Le Blanc — Association en sommeil'."
+        },
+        {
+          "url": "https://www.ffp.asso.fr/ou-pratiquer/structures/?code=3601",
+          "what": "FFP school entry still present, with no date; latest linked news is dated 17 May 2023."
+        },
+        {
+          "url": "https://www.aerovfr.com/2024/10/ca-chute-au-blanc-2",
+          "what": "17 October 2024: training jumps for Interior and Defence ministry operational parachutists at Le Blanc, 11–14 November 2024; state, not civilian."
+        }
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "fr-le-castellet",
+      "codex_verdict": "seasonal",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Air Mauss sells a Le Castellet tandem and calls the Castellet dates 'occasionnelles'. A public Facebook check-in dated 17 October 2026 places Air Mauss at Aéroport du Castellet ('Saut à 3500m'). However, the cited page (modified 10 November 2026) no longer shows 17 and 31 October 2026 or a comparison with Aix weekends; it now gives provisional dates of 17–18 and 24–25 April 2027, and 31 October 2026 could not be verified.",
+      "sources": [
+        {
+          "url": "https://air-mauss.com/saut-parachute-aix/",
+          "what": "Canonical Castellet page, dateModified 2026-11-10: 'dates occasionnelles'; next dates 17–18 and 24–25 April 2027, 'dates prévisionnelles à confirmer'."
+        },
+        {
+          "url": "https://www.facebook.com/airmauss",
+          "what": "Seen in search results only (no login): 'Oct 17, 2026 · Air Mauss Parachutisme is at Aéroport du Castellet. Saut à 3500m'."
+        },
+        {
+          "url": "https://air-mauss.com/blog/saut-en-parachute-castellet-circuit-paul-ricard/",
+          "what": "Operator article of 10 November 2026: Castellet is one of its dropzones; next dates are provisional, April 2027."
+        }
+      ],
+      "corrections_ok": false
+    },
+    {
+      "key": "fr-marennes",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "uncertain",
+      "reason": "The FEPP popup mentions Marennes as a secondary activity, but it is undated and its marker sits at Rochefort, not Marennes. Big Air's own site puts its dropzone at Rochefort airport and uses Marennes only as a scenic reference, and its 2026 planning PDFs do not mention Marennes. The 2026 Oléron–Marennes tourism listing sends customers to Rochefort airport at Saint-Agnant, '20 minutes de Marennes'. No jump at Marennes airfield in 2025 or later was found.",
+      "sources": [
+        {
+          "url": "https://www.fepp.aero/ou-pratiquer",
+          "what": "Page HTML: 'Big Air Parachutisme ( Rochefort)' marker at 45.8869, -0.9836; undated text 'activité secondaire' at Marennes."
+        },
+        {
+          "url": "https://bigair-parachutisme.fr/dropzone/",
+          "what": "Dropzone 'située sur l'aéroport de Rochefort, à seulement quelques minutes du bassin de Marennes-Oléron'."
+        },
+        {
+          "url": "https://bigair-parachutisme.fr/wp-content/uploads/2026/02/PLANNING-26.pdf",
+          "what": "2026 planning; no mention of Marennes."
+        },
+        {
+          "url": "https://www.ile-oleron-marennes.com/commerces-et-services-sites-communaux/big-air-parachutisme",
+          "what": "Open 14 February–29 November 2026; 'Rendez-vous à l'aéroport de Rochefort à St-Agnant (20 minutes de Marennes)'."
+        }
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "fr-reims-prunay",
+      "codex_verdict": "active",
+      "agree": false,
+      "final_verdict": "seasonal",
+      "reason": "This is a label-only disagreement: operation is confirmed, more firmly than Codex's sources show. The operator sells a 'Saut flash' on 3–4 October 2026 at Reims Prunay, billed as the last weekend of the season, and its Instagram posts from August–September 2026 show the 2026 season. Because the season is bounded, 'seasonal' fits the file's convention. The cited Le Bonbon article (20 August 2025) says '20 minutes de Reims' but does not name Prunay.",
+      "sources": [
+        {
+          "url": "https://www.air-parachutisme.com/saut/saut-flash-03-et-04-octobre-2026-venez-feter-avec-nous-le-dernier-week-end-de-la-saison",
+          "what": "Operator offer for 3–4 October 2026 at Reims Prunay, 'le dernier week-end de la saison'."
+        },
+        {
+          "url": "https://www.air-parachutisme.com/blog/ou-faire-un-saut-en-parachute",
+          "what": "Aircraft departs from and lands at Reims Prunay airfield; jump at 3,500 m."
+        },
+        {
+          "url": "https://www.instagram.com/air_parachutisme_reims",
+          "what": "Seen in search results only (no login): posts dated August–September 2026, including 'Plus que 5 places disponibles pour 2026'."
+        },
+        {
+          "url": "https://www.lebonbon.fr/reims/loisirs/4-activites-sensations-fortes-a-tester-a-reims-cet-ete/",
+          "what": "20 August 2025: Air Parachutisme Reims tandem from an aircraft, '20 minutes de Reims'; Prunay is not named."
+        }
+      ],
+      "corrections_ok": null
+    }
+  ]
+}

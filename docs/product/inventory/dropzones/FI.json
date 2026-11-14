@@ -398,8 +398,8 @@
           "website": "https://tamlk.org"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator information names Pirkkala, but dated 2025 federation evidence concerns Jämi and no 2025–2026 Pirkkala schedule was established.",
+      "status": "active",
+      "status_evidence": "Codex's own sources are undated apart from the 2026 membership fee, but dated club posts confirm aircraft jumping: an Instagram post from 29 June 2025 (date decoded from the post ID, and consistent with its 'tomorrow (Monday) the course starts', 30 June being a Monday only in 2025) reports jumping at Pirkkala that weekend. A Facebook post announces jumps into Santalahti on 13-17 July 2026, and the operator says Pirkkala tandems land there. The 2025 federation table lists one location per club (TamLK under Jämi), so Pirkkala's absence there is not evidence against it.",
       "sources": [
         {
           "url": "https://tamlk.org/kysymyksia/",
@@ -410,9 +410,40 @@
           "url": "https://ourairports.com/airports/EFTP/",
           "checked_on": "2026-11-14",
           "what": "Opened airport facility page: WGS84 airfield reference coordinates"
+        },
+        {
+          "url": "https://tamlk.org/hinnat/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator prices: Pirkkala tandem service and season 2026 membership fees."
+        },
+        {
+          "url": "https://tamlk.org/esittely/",
+          "checked_on": "2026-11-14",
+          "what": "Opened operator location page describes Pirkkala aircraft jumps, airport landing area and weekday/off-season use."
+        },
+        {
+          "url": "https://www.instagram.com/p/DLfZov4hE6F/",
+          "checked_on": "2026-11-14",
+          "what": "Club Instagram post (posted 2025-06-29 per its media ID): jumping took place at Pirkkala this weekend despite cloud; next weekend back at Jämi."
+        },
+        {
+          "url": "https://www.facebook.com/TamLK/videos/ensi-viikolla-13-1772026-hyp%C3%A4t%C3%A4%C3%A4n-santiksessa-tamperelaiset-laskuvarjohypp%C3%A4%C3%A4j%C3%A4t-/2068439867077997",
+          "checked_on": "2026-11-14",
+          "what": "Club Facebook post: jumps with landings at Santalahti park all week 13-17.7.2026, tandems bookable."
+        },
+        {
+          "url": "https://tamlk.org/tandemkurssi/",
+          "checked_on": "2026-11-14",
+          "what": "Operator: Pirkkala tandem 490 EUR; Pirkkala tandems land at Santalahti park weather permitting, otherwise at the landing area beside Pirkkala airport."
+        },
+        {
+          "url": "https://laskuvarjotoimikunta.ilmailuliitto.fi/wp-content/uploads/sites/5/2026/02/esitelma_25_netti.pdf",
+          "checked_on": "2026-11-14",
+          "what": "SIL 2025 jump table (8.2.2026): one location per club, Tampereen LK under Jämi with 1572 jumps."
         }
       ],
-      "note": "Operator describes this as a jumping location alongside Jämi, but the dated 2025 federation report identifies Jämi only."
+      "note": "Operator describes this as a jumping location alongside Jämi, but the dated 2025 federation report identifies Jämi only.",
+      "season": "Weekday evenings and outside the main Jämi season; some winter jumping, weather permitting"
     },
     {
       "key": "fi-malmi",
@@ -468,7 +499,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Finavia confirms occasional parachuting in 2022, but no 2025–2026 evidence of regular civilian operation was established.",
+      "status_evidence": "Finavia confirms occasional parachuting in 2022, but no 2025–2026 evidence of regular civilian operation was established. Re-checked 2026-11-14: The federation’s 8 February 2026 presentation lists 2025 club jumping locations without Rovaniemi. Finnish searches found historical Napapiirin club material but no dated 2025–2026 operation or definitive closure at this airport.",
       "sources": [
         {
           "url": "https://dropzonefinder.com/dropzones/finland",

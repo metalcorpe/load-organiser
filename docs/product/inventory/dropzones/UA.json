@@ -26,8 +26,8 @@
           "website": "https://paraskuf.com.ua/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Para-Skuf's newest news item (24 Feb 2022) says the Chayka airfield is not working.",
+      "status": "closed",
+      "status_evidence": "Para-Skuf's notice, still its latest news, says no jumps or aircraft flights take place at Chayka under martial law. The text hopes for a return in 2023, so it is a 2022 notice, not exactly dated 24 Feb 2022. Several 2025+ sources show the stop is still in force: Chayka Aero's current Instagram bio says the restrictions on jumps continue, the 2025 Ukrainian national championship was held in Poland, and the EASA bulletin revised 24 Jul 2026 keeps the Ukrainian FIRs closed to civil flights. This is a war suspension, not a permanent closure.",
       "sources": [
         {
           "url": "https://chayka.aero/ua/price-jump-parachute",
@@ -53,6 +53,21 @@
           "url": "https://paraskuf.com.ua/pro-nas/pro-paraskuf",
           "checked_on": "2026-11-14",
           "what": "Para-Skuf site: club based at Chayka, season April-November; newest news item 24 Feb 2022 'Chayka airfield is not working'"
+        },
+        {
+          "url": "https://paraskuf.com.ua/novini/aerodrom-chajka-ne-pratsiuie/",
+          "checked_on": "2026-11-14",
+          "what": "Operator suspension notice dated 24 February 2022, still published."
+        },
+        {
+          "url": "https://www.instagram.com/chayka.aero",
+          "checked_on": "2026-11-14",
+          "what": "Search-result view (no login): bio says restrictions on parachute jumps and the wind tunnel continue; the profile has posts dated 2025-04 to 2026-03"
+        },
+        {
+          "url": "https://www.optimuscoring.com/events/2?r=3C03B089-9F26-45F0-8A1E-66C270436317",
+          "checked_on": "2026-11-14",
+          "what": "Ukrainian Parachuting Championship 2025 held 13-20 Sep 2025 at Chrcynno (EPNC), Poland, not in Ukraine"
         }
       ],
       "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
@@ -80,7 +95,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: Historical sources identify Borodianka jumping, but no site-specific 2025+ operation or closure announcement was found. EASA confirms civil airspace closure in July 2026.",
       "sources": [
         {
           "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
@@ -125,7 +140,7 @@
       ],
       "aircraft": "An-2 (club championship reports, pre-war)",
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: The club’s latest visible parachuting news is from October 2023 and concerns jumping in the USA. No 2025+ civilian jumps at Korotych were established.",
       "sources": [
         {
           "url": "https://aeroclub.net.ua/events/ua/skydiving.html",
@@ -175,7 +190,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: The Progres operator still announces the end of its 2021 season; no 2025+ site-specific jumping or closure notice was found.",
       "sources": [
         {
           "url": "https://skok.kiev.ua/",
@@ -218,8 +233,8 @@
           "website": "https://aviaschool.com.ua/"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator page states parachute jumps are temporarily not conducted (undated); Ukrainian airspace closed to civil aviation since 24 Feb 2022 (EASA bulletin valid to Jan 2027).",
+      "status": "closed",
+      "status_evidence": "Every parachute page on the operator's site carries the banner 'parachute jumps are temporarily not conducted'. KAVA, which books the Tsuniv jumps through ZUPA, marks the Tsuniv jump 'temporarily unavailable' on a page with 2026 copyright and newly written FAQ text. The airfield still sells intro flights, so the stop applies to jumping only. The 2025 national championship being held in Poland and the 2026 EASA closure point the same way. This is a suspension (a stop), not a permanent closure.",
       "sources": [
         {
           "url": "https://aviaschool.com.ua/%D0%A1%D1%82%D1%80%D0%B8%D0%B1%D0%BE%D0%BA-%D0%B7-%D0%BF%D0%B0%D1%80%D0%B0%D1%88%D1%83%D1%82%D0%BE%D0%BC/",
@@ -240,6 +255,31 @@
           "url": "https://www.easa.europa.eu/en/node/136057",
           "checked_on": "2026-11-14",
           "what": "EASA conflict zone bulletin for Ukraine (revised 24 Jul 2026, valid to 31 Jan 2027) citing NOTAM A0021/26 closing Ukrainian FIRs to civil flights"
+        },
+        {
+          "url": "https://aviaschool.com.ua/Стрибок-з-парашутом/",
+          "checked_on": "2026-11-14",
+          "what": "Operator explicitly states that parachute jumps are temporarily not conducted."
+        },
+        {
+          "url": "https://aviaschool.com.ua/strybok-z-parashutom-800m",
+          "checked_on": "2026-11-14",
+          "what": "Same suspension banner on the solo-jump product page"
+        },
+        {
+          "url": "https://kava.ua/uk/events/pryzhok-s-parashyutom-s-800-metrov",
+          "checked_on": "2026-11-14",
+          "what": "Reseller/partner page for Tsuniv jumps, copyright 2026: 'Тимчасово недоступно'; FAQ says the service is currently unavailable"
+        },
+        {
+          "url": "https://www.instagram.com/tsuniv.aero/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield bio lists gift certificates, intro flights, simulator and PPL, with no parachuting"
+        },
+        {
+          "url": "https://www.optimuscoring.com/events/2?r=3C03B089-9F26-45F0-8A1E-66C270436317",
+          "checked_on": "2026-11-14",
+          "what": "2025 Ukrainian national championship held in Poland"
         }
       ],
       "note": "Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
@@ -263,7 +303,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: Historical reporting identifies aircraft jumping at Maiske, but no dated 2025+ civilian activity or site-specific closure announcement was found.",
       "sources": [
         {
           "url": "https://kava.ua/uk/certificates/skydiving-tandem-dnepr",
@@ -307,7 +347,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: The opened overview identifies Hidroport as a historical jumping site; local-language searches did not establish 2025+ civilian activity or a site-specific closure.",
       "sources": [
         {
           "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
@@ -341,7 +381,7 @@
       "icao": "UKGW",
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found.",
+      "status_evidence": "Ukrainian airspace has been closed to civil aviation since 24 Feb 2022 and remains closed (EASA bulletin valid to Jan 2027); no 2025+ evidence of civilian jumps at this airfield was found. Re-checked 2026-11-14: Historical public-broadcaster reporting documents tandem and solo jumping at Voroniv with Rivne aeroclub instructors. No 2025+ civilian jumping or site-specific closure evidence was established.",
       "sources": [
         {
           "url": "https://t1.ua/porady/42358-de-v-ukrayini-strybnuty-z-parashutom-mistsya-aerodromy-tsiny.html",
@@ -423,7 +463,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Undated local article (prices suggest about 2021) says tandem and solo jumps are made every weekend at Sutysky, 30 km from Vinnytsia. Ukrainian civil airspace has been closed since 24 Feb 2022 (EASA bulletin valid to Jan 2027); no 2025+ evidence found.",
+      "status_evidence": "Undated local article (prices suggest about 2021) says tandem and solo jumps are made every weekend at Sutysky, 30 km from Vinnytsia. Ukrainian civil airspace has been closed since 24 Feb 2022 (EASA bulletin valid to Jan 2027); no 2025+ evidence found. Re-checked 2026-11-14: An undated local report describes weekend tandem and solo jumps at Sutysky. Searches found no qualifying 2025+ operator evidence; reseller voucher validity was not treated as proof.",
       "sources": [
         {
           "url": "https://vn.20minut.ua/Groshi/pidkoryuemo-nebo-skilki-koshtue-stribnuti-z-parashutom-ta-politati-na--11265091.html",
@@ -461,7 +501,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
+      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain. Re-checked 2026-11-14: A 4 January 2016 report confirms training jumps at Krupske involving Sky-Group members. No 2025+ civilian operation or site-specific closure was established.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/dz-krupske/",
@@ -501,7 +541,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
+      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain. Re-checked 2026-11-14: The undated 5 Ocean directory entry locates the centre within Kyiv-South airfield at Ksaverivka; it is only a historical lead. No independent 2025+ jumping or site-specific closure evidence was established.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/dz-5-ocean/",

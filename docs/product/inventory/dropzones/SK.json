@@ -495,7 +495,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Current operator booking page names Lisková, Spišská Nová Ves and Bidovce, not Ražňany; the voucher lead lacks site-specific dated jumping evidence.",
+      "status_evidence": "Current operator booking page names Lisková, Spišská Nová Ves and Bidovce, not Ražňany; the voucher lead lacks site-specific dated jumping evidence. Re-checked 2026-11-14: COMPACT’s operator booking page lists Lisková, Spišská Nová Ves and Bidovce, without Ražňany. Local-language 2025–2026 searches returned Ražňany voucher offers but no independently dated operator activity.",
       "sources": [
         {
           "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
@@ -531,7 +531,7 @@
       ],
       "aircraft": "Cessna 182P (per voucher)",
       "status": "uncertain",
-      "status_evidence": "Current operator site names Slávnica and Kráľová pri Senci, not Kvetoslavov; voucher availability does not resolve regular operation here.",
+      "status_evidence": "Current operator site names Slávnica and Kráľová pri Senci, not Kvetoslavov; voucher availability does not resolve regular operation here. Re-checked 2026-11-14: SkyTaxi’s own landing-fee page explicitly includes Kvetoslavov under tandem jumps, strengthening the place attribution beyond reseller offers. The page is undated and links a 2022 airfield tariff; no 2025+ operation was established.",
       "sources": [
         {
           "url": "https://www.zlavomat.sk/akcia/887902-tandemovy-zoskok-z-neuveritelnej-vysky-3000-ci-3500-metrov",

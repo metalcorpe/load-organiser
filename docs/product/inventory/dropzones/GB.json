@@ -137,8 +137,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Airport article records closure on 24 September 2021. No dated 2025+ jumping evidence found; retained as uncertain under the inventory recency rule.",
+      "status": "closed",
+      "status_evidence": "Booker Gliding Club's November 2021 newsletter says the airfield closed at the end of September 2021 because its lease ended, with 19 September 2021 as the last flying day. Wikipedia, citing the Henley Standard, says the land went back to farmland, and the site is not among the parachute sites in the current UK AIP ENR 5.5 (AIRAC 11/2026). The Skydive Centre / London Parachute School site still gives Chiltern Park as its drop zone, but that page is stale (copyright 2019-2024). I found no new location for that operator.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Chiltern_Park_Aerodrome",
@@ -149,6 +149,21 @@
           "url": "https://britishskydiving.org/find-drop-zone/",
           "checked_on": "2026-11-14",
           "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://bookergliding.co.uk/members/Newsletters/Nov21.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Former airfield tenant confirms closure and its own relocation; page 2."
+        },
+        {
+          "url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "UK AIP ENR 5.5, AIRAC 11/2026: 27 parachute sites listed, none at Chiltern Park/Ipsden"
+        },
+        {
+          "url": "https://www.skydivecentre.com/contactus.htm",
+          "checked_on": "2026-11-14",
+          "what": "Operator site still names Chiltern Park as its DZ; stale page, footer 2019-2024"
         }
       ],
       "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
@@ -246,7 +261,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical directory lists Paragon; absent from the live federation list. No dated 2025+ jumping or closure evidence found.",
+      "status_evidence": "Historical directory lists Paragon; absent from the live federation list. No dated 2025+ jumping or closure evidence found. Re-checked 2026-11-14: SBH Scotland’s Winter 2022 newsletter advertised Paragon skydiving at Errol, but no operator or federation evidence of jumping there in 2025–2026 was found. Modern directory and insurance-blog listings do not establish continued operation.",
       "sources": [
         {
           "url": "https://www.skydiveworld.com/english/greatbrit.html",
@@ -506,8 +521,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "June 2011 federation minutes say the school could no longer use Lewknor and moved to Chiltern Park. No dated 2025+ evidence found.",
+      "status": "closed",
+      "status_evidence": "BPA Safety & Training Committee minutes of 9 June 2011 (item 6) say London Parachute School could no longer use its Lewknor drop zone and parachute landing area, and had moved to Chiltern Park, which itself closed in 2021. Lewknor is not in the current UK AIP list of parachute sites, and I found no later jumping there.",
       "sources": [
         {
           "url": "https://www.skydive-safety.com/Parachuting-Forms/BPA-Documents/Minutes/STC2011069.pdf",
@@ -518,6 +533,11 @@
           "url": "https://britishskydiving.org/find-drop-zone/",
           "checked_on": "2026-11-14",
           "what": "Cross-check against live affiliated list; site not listed."
+        },
+        {
+          "url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "UK AIP ENR 5.5, AIRAC 11/2026: no Lewknor parachute site"
         }
       ],
       "note": "Historical operator listed for identification. Coordinates are null: no opened source established the former landing-area position."
@@ -618,8 +638,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "2019 report says the operation moved to Beccles in 2010; 2020 Pooleys plate says parachuting ceased. No dated 2025+ confirmation found.",
+      "status": "closed",
+      "status_evidence": "A Business Air News report of 23 April 2019 says UK Parachuting moved from Old Buckenham to Beccles in 2010. The 2020 Pooleys airfield plate says 'aerodrome is no longer used for parachuting'. The current UK AIP lists Beccles and Sibson but no Old Buckenham parachute site, and the airfield's own site (which mentions 2025) lists its tenants without any parachuting. A 2026 SEO blog on ukskydiving.com names Old Buckenham without detail, and its own FAQ names only Sibson and Beccles, so it carries no weight.",
       "sources": [
         {
           "url": "https://www.businessairnews.com/mag_story.html?ident=15543",
@@ -635,6 +655,21 @@
           "url": "https://www.pooleys.com/media/10033/old-buckenham-egsv_cropped.pdf",
           "checked_on": "2026-11-14",
           "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "UK AIP ENR 5.5, AIRAC 11/2026: Beccles and Peterborough/Sibson listed; no Old Buckenham"
+        },
+        {
+          "url": "https://www.oldbuck.com",
+          "checked_on": "2026-11-14",
+          "what": "Current airfield site lists flying school, museums, bistro (new in 2025); no parachuting"
+        },
+        {
+          "url": "https://ukskydiving.com/skydiving-news/skydiving-drop-zones-near-east-anglia-your-2026-guide-to-the-best-jumps",
+          "checked_on": "2026-11-14",
+          "what": "Reseller SEO blog mentioning Old Buckenham without specifics; not evidence"
         }
       ],
       "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
@@ -728,8 +763,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Airfield owner announced September 2019 closure and Skydive London cessation. No dated 2025+ confirmation found; retained as an uncertain historical site rather than active.",
+      "status": "closed",
+      "status_evidence": "The airfield owner's notice of 29 July 2019 says the airfield would close at the end of September 2019 and that Skydive London would stop trading. Wikipedia says the farm was sold to two housebuilders in 2020. Redlands is not in the current UK AIP list of parachute sites.",
       "sources": [
         {
           "url": "https://www.redlandsairfield.co.uk/planning.htm",
@@ -745,6 +780,16 @@
           "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
           "checked_on": "2026-11-14",
           "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://en.wikipedia.org/wiki/Redlands_Airfield",
+          "checked_on": "2026-11-14",
+          "what": "Closed September 2019; farm sold to housebuilders in 2020 (seen in search result text)"
+        },
+        {
+          "url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "UK AIP ENR 5.5, AIRAC 11/2026: no Redlands/Swindon parachute site"
         }
       ],
       "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
@@ -875,43 +920,6 @@
       "season": "March–November; December–February closed (operator contact page)."
     },
     {
-      "key": "gb-south-cerney",
-      "name": "South Cerney Airfield",
-      "aliases": [],
-      "country": "GB",
-      "locality": "South Cerney, Gloucestershire",
-      "latitude": 51.69083,
-      "longitude": -1.92444,
-      "coordinates_source": "https://en.wikipedia.org/wiki/RAF_South_Cerney",
-      "icao": null,
-      "operators": [
-        {
-          "name": "Skydive South Cerney",
-          "website": null
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "Older directory lists the site; no dated 2025+ civilian jumping confirmation found. Directory closure claims do not establish the status of all military activity.",
-      "sources": [
-        {
-          "url": "https://www.skydiveworld.com/english/greatbrit.html",
-          "checked_on": "2026-11-14",
-          "what": "Historical operation or cessation evidence; not proof of present activity."
-        },
-        {
-          "url": "https://britishskydiving.org/find-drop-zone/",
-          "checked_on": "2026-11-14",
-          "what": "Cross-check against live affiliated list; site not listed."
-        },
-        {
-          "url": "https://en.wikipedia.org/wiki/RAF_South_Cerney",
-          "checked_on": "2026-11-14",
-          "what": "Airfield or landing-area coordinates."
-        }
-      ],
-      "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."
-    },
-    {
       "key": "gb-strathallan",
       "name": "Strathallan Airfield",
       "aliases": [],
@@ -1010,8 +1018,8 @@
           "website": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Airport-history site dates this operation 2013–2016 and says it moved to Shotton then stopped. No dated 2025+ DZ evidence found.",
+      "status": "closed",
+      "status_evidence": "The local airport-history site dates Skydive St George's airport operation to 2013-2016 (its first jumps were reported in March 2014). It says the club moved to Shotton with Peterlee Parachute Centre and shut down soon after. The current UK AIP has no Teesside parachute site; Peterlee/Shotton is listed. This is the weakest of the closures, because the relocation account is an enthusiast source and not official, but it is a specific dated relocation and not just an absence of evidence. A flydays listing that search tied to Teesside turned out to be at Shotton.",
       "sources": [
         {
           "url": "https://dtvmovements.co.uk/Info/History/Previous_Operators.htm",
@@ -1027,6 +1035,21 @@
           "url": "https://www.laasdata.com/uploads/The-LAAS-British-Isles-Airfield-Guide.pdf",
           "checked_on": "2026-11-14",
           "what": "Airfield or landing-area coordinates."
+        },
+        {
+          "url": "https://friendsoftia.co.uk/durham-tees-valley-airport-set-to-host-public-skydives-after-successful-first-drops",
+          "checked_on": "2026-11-14",
+          "what": "Start of the operation (first drops, opening to public 5 April; Northern Echo dated 7 Mar 2014)"
+        },
+        {
+          "url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "UK AIP ENR 5.5, AIRAC 11/2026: Peterlee parachute site listed; nothing at Teesside/Tees"
+        },
+        {
+          "url": "https://www.flydays.co.uk/flying-experience/15000ft-tandem-skydive/15451",
+          "checked_on": "2026-11-14",
+          "what": "Reseller listing that search tied to Teesside; page title says Shotton Airfield"
         }
       ],
       "note": "Historical operator listed for identification. Coordinates identify the airfield; current regular civilian parachuting is unconfirmed."

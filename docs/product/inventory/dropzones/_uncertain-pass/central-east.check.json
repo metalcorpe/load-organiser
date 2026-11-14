@@ -1,0 +1,66 @@
+{
+  "group": "central-east",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "ua-chayka-kyiv",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Para-Skuf's notice, still its latest news, says no jumps or aircraft flights take place at Chayka under martial law. The text hopes for a return in 2023, so it is a 2022 notice, not exactly dated 24 Feb 2022. Several 2025+ sources show the stop is still in force: Chayka Aero's current Instagram bio says the restrictions on jumps continue, the 2025 Ukrainian national championship was held in Poland, and the EASA bulletin revised 24 Jul 2026 keeps the Ukrainian FIRs closed to civil flights. This is a war suspension, not a permanent closure.",
+      "sources": [
+        {"url": "https://paraskuf.com.ua/novini/aerodrom-chajka-ne-pratsiuie/", "what": "Operator notice: no parachute jumps or aircraft flights at Chayka during martial law; hopes to reopen in 2023"},
+        {"url": "https://www.instagram.com/chayka.aero", "what": "Search-result view (no login): bio says restrictions on parachute jumps and the wind tunnel continue; the profile has posts dated 2025-04 to 2026-03"},
+        {"url": "https://www.optimuscoring.com/events/2?r=3C03B089-9F26-45F0-8A1E-66C270436317", "what": "Ukrainian Parachuting Championship 2025 held 13-20 Sep 2025 at Chrcynno (EPNC), Poland, not in Ukraine"},
+        {"url": "https://www.easa.europa.eu/en/node/136057", "what": "CZIB-2022-01R14, revised 24 Jul 2026, valid to 31 Jan 2027: NOTAM A0021/26 closes the Lviv, Kyiv, Dnipro, Simferopol and Odesa FIRs to civil aviation"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "ua-tsuniv-lviv",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Every parachute page on the operator's site carries the banner 'parachute jumps are temporarily not conducted'. KAVA, which books the Tsuniv jumps through ZUPA, marks the Tsuniv jump 'temporarily unavailable' on a page with 2026 copyright and newly written FAQ text. The airfield still sells intro flights, so the stop applies to jumping only. The 2025 national championship being held in Poland and the 2026 EASA closure point the same way. This is a suspension (a stop), not a permanent closure.",
+      "sources": [
+        {"url": "https://aviaschool.com.ua/Стрибок-з-парашутом/", "what": "Operator page: 'Стрибки з парашутом тимчасово не проводяться' (undated banner, live on 2026-11-14)"},
+        {"url": "https://aviaschool.com.ua/strybok-z-parashutom-800m", "what": "Same suspension banner on the solo-jump product page"},
+        {"url": "https://kava.ua/uk/events/pryzhok-s-parashyutom-s-800-metrov", "what": "Reseller/partner page for Tsuniv jumps, copyright 2026: 'Тимчасово недоступно'; FAQ says the service is currently unavailable"},
+        {"url": "https://www.instagram.com/tsuniv.aero/", "what": "Airfield bio lists gift certificates, intro flights, simulator and PPL, with no parachuting"},
+        {"url": "https://www.optimuscoring.com/events/2?r=3C03B089-9F26-45F0-8A1E-66C270436317", "what": "2025 Ukrainian national championship held in Poland"},
+        {"url": "https://www.easa.europa.eu/en/node/136057", "what": "EASA CZIB revised 24 Jul 2026: Ukrainian FIRs closed to civil aviation"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "pl-zamosc",
+      "codex_verdict": "active",
+      "agree": true,
+      "final_verdict": "seasonal",
+      "reason": "Promoting the place to operating is supported. PKBWL records a parachute accident at EPZA on 30 Aug 2025 (PD Navigator 280 canopy, serious injury), so an aircraft jump was made there in 2025. The ULC register dated 22 May 2026 lists Aeroklub Ziemi Zamojskiej's parachute training (PJ to D, instructor) at EPZA, and the club's current product page and Instagram bio sell tandems from EPZA. 'Seasonal' fits better than 'active': the club's posts tie jumping to the spring season, nothing shows winter jumping, and the PL file labels similar aero clubs 'seasonal'.",
+      "sources": [
+        {"url": "https://pkbwl.gov.pl/raporty/2025-0117/", "what": "Official occurrence record: parachute accident, PD Navigator 280, EPZA, 2025-08-30"},
+        {"url": "https://ulc.gov.pl/_download/2026/rps_stan_na_22_05_2026.pdf", "what": "Entry 61RPS-06/2012: Aeroklub Ziemi Zamojskiej, practical training at Lotnisko Zamość (EPZA), PJ/PJ(B-D)/INS courses (registered 2012, extended 2013; opened via Tavily extract because direct download is bot-blocked)"},
+        {"url": "https://aeroklubzamosc.pl/produkt/skok-spadochronowy/", "what": "Operator tandem product: jump made at EPZA Zamość-Mokre from 3000 m; undated"},
+        {"url": "https://www.instagram.com/aeroklubziemizamojskiej", "what": "Search-result view: bio 'LOTY WIDOKOWE | SKOKI W TANDEMIE', posts dated to Nov 2026"},
+        {"url": "https://www.facebook.com/AeroklubZamosc/videos/skok-ze-spadochronem-to-przygoda-kt%C3%B3rej-nie-da-si%C4%99-por%C3%B3wna%C4%87-z-niczym-innym-zobac/641845351651592", "what": "Search-result view: club urges booking jumps 'for spring', showing a seasonal operation (undated)"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "hu-tokol",
+      "codex_verdict": "not_a_dropzone",
+      "agree": true,
+      "final_verdict": "not_a_dropzone",
+      "reason": "The operator's site (2026 copyright) calls Tököl its company base and a future tandem location, and says jumps currently happen only at Nyíregyháza and Hajdúszoboszló. The Tököl airport rules (Ver 1.1, approved 23 Apr 2026) are stronger proof that no jumping happens there: the LHSDZLHTL drop zone airspace is 'designated but inactive', and the active-drop-zone procedures are marked N/A. Caveat: undated Fly Jump social bios list Tököl as a jump location, and the drop zone airspace is published, so the place should be rechecked if that airspace becomes active.",
+      "sources": [
+        {"url": "https://flyjumptandemugras.hu/", "what": "Operator: Tököl is the company base and a future tandem location; current jumps at Nyíregyháza and Hajdúszoboszló only"},
+        {"url": "https://lhtl.hu/repuloterrend", "what": "Airport rules Ver 1.1 (approved 2026-04-23): 'a LHSDZLHTL Drop Zone légtér kijelölt, de inaktív légtér'; DZ table and DZ procedures N/A"},
+        {"url": "https://ais-en.hungarocontrol.hu/vfrmanual/LHTL", "what": "VFR manual updated 2026-08-06 lists the LHSDZLHTL / TÖKÖL DROP ZONE airspace (3.15 km radius); no activity information"},
+        {"url": "https://www.instagram.com/tandemugras24", "what": "Search-result view: bio names Tököl, Nyíregyháza, Hajdúszoboszló; latest posts Dec 2024; no dated jump at Tököl seen"}
+      ],
+      "corrections_ok": true
+    }
+  ]
+}

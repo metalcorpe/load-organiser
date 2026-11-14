@@ -122,8 +122,9 @@
       "key": "nl-hilversum",
       "name": "Hilversum Airfield",
       "aliases": [
-        "Skydive Hilversum",
-        "EHHV"
+        "Baarn landing area",
+        "EHHV",
+        "Skydive Hilversum"
       ],
       "country": "NL",
       "locality": "Hilversum, Noord-Holland",
@@ -154,8 +155,19 @@
           "url": "https://www.skydivehilversum.nl/rooster",
           "checked_on": "2026-11-14",
           "what": "club roster with November 2026 entries, jumping on 7 November 2026"
+        },
+        {
+          "url": "https://eaip.lvnl.nl/AIRAC%20AMDT%2011-2026_2026_10_29/eAIP/EH-ENR%205.5-en-GB.html",
+          "checked_on": "2026-11-14",
+          "what": "Opened current AIP, section 2.2 Cluster Utrecht, names Baarn, operator, FL060 ceiling and UDP activity."
+        },
+        {
+          "url": "https://eaip.lvnl.nl/",
+          "checked_on": "2026-11-14",
+          "what": "Issue index identifies 29 October 2026 as the currently effective issue on the check date."
         }
-      ]
+      ],
+      "note": "Baarn (52.204786, 5.326372) is its weather fallback landing area (Dutch AIP parachute area EHAAPJA002, checked 2026-11-14); merged from nl-baarn."
     },
     {
       "key": "nl-hoogeveen",
@@ -349,38 +361,6 @@
         }
       ],
       "note": "Added by Codex; aircraft depart Hilversum, but this is a separate regular landing place."
-    },
-    {
-      "key": "nl-baarn",
-      "name": "Baarn landing area",
-      "aliases": [],
-      "country": "NL",
-      "locality": "Baarn, Utrecht",
-      "latitude": 52.204786,
-      "longitude": 5.326372,
-      "coordinates_source": "https://www.skydivehilversum.nl/en/im-a-skydiver/ (operator map destination: 52.2047856, 5.3263715)",
-      "icao": null,
-      "operators": [
-        {
-          "name": "Skydive Hilversum / Paraclub Midden Nederland",
-          "website": "https://www.skydivehilversum.nl/"
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "Operator and Hilversum airport describe Baarn as an alternative landing area; no dated 2025+ jump at Baarn itself was confirmed.",
-      "sources": [
-        {
-          "url": "https://www.skydivehilversum.nl/en/im-a-skydiver/",
-          "checked_on": "2026-11-14",
-          "what": "Operator describes secondary landing site and provides map destination"
-        },
-        {
-          "url": "https://www.ehhv.nl/for-pilots/para-jumping-dropzones",
-          "checked_on": "2026-11-14",
-          "what": "Airport confirms distinct alternative landing place"
-        }
-      ],
-      "note": "Added by Codex; weather-dependent secondary landing area, separate from Hilversum and Westbroek."
     },
     {
       "key": "nl-oostwold",

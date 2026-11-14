@@ -1,0 +1,164 @@
+{
+  "group": "west-north",
+  "checker": "claude",
+  "checked_on": "2026-11-14",
+  "checks": [
+    {
+      "key": "gb-chiltern-park",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Booker Gliding Club's November 2021 newsletter says the airfield closed at the end of September 2021 because its lease ended, with 19 September 2021 as the last flying day. Wikipedia, citing the Henley Standard, says the land went back to farmland, and the site is not among the parachute sites in the current UK AIP ENR 5.5 (AIRAC 11/2026). The Skydive Centre / London Parachute School site still gives Chiltern Park as its drop zone, but that page is stale (copyright 2019-2024). I found no new location for that operator.",
+      "sources": [
+        {"url": "https://bookergliding.co.uk/members/Newsletters/Nov21.pdf", "what": "Nov 2021 newsletter, 'Latest news': airfield closed end of September 2021, lease terminated, last day 19 Sep 2021; club moved to Abingdon"},
+        {"url": "https://en.wikipedia.org/wiki/Chiltern_Park_Aerodrome", "what": "Closed 24 September 2021 and reverted to farmland (cites Henley Standard 2021)"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: 27 parachute sites listed, none at Chiltern Park/Ipsden"},
+        {"url": "https://www.skydivecentre.com/contactus.htm", "what": "Operator site still names Chiltern Park as its DZ; stale page, footer 2019-2024"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "gb-lewknor",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "BPA Safety & Training Committee minutes of 9 June 2011 (item 6) say London Parachute School could no longer use its Lewknor drop zone and parachute landing area, and had moved to Chiltern Park, which itself closed in 2021. Lewknor is not in the current UK AIP list of parachute sites, and I found no later jumping there.",
+      "sources": [
+        {"url": "https://www.skydive-safety.com/Parachuting-Forms/BPA-Documents/Minutes/STC2011069.pdf", "what": "STC minutes 9 June 2011, item 6: LPS no longer able to use Lewknor DZ/PLA; new DZ at Chiltern Park approved"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: no Lewknor parachute site"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "gb-old-buckenham",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "A Business Air News report of 23 April 2019 says UK Parachuting moved from Old Buckenham to Beccles in 2010. The 2020 Pooleys airfield plate says 'aerodrome is no longer used for parachuting'. The current UK AIP lists Beccles and Sibson but no Old Buckenham parachute site, and the airfield's own site (which mentions 2025) lists its tenants without any parachuting. A 2026 SEO blog on ukskydiving.com names Old Buckenham without detail, and its own FAQ names only Sibson and Beccles, so it carries no weight.",
+      "sources": [
+        {"url": "https://www.businessairnews.com/mag_story.html?ident=15543", "what": "23 Apr 2019: operator moved from Old Buckenham to Beccles in 2010"},
+        {"url": "https://www.pooleys.com/media/10033/old-buckenham-egsv_cropped.pdf", "what": "2020 plate: 'AERODROME IS NO LONGER USED FOR PARACHUTING'; N52 29.85 E001 03.12 matches record coordinates"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: Beccles and Peterborough/Sibson listed; no Old Buckenham"},
+        {"url": "https://www.oldbuck.com", "what": "Current airfield site lists flying school, museums, bistro (new in 2025); no parachuting"},
+        {"url": "https://ukskydiving.com/skydiving-news/skydiving-drop-zones-near-east-anglia-your-2026-guide-to-the-best-jumps", "what": "Reseller SEO blog mentioning Old Buckenham without specifics; not evidence"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "gb-redlands",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "The airfield owner's notice of 29 July 2019 says the airfield would close at the end of September 2019 and that Skydive London would stop trading. Wikipedia says the farm was sold to two housebuilders in 2020. Redlands is not in the current UK AIP list of parachute sites.",
+      "sources": [
+        {"url": "https://www.redlandsairfield.co.uk/planning.htm", "what": "Owner notice 29 Jul 2019: termination notices served April 2019, closure end of September, Skydive London will cease trading"},
+        {"url": "https://en.wikipedia.org/wiki/Redlands_Airfield", "what": "Closed September 2019; farm sold to housebuilders in 2020 (seen in search result text)"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: no Redlands/Swindon parachute site"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "gb-teesside",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "The local airport-history site dates Skydive St George's airport operation to 2013-2016 (its first jumps were reported in March 2014). It says the club moved to Shotton with Peterlee Parachute Centre and shut down soon after. The current UK AIP has no Teesside parachute site; Peterlee/Shotton is listed. This is the weakest of the closures, because the relocation account is an enthusiast source and not official, but it is a specific dated relocation and not just an absence of evidence. A flydays listing that search tied to Teesside turned out to be at Shotton.",
+      "sources": [
+        {"url": "https://dtvmovements.co.uk/Info/History/Previous_Operators.htm", "what": "Skydive St George 2013-2016; moved to Peterlee Shotton, shut down not long after"},
+        {"url": "https://friendsoftia.co.uk/durham-tees-valley-airport-set-to-host-public-skydives-after-successful-first-drops", "what": "Start of the operation (first drops, opening to public 5 April; Northern Echo dated 7 Mar 2014)"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: Peterlee parachute site listed; nothing at Teesside/Tees"},
+        {"url": "https://www.flydays.co.uk/flying-experience/15000ft-tandem-skydive/15451", "what": "Reseller listing that search tied to Teesside; page title says Shotton Airfield"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "nl-baarn",
+      "codex_verdict": "active",
+      "agree": true,
+      "final_verdict": "active",
+      "reason": "The current Dutch AIP ENR 5.5 (AMDT 11-2026, effective 29 Oct 2026) lists BAARN (EHAAPJA002) as a parachute jumping area: a 2 NM circle centred 52°12'30\"N 5°19'00\"E, up to FL060, operated by Skydive Hilversum. That meets the 'current AIP naming parachuting here' rule. The operator and the airport both call Baarn a weather-dependent fallback landing area ('uitval locatie'), with the aircraft based at Hilversum. I found no dated 2025+ jump at Baarn itself, so 'active' rests on the AIP and on the operator being active in 2026, not on a dated jump; the owner may prefer to treat it as a secondary landing area.",
+      "sources": [
+        {"url": "https://eaip.lvnl.nl/AIRAC%20AMDT%2011-2026_2026_10_29/eAIP/EH-ENR%205.5-en-GB.html", "what": "Read via Tavily (direct curl hit a Cloudflare challenge): BAARN EHAAPJA002, Skydive Hilversum, FL060, parachute jumping; Cluster Utrecht"},
+        {"url": "https://www.skydivehilversum.nl/en/im-a-skydiver/", "what": "Operator: Baarn is its second dropzone, used depending on weather; Westbroek is the main weekend site"},
+        {"url": "https://www.ehhv.nl/for-pilots/para-jumping-dropzones", "what": "Hilversum airport: Dropzone Baarn used as a fallback location"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "dk-ejstrupholm",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "ØFK's AGM minutes of 14 March 2026 say the club moved out of Ejstrupholm in 2025, paid clubhouse rent only until the notice ended, now operates from Viborg with Skydive Viborg, and is talking to Randers and Stauning about a new base. A DFU news item of 30 June 2025 says the airfield owner ended the club's agreement in order to convert the clubhouse. The DFU club list and its 2026 jump-site map still show ØFK at Ejstrupholm, but they conflict with the club's own dated minutes and are stale.",
+      "sources": [
+        {"url": "https://oefk.dk/wp-content/uploads/2026/04/Generalforsamling-den-14.-marts-2026.pdf", "what": "AGM 14 Mar 2026: 'Flytning fra Ejstrupholm' in 2025; 'Klubben opererer aktuelt fra Viborg'; talks with Randers/Stauning"},
+        {"url": "https://dfu.dk/nyheder/%C3%B8stjyllands-faldsk%C3%A6rmsklub-m%C3%A5-vige-bryllupper", "what": "DFU news published 2025-06-30: owner terminated the club's agreement; club works with Skydive Viborg"},
+        {"url": "https://dfu.dk/klubber/kluboversigt", "what": "Federation list still reads 'ØFK/Samsø og Ejstrupholm' (stale)"},
+        {"url": "https://www.dfu.dk/sites/default/files/dfu_springpladser_2026.jpg", "what": "DFU 2026 jump-site map still marks ØFK at Ejstrupholm Flyveplads (stale)"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "dk-sundbylille",
+      "codex_verdict": "closed",
+      "agree": true,
+      "final_verdict": "closed",
+      "reason": "Nordsjællands Faldskærms Klub's own notice says it moved its jump site from Frederikssund (Sundbylille) to Aversi, Tornelundsvej 8, 4690 Haslev, on 1 March 2026. The DFU booking portal and the federation club list say the same, and I found no other operator using Sundbylille.",
+      "sources": [
+        {"url": "https://skydive-nfk.dk/vi-har-flyttet-springplads", "what": "Operator: 'pr. 1. marts 2026 har flyttet springplads fra Frederikssund til Aversi', Tornelundsvej 8, Haslev"},
+        {"url": "https://skydive.dk/om-os/klubber?page=1", "what": "DFU portal: Sundbylille base since 1973; from 2026 shares Aversi's field in Haslev"},
+        {"url": "https://dfu.dk/klubber/kluboversigt", "what": "Federation list: 'NFK/Springplads i Haslev'"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "dk-ronne",
+      "codex_verdict": "uncertain",
+      "agree": true,
+      "final_verdict": "uncertain",
+      "reason": "Included only to check the operator correction. The DFU club list names the club 'Faldskærmsklubben Bornholm (FKB/Rønne)' and links it to www.fkr.dk, and a public Facebook page uses the same name (@SkydiveBornholm), so the corrected name is right. On 2026-11-14, fkr.dk showed only a one.com hosting placeholder, so the website field adds nothing; the Facebook page would be more useful. The newest dated jumping I found at Rønne airport is a DFU report from October 2024, so 'uncertain' stands.",
+      "sources": [
+        {"url": "https://dfu.dk/klubber/kluboversigt", "what": "Federation list: 'Faldskærmsklubben Bornholm (FKB/Rønne)' linked to http://www.fkr.dk/"},
+        {"url": "https://www.fkr.dk/", "what": "Opened 2026-11-14: one.com 'Hosted by' placeholder, no club content"},
+        {"url": "https://www.facebook.com/SkydiveBornholm", "what": "Public page title 'Faldskærmsklubben Bornholm' (search result only, not opened past login)"},
+        {"url": "https://dfu.dk/nyheder/sol-og-soldaterhold-over-bornholm", "what": "DFU news published 2024-10-02: student jumps at Rønne Lufthavn in 2024; before 2025, so not current evidence"}
+      ],
+      "corrections_ok": true
+    },
+    {
+      "key": "gb-errol",
+      "codex_verdict": "uncertain",
+      "agree": true,
+      "final_verdict": "uncertain",
+      "reason": "Added on the coordinator's follow-up. The current UK AIP still lists ERROL PARACHUTE SITE (Wed-Sun and public holidays, drop zone phone number) but names no operator. The only operator found is Paragon Skydiving Club, and its newest dated activity is a 2021 news report and a 2023 TripAdvisor review. Its domain paragonskydiving.co.uk now serves an online casino, and Errol is not on the British Skydiving drop-zone list. Two charity booking channels now send Errol jumpers to St Andrews or Strathallan: Skyline's 'skydiving near Errol' page and SCAA's own tandem page (SCAA's 2026 events round-up still names Errol in older boilerplate). These are signs of decline, not a dated closure, and there is no 2025+ jumping evidence, so the verdict stays uncertain.",
+      "sources": [
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: Errol parachute site, 1.5 NM, FL104, hours Wed-Sun & PH, DZ tel 01738-635347; no operator named"},
+        {"url": "https://britishskydiving.org/find-drop-zone/", "what": "Live federation list: Scotland shows only Skydive St Andrews and Skydive Strathallan; no Errol/Paragon"},
+        {"url": "https://paragonskydiving.co.uk/", "what": "Opened 2026-11-14: operator domain now an online-casino page, no skydiving content"},
+        {"url": "https://www.dailyrecord.co.uk/news/scottish-news/scots-skydiving-instructor-parachute-fail-24416538", "what": "June 2021 report of a Paragon tandem at Errol Airfield; historical"},
+        {"url": "https://www.tripadvisor.com/Attraction_Review-g4282079-d25264444-Reviews-Paragon_Skydiving-Errol_Perth_and_Kinross_Scotland.html", "what": "Search snippet only (page returns 403): review dated Aug 2023; nothing newer seen"},
+        {"url": "https://www.skylineskydiving.co.uk/prices-locations/scotland/errol", "what": "Charity booking site: nearest airfields to Errol are St Andrews and Auchterarder"},
+        {"url": "https://www.scaa.org.uk/support-us/events/tandem-skydive/", "what": "Charity tandem page lists only St Andrews or Auchterarder (booked via Skyline)"},
+        {"url": "https://www.scaa.org.uk/our-mission/news-and-media/round-up-best-2026-events-take-part-for-scaa", "what": "2026 round-up still names Errol, with pre-2019 'British Parachute Association' wording; not operator evidence"}
+      ],
+      "corrections_ok": null
+    },
+    {
+      "key": "gb-south-cerney",
+      "codex_verdict": "uncertain",
+      "agree": false,
+      "final_verdict": "not_a_dropzone",
+      "reason": "Added on the coordinator's follow-up. South Cerney is the Army's Duke of Gloucester Barracks, and RAF Brize Norton publishes it as the 'South Cerney Drop Zone' for scheduled military local training sorties (November 2026 schedule). The resident team, the RLC Silver Stars, is an Army display team for Regular and Reserve RLC personnel. A stakeholder response in a CAA airspace-change consultation says resident parachuting no longer takes place and any activity is rare and NOTAM-covered. British Skydiving lists no club here, though it does list military clubs that take civilians elsewhere (APA Netheravon, RAFSPA Weston-on-the-Green). The only civilian jumping found is a 2008 Red Devils / Click and Jump tandem day, so I treat it as a military-only drop zone. The main risk is that this partly rests on absence: I found no explicit 'military only' statement, only no civilian route.",
+      "sources": [
+        {"url": "https://www.raf.mod.uk/our-organisation/stations/raf-brize-norton/documents/south-cerney-local-flying-times", "what": "Read via Tavily (direct fetch 403): 'SOUTH CERNEY DROP ZONE SCHEDULED MILITARY LOCAL TRAINING SORTIES NOVEMBER 2026', all days Nil Planned"},
+        {"url": "https://www.aurora.nats.co.uk/htmlAIP/Publications/2026-10-29-AIRAC/html/eAIP/EG-ENR-5.5-en-GB.html", "what": "UK AIP ENR 5.5, AIRAC 11/2026: South Cerney parachute site, FL150, drops subject to Brize Norton permission; no operator named"},
+        {"url": "https://airspacechange.caa.co.uk/documents/download/1872", "what": "Undated stakeholder response in a CAA ACP: resident parachuting no longer takes place at South Cerney; rare activity covered by NOTAM"},
+        {"url": "https://www.facebook.com/rlc.silver.stars", "what": "Search snippet only: RLC Silver Stars at Duke of Gloucester Barracks, South Cerney; develops Regular & Reserve RLC parachuting talent"},
+        {"url": "https://www.arena-displays.co.uk/our-acts/silver-stars-parachute-display-team", "what": "Silver Stars made up of serving Regular Army and Army Reserve personnel"},
+        {"url": "https://britishskydiving.org/find-drop-zone/", "what": "Live federation list: no South Cerney club; military clubs open to civilians are listed elsewhere (APA Netheravon, RAFSPA Weston-on-the-Green)"},
+        {"url": "https://www.exploregloucestershire.co.uk/news/258/Skydiving-with-the-Red-Devils-over-South-Cerney-with-video", "what": "7 Aug 2008 civilian tandem day with the Red Devils via Click and Jump; historical only"}
+      ],
+      "corrections_ok": null
+    }
+  ]
+}

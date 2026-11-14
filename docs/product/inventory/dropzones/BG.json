@@ -139,7 +139,7 @@
       "icao": "LBPR",
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "Uncertain: LAND BG airfield page lists parachuting by prior arrangement, but no 2025+ jump schedule or operator activity was established.",
+      "status_evidence": "Uncertain: LAND BG airfield page lists parachuting by prior arrangement, but no 2025+ jump schedule or operator activity was established. Re-checked 2026-11-14: Skydive Sofia describes past operations at Primorsko and a 2025 shift toward courses at various locations, without assigning a 2025+ programme to Primorsko. LAND BG offers parachuting by arrangement but is undated; no dated local jump programme was established.",
       "sources": [
         {
           "url": "https://en.wikipedia.org/wiki/Primorsko_Airfield",
@@ -185,8 +185,8 @@
           "name": "Bulgarian National Parachute Club"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "National aero-club membership page identifies two parachuting clubs at Erden; LAND BG confirms parachuting training and jumps, but no dated 2025+ local programme was established.",
+      "status": "seasonal",
+      "status_evidence": "The organiser bulletin puts the 60th Bulgarian Championship / EEAL round at Dropzone Erden (N43 29.955 E23 18.281, matching the record) on 4-7 Sep 2025 with Cessna and An-2 jump aircraft and pre-event training from 29 Aug. The EEAL results file (created 14 Sep 2025) and a Ministry of Defence report dated 11 Sep 2025 confirm the jumps took place on 5-6 Sep. Caveat: in 2026 the national championship moved to Dolna Mitropolia and the Bulgarian EEAL round to Pleven, 'for the first time' away from Montana, so no 2026 jumping at Erden is confirmed. Erden tandems in 2026 appear only on gift resellers, which do not count.",
       "sources": [
         {
           "url": "https://www.landbg.info/bg/airport/erden",
@@ -197,9 +197,35 @@
           "url": "https://www.bnac.bg/%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0/",
           "checked_on": "2026-11-14",
           "what": "National federation club structure identifies Aeroclub Montana and Bulgarian National Parachute Club at Erden"
+        },
+        {
+          "url": "https://www.eeal.eu/storage/app/media/2025_EEAL_Montana-bulletin.pdf",
+          "checked_on": "2026-11-14",
+          "what": "Organiser bulletin: Erden venue, 2025 dates, aircraft, jump prices and Aero Club Montana."
+        },
+        {
+          "url": "https://www.eeal.eu/storage/app/media/2025_EEAL_Montana-results.pdf",
+          "checked_on": "2026-11-14",
+          "what": "EEAL Montana 2025 team ranking over 8 jumps; PDF creation date 14 Sep 2025"
+        },
+        {
+          "url": "https://armymedia.bg/2025/09/11/%D1%81%D0%BF%D0%B5%D1%86%D0%B8%D0%B0%D0%BB%D0%BD%D0%B8%D1%82%D0%B5-%D1%81%D0%B8%D0%BB%D0%B8-%D1%81-%D0%BF%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B8-%D0%BC%D0%B5%D1%81%D1%82%D0%B0-%D0%B2-60-%D0%BE%D1%82",
+          "checked_on": "2026-11-14",
+          "what": "MoD report 11 Sep 2025: 60th championship and EEAL round held 5-6 Sep 2025, 13 teams"
+        },
+        {
+          "url": "https://www.eeal.eu",
+          "checked_on": "2026-11-14",
+          "what": "2025 post: 'jumps will take place at Erden airport'; 2026 post: Bulgarian round moved to Pleven"
+        },
+        {
+          "url": "https://www.topnovini.com/story/445417369",
+          "checked_on": "2026-11-14",
+          "what": "61st national championship (2026) held at Dolna Mitropolia, not Erden"
         }
       ],
-      "note": "Added by Codex; operator site returned HTTP 403. The federation page is undated and its registration column refers to 2020."
+      "note": "Added by Codex; operator site returned HTTP 403. The federation page is undated and its registration column refers to 2020.",
+      "season": "Confirmed training/competition period: 29 August–7 September 2025; wider schedule unverified"
     }
   ]
 }

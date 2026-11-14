@@ -224,8 +224,8 @@
           "name": "Parachutisme 74 (former)"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Registry updated July 2026 marks Parachutisme 74 and its Annemasse establishment closed in August 2024; no 2025-or-later successor jump operation was verified.",
+      "status": "closed",
+      "status_evidence": "In the Annemasse council session of 12 November 2025 (official city video), the mayor's side speaks of the parachute-jump company in the past tense: safety and management failures, then 'il est plus là'. A new school is only discussed as a possibility if conditions can be met. No 2026 restart was found in independent searches.",
       "sources": [
         {
           "url": "https://app.extrmsport.com/skydive/dropzone/fr/parachutisme-74/",
@@ -241,6 +241,16 @@
           "url": "https://www.pappers.fr/entreprise/parachutisme-74-412481954",
           "checked_on": "2026-11-14",
           "what": "Registry updated July 2026 marks Parachutisme 74 and its Annemasse establishment closed in August 2024; no 2025-or-later successor jump operation was verified."
+        },
+        {
+          "url": "https://politique.pappers.fr/commune/document/2fedeb0cbfc9f29039820046da598d60",
+          "checked_on": "2026-11-14",
+          "what": "Public municipal minutes, page 33, discuss a prospective parachuting association and conditions for its return."
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=45AsYTrQZho",
+          "checked_on": "2026-11-14",
+          "what": "Ville d'Annemasse channel, council of 12 November 2025, item 16 (aerodrome concession), transcript about 1:25:40 to 1:31:00: the former jump operator is gone; a return would be considered."
         }
       ],
       "note": "Airfield reference point, not necessarily the precise parachute landing target."
@@ -396,7 +406,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Survol du Perche describes aviation services and pilot qualifications, but no dated 2025-or-later regular skydiving schedule was found.",
+      "status_evidence": "Survol du Perche describes aviation services and pilot qualifications, but no dated 2025-or-later regular skydiving schedule was found. Re-checked 2026-11-14: The operator describes ULM flights at Saint-Germain-de-la-Coudre and a pilot’s parachute-dropping qualification, but provides no dated 2025-or-later jump programme. A qualification alone does not establish a dropzone.",
       "sources": [
         {
           "url": "https://app.extrmsport.com/skydive/dropzone/fr/normandie-belleme-ulm-lf6152/",
@@ -736,7 +746,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Judicial asset-sale notice dated 30 June 2026 concerns Air 65 and its Pilatus; no successor operation or dated current jump schedule was verified.",
+      "status_evidence": "Judicial asset-sale notice dated 30 June 2026 concerns Air 65 and its Pilatus; no successor operation or dated current jump schedule was verified. Re-checked 2026-11-14: An Air 65 asset-sale notice records liquidation-related proceedings dated 30 June 2026 and offers its Pilatus PC-6. This does not establish whether another operator continued jumping at Castelnau-Magnoac.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/location/france/",
@@ -1209,7 +1219,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator calendar research did not establish 2025-or-later Dinan sessions; dated schedules found concerned other airfields.",
+      "status_evidence": "Operator calendar research did not establish 2025-or-later Dinan sessions; dated schedules found concerned other airfields. Re-checked 2026-11-14: The current FEPP professional-federation map checked 14 November 2026 explicitly lists Aero Tandem Celtic at Dinan. Its 2026 planning PDF also includes a Dinan tariff category, although individual Dinan dates are not clear in the extracted calendar.",
       "sources": [
         {
           "url": "https://www.aerotandemceltic.com",
@@ -1294,7 +1304,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Para Groupe Jean Bart publishes 2026 jump sessions but identifies its base as Calais-Marck; current jumping at Dunkerque-Les Moëres remains unverified.",
+      "status_evidence": "Para Groupe Jean Bart publishes 2026 jump sessions but identifies its base as Calais-Marck; current jumping at Dunkerque-Les Moëres remains unverified. Re-checked 2026-11-14: Para Groupe Jean Bart lists April–October 2026 sessions but identifies its airfield as Calais-Marck. No 2025-or-later jumping at the separate Les Moëres airfield or explicit site-closure statement was verified.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/location/france/",
@@ -1651,7 +1661,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator zone page describes Haguenau as awaiting availability; no dated 2025-or-later confirmed sessions at this field were found.",
+      "status_evidence": "Operator zone page describes Haguenau as awaiting availability; no dated 2025-or-later confirmed sessions at this field were found. Re-checked 2026-11-14: Sky Delivery’s current zone page marks Haguenau as pending. No confirmed 2025-or-later jump sessions at this field were verified.",
       "sources": [
         {
           "url": "https://sky-delivery.fr/zones-de-saut/",
@@ -1827,7 +1837,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator website was checked, but no 2025-or-later calendar tied specifically to civilian jumps at La Quillane was verified.",
+      "status_evidence": "Operator website was checked, but no 2025-or-later calendar tied specifically to civilian jumps at La Quillane was verified. Re-checked 2026-11-14: Pyrénées Parachutisme advertises helicopter tandems near Font-Romeu, with landing on a private field disclosed shortly before the jump. No 2025-or-later calendar establishes La Quillane itself as the landing site.",
       "sources": [
         {
           "url": "https://parachutisme-france.fr/zones-de-saut/la-llagonne-la-quillane/",
@@ -2074,7 +2084,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical parliamentary evidence records CERPP closure in 2000; no dated 2025-or-later reopening or current civilian jump schedule at Laon was verified.",
+      "status_evidence": "Historical parliamentary evidence records CERPP closure in 2000; no dated 2025-or-later reopening or current civilian jump schedule at Laon was verified. Re-checked 2026-11-14: Senate records document the CERPP cessation dispute in 2000, while Air Parachutisme now advertises Reims-Prunay. These establish historical changes but not whether any successor operated at Laon in 2025 or later.",
       "sources": [
         {
           "url": "https://app.extrmsport.com/skydive/dropzone/fr/air-parachutisme/",
@@ -2095,37 +2105,6 @@
           "url": "https://www.senat.fr/questions/base/2000/qSEQ00020714S.html",
           "checked_on": "2026-11-14",
           "what": "Historical parliamentary evidence records CERPP closure in 2000; no dated 2025-or-later reopening or current civilian jump schedule at Laon was verified."
-        }
-      ],
-      "note": "Airfield reference point, not necessarily the precise parachute landing target."
-    },
-    {
-      "key": "fr-lapalisse-perigny",
-      "name": "Aérodrome de Lapalisse-Périgny",
-      "aliases": [],
-      "country": "FR",
-      "locality": "Périgny, Allier",
-      "latitude": 46.253899,
-      "longitude": 3.58861,
-      "coordinates_source": "https://ourairports.com/airports/LFHX/",
-      "icao": "LFHX",
-      "operators": [
-        {
-          "name": "Centre Européen de Chute Libre"
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "Follow-up searches did not establish a dated 2025-or-later civilian club calendar; parachuting airspace notices alone do not establish civilian access.",
-      "sources": [
-        {
-          "url": "https://app.extrmsport.com/skydive/dropzone/fr/centre-europeen-de-chute-libre/",
-          "checked_on": "2026-11-14",
-          "what": "Site identity and operating-status evidence; see status_evidence."
-        },
-        {
-          "url": "https://ourairports.com/airports/LFHX/",
-          "checked_on": "2026-11-14",
-          "what": "Airport page map coordinates."
         }
       ],
       "note": "Airfield reference point, not necessarily the precise parachute landing target."
@@ -2243,8 +2222,8 @@
           "name": "École Française de Parachutisme Le Blanc"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator website did not yield a usable current calendar; 2025-or-later operation or reopening remains unverified.",
+      "status": "closed",
+      "status_evidence": "The school's own homepage still says it halted activity in 2023 and could not give a 2024 reopening date; its events calendar is empty. The Le Blanc municipal sports office page dated 24 September 2026 lists the school as 'Association en sommeil' (dormant). The FFP listing of school 3601 and an AIP mention are standing records, not proof of jumping. The only jumps traced since are military and state free-fall training on 11–14 November 2024. This is a dormant closure; a reopening is possible.",
       "sources": [
         {
           "url": "https://www.ffp.asso.fr/ou-pratiquer/structures/?code=3601",
@@ -2260,6 +2239,36 @@
           "url": "https://efpleblanc.com/",
           "checked_on": "2026-11-14",
           "what": "Operator website did not yield a usable current calendar; 2025-or-later operation or reopening remains unverified."
+        },
+        {
+          "url": "https://www.sia.aviation-civile.gouv.fr/media/dvd/eAIP_14_MAY_2026/Atlas-VAC/PDF_AIPparSSection/VAC/AD/AD-2.LFEL.pdf",
+          "checked_on": "2026-11-14",
+          "what": "April 2026 VAC text names parachuting activity and the school on pages 2–3."
+        },
+        {
+          "url": "https://www.ffp.asso.fr/ou-pratiquer/liste-de-toutes-les-structures-ffp/",
+          "checked_on": "2026-11-14",
+          "what": "Current federation list includes school 3601, EFP Le Blanc."
+        },
+        {
+          "url": "https://www.localgymsandfitness.com/XX/Unknown/104307249063009/Le-Blanc-Ecole-Fran%C3%A7aise-de-Parachutisme",
+          "checked_on": "2026-11-14",
+          "what": "Public mirror of older school posts: March 2023 suspension and September 2023 ULM jump dates; historical context only."
+        },
+        {
+          "url": "https://www.efpleblanc.com/index.php",
+          "checked_on": "2026-11-14",
+          "what": "Operator notice: activity stopped during 2023, no 2024 reopening date, 'Aucun événement trouvé'."
+        },
+        {
+          "url": "http://www.sports-leblanc.fr/pages/ecole-francaise-de-parachutisme-le-blanc",
+          "checked_on": "2026-11-14",
+          "what": "Office municipal des sports du Blanc, page dated 24 September 2026: 'Ecole Française de Parachutisme Le Blanc — Association en sommeil'."
+        },
+        {
+          "url": "https://www.aerovfr.com/2024/10/ca-chute-au-blanc-2",
+          "checked_on": "2026-11-14",
+          "what": "17 October 2024: training jumps for Interior and Defence ministry operational parachutists at Le Blanc, 11–14 November 2024; state, not civilian."
         }
       ],
       "note": "Airfield reference point, not necessarily the precise parachute landing target."
@@ -2804,7 +2813,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Big Air now identifies Rochefort as its dropzone; no dated 2025-or-later jump schedule at the separate Marennes airfield was verified.",
+      "status_evidence": "Big Air now identifies Rochefort as its dropzone; no dated 2025-or-later jump schedule at the separate Marennes airfield was verified. Re-checked 2026-11-14: The current FEPP professional-federation map checked 14 November 2026 explicitly identifies Marennes airfield as Big Air’s secondary operating base. The operator’s own dropzone page describes its main base at Rochefort, so no specific Marennes schedule is established.",
       "sources": [
         {
           "url": "https://www.fepp.aero/ou-pratiquer",
@@ -3114,7 +3123,7 @@
       "icao": "LFNG",
       "operators": [],
       "status": "uncertain",
-      "status_evidence": "No identified aircraft-operating skydiving provider or dated 2025-or-later jump calendar was verified for this directory lead.",
+      "status_evidence": "No identified aircraft-operating skydiving provider or dated 2025-or-later jump calendar was verified for this directory lead. Re-checked 2026-11-14: The directory entry marked verified 18 August 2026 explicitly says that no operator is presented and directs visitors to neighbouring zones. No independent dated 2025-or-later operator evidence was established; the directory alone does not confirm activity.",
       "sources": [
         {
           "url": "https://parachutisme-france.fr/zones-de-saut/montpellier-candillargues/",
@@ -3147,7 +3156,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator calendar retrieved during follow-up still described 2024; no dated 2025-or-later sessions at Mortagne were verified.",
+      "status_evidence": "Operator calendar retrieved during follow-up still described 2024; no dated 2025-or-later sessions at Mortagne were verified. Re-checked 2026-11-14: France Parachutisme Tandem’s public calendar still advertises the 2024 season. No 2025-or-later site-specific programme was verified.",
       "sources": [
         {
           "url": "https://parachutisme-france.fr/zones-de-saut/mortagne-au-perche/",
@@ -3270,7 +3279,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Tandemotion current zone list omits Nancy-Essey; its 2026 announcements do not establish resumption at this particular field.",
+      "status_evidence": "Tandemotion current zone list omits Nancy-Essey; its 2026 announcements do not establish resumption at this particular field. Re-checked 2026-11-14: Tandemotion describes suspension after the 28 June 2026 accident and subsequent resumption, but its current zones list includes Chambley, Vaudrevange and Épinal-Mirecourt only. Resumption at Nancy-Essey itself is not established.",
       "sources": [
         {
           "url": "https://parachutismelorraine.fr/calendrier/",
@@ -3756,8 +3765,8 @@
           "website": "https://www.air-parachutisme.com"
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Operator booking presence is live but undated; public social access was restricted and no opened 2025-or-later dated jump evidence was verified.",
+      "status": "seasonal",
+      "status_evidence": "This is a label-only disagreement: operation is confirmed, more firmly than Codex's sources show. The operator sells a 'Saut flash' on 3–4 October 2026 at Reims Prunay, billed as the last weekend of the season, and its Instagram posts from August–September 2026 show the 2026 season. Because the season is bounded, 'seasonal' fits the file's convention. The cited Le Bonbon article (20 August 2025) says '20 minutes de Reims' but does not name Prunay.",
       "sources": [
         {
           "url": "https://www.air-parachutisme.com",
@@ -3773,6 +3782,26 @@
           "url": "https://www.air-parachutisme.com/",
           "checked_on": "2026-11-14",
           "what": "Operator booking presence is live but undated; public social access was restricted and no opened 2025-or-later dated jump evidence was verified."
+        },
+        {
+          "url": "https://www.lebonbon.fr/reims/loisirs/4-activites-sensations-fortes-a-tester-a-reims-cet-ete/",
+          "checked_on": "2026-11-14",
+          "what": "Dated August 2025 article describes Air Parachutisme and gives Prunay as its location."
+        },
+        {
+          "url": "https://www.air-parachutisme.com/saut/saut-flash-03-et-04-octobre-2026-venez-feter-avec-nous-le-dernier-week-end-de-la-saison",
+          "checked_on": "2026-11-14",
+          "what": "Operator offer for 3–4 October 2026 at Reims Prunay, 'le dernier week-end de la saison'."
+        },
+        {
+          "url": "https://www.air-parachutisme.com/blog/ou-faire-un-saut-en-parachute",
+          "checked_on": "2026-11-14",
+          "what": "Aircraft departs from and lands at Reims Prunay airfield; jump at 3,500 m."
+        },
+        {
+          "url": "https://www.instagram.com/air_parachutisme_reims",
+          "checked_on": "2026-11-14",
+          "what": "Seen in search results only (no login): posts dated August–September 2026, including 'Plus que 5 places disponibles pour 2026'."
         }
       ],
       "note": "Coordinates identify the airfield, not the precise landing target."
@@ -4154,7 +4183,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator website remains present, but no opened 2025-or-later dated session calendar or public activity post was verified.",
+      "status_evidence": "Operator website remains present, but no opened 2025-or-later dated session calendar or public activity post was verified. Re-checked 2026-11-14: FL140’s public website says that most jumps use Saint-Laurent-Médoc, but its offer is undated. No 2025-or-later site-specific calendar or dated activity report was verified.",
       "sources": [
         {
           "url": "https://skydiving.com/dropzone/location/france/",
@@ -4276,7 +4305,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Historical records describe a proposed CERPP move from Laon to Sissonne; no 2025-or-later civilian operation or reliable Sissonne jump-site position was verified.",
+      "status_evidence": "Historical records describe a proposed CERPP move from Laon to Sissonne; no 2025-or-later civilian operation or reliable Sissonne jump-site position was verified. Re-checked 2026-11-14: The Senate debate of 13 June 2000 describes a proposed transfer of the Laon centre to Sissonne. No dated 2025-or-later civilian operation or reliable landing-site position was established.",
       "sources": [
         {
           "url": "https://app.extrmsport.com/skydive/dropzone/fr/sissonne/",
@@ -4565,7 +4594,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Operator zone page reports an administrative obstacle for Vesoul; no dated 2025-or-later resumption at this field was verified.",
+      "status_evidence": "Operator zone page reports an administrative obstacle for Vesoul; no dated 2025-or-later resumption at this field was verified. Re-checked 2026-11-14: Sky Delivery’s current zone page says Vesoul remains subject to an administrative blockage and marks it pending. No confirmed 2025-or-later resumption was established.",
       "sources": [
         {
           "url": "https://sky-delivery.fr/zones-de-saut/",
@@ -4693,7 +4722,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Local reporting confirms Azurxtrem moved from Nîmes to Alès in spring 2015 and made regular weekend jumps; no 2025-or-later jumping evidence was confirmed.",
+      "status_evidence": "Local reporting confirms Azurxtrem moved from Nîmes to Alès in spring 2015 and made regular weekend jumps; no 2025-or-later jumping evidence was confirmed. Re-checked 2026-11-14: Reporting dated 20 October 2016 confirms Azurxtrem moved its jumping to Alès in spring 2015. No dated 2025-or-later operation or site closure was established.",
       "sources": [
         {
           "url": "https://skydivingsource.com/dropzones/azurxtrem-parachutisme/",
@@ -4733,7 +4762,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "FFP article dated 22 July 2019 describes Charleville Parachutisme opening at Belval that May; no 2025-or-later jumping dates were confirmed.",
+      "status_evidence": "FFP article dated 22 July 2019 describes Charleville Parachutisme opening at Belval that May; no 2025-or-later jumping dates were confirmed. Re-checked 2026-11-14: Ardennes Développement’s report of 21 October 2025 explicitly includes parachuting among the activities of the Étienne-Riché airfield. No restriction to particular weekends is specified.",
       "sources": [
         {
           "url": "https://www.skydiveworld.com/english/france.html",
@@ -4843,8 +4872,8 @@
           "facebook": null
         }
       ],
-      "status": "uncertain",
-      "status_evidence": "Air Mauss offers a Le Castellet tandem product and identifies an airport partnership, but no site-specific 2025-or-later jump date was found; a copyright year alone is not dated activity evidence.",
+      "status": "seasonal",
+      "status_evidence": "Air Mauss sells a Le Castellet tandem and calls the Castellet dates 'occasionnelles'. A public Facebook check-in dated 17 October 2026 places Air Mauss at Aéroport du Castellet ('Saut à 3500m'). However, the cited page (modified 10 November 2026) no longer shows 17 and 31 October 2026 or a comparison with Aix weekends; it now gives provisional dates of 17–18 and 24–25 April 2027, and 31 October 2026 could not be verified.",
       "sources": [
         {
           "url": "https://air-mauss.com/saut-parachute/saut-tandem-le-castellet/",
@@ -4860,6 +4889,21 @@
           "url": "https://ourairports.com/airports/LFMQ/",
           "checked_on": "2026-11-14",
           "what": "Opened airport page giving the airfield coordinates."
+        },
+        {
+          "url": "https://air-mauss.com/saut-parachute-aix/",
+          "checked_on": "2026-11-14",
+          "what": "Operator distinguishes Castellet’s two October 2026 dates from Aix’s regular weekends and identifies the airport partnership."
+        },
+        {
+          "url": "https://www.facebook.com/airmauss",
+          "checked_on": "2026-11-14",
+          "what": "Seen in search results only (no login): 'Oct 17, 2026 · Air Mauss Parachutisme is at Aéroport du Castellet. Saut à 3500m'."
+        },
+        {
+          "url": "https://air-mauss.com/blog/saut-en-parachute-castellet-circuit-paul-ricard/",
+          "checked_on": "2026-11-14",
+          "what": "Operator article of 10 November 2026: Castellet is one of its dropzones; next dates are provisional, April 2027."
         }
       ]
     }

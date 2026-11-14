@@ -584,7 +584,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here. Re-checked 2026-11-14: Airgasmo's 2026 schedule lists two Lienz weekends (27-28 Jun, 12-13 Sep 2026), but nothing shows either took place; kept uncertain, like ba-visoko (a schedule or offer alone is not proof of jumps).",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -623,7 +623,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here. Re-checked 2026-11-14: The regional Aero Club page names Wolfsberg as a parachuting zone but does not date that information. Fallschirmzentrum Kärnten’s 2026 calendar and reopened directions omit Wolfsberg, and no dated 2025+ jumping was established.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -661,7 +661,7 @@
         }
       ],
       "status": "uncertain",
-      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here.",
+      "status_evidence": "Codex cross-check: remains uncertain; operator directions name this site but its 2026 jump calendar contains no dates here. Re-checked 2026-11-14: Fallschirmzentrum Kärnten’s opened 2026 calendar gives no Friesach-Hirt jump dates, and the reopened directions page no longer lists this place. German searches did not establish 2025+ civilian operation or an explicit closure.",
       "sources": [
         {
           "url": "https://www.fallschirmspringen-kaernten.at/de/anfahrt.html",
@@ -904,14 +904,9 @@
       "longitude": 14.49558,
       "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LOGI)",
       "icao": "LOGI",
-      "operators": [
-        {
-          "name": "Internationaler Pink Parachute Club",
-          "website": "https://pink.at/"
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "ÖAeC school register dated 3 February 2026 lists LOGI as the training airfield; no actual 2025+ jump dates at Trieben were confirmed in the operator schedule.",
+      "operators": "Add Airgasmo (https://airgasmo.com/), which publishes the Trieben jump dates. Keep Internationaler Pink Parachute Club only as the ÖAeC-authorised school at LOGI; no Pink schedule shows Trieben jumps.",
+      "status": "seasonal",
+      "status_evidence": "Codex's evidence does not show jumps at Trieben. The ÖAeC register (issued 3 Feb 2026) only records that Internationaler Pink Parachute Club holds a school authorisation with LOGI as its training site, and no Pink Skyvan schedule from Jan 2025 to Nov 2026 lists Trieben (13 archived versions checked, plus the live page). The jumps are run by Airgasmo, the airfield's listed parachute operator in 2024. Its own 2026 'Wann und Wo' schedule lists nine Trieben weekends from 14–17 May to 3–4 Oct 2026, its 16 Jun 2026 Instagram reel is tagged #trieben, and customer reviews dated 27 Jun 2025 and 2 Jul 2026 name Trieben as the jump site. That is weekend operation in season, which AT.json records as seasonal; the recorded coordinates are within about 50 m of the OSM aerodrome.",
       "sources": [
         {
           "url": "https://www.aeroclub.at/uploads/download/OeAeC_FAA_ato_FAL_001_i021_fallschirmspringerschulen.pdf",
@@ -927,9 +922,45 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "LOGI airfield coordinates"
+        },
+        {
+          "url": "https://www.fallschirmspringen-wien.at/trieben",
+          "checked_on": "2026-11-14",
+          "what": "Tandem team advertises the airfield but says no matching dates are available."
+        },
+        {
+          "url": "https://web.archive.org/cdx/search/cdx?url=pink.at/schedule.htm&from=2024&to=2026",
+          "checked_on": "2026-11-14",
+          "what": "Archived versions dated 2025-01-17 to 2026-07-14 (13 checked) and three 2024 versions: no Trieben entry in any."
+        },
+        {
+          "url": "https://airgasmo.com/wann-und-wo/",
+          "checked_on": "2026-11-14",
+          "what": "Operator's 2026 schedule: Trieben 14-17 May, 13-14 Jun, 20-21 Jun, 18-19 Jul, 25-26 Jul, 15-16 Aug, 22-23 Aug, 26-27 Sep, 03-04 Oct."
+        },
+        {
+          "url": "https://www.instagram.com/reel/DZpl5XMCy4s",
+          "checked_on": "2026-11-14",
+          "what": "Airgasmo skydiving reel dated 16 Jun 2026, tagged #trieben #tandem."
+        },
+        {
+          "url": "https://adac.regiondo.de/fallschirm-tandemsprung-trieben?vendor=36008&subid=maps",
+          "checked_on": "2026-11-14",
+          "what": "Airgasmo 'Fallschirm Tandemsprung Trieben' booking listing (reseller storefront; supporting only): reviews dated 22 May 2025 to 1 Oct 2026, those of 27 Jun 2025, 2 Jul 2026 and 1 Oct 2026 naming Trieben; operator replies on the 2025 reviews."
+        },
+        {
+          "url": "https://fly1.logi.at/news-and-events/",
+          "checked_on": "2026-11-14",
+          "what": "Airfield operator (Union Sportfliegerclub Trieben) calendar: past events 'Fallschirmspringen mit Airgasmo' on 21 Apr, 1 May and 4 May 2024; no 2025–2026 events published."
+        },
+        {
+          "url": "https://www.openstreetmap.org/way/30520625",
+          "checked_on": "2026-11-14",
+          "what": "OSM aerodrome LOGI Trieben, centre 47.49307, 14.49506 (matches record within ~50 m)."
         }
       ],
-      "note": "Added by Codex; current training authorization does not establish recent regular jumping."
+      "note": "Added by Codex; current training authorization does not establish recent regular jumping.",
+      "season": "Selected weekends, May–October (Airgasmo 2026 schedule)"
     },
     {
       "key": "at-thalgau",
