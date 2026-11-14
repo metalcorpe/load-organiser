@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import { isCountryCode } from '#lib/countries.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { listVenuePoints } from '#lib/server/directory.ts';
@@ -17,6 +16,6 @@ export const GET: RequestHandler = async ({ url }) => {
 		q: q || undefined,
 		country: country || undefined
 	});
-	if (!outcome.ok) return json({ ok: false, reason: outcome.reason }, { status: 502 });
-	return json({ ok: true, points: outcome.value.points, truncated: outcome.value.truncated });
+	if (!outcome.ok) return Response.json({ ok: false, reason: outcome.reason }, { status: 502 });
+	return Response.json({ ok: true, points: outcome.value.points, truncated: outcome.value.truncated });
 };

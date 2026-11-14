@@ -57,7 +57,11 @@
 		phase = 'loading';
 		try {
 			const [library] = await Promise.all([
-				browser ? import('#lib/leaflet-map.ts') : undefined,
+				// import.meta.env.SSR, not `browser`: Vite replaces it at build time, so the server
+				// build has no import of the Leaflet chunk. With one, SvelteKit counts the chunk's
+				// CSS as used during SSR and links it in the head of every /dz page; without, the
+				// CSS loads only here, with the chunk, when the map is shown.
+				import.meta.env.SSR ? undefined : import('#lib/leaflet-map.ts'),
 				fetchPoints(query)
 			]);
 			leaflet = library;

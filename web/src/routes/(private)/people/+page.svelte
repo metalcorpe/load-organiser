@@ -36,7 +36,7 @@
 {:else}
 	<section class="card you">
 		<p>
-			You are <a href="/people/{data.profile.handle}">@{data.profile.handle}</a>
+			You are <a class="wrap-anywhere" href="/people/{data.profile.handle}">@{data.profile.handle}</a>
 			({data.profile.discoverable ? 'discoverable' : 'not discoverable: only approved followers see your profile'}).
 		</p>
 		{#if data.profile.discoverable}
@@ -70,7 +70,7 @@
 	{:else}
 		<ul class="results rows" aria-label="Search results">
 			{#each data.search.items as person (person.handle)}
-				<li><a class="title" href="/people/{person.handle}">{person.display_name}</a> <span class="meta">@{person.handle}</span></li>
+				<li><a class="title" href="/people/{person.handle}">{person.display_name}</a> <span class="meta wrap-anywhere">@{person.handle}</span></li>
 			{/each}
 		</ul>
 	{/if}
@@ -78,7 +78,7 @@
 
 {#snippet who(person: PersonOut)}
 	<a class="title" href="/people/{person.handle}">{person.display_name}</a>
-	<span class="meta">@{person.handle}</span>
+	<span class="meta wrap-anywhere">@{person.handle}</span>
 {/snippet}
 
 {#snippet block(person: PersonOut)}
@@ -174,7 +174,7 @@
 	<ul class="results rows" aria-label="Blocked">
 		{#each data.blocked as person (person.handle)}
 			<li>
-				<span class="title">{person.display_name}</span> <span class="meta">@{person.handle}</span>
+				<span class="title">{person.display_name}</span> <span class="meta wrap-anywhere">@{person.handle}</span>
 				<form method="POST" action="?/unblock" class="inline">
 					<input type="hidden" name="handle" value={person.handle} />
 					<button class="button secondary" disabled={!data.emailVerified}>Unblock</button>

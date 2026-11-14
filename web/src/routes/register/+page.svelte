@@ -27,8 +27,8 @@
 {#if form && 'sent' in form && form.sent}
 	<Notice title="Check your email" tone="ok">
 		<p>
-			If <strong>{form.email}</strong> can be registered, we sent a link to confirm it. The link works
-			once and expires in 30 minutes.
+			If <strong class="wrap-anywhere">{form.email}</strong> can be registered, we sent a link to
+			confirm it. The link works once and expires in 30 minutes.
 		</p>
 		<p>You can sign in now; saving private records needs a confirmed email.</p>
 	</Notice>

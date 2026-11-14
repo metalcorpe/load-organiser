@@ -121,10 +121,14 @@
 		font-size: 1rem;
 	}
 
+	/* The text beside the date tile. With large text on a small screen this column is only a few
+	   letters wide, so its words (type, status, title, place) may break anywhere rather than
+	   push the card past the screen. */
 	.body {
 		display: grid;
 		gap: 0.2rem;
 		min-width: 0;
+		overflow-wrap: anywhere;
 	}
 
 	p {
@@ -144,7 +148,6 @@
 		line-height: 1.3;
 		color: var(--fg);
 		text-decoration: none;
-		overflow-wrap: anywhere;
 	}
 
 	/* The title link covers the whole card, so the card is one tap target. */
@@ -162,7 +165,6 @@
 	.line {
 		color: var(--muted);
 		font-size: 0.9rem;
-		overflow-wrap: anywhere;
 	}
 
 	.price {

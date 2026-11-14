@@ -42,7 +42,7 @@
 	<ul class="results rows" aria-label="Reports">
 		{#each data.reports.items as report (report.id)}
 			<li>
-				<span class="title"
+				<span class="title wrap-anywhere"
 					>{report.post_id ? 'Shared jump by ' : ''}@{report.target.handle} · {report.target.display_name}</span
 				>
 				<span class="meta">

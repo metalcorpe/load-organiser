@@ -2,8 +2,9 @@
  * The dropzone map, drawn with Leaflet and Leaflet.markercluster over OpenStreetMap tiles.
  *
  * Browser only, and imported dynamically by DropzoneMap.svelte once the visitor chooses to
- * show the map: the libraries' JavaScript is not in the page bundle, and no tile is requested
- * before that choice. Popup content is built with DOM text nodes, never HTML strings.
+ * show the map: the libraries' JavaScript and CSS (imported below) are not in the page bundle
+ * and load with this chunk, and no tile is requested before that choice. Popup content is
+ * built with DOM text nodes, never HTML strings.
  */
 import L from 'leaflet';
 // Registers L.markerClusterGroup on the Leaflet object above (its UMD build reads window.L,

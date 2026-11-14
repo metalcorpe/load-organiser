@@ -31,7 +31,11 @@ body {
 	background: var(--bg);
 	color: var(--fg);
 	font: 16px/1.5 var(--font-body);
-	overflow-wrap: anywhere;
+	/* A string too long for its line (an address, an email) still wraps. Not `anywhere` here:
+	   it also lets flex and grid items shrink below their longest word, so with enlarged text
+	   ordinary words broke inside the word. Long strings get `anywhere` where they are shown:
+	   .wrap-anywhere below, dd, and a few components' own rules. */
+	overflow-wrap: break-word;
 }
 
 a {
@@ -66,6 +70,12 @@ h1 {
 	clip: rect(0 0 0 0);
 	white-space: nowrap;
 	border: 0;
+}
+
+/* Text that can be one long unbroken string: a web address, an email, a handle. It may break
+   at any character, also inside a flex or grid item, so it never widens the page. */
+.wrap-anywhere {
+	overflow-wrap: anywhere;
 }
 
 .lede {
@@ -278,12 +288,15 @@ h1 {
 	font: inherit;
 }
 
-/* A checkbox or radio with its text: one 44px row, box beside the words. */
+/* A checkbox or radio with its text: one 44px row, box beside the words. The text (often a
+   name someone typed) is the row's only flexible part, so it breaks inside a word only when
+   the word is wider than the space beside the box, instead of pushing the row off the page. */
 .choice {
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
 	min-height: 44px;
+	overflow-wrap: anywhere;
 }
 
 .choice > input {

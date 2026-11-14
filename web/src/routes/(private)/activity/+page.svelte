@@ -114,7 +114,7 @@
 				{#each following.slice(0, SHOWN) as person (person.handle)}
 					<li>
 						<a href="/people/{person.handle}">{person.display_name}</a>
-						<span class="meta">@{person.handle}</span>
+						<span class="meta wrap-anywhere">@{person.handle}</span>
 					</li>
 				{/each}
 			</ul>
@@ -134,10 +134,6 @@
 		justify-content: space-between;
 		align-items: baseline;
 		column-gap: 1rem;
-	}
-
-	.head h1 {
-		overflow-wrap: break-word;
 	}
 
 	.head .links {

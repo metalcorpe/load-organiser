@@ -75,11 +75,13 @@ interface Seen {
 	external: string[];
 	/** The map's own point requests to the site. */
 	points: string[];
+	/** Stylesheets requested from the site. */
+	stylesheets: string[];
 }
 
 /** Answer tile requests locally, and record every request that leaves for another host. */
 async function stubTiles(page: Page): Promise<Seen> {
-	const seen: Seen = { tiles: [], referers: new Set(), external: [], points: [] };
+	const seen: Seen = { tiles: [], referers: new Set(), external: [], points: [], stylesheets: [] };
 	await page.route(TILES, (route) => {
 		seen.tiles.push(route.request().url());
 		seen.referers.add(route.request().headers()['referer'] ?? '');
@@ -90,9 +92,29 @@ async function stubTiles(page: Page): Promise<Seen> {
 		if (url.protocol === 'data:' || url.protocol === 'blob:') return;
 		if (url.origin !== ORIGIN) seen.external.push(url.href);
 		else if (url.pathname === '/dz/points') seen.points.push(url.search);
+		else if (request.resourceType() === 'stylesheet') seen.stylesheets.push(url.href);
 	});
 	return seen;
 }
+
+/** Whether one of these stylesheets is Leaflet's (with Leaflet.markercluster's), by its rules. */
+async function leafletCssAmong(page: Page, urls: string[]): Promise<boolean> {
+	for (const url of urls) {
+		const css = await (await page.request.get(url)).text();
+		if (css.includes('.leaflet-tile-pane') || css.includes('.leaflet-cluster-anim')) return true;
+	}
+	return false;
+}
+
+/** Whether Leaflet's own rules are applied to the page (the page's overrides do not count). */
+const leafletCssApplied = (page: Page) =>
+	page.evaluate(() =>
+		[...document.styleSheets].some((sheet) =>
+			[...sheet.cssRules].some(
+				(rule) => rule instanceof CSSStyleRule && rule.selectorText.includes('.leaflet-tile-pane')
+			)
+		)
+	);
 
 const offSite = (seen: Seen) =>
 	seen.external.filter((url) => !url.startsWith('https://tile.openstreetmap.org/'));
@@ -147,11 +169,19 @@ test.describe('dropzone map', () => {
 		await expect(page.getByTestId('dz-map')).toHaveCount(0);
 		await expect(page.getByTestId('map-needs-js')).toHaveCount(0);
 		expect(seen.external).toEqual([]);
-		// The points are not loaded either until the choice.
+		// The points are not loaded either until the choice, nor Leaflet's CSS (list or Map view).
 		expect(seen.points).toEqual([]);
+		expect(seen.stylesheets.length).toBeGreaterThan(0);
+		expect(await leafletCssAmong(page, seen.stylesheets), 'Leaflet CSS before the choice').toBe(false);
+		expect(await leafletCssApplied(page)).toBe(false);
 
 		await showMap(page);
 		expect(seen.points).toEqual([`?q=${base}&country=`]);
+		// Leaflet's CSS came with the map, and styles it: panes stacked over the tiles.
+		expect(await leafletCssApplied(page)).toBe(true);
+		await expect(page.locator('.leaflet-container')).toHaveCSS('overflow', 'hidden');
+		await expect(page.locator('.leaflet-tile-pane')).toHaveCSS('position', 'absolute');
+		await expect(page.locator('.leaflet-tile-pane')).toHaveCSS('z-index', '200');
 		const map = page.getByRole('region', { name: 'Map of 3 dropzones' });
 		await expect(map).toBeVisible();
 		await expect(map).toBeFocused();
@@ -243,6 +273,9 @@ test.describe('dropzone map', () => {
 		const plainSeen = await stubTiles(page);
 		await page.goto(`${ORIGIN}/dz?view=map&q=${shared.base}`);
 		await expect(page.getByText('The map needs JavaScript.')).toBeVisible();
+		// The server-rendered Map view does not link Leaflet's CSS either.
+		expect(plainSeen.stylesheets.length).toBeGreaterThan(0);
+		expect(await leafletCssAmong(page, plainSeen.stylesheets)).toBe(false);
 		await expect(page.getByRole('button', { name: 'Show map' })).toHaveCount(0);
 		await page.getByRole('link', { name: 'Use the list' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/dz?q=${shared.base}`);

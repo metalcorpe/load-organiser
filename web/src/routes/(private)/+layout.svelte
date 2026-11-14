@@ -9,7 +9,9 @@
 <!-- Profile has its own resend button next to the account details. -->
 {#if data.viewer && !data.viewer.emailVerified && page.url.pathname !== '/profile'}
 	<Notice title="Confirm your email" tone="warn">
-		<p>Saving private records needs a confirmed email. Use the link we sent to {data.viewer.email}.</p>
+		<p>Saving private records needs a confirmed email. Use the link we sent to
+			<span class="wrap-anywhere">{data.viewer.email}</span>.
+		</p>
 		<form method="POST" action="/profile?/resend">
 			<button class="button secondary" type="submit">Send a new link</button>
 		</form>

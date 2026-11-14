@@ -651,17 +651,13 @@
 
 <style>
 	/* With very large text the links move under the heading; "Logbook" never breaks inside
-	   the word (the page's overflow-wrap: anywhere would let the flex row squeeze it). */
+	   the word (the page's overflow-wrap: break-word keeps the flex row from squeezing it). */
 	.head {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: baseline;
 		column-gap: 1rem;
-	}
-
-	.head h1 {
-		overflow-wrap: break-word;
 	}
 
 	.head .links {
@@ -708,14 +704,10 @@
 		font-variant-numeric: tabular-nums;
 	}
 
-	/* With large text the dates move under the total; no number or word breaks in two. */
+	/* With large text the dates move under the total; no number or word breaks in two (the
+	   page's overflow-wrap: break-word). */
 	.totals {
 		flex-wrap: wrap;
-	}
-
-	.totals p,
-	.totals span {
-		overflow-wrap: break-word;
 	}
 
 	.unit {

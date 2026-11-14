@@ -150,8 +150,8 @@
 		Open organizer registration
 	</a>
 	<p class="hint">
-		Opens {hostOf(item.registration_url)}. Availability is not tracked here: places, registration and
-		payment are with the organizer.
+		Opens <span class="wrap-anywhere">{hostOf(item.registration_url)}</span>. Availability is not
+		tracked here: places, registration and payment are with the organizer.
 	</p>
 </section>
 
@@ -188,7 +188,7 @@
 <!-- Where this came from: quieter, still readable. -->
 <footer class="provenance">
 	<p>
-		Source: <a href={item.source_url} rel="external noopener noreferrer nofollow"
+		Source: <a class="wrap-anywhere" href={item.source_url} rel="external noopener noreferrer nofollow"
 			>{hostOf(item.source_url)}</a
 		>{#if item.source_note}{' '}({item.source_note}){/if}. Last checked {formatDay(item.checked_on)}.
 	</p>
@@ -209,6 +209,9 @@
 	/* The navy header: the one brand block on this page. */
 	.hero {
 		display: grid;
+		/* One column no wider than the card: a title word too long for it breaks instead of
+		   widening the page. */
+		grid-template-columns: minmax(0, 1fr);
 		gap: 0.4rem;
 		margin: 0 -1rem 1rem;
 		padding: 0.75rem 1.25rem 1.4rem;
