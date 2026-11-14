@@ -19,7 +19,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/profile">Profile</a></p>
+<p><a href="/profile">Me</a></p>
 <h1>Your data</h1>
 <PrivacyLabel />
 <p class="lede">Keep a copy of your records, or bring a copy back. Both are free and private.</p>

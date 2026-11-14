@@ -229,9 +229,9 @@ test.describe('private logbook', () => {
 		await expect(page.locator('header .avatar')).toHaveText('U');
 
 		await banner.getByRole('button', { name: 'Send a new link' }).click();
+		// The result shows on Me, under the same banner (once: Me has no second one).
 		await expect(page.getByText('We sent a new confirmation link.')).toBeVisible();
-		// Profile has its own resend button, so the banner is not repeated there.
-		await expect(page.getByRole('region', { name: 'Confirm your email' })).toHaveCount(0);
+		await expect(page.getByRole('region', { name: 'Confirm your email' })).toHaveCount(1);
 	});
 
 	test('log a jump at an unlisted place with a new component, without gear setup', async ({

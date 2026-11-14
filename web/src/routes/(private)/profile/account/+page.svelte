@@ -20,7 +20,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/profile">Profile</a></p>
+<p><a href="/profile">Me</a></p>
 <h1>Account and security</h1>
 <p class="lede">How you sign in, and the account itself. Each change here asks for your password.</p>
 

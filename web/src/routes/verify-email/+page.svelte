@@ -32,7 +32,7 @@
 {:else}
 	{#if error}
 		<p class="form-error" role="alert">{error}</p>
-		<p>Signed in? Request a new link from <a href="/profile">Profile</a>.</p>
+		<p>Signed in? Request a new link from <a href="/profile">Me</a>.</p>
 	{/if}
 	<form method="POST" class="form">
 		<p>Confirm that this email address belongs to you.</p>

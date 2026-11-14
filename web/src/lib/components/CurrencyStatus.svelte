@@ -29,7 +29,7 @@
 <section class="currency {status.kind}" aria-labelledby="{id}-title">
 	<h2 id="{id}-title">Jump currency</h2>
 	{#if status.kind === 'no_licence'}
-		<p><a href="/profile#licence-heading">Set your licence</a> to see your jump currency.</p>
+		<p><a href="/profile/preferences#licence-heading">Set your licence</a> to see your jump currency.</p>
 	{:else if status.kind === 'no_jumps'}
 		<p>No jumps recorded yet, so there is no currency to show.</p>
 	{:else}

@@ -9,7 +9,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					'Where a member’s own records live, grouped. Records shows tiles with a line each; the Me tab (profile) shows the same groups as compact link lists (`compact`), with its own groups added (`extra`). Each link is one tap target of at least 44px.'
+					'Where a member’s own records live, grouped, as tiles with a line each on the Records page. Each tile is one tap target of at least 44px. Me lists the same places with DestinationList.'
 			}
 		}
 	}
@@ -19,20 +19,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
-
-export const Compact: Story = {
-	args: {
-		compact: true,
-		extra: [
-			{
-				id: 'account',
-				heading: 'Account and settings',
-				items: [
-					{ href: '/profile/account', name: 'Account and security', text: '' },
-					{ href: '#licence-heading', name: 'Licence', text: '' },
-					{ href: '#weight-heading', name: 'Exit weight', text: '' }
-				]
-			}
-		]
-	}
-};
