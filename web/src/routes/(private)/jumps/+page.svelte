@@ -152,8 +152,9 @@
 	<!-- novalidate: the server checks the dates and explains; WebKit otherwise blocks the
      submit silently on a date field it considers half-filled. -->
 <form method="GET" action="/jumps" class="jump-search" role="search" novalidate>
+		<!-- A visible name: the placeholder is cut short on a small phone. -->
+		<label class="search-label" for="q">Place, aircraft or notes</label>
 		<div class="search-row">
-			<label class="visually-hidden" for="q">Place, aircraft or notes</label>
 			<input
 				id="q"
 				name="q"

@@ -412,6 +412,30 @@ test.describe('search context and the filter panel', () => {
 		await plain.close();
 	});
 
+	test('the search box has a visible name and a readable placeholder in both themes', async ({
+		page
+	}) => {
+		for (const scheme of ['light', 'dark'] as const) {
+			await page.emulateMedia({ colorScheme: scheme });
+			await page.goto('/');
+			// The name stays visible when the placeholder is cut short on a small phone.
+			await expect(page.locator('label[for="q"]')).toHaveText('Title or organizer');
+			await expect(page.locator('label[for="q"]')).toBeVisible();
+			const box = page.getByRole('searchbox', { name: 'Title or organizer' });
+			// The placeholder is the muted colour (4.5:1 on a field, tokens.spec.ts), not the
+			// browser's grey.
+			const [placeholder, muted] = await box.evaluate((input) => {
+				const probe = document.createElement('span');
+				probe.style.color = 'var(--muted)';
+				document.body.append(probe);
+				const colour = getComputedStyle(probe).color;
+				probe.remove();
+				return [getComputedStyle(input, '::placeholder').color, colour];
+			});
+			expect(placeholder, scheme).toBe(muted);
+		}
+	});
+
 	test('country and dates come first; type, discipline and audience fold away', async ({ page }) => {
 		await page.goto('/');
 		await page.locator('summary', { hasText: 'Filters' }).click();
