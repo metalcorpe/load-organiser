@@ -30,7 +30,7 @@
 		"@storybook/addon-a11y": "10.6.6",
 		"@storybook/addon-docs": "10.6.6",
 		"@storybook/addon-themes": "10.6.6",
-		"@storybook/sveltekit": "10.6.6",
+		"@storybook/sveltekit": "10.6.7",
 		"@sveltejs/adapter-cloudflare": "8.0.2",
 		"@sveltejs/kit": "3.1.1",
 		"@sveltejs/vite-plugin-svelte": "7.3.1",
