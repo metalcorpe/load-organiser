@@ -4,7 +4,8 @@
 
 Owner decision 2026-11-09: the researched candidate records are for local testing
 only and are never loaded into production. This refuses to run unless
-ENVIRONMENT=local. Records go through the same services and publication rules as
+ENVIRONMENT=local and SKYDIVER_DEV_DATA=1 are both set explicitly (scripts/dev.sh
+seed sets them) and the database is on this machine. Records go through the same services and publication rules as
 `/review`, acting as EMAIL, an account with the reviewer role. A record the rules
 refuse stays unpublished and is reported: a listing without dates waits in
 the review queue.
@@ -14,19 +15,23 @@ carries `dev-data:<key>`.
 
 The researched dropzone inventory (`dropzones/<CC>.json` next to PATH, or DIR; files
 starting with `_` are notes and are skipped) loads as venues with coordinates and
-aliases. A dropzone already present, by key or by name or alias in the same country,
-is not added again; an existing venue without coordinates gets the researched ones.
-Researched `closed` dropzones load as closed venues; `uncertain` ones stay listed,
-with the research status in the source note.
+aliases. A dropzone already present, by key, or by its name matching a stored venue
+name or alias in the same country, is not added again; an existing venue without
+coordinates gets the researched ones. Its own aliases never match: they are often
+operator brands shared by several airfields. Each venue is created as a draft and
+made public (listed, or closed for researched `closed` dropzones) in one step at
+the end; `uncertain` ones stay listed, with the research status in the source note.
+Invalid records are refused and reported; the rest still load.
 """
 
 import argparse
 import json
+import os
 import re
 import sys
 import unicodedata
 import uuid
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
@@ -137,7 +142,7 @@ def dropzone_files(folder: Path) -> list[Path]:
 
 
 def _venue_names(engine: Engine) -> dict[tuple[str, str], uuid.UUID]:
-    """Unmerged venues by (country, name or alias search key)."""
+    """Unmerged venues by (country, name or alias search key), as stored before this run."""
     with engine.connect() as conn:
         rows = conn.execute(
             text(
@@ -149,6 +154,44 @@ def _venue_names(engine: Engine) -> dict[tuple[str, str], uuid.UUID]:
             )
         ).all()
     return {(country, key): venue_id for country, key, venue_id in rows}
+
+
+def _venue_status(engine: Engine, venue_id: uuid.UUID) -> str:
+    with engine.connect() as conn:
+        return str(
+            conn.execute(
+                text("SELECT status FROM skydiver_venue WHERE id = :id"),
+                {"id": venue_id},
+            ).scalar_one()
+        )
+
+
+DROPZONE_STATUSES = frozenset({"active", "seasonal", "uncertain", "closed"})
+DROPZONE_KEY = re.compile(r"^[a-z0-9-]+$")
+
+
+def _is_coordinate(value: Any) -> bool:
+    return value is None or (
+        isinstance(value, int | float) and not isinstance(value, bool)
+    )
+
+
+def _record_problem(dz: Any) -> str | None:
+    """Why a research record cannot load, checked before anything is written."""
+    if not isinstance(dz, dict):
+        return "record_invalid"
+    if not isinstance(dz.get("key"), str) or not DROPZONE_KEY.match(dz["key"]):
+        return "key_invalid"
+    if not isinstance(dz.get("name"), str) or not isinstance(dz.get("country"), str):
+        return "name_or_country_invalid"
+    if dz.get("status") not in DROPZONE_STATUSES:
+        return "status_invalid"
+    if not (_is_coordinate(dz.get("latitude")) and _is_coordinate(dz.get("longitude"))):
+        return "coordinates_invalid"
+    aliases = dz.get("aliases") or []
+    if not isinstance(aliases, list) or not all(isinstance(a, str) for a in aliases):
+        return "aliases_invalid"
+    return None
 
 
 def _source(dropzone: dict[str, Any], researched_on: str | None) -> tuple[str, date]:
@@ -187,15 +230,49 @@ def _locate(
     return True
 
 
+def _publish(
+    directory: DirectoryService,
+    actor: Actor,
+    venue_id: uuid.UUID,
+    aliases: list[str],
+    status: str,
+) -> int:
+    """Aliases, then the public status in one step; returns the aliases dropped.
+
+    The venue is created as a draft, so it is not public until this succeeds. A
+    failure leaves the draft, and the next run finishes it (aliases are idempotent).
+    """
+    dropped = 0
+    venue, _ = directory.reviewer_venue(actor, venue_id)
+    for alias in aliases:
+        try:
+            venue = directory.add_alias(
+                actor, venue_id, alias, expected_version=venue.version
+            )
+        except DirectoryRuleError:
+            dropped += 1
+    target = VenueStatus.CLOSED if status == "closed" else VenueStatus.LISTED
+    directory.set_status(actor, venue_id, target, expected_version=venue.version)
+    return dropped
+
+
 def load_dropzones(
     engine: Engine, folder: Path, actor: Actor, directory: DirectoryService
 ) -> dict[str, Any]:
+    """Every country file; a bad file or record is refused, never the whole load.
+
+    A record is a duplicate only by its own name, matched against the names and
+    aliases stored before this run and the names of venues this run adds. Aliases
+    added here (often operator brands shared by several airfields) never identify
+    a dropzone.
+    """
     report: dict[str, Any] = {
         "files": 0,
         "added": 0,
         "closed": 0,
         "skipped": 0,
-        "duplicates": 0,
+        "resumed": 0,
+        "duplicates": [],
         "located": 0,
         "aliases_dropped": 0,
         "refused": [],
@@ -203,60 +280,71 @@ def load_dropzones(
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
     for file in dropzone_files(folder):
-        data = json.loads(file.read_text())
+        try:
+            data = json.loads(file.read_text(encoding="utf-8"))
+            records = data["dropzones"]
+            if not isinstance(records, list):
+                raise TypeError("dropzones is not a list")
+        except (ValueError, KeyError, TypeError) as error:
+            report["refused"].append({"file": file.name, "reason": str(error)[:200]})
+            continue
         report["files"] += 1
-        for dz in data["dropzones"]:
+        for dz in records:
+            problem = _record_problem(dz)
+            if problem:
+                key = dz.get("key") if isinstance(dz, dict) else None
+                report["refused"].append({"key": key, "reason": problem})
+                continue
             key = dz["key"]
+            status = dz["status"]
+            aliases = [a for a in dz.get("aliases") or [] if a.strip()]
             if key in loaded:
-                report["skipped"] += 1
-                continue
-            country = str(dz["country"]).upper()
-            aliases = [str(a) for a in dz.get("aliases") or []]
-            same = [
-                names[(country, search_key(n))]
-                for n in (dz["name"], *aliases)
-                if (country, search_key(n)) in names
-            ]
-            if same:
-                report["duplicates"] += 1
-                report["located"] += _locate(directory, actor, same[0], dz)
-                continue
-            status = str(dz.get("status") or "uncertain")
-            try:
-                url, checked = _source(dz, data.get("researched_on"))
-                venue = directory.create_venue(
-                    actor,
-                    VenueInput(
-                        name=dz["name"],
-                        country=country,
-                        locality=dz.get("locality"),
-                        latitude=dz.get("latitude"),
-                        longitude=dz.get("longitude"),
-                        source_url=url,
-                        source_note=_note(key, f"Research status: {status}."),
-                        checked_on=checked,
-                    ),
-                )
-            except (DirectoryRuleError, ValueError) as error:
-                report["refused"].append({"key": key, "reason": str(error)})
-                continue
-            loaded[key] = venue.id
-            names[(country, search_key(venue.name))] = venue.id
-            report["added"] += 1
-            for alias in aliases:
-                try:
-                    venue = directory.add_alias(
-                        actor, venue.id, alias, expected_version=venue.version
-                    )
-                except DirectoryRuleError:
-                    report["aliases_dropped"] += 1
+                if _venue_status(engine, loaded[key]) != "draft":
+                    report["skipped"] += 1
                     continue
-                names[(country, search_key(alias))] = venue.id
-            if status == "closed":
-                directory.set_status(
-                    actor, venue.id, VenueStatus.CLOSED, expected_version=venue.version
+                venue_id = loaded[key]  # a draft an earlier run left unfinished
+                report["resumed"] += 1
+            else:
+                country = dz["country"].upper()
+                match = names.get((country, search_key(dz["name"])))
+                if match is not None:
+                    report["duplicates"].append({"key": key, "matched": str(match)})
+                    report["located"] += _locate(directory, actor, match, dz)
+                    continue
+                try:
+                    url, checked = _source(dz, data.get("researched_on"))
+                    venue = directory.create_venue(
+                        actor,
+                        VenueInput(
+                            name=dz["name"],
+                            country=country,
+                            locality=dz.get("locality"),
+                            latitude=dz.get("latitude"),
+                            longitude=dz.get("longitude"),
+                            source_url=url,
+                            source_note=_note(key, f"Research status: {status}."),
+                            checked_on=checked,
+                            listed=False,
+                        ),
+                    )
+                except (DirectoryRuleError, ValueError) as error:
+                    report["refused"].append({"key": key, "reason": str(error)})
+                    continue
+                venue_id = venue.id
+                loaded[key] = venue_id
+                names[(country, search_key(venue.name))] = venue_id
+            try:
+                report["aliases_dropped"] += _publish(
+                    directory, actor, venue_id, aliases, status
                 )
-                report["closed"] += 1
+            except (DirectoryRuleError, EditConflict) as error:
+                reason = getattr(error, "code", None) or str(error)
+                report["refused"].append(
+                    {"key": key, "reason": f"left as draft: {reason}"}
+                )
+                continue
+            report["added"] += 1
+            report["closed"] += status == "closed"
     return report
 
 
@@ -268,7 +356,7 @@ def load(
     opportunities: OpportunityService,
     dropzones: Path | None = None,
 ) -> dict[str, Any]:
-    data = json.loads(path.read_text())
+    data = json.loads(path.read_text(encoding="utf-8"))
     report: dict[str, Any] = {
         "added": {},
         "skipped": 0,
@@ -365,6 +453,27 @@ def load(
     return report
 
 
+LOOPBACK_HOSTS = frozenset({"127.0.0.1", "localhost", "::1"})
+
+
+def dev_data_refusal(
+    environ: Mapping[str, str], environment: str, postgres_server: str
+) -> str | None:
+    """Why loading must not run here, or None. Every condition is an explicit opt-in.
+
+    Settings default ENVIRONMENT to "local", so the setting alone could fail open:
+    the variable itself must say local, `SKYDIVER_DEV_DATA=1` must be set (only
+    `scripts/dev.sh seed` sets it) and the database must be on this machine.
+    """
+    if environ.get("SKYDIVER_DEV_DATA") != "1":
+        return "dev data loads only with SKYDIVER_DEV_DATA=1 (scripts/dev.sh seed)"
+    if environ.get("ENVIRONMENT") != "local" or environment != "local":
+        return "dev data loads only with ENVIRONMENT=local set explicitly"
+    if postgres_server not in LOOPBACK_HOSTS:
+        return "dev data loads only into a database on this machine"
+    return None
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Load local development listings.")
     parser.add_argument("command", choices=["load"])
@@ -382,8 +491,14 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     from app.core.config import settings  # settings are read only when run
 
-    if settings.ENVIRONMENT != "local":
-        print("dev data loads only with ENVIRONMENT=local", file=sys.stderr)
+    refusal = dev_data_refusal(
+        os.environ, settings.ENVIRONMENT, settings.POSTGRES_SERVER
+    )
+    if refusal:
+        print(refusal, file=sys.stderr)
+        return 2
+    if args.dropzones is not None and not args.dropzones.is_dir():
+        print(f"--dropzones {args.dropzones} is not a directory", file=sys.stderr)
         return 2
     from app.core.db import engine
     from app.main import directory_service, opportunity_service

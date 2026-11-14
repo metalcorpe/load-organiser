@@ -12,7 +12,7 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.core.db import engine
 from app.skydiver import devdata
-from app.skydiver.directory.policy import SOURCE_NOTE_MAX
+from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
 from app.skydiver.directory.service import DirectoryService
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.opportunities.service import OpportunityService
@@ -131,19 +131,33 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(tmp_path: Path) -> N
     folder.mkdir()
     # The fixture with this run's tag, so runs sharing the database stay independent.
     for source in FIXTURES.iterdir():
-        (folder / source.name).write_text(source.read_text().replace("TAG", tag))
+        text_in = source.read_text(encoding="utf-8").replace("TAG", tag)
+        (folder / source.name).write_text(text_in, encoding="utf-8")
     path = tmp_path / "dev.json"
     path.write_text(json.dumps(_fixture(tag)))  # "Dev DZ <tag>", ES, no coordinates
 
     first = devdata.load(engine, path, actor, directory, listings)
     report = first["dropzones"]
+    dev_dz = directory.search(query=f"Dev DZ {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     assert {k: v for k, v in report.items() if k != "refused"} == {
-        "files": 1, "added": 3, "closed": 1, "skipped": 0, "duplicates": 1,
+        "files": 1, "added": 4, "closed": 1, "skipped": 0, "resumed": 0,
+        "duplicates": [{"key": f"es-{tag}-listed-already", "matched": str(dev_dz.id)}],
         "located": 1, "aliases_dropped": 0,
     }  # fmt: skip
-    assert report["refused"] == [
-        {"key": f"es-{tag}-unsourced", "reason": "source_required"}
+    # Bad records and a broken file are refused one by one; everything else loaded.
+    refused = report["refused"]
+    assert refused[-1]["file"] == "PT.json"  # files load in name order
+    assert refused[:-1] == [
+        {"key": f"es-{tag}-unsourced", "reason": "source_required"},
+        {"key": f"es-{tag}-bad-status", "reason": "status_invalid"},
+        {"key": f"Bad Key {tag}", "reason": "key_invalid"},
+        {"key": f"es-{tag}-bad-coordinates", "reason": "coordinates_invalid"},
     ]
+    # Nothing was left behind for refused records, not even a draft.
+    for name in ("Unsourced Field", "Bad Status", "Bad Coordinates"):
+        with engine.connect() as conn:
+            found = conn.execute(text("SELECT count(*) FROM skydiver_venue WHERE name = :n"), {"n": f"{name} {tag}"}).scalar_one()  # fmt: skip
+        assert found == 0, name
 
     def venue(name: str) -> dict[str, Any]:
         page = directory.search(query=name, country="ES", cursor=None, limit=None)
@@ -165,17 +179,56 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(tmp_path: Path) -> N
     assert (unplaced["status"], unplaced["lat"]) == ("listed", None)
     assert unplaced["checked_on"] == "2026-11-14"  # the file's research day
     assert unplaced["note"].endswith("Research status: uncertain.")
-    # The listings' own venue, found by the dropzone's alias, got the coordinates.
+    # The listings' own venue, found by the dropzone's name, got the coordinates.
     known = venue(f"Dev DZ {tag}")
     assert (known["lat"], known["lon"]) == (41.5, 2.1)
     assert directory.search(query=f"Aeródromo Dev {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
+    # An alias shared with another dropzone (an operator brand) does not make it the same one.
+    second = venue(f"Second Field {tag}")
+    assert (second["status"], second["aliases"]) == ("listed", [f"Skydive Active {tag}"])  # fmt: skip
     points = directory.map_points(query=tag, country="ES", cursor=None, limit=None)
     assert sorted(p.name for p in points.items) == sorted(
-        [f"Active Field {tag}", f"Closed Field {tag}", f"Dev DZ {tag}"]
+        [
+            f"Active Field {tag}",
+            f"Second Field {tag}",
+            f"Closed Field {tag}",
+            f"Dev DZ {tag}",
+        ]  # fmt: skip
     )
 
     again = devdata.load(engine, path, actor, directory, listings)["dropzones"]
-    assert (again["added"], again["skipped"], again["located"]) == (0, 3, 0)
+    assert (again["added"], again["skipped"], again["located"]) == (0, 4, 0)
+
+
+def test_an_unfinished_dropzone_stays_a_draft_and_the_next_run_finishes_it(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    clock = lambda: datetime.now(UTC)  # noqa: E731
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=clock)  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    record = json.loads((FIXTURES / "ES.json").read_text(encoding="utf-8").replace("TAG", tag))  # fmt: skip
+    record["dropzones"] = [d for d in record["dropzones"] if d["key"] == f"es-{tag}-closed"]  # fmt: skip
+    (folder / "ES.json").write_text(json.dumps(record), encoding="utf-8")
+
+    real = directory.set_status
+
+    def interrupted(*_args: Any, **_kwargs: Any) -> Any:
+        raise DirectoryRuleError("interrupted")
+
+    monkeypatch.setattr(directory, "set_status", interrupted)
+    first = devdata.load_dropzones(engine, folder, actor, directory)
+    assert first["refused"] == [{"key": f"es-{tag}-closed", "reason": "left as draft: interrupted"}]  # fmt: skip
+    assert directory.search(query=f"Closed Field {tag}", country=None, cursor=None, limit=None).items == []  # fmt: skip
+
+    monkeypatch.setattr(directory, "set_status", real)
+    second = devdata.load_dropzones(engine, folder, actor, directory)
+    assert (second["resumed"], second["added"], second["closed"]) == (1, 1, 1)
+    [closed] = directory.search(query=f"Closed Field {tag}", country=None, cursor=None, limit=None).items  # fmt: skip
+    assert closed.status.value == "closed"
 
 
 def test_dropzone_files_skip_notes(tmp_path: Path) -> None:
@@ -192,8 +245,37 @@ def test_needs_a_reviewer() -> None:
 
 
 def test_refuses_outside_local(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("SKYDIVER_DEV_DATA", "1")
     monkeypatch.setattr(settings, "ENVIRONMENT", "production")
     assert devdata.main(["load", "x.json", "--reviewer", "a@example.com"]) == 2
+
+
+def test_refuses_without_the_explicit_opt_in(monkeypatch: pytest.MonkeyPatch) -> None:
+    """ENVIRONMENT defaults to local in settings, so that alone must not be enough."""
+    monkeypatch.setattr(settings, "ENVIRONMENT", "local")
+    monkeypatch.delenv("SKYDIVER_DEV_DATA", raising=False)
+    assert devdata.main(["load", "x.json", "--reviewer", "a@example.com"]) == 2
+
+    local = {"SKYDIVER_DEV_DATA": "1", "ENVIRONMENT": "local"}
+    assert devdata.dev_data_refusal(local, "local", "127.0.0.1") is None
+    assert devdata.dev_data_refusal(local, "local", "::1") is None
+    assert devdata.dev_data_refusal({"ENVIRONMENT": "local"}, "local", "localhost")
+    # The setting's default without the variable itself.
+    assert devdata.dev_data_refusal({"SKYDIVER_DEV_DATA": "1"}, "local", "127.0.0.1")
+    assert devdata.dev_data_refusal({**local, "SKYDIVER_DEV_DATA": "yes"}, "local", "127.0.0.1")  # fmt: skip
+    assert devdata.dev_data_refusal(local, "local", "db.example.org")
+
+
+def test_refuses_a_dropzones_path_that_is_not_a_folder(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setenv("SKYDIVER_DEV_DATA", "1")
+    monkeypatch.setenv("ENVIRONMENT", "local")
+    monkeypatch.setattr(settings, "ENVIRONMENT", "local")
+    monkeypatch.setattr(settings, "POSTGRES_SERVER", "127.0.0.1")
+    missing = str(tmp_path / "nowhere")
+    args = ["load", "x.json", "--reviewer", "a@example.com", "--dropzones", missing]
+    assert devdata.main(args) == 2
 
 
 def test_the_dev_listings_file_matches_what_the_loader_reads() -> None:

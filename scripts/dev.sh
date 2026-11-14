@@ -101,10 +101,17 @@ case "${1:-}" in
     ;;
   seed)
     [ -n "${2:-}" ] || { echo "usage: scripts/dev.sh seed EMAIL" >&2; exit 2; }
+    dropzones=""
+    if [ -n "${DEV_DROPZONES:-}" ]; then
+      # Absolute (the loader runs from an empty directory) and shell-quoted for in_backend.
+      dir=$(cd "$DEV_DROPZONES" 2>/dev/null && pwd) ||
+        { echo "DEV_DROPZONES is not a directory: $DEV_DROPZONES" >&2; exit 2; }
+      dropzones="--dropzones $(printf '%q' "$dir")"
+    fi
     setup
-    in_backend "PYTHONPATH='$B' uv run --project '$B' python -m app.skydiver.devdata load \
-      '$ROOT/docs/product/inventory/dev-listings.json' --reviewer '$2' \
-      ${DEV_DROPZONES:+--dropzones '$DEV_DROPZONES'}"
+    # SKYDIVER_DEV_DATA=1 is the loader's explicit opt-in; nothing else sets it.
+    in_backend "SKYDIVER_DEV_DATA=1 PYTHONPATH='$B' uv run --project '$B' python -m app.skydiver.devdata load \
+      '$ROOT/docs/product/inventory/dev-listings.json' --reviewer '$2' $dropzones"
     ;;
   mail)
     newest=$(ls -t "$DEV/outbox" 2>/dev/null | head -1)

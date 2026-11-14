@@ -186,14 +186,17 @@ def test_map_points_are_the_public_venues_with_coordinates(api: Api) -> None:
     here: dict[str, Any] = {"latitude": 42.258571, "longitude": 3.137}
     listed = api.venue(f"{base} Listed", locality="Field", **here)
     closed = api.venue(f"{base} Closed", **here)
-    api.call("POST", f"/directory/venues/{closed['id']}/status", api.reviewer,
-             {"status": "closed"})  # fmt: skip
+    closing = api.call("POST", f"/directory/venues/{closed['id']}/status", api.reviewer,
+                       {"status": "closed"})  # fmt: skip
+    assert closing.status_code == 200, closing.text
     api.venue(f"{base} Nowhere")  # no coordinates: in the list, not on the map
-    api.call("POST", "/directory/venues", api.reviewer,
-             {"name": f"{base} Draft", "country": "ES", "listed": False, **here})  # fmt: skip
+    draft = api.call("POST", "/directory/venues", api.reviewer,
+                     {"name": f"{base} Draft", "country": "ES", "listed": False, **here})  # fmt: skip
+    assert draft.status_code == 201 and draft.json()["status"] == "draft", draft.text
     merged = api.venue(f"{base} Merged", **here)
-    api.call("POST", f"/directory/venues/{merged['id']}/merge", api.reviewer,
-             {"into": listed["id"]})  # fmt: skip
+    merging = api.call("POST", f"/directory/venues/{merged['id']}/merge", api.reviewer,
+                       {"into": listed["id"]})  # fmt: skip
+    assert merging.status_code == 200, merging.text
 
     page = points(api, q=base)
     assert page["next_cursor"] is None

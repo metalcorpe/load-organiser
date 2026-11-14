@@ -20,6 +20,22 @@
       "note": null
     },
     {
+      "key": "es-TAG-second",
+      "name": "Second Field TAG",
+      "aliases": ["Skydive Active TAG"],
+      "country": "ES",
+      "locality": null,
+      "latitude": 41.9,
+      "longitude": 2.8,
+      "coordinates_source": null,
+      "icao": null,
+      "operators": [{ "name": "Skydive Active TAG", "website": "https://example.org/", "facebook": null }],
+      "status": "active",
+      "status_evidence": "Season calendar 2026",
+      "sources": [{ "url": "https://example.org/second", "checked_on": "2026-11-14", "what": "operator" }],
+      "note": "Shares an operator brand with Active Field: a different dropzone."
+    },
+    {
       "key": "es-TAG-closed",
       "name": "Closed Field TAG",
       "aliases": [],
@@ -53,8 +69,8 @@
     },
     {
       "key": "es-TAG-listed-already",
-      "name": "Aeródromo Dev TAG",
-      "aliases": ["Dev DZ TAG"],
+      "name": "Dev DZ TAG",
+      "aliases": ["Aeródromo Dev TAG"],
       "country": "ES",
       "locality": "Somewhere",
       "latitude": 41.5,
@@ -82,6 +98,36 @@
       "status_evidence": "",
       "sources": [],
       "note": null
+    },
+    {
+      "key": "es-TAG-bad-status",
+      "name": "Bad Status TAG",
+      "aliases": [],
+      "country": "ES",
+      "latitude": null,
+      "longitude": null,
+      "status": "maybe",
+      "sources": [{ "url": "https://example.org/x", "checked_on": "2026-11-14", "what": "operator" }]
+    },
+    {
+      "key": "Bad Key TAG",
+      "name": "Bad Key TAG",
+      "aliases": [],
+      "country": "ES",
+      "latitude": null,
+      "longitude": null,
+      "status": "active",
+      "sources": [{ "url": "https://example.org/x", "checked_on": "2026-11-14", "what": "operator" }]
+    },
+    {
+      "key": "es-TAG-bad-coordinates",
+      "name": "Bad Coordinates TAG",
+      "aliases": [],
+      "country": "ES",
+      "latitude": "41.0",
+      "longitude": 2.0,
+      "status": "active",
+      "sources": [{ "url": "https://example.org/x", "checked_on": "2026-11-14", "what": "operator" }]
     }
   ]
 }
