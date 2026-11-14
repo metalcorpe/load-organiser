@@ -1,6 +1,7 @@
 """#157 published jump summaries over HTTP against PostgreSQL."""
 
 import json
+import re
 import uuid
 from collections.abc import Iterator
 from typing import Any
@@ -137,8 +138,10 @@ def test_a_post_copies_only_the_selected_values(api: Api) -> None:
     assert seen["is_owner"] is False and seen["version"] is None
     assert seen["jump_id"] is None
     text = json.dumps(seen)
-    for private in ("secret note", "private.example", "borrowed rig", "812"):
+    for private in ("secret note", "private.example", "borrowed rig"):
         assert private not in text, private
+    # The jump number as a number: the random venue name may hold "812" ("Po303c4812 DZ").
+    assert not re.search(r"(?<![0-9A-Za-z])812(?![0-9A-Za-z])", text)
 
     # A post is not another jump, and publishing is in the owner's history.
     assert len(api.ok("GET", "/jumps", owner)["items"]) == 1
