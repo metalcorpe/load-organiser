@@ -37,7 +37,9 @@
     {
       "key": "no-stend",
       "name": "Stend landing area",
-      "aliases": [],
+      "aliases": [
+        "Titlestad landing area"
+      ],
       "country": "NO",
       "locality": "Bergen",
       "latitude": 60.275196,
@@ -51,7 +53,7 @@
         }
       ],
       "status": "active",
-      "status_evidence": "NLF magazine report dated 4 December 2025 documents Easter, summer and autumn jumps at Stend.",
+      "status_evidence": "NLF magazine report dated 4 December 2025 documents Easter, summer and autumn jumps at Stend and summer jumping at Titlestad.",
       "sources": [
         {
           "url": "https://www.bfsk.no/v3/index.php",
@@ -74,51 +76,8 @@
           "what": "Operator landing-field directions link the public map containing named Stend and Titlestad points."
         }
       ],
-      "note": "Named landing-area point from the public map linked by Bergen Fallskjermklubb; distinct from the Flesland departure airport.",
-      "season": "Autumn, winter and spring"
-    },
-    {
-      "key": "no-titlestad",
-      "name": "Titlestad landing area",
-      "aliases": [],
-      "country": "NO",
-      "locality": "Bergen",
-      "latitude": 60.277058,
-      "longitude": 5.355084,
-      "coordinates_source": "https://www.google.com/maps/d/kml?mid=1OC7cCeHV2LuxWDtu4WKnMxMqKFnvH1ab&forcekml=1",
-      "icao": null,
-      "operators": [
-        {
-          "name": "Bergen Fallskjermklubb",
-          "website": "https://www.bfsk.no/v3/index.php"
-        }
-      ],
-      "status": "seasonal",
-      "status_evidence": "NLF magazine report dated 4 December 2025 confirms summer jumping at Titlestad.",
-      "sources": [
-        {
-          "url": "https://www.bfsk.no/v3/index.php",
-          "checked_on": "2026-11-14",
-          "what": "Dropzone location and operator evidence"
-        },
-        {
-          "url": "https://frittfall.org/artikkel/luke-4-bergen-fallskjermklubb",
-          "checked_on": "2026-11-14",
-          "what": "Follow-up: dated status evidence"
-        },
-        {
-          "url": "https://www.google.com/maps/d/kml?mid=1OC7cCeHV2LuxWDtu4WKnMxMqKFnvH1ab&forcekml=1",
-          "checked_on": "2026-11-14",
-          "what": "Coordinate source opened during follow-up; Named landing-area point from the public map linked by Bergen Fallskjermklubb; distinct from the Flesland departure airport."
-        },
-        {
-          "url": "https://www.bfsk.no/v3/index.php?catid=37&id=502&option=com_content&view=article",
-          "checked_on": "2026-11-14",
-          "what": "Operator landing-field directions link the public map containing named Stend and Titlestad points."
-        }
-      ],
-      "note": "Named landing-area point from the public map linked by Bergen Fallskjermklubb; distinct from the Flesland departure airport.",
-      "season": "Summer"
+      "note": "One dropzone: Bergen Fallskjermklubb's two landing areas, Stend and Titlestad (60.277058, 5.355084, about 1.8 km east, used in summer), named on the public map the club links. The aircraft departs from Flesland. Merged from no-titlestad on 2026-11-14.",
+      "season": "All year: Stend in autumn, winter and spring; Titlestad in summer"
     },
     {
       "key": "no-molde-aro",

@@ -26,6 +26,9 @@ Exclude:
 - tandem resellers with no aircraft of their own at that place. Record the place they fly
   from instead.
 
+Not covered (owner decision 2026-11-14): Russia, Belarus, and places in occupied
+territory.
+
 When a place may be closed, record it with `"status": "closed"` or `"uncertain"` and say why.
 Do not leave it out silently.
 

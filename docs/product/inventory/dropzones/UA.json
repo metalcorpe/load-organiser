@@ -444,39 +444,6 @@
       "note": "Added in the check. Pre-war dropzone. Listed for completeness; do not show as bookable until there is dated evidence that civilian jumping has resumed."
     },
     {
-      "key": "ua-valerianivka",
-      "name": "Aerodrom Valerianivka",
-      "aliases": [
-        "DZ Valerianovka"
-      ],
-      "country": "UA",
-      "locality": "Valerianivka, Donetsk Oblast",
-      "latitude": 47.628843,
-      "longitude": 37.399778,
-      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident UA-0059)",
-      "icao": null,
-      "operators": [
-        {
-          "name": "Klub EXTRIM"
-        }
-      ],
-      "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain. Local history states flying stopped in 2014.",
-      "sources": [
-        {
-          "url": "https://zabytki.in.ua/ru/2673/aerodrom-v-valeryanovke",
-          "checked_on": "2026-11-14",
-          "what": "History identifies the parachuting club, airfield and suspension after 2014."
-        },
-        {
-          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
-          "checked_on": "2026-11-14",
-          "what": "Opened airport dataset; UA-0059 airfield coordinates."
-        }
-      ],
-      "note": ""
-    },
-    {
       "key": "ua-krupske",
       "name": "Aerodrom Krupske",
       "aliases": [
@@ -553,87 +520,6 @@
         }
       ],
       "note": ""
-    },
-    {
-      "key": "ua-koktebel",
-      "name": "Koktebel Gliding Centre airfield",
-      "aliases": [],
-      "country": "UA",
-      "locality": "Uzun-Syrt, Koktebel, Crimea",
-      "latitude": 45.020896,
-      "longitude": 35.206845,
-      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident UA-0129)",
-      "icao": null,
-      "operators": [],
-      "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
-      "sources": [
-        {
-          "url": "https://travelcrimea.com/sport_interesno/20200812/1344091.html",
-          "checked_on": "2026-11-14",
-          "what": "2020 tourism article identifies aircraft parachuting at these three airfields."
-        },
-        {
-          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
-          "checked_on": "2026-11-14",
-          "what": "Opened airport dataset; UA-0129 airfield coordinates."
-        }
-      ],
-      "note": "Crimea filed under UA; historical tourist offer does not establish current civilian operation or a current operator."
-    },
-    {
-      "key": "ua-yukharina-balka",
-      "name": "Yukharina Balka airfield",
-      "aliases": [],
-      "country": "UA",
-      "locality": "Sevastopol, Crimea",
-      "latitude": 44.549003,
-      "longitude": 33.488613,
-      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident UA-0016)",
-      "icao": null,
-      "operators": [],
-      "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
-      "sources": [
-        {
-          "url": "https://travelcrimea.com/sport_interesno/20200812/1344091.html",
-          "checked_on": "2026-11-14",
-          "what": "2020 tourism article identifies aircraft parachuting at these three airfields."
-        },
-        {
-          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
-          "checked_on": "2026-11-14",
-          "what": "Opened airport dataset; UA-0016 airfield coordinates."
-        }
-      ],
-      "note": "Crimea filed under UA; historical tourist offer does not establish current civilian operation or a current operator."
-    },
-    {
-      "key": "ua-zavodske",
-      "name": "Zavodske airfield",
-      "aliases": [],
-      "country": "UA",
-      "locality": "Simferopol, Crimea",
-      "latitude": 44.916281,
-      "longitude": 34.061586,
-      "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (ident UKFW)",
-      "icao": "UKFW",
-      "operators": [],
-      "status": "uncertain",
-      "status_evidence": "No 2025+ civilian jumping evidence was established; retained as a historical dropzone with current operation uncertain.",
-      "sources": [
-        {
-          "url": "https://travelcrimea.com/sport_interesno/20200812/1344091.html",
-          "checked_on": "2026-11-14",
-          "what": "2020 tourism article identifies aircraft parachuting at these three airfields."
-        },
-        {
-          "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
-          "checked_on": "2026-11-14",
-          "what": "Opened airport dataset; UKFW airfield coordinates."
-        }
-      ],
-      "note": "Crimea filed under UA; historical tourist offer does not establish current civilian operation or a current operator."
     }
   ]
 }

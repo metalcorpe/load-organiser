@@ -35,7 +35,7 @@ Status meanings and sourcing rules: [README.md](README.md). Per-group sources, g
 | ME | 2 | 1 | 0 | 1 | 0 | 0 | claude |
 | MK | 5 | 0 | 0 | 5 | 0 | 0 | claude |
 | NL | 11 | 8 | 1 | 1 | 1 | 0 | claude |
-| NO | 20 | 11 | 5 | 4 | 0 | 1 | codex |
+| NO | 19 | 11 | 4 | 4 | 0 | 1 | codex |
 | PL | 38 | 5 | 27 | 5 | 1 | 1 | claude |
 | PT | 17 | 6 | 2 | 9 | 0 | 1 | claude |
 | RO | 19 | 11 | 2 | 6 | 0 | 0 | claude |
@@ -45,11 +45,12 @@ Status meanings and sourcing rules: [README.md](README.md). Per-group sources, g
 | SK | 16 | 2 | 12 | 2 | 0 | 0 | claude |
 | SM | 1 | 0 | 0 | 1 | 0 | 0 | codex |
 | TR | 6 | 2 | 0 | 4 | 0 | 2 | claude |
-| UA | 16 | 0 | 0 | 15 | 1 | 0 | claude |
+| UA | 12 | 0 | 0 | 11 | 1 | 0 | claude |
 | XK | 1 | 0 | 0 | 1 | 0 | 0 | codex |
-| **Total** | **690** | **259** | **229** | **182** | **20** | **16** | |
+| **Total** | **685** | **259** | **228** | **178** | **20** | **16** | |
 
 No regular dropzone found (sources in `_coverage-zero*.md`): GI, MT, VA, MC, LI. Kosovo has only a historical, uncertain record.
-Not researched: RU, BY (owner to decide). Two Ukrainian records are in Crimea (Koktebel, Sevastopol); both are uncertain/historical — whether to show occupied-territory sites is an owner decision.
+Not covered, owner decision 2026-11-14: Russia and Belarus, and places in occupied territory. The three Crimea records (Koktebel, Yukharina Balka, Zavodske) and Valerianivka (Donetsk Oblast, occupied since 2022) were removed; their sources stay in `_coverage-balkans-east.md`.
+Merged 2026-11-14: Titlestad into `no-stend`, one club's two seasonal landing areas 1.8 km apart.
 
 How it was made: Claude researchers (7 country groups) with an adversarial checker each; Codex workers (Orca) for FR, GB/IE and the Nordic/Baltic countries, a second pass on uncertain records, a cross-check of the Claude countries, and an aggregator-first completeness sweep for every country.
