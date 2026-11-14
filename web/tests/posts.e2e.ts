@@ -147,6 +147,14 @@ test.describe('shared jump summaries', () => {
 		await expect(noOne.getByRole('link', { name: 'Find people' })).toHaveAttribute('href', '/people');
 		await sam.page.goto(`/people/${alexHandle}`);
 		await sam.page.getByRole('button', { name: 'Ask to follow' }).click();
+		// Alex follows no one, and on a phone still sees the waiting request on Friends.
+		await alex.page.setViewportSize({ width: 390, height: 844 });
+		await alex.page.goto('/activity');
+		await expect(alex.page.getByRole('region', { name: 'You do not follow anyone yet' })).toBeVisible();
+		await expect(alex.page.getByRole('link', { name: '1 follow request waiting' })).toBeVisible();
+		await expect(
+			alex.page.getByRole('link', { name: 'Followers, requests and blocking' })
+		).toBeVisible();
 		await alex.page.goto('/people');
 		await alex.page
 			.getByRole('list', { name: 'Follow requests' })

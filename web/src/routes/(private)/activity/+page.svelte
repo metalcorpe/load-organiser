@@ -29,6 +29,15 @@
 <!-- Large screens: the shared jumps in the main column, the people you follow beside them. -->
 <div class="columns">
 	<div class="col-main">
+		<!-- On every screen, before the feed: someone is waiting for an answer. -->
+		{#if data.requests > 0}
+			<p class="requests">
+				<a href="/people"
+					>{data.requests}
+					{data.requests === 1 ? 'follow request' : 'follow requests'} waiting</a
+				>
+			</p>
+		{/if}
 		{#if data.feed === null}
 			<Notice title="Shared jumps could not be loaded" tone="bad">
 				<p role="alert">The service is unavailable right now. Try again later.</p>
@@ -72,11 +81,15 @@
 				<p class="hint">Your logbook stays private; you choose which jumps to share from their pages.</p>
 			</section>
 		{:else}
+			<!-- Following someone, or unknown (the list failed): the copy claims neither. -->
 			<section class="empty-state" aria-labelledby="empty-heading">
-				<h2 id="empty-heading">No shared jumps yet</h2>
+				<h2 id="empty-heading">
+					{data.following === null ? 'No shared jumps to show yet' : 'No shared jumps yet'}
+				</h2>
 				<p>
-					The people you follow have not shared a jump with you yet. Their shared jumps appear here,
-					each with its own date.
+					{data.following === null
+						? 'Jumps shared by people you follow appear here, each with its own date.'
+						: 'The people you follow have not shared a jump with you yet. Their shared jumps appear here, each with its own date.'}
 				</p>
 				<p class="actions">
 					<a class="button" href="/people">Find people</a>
@@ -88,17 +101,14 @@
 		{/if}
 	</div>
 
-	<!-- On a phone this comes after the feed, and only once there is someone to list. -->
-	<section
-		class="col-side people"
-		class:wide-only={data.following === null || following.length === 0}
-		aria-labelledby="following-heading"
-	>
-		<h2 id="following-heading">People you follow</h2>
+	<!-- On a phone this comes after the feed. Following no one, a phone shows only the link to
+	     followers and blocking: the empty state above already says it. -->
+	<section class="col-side people" class:none={followsNoOne} aria-labelledby="following-heading">
+		<h2 id="following-heading" class:wide-only={followsNoOne}>People you follow</h2>
 		{#if data.following === null}
-			<p class="hint">The people you follow could not be loaded right now.</p>
+			<p class="hint">The people you follow could not be loaded right now. Reload to try again.</p>
 		{:else if following.length === 0}
-			<p class="hint">No one yet. The jumps they share will show here once they approve you.</p>
+			<p class="hint wide-only">No one yet. The jumps they share will show here once they approve you.</p>
 		{:else}
 			<ul class="following" aria-labelledby="following-heading">
 				{#each following.slice(0, SHOWN) as person (person.handle)}
@@ -111,14 +121,6 @@
 			{#if following.length > SHOWN}
 				<p class="hint">and {following.length - SHOWN} more</p>
 			{/if}
-		{/if}
-		{#if data.requests > 0}
-			<p>
-				<a href="/people"
-					>{data.requests}
-					{data.requests === 1 ? 'follow request' : 'follow requests'} waiting</a
-				>
-			</p>
 		{/if}
 		<p class="more-link"><a href="/people">Followers, requests and blocking</a></p>
 	</section>
@@ -194,6 +196,26 @@
 	.meta {
 		color: var(--muted);
 		font-size: 0.9rem;
+	}
+
+	.requests {
+		margin: 0 0 0.75rem;
+	}
+
+	.requests a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		font-weight: 600;
+	}
+
+	/* Following no one, on a phone: just the link, no card. */
+	@media (max-width: 59.99rem) {
+		.people.none {
+			padding: 0;
+			border: 0;
+			background: none;
+		}
 	}
 
 	@media (min-width: 60rem) {

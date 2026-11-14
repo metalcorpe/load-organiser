@@ -3,6 +3,12 @@
    which the root layout imports before this file. Do not set token values here. */
 :root {
 	color-scheme: light dark;
+	/* Layout widths (navigation.ts, pageLayout): the frame the header and the primary pages
+	   share, the narrow column of every other page, and the longest line for paragraphs and
+	   forms in either. Here rather than in the layout, so Storybook has them too. */
+	--frame: 70rem;
+	--narrow: 40rem;
+	--measure: 40rem;
 }
 
 *,
@@ -102,6 +108,21 @@ h1 {
 	.columns > .col-main-end > :first-child {
 		margin-top: 0;
 	}
+}
+
+/* A primary page with nothing for the side column (for example while selecting jumps) has
+   no columns: the main column alone at the frame's left edge, as wide as it is beside the
+   side column, never an empty side column. */
+@media (min-width: 60rem) {
+	.solo {
+		max-width: calc(var(--frame) - 2rem - 22.5rem);
+	}
+}
+
+/* Text in a column keeps the reading measure, however wide the column. */
+.col-main p,
+.col-main-end p {
+	max-width: var(--measure);
 }
 
 /* Shown beside the main column only: on one column it would push the main task down. */
@@ -299,6 +320,7 @@ h1 {
 }
 
 .form-error {
+	max-width: var(--measure);
 	margin: 0;
 	padding: 0.6rem 0.8rem;
 	border-radius: 9px;

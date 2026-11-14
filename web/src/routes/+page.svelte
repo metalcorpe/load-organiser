@@ -259,7 +259,9 @@
 {:else if !data.result.ok}
 	<Notice title="Listings could not be loaded" tone="bad">
 		<p role="alert">{listingMessage(data.result.reason)}</p>
-		<p>Your search is kept. <a href={here} data-sveltekit-reload>Try again</a></p>
+		<p>Your search is kept.</p>
+		<!-- A button on the surface colour: an accent link on the error tint is under 4.5:1. -->
+		<p><a class="button secondary" href={here} data-sveltekit-reload>Try again</a></p>
 	</Notice>
 {:else if data.result.items.length === 0 && filtered}
 	<!-- A result, not a page: the quiet empty state, with the way out first. -->

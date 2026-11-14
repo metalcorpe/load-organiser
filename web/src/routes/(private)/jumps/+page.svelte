@@ -93,8 +93,15 @@
 	);
 	// Currency, gear and plans: on the plain logbook (any page) beside the jumps. A phone shows
 	// them on the first page only, and a filtered one only the count of matches.
-	const home = $derived(!data.filtered && !data.select);
-	const sideOnPhones = $derived(data.page.ok && (data.filtered || (home && !data.older)));
+	// Nothing beside a failed or stale load.
+	const home = $derived(data.page.ok && !data.filtered && !data.select);
+	const matchedSide = $derived(
+		data.page.ok && data.filtered && matched !== null && matched.jumps > 0
+	);
+	// Without anything for the side column (selecting jumps, no matches, a failed load), there
+	// are no columns: the main column alone, as wide as it is beside the side column.
+	const hasSide = $derived(home || matchedSide);
+	const sideOnPhones = $derived(matchedSide || (home && !data.older));
 	const declared = $derived(
 		data.summary?.priorJumps ? { count: data.summary.priorJumps, before: data.summary.priorBefore } : null
 	);
@@ -115,7 +122,7 @@
 
 <!-- Large screens: the jumps (or the way to start) in the main column; currency, gear due
      soon and what is coming up beside them. One column on a phone, in this order. -->
-<div class="columns">
+<div class={hasSide ? 'columns' : 'solo'}>
 <div class="col-main">
 {#if filterError}
 	<p class="form-error" role="alert" id="filter-error">{jumpMessage(filterError)}</p>
@@ -306,9 +313,10 @@
 {/if}
 </div>
 
+{#if hasSide}
 <div class="col-side" class:wide-only={!sideOnPhones}>
 	<!-- The count and span of the matches; with none, the quiet empty state says it. -->
-	{#if data.page.ok && data.filtered && matched && matched.jumps > 0}
+	{#if matchedSide && matched && data.page.ok}
 		<section class="matched" aria-label="Matching jumps">
 			<p>
 				<strong>{n(matched.jumps)} {matched.jumps === 1 ? 'jump matches' : 'jumps match'}</strong>
@@ -375,6 +383,7 @@
 		{/if}
 	{/if}
 </div>
+{/if}
 
 <div class="col-main-end">
 {#if data.page.ok}

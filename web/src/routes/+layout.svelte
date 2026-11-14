@@ -111,16 +111,9 @@
 		top: 0.5rem;
 	}
 
-	/* The layout rule (navigation.ts, pageLayout). The header spans the frame on every page.
-	   The primary pages fill the same frame, so their headings start at the header's edge;
-	   every other page is one narrow column, centred. --measure is the longest line for
-	   paragraphs and forms, in either. */
-	:global(:root) {
-		--frame: 70rem;
-		--narrow: 40rem;
-		--measure: 40rem;
-	}
-
+	/* The layout rule (navigation.ts, pageLayout; widths in app.css). The header spans the
+	   frame on every page. The primary pages fill the same frame, so their headings start at
+	   the header's edge; every other page is one narrow column, centred. */
 	header {
 		display: flex;
 		align-items: center;

@@ -65,7 +65,10 @@
 	a[aria-current='page'] {
 		color: var(--accent);
 		font-weight: 750;
-		box-shadow: inset 0 3px var(--accent);
+		/* The bar across the top of the tab (phones) or the bottom (large screens), drawn as a
+		   background: an inset shadow on a tab whose edge falls on a half pixel left a thin
+		   accent line down its side. */
+		background: linear-gradient(var(--accent), var(--accent)) top / 100% 3px no-repeat;
 	}
 
 	@media (min-width: 48rem) {
@@ -88,7 +91,7 @@
 		}
 
 		a[aria-current='page'] {
-			box-shadow: inset 0 -3px var(--accent);
+			background-position: bottom;
 		}
 
 		/* Same size and place on every page: centred in the bar, so switching pages, whatever
