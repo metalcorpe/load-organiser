@@ -1,6 +1,6 @@
 """Load the candidate listings as local development data (#162).
 
-    python -m app.skydiver.devdata load PATH --reviewer EMAIL
+    python -m app.skydiver.devdata load PATH --reviewer EMAIL [--dropzones DIR]
 
 Owner decision 2026-11-09: the researched candidate records are for local testing
 only and are never loaded into production. This refuses to run unless
@@ -11,6 +11,13 @@ the review queue.
 
 Running it again adds only records not loaded before: each record's source note
 carries `dev-data:<key>`.
+
+The researched dropzone inventory (`dropzones/<CC>.json` next to PATH, or DIR; files
+starting with `_` are notes and are skipped) loads as venues with coordinates and
+aliases. A dropzone already present, by key or by name or alias in the same country,
+is not added again; an existing venue without coordinates gets the researched ones.
+Researched `closed` dropzones load as closed venues; `uncertain` ones stay listed,
+with the research status in the source note.
 """
 
 import argparse
@@ -30,8 +37,18 @@ from sqlmodel import Session, col
 
 from app.models import User
 from app.skydiver.access.policy import Actor, Role, actor_roles
-from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
-from app.skydiver.directory.service import DirectoryService, VenueInput
+from app.skydiver.directory.policy import (
+    SOURCE_NOTE_MAX,
+    DirectoryRuleError,
+    VenueStatus,
+    search_key,
+)
+from app.skydiver.directory.service import (
+    DirectoryService,
+    EditConflict,
+    VenueChanges,
+    VenueInput,
+)
 from app.skydiver.identity.tables import SkydiverPerson, SkydiverRoleGrant
 from app.skydiver.opportunities.policy import Audience, Discipline, OpportunityStatus
 from app.skydiver.opportunities.service import OpportunityService
@@ -112,12 +129,144 @@ def _loaded(engine: Engine, table: str) -> dict[str, uuid.UUID]:
     return {str(note).split()[0].removeprefix(MARK): row_id for row_id, note in rows}
 
 
+def dropzone_files(folder: Path) -> list[Path]:
+    """Country files of the dropzone inventory; `_`-prefixed files are research notes."""
+    if not folder.is_dir():
+        return []
+    return sorted(p for p in folder.glob("*.json") if not p.name.startswith("_"))
+
+
+def _venue_names(engine: Engine) -> dict[tuple[str, str], uuid.UUID]:
+    """Unmerged venues by (country, name or alias search key)."""
+    with engine.connect() as conn:
+        rows = conn.execute(
+            text(
+                "SELECT country, name_key, id FROM skydiver_venue "
+                "WHERE status <> 'merged' "
+                "UNION ALL "
+                "SELECT v.country, a.alias_key, v.id FROM skydiver_venue_alias a "
+                "JOIN skydiver_venue v ON v.id = a.venue_id WHERE v.status <> 'merged'"
+            )
+        ).all()
+    return {(country, key): venue_id for country, key, venue_id in rows}
+
+
+def _source(dropzone: dict[str, Any], researched_on: str | None) -> tuple[str, date]:
+    """The first web source, and the day it was checked (or the file's research day)."""
+    for source in dropzone.get("sources") or []:
+        url = str(source.get("url") or "")
+        if url.startswith(("https://", "http://")):
+            day = source.get("checked_on") or researched_on
+            return url, date.fromisoformat(str(day))
+    raise DirectoryRuleError("source_required")
+
+
+def _locate(
+    directory: DirectoryService,
+    actor: Actor,
+    venue_id: uuid.UUID,
+    dropzone: dict[str, Any],
+) -> bool:
+    """Give an existing venue the researched coordinates if it has none (compare-and-swap)."""
+    if dropzone.get("latitude") is None or dropzone.get("longitude") is None:
+        return False
+    venue, _ = directory.reviewer_venue(actor, venue_id)
+    if venue.latitude is not None:
+        return False
+    try:
+        directory.update_venue(
+            actor,
+            venue_id,
+            VenueChanges(
+                {"latitude": dropzone["latitude"], "longitude": dropzone["longitude"]}
+            ),
+            expected_version=venue.version,
+        )
+    except EditConflict, DirectoryRuleError:
+        return False  # changed meanwhile, or the coordinates are refused: left as it is
+    return True
+
+
+def load_dropzones(
+    engine: Engine, folder: Path, actor: Actor, directory: DirectoryService
+) -> dict[str, Any]:
+    report: dict[str, Any] = {
+        "files": 0,
+        "added": 0,
+        "closed": 0,
+        "skipped": 0,
+        "duplicates": 0,
+        "located": 0,
+        "aliases_dropped": 0,
+        "refused": [],
+    }
+    loaded = _loaded(engine, "skydiver_venue")
+    names = _venue_names(engine)
+    for file in dropzone_files(folder):
+        data = json.loads(file.read_text())
+        report["files"] += 1
+        for dz in data["dropzones"]:
+            key = dz["key"]
+            if key in loaded:
+                report["skipped"] += 1
+                continue
+            country = str(dz["country"]).upper()
+            aliases = [str(a) for a in dz.get("aliases") or []]
+            same = [
+                names[(country, search_key(n))]
+                for n in (dz["name"], *aliases)
+                if (country, search_key(n)) in names
+            ]
+            if same:
+                report["duplicates"] += 1
+                report["located"] += _locate(directory, actor, same[0], dz)
+                continue
+            status = str(dz.get("status") or "uncertain")
+            try:
+                url, checked = _source(dz, data.get("researched_on"))
+                venue = directory.create_venue(
+                    actor,
+                    VenueInput(
+                        name=dz["name"],
+                        country=country,
+                        locality=dz.get("locality"),
+                        latitude=dz.get("latitude"),
+                        longitude=dz.get("longitude"),
+                        source_url=url,
+                        source_note=_note(key, f"Research status: {status}."),
+                        checked_on=checked,
+                    ),
+                )
+            except (DirectoryRuleError, ValueError) as error:
+                report["refused"].append({"key": key, "reason": str(error)})
+                continue
+            loaded[key] = venue.id
+            names[(country, search_key(venue.name))] = venue.id
+            report["added"] += 1
+            for alias in aliases:
+                try:
+                    venue = directory.add_alias(
+                        actor, venue.id, alias, expected_version=venue.version
+                    )
+                except DirectoryRuleError:
+                    report["aliases_dropped"] += 1
+                    continue
+                names[(country, search_key(alias))] = venue.id
+            if status == "closed":
+                directory.set_status(
+                    actor, venue.id, VenueStatus.CLOSED, expected_version=venue.version
+                )
+                report["closed"] += 1
+    return report
+
+
 def load(
     engine: Engine,
     path: Path,
     actor: Actor,
     directory: DirectoryService,
     opportunities: OpportunityService,
+    dropzones: Path | None = None,
 ) -> dict[str, Any]:
     data = json.loads(path.read_text())
     report: dict[str, Any] = {
@@ -148,6 +297,11 @@ def load(
         )
         venues[v["key"]] = venue.id
         added["venues"] = added.get("venues", 0) + 1
+
+    # After the listings' venues, so a dropzone they already name is not added twice.
+    report["dropzones"] = load_dropzones(
+        engine, dropzones or path.parent / "dropzones", actor, directory
+    )
 
     providers = _loaded(engine, "skydiver_provider")
     for p in data["providers"]:
@@ -218,6 +372,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument(
         "--reviewer", required=True, help="account with the reviewer role"
     )
+    parser.add_argument(
+        "--dropzones",
+        type=Path,
+        default=None,
+        help="dropzone inventory folder (default: dropzones/ next to PATH)",
+    )
     args = parser.parse_args(argv)
 
     from app.core.config import settings  # settings are read only when run
@@ -233,7 +393,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     except DevDataError as error:
         print(error, file=sys.stderr)
         return 1
-    report = load(engine, args.path, actor, directory_service, opportunity_service)
+    report = load(
+        engine,
+        args.path,
+        actor,
+        directory_service,
+        opportunity_service,
+        dropzones=args.dropzones,
+    )
     print(json.dumps(report, indent=1))
     return 0
 

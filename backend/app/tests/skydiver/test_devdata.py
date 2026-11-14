@@ -116,6 +116,75 @@ def test_loads_through_the_rules_once_and_leaves_undated_listings_in_review(tmp_
     assert again["skipped"] == 4
 
 
+FIXTURES = Path(__file__).parent / "fixtures" / "dropzones"
+
+
+def test_loads_the_dropzone_inventory_with_coordinates_once(tmp_path: Path) -> None:
+    """Country files load as venues; `_` files are skipped; known dropzones are not doubled."""
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    clock = lambda: datetime.now(UTC)  # noqa: E731
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=clock)  # fmt: skip
+    listings = OpportunityService(stores=sql_listing_store_factory(engine), clock=clock)  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    # The fixture with this run's tag, so runs sharing the database stay independent.
+    for source in FIXTURES.iterdir():
+        (folder / source.name).write_text(source.read_text().replace("TAG", tag))
+    path = tmp_path / "dev.json"
+    path.write_text(json.dumps(_fixture(tag)))  # "Dev DZ <tag>", ES, no coordinates
+
+    first = devdata.load(engine, path, actor, directory, listings)
+    report = first["dropzones"]
+    assert {k: v for k, v in report.items() if k != "refused"} == {
+        "files": 1, "added": 3, "closed": 1, "skipped": 0, "duplicates": 1,
+        "located": 1, "aliases_dropped": 0,
+    }  # fmt: skip
+    assert report["refused"] == [
+        {"key": f"es-{tag}-unsourced", "reason": "source_required"}
+    ]
+
+    def venue(name: str) -> dict[str, Any]:
+        page = directory.search(query=name, country="ES", cursor=None, limit=None)
+        assert len(page.items) == 1, name
+        v = page.items[0]
+        return {
+            "status": v.status.value, "lat": v.latitude, "lon": v.longitude,
+            "aliases": sorted(a.name for a in v.aliases), "note": v.source_note,
+            "url": v.source_url, "checked_on": v.checked_on.isoformat() if v.checked_on else None,
+        }  # fmt: skip
+
+    active = venue(f"Active Field {tag}")
+    assert active["status"] == "listed" and (active["lat"], active["lon"]) == (42.25857, 3.137)  # fmt: skip
+    assert active["aliases"] == ["LEXX", f"Skydive Active {tag}"]
+    assert (active["url"], active["checked_on"]) == ("https://example.org/federation", "2026-11-13")  # fmt: skip
+    assert active["note"].startswith(f"dev-data:es-{tag}-active ")
+    assert venue(f"Closed Field {tag}")["status"] == "closed"
+    unplaced = venue(f"Unplaced Field {tag}")
+    assert (unplaced["status"], unplaced["lat"]) == ("listed", None)
+    assert unplaced["checked_on"] == "2026-11-14"  # the file's research day
+    assert unplaced["note"].endswith("Research status: uncertain.")
+    # The listings' own venue, found by the dropzone's alias, got the coordinates.
+    known = venue(f"Dev DZ {tag}")
+    assert (known["lat"], known["lon"]) == (41.5, 2.1)
+    assert directory.search(query=f"Aeródromo Dev {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
+    points = directory.map_points(query=tag, country="ES", cursor=None, limit=None)
+    assert sorted(p.name for p in points.items) == sorted(
+        [f"Active Field {tag}", f"Closed Field {tag}", f"Dev DZ {tag}"]
+    )
+
+    again = devdata.load(engine, path, actor, directory, listings)["dropzones"]
+    assert (again["added"], again["skipped"], again["located"]) == (0, 3, 0)
+
+
+def test_dropzone_files_skip_notes(tmp_path: Path) -> None:
+    for name in ("FR.json", "_coverage.json", "_osm-sweep.json", "README.md"):
+        (tmp_path / name).write_text("{}")
+    assert [p.name for p in devdata.dropzone_files(tmp_path)] == ["FR.json"]
+    assert devdata.dropzone_files(tmp_path / "missing") == []
+
+
 def test_needs_a_reviewer() -> None:
     accounts = Accounts.create()
     with pytest.raises(devdata.DevDataError):
