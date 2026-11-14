@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import DestinationList, { type DestinationGroup } from '#lib/components/DestinationList.svelte';
 	import { authMessage } from '#lib/auth-messages.ts';
 	import { LICENCE_LABEL, isLicence } from '#lib/currency.ts';
 	import { formatWeight } from '#lib/wing-loading.ts';
-	import { onMount } from 'svelte';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -119,10 +119,12 @@
 	]);
 
 	// Links from before the settings had their own page point at their anchors here: go on to
-	// the form itself. Without scripts the anchor is the setting's row, one tap from it.
-	onMount(() => {
-		if (location.hash === '#licence-heading' || location.hash === '#weight-heading') {
-			void goto(`/profile/preferences${location.hash}`, { replaceState: true });
+	// the form itself, on arrival or when only the hash changes (already on Me). Without
+	// scripts the anchor is the setting's row, one tap from it.
+	$effect(() => {
+		const hash = page.url.hash;
+		if (hash === '#licence-heading' || hash === '#weight-heading') {
+			void goto(`/profile/preferences${hash}`, { replaceState: true });
 		}
 	});
 </script>
