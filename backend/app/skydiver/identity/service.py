@@ -464,11 +464,12 @@ class IdentityService:
             self._confirm_password(store, account, password, now, client_ip)
 
     def consume(self, *, rule: ThrottleRule, key: str) -> None:
-        """Count one attempt against `rule` for `key`; Throttled when over the limit."""
-        now = self._clock()
-        with self._stores() as store:
-            self._check(store, rule, now, key)
-            self._hit(store, rule, now, key)
+        """Count one attempt against `rule` for `key`; Throttled when over the limit.
+
+        Taken like `reserve`: a separate count and insert let concurrent attempts at
+        the limit all pass.
+        """
+        self.reserve(rule=rule, key=key)
 
     def reserve(self, *, rule: ThrottleRule, key: str) -> uuid.UUID:
         """Take one slot of `rule` for `key` atomically; Throttled when none is left.
