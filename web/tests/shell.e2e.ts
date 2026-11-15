@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { PRIVATE_PATHS } from './support/paths.ts';
+import { UNREACHABLE_ORIGIN } from './support/origins.ts';
 
 const API_HOST = new URL(process.env.E2E_API_ORIGIN ?? 'http://127.0.0.1:8144').host;
 
@@ -27,7 +28,7 @@ test.describe('public shell', () => {
 		await expect(
 			page
 				.getByRole('region', { name: 'Listings' })
-				.or(page.getByText('No listings published yet'))
+				.or(page.getByRole('region', { name: 'No listings published yet' }))
 		).toBeVisible();
 
 		// Guests browse the public area without the members' tab bar.
@@ -95,6 +96,8 @@ test.describe('real API flow (isolated FastAPI + PostgreSQL)', () => {
 
 	test('client navigation shows a loading state, then the result', async ({ page }) => {
 		await page.goto('/');
+		// Hydrated: a click before then is a full page load, with no client navigation to show.
+		await page.locator('html[data-sign-in-sheet="ready"]').waitFor();
 		let release!: () => void;
 		const gate = new Promise<void>((resolve) => (release = resolve));
 		await page.route('**/status/__data.json**', async (route) => {
@@ -180,7 +183,7 @@ test.describe('private routes deny anonymous access', () => {
 });
 
 test.describe('upstream failure (API origin points at a closed port)', () => {
-	test.use({ baseURL: 'http://127.0.0.1:4174' });
+	test.use({ baseURL: UNREACHABLE_ORIGIN });
 
 	test('the events board tells a failed load apart from a date mistake', async ({ page }) => {
 		await page.goto('/?q=boogie');
@@ -217,7 +220,7 @@ test.describe('upstream failure (API origin points at a closed port)', () => {
 			headers: {
 				cookie,
 				accept: 'text/html',
-				origin: 'http://127.0.0.1:4174',
+				origin: UNREACHABLE_ORIGIN,
 				'content-type': 'application/x-www-form-urlencoded'
 			},
 			data: '',

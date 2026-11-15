@@ -2,10 +2,11 @@ import { expect, test, type APIRequestContext, type Page } from '@playwright/tes
 import { randomBytes } from 'node:crypto';
 import { PASSWORD, createAccount } from './support/accounts.ts';
 import { openJumpSections } from './support/jump-form.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // #160 what leaves the server: raw HTML and SvelteKit data payloads of public
 // pages, and cross-site writes to JSON routes, on the production-cookie preview.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 const COOKIE = '__Host-organiser_session';
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 

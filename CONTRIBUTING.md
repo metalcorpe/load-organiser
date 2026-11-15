@@ -28,7 +28,11 @@ scripts/verify.sh backend web     # any subset of: backend web e2e
 | --- | --- |
 | `backend` | Alembic migrations on a fresh `verify_backend` database, all backend tests, ruff and mypy on the beta modules |
 | `web` | `npm run check` (types), unit tests, Cloudflare Workers build |
-| `e2e` | Fresh `verify_e2e` database, isolated API, Playwright against three local workerd previews (one HTTPS); fails on any API 5xx |
+| `e2e` | Playwright against three local workerd previews (one HTTPS), split into shards that run side by side (`E2E_STACKS`, default 2), each with its own fresh database, API and mail outbox; fails on any API 5xx |
+
+`E2E_ARGS` narrows the e2e run (one file, one device; see the top of `scripts/verify.sh`) and then
+uses one stack. To run two checkouts' gates at once, give the second one other ports:
+`E2E_PORT_BASE=4273 VERIFY_API_PORT=8244 VERIFY_PG_PORT=55433`.
 
 Isolation rules the script enforces:
 
@@ -38,7 +42,8 @@ Isolation rules the script enforces:
 - **Disposable data only.** Without configuration the script creates a throwaway PostgreSQL cluster
   and deletes it afterwards. To use an existing server, set `VERIFY_PG_HOST`, `VERIFY_PG_PORT`,
   `VERIFY_PG_USER`, `VERIFY_PG_PASSWORD` and `VERIFY_PG_DISPOSABLE=yes`; only the databases
-  `verify_backend` and `verify_e2e` are dropped and recreated. The legacy test fixtures delete all
+  `verify_backend`, `verify_e2e` (or `verify_e2e_1` to `_N`) and the recovery drill's are dropped
+  and recreated. The legacy test fixtures delete all
   users, so never point verification at a database you care about.
 - E2E uses a fresh database each run because throttle windows persist. Mail goes to a local file
   outbox, which is not evidence of real delivery.

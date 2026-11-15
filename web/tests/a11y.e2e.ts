@@ -9,11 +9,12 @@ import {
 	reviewerCredentials,
 	reviewerSession
 } from './support/accounts.ts';
+import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Automated WCAG 2.2 A/AA checks with axe on every page, in light and dark.
 // axe finds roughly a third to a half of accessibility problems; it does not replace
 // the screen-reader and keyboard checks recorded in docs/product/beta-evidence.md.
-const ORIGIN = 'https://127.0.0.1:4175';
+const ORIGIN = SECURE_ORIGIN;
 test.use({ baseURL: ORIGIN, ignoreHTTPSErrors: true });
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
