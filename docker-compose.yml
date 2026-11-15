@@ -37,7 +37,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB?Variable not set}
 
   adminer:
-    image: adminer:6.2.0
+    image: adminer:6.3.0
     restart: always
     networks:
       - traefik-public
