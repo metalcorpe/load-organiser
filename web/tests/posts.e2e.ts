@@ -123,6 +123,30 @@ test.describe('shared jump summaries', () => {
 		await Promise.all([alex.context.close(), sam.context.close(), visitor.context().close()]);
 	});
 
+	test('Friends leads a newcomer to a profile first, then back to finding people', async ({
+		browser
+	}) => {
+		const newcomer = await newPerson(browser, 'friendsnew');
+		await newcomer.page.goto('/activity');
+		const start = newcomer.page.getByRole('region', { name: 'Start with a public profile' });
+		await expect(start).toContainText('To ask to follow someone you need a public profile');
+		// Looking around is still possible.
+		await expect(start.getByRole('link', { name: 'Look for people first' })).toHaveAttribute(
+			'href',
+			'/people'
+		);
+		await start.getByRole('link', { name: 'Create your public profile' }).click();
+		await newcomer.page.getByLabel('Handle').fill(`n${randomBytes(5).toString('hex')}`);
+		await newcomer.page.getByLabel('Display name').fill('Newcomer');
+		await newcomer.page.getByRole('button', { name: 'Create profile' }).click();
+		// Saved, and on to finding people.
+		await expect(newcomer.page).toHaveURL(`${ORIGIN}/people`);
+		await expect(newcomer.page.getByLabel('Find people by handle or name')).toBeVisible();
+		await newcomer.page.goto('/activity');
+		await expect(newcomer.page.getByRole('region', { name: 'Find people you jump with' })).toBeVisible();
+		await newcomer.context.close();
+	});
+
 	test('the feed and dropzone activity show only what each reader may see', async ({ browser }) => {
 		const tag = randomBytes(3).toString('hex');
 		const name = `Fd${tag} Skydive`;
@@ -140,21 +164,28 @@ test.describe('shared jump summaries', () => {
 			await browser.newContext({ baseURL: ORIGIN, ignoreHTTPSErrors: true })
 		).newPage();
 
-		// The Friends tab's page is called Friends; following no one yet, it leads to Find people.
+		// The Friends tab's page is called Friends; with a profile and following no one yet, it
+		// leads to Find people.
 		await sam.page.goto('/activity');
 		await expect(sam.page).toHaveTitle('Friends · Load Organiser');
 		await expect(sam.page.getByRole('heading', { level: 1 })).toHaveText('Friends');
-		const noOne = sam.page.getByRole('region', { name: 'You do not follow anyone yet' });
+		const noOne = sam.page.getByRole('region', { name: 'Find people you jump with' });
 		await expect(noOne.getByRole('link', { name: 'Find people' })).toHaveAttribute('href', '/people');
 		await sam.page.goto(`/people/${alexHandle}`);
 		await sam.page.getByRole('button', { name: 'Ask to follow' }).click();
+		// Asked, not approved: waiting, told apart from following, with whom it is waiting on.
+		await sam.page.goto('/activity');
+		await expect(sam.page.getByRole('region', { name: 'Waiting for approval' })).toBeVisible();
+		await expect(
+			sam.page.getByRole('list', { name: 'Waiting for approval' }).getByRole('link', { name: `Alex ${tag}` })
+		).toBeVisible();
 		// Alex follows no one, and on a phone still sees the waiting request on Friends.
 		await alex.page.setViewportSize({ width: 390, height: 844 });
 		await alex.page.goto('/activity');
-		await expect(alex.page.getByRole('region', { name: 'You do not follow anyone yet' })).toBeVisible();
+		await expect(alex.page.getByRole('region', { name: 'Find people you jump with' })).toBeVisible();
 		await expect(alex.page.getByRole('link', { name: '1 follow request waiting' })).toBeVisible();
 		await expect(
-			alex.page.getByRole('link', { name: 'Followers, requests and blocking' })
+			alex.page.getByRole('link', { name: 'Requests, followers and blocking' })
 		).toBeVisible();
 		await alex.page.goto('/people');
 		await alex.page
@@ -204,9 +235,13 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByLabel('Unpublish this post').check();
 		await alex.page.getByRole('button', { name: 'Unpublish' }).click();
 		await expect(alex.page.getByText('Unpublished.', { exact: false })).toBeVisible();
-		// Following someone who shares nothing is told apart from following no one.
+		// Following someone who shares nothing is told apart from following no one, without
+		// the setup steps again.
 		await sam.page.goto('/activity');
-		await expect(sam.page.getByRole('region', { name: 'No shared jumps yet' })).toBeVisible();
+		const nothing = sam.page.getByRole('region', { name: 'No shared jumps yet' });
+		await expect(nothing).toBeVisible();
+		await expect(nothing.getByRole('link')).toHaveCount(0);
+		await expect(sam.page.getByRole('list', { name: 'Waiting for approval' })).toHaveCount(0);
 
 		await Promise.all([alex.context.close(), sam.context.close(), visitor.context().close()]);
 	});

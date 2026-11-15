@@ -74,10 +74,20 @@ export function dateStub(start: string | null, end: string | null): DateStub | n
 	return { month: MONTH_SHORT.format(day(start)), day: String(Number(start.slice(8))) };
 }
 
-/** How many calendar days a listing runs, both ends included; 0 when undated. */
-export function spanDays(start: string | null, end: string | null): number {
-	if (!start || !end) return 0;
-	return Math.round((day(end).getTime() - day(start).getTime()) / 86_400_000) + 1;
+/**
+ * A card's dates in short, start and finish: "24–31 Dec", "29 Mar – 2 Apr", and both years
+ * across a new year ("30 Dec 2027 – 2 Jan 2028"); one day is "24 Dec"; null when undated. The
+ * year is otherwise left out: cards sit under their month's heading, which names it.
+ */
+export function shortRange(start: string | null, end: string | null): string | null {
+	if (!start || !end) return null;
+	const short = (value: string) => `${Number(value.slice(8))} ${MONTH_SHORT.format(day(value))}`;
+	if (start === end) return short(start);
+	const [sy, sm] = start.split('-');
+	const [ey, em] = end.split('-');
+	if (sy !== ey) return `${short(start)} ${sy} – ${short(end)} ${ey}`;
+	if (sm !== em) return `${short(start)} – ${short(end)}`;
+	return `${Number(start.slice(8))}–${short(end)}`;
 }
 
 /** The fields the board's highlight is chosen by. */
@@ -99,7 +109,7 @@ export function pickFeatured<T extends FeaturedCandidate>(items: readonly T[], t
 			(i) =>
 				(i.category === 'boogie' || i.category === 'camp') &&
 				i.status === 'published' &&
-				spanDays(i.starts_on, i.ends_on) > 1 &&
+				i.ends_on !== i.starts_on &&
 				(i.starts_on ?? '') > today
 		) ?? null
 	);

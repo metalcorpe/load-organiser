@@ -9,6 +9,8 @@ import {
 	deletePlan,
 	getOpportunity,
 	listPlans,
+	listSaved,
+	unsaveOpportunity,
 	updatePlan
 } from '#lib/server/opportunities.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
@@ -61,8 +63,9 @@ export const load: PageServerLoad = async (event) => {
 	const secret = secretFor(event);
 	const viewer = requireViewer(event.locals.viewer, event.url);
 	const api = createRequestApi();
-	const [plans, places, start] = await Promise.all([
+	const [plans, saved, places, start] = await Promise.all([
 		listPlans(api, secret),
+		listSaved(api, secret),
 		listPlaces(api, secret),
 		startingPoint(api, event.url)
 	]);
@@ -71,6 +74,10 @@ export const load: PageServerLoad = async (event) => {
 		plans: plans.ok
 			? { ok: true as const, items: plans.value }
 			: { ok: false as const, reason: plans.reason },
+		// Saved events: bookmarks, kept apart from plans (saving is not a plan or a registration).
+		saved: saved.ok
+			? { ok: true as const, items: saved.value }
+			: { ok: false as const, reason: saved.reason },
 		places: places.ok ? places.value.map((p) => ({ id: p.id, name: p.name })) : [],
 		start
 	};
@@ -106,7 +113,13 @@ export const actions: Actions = {
 				error: outcome.reason
 			});
 		}
-		redirect(303, '/plans?created=1');
+		// Back to the event or dropzone the plan was started from.
+		const back = link.opportunity_id
+			? `/events/${link.opportunity_id}`
+			: link.venue_id
+				? `/dz/${link.venue_id}`
+				: null;
+		redirect(303, back ? `/plans?created=1&back=${encodeURIComponent(back)}` : '/plans?created=1');
 	},
 
 	update: async (event) => {
@@ -140,5 +153,17 @@ export const actions: Actions = {
 			});
 		}
 		return { form: 'remove', done: true };
+	},
+
+	/** Remove a saved event (a bookmark); its plans, if any, stay. */
+	unsave: async (event) => {
+		const secret = secretFor(event);
+		const id = field(await event.request.formData(), 'id', { max: 64 });
+		if (!isUuid(id)) return fail(404, { form: 'unsave', error: 'not_found' });
+		const outcome = await unsaveOpportunity(createRequestApi(), secret, id);
+		if (!outcome.ok) {
+			return fail(listingStatus(outcome.reason), { form: 'unsave', id, error: outcome.reason });
+		}
+		return { form: 'unsave', done: true };
 	}
 };

@@ -201,7 +201,12 @@
 		margin: 0 0 0.75rem;
 	}
 
+	/* isolation: Leaflet stacks its tiles, markers, controls and popups with z-index 200 to 1000.
+	   Without a stacking context of its own they compete with the page, and on a phone painted
+	   over the members' tab bar (fixed, z-index 10) and took its taps. Here they stack only
+	   among themselves, inside the map. */
 	.map {
+		isolation: isolate;
 		height: min(70vh, 40rem);
 		min-height: 20rem;
 		border-radius: var(--radius);

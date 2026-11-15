@@ -10,7 +10,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					'A listing on the board, dropzone and organizer pages. The date tile carries the type tint; the tag repeats the type with its own icon, so colour is never the only cue. The title link covers the card.'
+					'A listing on the board, dropzone and organizer pages. The date tile carries the type tint and the start; a listing of several days also shows its start and finish beside the type (both years across a new year). The tag repeats the type with its own icon, so colour is never the only cue. The title link covers the card.'
 			}
 		}
 	},
@@ -21,6 +21,16 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Boogie: Story = {};
+
+export const OneDay: Story = {
+	name: 'One day',
+	args: { item: listing({ title: 'Sunday fun jumps', starts_on: '2026-12-13', ends_on: '2026-12-13' }) }
+};
+
+export const AcrossANewYear: Story = {
+	name: 'Across a new year',
+	args: { item: listing({ title: 'New Year boogie', starts_on: '2027-12-30', ends_on: '2028-01-02' }) }
+};
 
 export const Camp: Story = {
 	args: {

@@ -209,7 +209,7 @@ async function world(): Promise<World> {
 				`/gear/${component.id}`,
 				'/places',
 				'/plans',
-				'/saved',
+				'/profile/preferences',
 				'/submit'
 			],
 			reviewer: [

@@ -311,10 +311,14 @@
 				{#each gear as item (item.id)}
 					<label class="choice">
 						<input type="checkbox" name="component_ids" value={item.id} checked={chosen.has(item.id)} />
-						{item.label} <span class="meta"
-							>({KIND_LABEL[item.kind] ?? item.kind}{item.canopySize ? `, ${item.canopySize} sq ft` : ''}{item.archived
-								? ', archived'
-								: ''})</span
+						<!-- One flex item, so the name and its detail wrap as one line of text. -->
+						<span
+							>{item.label}
+							<span class="meta"
+								>({KIND_LABEL[item.kind] ?? item.kind}{item.canopySize ? `, ${item.canopySize} sq ft` : ''}{item.archived
+									? ', archived'
+									: ''})</span
+							></span
 						>
 					</label>
 				{/each}
@@ -367,7 +371,7 @@
 				<p class="hint" id="exit_weight_hint">
 					Your weight with your gear on, for the wing loading.
 					{#if loading?.usualGrams}Empty: your usual exit weight, {formatWeight(loading.usualGrams, unit)}.
-					{:else}Set your usual exit weight on your <a href="/profile#weight-heading">profile</a>.{/if}
+					{:else}Set your usual exit weight in your <a href="/profile/preferences#weight-heading">jump preferences</a>.{/if}
 				</p>
 				<p class="hint" role="status">{note}</p>
 			</div>

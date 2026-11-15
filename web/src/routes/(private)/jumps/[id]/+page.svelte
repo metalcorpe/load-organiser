@@ -148,7 +148,7 @@
 			>
 		{:else}
 			Unknown: {missingText(wl.missing)}.
-			{#if help.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if help.profile && help.gear}
+			{#if help.profile}<a href="/profile/preferences#weight-heading">Set your exit weight</a>{/if}{#if help.profile && help.gear}
 				·
 			{/if}{#if help.gear}<a href="/gear">Gear</a>{/if}
 		{/if}

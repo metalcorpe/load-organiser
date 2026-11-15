@@ -8,7 +8,7 @@
 		dateStub,
 		formatPrice,
 		formatRange,
-		spanDays,
+		shortRange,
 		statusLabel
 	} from '#lib/listings.ts';
 
@@ -17,7 +17,8 @@
 	const href = $derived(eventHref(item.id, { results }));
 	const status = $derived(statusLabel(item.status, item.ended));
 	const stub = $derived(dateStub(item.starts_on, item.ends_on));
-	const days = $derived(spanDays(item.starts_on, item.ends_on));
+	// Several days: the finish too, not only the start the tile shows.
+	const range = $derived(item.starts_on !== item.ends_on ? shortRange(item.starts_on, item.ends_on) : null);
 	const place = $derived(item.venue ? item.venue.name : (item.location_note ?? ''));
 	// The organizer only when it adds something the place name does not already say.
 	const organizer = $derived(
@@ -42,11 +43,9 @@
 	</div>
 	<div class="body">
 		<p class="kind">
-			<span class="type-tag"
-				><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]}{days > 1
-					? ` · ${days} days`
-					: ''}</span
-			>
+			<span class="type-tag"><TypeIcon category={item.category} />{CATEGORY_LABEL[item.category]}</span>
+			<!-- The short range is for the eye; a screen reader hears the full dates instead. -->
+			{#if range}<span class="range" aria-hidden="true">{range}</span>{/if}
 			{#if status}<span class="badge status">{status}</span>{/if}
 			<span class="visually-hidden">{formatRange(item.starts_on, item.ends_on)}</span>
 		</p>
@@ -140,6 +139,14 @@
 		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.4rem;
+	}
+
+	/* Beside the type: start and finish, in the type's line so the title stays the strongest. */
+	.range {
+		color: var(--fg);
+		font-size: 0.85rem;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
 	}
 
 	.title {

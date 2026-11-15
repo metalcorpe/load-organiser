@@ -9,7 +9,13 @@
 	// calls anyone a friend.
 	const SHOWN = 8;
 	const following = $derived(data.following ?? []);
+	const requested = $derived(data.requested ?? []);
 	const followsNoOne = $derived(data.following !== null && data.following.length === 0);
+	// Setting up, step by step: a profile first (needed to ask anyone), then people to follow.
+	const setup = $derived(
+		!data.hasProfile ? 'profile' : followsNoOne && requested.length === 0 ? 'find' : null
+	);
+	const profileFromHere = `/profile/public?returnTo=${encodeURIComponent('/people')}`;
 </script>
 
 <svelte:head>
@@ -19,11 +25,15 @@
 
 <div class="head">
 	<h1>Friends</h1>
-	<p class="links"><a href="/people">Find people</a></p>
+	<!-- In reach on every state, above the feed; requests come with a profile. -->
+	<nav class="links" aria-label="People">
+		<a href="/people">Find people</a>
+		{#if data.hasProfile}<a href="/people#requests-heading">Requests, followers and blocking</a>{/if}
+	</nav>
 </div>
 <p class="lede">
-	Jumps shared by people you follow, newest first. Following is one way: it shows you what they
-	share and opens nothing of yours.
+	Jumps the people you follow chose to share with you. Your logbook stays private; you share a
+	jump only when you choose to.
 </p>
 
 <!-- Large screens: the shared jumps in the main column, the people you follow beside them. -->
@@ -65,37 +75,45 @@
 				<p>You have reached the oldest jump shared with you.</p>
 				<p class="actions"><a class="button secondary" href="/activity">Back to the newest</a></p>
 			</section>
-		{:else if followsNoOne}
+		{:else if setup === 'profile'}
 			<section class="empty-state" aria-labelledby="empty-heading">
-				<h2 id="empty-heading">You do not follow anyone yet</h2>
+				<h2 id="empty-heading">Start with a public profile</h2>
 				<p>
-					Follow people you jump with to see the jumps they share. They approve each request, and
-					following never opens anyone's logbook or gear.
+					To ask to follow someone you need a public profile: it is what they see before they
+					approve you. It shows only the name and details you enter.
 				</p>
 				<p class="actions">
-					<a class="button" href="/people">Find people</a>
-					{#if !data.hasProfile}
-						<a class="button secondary" href="/profile/public">Create a public profile</a>
-					{/if}
+					<a class="button" href={profileFromHere}>Create your public profile</a>
+					<a class="button secondary" href="/people">Look for people first</a>
 				</p>
-				<p class="hint">Your logbook stays private; you choose which jumps to share from their pages.</p>
+				<p class="hint">After saving it you go on to finding people.</p>
+			</section>
+		{:else if setup === 'find'}
+			<section class="empty-state" aria-labelledby="empty-heading">
+				<h2 id="empty-heading">Find people you jump with</h2>
+				<p>
+					Ask to follow them; each person approves you first. Following never opens their logbook
+					or gear, or yours.
+				</p>
+				<p class="actions"><a class="button" href="/people">Find people</a></p>
+			</section>
+		{:else if followsNoOne && requested.length > 0}
+			<section class="empty-state" aria-labelledby="empty-heading">
+				<h2 id="empty-heading">Waiting for approval</h2>
+				<p>
+					You asked to follow {requested.length === 1 ? 'someone' : `${requested.length} people`}.
+					You follow them once they approve; the jumps they share with you then appear here.
+				</p>
+				<p class="actions"><a class="button secondary" href="/people">Find more people</a></p>
 			</section>
 		{:else}
-			<!-- Following someone, or unknown (the list failed): the copy claims neither. -->
-			<section class="empty-state" aria-labelledby="empty-heading">
-				<h2 id="empty-heading">
-					{data.following === null ? 'No shared jumps to show yet' : 'No shared jumps yet'}
-				</h2>
+			<!-- Following someone, or unknown (the list failed): nothing to set up, only to wait. -->
+			<section class="empty-state quiet" aria-labelledby="empty-heading">
+				<h2 id="empty-heading">No shared jumps yet</h2>
 				<p>
 					{data.following === null
 						? 'Jumps shared by people you follow appear here, each with its own date.'
-						: 'The people you follow have not shared a jump with you yet. Their shared jumps appear here, each with its own date.'}
-				</p>
-				<p class="actions">
-					<a class="button" href="/people">Find people</a>
-					{#if !data.hasProfile}
-						<a class="button secondary" href="/profile/public">Create a public profile</a>
-					{/if}
+						: 'The people you follow have not shared a jump with you yet. When they do, it appears here.'}
 				</p>
 			</section>
 		{/if}
@@ -122,7 +140,18 @@
 				<p class="hint">and {following.length - SHOWN} more</p>
 			{/if}
 		{/if}
-		<p class="more-link"><a href="/people">Followers, requests and blocking</a></p>
+		{#if requested.length > 0}
+			<h3 class="waiting-heading" id="requested-heading">Waiting for approval</h3>
+			<ul class="following" aria-labelledby="requested-heading">
+				{#each requested.slice(0, SHOWN) as person (person.handle)}
+					<li>
+						<a href="/people/{person.handle}">{person.display_name}</a>
+						<span class="meta wrap-anywhere">@{person.handle} · asked</span>
+					</li>
+				{/each}
+			</ul>
+			{#if requested.length > SHOWN}<p class="hint">and {requested.length - SHOWN} more</p>{/if}
+		{/if}
 	</section>
 </div>
 
@@ -137,7 +166,14 @@
 	}
 
 	.head .links {
-		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.25rem;
+	}
+
+	.waiting-heading {
+		margin: 0.75rem 0 0.35rem;
+		font-size: 0.95rem;
 	}
 
 	.head a {

@@ -63,57 +63,95 @@ test.describe('account deletion', () => {
 });
 
 test.describe('Me and Account and security', () => {
-	test('Me is an overview; account and security has its own page; deep links still land', async ({
+	test('Me leads with where things are; the settings are summaries; old deep links still land', async ({
 		page
 	}) => {
 		const email = await createAccount({ label: 'mesplit' });
 		await signIn(page, email);
 		await expect(page).toHaveURL(`${ORIGIN}/profile`);
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText('Me');
 		await expect(page.getByTestId('account-email')).toHaveText(email);
-		const links = page.getByRole('navigation', { name: 'Your records and more' });
+		const rows = page.getByRole('navigation', { name: 'Your things and settings' });
 		for (const name of [
-			'Logbook',
-			'Statistics',
+			'Plans and saved events',
 			'Gear',
-			'Saved listings',
-			'Visit plans',
-			'Private places',
+			'Edit Licence',
+			'Edit Exit weight',
+			'Edit Public profile',
+			'Account and security',
+			'Import a logbook',
 			'Export or restore',
-			'Import from a spreadsheet',
+			'Printable logbook',
+			'Private places',
 			'Suggestions and reports',
-			'Your public profile',
-			'People and follow requests',
-			'Privacy and the beta',
-			'Send feedback'
+			'Send feedback',
+			'Privacy and the beta'
 		]) {
-			await expect(links.getByRole('link', { name, exact: true })).toBeVisible();
+			await expect(rows.getByRole('link', { name: new RegExp(`^${name}`) })).toBeVisible();
 		}
+		// Each setting is a summary with its value, not a form.
+		await expect(rows.getByRole('link', { name: /^Edit Licence/ })).toContainText('No licence');
+		await expect(page.getByRole('button', { name: 'Save licence' })).toHaveCount(0);
+		// On a phone the places come right after who you are, not below forms.
+		await page.setViewportSize({ width: 390, height: 844 });
+		await expect(rows.getByRole('link', { name: /^Plans and saved events/ })).toBeInViewport();
 		// Not a reviewer: no reviewer tools.
-		await expect(links.getByRole('link', { name: /Maintenance/ })).toHaveCount(0);
-		// The password and deletion forms are no longer on Me.
+		await expect(rows.getByRole('link', { name: /Maintenance/ })).toHaveCount(0);
+		// The password and deletion forms are not on Me.
 		await expect(page.getByRole('button', { name: 'Change password' })).toHaveCount(0);
 		await expect(page.getByRole('region', { name: 'Delete account' })).toHaveCount(0);
 
-		// Old deep links to the licence and the exit weight keep working.
+		// The licence and exit weight are edited on Jump preferences, reached from their rows.
+		await rows.getByRole('link', { name: /^Edit Exit weight/ }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/profile/preferences#weight-heading`);
+		await expect(page.getByRole('heading', { level: 2, name: 'Exit weight' })).toBeInViewport();
+		await page.getByLabel('Exit weight (optional)', { exact: true }).fill('80');
+		await page.getByRole('button', { name: 'Save exit weight' }).click();
+		await expect(page.getByText('Exit weight saved.', { exact: true })).toBeVisible();
+		await page.goto('/profile');
+		await expect(rows.getByRole('link', { name: /^Edit Exit weight/ })).toContainText('80 kg');
+
+		// Old deep links to the settings on Me go on to the settings themselves.
 		for (const [hash, name] of [
 			['licence-heading', 'Licence'],
 			['weight-heading', 'Exit weight']
 		]) {
 			await page.goto(`/profile#${hash}`);
+			await expect(page).toHaveURL(`${ORIGIN}/profile/preferences#${hash}`);
 			await expect(page.getByRole('heading', { level: 2, name, exact: true })).toBeInViewport();
 		}
 
-		// Account and security is linked once, from the account card.
-		await expect(page.getByRole('link', { name: 'Account and security' })).toHaveCount(1);
-		await page.getByRole('link', { name: 'Account and security' }).click();
+		await page.goto('/profile');
+		await rows.getByRole('link', { name: /^Account and security/ }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/profile/account`);
 		await expect(page.getByTestId('account-email')).toHaveText(email);
 		for (const name of ['Change password', 'Sign out everywhere', 'Delete account']) {
 			await expect(page.getByRole('region', { name })).toBeVisible();
 		}
-		// Me is still the current tab.
-		await expect(
-			page.getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Me' })
-		).toHaveAttribute('aria-current', 'page');
+		// Me is still the current tab, on its pages and on Jump preferences.
+		const me = page.getByRole('navigation', { name: 'Primary' }).getByRole('link', { name: 'Me' });
+		await expect(me).toHaveAttribute('aria-current', 'page');
+		await page.goto('/profile/preferences');
+		await expect(me).toHaveAttribute('aria-current', 'page');
+	});
+
+	test('without a destination, signing in lands on the Logbook; a destination is kept', async ({
+		page
+	}) => {
+		const email = await createAccount({ label: 'landing' });
+		await page.goto('/sign-in');
+		await page.getByLabel('Email', { exact: true }).fill(email);
+		await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+		await page.getByRole('button', { name: 'Sign in' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/jumps`);
+		// Signed in, /sign-in and /register lead there too, or to the destination they name.
+		await page.goto('/sign-in');
+		await expect(page).toHaveURL(`${ORIGIN}/jumps`);
+		await page.goto('/register?returnTo=%2Fstats');
+		await expect(page).toHaveURL(`${ORIGIN}/stats`);
+		// Explore stays a page of its own for members.
+		await page.goto('/');
+		await expect(page).toHaveURL(`${ORIGIN}/`);
+		await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 	});
 });

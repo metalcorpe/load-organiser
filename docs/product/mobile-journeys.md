@@ -6,7 +6,23 @@ The [clickable phone mockup](mockups/mobile-walkthrough.html) is a standalone de
 
 The [two-pass product review](product-review.md) records scope/value risks and corrections; the decision sheet resolves the remaining product choices. The mockup remains an illustration; its Previous/Next controls are review navigation, not the application flow.
 
-## Navigation and screen inventory
+## Navigation as built (2026-11-14)
+
+Four tabs, each with one job; the labels, palette and type are design E/G. The earlier five-tab recommendation below is superseded and kept for its reasoning.
+
+| Tab | Job | Destinations |
+| --- | --- | --- |
+| Explore (`/`, `/dz`) | Discover events and dropzones | Events and Dropzones switch, search, filters, List or Map; event, organizer and dropzone pages. Registering is done with the organizer; saving is a private bookmark. |
+| Logbook (`/jumps`) | Add, import, find and review jumps | Log a jump (the main action); History and Statistics as secondary links. Empty logbook: Log your first jump and Import existing logbook, no search. Beside the jumps only what is due or coming up. |
+| Friends (`/activity`) | Shared jumps, finding people, follow requests | Find people and Requests, followers and blocking above the feed. The empty state follows the account: no public profile (create one, then back to finding people), a profile and no follows (find people), asked but not approved (waiting for approval, named), following with nothing shared (said once, no setup). |
+| Me (`/profile`) | Overview and where your things live | Plans and saved events (`/plans`), Gear, Jump preferences (licence and exit weight on `/profile/preferences`, shown on Me as summaries with Edit), Public profile, Account and security, Import, Export or restore, Printable logbook; private places, suggestions, feedback, privacy and reviewer tools as quieter links. |
+
+- Signing in without a destination lands on the Logbook; a `returnTo` (event pages, the header's Sign in) is kept, and Explore stays the guest landing page.
+- Kept addresses: `/saved` goes to `/plans#saved`; `/profile#licence-heading` and `#weight-heading` go on to the settings on `/profile/preferences` (without scripts they land on the setting's row on Me).
+- A plan started from an event or dropzone page offers the way back to it once saved. Saved events and visit plans stay in separate sections; removing a saved event keeps its plan.
+- The members' tab bar stays above the dropzone map (the map is its own stacking context; e2e `dz-map` taps every tab with the map under it).
+
+## Navigation and screen inventory (planning, superseded)
 
 Recommended compact phone navigation: **Discover · Activity · Add jump · Records · Profile**. Discover is the guest landing page. Signed-in users keep the same tabs; the application does not switch into the existing staff dashboard after login. Records groups Logbook, Gear, and Saved/planned visits. Profile contains discoverability, follow requests, account/recovery, blocked users, data export/restore, and deletion. Account controls remain separate from the public profile preview.
 

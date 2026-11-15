@@ -11,6 +11,7 @@
 		typeRows,
 		yearRows
 	} from '#lib/stats.ts';
+	import { scrollRegion } from '#lib/scroll-region.ts';
 	import { formatLoading, missingText } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
 
@@ -119,6 +120,7 @@
 			/>
 
 			{#if s.altitudes.length > 0}
+				<div class="table-scroll" {@attach scrollRegion}>
 				<table class="plain">
 					<caption>Exit altitude</caption>
 					<thead>
@@ -140,6 +142,7 @@
 						{/each}
 					</tbody>
 				</table>
+				</div>
 				<p class="hint">
 					In the unit each altitude was entered in; feet and metres are not mixed or converted.
 					{#if s.altitude_not_recorded > 0}{count(s.altitude_not_recorded)} without an exit altitude.{/if}
@@ -163,8 +166,8 @@
 				</p>
 			{:else}
 				<p class="hint">
-					No wing loading on these jumps: it needs your exit weight (on your
-					<a href="/profile#weight-heading">profile</a>) and a main canopy with its size recorded on the
+					No wing loading on these jumps: it needs your exit weight (in your
+					<a href="/profile/preferences#weight-heading">jump preferences</a>) and a main canopy with its size recorded on the
 					jump.
 				</p>
 			{/if}

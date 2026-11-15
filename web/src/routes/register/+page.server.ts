@@ -9,7 +9,7 @@ import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = ({ locals, url }) => {
 	const returnTo = safeReturnPath(url.searchParams.get('returnTo'));
-	if (locals.viewer) redirect(303, returnTo ?? '/profile');
+	if (locals.viewer) redirect(303, returnTo ?? '/jumps');
 	return { returnTo };
 };
 

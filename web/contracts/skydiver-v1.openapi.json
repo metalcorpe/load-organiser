@@ -20304,6 +20304,7 @@
             "schema": {
               "enum": [
                 "requests",
+                "requested",
                 "followers",
                 "following",
                 "blocked"

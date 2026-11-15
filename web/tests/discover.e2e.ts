@@ -224,8 +224,10 @@ test.describe('discover board', () => {
 		await page.reload();
 		await expect(page.getByRole('button', { name: 'Remove from saved' })).toBeVisible();
 
+		// The old address of the saved list leads to its place beside the plans.
 		await page.goto('/saved');
-		const saved = page.getByRole('list', { name: 'Saved listings' });
+		await expect(page).toHaveURL(`${ORIGIN}/plans#saved`);
+		const saved = page.getByRole('list', { name: 'Saved events' });
 		await expect(saved.getByRole('link', { name: listing.title })).toHaveCount(1);
 
 		// Plan a visit from the saved item, with dates starting from the listing.
@@ -235,14 +237,21 @@ test.describe('discover board', () => {
 		await page.getByLabel('First day').fill('2027-07-11');
 		await page.getByRole('button', { name: 'Save plan' }).click();
 		await expect(page.getByText('Plan saved privately.')).toBeVisible();
+		// Back to the event the plan was made for.
+		await expect(page.getByRole('link', { name: 'Back to the event' })).toHaveAttribute(
+			'href',
+			`/events/${listing.id}`
+		);
 		const plans = page.getByRole('list', { name: 'Your plans' });
 		await expect(plans.getByText('Your dates: 11–14 July 2027')).toBeVisible();
 		await expect(plans.getByText("The listing's dates are 10–14 July 2027")).toBeVisible();
 
-		await page.goto('/saved');
-		await page.getByRole('button', { name: 'Remove' }).click();
+		// Removing the saved event keeps the plan: saving and planning are separate.
+		await page.goto('/plans');
+		await page.getByRole('list', { name: 'Saved events' }).getByRole('button', { name: 'Remove' }).click();
 		await expect(page.getByText('Removed from saved.')).toBeVisible();
-		await expect(page.getByText('You have not saved any listings')).toBeVisible();
+		await expect(page.getByText('Nothing saved.')).toBeVisible();
+		await expect(plans.getByText('Your dates: 11–14 July 2027')).toBeVisible();
 	});
 
 	test('saves are not visible to anyone else', async ({ page, browser }) => {
@@ -258,8 +267,8 @@ test.describe('discover board', () => {
 		const otherPage = await other.newPage();
 		await otherPage.goto('/sign-in?returnTo=%2Fsaved');
 		await signInHere(otherPage, await createAccount({ label: 'other' }));
-		await expect(otherPage).toHaveURL(`${ORIGIN}/saved`);
-		await expect(otherPage.getByText('You have not saved any listings')).toBeVisible();
+		await expect(otherPage).toHaveURL(`${ORIGIN}/plans#saved`);
+		await expect(otherPage.getByText('Nothing saved.')).toBeVisible();
 		await otherPage.goto(`/events/${listing.id}`);
 		await expect(otherPage.getByRole('button', { name: 'Save privately' })).toBeVisible();
 		await other.close();
@@ -411,6 +420,30 @@ test.describe('search context and the filter panel', () => {
 		await expect(nojs).toHaveURL(/\?save=1&ctx=/);
 		await expect(nojs.getByRole('link', { name: 'Back to results' })).toHaveAttribute('href', results);
 		await plain.close();
+	});
+
+	test('the search box has a visible name and a readable placeholder in both themes', async ({
+		page
+	}) => {
+		for (const scheme of ['light', 'dark'] as const) {
+			await page.emulateMedia({ colorScheme: scheme });
+			await page.goto('/');
+			// The name stays visible when the placeholder is cut short on a small phone.
+			await expect(page.locator('label[for="q"]')).toHaveText('Title or organizer');
+			await expect(page.locator('label[for="q"]')).toBeVisible();
+			const box = page.getByRole('searchbox', { name: 'Title or organizer' });
+			// The placeholder is the muted colour (4.5:1 on a field, tokens.spec.ts), not the
+			// browser's grey.
+			const [placeholder, muted] = await box.evaluate((input) => {
+				const probe = document.createElement('span');
+				probe.style.color = 'var(--muted)';
+				document.body.append(probe);
+				const colour = getComputedStyle(probe).color;
+				probe.remove();
+				return [getComputedStyle(input, '::placeholder').color, colour];
+			});
+			expect(placeholder, scheme).toBe(muted);
+		}
 	});
 
 	test('country and dates come first; type, discipline and audience fold away', async ({ page }) => {
@@ -583,6 +616,17 @@ test.describe('search context and the filter panel', () => {
 			starts_on: '2027-12-30',
 			ends_on: '2028-01-02'
 		});
+		// On the board each card shows its start and finish in short; the full dates are what a
+		// screen reader hears.
+		await page.goto(`/?q=${base}`);
+		for (const [listing, short] of [
+			[months, '28 Jun – 3 Jul'],
+			[years, '30 Dec 2027 – 2 Jan 2028']
+		] as const) {
+			const card = page.getByRole('article').filter({ hasText: listing.title });
+			await expect(card.getByText(short, { exact: true })).toBeVisible();
+			await expect(card.getByText(short, { exact: true })).toHaveAttribute('aria-hidden', 'true');
+		}
 		for (const [listing, text] of [
 			[months, '28 June – 3 July 2027'],
 			[years, '30 December 2027 – 2 January 2028']

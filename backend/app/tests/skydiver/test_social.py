@@ -199,6 +199,13 @@ def test_follow_requests_need_approval_and_a_profile(api: Api) -> None:
         alex[1]
     ]
     assert api.ok("GET", "/me/profile", sam[0])["pending_requests"] == 1
+    # The requester sees their own request waiting, and is not yet following.
+    assert [p["handle"] for p in api.ok("GET", "/me/people/requested", alex[0])] == [
+        sam[1]
+    ]
+    assert api.ok("GET", "/me/people/following", alex[0]) == []
+    # Nobody else's list holds it.
+    assert api.ok("GET", "/me/people/requested", sam[0]) == []
 
     api.ok("POST", f"/me/people/requests/{alex[1]}/approve", sam[0], status=204)
     assert api.ok("GET", f"/people/{sam[1]}", alex[0])["follow_state"] == "following"
@@ -206,6 +213,8 @@ def test_follow_requests_need_approval_and_a_profile(api: Api) -> None:
     assert [p["handle"] for p in api.ok("GET", "/me/people/following", alex[0])] == [
         sam[1]
     ]
+    # Approved: no longer waiting.
+    assert api.ok("GET", "/me/people/requested", alex[0]) == []
 
     # Approved followers keep seeing a profile that stops being discoverable.
     own = api.ok("GET", "/me/profile", sam[0])

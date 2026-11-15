@@ -32,7 +32,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/profile">Profile</a> · <a href="/people">People</a></p>
+<p><a href="/profile">Me</a> · <a href="/people">People</a></p>
 <h1>Public profile</h1>
 <p class="lede">
 	Optional. Only what you enter here is shown: never your email, registration name, logbook, gear,

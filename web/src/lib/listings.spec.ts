@@ -6,7 +6,7 @@ import {
 	formatRange,
 	groupByMonth,
 	pickFeatured,
-	spanDays,
+	shortRange,
 	statusLabel
 } from './listings.ts';
 
@@ -76,12 +76,16 @@ describe('dateStub', () => {
 	});
 });
 
-describe('spanDays', () => {
-	it('counts both ends, across months and years', () => {
-		expect(spanDays('2026-12-24', '2026-12-31')).toBe(8);
-		expect(spanDays('2026-12-30', '2027-01-02')).toBe(4);
-		expect(spanDays('2026-11-14', '2026-11-14')).toBe(1);
-		expect(spanDays(null, null)).toBe(0);
+describe('shortRange', () => {
+	it('names the start and the finish, briefly', () => {
+		expect(shortRange('2026-12-24', '2026-12-31')).toBe('24–31 Dec');
+		expect(shortRange('2027-03-29', '2027-04-02')).toBe('29 Mar – 2 Apr');
+		expect(shortRange('2026-11-14', '2026-11-14')).toBe('14 Nov');
+		expect(shortRange(null, null)).toBeNull();
+	});
+
+	it('names both years across a new year', () => {
+		expect(shortRange('2027-12-30', '2028-01-02')).toBe('30 Dec 2027 – 2 Jan 2028');
 	});
 });
 

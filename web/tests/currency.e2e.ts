@@ -38,7 +38,7 @@ async function logJump(email: string, on: string) {
 }
 
 async function setLicence(page: Page, label: string) {
-	await page.goto('/profile');
+	await page.goto('/profile/preferences');
 	await page.getByRole('combobox', { name: 'Licence' }).selectOption({ label });
 	await page.getByRole('button', { name: 'Save licence' }).click();
 	await expect(page.getByText('Licence saved.')).toBeVisible();
@@ -102,7 +102,7 @@ test.describe('jump currency', () => {
 
 	test('saving a form lower on the page brings its confirmation into view', async ({ page }) => {
 		const email = await createAccount({ label: 'save-view' });
-		await signIn(page, email, '/profile');
+		await signIn(page, email, '/profile/preferences');
 		await page.setViewportSize({ width: 320, height: 640 });
 		await page.waitForFunction(() => document.documentElement.dataset.formGuard === 'ready');
 
