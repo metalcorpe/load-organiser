@@ -173,6 +173,8 @@ async function world(): Promise<World> {
 				'/dz',
 				`/jumps/${jump.id}`,
 				'/profile',
+				'/profile/preferences',
+				'/activity',
 				'/profile/account',
 				'/profile/public',
 				'/plans',

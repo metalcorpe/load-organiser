@@ -105,7 +105,7 @@ No provider or opportunity data is shipped. Real inventory, source reuse review 
 
 ## Implemented in #150
 
-Web: `/` (board), `/events/{id}`, `/organizers/{id}`, upcoming listings on `/dz/{id}`; private `/saved` and `/plans` under Records. Backend: `backend/app/skydiver/saves/` (`/saved`, `/plans`).
+Web: `/` (board), `/events/{id}`, `/organizers/{id}`, upcoming listings on `/dz/{id}`; private plans and saved events on `/plans` under Me (`/saved` redirects there). Backend: `backend/app/skydiver/saves/` (`/saved`, `/plans`).
 
 | Area | Behaviour |
 | --- | --- |

@@ -20,9 +20,9 @@ test.describe('wing loading', () => {
 		page
 	}) => {
 		const email = await createAccount({ label: 'wingload' });
-		await signIn(page, email, '/profile');
+		await signIn(page, email, '/profile/preferences');
 
-		// The usual exit weight, a private setting on the profile.
+		// The usual exit weight, a private jump preference.
 		await page.getByLabel('Exit weight (optional)', { exact: true }).fill('81.6');
 		await page.getByRole('radio', { name: 'Kilograms' }).check();
 		await page.getByRole('button', { name: 'Save exit weight' }).click();

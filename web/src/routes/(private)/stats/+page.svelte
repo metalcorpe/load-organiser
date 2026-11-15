@@ -166,8 +166,8 @@
 				</p>
 			{:else}
 				<p class="hint">
-					No wing loading on these jumps: it needs your exit weight (on your
-					<a href="/profile#weight-heading">profile</a>) and a main canopy with its size recorded on the
+					No wing loading on these jumps: it needs your exit weight (in your
+					<a href="/profile/preferences#weight-heading">jump preferences</a>) and a main canopy with its size recorded on the
 					jump.
 				</p>
 			{/if}

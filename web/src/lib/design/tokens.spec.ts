@@ -44,6 +44,8 @@ const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['focus', 'surface', 3],
 	['focus', 'brand', 3],
 	['fg', 'field', 4.5],
+	// Placeholders (app.css ::placeholder).
+	['muted', 'field', 4.5],
 	['field-border', 'field', 3],
 	['field-border', 'surface', 3],
 	['field-border', 'bg', 3],

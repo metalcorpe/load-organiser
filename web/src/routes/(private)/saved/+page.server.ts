@@ -3,7 +3,7 @@ import { listingStatus } from '#lib/listings.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
-import { listSaved, unsaveOpportunity } from '#lib/server/opportunities.ts';
+import { unsaveOpportunity } from '#lib/server/opportunities.ts';
 import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad, RequestEvent } from './$types';
@@ -15,14 +15,11 @@ function secretFor(event: Pick<RequestEvent, 'locals' | 'url' | 'cookies'>): str
 	return secret;
 }
 
+// Saved events live with visit plans now (/plans, under "Saved events"): this address, from
+// bookmarks and older links, goes there. Its remove action stays for a form still open here.
 export const load: PageServerLoad = async (event) => {
-	const secret = secretFor(event);
-	const saved = await listSaved(createRequestApi(), secret);
-	return {
-		saved: saved.ok
-			? { ok: true as const, items: saved.value }
-			: { ok: false as const, reason: saved.reason }
-	};
+	secretFor(event);
+	redirect(303, '/plans#saved');
 };
 
 export const actions: Actions = {

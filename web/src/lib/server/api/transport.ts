@@ -327,6 +327,8 @@ export const OPERATIONS = {
 	listFollowRequests: { method: 'GET', path: `${BETA}/me/people/requests`, maxBodyBytes: 512 * 1024 },
 	listFollowers: { method: 'GET', path: `${BETA}/me/people/followers`, maxBodyBytes: 512 * 1024 },
 	listFollowing: { method: 'GET', path: `${BETA}/me/people/following`, maxBodyBytes: 512 * 1024 },
+	// The viewer's own follow requests that are not approved yet.
+	listRequested: { method: 'GET', path: `${BETA}/me/people/requested`, maxBodyBytes: 512 * 1024 },
 	listBlocked: { method: 'GET', path: `${BETA}/me/people/blocked`, maxBodyBytes: 512 * 1024 },
 	searchPeople: { method: 'GET', path: `${BETA}/people`, query: ['q'] },
 	getPerson: { method: 'GET', path: `${BETA}/people/{handle}` },

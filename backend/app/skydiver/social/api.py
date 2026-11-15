@@ -280,7 +280,7 @@ def create_router(
         dependencies=deps,
     )
     def list_people(
-        relation: Literal["requests", "followers", "following", "blocked"],
+        relation: Literal["requests", "requested", "followers", "following", "blocked"],
         actor: Reader,
     ) -> list[PersonOut]:
         return [_person(p) for p in service().people(actor, relation)]

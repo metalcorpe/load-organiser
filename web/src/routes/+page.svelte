@@ -115,8 +115,9 @@
      the URL's filters change (Clear filters, back/forward). -->
 {#key page.url.search}
 <form method="GET" class="board-search" role="search">
+	<!-- A visible name: the placeholder is cut short on a small phone. -->
+	<label class="search-label" for="q">Title or organizer</label>
 	<div class="search-row">
-		<label class="visually-hidden" for="q">Title or organizer</label>
 		<input
 			id="q"
 			name="q"

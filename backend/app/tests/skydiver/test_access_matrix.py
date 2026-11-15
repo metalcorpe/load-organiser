@@ -265,7 +265,7 @@ def test_the_owners_records_are_unchanged(
     assert any(p["id"] == ids["plan_id"] for p in w.ok("GET", "/plans", owner))
     assert any(p["id"] == ids["place_id"] for p in w.ok("GET", "/places", owner))
     # Nothing the other callers did created a follow, block or report.
-    for relation in ("requests", "followers", "blocked"):
+    for relation in ("requests", "requested", "followers", "blocked"):
         assert w.ok("GET", f"/me/people/{relation}", owner) == [], relation
     reviewer = w.accounts.session(reviewer=True)
     reports = w.ok("GET", "/social/reports", reviewer)

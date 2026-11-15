@@ -155,7 +155,7 @@
 					{wl.known > 0 ? `${count(wl.unknown)} have none` : 'No jump has a wing loading yet'}: {missingText(
 						wlMissing
 					)}.
-					{#if wlHelp.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if wlHelp.profile && wlHelp.gear}
+					{#if wlHelp.profile}<a href="/profile/preferences#weight-heading">Set your exit weight</a>{/if}{#if wlHelp.profile && wlHelp.gear}
 						·
 					{/if}{#if wlHelp.gear}<a href="/gear">Add canopy sizes under Gear</a>, and tick the main
 						canopy on your jumps{/if}

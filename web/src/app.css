@@ -289,6 +289,20 @@ h1 {
 	font-weight: 650;
 }
 
+/* The visible name over a search box and its button (.search-row). */
+.search-label {
+	display: block;
+	margin: 0 0 0.3rem;
+	font-weight: 650;
+}
+
+/* Placeholder text: muted, which keeps 4.5:1 against a field in both themes (tokens.spec.ts),
+   instead of the browser's grey (3.95:1 on the dark field). Firefox would also fade it. */
+::placeholder {
+	color: var(--muted);
+	opacity: 1;
+}
+
 .field input:not([type='checkbox'], [type='radio']) {
 	min-width: 0;
 	max-width: 100%;

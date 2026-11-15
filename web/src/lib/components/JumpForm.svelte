@@ -371,7 +371,7 @@
 				<p class="hint" id="exit_weight_hint">
 					Your weight with your gear on, for the wing loading.
 					{#if loading?.usualGrams}Empty: your usual exit weight, {formatWeight(loading.usualGrams, unit)}.
-					{:else}Set your usual exit weight on your <a href="/profile#weight-heading">profile</a>.{/if}
+					{:else}Set your usual exit weight in your <a href="/profile/preferences#weight-heading">jump preferences</a>.{/if}
 				</p>
 				<p class="hint" role="status">{note}</p>
 			</div>

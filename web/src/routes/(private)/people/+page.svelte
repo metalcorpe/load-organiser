@@ -15,7 +15,7 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/profile">Profile</a></p>
+<p><a href="/profile">Me</a></p>
 <h1>People</h1>
 <p class="lede">Follow people you know. Following never opens anyone's logbook or gear.</p>
 
@@ -31,7 +31,8 @@
 			You have no public profile, so no one can find you and you cannot ask to follow people.
 			Your logbook stays private either way.
 		</p>
-		<a class="button" href="/profile/public">Create a profile</a>
+		<!-- After saving, back here to find people. -->
+		<a class="button" href="/profile/public?returnTo=%2Fpeople">Create a profile</a>
 	</section>
 {:else}
 	<section class="card you">
@@ -98,8 +99,8 @@
 
 {#if errorFor('people')}<p class="form-error" role="alert">{errorFor('people')}</p>{/if}
 
-<section class="card">
-<h2>Follow requests</h2>
+<section class="card" aria-labelledby="requests-heading">
+<h2 id="requests-heading">Follow requests</h2>
 {#if errorFor('requests')}<p class="form-error" role="alert">{errorFor('requests')}</p>{/if}
 {#if data.requests === null}
 	<p class="form-error" role="alert">{socialMessage('unavailable')}</p>

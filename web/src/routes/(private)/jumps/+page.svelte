@@ -95,13 +95,18 @@
 	// them on the first page only, and a filtered one only the count of matches.
 	// Nothing beside a failed or stale load.
 	const home = $derived(data.page.ok && !data.filtered && !data.select);
+	// Only what there is to say: currency, gear coming due, plans or saved events coming up.
+	const homeSide = $derived(
+		home &&
+			((Boolean(data.summary?.currency) && !firstUse) || due.length > 0 || data.coming.length > 0)
+	);
 	const matchedSide = $derived(
 		data.page.ok && data.filtered && matched !== null && matched.jumps > 0
 	);
-	// Without anything for the side column (selecting jumps, no matches, a failed load), there
-	// are no columns: the main column alone, as wide as it is beside the side column.
-	const hasSide = $derived(home || matchedSide);
-	const sideOnPhones = $derived(matchedSide || (home && !data.older));
+	// Without anything for the side column (nothing due or coming, selecting jumps, no matches,
+	// a failed load), there are no columns: the main column alone, as wide as it is beside one.
+	const hasSide = $derived(homeSide || matchedSide);
+	const sideOnPhones = $derived(matchedSide || (homeSide && !data.older));
 	const declared = $derived(
 		data.summary?.priorJumps ? { count: data.summary.priorJumps, before: data.summary.priorBefore } : null
 	);
@@ -116,7 +121,11 @@
 
 <div class="head">
 	<h1>Logbook</h1>
-	<p class="links"><a href="/history">History</a> · <a href="/stats">Statistics</a></p>
+	<!-- Reading your jumps back: secondary to logging them, so links, not buttons. -->
+	<nav class="links" aria-label="Your totals">
+		<a href="/history">History</a>
+		<a href="/stats">Statistics</a>
+	</nav>
 </div>
 <PrivacyLabel text="Private logbook — only you can see your jumps" />
 
@@ -152,8 +161,9 @@
 	<!-- novalidate: the server checks the dates and explains; WebKit otherwise blocks the
      submit silently on a date field it considers half-filled. -->
 <form method="GET" action="/jumps" class="jump-search" role="search" novalidate>
+		<!-- A visible name: the placeholder is cut short on a small phone. -->
+		<label class="search-label" for="q">Place, aircraft or notes</label>
 		<div class="search-row">
-			<label class="visually-hidden" for="q">Place, aircraft or notes</label>
 			<input
 				id="q"
 				name="q"
@@ -333,19 +343,13 @@
 				today={data.today}
 				progress={data.summary.progress}
 			/>{/if}
-		<!-- Gear and plans, each its own section, soonest first. With nothing in one, a phone shows
-		     nothing; beside the jumps a line says what would appear there. -->
+		<!-- Gear and plans, each its own section, soonest first, only when something is due or
+		     coming: no empty reminder panels. Plans and saved events are managed from Me. -->
 		{#if due.length > 0}
 			<section class="ahead" aria-labelledby="due-heading">
 				<h2 id="due-heading">Due soon</h2>
 				<DueList items={due} {today} label="Due soon" />
 				<p class="more-link"><a href="/gear">All gear dates</a></p>
-			</section>
-		{:else}
-			<section class="ahead quiet wide-only" aria-labelledby="due-heading">
-				<h2 id="due-heading">Gear due soon</h2>
-				<p>Reserve repacks and other service dates show here as they come due.</p>
-				<p class="more-link"><a href="/gear">Your gear</a></p>
 			</section>
 		{/if}
 		{#if data.coming.length > 0}
@@ -359,7 +363,7 @@
 								>{item.title}</a
 							>
 							<span class="meta"
-								>{item.kind === 'plan' ? 'Your plan' : 'Saved listing'} · {formatRange(
+								>{item.kind === 'plan' ? 'Your plan' : 'Saved event'} · {formatRange(
 									item.starts_on,
 									item.ends_on
 								)}{item.place ? ` · ${item.place}` : ''}</span
@@ -372,13 +376,7 @@
 						</li>
 					{/each}
 				</ol>
-				<p class="more-link"><a href="/saved">See all saved</a> · <a href="/plans">See all plans</a></p>
-			</section>
-		{:else}
-			<section class="ahead quiet wide-only" aria-labelledby="coming-heading">
-				<h2 id="coming-heading">Coming up</h2>
-				<p>Events you save and the visits you plan show here, soonest first.</p>
-				<p class="more-link"><a href="/">Browse events</a> · <a href="/plans">Plan a visit</a></p>
+				<p class="more-link"><a href="/plans">Plans and saved events</a></p>
 			</section>
 		{/if}
 	{/if}
@@ -628,7 +626,7 @@
 			<p class="hint">
 				No wing loading for {loadingNote.count}
 				{loadingNote.count === 1 ? 'jump' : 'jumps'} here: {loadingNote.text}.
-				{#if loadingHelp.profile}<a href="/profile#weight-heading">Set your exit weight</a>{/if}{#if loadingHelp.profile && loadingHelp.gear}
+				{#if loadingHelp.profile}<a href="/profile/preferences#weight-heading">Set your exit weight</a>{/if}{#if loadingHelp.profile && loadingHelp.gear}
 					·
 				{/if}{#if loadingHelp.gear}<a href="/gear">Add canopy sizes under Gear</a>{/if}
 			</p>
@@ -661,10 +659,15 @@
 	}
 
 	.head .links {
-		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 1.25rem;
 	}
 
-	.head a {
+	.head .links a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
 		font-weight: 600;
 	}
 
@@ -970,24 +973,6 @@
 
 	.ahead .more-link {
 		margin: 0.4rem 0 0;
-	}
-
-	/* Nothing in it yet (beside the jumps only): a line and a link, no card. */
-	.ahead.quiet {
-		padding: 0.6rem 0 0;
-		border: 0;
-		border-top: 1px solid var(--border);
-		border-radius: 0;
-		background: none;
-	}
-
-	.ahead.quiet p {
-		margin: 0;
-		color: var(--muted);
-	}
-
-	.ahead.quiet .more-link {
-		margin-top: 0.25rem;
 	}
 
 	.coming {

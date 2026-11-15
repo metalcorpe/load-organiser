@@ -9901,7 +9901,7 @@ export type ListMyPeopleData = {
         /**
          * Relation
          */
-        relation: 'requests' | 'followers' | 'following' | 'blocked';
+        relation: 'requests' | 'requested' | 'followers' | 'following' | 'blocked';
     };
     query?: never;
     url: '/api/skydiver/v1/me/people/{relation}';
