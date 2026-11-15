@@ -668,7 +668,9 @@
 		font-weight: 600;
 	}
 
+	/* Its width sizes the total (.number). */
 	.card {
+		container-type: inline-size;
 		display: grid;
 		gap: 0.9rem;
 		margin: 0.25rem 0 1.25rem;
@@ -689,8 +691,10 @@
 		gap: 0.75rem;
 	}
 
+	/* With large text "jumps" moves under the number. */
 	.big {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: baseline;
 		gap: 0.4rem;
 	}
@@ -698,7 +702,9 @@
 	.number {
 		font-family: var(--font-display);
 		font-weight: 700;
-		font-size: 3.6rem;
+		/* At most about a quarter of the card's width, so six characters (12,345) still fit
+		   inside it with large text on a small phone; at ordinary sizes that is never reached. */
+		font-size: min(3.6rem, 26cqi);
 		line-height: 0.9;
 		color: var(--highlight);
 		font-variant-numeric: tabular-nums;

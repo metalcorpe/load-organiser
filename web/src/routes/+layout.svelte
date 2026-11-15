@@ -113,9 +113,11 @@
 
 	/* The layout rule (navigation.ts, pageLayout; widths in app.css). The header spans the
 	   frame on every page. The primary pages fill the same frame, so their headings start at
-	   the header's edge; every other page is one narrow column, centred. */
+	   the header's edge; every other page is one narrow column, centred. With very large text,
+	   what does not fit beside the name of the app moves to a second row, not off the screen. */
 	header {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: 0.5rem;
 		max-width: var(--frame);
@@ -123,10 +125,14 @@
 		padding: 0.75rem 1rem;
 	}
 
-	/* With very large text, Sign in and Join move under the name instead of off the screen. A
-	   member's name shortens instead. */
-	header.guest {
-		flex-wrap: wrap;
+	/* A guest's Sign in and Join always show in full, so they move as a pair. A member's avatar
+	   and name take the rest of the row, the name shortening to fit; they move to a row of their
+	   own only when the avatar and the gap after it (2.75rem) no longer fit beside the name of
+	   the app: very large text on a small phone. */
+	header:not(.guest) .account {
+		flex: 1 1 0;
+		justify-content: flex-end;
+		min-width: 2.75rem;
 	}
 
 	.brand {

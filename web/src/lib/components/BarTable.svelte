@@ -18,6 +18,8 @@
 </script>
 
 <script lang="ts">
+	import { scrollRegion } from '#lib/scroll-region.ts';
+
 	let {
 		caption,
 		rowHeader,
@@ -41,6 +43,7 @@
 		row.text ?? (row.value === null ? '–' : row.value.toLocaleString('en-GB'));
 </script>
 
+<div class="table-scroll" {@attach scrollRegion}>
 <table class="bars">
 	<caption>{caption}</caption>
 	<thead>
@@ -63,13 +66,16 @@
 		{/each}
 	</tbody>
 </table>
+</div>
 {#if hint}<p class="hint">{hint}</p>{/if}
 
 <style>
+	/* No max-width: with large text on a small phone the table may be wider than the screen; it
+	   then scrolls in its .table-scroll box, its labels keeping their words whole instead of being
+	   squeezed down to a letter a line. */
 	.bars {
 		border-collapse: collapse;
 		margin-block: 0.5rem;
-		max-width: 100%;
 	}
 
 	.bars caption {
@@ -90,16 +96,14 @@
 		font-weight: 600;
 	}
 
-	/* The labels share each row with a fixed-width bar; with large text a long label (a place
-	   name) breaks inside a word rather than widening the table past the screen. */
-	.bars th {
-		overflow-wrap: anywhere;
-	}
-
+	/* A number never breaks; a column heading may, so it does not widen the table. */
 	.bars .value {
 		text-align: end;
-		white-space: nowrap;
 		font-variant-numeric: tabular-nums;
+	}
+
+	.bars td.value {
+		white-space: nowrap;
 	}
 
 	/* A fixed track per row, so the bars compare at a glance; the number stays the data. */

@@ -107,9 +107,12 @@
 		margin: 0 0 1rem;
 	}
 
-	/* List or Map: two plain links styled as a small segmented control. */
+	/* List or Map: two plain links styled as a small segmented control. With very large text Map
+	   wraps under List instead of running off the screen. */
 	.views {
 		display: inline-flex;
+		flex-wrap: wrap;
+		max-width: 100%;
 		gap: 0.25rem;
 		margin: 0 0 1rem;
 		padding: 0.25rem;

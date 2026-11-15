@@ -72,6 +72,19 @@ h1 {
 	border: 0;
 }
 
+/* Around a data table that, with large text on a small screen, can be wider than the page: the
+   table scrolls sideways in here instead (scroll-region.ts gives the box a tab stop while it does).
+   The caption wraps within the part of the box that shows, so it is never cut off. */
+.table-scroll {
+	container-type: inline-size;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+.table-scroll caption {
+	max-width: 100cqi;
+}
+
 /* Text that can be one long unbroken string: a web address, an email, a handle. It may break
    at any character, also inside a flex or grid item, so it never widens the page. */
 .wrap-anywhere {
@@ -570,6 +583,14 @@ legend {
 	color: var(--fg);
 	font-weight: 600;
 	text-decoration: none;
+}
+
+/* Each row is a grid of its own, so one long word in a name (a compound place name) would keep
+   its whole width and push the row past the screen; it breaks instead, only when it alone does
+   not fit a line. */
+.results.rows > li > .title,
+.results.rows > li > .meta {
+	overflow-wrap: anywhere;
 }
 
 .results.rows > li > a.title::after {
