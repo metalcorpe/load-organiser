@@ -179,7 +179,9 @@
       "icao": "LDSS",
       "operators": [
         {
-          "name": "Aeroklub Sinj"
+          "name": "Aeroklub Sinj",
+          "website": "https://www.aeroklubsinj.hr/",
+          "facebook": "https://www.facebook.com/aeroklubsinj"
         },
         {
           "name": "Padobranski klub Graviton (Split)"
@@ -207,6 +209,11 @@
           "url": "https://www.openstreetmap.org/way/39207385",
           "checked_on": "2026-11-14",
           "what": "OSM airfield geometry"
+        },
+        {
+          "url": "https://www.aeroklubsinj.hr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },

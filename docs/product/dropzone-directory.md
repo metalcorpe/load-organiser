@@ -67,6 +67,15 @@ Open details: initial directory sources and reuse permissions, minimum location 
 | Provisional places | Owner-only name + country, saved immediately (confirmed email required, like all private writes); optional link to a public venue; at most 200 per person (design default). Never public, never a suggestion, never visible on venue pages |
 | Authority | Maintenance requires the server-granted `reviewer` role (`python -m app.skydiver.access.grant reviewer <email>`). Listings have no claim, endorsement or verification fields, and public venue responses contain no counts or linked private records. Owner decision 2026-11-14: a listing may show who runs the dropzone, its season and aircraft *as its source states them* (`operators` with optional links, `season`, `aircraft`; reviewers edit them, changes are recorded as `details_updated` events). The page says these come from the source; they do not mean the operator takes part, claimed the listing or endorses anything |
 
+## Only dropzones a jumper can reach (owner decision 2026-11-16)
+
+An open (active or seasonal) researched dropzone is published only with a website or Facebook page of its own operator: a listing with nothing to follow lowers the directory's value for a fun jumper. Closed dropzones stay listed without one, so jumps logged there keep their place.
+
+- The loader (`devdata._has_link`) leaves an open dropzone without an operator link as a draft, locally and on staging.
+- A research pass on 2026-11-16 found the operator's own page for 61 of the 68 open dropzones that had none (often it was already among the record's sources but not on the operator). Each was opened and ties the operator to that airfield with 2025–2026 activity. The 7 not found stay drafts: `gb-weston-on-the-green`, `it-arezzo`, `it-udine-campoformido`, `it-san-vincenzo`, `it-terni`, `pt-rio-maior`, `pt-braganca`.
+- A rerun of `scripts/staging.sh load-dropzones` adds the new links to venues already on staging (`_operator_links`: a same-named operator without a link gets it; existing names and links are kept).
+- A public venue is never unlisted (jumps refer to it). If one already on staging has no operator link, the load report names it under `unlinked` for the owner to review in `/review`.
+
 ## Map view
 
 Requested by the owner 2026-11-14: `/dz?view=map` shows the same search as the list on a map. No paid

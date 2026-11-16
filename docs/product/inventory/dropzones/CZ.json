@@ -952,7 +952,9 @@
       "icao": "LKOL",
       "operators": [
         {
-          "name": "Hanácký paraklub"
+          "name": "Hanácký paraklub",
+          "website": "https://hanackyparaklub.cz/",
+          "facebook": "https://www.facebook.com/hanackyparaklub"
         }
       ],
       "status": "seasonal",
@@ -967,6 +969,11 @@
           "url": "https://davidmegginson.github.io/ourairports-data/airports.csv",
           "checked_on": "2026-11-14",
           "what": "Opened airport dataset; LKOL airfield coordinates."
+        },
+        {
+          "url": "https://hanackyparaklub.cz/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Recurring sport jumping established; daily tandem availability not established."

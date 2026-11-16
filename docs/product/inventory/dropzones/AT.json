@@ -904,7 +904,13 @@
       "longitude": 14.49558,
       "coordinates_source": "https://davidmegginson.github.io/ourairports-data/airports.csv (LOGI)",
       "icao": "LOGI",
-      "operators": "Add Airgasmo (https://airgasmo.com/), which publishes the Trieben jump dates. Keep Internationaler Pink Parachute Club only as the ÖAeC-authorised school at LOGI; no Pink schedule shows Trieben jumps.",
+      "operators": [
+        {
+          "name": "Airgasmo",
+          "website": "https://airgasmo.com/",
+          "facebook": null
+        }
+      ],
       "status": "seasonal",
       "status_evidence": "Codex's evidence does not show jumps at Trieben. The ÖAeC register (issued 3 Feb 2026) only records that Internationaler Pink Parachute Club holds a school authorisation with LOGI as its training site, and no Pink Skyvan schedule from Jan 2025 to Nov 2026 lists Trieben (13 archived versions checked, plus the live page). The jumps are run by Airgasmo, the airfield's listed parachute operator in 2024. Its own 2026 'Wann und Wo' schedule lists nine Trieben weekends from 14–17 May to 3–4 Oct 2026, its 16 Jun 2026 Instagram reel is tagged #trieben, and customer reviews dated 27 Jun 2025 and 2 Jul 2026 name Trieben as the jump site. That is weekend operation in season, which AT.json records as seasonal; the recorded coordinates are within about 50 m of the OSM aerodrome.",
       "sources": [

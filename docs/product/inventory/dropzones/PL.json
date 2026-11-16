@@ -779,6 +779,11 @@
       "icao": "EPOP",
       "operators": [
         {
+          "name": "Aeroklub Opolski",
+          "website": "https://aeroklubopole.pl/kurs-spadochronowy",
+          "facebook": "https://www.facebook.com/aeroklub.opolski"
+        },
+        {
           "name": "Skoki Spadochronowe Opole (Para Med & Rigging)"
         }
       ],
@@ -790,6 +795,11 @@
           "url": "https://fajnewypady.pl/przezycia/skok-spadochronowy",
           "checked_on": "2026-11-14",
           "what": "tandem price comparison of 25 Polish organisers; each entry says the organiser page was checked 2026-10-08"
+        },
+        {
+          "url": "https://aeroklubopole.pl/kurs-spadochronowy",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },
@@ -1157,6 +1167,11 @@
       "icao": "EPKA",
       "operators": [
         {
+          "name": "Szkoła Spadochronowa Merkury",
+          "website": "https://skoki-kielce.pl/",
+          "facebook": "https://www.facebook.com/skokikielce"
+        },
+        {
           "name": "Skoki Kielce"
         },
         {
@@ -1175,6 +1190,11 @@
           "url": "https://dlapilota.pl/wiadomosci/polska/xxvii-mistrzostwa-zwiazku-polskich-spadochroniarzy-w-celnosci-ladowania-0",
           "checked_on": "2026-11-14",
           "what": "news report, parachute accuracy championships at Masłów, 21–23 August 2026"
+        },
+        {
+          "url": "https://skoki-kielce.pl/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },
@@ -1324,7 +1344,8 @@
       "operators": [
         {
           "name": "Grupa Spadochronowa REAKTOR24",
-          "website": null
+          "website": "https://reaktor24.pl/",
+          "facebook": "https://www.facebook.com/grupa.spadochronowa.reaktor24"
         }
       ],
       "status": "active",
@@ -1339,6 +1360,11 @@
           "url": "https://ourairports.com/airports/EPKR/",
           "checked_on": "2026-11-14",
           "what": "Opened airport reference coordinates."
+        },
+        {
+          "url": "https://reaktor24.pl/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Site included for the resident operator activity; the visiting Sky Magic display is not counted as a separate dropzone."
