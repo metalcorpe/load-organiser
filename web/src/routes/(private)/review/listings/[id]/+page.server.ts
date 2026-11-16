@@ -9,7 +9,7 @@ import { isUuid } from '#lib/server/api/transport.ts';
 import { field } from '#lib/server/forms.ts';
 import { call, failStatus, isPage } from '#lib/server/maintenance.ts';
 import { requireReviewer } from '#lib/server/reviewer.ts';
-import { echo, list, text, version } from '#lib/server/review-forms.ts';
+import { echo, list, priceTiers, text, version } from '#lib/server/review-forms.ts';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -81,6 +81,7 @@ function body(data: FormData) {
 		price_amount: price,
 		price_currency: text(data, 'price_currency', 3)?.toUpperCase() ?? null,
 		price_basis: text(data, 'price_basis', 16),
+		price_tiers: priceTiers(data),
 		price_note: text(data, 'price_note', 400),
 		registration_url: text(data, 'registration_url'),
 		source_url: text(data, 'source_url'),

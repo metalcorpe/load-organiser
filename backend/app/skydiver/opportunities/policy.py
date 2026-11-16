@@ -17,9 +17,11 @@ from datetime import UTC, date, datetime, time, timedelta
 from decimal import Decimal, InvalidOperation
 from enum import StrEnum
 from functools import cache
+from typing import Any
 from zoneinfo import ZoneInfo, available_timezones
 
 from app.skydiver.directory.policy import DirectoryRuleError as RuleError
+from app.skydiver.directory.policy import clean_text
 from app.skydiver.opportunities.languages import ISO_LANGUAGES
 
 TITLE_MAX = 160
@@ -28,6 +30,8 @@ PREREQUISITES_MAX = 1000
 LOCATION_NOTE_MAX = 200
 PRICE_NOTE_MAX = 280
 PRICE_MAX = Decimal("100000")
+PRICE_TIERS_MAX = 6
+PRICE_TIER_LABEL_MAX = 60
 SPAN_MAX_DAYS = 366
 LANGUAGES_MAX = 8
 UNKNOWN_SORT_DATE = date(9999, 12, 31)  # postponed with no dates: listed last
@@ -248,6 +252,10 @@ def price(
         return Price(None, None, None)
     if not currency or not basis:
         raise RuleError("price_incomplete")
+    return _stated_price(amount, currency, basis)
+
+
+def _stated_price(amount: Decimal | float | str, currency: str, basis: str) -> Price:
     try:
         value = Decimal(str(amount)).quantize(Decimal("0.01"))
     except (InvalidOperation, ValueError) as error:
@@ -261,6 +269,107 @@ def price(
         return Price(value, code, PriceBasis(basis))
     except ValueError as error:
         raise RuleError("price_basis_invalid") from error
+
+
+@dataclass(frozen=True)
+class PriceTier:
+    """One stated charge: what it pays for, how much, and the dates it applies.
+
+    `from_on`/`until_on` are inclusive calendar dates in the opportunity's time zone;
+    None means open-ended. `optional` marks an extra the jumper may skip.
+    """
+
+    label: str
+    amount: Decimal
+    currency: str
+    basis: PriceBasis
+    from_on: date | None
+    until_on: date | None
+    optional: bool
+
+    def as_json(self) -> dict[str, Any]:
+        return {
+            "label": self.label,
+            "amount": f"{self.amount:.2f}",
+            "currency": self.currency,
+            "basis": self.basis.value,
+            "from_on": self.from_on.isoformat() if self.from_on else None,
+            "until_on": self.until_on.isoformat() if self.until_on else None,
+            "optional": self.optional,
+        }
+
+
+_TIER_KEYS = frozenset(
+    {"label", "amount", "currency", "basis", "from_on", "until_on", "optional"}
+)
+
+
+def _tier_date(value: object) -> date | None:
+    if value is None:
+        return None
+    if isinstance(value, datetime):
+        raise RuleError("price_tiers_invalid")
+    if isinstance(value, date):
+        return value
+    if isinstance(value, str):
+        try:
+            return date.fromisoformat(value)
+        except ValueError as error:
+            raise RuleError("price_tiers_invalid") from error
+    raise RuleError("price_tiers_invalid")
+
+
+def _price_tier(raw: object) -> PriceTier:
+    if not isinstance(raw, dict) or not set(raw) <= _TIER_KEYS:
+        raise RuleError("price_tiers_invalid")
+    label, amount = raw.get("label"), raw.get("amount")
+    currency, basis = raw.get("currency"), raw.get("basis")
+    optional = raw.get("optional", False)
+    if not isinstance(label, str) or not isinstance(optional, bool):
+        raise RuleError("price_tiers_invalid")
+    if not isinstance(currency, str) or not isinstance(basis, str):
+        raise RuleError("price_tiers_invalid")
+    if amount is None or isinstance(amount, bool):
+        raise RuleError("price_invalid")
+    if not isinstance(amount, Decimal | int | float | str):
+        raise RuleError("price_invalid")
+    clean_label = clean_text(
+        label, field="price_tier_label", maximum=PRICE_TIER_LABEL_MAX
+    )
+    stated = _stated_price(amount, currency, basis)
+    assert stated.amount is not None and stated.currency and stated.basis
+    from_on, until_on = _tier_date(raw.get("from_on")), _tier_date(raw.get("until_on"))
+    if from_on and until_on and from_on > until_on:
+        raise RuleError("price_tier_dates_out_of_order")
+    return PriceTier(
+        clean_label, stated.amount, stated.currency, stated.basis, from_on, until_on,
+        optional,
+    )  # fmt: skip
+
+
+def price_tiers(
+    raw: object,
+    *,
+    time_zone: str | None = None,
+    price_amount: Decimal | float | str | None = None,
+) -> list[PriceTier]:
+    """Dated or separate charges that replace the single stated price.
+
+    A listing states one price, a list of tiers, or neither. Tier dates are read in
+    the opportunity's zone, so any dated tier needs one. Order is kept as given.
+    """
+    if raw is None:
+        return []
+    if not isinstance(raw, list | tuple):
+        raise RuleError("price_tiers_invalid")
+    if len(raw) > PRICE_TIERS_MAX:
+        raise RuleError("price_tiers_too_many")
+    tiers = [_price_tier(item) for item in raw]
+    if tiers and price_amount is not None:
+        raise RuleError("price_tiers_with_amount")
+    if time_zone is None and any(t.from_on or t.until_on for t in tiers):
+        raise RuleError("price_tier_zone_required")
+    return tiers
 
 
 @dataclass(frozen=True)

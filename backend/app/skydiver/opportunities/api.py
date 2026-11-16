@@ -56,6 +56,31 @@ PriceBasisName = Literal["per_person", "per_jump", "per_day"]
 ProviderKindName = Literal["organization", "person"]
 
 
+class PriceTierOut(BaseModel):
+    """One stated charge. Dates are inclusive, in the opportunity's `time_zone`."""
+
+    label: str = Field(description="What the charge pays for, e.g. Registration.")
+    amount: str = Field(description="Decimal string with two places.")
+    currency: str
+    basis: PriceBasisName
+    from_on: date | None = Field(description="First day it applies; null: open.")
+    until_on: date | None = Field(description="Last day it applies; null: open.")
+    optional: bool = Field(description="An extra the jumper may skip.")
+
+
+class PriceTierIn(BaseModel):
+    label: Annotated[str, Field(min_length=1, max_length=120)]
+    amount: Decimal = Field(max_digits=10, decimal_places=2)
+    currency: Annotated[str, Field(max_length=3)]
+    basis: PriceBasisName
+    from_on: date | None = None
+    until_on: date | None = None
+    optional: bool = False
+
+
+PriceTiers = Annotated[list[PriceTierIn], Field(max_length=16)]
+
+
 class Problem(BaseModel):
     detail: str
 
@@ -124,6 +149,9 @@ class OpportunityOut(BaseModel):
     price_currency: str | None
     price_basis: PriceBasisName | None
     price_note: str | None
+    price_tiers: list[PriceTierOut] = Field(
+        description="Dated or separate charges; when set, `price_amount` is null."
+    )
     registration_url: str = Field(description="External registration or contact page.")
     source_url: str
     checked_on: date
@@ -201,6 +229,7 @@ class ReviewerOpportunityOut(BaseModel):
     price_currency: str | None
     price_basis: str | None
     price_note: str | None
+    price_tiers: list[PriceTierOut]
     registration_url: str | None
     source_url: str | None
     internal_note: str | None
@@ -310,6 +339,13 @@ class OpportunityFields(BaseModel):
     price_currency: Annotated[str, Field(max_length=3)] | None = None
     price_basis: PriceBasisName | None = None
     price_note: Note | None = None
+    price_tiers: PriceTiers | None = Field(
+        default=None,
+        description=(
+            "Replaces the single price. Null or omitted: unchanged on update "
+            "(none on create); empty list: clear."
+        ),
+    )
     registration_url: Url | None = None
     source_url: Url | None = None
     internal_note: Note | None = None
@@ -352,6 +388,10 @@ _ERRORS: dict[int | str, dict[str, Any]] = {
 
 def _amount(value: Decimal | None) -> str | None:
     return f"{value:.2f}" if value is not None else None
+
+
+def _tiers(tiers: tuple[dict[str, Any], ...]) -> list[PriceTierOut]:
+    return [PriceTierOut.model_validate(tier) for tier in tiers]
 
 
 def _public_provider(provider: Provider) -> ProviderOut:
@@ -404,6 +444,7 @@ def opportunity_out(item: Opportunity) -> OpportunityOut:
         price_currency=row.price_currency,
         price_basis=row.price_basis,  # type: ignore[arg-type]
         price_note=row.price_note,
+        price_tiers=_tiers(row.price_tiers),
         registration_url=row.registration_url,
         source_url=row.source_url,
         checked_on=row.checked_on,
@@ -462,6 +503,7 @@ def _reviewer_opportunity(
         price_currency=row.price_currency,
         price_basis=row.price_basis,
         price_note=row.price_note,
+        price_tiers=_tiers(row.price_tiers),
         registration_url=row.registration_url,
         source_url=row.source_url,
         internal_note=row.internal_note,

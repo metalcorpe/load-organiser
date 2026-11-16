@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+	coordinatesText,
 	dzHref,
 	dzView,
 	formatCoordinates,
@@ -98,5 +99,12 @@ describe('dropzone map helpers', () => {
 		expect(mapChosen(broken)).toBe(false);
 		expect(() => rememberMapChoice(broken)).not.toThrow();
 		expect(mapChosen(() => undefined)).toBe(false);
+	});
+});
+
+describe('coordinatesText', () => {
+	it('copies plain signed decimals that map apps accept', () => {
+		expect(coordinatesText(42.25857, 3.137)).toBe('42.25857, 3.13700');
+		expect(coordinatesText(-33.9, -70.1234567)).toBe('-33.90000, -70.12346');
 	});
 });

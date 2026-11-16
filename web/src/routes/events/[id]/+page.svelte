@@ -12,6 +12,7 @@
 		hostOf,
 		languageName,
 		listingMessage,
+		priceRows,
 		statusLabel
 	} from '#lib/listings.ts';
 	import type { PageProps } from './$types';
@@ -20,6 +21,8 @@
 	const item = $derived(data.item);
 	const status = $derived(statusLabel(item.status, item.ended));
 	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
+	// Dated tiers replace the single price: each shown with its dates and whether it still applies.
+	const tiers = $derived(priceRows(item));
 	const isSaved = $derived(
 		form && 'saved' in form ? true : form && 'removed' in form ? false : Boolean(data.saved.savedAt)
 	);
@@ -40,7 +43,7 @@
 			!item.audience.length && 'who can join',
 			!item.prerequisites && 'prerequisites',
 			!item.languages.length && 'languages',
-			!price && !item.price_note && 'price'
+			!price && !tiers.length && !item.price_note && 'price'
 		].filter((v): v is string => Boolean(v))
 	);
 	// The board search this was opened from stays with the page through sign-in and saving.
@@ -75,10 +78,9 @@
 		{#if status}<span class="badge status">{status}</span>{/if}
 	</p>
 	<h1 id="listing-title">{item.title}</h1>
-	<p class="when">
-		{formatRange(item.starts_on, item.ends_on)}
-		{#if item.time_zone && item.starts_on}<span class="tz">({item.time_zone} local dates)</span>{/if}
-	</p>
+	<!-- Calendar dates as the organizer gives them, in their own place: never shifted, and
+	     the zone that interprets them (`time_zone`) stays in the data, not the heading. -->
+	<p class="when">{formatRange(item.starts_on, item.ends_on)}</p>
 	<!-- A listed dropzone links to its page; a place the source only names stays text. -->
 	<p class="where">
 		{#if item.venue}<a href="/dz/{item.venue.id}">{item.venue.name}</a
@@ -108,7 +110,25 @@
 
 <!-- What a jumper needs to decide: cost, who it is for, what it asks, who runs it. -->
 <dl class="facts">
-	{#if price || item.price_note}
+	{#if tiers.length}
+		<dt>Price</dt>
+		<dd>
+			<ul class="tiers" aria-label="Prices">
+				{#each tiers as tier, i (i)}
+					<li class:past={tier.state === 'past'}>
+						<span class="tier-name">{tier.label}{tier.optional ? ' (optional)' : ''}</span>
+						<span class="amount">{tier.price}</span>
+						{#if tier.when || tier.state === 'past'}
+							<span class="hint"
+								>{[tier.when, tier.state === 'past' && 'no longer offered'].filter(Boolean).join(' · ')}</span
+							>
+						{/if}
+					</li>
+				{/each}
+			</ul>
+			{#if item.price_note}<span class="price-note">{item.price_note}</span>{/if}
+		</dd>
+	{:else if price || item.price_note}
 		<dt>Price</dt>
 		<dd>{price ?? ''}{price && item.price_note ? '. ' : ''}{item.price_note ?? ''}</dd>
 	{/if}
@@ -258,13 +278,6 @@
 		font-size: 1.15rem;
 	}
 
-	.tz {
-		font-family: var(--font-body);
-		font-weight: 400;
-		font-size: 0.9rem;
-		color: var(--brand-muted);
-	}
-
 	.where {
 		color: var(--brand-muted);
 	}
@@ -286,6 +299,39 @@
 		display: grid;
 		gap: 0.2rem;
 		justify-items: start;
+	}
+
+	.tiers {
+		display: grid;
+		gap: 0.4rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.tiers li {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0 0.5rem;
+	}
+
+	/* The organizer's note follows the list, set apart so it does not read as the last tier. */
+	.price-note {
+		margin-top: 0.4rem;
+	}
+
+	.tier-name {
+		font-weight: 600;
+	}
+
+	/* An ended tier stays readable, so the change is explained, but is struck through and
+	   said in words ("no longer offered"), never shown as the price. */
+	.tiers .past {
+		color: var(--muted);
+	}
+
+	.tiers .past .amount {
+		text-decoration: line-through;
 	}
 
 	.unstated {

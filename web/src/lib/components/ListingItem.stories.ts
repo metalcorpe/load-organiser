@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/sveltekit';
 import ListingItem from './ListingItem.svelte';
-import { listing } from '#lib/stories/fixtures.ts';
+import { listing, RISING_REGISTRATION } from '#lib/stories/fixtures.ts';
 
 const meta = {
 	title: 'Listings/Listing card',
@@ -21,6 +21,26 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Boogie: Story = {};
+
+export const PriceByDate: Story = {
+	name: 'Price that changes by date',
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Dated tiers: the card shows only the required tier in effect today in the listing\'s time zone, with its label. An expired tier is never shown; with no single tier in effect it says "See pricing".'
+			}
+		}
+	},
+	args: {
+		item: listing({
+			price_amount: null,
+			price_currency: null,
+			price_basis: null,
+			price_tiers: RISING_REGISTRATION
+		})
+	}
+};
 
 export const OneDay: Story = {
 	name: 'One day',

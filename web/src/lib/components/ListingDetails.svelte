@@ -45,23 +45,39 @@
 
 <style>
 	.listing-details {
+		/* The layout follows the disclosure's own width, not the window's: the same component
+		   sits in full-width and narrow columns. */
+		container-type: inline-size;
 		margin: 1.25rem 0 0.5rem;
 		border-top: 1px solid var(--border);
 		padding-top: 0.25rem;
 		color: var(--muted);
 	}
 
+	/* Narrow: each label above its value, so a long label never squeezes the value (a source
+	   domain) into a sliver. */
 	dl {
 		display: grid;
-		grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
-		gap: 0.35rem 1rem;
+		grid-template-columns: minmax(0, 1fr);
 		margin: 0.25rem 0 0.5rem;
 	}
 
 	dd {
-		margin: 0;
+		margin: 0 0 0.5rem;
 		overflow-wrap: anywhere;
 		color: var(--fg);
+	}
+
+	/* Wide enough for both: labels in a capped first column, values in the rest. */
+	@container (min-width: 30rem) {
+		dl {
+			grid-template-columns: minmax(8rem, 15rem) minmax(0, 1fr);
+			gap: 0.35rem 1rem;
+		}
+
+		dd {
+			margin: 0;
+		}
 	}
 
 	p {

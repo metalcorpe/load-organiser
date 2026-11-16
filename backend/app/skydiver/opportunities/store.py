@@ -86,6 +86,7 @@ def _opportunity(row: SkydiverOpportunity) -> OpportunityRow:
         price_currency=row.price_currency,
         price_basis=row.price_basis,
         price_note=row.price_note,
+        price_tiers=tuple(row.price_tiers or ()),
         registration_url=row.registration_url,
         source_url=row.source_url,
         internal_note=row.internal_note,

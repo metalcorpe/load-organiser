@@ -5,8 +5,8 @@
 	import { eventHref } from '#lib/listing-filters.ts';
 	import {
 		CATEGORY_LABEL,
+		cardPrice,
 		dateStub,
-		formatPrice,
 		formatRange,
 		shortRange,
 		statusLabel
@@ -26,7 +26,8 @@
 			? item.provider.name
 			: null
 	);
-	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
+	// Today's price only: never a tier that has already ended (cardPrice).
+	const price = $derived(cardPrice(item));
 </script>
 
 <article
