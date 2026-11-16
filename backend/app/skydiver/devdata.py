@@ -455,7 +455,8 @@ def _operator_links(
     """The stored operators with researched links added where a same-named operator
     has none (or, when none of them gets one, the researched operators that have a
     link, up to the limit); None when nothing would change. Existing names and links
-    stay."""
+    stay. The inventory is the source of researched links: a link removed in /review
+    comes back on the next run unless it is removed from the inventory too."""
     links = {search_key(o["name"]): o["url"] for o in researched if o.get("url")}
     merged = [
         {"name": o.name, "url": o.url or links.get(search_key(o.name))} for o in stored
@@ -563,14 +564,16 @@ def load_dropzones(
         "refused": [],
     }
 
-    def publishes(dz: Mapping[str, Any]) -> bool:
-        # An open dropzone a jumper cannot reach (no website or Facebook page of its
-        # own) stays a draft until research finds one (owner decision 2026-11-16).
-        if not (dz["status"] == "closed" or _has_link(dz)):
-            return False
+    def trusted(dz: Mapping[str, Any]) -> bool:
+        """Its researched coordinates and details may fill in a stored venue."""
         if publish is None:
             return dz["status"] in LOCAL_PUBLISH
         return dz["status"] in publish and _point(dz) is not None
+
+    def publishes(dz: Mapping[str, Any]) -> bool:
+        # An open dropzone a jumper cannot reach (no website or Facebook page of its
+        # own) stays a draft until research finds one (owner decision 2026-11-16).
+        return trusted(dz) and (dz["status"] == "closed" or _has_link(dz))
 
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
@@ -605,13 +608,17 @@ def load_dropzones(
                 current = _venue_status(engine, loaded[key])
                 if current != "draft":
                     report["skipped"] += 1
-                    if current == "listed" and not _has_link(dz):
+                    if (
+                        current == "listed"
+                        and dz["status"] != "closed"
+                        and not _has_link(dz)
+                    ):
                         # Public already, and a public venue is never unlisted (jumps
                         # refer to it): named for the owner to review instead.
                         report["unlinked"].append(key)
                     # Loaded before the details existed: add them where it may publish,
                     # to the surviving venue when this one was merged into another.
-                    target = _surviving(engine, loaded[key]) if publishes(dz) else None
+                    target = _surviving(engine, loaded[key]) if trusted(dz) else None
                     if target is not None:
                         report["detailed"] += _fill_details(
                             directory, actor, target, dz
@@ -636,7 +643,7 @@ def load_dropzones(
                     report["duplicates"].append(
                         {"key": key, "matched": str(match[0]), "by": match[1]}
                     )
-                    if publishes(dz):
+                    if trusted(dz):
                         report["located"] += _locate(directory, actor, match[0], dz)
                         report["detailed"] += _fill_details(
                             directory, actor, match[0], dz
