@@ -55,7 +55,7 @@
 	checkedOn={provider.checked_on}
 	note="Listed from public information. The organizer does not run this page, and no qualifications or affiliations are checked."
 />
-<p>
+<p class="correction">
 	<a
 		href="/submit?kind=correction&target_kind=provider&target_id={provider.id}&title={encodeURIComponent(
 			provider.name

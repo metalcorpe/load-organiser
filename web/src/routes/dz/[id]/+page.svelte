@@ -17,7 +17,9 @@
 	// One website action: with exactly one operator link it is "Visit website" and the name
 	// above stays plain text; with several, each name links to its own site instead.
 	const websites = $derived(venue.operators.filter((o) => o.url));
-	const website = $derived(websites.length === 1 ? websites[0].url : null);
+	const website = $derived(
+		venue.status !== 'closed' && websites.length === 1 ? websites[0].url : null
+	);
 	const place = $derived([venue.locality, countryName(venue.country)].filter(Boolean).join(', '));
 	const correctionHref = $derived(
 		`/submit?kind=correction&target_kind=venue&target_id=${venue.id}&title=${encodeURIComponent(venue.name)}`
@@ -147,7 +149,7 @@
 	note="Listed from public information. The dropzone does not run this page."
 />
 {#if venue.status === 'closed'}
-	<p><a href={correctionHref}>Suggest a correction</a></p>
+	<p class="correction"><a href={correctionHref}>Suggest a correction</a></p>
 {/if}
 
 <style>

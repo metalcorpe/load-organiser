@@ -189,9 +189,9 @@
 <ListingDetails
 	sourceUrl={item.source_url}
 	checkedOn={item.checked_on}
-	note="Summarized from public information. Not run by the organizer."
+	note="Summarized from public information. The organizer does not run this page."
 />
-<p>
+<p class="correction">
 	<a
 		href="/submit?kind=correction&target_kind=opportunity&target_id={item.id}&title={encodeURIComponent(
 			item.title

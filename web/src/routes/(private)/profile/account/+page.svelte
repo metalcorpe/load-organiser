@@ -127,7 +127,7 @@
 		if you want a copy.
 	</p>
 	<p class="hint">
-		Suggestions, corrections and feedback you sent are kept without your name, including what you
+		Suggestions, corrections, problem reports and feedback you sent are kept without your name, including what you
 		wrote. People who already saw or copied something you shared publicly keep their copy.
 		<a href="/privacy#deletion">More about what deletion removes and keeps</a>.
 	</p>
