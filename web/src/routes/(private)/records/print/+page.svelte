@@ -90,8 +90,8 @@
 		<section class="sheet" aria-labelledby="sheet-title">
 			<h2 id="sheet-title">Logbook{o.owner ? ` of ${o.owner}` : ''}</h2>
 			<p class="sheet-meta">
-				{range} · {count(r.jumps.length)} · printed from Load Organiser. Self-reported entries; a
-				signature is the signer's own confirmation.
+				{range} · {count(r.jumps.length)} · printed from Load Organiser. Entries are the jumper's own
+				records; a signature is the signer's own confirmation.
 			</p>
 			{#if r.incomplete}
 				<p class="form-error" role="alert">Only the first {count(r.jumps.length)} are shown.</p>

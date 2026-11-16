@@ -17,13 +17,13 @@
 	<title>Dropzones · Load Organiser</title>
 	<meta
 		name="description"
-		content="Source-backed directory of skydiving dropzones. A listing is not an endorsement and does not mean the dropzone uses Load Organiser."
+		content="Find skydiving dropzones in Europe by name or country: who runs them, their season and upcoming events."
 	/>
 </svelte:head>
 
 <ExploreSwitch />
 <h1>Dropzones</h1>
-<p class="lede">Dropzones from public sources. A listing is not an endorsement.</p>
+<p class="lede">Search by name or country, or browse the map.</p>
 
 <form method="GET" class="form search" role="search" data-sveltekit-keepfocus>
 	<div class="field">
@@ -61,10 +61,9 @@
 		<h2 id="empty-heading">{filtered ? 'No listed dropzones match' : 'No dropzones are listed yet'}</h2>
 		<p>
 			{#if filtered}
-				Try another spelling or country. Coverage is limited to reviewed, source-backed listings.
+				Try another spelling, a former name or another country.
 			{:else}
-				Listings appear only after a source has been reviewed. Nothing here is a complete
-				directory.
+				Dropzones appear here once they have been checked.
 			{/if}
 			Signed-in jumpers can keep a <a href="/places">private place</a> for any dropzone that is missing,
 			or <a href="/submit?kind=suggest_venue">suggest it</a>.

@@ -120,21 +120,33 @@ test.describe('discover board', () => {
 		// A filter that excludes it gives an honest empty state.
 		await page.goto(`/?q=${base}&discipline=wingsuit`);
 		await expect(page.getByText('No listings match')).toBeVisible();
+		await expect(page.getByText('Try fewer filters')).toBeVisible();
 
 		await page.goto(`/?q=${base}`);
 		await page.getByRole('link', { name: listing.title }).click();
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.title);
 		await expect(page.getByText('10–14 July 2027 (Europe/Lisbon local dates)')).toBeVisible();
 		await expect(page.getByText('C licence or 200 jumps')).toBeVisible();
-		await expect(page.getByText('As stated by the source')).toBeVisible();
-		await expect(page.getByText('Availability is not tracked here')).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Open organizer registration' })).toHaveAttribute(
+		await expect(page.getByText('The organizer decides who can take part.')).toBeVisible();
+		await expect(page.getByText('Registration is handled by the organizer on')).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Register with the organizer' })).toHaveAttribute(
 			'href',
 			'https://example.org/register'
 		);
+		// Where it came from is folded away, after the facts and actions.
+		await expect(page.locator('details.listing-details')).not.toHaveAttribute('open', '');
+		await page.locator('summary', { hasText: 'Listing details' }).click();
+		await expect(page.locator('details.listing-details')).toContainText(
+			'Last checked against the source'
+		);
+		await expect(page.getByRole('main')).not.toContainText(/verified|official/i);
 		await page.getByRole('link', { name: listing.provider }).click();
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.provider);
 		await expect(page.getByRole('link', { name: listing.title })).toBeVisible();
+		// What they run first; no title or qualification is implied.
+		await expect(page.getByRole('heading', { name: 'Upcoming events' })).toBeVisible();
+		await expect(page.getByRole('main')).not.toContainText(/coach|qualified|certified|official/i);
+		await expect(page.getByRole('link', { name: 'Suggest a correction' })).toBeVisible();
 	});
 
 	test('the sign-in sheet closes with Escape and Back, and returns focus', async ({ page }) => {

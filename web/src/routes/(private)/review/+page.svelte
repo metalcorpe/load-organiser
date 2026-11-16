@@ -8,15 +8,14 @@
 </script>
 
 <svelte:head>
-	<title>Maintenance · Load Organiser</title>
+	<title>Reviewer tools · Load Organiser</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<h1>Maintenance</h1>
+<h1>Reviewer tools</h1>
 <p class="lede">
-	Reviewer tools. Every change is recorded with your account. Due checks follow the operating
-	cadence: listings starting within 30 days weekly, postponed listings weekly, dropzones and
-	organizers every 60 days.
+	Every change is recorded with your account. Due checks follow the operating cadence: listings
+	starting within 30 days weekly, postponed listings weekly, dropzones and organizers every 60 days.
 </p>
 
 <p class="actions">

@@ -27,7 +27,7 @@
 <p><a href="/records">Records</a></p>
 <h1>Gear</h1>
 <PrivacyLabel />
-<p class="lede">Containers, canopies and AADs, private to you. Not proof of ownership or airworthiness.</p>
+<p class="lede">Your containers, canopies and AADs, with the service dates and limits you track.</p>
 
 {#if !data.emailVerified}
 	<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to save gear.</p>
@@ -51,8 +51,8 @@
 			<DueList items={data.due} {today} label="Due dates" detailed />
 		{/if}
 		<p class="hint">
-			From dates you entered and, for a reserve, your last recorded repack. Not an airworthiness
-			check: your rigger and the manufacturer decide that.
+			From the dates you entered and, for a reserve, your last recorded repack. Your rigger and the
+			manufacturer decide whether gear is airworthy.
 		</p>
 	</section>
 {/if}
@@ -72,7 +72,7 @@
 					· {RELATION_LABEL[item.component.relation]}
 				</span>
 				{#if item.rig}<span class="meta">In {item.rig.rig_label} since {formatDay(item.rig.from_on)}</span>{/if}
-				{#if item.next_due}<span class="meta">Next due you entered: {formatDay(item.next_due)}</span>{/if}
+				{#if item.next_due}<span class="meta">Next due: {formatDay(item.next_due)}</span>{/if}
 			</li>
 		{/each}
 	</ul>

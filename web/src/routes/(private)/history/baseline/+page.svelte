@@ -42,8 +42,8 @@
 </p>
 <p class="hint">
 	Your total becomes that number plus the jumps you record from that date on. Entries you record before
-	the date stay in your logbook but are not counted twice. The count is your own statement: it adds no
-	dated jumps or gear use and is not evidence of currency.
+	the date stay in your logbook but are not counted twice. The count has no dates, so it adds nothing
+	to your gear use or jump currency.
 </p>
 
 {#if !data.history.ok}

@@ -13,6 +13,7 @@
 # runs backend commands from an empty directory with a cleared environment.
 # ENVIRONMENT=local, so the dev listings loader is allowed here and nowhere else.
 # Web: http://127.0.0.1:5180   API: http://127.0.0.1:8150
+# The web preview runs with DEMO_DATA=true: every page says it is a local demo copy.
 set -euo pipefail
 SWITCHES='export SKYDIVER_REGISTRATION_OPEN=true SKYDIVER_SUBMISSIONS_OPEN=true SKYDIVER_PUBLISHING_OPEN=true SKYDIVER_MAX_ACCOUNTS=20'
 
@@ -87,7 +88,8 @@ start() {
   (cd "$W" && WRANGLER_SEND_METRICS=false exec npx wrangler dev .svelte-kit/cloudflare/_worker.js \
     --port "$WEB_PORT" --ip 127.0.0.1 --persist-to "$DEV/wrangler" \
     --var "API_ORIGIN:http://127.0.0.1:$API_PORT" --var "APP_ORIGIN:$WEB_ORIGIN" \
-    --var SESSION_COOKIE_MODE:localhost-dev --var "API_PROXY_KEY:$proxy_key") >"$DEV/web.log" 2>&1 &
+    --var SESSION_COOKIE_MODE:localhost-dev --var DEMO_DATA:true \
+    --var "API_PROXY_KEY:$proxy_key") >"$DEV/web.log" 2>&1 &
   web_pid=$!
   wait
 }

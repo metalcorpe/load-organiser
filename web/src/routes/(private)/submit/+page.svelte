@@ -32,25 +32,21 @@
 
 <h1>Suggest or report</h1>
 <p class="lede">
-	Tell the maintainer about a missing listing, outdated details or a problem, or send feedback about
-	the beta. Listings change only after a person checks them against a source. Your name and email are
-	not shown to the reviewer.
+	Tell us about a missing listing, outdated details or a problem, or send feedback about the beta.
+	We check each one before changing a listing. The people who check it don't see your name or email.
 </p>
 
-{#if sent}<p role="status" class="ok">Sent. You can follow its status below.</p>{/if}
+{#if sent}<p role="status" class="ok">Received. We'll review it. You can follow it below.</p>{/if}
 
 <section aria-labelledby="form-heading">
 	<h2 id="form-heading">{data.target && data.title ? `About: ${data.title}` : 'New submission'}</h2>
 	{#if data.paused}
 		<Notice title="Sending is paused" tone="warn">
-			<p>
-				New submissions are not being taken right now. Please come back later. Your earlier
-				submissions are listed below.
-			</p>
+			<p>You can't send anything right now. Try again later. What you sent before is below.</p>
 		</Notice>
 	{:else}
 	{#if !data.emailVerified}
-		<p class="hint">Confirm your email address on your <a href="/profile">profile</a> first.</p>
+		<p class="hint">Confirm your email address on your <a href="/profile">profile</a> to send.</p>
 	{/if}
 	<form method="POST" class="form" novalidate>
 		{#if form && 'error' in form}
@@ -90,7 +86,7 @@
 				maxlength="2048"
 				defaultValue={form && 'values' in form ? form.values.source_url : ''}
 			/>
-			<p class="hint">The organizer's or dropzone's own page that shows this.</p>
+			<p class="hint">A link to the organizer's or dropzone's own page helps us check it.</p>
 		</div>
 		<div class="form-actions"><button class="button" type="submit">Send</button></div>
 	</form>
@@ -110,7 +106,7 @@
 				<span class="tag">{STATUS_LABEL[item.status]}</span>
 				<span class="meta">Sent {formatDay(item.created_at.slice(0, 10))}</span>
 				<span class="meta message">{item.message}</span>
-				{#if item.resolution_note}<span class="meta">Reviewer: {item.resolution_note}</span>{/if}
+				{#if item.resolution_note}<span class="meta">Reply: {item.resolution_note}</span>{/if}
 			</li>
 		{/each}
 	</ul>

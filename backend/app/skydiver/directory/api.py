@@ -79,7 +79,7 @@ Operators = Annotated[
 
 
 class VenueOut(BaseModel):
-    """Public venue: source-backed identity only. No operator or endorsement data."""
+    """Public venue: what a visitor may see. Never `internal_note` (reviewer-only)."""
 
     id: uuid.UUID
     name: str
@@ -89,9 +89,12 @@ class VenueOut(BaseModel):
     longitude: float | None
     status: Literal["listed", "closed"]
     aliases: list[AliasOut]
-    source_url: str
-    source_note: str | None
-    checked_on: date
+    source_url: str = Field(
+        description="Where the listing was taken from (attribution)."
+    )
+    checked_on: date = Field(
+        description="When a reviewer last checked the listing against its source."
+    )
     operators: list[OperatorOut] = Field(
         description="Who runs it, as the source states; not a claim or endorsement."
     )
@@ -182,7 +185,7 @@ class VenueCreateIn(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     source_url: Url | None = None
-    source_note: Note | None = None
+    internal_note: Note | None = None
     checked_on: date | None = None
     operators: Operators = []
     season: Detail | None = None
@@ -199,7 +202,7 @@ class VenueUpdateIn(BaseModel):
     latitude: float | None = None
     longitude: float | None = None
     source_url: Url | None = None
-    source_note: Note | None = None
+    internal_note: Note | None = None
     checked_on: date | None = None
     operators: Operators | None = None
     season: Detail | None = None
@@ -239,7 +242,7 @@ class ReviewerVenueOut(BaseModel):
     merged_into_id: uuid.UUID | None
     aliases: list[AliasOut]
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     operators: list[OperatorOut]
     season: str | None
@@ -266,7 +269,6 @@ def _public(venue: Venue) -> VenueOut:
         status="closed" if venue.status is VenueStatus.CLOSED else "listed",
         aliases=[AliasOut(name=a.name, kind=a.kind.value) for a in venue.aliases],
         source_url=venue.source_url,
-        source_note=venue.source_note,
         checked_on=venue.checked_on,
         operators=_operators(venue),
         season=venue.season,
@@ -308,7 +310,7 @@ def _reviewer(venue: Venue, events: list[VenueEvent]) -> ReviewerVenueOut:
         merged_into_id=venue.merged_into_id,
         aliases=[AliasOut(name=a.name, kind=a.kind.value) for a in venue.aliases],
         source_url=venue.source_url,
-        source_note=venue.source_note,
+        internal_note=venue.internal_note,
         checked_on=venue.checked_on,
         operators=_operators(venue),
         season=venue.season,

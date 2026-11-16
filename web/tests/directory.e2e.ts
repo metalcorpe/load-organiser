@@ -61,13 +61,53 @@ test.describe('public dropzone directory', () => {
 		await page.getByRole('link', { name: `${base} Ampuriabrava` }).click();
 
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(`${base} Ampuriabrava`);
-		await expect(page.getByText('Spain')).toBeVisible();
-		await expect(page.getByRole('link', { name: 'example.org' })).toHaveAttribute(
-			'href',
-			SOURCE.source_url
-		);
-		await expect(page.getByText('1 November 2026')).toBeVisible();
-		await expect(page.getByText('does not mean the dropzone')).toBeVisible();
+		await expect(page.getByText('Empuriabrava, Spain')).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Planning a visit?' })).toBeVisible();
+		await expect(page.getByRole('link', { name: 'Suggest a correction' })).toBeVisible();
+
+		// Where the listing came from is secondary: folded under "Listing details", opened from
+		// the keyboard, and the date is labelled as a check against the source, nothing more.
+		const source = page.getByRole('link', { name: 'example.org' });
+		await expect(source).toBeHidden();
+		const summary = page.locator('summary', { hasText: 'Listing details' });
+		await summary.focus();
+		await page.keyboard.press('Enter');
+		await expect(source).toBeVisible();
+		await expect(source).toHaveAttribute('href', SOURCE.source_url);
+		const details = page.locator('details.listing-details');
+		await expect(details).toContainText('Last checked against the source');
+		await expect(details).toContainText('1 November 2026');
+		await expect(page.getByRole('main')).not.toContainText(/verified|confirmed|official/i);
+		await page.keyboard.press('Enter');
+		await expect(source).toBeHidden();
+	});
+
+	test("a reviewer's internal note never reaches the public page", async ({ page, browser }) => {
+		const reviewer = await reviewerSession();
+		const marker = `dev-data:${token()} Unreviewed candidate, local development only.`;
+		const venue = await createVenue(reviewer, {
+			name: `${token()} Noted field`,
+			internal_note: marker
+		});
+		await page.goto(`/dz/${venue.id}`);
+		await page.locator('summary', { hasText: 'Listing details' }).click();
+		const html = await page.content();
+		expect(html).not.toContain('dev-data');
+		expect(html).not.toContain('Unreviewed candidate');
+		expect(html).not.toContain('internal_note');
+
+		// The reviewer still has it, in the reviewer tools.
+		const signedIn = await browser.newContext({ ignoreHTTPSErrors: true, baseURL: ORIGIN });
+		const reviewerPage = await signedIn.newPage();
+		const { email, password } = reviewerCredentials();
+		await reviewerPage.goto('/sign-in');
+		await reviewerPage.getByLabel('Email', { exact: true }).fill(email);
+		await reviewerPage.getByLabel('Password', { exact: true }).fill(password);
+		await reviewerPage.getByRole('button', { name: 'Sign in' }).click();
+		await expect(reviewerPage.getByTestId('current-account')).toBeVisible();
+		await reviewerPage.goto(`/review/dropzones/${venue.id}`);
+		await expect(reviewerPage.getByLabel(/Internal note/)).toHaveValue(marker);
+		await signedIn.close();
 	});
 
 	test('a merged listing redirects to the surviving one', async ({ page, request }) => {
@@ -118,14 +158,14 @@ test.describe('public dropzone directory', () => {
 			aircraft: 'Pilatus PC-6'
 		});
 		await page.goto(`/dz/${venue.id}`);
-		const operatorLink = page.getByRole('link', { name: 'Skydive Example' });
-		await expect(operatorLink).toHaveAttribute('href', 'https://skydive.example/');
-		await expect(operatorLink).toHaveAttribute('rel', /nofollow/);
-		await expect(page.getByText('Paraclub Example')).toBeVisible();
+		// One operator website: one "Visit website" action, the name itself plain text.
+		const website = page.getByRole('link', { name: 'Visit website' });
+		await expect(website).toHaveAttribute('href', 'https://skydive.example/');
+		await expect(website).toHaveAttribute('rel', /nofollow/);
+		await expect(page.getByRole('link', { name: 'Skydive Example' })).toHaveCount(0);
+		await expect(page.getByText('Skydive Example, Paraclub Example')).toBeVisible();
 		await expect(page.getByText('April–October, weekends')).toBeVisible();
 		await expect(page.getByText('Pilatus PC-6')).toBeVisible();
-		// Said to come from the source, not from the operator.
-		await expect(page.getByText(/as that source states them/)).toBeVisible();
 
 		const { email, password } = reviewerCredentials();
 		await page.goto('/sign-in');
@@ -142,7 +182,7 @@ test.describe('public dropzone directory', () => {
 
 		await page.goto(`/dz/${venue.id}`);
 		await expect(page.getByText('New Operator')).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Skydive Example' })).toHaveCount(0);
+		await expect(page.getByRole('link', { name: 'Visit website' })).toHaveCount(0);
 		await expect(page.getByText('Paraclub Example')).toHaveCount(0);
 	});
 });

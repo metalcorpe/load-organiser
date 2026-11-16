@@ -59,13 +59,28 @@ Open details: initial directory sources and reuse permissions, minimum location 
 
 | Area | Behaviour |
 | --- | --- |
-| Venue identity | Random UUID that never changes. Name, ISO 3166-1 country, optional locality and coordinates, `source_url` + `checked_on` (required unless draft), optional source note |
+| Venue identity | Random UUID that never changes. Name, ISO 3166-1 country, optional locality and coordinates, `source_url` + `checked_on` (required unless draft), optional internal note (reviewer-only; see below) |
 | Status | `draft` (reviewer-only, not public) → `listed` ⇄ `closed` (historical, still public and selectable). A public venue cannot return to draft; it is closed instead. `merged` is set only by a merge |
 | Rename / relocation | Same venue; the previous name becomes a searchable `former` alias. Location changes are recorded as `relocated`, separately from renames. Every change is an event with the reviewer's account |
 | Duplicates | Only an explicit reviewer merge. The source becomes `merged` → target; its name and aliases become `merged` aliases of the target. Old IDs keep resolving (the web redirects `/dz/{old}` with 301). Stored private references are not rewritten. Equal names are never merged automatically; a public venue cannot merge into a draft |
 | Search | Name, alias and former names; case-, accent- and punctuation-insensitive; optional country; keyset pages of 20 (max 50). Public results are listed and closed venues only |
 | Provisional places | Owner-only name + country, saved immediately (confirmed email required, like all private writes); optional link to a public venue; at most 200 per person (design default). Never public, never a suggestion, never visible on venue pages |
 | Authority | Maintenance requires the server-granted `reviewer` role (`python -m app.skydiver.access.grant reviewer <email>`). Listings have no claim, endorsement or verification fields, and public venue responses contain no counts or linked private records. Owner decision 2026-11-14: a listing may show who runs the dropzone, its season and aircraft *as its source states them* (`operators` with optional links, `season`, `aircraft`; reviewers edit them, changes are recorded as `details_updated` events). The page says these come from the source; they do not mean the operator takes part, claimed the listing or endorses anything |
+
+## Internal notes and listing provenance (2026-11-16)
+
+Venues, organizers and event listings each carry four kinds of information, kept apart:
+
+| Kind | Where it lives | Who sees it |
+|---|---|---|
+| Public facts | Structured fields: name, location, operators, season, aircraft; for events dates, price, audience, prerequisites, registration link | Everyone, as the main content of the page |
+| Attribution | `source_url`: the page the listing was taken from. It may be a third party, so it is labelled "Source", never "Official website" | Everyone, folded under "Listing details" |
+| Information check | `checked_on`: the day a reviewer last checked the listing against its source. Labelled "Last checked against the source", never "Verified" or "Confirmed" | Everyone, folded under "Listing details" |
+| Internal note | `internal_note` (database column `source_note`, kept so no migration or rollover is needed): research status, inventory reference, development markers, editorial remarks | Reviewers only: the reviewer API (`/directory/...`) and `/review` |
+
+The public API models (`VenueOut`, `OpportunityOut`, `ProviderOut`) have no note field, so a note cannot reach a public page, its metadata or the client payload. The web types are generated from those models, so a page that tried to show one would not compile. Existing notes were not copied anywhere public: a fact worth showing goes into a structured field by a reviewer. One structured fact is derived by the research loader: a dropzone researched as `seasonal` without stated dates gets the Season "Open part of the year" (`devdata.SEASONAL_UNDATED`). Hosted dropzones loaded before this change get it on the next `scripts/staging.sh load-dropzones` run only if they have no details yet.
+
+Publication rules are unchanged: drafts and `uncertain` research leads stay unpublished. A local copy loaded with unreviewed sample data says so once on every page ("Local demo copy…") through the web setting `DEMO_DATA=true`, which only `scripts/dev.sh` sets, instead of each listing carrying a `dev-data:` marker.
 
 ## Only dropzones a jumper can reach (owner decision 2026-11-16)
 

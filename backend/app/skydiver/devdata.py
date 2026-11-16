@@ -16,8 +16,8 @@ seed sets them) and the database is on this machine. Records go through the same
 refuse stays unpublished and is reported: a listing without dates waits in
 the review queue.
 
-Running it again adds only records not loaded before: each record's source note
-carries `dev-data:<key>`.
+Running it again adds only records not loaded before: each record's internal note
+(reviewer-only, never public) carries `dev-data:<key>`.
 
 The researched dropzone inventory (`dropzones/<CC>.json` next to PATH, or DIR; files
 starting with `_` are notes and are skipped) loads as venues with coordinates and
@@ -30,7 +30,9 @@ several airfields. Each venue is created as a
 draft and made public (listed, or closed for researched `closed` dropzones) in one
 step at the end; `uncertain` ones stay drafts, as on staging: an unconfirmed lead is
 not shown as a dropzone. So does an open dropzone without a website or Facebook page
-of its operator (owner decision 2026-11-16): a jumper could not reach it. The research status is in the source note. Invalid records
+of its operator (owner decision 2026-11-16): a jumper could not reach it. The research
+status is in the internal note; a seasonal dropzone without stated dates gets the
+Season "Open part of the year". Invalid records
 are refused and reported; the rest still load.
 """
 
@@ -57,9 +59,9 @@ from app.models import User
 from app.skydiver.access.policy import Actor, Role, actor_roles
 from app.skydiver.directory.policy import (
     DETAIL_MAX,
+    INTERNAL_NOTE_MAX,
     OPERATOR_NAME_MAX,
     OPERATORS_MAX,
-    SOURCE_NOTE_MAX,
     DirectoryRuleError,
     VenueStatus,
     clean_text,
@@ -108,13 +110,18 @@ def _slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", plain.lower()).strip("-")[:60]
 
 
+# Shown as the Season of a dropzone researched as seasonal whose dates are not known.
+SEASONAL_UNDATED = "Open part of the year"
+
+
 def _note(key: str, extra: str | None = None) -> str:
     note = f"{MARK}{key} Unreviewed candidate, local development only."
-    return f"{note} {extra}"[:SOURCE_NOTE_MAX] if extra else note
+    return f"{note} {extra}"[:INTERNAL_NOTE_MAX] if extra else note
 
 
-# The source note shows on the public dropzone page, so a hosted record says what it is
-# in words and carries its inventory key at the end (how a later run finds it).
+# The internal note is reviewer-only (never in a public response): it names the research
+# status for the reviewer and carries the inventory key at the end (how a later run
+# finds the record).
 HOSTED_REF = re.compile(r"Inventory ref ([a-z0-9-]+)\.$")
 
 
@@ -442,9 +449,14 @@ def _details(dropzone: Mapping[str, Any]) -> dict[str, Any]:
             value[: DETAIL_MAX - 1] + "…" if len(value) > DETAIL_MAX else value or None
         )
 
+    # A seasonal dropzone without stated dates still tells a visitor something useful;
+    # the research status itself (and every other one) stays in the internal note.
+    season = text("season") or (
+        SEASONAL_UNDATED if dropzone.get("status") == "seasonal" else None
+    )
     return {
         "operators": operators,
-        "season": text("season"),
+        "season": season,
         "aircraft": text("aircraft"),
     }
 
@@ -660,7 +672,7 @@ def load_dropzones(
                             latitude=dz.get("latitude"),
                             longitude=dz.get("longitude"),
                             source_url=url,
-                            source_note=(
+                            internal_note=(
                                 _note(key, f"Research status: {status}.")
                                 if publish is None
                                 else _hosted_note(key, status)
@@ -729,7 +741,7 @@ def load(
                 latitude=v.get("latitude"),
                 longitude=v.get("longitude"),
                 source_url=v["source_url"],
-                source_note=_note(v["key"]),
+                internal_note=_note(v["key"]),
                 checked_on=DRAFTED_ON,
             ),
         )
@@ -752,7 +764,7 @@ def load(
             "country": p.get("country"),
             "website_url": p.get("website_url"),
             "source_url": p.get("source_url"),
-            "source_note": _note(p["key"], p.get("note")),
+            "internal_note": _note(p["key"], p.get("note")),
             "checked_on": DRAFTED_ON,
         }
         provider = opportunities.create_provider(actor, fields, publish=True)
@@ -772,7 +784,7 @@ def load(
             country=o["country"],
             provider_id=providers[o["provider"]],
             venue_id=venues.get(o["venue"]) if o.get("venue") else None,
-            source_note=_note(key),
+            internal_note=_note(key),
             checked_on=DRAFTED_ON,
         )
         # Training methods (AFF, static line, tandem...) are not disciplines.

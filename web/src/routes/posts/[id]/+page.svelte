@@ -21,10 +21,7 @@
 
 <h1>Jump on {formatDay(post.jumped_on)}</h1>
 <JumpCard {post} link={false} />
-<p class="hint">
-	A shared summary chosen by the jumper. It is not a verified record and does not give access to
-	their logbook or gear.
-</p>
+<p class="hint">Logged and shared by the jumper. Their logbook and gear stay private.</p>
 
 {#if post.is_owner}
 	<p>
@@ -36,8 +33,7 @@
 	<form method="POST" action="?/report" class="form">
 		{#if form && form.form === 'report' && 'done' in form}
 			<p role="status" class="ok">
-				Report received. A reviewer will look at it; that is not a promise of a particular outcome or
-				time. The person is not told who reported them.
+				Report received. A reviewer will look at it. The person is not told who reported them.
 			</p>
 		{/if}
 		{#if reportError}<p class="form-error" role="alert">{reportError}</p>{/if}

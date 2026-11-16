@@ -1,3 +1,4 @@
+import { DEMO_DATA } from '$app/env/private';
 import type { LayoutServerLoad } from './$types';
 
 // Minimal identity for rendering the current account. Never the session secret.
@@ -14,6 +15,8 @@ export const load: LayoutServerLoad = ({ locals }) => {
 					reviewer: viewer.reviewer
 				}
 			: null,
-		sessionUnconfirmed: locals.sessionUnconfirmed
+		sessionUnconfirmed: locals.sessionUnconfirmed,
+		// Said once for the whole copy, not per listing (scripts/dev.sh sets it).
+		demoData: DEMO_DATA
 	};
 };

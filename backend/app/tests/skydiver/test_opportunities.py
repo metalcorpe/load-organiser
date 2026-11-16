@@ -27,11 +27,11 @@ PUBLIC_FIELDS = {
     "id", "title", "category", "status", "ended", "provider", "venue", "country",
     "location_note", "starts_on", "ends_on", "time_zone", "disciplines", "audience",
     "languages", "summary", "prerequisites", "price_amount", "price_currency",
-    "price_basis", "price_note", "registration_url", "source_url", "source_note",
+    "price_basis", "price_note", "registration_url", "source_url",
     "checked_on",
 }  # fmt: skip
 PROVIDER_FIELDS = {
-    "id", "name", "kind", "country", "website_url", "source_url", "source_note",
+    "id", "name", "kind", "country", "website_url", "source_url",
     "checked_on",
 }  # fmt: skip
 
@@ -705,3 +705,26 @@ def test_countries_lists_only_places_with_upcoming_public_listings(api: Api) -> 
     assert "NR" not in countries  # not public
     assert "PW" not in countries  # ended
     assert countries == sorted(set(countries))
+
+
+def test_internal_notes_stay_with_reviewers(api: Api) -> None:
+    """Organizer and listing notes for reviewers never reach a public body."""
+    base = token()
+    marker = "dev-data:zz-test Unreviewed candidate, local development only."
+    provider = api.provider(f"{base} Notes Co", internal_note=marker)
+    item = api.listed(f"{base} Notes Boogie", provider["id"], internal_note=marker)
+    reviewer = api.ok("GET", f"/directory/opportunities/{item['id']}")
+    assert reviewer["internal_note"] == marker
+    assert (
+        api.ok("GET", f"/directory/providers/{provider['id']}")["internal_note"]
+        == marker
+    )
+    public = [
+        api.call("GET", "/opportunities", q=base),
+        api.call("GET", f"/opportunities/{item['id']}"),
+        api.call("GET", f"/providers/{provider['id']}"),
+    ]
+    for response in public:
+        assert response.status_code == 200, response.text
+        assert "internal_note" not in response.text and "dev-data" not in response.text
+    assert [i["id"] for i in public[0].json()["items"]] == [item["id"]]

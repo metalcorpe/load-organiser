@@ -123,7 +123,7 @@ test.describe('profiles and follows', () => {
 		await expect(results).toContainText(`Alex ${tag}`);
 		await expect(results).not.toContainText(`Sam ${tag}`);
 		await alex.page.goto(`/people?q=${tag}`);
-		await expect(alex.page.getByText('No discoverable profile matches.')).toBeVisible();
+		await expect(alex.page.getByText('No profile matches.')).toBeVisible();
 
 		await sam.page.getByRole('link', { name: `Alex ${tag}` }).click();
 		await expect(sam.page).toHaveURL(`${ORIGIN}/people/${alexHandle}`);

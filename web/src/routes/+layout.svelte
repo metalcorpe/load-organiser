@@ -63,6 +63,12 @@
 <NavigationStatus />
 <FormGuard />
 
+{#if data.demoData}
+	<p class="demo-note">
+		Local demo copy: events and dropzones here are unreviewed sample data.
+	</p>
+{/if}
+
 <header class:guest={!data.viewer}>
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
@@ -109,6 +115,16 @@
 
 	.skip-link:focus {
 		top: 0.5rem;
+	}
+
+	.demo-note {
+		margin: 0;
+		padding: 0.4rem 1rem;
+		background: var(--surface);
+		border-bottom: 1px solid var(--border);
+		color: var(--muted);
+		font-size: 0.9rem;
+		text-align: center;
 	}
 
 	/* The layout rule (navigation.ts, pageLayout; widths in app.css). The header spans the

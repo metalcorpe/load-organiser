@@ -72,7 +72,6 @@ class ProviderOut(BaseModel):
     country: str | None
     website_url: str | None
     source_url: str
-    source_note: str | None
     checked_on: date
 
 
@@ -127,7 +126,6 @@ class OpportunityOut(BaseModel):
     price_note: str | None
     registration_url: str = Field(description="External registration or contact page.")
     source_url: str
-    source_note: str | None
     checked_on: date
 
 
@@ -165,7 +163,7 @@ class ReviewerProviderOut(BaseModel):
     status: Literal["draft", "published", "archived", "merged"]
     merged_into_id: uuid.UUID | None
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     updated_at: datetime
     version: int
@@ -205,7 +203,7 @@ class ReviewerOpportunityOut(BaseModel):
     price_note: str | None
     registration_url: str | None
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     updated_at: datetime
     version: int
@@ -259,7 +257,7 @@ class ProviderCreateIn(BaseModel):
     country: Country | None = None
     website_url: Url | None = None
     source_url: Url | None = None
-    source_note: Note | None = None
+    internal_note: Note | None = None
     checked_on: date | None = None
     publish: bool = Field(default=False, description="False creates a draft.")
 
@@ -282,7 +280,7 @@ class ProviderUpdateIn(BaseModel):
     country: Country | None = None
     website_url: Url | None = None
     source_url: Url | None = None
-    source_note: Note | None = None
+    internal_note: Note | None = None
     checked_on: date | None = None
     version: ExpectedVersion = None
 
@@ -314,7 +312,7 @@ class OpportunityFields(BaseModel):
     price_note: Note | None = None
     registration_url: Url | None = None
     source_url: Url | None = None
-    source_note: Note | None = None
+    internal_note: Note | None = None
     checked_on: date | None = None
 
 
@@ -365,7 +363,6 @@ def _public_provider(provider: Provider) -> ProviderOut:
         country=provider.country,
         website_url=provider.website_url,
         source_url=provider.source_url,
-        source_note=provider.source_note,
         checked_on=provider.checked_on,
     )
 
@@ -409,7 +406,6 @@ def opportunity_out(item: Opportunity) -> OpportunityOut:
         price_note=row.price_note,
         registration_url=row.registration_url,
         source_url=row.source_url,
-        source_note=row.source_note,
         checked_on=row.checked_on,
     )
 
@@ -432,7 +428,7 @@ def _reviewer_provider(
         status=provider.status.value,
         merged_into_id=provider.merged_into_id,
         source_url=provider.source_url,
-        source_note=provider.source_note,
+        internal_note=provider.internal_note,
         checked_on=provider.checked_on,
         updated_at=provider.updated_at,
         version=provider.version,
@@ -468,7 +464,7 @@ def _reviewer_opportunity(
         price_note=row.price_note,
         registration_url=row.registration_url,
         source_url=row.source_url,
-        source_note=row.source_note,
+        internal_note=row.internal_note,
         checked_on=row.checked_on,
         updated_at=row.updated_at,
         version=row.version,

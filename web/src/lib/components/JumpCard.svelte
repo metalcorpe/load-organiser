@@ -26,7 +26,7 @@
 	</p>
 	{#if author}
 		<p class="meta">
-			by <a href="/people/{post.author.handle}">{post.author.display_name}</a>
+			Shared by <a href="/people/{post.author.handle}">{post.author.display_name}</a>
 			<span class="wrap-anywhere">(@{post.author.handle})</span>
 		</p>
 	{/if}
@@ -46,8 +46,7 @@
 		</p>
 	{/if}
 	<p class="meta">
-		Self-reported, not verified · jumped {formatDay(post.jumped_on)} ·
-		{#if preview}not published yet{:else}published {formatDay(published)}{/if}{post.is_owner
+		{#if preview}Not published yet{:else}Published {formatDay(published)}{/if}{post.is_owner
 			? ` · ${AUDIENCE_LABEL[post.audience]}`
 			: ''}
 	</p>

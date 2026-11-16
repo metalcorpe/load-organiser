@@ -4663,6 +4663,18 @@
             ],
             "title": "Ends On"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "languages": {
             "anyOf": [
               {
@@ -4773,18 +4785,6 @@
               }
             ],
             "title": "Registration Url"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -5060,17 +5060,6 @@
             "title": "Registration Url",
             "type": "string"
           },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
-          },
           "source_url": {
             "title": "Source Url",
             "type": "string"
@@ -5159,7 +5148,6 @@
           "price_note",
           "registration_url",
           "source_url",
-          "source_note",
           "checked_on"
         ],
         "title": "OpportunityOut",
@@ -5315,6 +5303,18 @@
             ],
             "title": "Ends On"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "languages": {
             "anyOf": [
               {
@@ -5432,18 +5432,6 @@
               }
             ],
             "title": "Registration Url"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -6741,6 +6729,18 @@
             ],
             "title": "Country"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "kind": {
             "enum": [
               "organization",
@@ -6760,18 +6760,6 @@
             "description": "False creates a draft.",
             "title": "Publish",
             "type": "boolean"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -6895,17 +6883,6 @@
             "title": "Name",
             "type": "string"
           },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
-          },
           "source_url": {
             "title": "Source Url",
             "type": "string"
@@ -6929,7 +6906,6 @@
           "country",
           "website_url",
           "source_url",
-          "source_note",
           "checked_on"
         ],
         "title": "ProviderOut",
@@ -7021,6 +6997,18 @@
             ],
             "title": "Country"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "kind": {
             "anyOf": [
               {
@@ -7048,18 +7036,6 @@
               }
             ],
             "title": "Name"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -8212,6 +8188,17 @@
             "title": "Id",
             "type": "string"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "languages": {
             "items": {
               "type": "string"
@@ -8300,17 +8287,6 @@
               }
             ],
             "title": "Registration Url"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -8421,7 +8397,7 @@
           "price_note",
           "registration_url",
           "source_url",
-          "source_note",
+          "internal_note",
           "checked_on",
           "updated_at",
           "version",
@@ -8467,6 +8443,17 @@
             "title": "Id",
             "type": "string"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "kind": {
             "enum": [
               "organization",
@@ -8490,17 +8477,6 @@
           "name": {
             "title": "Name",
             "type": "string"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [
@@ -8553,7 +8529,7 @@
           "status",
           "merged_into_id",
           "source_url",
-          "source_note",
+          "internal_note",
           "checked_on",
           "updated_at",
           "version",
@@ -8609,6 +8585,17 @@
             "format": "uuid",
             "title": "Id",
             "type": "string"
+          },
+          "internal_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
           },
           "latitude": {
             "anyOf": [
@@ -8677,17 +8664,6 @@
             ],
             "title": "Season"
           },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
-          },
           "source_url": {
             "anyOf": [
               {
@@ -8730,7 +8706,7 @@
           "merged_into_id",
           "aliases",
           "source_url",
-          "source_note",
+          "internal_note",
           "checked_on",
           "operators",
           "season",
@@ -10063,6 +10039,18 @@
             "title": "Country",
             "type": "string"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "latitude": {
             "anyOf": [
               {
@@ -10132,18 +10120,6 @@
             ],
             "title": "Season"
           },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
-          },
           "source_url": {
             "anyOf": [
               {
@@ -10191,7 +10167,7 @@
         "type": "object"
       },
       "VenueOut": {
-        "description": "Public venue: source-backed identity only. No operator or endorsement data.",
+        "description": "Public venue: what a visitor may see. Never `internal_note` (reviewer-only).",
         "properties": {
           "aircraft": {
             "anyOf": [
@@ -10213,6 +10189,7 @@
             "type": "array"
           },
           "checked_on": {
+            "description": "When a reviewer last checked the listing against its source.",
             "format": "date",
             "title": "Checked On",
             "type": "string"
@@ -10284,18 +10261,8 @@
             "description": "As the source states it.",
             "title": "Season"
           },
-          "source_note": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
-          },
           "source_url": {
+            "description": "Where the listing was taken from (attribution).",
             "title": "Source Url",
             "type": "string"
           },
@@ -10318,7 +10285,6 @@
           "status",
           "aliases",
           "source_url",
-          "source_note",
           "checked_on",
           "operators",
           "season",
@@ -10510,6 +10476,18 @@
             ],
             "title": "Country"
           },
+          "internal_note": {
+            "anyOf": [
+              {
+                "maxLength": 400,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Internal Note"
+          },
           "latitude": {
             "anyOf": [
               {
@@ -10585,18 +10563,6 @@
               }
             ],
             "title": "Season"
-          },
-          "source_note": {
-            "anyOf": [
-              {
-                "maxLength": 400,
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Source Note"
           },
           "source_url": {
             "anyOf": [

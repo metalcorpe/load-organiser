@@ -68,7 +68,10 @@
 				choices ({describeImport(result.item.counts)}). It was not imported a second time.
 			{/if}
 		</p>
-		<p>Imported jumps show as imported by you, not verified.</p>
+		<p>
+			Each jump's page marks it as imported. Correct a jump there, or undo the whole import under
+			Your imports.
+		</p>
 		<p><a href="/jumps">Open your logbook</a></p>
 	</Notice>
 {/if}

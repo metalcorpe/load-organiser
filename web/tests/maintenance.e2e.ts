@@ -62,7 +62,7 @@ test.describe('maintenance tools', () => {
 		await signIn(page, await createAccount({ label: 'member' }));
 		const response = await page.goto('/review');
 		expect(response?.status()).toBe(404);
-		await expect(page.getByRole('link', { name: 'Maintenance' })).toHaveCount(0);
+		await expect(page.getByRole('link', { name: /reviewer tools/i })).toHaveCount(0);
 	});
 
 	test('a reviewer publishes a sourced listing that guests then see', async ({ page, browser }) => {
@@ -117,11 +117,11 @@ test.describe('maintenance tools', () => {
 		const member = await memberContext.newPage();
 		await signIn(member, await createAccount({ label: 'reporter' }));
 		await member.goto(`/events/${id}`);
-		await member.getByRole('link', { name: 'Suggest a correction or report a problem' }).click();
+		await member.getByRole('link', { name: 'Suggest a correction' }).click();
 		await member.getByLabel('Correct information').check();
 		await member.getByLabel('Details', { exact: true }).fill(`${base}: the dates moved to September.`);
 		await member.getByRole('button', { name: 'Send' }).click();
-		await expect(member.getByText('Sent. You can follow its status below.')).toBeVisible();
+		await expect(member.getByText("Received. We'll review it. You can follow it below.")).toBeVisible();
 		await expect(member.getByText('Waiting for review').first()).toBeVisible();
 
 		await page.goto('/review/submissions');
@@ -134,7 +134,7 @@ test.describe('maintenance tools', () => {
 		await member.reload();
 		const mine = member.getByRole('listitem').filter({ hasText: base });
 		await expect(mine.getByText('Accepted')).toBeVisible();
-		await expect(mine.getByText('Reviewer: Dates updated from the source.')).toBeVisible();
+		await expect(mine.getByText('Reply: Dates updated from the source.')).toBeVisible();
 		await memberContext.close();
 	});
 });

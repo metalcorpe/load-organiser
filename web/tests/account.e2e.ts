@@ -96,7 +96,7 @@ test.describe('Me and Account and security', () => {
 		await page.setViewportSize({ width: 390, height: 844 });
 		await expect(rows.getByRole('link', { name: /^Plans and saved events/ })).toBeInViewport();
 		// Not a reviewer: no reviewer tools.
-		await expect(rows.getByRole('link', { name: /Maintenance/ })).toHaveCount(0);
+		await expect(rows.getByRole('link', { name: /reviewer tools/i })).toHaveCount(0);
 		// The password and deletion forms are not on Me.
 		await expect(page.getByRole('button', { name: 'Change password' })).toHaveCount(0);
 		await expect(page.getByRole('region', { name: 'Delete account' })).toHaveCount(0);

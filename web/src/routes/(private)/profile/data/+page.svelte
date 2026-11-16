@@ -22,7 +22,7 @@
 <p><a href="/profile">Me</a></p>
 <h1>Your data</h1>
 <PrivacyLabel />
-<p class="lede">Keep a copy of your records, or bring a copy back. Both are free and private.</p>
+<p class="lede">Download a copy of your records, or bring one back into empty records.</p>
 
 {#if !data.records.ok}
 	<p class="form-error" role="alert">{recordsMessage(data.records.reason)}</p>
@@ -45,9 +45,9 @@
 	<details class="included">
 		<summary>What's included?</summary>
 		<p>
-			Format version 1: your jumps and their history, gear with rigs and service entries, your
-			prior jump count, licence, private places, saved listings and visit plans, plus the names of
-			the public dropzones and listings they point to.
+			Your jumps and their history, gear with rigs and service entries, your prior jump count,
+			licence, private places, saved listings and visit plans, plus the names of the public dropzones
+			and listings they point to.
 		</p>
 		<p>
 			It does not contain your password, sessions, email address or any other person's records.
