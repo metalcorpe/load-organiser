@@ -24,7 +24,7 @@ from app.tests.skydiver.support import Accounts
 SOURCE = {"source_url": "https://example.org/dz-list", "checked_on": "2026-11-01"}
 PUBLIC_FIELDS = {
     "id", "name", "country", "locality", "latitude", "longitude", "status",
-    "aliases", "source_url", "source_note", "checked_on",
+    "aliases", "source_url", "checked_on",
     # As the source states them (owner decision 2026-11-14): not a claim or endorsement.
     "operators", "season", "aircraft",
 }  # fmt: skip
@@ -128,6 +128,31 @@ def test_public_venue_exposes_only_source_backed_identity(api: Api) -> None:
     assert body["venue"]["status"] == "listed"
     assert (body["venue"]["operators"], body["venue"]["season"], body["venue"]["aircraft"]) == ([], None, None)  # fmt: skip
     assert detail.headers["cache-control"] == "no-store"
+
+
+MARKER = "dev-data:zz-test Unreviewed candidate, local development only. Research status: seasonal."
+
+
+def test_internal_note_stays_with_reviewers(api: Api) -> None:
+    """The reviewer's working note (research status, import keys, development markers)
+    never reaches a public body: detail, search or map points. Reviewers still see it."""
+    name = token()
+    venue = api.venue(name, latitude=41.5, longitude=2.5, internal_note=MARKER)
+    assert venue["internal_note"] == MARKER  # the reviewer's own response
+    reviewer_view = api.call("GET", f"/directory/venues/{venue['id']}", api.reviewer)
+    assert reviewer_view.json()["internal_note"] == MARKER
+    public = [
+        api.call("GET", f"/venues/{venue['id']}"),
+        api.call("GET", "/venues", q=name),
+        api.call("GET", "/venue-points", q=name),
+    ]
+    for response in public:
+        assert response.status_code == 200, response.text
+        assert "internal_note" not in response.text
+        assert (
+            "dev-data" not in response.text and "Research status" not in response.text
+        )
+    assert public[1].json()["items"][0]["id"] == venue["id"]  # the record is there
 
 
 def test_source_stated_operators_season_and_aircraft(api: Api) -> None:

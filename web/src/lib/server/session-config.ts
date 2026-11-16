@@ -19,6 +19,13 @@ export function parseCookieMode(raw: string | undefined): CookieMode {
 	throw new Error("SESSION_COOKIE_MODE must be 'secure' or 'localhost-dev'");
 }
 
+/** DEMO_DATA: 'true' only on a local copy loaded with sample listings (scripts/dev.sh). */
+export function parseDemoData(raw: string | undefined): boolean {
+	if (raw === undefined || raw.trim() === '' || raw === 'false') return false;
+	if (raw === 'true') return true;
+	throw new Error("DEMO_DATA must be 'true' or 'false'");
+}
+
 export function parseProxyKey(raw: string | undefined): string | undefined {
 	if (raw === undefined || raw === '') return undefined;
 	if (raw.length < 32) throw new Error('API_PROXY_KEY must be at least 32 characters');

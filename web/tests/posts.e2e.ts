@@ -66,7 +66,7 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByRole('button', { name: 'Preview' }).click();
 		const preview = alex.page.getByRole('article');
 		await expect(preview).toContainText('Freefly');
-		await expect(preview).toContainText('not published yet');
+		await expect(preview).toContainText('Not published yet');
 		await expect(preview).not.toContainText('secret detail');
 		await alex.page.getByRole('button', { name: 'Publish' }).click();
 		await expect(alex.page.getByText('Published.', { exact: true })).toBeVisible();
@@ -215,7 +215,7 @@ test.describe('shared jump summaries', () => {
 		await expect(feed).toContainText(`Big way ${tag}`);
 		// Find people stays in reach above the feed.
 		await expect(sam.page.getByRole('link', { name: 'Find people' })).toHaveAttribute('href', '/people');
-		await expect(feed).toContainText('jumped 15 August 2026');
+		await expect(feed).toContainText('Jump on 15 August 2026');
 		const here = visitor.getByRole('list', { name: 'Shared jumps here' });
 		await visitor.goto(`/dz/${venueId}`);
 		await expect(here).toContainText(`Big way ${tag}`);

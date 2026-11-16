@@ -21,8 +21,8 @@
 <h1>Private places</h1>
 <PrivacyLabel />
 <p class="lede">
-	Places only you can see. Use one when a dropzone is not listed, so logging never waits for a
-	listing. Adding a place does not publish it, suggest it or notify anyone.
+	Add a field that is not in the dropzone list, so you can log jumps there right away. Adding a
+	place does not publish it or notify anyone.
 </p>
 
 <section class="card" aria-labelledby="add-heading">

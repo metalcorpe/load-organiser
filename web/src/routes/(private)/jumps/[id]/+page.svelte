@@ -123,11 +123,12 @@
 />
 {#if jump.jump_number}<p class="number" aria-hidden="true">#{jump.jump_number}</p>{/if}
 <p class="lede">
-	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name} · {jump.source === 'restored'
-		? 'restored from your export'
+	<!-- Where a jump came from, when not typed in here: it helps when checking imported rows. -->
+	{JUMP_TYPE_LABEL[jump.jump_type]} · {current.name}{jump.source === 'restored'
+		? ' · Restored from your export'
 		: jump.source === 'imported'
-			? 'imported by you'
-			: 'entered by you'}, not verified
+			? ' · Imported'
+			: ''}
 </p>
 <dl class="facts">
 	<dt>Where</dt>

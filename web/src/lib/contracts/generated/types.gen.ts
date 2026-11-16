@@ -2398,6 +2398,10 @@ export type OpportunityCreateIn = {
      */
     ends_on?: string | null;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Languages
      */
     languages?: Array<string> | null;
@@ -2433,10 +2437,6 @@ export type OpportunityCreateIn = {
      * Registration Url
      */
     registration_url?: string | null;
-    /**
-     * Source Note
-     */
-    source_note?: string | null;
     /**
      * Source Url
      */
@@ -2567,10 +2567,6 @@ export type OpportunityOut = {
      */
     registration_url: string;
     /**
-     * Source Note
-     */
-    source_note: string | null;
-    /**
      * Source Url
      */
     source_url: string;
@@ -2660,6 +2656,10 @@ export type OpportunityUpdateIn = {
      */
     ends_on?: string | null;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Languages
      */
     languages?: Array<string> | null;
@@ -2695,10 +2695,6 @@ export type OpportunityUpdateIn = {
      * Registration Url
      */
     registration_url?: string | null;
-    /**
-     * Source Note
-     */
-    source_note?: string | null;
     /**
      * Source Url
      */
@@ -3322,6 +3318,10 @@ export type ProviderCreateIn = {
      */
     country?: string | null;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Kind
      */
     kind: 'organization' | 'person';
@@ -3335,10 +3335,6 @@ export type ProviderCreateIn = {
      * False creates a draft.
      */
     publish?: boolean;
-    /**
-     * Source Note
-     */
-    source_note?: string | null;
     /**
      * Source Url
      */
@@ -3407,10 +3403,6 @@ export type ProviderOut = {
      */
     name: string;
     /**
-     * Source Note
-     */
-    source_note: string | null;
-    /**
      * Source Url
      */
     source_url: string;
@@ -3467,6 +3459,10 @@ export type ProviderUpdateIn = {
      */
     country?: string | null;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Kind
      */
     kind?: 'organization' | 'person' | null;
@@ -3474,10 +3470,6 @@ export type ProviderUpdateIn = {
      * Name
      */
     name?: string | null;
-    /**
-     * Source Note
-     */
-    source_note?: string | null;
     /**
      * Source Url
      */
@@ -4071,6 +4063,10 @@ export type ReviewerOpportunityOut = {
      */
     id: string;
     /**
+     * Internal Note
+     */
+    internal_note: string | null;
+    /**
      * Languages
      */
     languages: Array<string>;
@@ -4106,10 +4102,6 @@ export type ReviewerOpportunityOut = {
      * Registration Url
      */
     registration_url: string | null;
-    /**
-     * Source Note
-     */
-    source_note: string | null;
     /**
      * Source Url
      */
@@ -4169,6 +4161,10 @@ export type ReviewerProviderOut = {
      */
     id: string;
     /**
+     * Internal Note
+     */
+    internal_note: string | null;
+    /**
      * Kind
      */
     kind: 'organization' | 'person';
@@ -4180,10 +4176,6 @@ export type ReviewerProviderOut = {
      * Name
      */
     name: string;
-    /**
-     * Source Note
-     */
-    source_note: string | null;
     /**
      * Source Url
      */
@@ -4235,6 +4227,10 @@ export type ReviewerVenueOut = {
      */
     id: string;
     /**
+     * Internal Note
+     */
+    internal_note: string | null;
+    /**
      * Latitude
      */
     latitude: number | null;
@@ -4262,10 +4258,6 @@ export type ReviewerVenueOut = {
      * Season
      */
     season: string | null;
-    /**
-     * Source Note
-     */
-    source_note: string | null;
     /**
      * Source Url
      */
@@ -5002,6 +4994,10 @@ export type VenueCreateIn = {
      */
     country: string;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Latitude
      */
     latitude?: number | null;
@@ -5034,10 +5030,6 @@ export type VenueCreateIn = {
      */
     season?: string | null;
     /**
-     * Source Note
-     */
-    source_note?: string | null;
-    /**
      * Source Url
      */
     source_url?: string | null;
@@ -5059,7 +5051,7 @@ export type VenueDetailOut = {
 /**
  * VenueOut
  *
- * Public venue: source-backed identity only. No operator or endorsement data.
+ * Public venue: what a visitor may see. Never `internal_note` (reviewer-only).
  */
 export type VenueOut = {
     /**
@@ -5074,6 +5066,8 @@ export type VenueOut = {
     aliases: Array<AliasOut>;
     /**
      * Checked On
+     *
+     * When a reviewer last checked the listing against its source.
      */
     checked_on: string;
     /**
@@ -5115,11 +5109,9 @@ export type VenueOut = {
      */
     season: string | null;
     /**
-     * Source Note
-     */
-    source_note: string | null;
-    /**
      * Source Url
+     *
+     * Where the listing was taken from (attribution).
      */
     source_url: string;
     /**
@@ -5237,6 +5229,10 @@ export type VenueUpdateIn = {
      */
     country?: string | null;
     /**
+     * Internal Note
+     */
+    internal_note?: string | null;
+    /**
      * Latitude
      */
     latitude?: number | null;
@@ -5260,10 +5256,6 @@ export type VenueUpdateIn = {
      * Season
      */
     season?: string | null;
-    /**
-     * Source Note
-     */
-    source_note?: string | null;
     /**
      * Source Url
      */

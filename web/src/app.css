@@ -682,3 +682,10 @@ legend {
 	size: landscape;
 	margin: 10mm;
 }
+
+/* A standalone "Suggest a correction" link after a listing: a full-size touch target. */
+.correction a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+}

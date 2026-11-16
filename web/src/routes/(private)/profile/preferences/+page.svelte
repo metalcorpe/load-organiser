@@ -30,16 +30,17 @@
 
 <p><a href="/profile">Me</a></p>
 <h1>Jump preferences</h1>
-<p class="lede">Both are private to you and only change what your own pages show.</p>
+<p class="lede">Only you can see these. They only change what your own pages show.</p>
 
 <section class="setting" aria-labelledby="licence-heading">
 	<h2 id="licence-heading">Licence</h2>
-	<p>Shows your jump currency on your Logbook and History.</p>
+	<p>Set it to see your jump currency and progress toward your next licence.</p>
 	<details class="about">
 		<summary>How it is used</summary>
 		<p>
-			Currency follows USPA guidance (USPA SIM 5-2) for your licence. It is not checked and not a
-			verified status.
+			Currency uses the number of days USPA recommends for your licence (USPA SIM 5-2), counted from
+			your most recent logged jump. Progress uses the jump and freefall time requirements for the
+			next licence (USPA SIM 3-1).
 		</p>
 	</details>
 	<form method="POST" action="?/licence" class="form" novalidate>
@@ -71,8 +72,8 @@
 	<details class="about">
 		<summary>How it is used</summary>
 		<p>
-			Wing loading is exit weight over the size of your main canopy. A jump can have its own exit
-			weight; this one is used for the others. It is not checked and not shared.
+			Wing loading is your exit weight in pounds divided by your main canopy size in square feet.
+			A jump can have its own exit weight; this one is used for all your other jumps.
 		</p>
 	</details>
 	<form method="POST" action="?/exitWeight" class="form" novalidate>

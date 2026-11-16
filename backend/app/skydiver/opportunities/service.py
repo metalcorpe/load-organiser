@@ -57,7 +57,7 @@ class Provider:
     status: ProviderStatus
     merged_into_id: uuid.UUID | None
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     updated_at: datetime
     version: int = 1
@@ -90,7 +90,7 @@ class OpportunityRow:
     price_note: str | None
     registration_url: str | None
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     status: OpportunityStatus
     duplicate_of_id: uuid.UUID | None
@@ -160,7 +160,7 @@ PROVIDER_FIELDS = (
     "country",
     "website_url",
     "source_url",
-    "source_note",
+    "internal_note",
     "checked_on",
 )
 OPPORTUNITY_FIELDS = (
@@ -184,7 +184,7 @@ OPPORTUNITY_FIELDS = (
     "price_note",
     "registration_url",
     "source_url",
-    "source_note",
+    "internal_note",
     "checked_on",
 )
 _SCHEDULE = {"starts_on", "ends_on", "time_zone"}
@@ -909,7 +909,7 @@ class OpportunityService:
             ("summary", policy.SUMMARY_MAX),
             ("prerequisites", policy.PREREQUISITES_MAX),
             ("price_note", policy.PRICE_NOTE_MAX),
-            ("source_note", directory_policy.SOURCE_NOTE_MAX),
+            ("internal_note", directory_policy.INTERNAL_NOTE_MAX),
         ):
             if name in raw:
                 values[name] = optional(raw[name], field=name, maximum=maximum)
@@ -1036,11 +1036,11 @@ def _provider_values(raw: dict[str, Any], now: datetime) -> dict[str, Any]:
     for name in ("website_url", "source_url"):
         if name in raw:
             values[name] = directory_policy.source_url(raw[name]) if raw[name] else None
-    if "source_note" in raw:
-        values["source_note"] = directory_policy.optional_text(
-            raw["source_note"],
-            field="source_note",
-            maximum=directory_policy.SOURCE_NOTE_MAX,
+    if "internal_note" in raw:
+        values["internal_note"] = directory_policy.optional_text(
+            raw["internal_note"],
+            field="internal_note",
+            maximum=directory_policy.INTERNAL_NOTE_MAX,
         )
     if "checked_on" in raw:
         values["checked_on"] = (
@@ -1065,7 +1065,7 @@ def _provider_dict(provider: Provider) -> dict[str, Any]:
         "country": provider.country,
         "website_url": provider.website_url,
         "source_url": provider.source_url,
-        "source_note": provider.source_note,
+        "internal_note": provider.internal_note,
         "checked_on": provider.checked_on,
     }
 

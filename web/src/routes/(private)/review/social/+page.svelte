@@ -18,11 +18,11 @@
 </script>
 
 <svelte:head>
-	<title>Profile reports · Maintenance · Load Organiser</title>
+	<title>Profile reports · Reviewer tools · Load Organiser</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/review">Maintenance</a></p>
+<p><a href="/review">Reviewer tools</a></p>
 <h1>Profile reports</h1>
 <p class="lede">
 	Reports about public profiles, separate from listing corrections. You see the reported profile's

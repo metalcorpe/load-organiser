@@ -103,7 +103,7 @@ test('import a spreadsheet, see the jumps in the logbook, then undo it', async (
 	const jumps = page.getByRole('list', { name: 'Jumps' });
 	await expect(jumps).toContainText('Freefly · Olive grove (private place)');
 	await jumps.getByRole('link', { name: /#5/ }).click();
-	await expect(page.getByText('imported by you, not verified')).toBeVisible();
+	await expect(page.locator('.hero .lede')).toContainText('· Imported');
 
 	// Undo removes the imported jumps and the place nothing else uses.
 	await page.goto('/records/import');

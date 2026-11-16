@@ -31,23 +31,28 @@
 	{#if status.kind === 'no_licence'}
 		<p><a href="/profile/preferences#licence-heading">Set your licence</a> to see your jump currency.</p>
 	{:else if status.kind === 'no_jumps'}
-		<p>No jumps recorded yet, so there is no currency to show.</p>
+		<p>Your currency shows here once you log a jump.</p>
 	{:else}
 		<p data-testid="currency-status"><strong>{status.text}</strong></p>
+		<p class="hint">Guidance from the jumps in your logbook, not a qualification.</p>
+		<!-- How it is calculated matters only once there is a computed status to read it against. -->
+		<details class="how">
+			<summary>How this is calculated</summary>
+			<p>
+				You stay current for the number of days USPA recommends for your licence (USPA SIM 5-2),
+				counted from your most recent logged jump.
+			</p>
+			<p>
+				Every jump type counts, tandem included: the logbook does not record whether you were the
+				instructor or the passenger. A prior jump count has no dates, so it does not count.
+			</p>
+		</details>
 	{/if}
 	{#if nextLicence}
 		<p data-testid="licence-progress">
 			{nextLicence} <a href="/history#next-licence">Next licence details</a>
 		</p>
 	{/if}
-	<p class="hint">
-		Guidance computed from your own entries, not a verified status (USPA SIM 5-2).
-		<!-- The details matter only once there is a computed status to read them against. -->
-		{#if status.kind !== 'no_licence' && status.kind !== 'no_jumps'}
-			Every jump type counts, tandem included: the logbook does not record whether you were the
-			instructor or the passenger. A prior jump count has no dates and adds nothing.
-		{/if}
-	</p>
 </section>
 
 <style>
@@ -69,6 +74,10 @@
 	}
 
 	p {
+		margin: 0.25rem 0 0;
+	}
+
+	.how {
 		margin: 0.25rem 0 0;
 	}
 </style>

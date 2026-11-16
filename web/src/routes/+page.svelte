@@ -269,8 +269,8 @@
 	<section class="empty-state quiet" aria-labelledby="empty-heading">
 		<h2 id="empty-heading">No listings match</h2>
 		<p>
-			Nothing upcoming matches these filters. Coverage is limited to reviewed, source-backed
-			listings, so this does not mean nothing is happening.
+			Nothing upcoming matches these filters. Try fewer filters, or suggest an event that is
+			missing.
 		</p>
 		<p class="actions">
 			<a class="button secondary" href="/">Clear filters</a>
@@ -279,11 +279,8 @@
 	</section>
 {:else if data.result.items.length === 0}
 	<section class="empty-state" aria-labelledby="empty-heading">
-		<h2 id="empty-heading">No listings published yet</h2>
-		<p>
-			Listings appear only after a source has been reviewed. Nothing here represents real
-			availability.
-		</p>
+		<h2 id="empty-heading">No events listed yet</h2>
+		<p>Events appear here once they have been checked. Know of one? Suggest it.</p>
 		<p class="actions">
 			<a class="button secondary" href="/submit?kind=suggest_listing">Suggest a listing</a>
 		</p>

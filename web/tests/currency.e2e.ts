@@ -54,17 +54,17 @@ test.describe('jump currency', () => {
 		await page.goto('/history');
 		const box = page.getByRole('region', { name: 'Jump currency' });
 		await expect(box).toContainText('Set your licence to see your jump currency.');
-		await expect(box).toContainText('not a verified status (USPA SIM 5-2)');
+		await expect(box.getByRole('link', { name: 'Set your licence' })).toBeVisible();
 
 		await setLicence(page, 'B licence');
 		await page.goto('/history');
 		await expect(page.getByRole('region', { name: 'Jump currency' })).toContainText(
-			'No jumps recorded yet, so there is no currency to show.'
+			'Your currency shows here once you log a jump.'
 		);
-		// The details come with a computed status, not before.
-		await expect(page.getByRole('region', { name: 'Jump currency' })).not.toContainText(
-			'Every jump type counts'
-		);
+		// How it is calculated comes with a computed status, not before.
+		await expect(
+			page.getByRole('region', { name: 'Jump currency' }).getByText('How this is calculated')
+		).toHaveCount(0);
 
 		await logJump(email, day(-10));
 		await page.goto('/jumps');
@@ -73,7 +73,10 @@ test.describe('jump currency', () => {
 		);
 		await page.goto('/history');
 		await expect(page.getByTestId('currency-status')).toContainText(`Current until ${long(day(80))}`);
-		await expect(page.getByRole('region', { name: 'Jump currency' })).toContainText(
+		const currency = page.getByRole('region', { name: 'Jump currency' });
+		await expect(currency).toContainText('Guidance from the jumps in your logbook, not a qualification.');
+		await currency.getByText('How this is calculated').click();
+		await expect(currency).toContainText(
 			'the logbook does not record whether you were the instructor or the passenger'
 		);
 	});

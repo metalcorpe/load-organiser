@@ -20,7 +20,7 @@
 
 <h1>Records</h1>
 <PrivacyLabel />
-<p class="lede">Private to you.</p>
+<p class="lede">Your jumps, gear and plans, as you record them.</p>
 
 {#if s}
 	<section class="summary" aria-label="Summary">

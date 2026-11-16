@@ -107,16 +107,16 @@
 
 <section class="map-view" aria-labelledby="map-heading">
 	<h2 id="map-heading" class="visually-hidden">Map</h2>
-	<p class="hint">
-		The map shows the dropzones of the list that have coordinates. The
-		<a href={listHref}>list</a> is the accessible equivalent, with the same dropzones and search.
+	<p class="map-intro">
+		<span class="hint">Dropzones with a known location.</span>
+		<a class="button secondary" href={listHref}>View as list</a>
 	</p>
 
 	<!-- Server-rendered and replaced once the component runs, rather than <noscript>, so it also
 	     shows when scripts are blocked or fail to load, not only when they are switched off. -->
 	{#if phase === 'server'}
 		<p class="notice" data-testid="map-needs-js">
-			The map needs JavaScript. <a href={listHref}>Use the list</a>: it has the same dropzones.
+			The map needs JavaScript. The list above has the same dropzones.
 		</p>
 	{/if}
 
@@ -136,7 +136,7 @@
 			<h2 id="map-empty-heading">No dropzones to show on the map</h2>
 			<p>
 				{filtered ? 'None of the matching dropzones' : 'No listed dropzone'} has coordinates yet.
-				<a href={listHref}>The list</a> shows every listed dropzone{filtered ? ' that matches' : ''}.
+				<a href={listHref}>View as list</a> to see every dropzone{filtered ? ' that matches' : ''}.
 			</p>
 			{#if filtered}
 				<p class="actions"><a class="button secondary" href={dzHref({ view: 'map' })}>Clear search</a></p>
@@ -179,6 +179,16 @@
 </section>
 
 <style>
+	/* The list is one tap away from the map: a real control, not a sentence. */
+	.map-intro {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem 1rem;
+		margin: 0 0 0.75rem;
+	}
+
 	.map-view {
 		margin: 0 0 1rem;
 	}

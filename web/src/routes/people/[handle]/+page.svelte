@@ -35,8 +35,9 @@
 	{/if}
 </dl>
 <p class="hint">
-	A profile is the person's own description. It is not a verified identity, licence or experience
-	record, and it never gives access to their logbook or gear.
+	{p.is_self
+		? 'Written by you. Your logbook and gear stay private.'
+		: `Written by ${p.display_name}. Their logbook and gear stay private.`}
 </p>
 
 <section aria-labelledby="posts-heading">
@@ -46,7 +47,7 @@
 	{:else if data.posts.items.length === 0}
 		<p class="hint">{data.older ? 'No older shared jumps.' : 'Nothing shared that you can see.'}</p>
 	{:else}
-		<p class="hint">Newest publication first; each shows the date of the jump itself.</p>
+		<p class="hint">Newest shared first.</p>
 		<ul class="results" aria-label="Shared jumps">
 			{#each data.posts.items as post (post.id)}
 				<li><JumpCard {post} author={false} /></li>
@@ -64,8 +65,8 @@
 	<section class="card join" aria-labelledby="join-heading">
 		<h2 id="join-heading">Follow {p.display_name}</h2>
 		<p>
-			Follow to see the jumps they share with followers. Your own logbook stays private: you
-			choose what, if anything, to share.
+			Follow to see the jumps they share with followers. Your logbook stays private unless you
+			share a jump.
 		</p>
 		<p class="actions">
 			<a class="button" href="/register?returnTo={encodeURIComponent(page.url.pathname)}">Join to follow</a>
@@ -76,8 +77,8 @@
 	<section class="card join" aria-labelledby="join-heading">
 		<h2 id="join-heading">Follow {p.display_name}</h2>
 		<p>
-			People approve followers by handle, so following needs a public profile of your own. It
-			shows only what you enter; your logbook stays private.
+			To follow someone you need a public profile: it is what they see before they approve you.
+			It shows only what you enter.
 		</p>
 		<p class="actions">
 			<a class="button" href="/profile/public?returnTo={encodeURIComponent(page.url.pathname)}"
@@ -133,8 +134,7 @@
 		<form method="POST" action="?/report" class="form">
 			{#if doneFor('report')}
 				<p role="status" class="ok">
-					Report received. A reviewer will look at it; that is not a promise of a particular
-					outcome or time. The person is not told who reported them.
+					Report received. A reviewer will look at it. The person is not told who reported them.
 				</p>
 			{/if}
 			{#if errorFor('report')}<p class="form-error" role="alert">{errorFor('report')}</p>{/if}

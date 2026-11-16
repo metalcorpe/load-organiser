@@ -395,7 +395,6 @@
 			</div>
 		</div>
 	</Disclosure>
-	<p class="hint">This is your own record. Nothing here is shared or verified.</p>
 	<div class="form-actions">
 		<button class="button" type="submit" {disabled}>{submitLabel}</button>
 	</div>

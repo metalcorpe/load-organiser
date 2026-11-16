@@ -15,6 +15,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Numeric,
+    String,
     Text,
     UniqueConstraint,
     text,
@@ -79,7 +80,11 @@ class SkydiverVenue(SQLModel, table=True):
         sa_column=Column(ForeignKey("skydiver_venue.id"), nullable=True),
     )
     source_url: str | None = Field(default=None, max_length=2048)
-    source_note: str | None = Field(default=None, max_length=280)
+    # Reviewer-only working note (research status, import reference, editorial remarks).
+    # Stored in the original `source_note` column; never part of a public response.
+    internal_note: str | None = Field(
+        default=None, sa_column=Column("source_note", String(280), nullable=True)
+    )
     checked_on: date | None = Field(default=None, sa_column=Column(Date, nullable=True))
     # [{"name": str, "url": str | None}, ...], at most 4 (policy.operators).
     operators: list[dict[str, Any]] = Field(

@@ -39,7 +39,7 @@ export const load: PageServerLoad = async (event) => {
 	]);
 	if (listing && !listing.ok) {
 		if (listing.reason === 'not_found') error(404, 'Not found');
-		error(503, 'The maintenance service is unavailable right now.');
+		error(503, 'Reviewer tools are unavailable right now. Try again later.');
 	}
 	let zones: string[] = [];
 	try {
@@ -84,7 +84,7 @@ function body(data: FormData) {
 		price_note: text(data, 'price_note', 400),
 		registration_url: text(data, 'registration_url'),
 		source_url: text(data, 'source_url'),
-		source_note: text(data, 'source_note', 400),
+		internal_note: text(data, 'internal_note', 400),
 		checked_on: text(data, 'checked_on', 10)
 	};
 }

@@ -146,7 +146,6 @@ export function isOpportunityOut(v: unknown): v is OpportunityOut {
 		isNullableString(v.price_note) &&
 		isHttpUrl(v.registration_url) &&
 		isHttpUrl(v.source_url) &&
-		isNullableString(v.source_note) &&
 		isDate(v.checked_on)
 	);
 }
@@ -160,7 +159,6 @@ export function isProviderOut(v: unknown): v is ProviderOut {
 		isNullableString(v.country) &&
 		(v.website_url === null || isHttpUrl(v.website_url)) &&
 		isHttpUrl(v.source_url) &&
-		isNullableString(v.source_note) &&
 		isDate(v.checked_on)
 	);
 }

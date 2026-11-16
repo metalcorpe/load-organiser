@@ -1,6 +1,6 @@
-/** Text for maintenance and submission outcomes (#151). Client-safe. */
+/** Text for reviewer-tool and submission outcomes (#151). Client-safe. */
 
-/** Reviewer-facing text for rule codes; unknown codes are shown as the code itself. */
+/** Text for rule codes, shown to reviewers and senders; an unknown code is named in a generic message. */
 export const REVIEW_MESSAGES: Record<string, string> = {
 	edit_conflict:
 		'Someone changed this since you opened it. Nothing was saved. Copy what you need, then reload to see the current version.',
@@ -42,5 +42,5 @@ export const REVIEW_MESSAGES: Record<string, string> = {
 
 export function reviewMessage(code: string | undefined): string | undefined {
 	if (!code) return undefined;
-	return REVIEW_MESSAGES[code] ?? `Refused by the service: ${code.replaceAll('_', ' ')}.`;
+	return REVIEW_MESSAGES[code] ?? `That could not be done (${code.replaceAll('_', ' ')}).`;
 }

@@ -260,7 +260,8 @@ test.describe('private logbook', () => {
 		await page.getByRole('button', { name: 'Save private jump' }).first().click();
 
 		await expect(page.getByText('Saved privately.')).toBeVisible();
-		await expect(page.getByText('entered by you, not verified')).toBeVisible();
+		await expect(page.locator('.hero .lede')).toContainText('Belly / formation');
+		await expect(page.locator('.hero .lede')).not.toContainText('Imported');
 		await expect(page.getByText('exit 4,000 m (reference not stated)')).toBeVisible();
 		await expect(page.getByRole('link', { name: 'Rented Navigator' })).toBeVisible();
 

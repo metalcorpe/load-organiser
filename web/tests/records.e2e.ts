@@ -71,7 +71,7 @@ test.describe('your data', () => {
 		await target.goto('/jumps');
 		await expect(target.getByText('1 jump recorded here.', { exact: false })).toBeVisible();
 		await target.getByRole('list', { name: 'Jumps' }).getByRole('link').first().click();
-		await expect(target.getByText('restored from your export, not verified')).toBeVisible();
+		await expect(target.locator('.hero .lede')).toContainText('· Restored from your export');
 
 		// The exact same file again: already restored, nothing applied twice.
 		await target.goto('/profile/data');

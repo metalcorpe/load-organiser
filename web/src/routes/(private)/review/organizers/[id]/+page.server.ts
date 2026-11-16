@@ -26,7 +26,7 @@ export const load: PageServerLoad = async (event) => {
 	]);
 	if (provider && !provider.ok) {
 		if (provider.reason === 'not_found') error(404, 'Not found');
-		error(503, 'The maintenance service is unavailable right now.');
+		error(503, 'Reviewer tools are unavailable right now. Try again later.');
 	}
 	return {
 		provider: provider ? provider.value : null,
@@ -41,7 +41,7 @@ function fields(data: FormData) {
 		country: text(data, 'country', 2),
 		website_url: text(data, 'website_url'),
 		source_url: text(data, 'source_url'),
-		source_note: text(data, 'source_note', 400),
+		internal_note: text(data, 'internal_note', 400),
 		checked_on: text(data, 'checked_on', 10)
 	};
 }

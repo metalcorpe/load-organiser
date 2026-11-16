@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ListingDetails from '#lib/components/ListingDetails.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
@@ -6,7 +7,6 @@
 		AUDIENCE_LABEL,
 		CATEGORY_LABEL,
 		DISCIPLINE_LABEL,
-		formatDay,
 		formatPrice,
 		formatRange,
 		hostOf,
@@ -37,7 +37,7 @@
 	const unstated = $derived(
 		[
 			!item.disciplines.length && 'disciplines',
-			!item.audience.length && 'who it is for',
+			!item.audience.length && 'who can join',
 			!item.prerequisites && 'prerequisites',
 			!item.languages.length && 'languages',
 			!price && !item.price_note && 'price'
@@ -57,7 +57,7 @@
 		content="{CATEGORY_LABEL[item.category]} in {countryName(item.country)}, {formatRange(
 			item.starts_on,
 			item.ends_on
-		)}. Source-backed listing; register with the organizer."
+		)}. Registration is handled by the organizer."
 	/>
 </svelte:head>
 
@@ -90,15 +90,15 @@
 
 {#if item.status === 'cancelled'}
 	<Notice title="Cancelled" tone="warn">
-		<p>The organizer's source says this was cancelled. Check with them about any registration.</p>
+		<p>If you registered, contact the organizer about your place and payment.</p>
 	</Notice>
 {:else if item.status === 'postponed'}
 	<Notice title="Postponed" tone="warn">
-		<p>New dates have not been announced in the source. Check with the organizer.</p>
+		<p>New dates have not been announced. Check with the organizer before making plans.</p>
 	</Notice>
 {:else if item.ended}
 	<Notice title="Ended" tone="info">
-		<p>This listing has ended. It stays here so links and saved items keep working.</p>
+		<p>This event has ended.</p>
 	</Notice>
 {/if}
 
@@ -120,7 +120,7 @@
 		<dt>Prerequisites</dt>
 		<dd>
 			<span class="quote">{item.prerequisites}</span>
-			<span class="hint">As stated by the source. Eligibility is decided by the organizer.</span>
+			<span class="hint">The organizer decides who can take part.</span>
 		</dd>
 	{/if}
 	{#if item.languages.length}
@@ -139,7 +139,7 @@
 
 {#if unstated.length}
 	<p class="hint unstated">
-		Not stated by the source: {unstated.join(', ')}. Ask the organizer.
+		Not listed: {unstated.join(', ')}. Ask the organizer.
 	</p>
 {/if}
 
@@ -147,11 +147,12 @@
      separate blocks so one is never mistaken for the other. -->
 <section class="action register" aria-label="Register with the organizer">
 	<a class="button" href={item.registration_url} rel="external noopener noreferrer nofollow">
-		Open organizer registration
+		Register with the organizer
 	</a>
 	<p class="hint">
-		Opens <span class="wrap-anywhere">{hostOf(item.registration_url)}</span>. Availability is not
-		tracked here: places, registration and payment are with the organizer.
+		Registration is handled by the organizer on
+		<span class="wrap-anywhere">{hostOf(item.registration_url)}</span>. Check places and payment
+		with them.
 	</p>
 </section>
 
@@ -185,25 +186,18 @@
 	{/if}
 </section>
 
-<!-- Where this came from: quieter, still readable. -->
-<footer class="provenance">
-	<p>
-		Source: <a class="wrap-anywhere" href={item.source_url} rel="external noopener noreferrer nofollow"
-			>{hostOf(item.source_url)}</a
-		>{#if item.source_note}{' '}({item.source_note}){/if}. Last checked {formatDay(item.checked_on)}.
-	</p>
-	<p>
-		Summarized from the source. A listing is not an endorsement by the dropzone or by Load
-		Organiser.
-	</p>
-	<p>
-		<a
-			href="/submit?kind=correction&target_kind=opportunity&target_id={item.id}&title={encodeURIComponent(
-				item.title
-			)}">Suggest a correction or report a problem</a
-		>
-	</p>
-</footer>
+<ListingDetails
+	sourceUrl={item.source_url}
+	checkedOn={item.checked_on}
+	note="Summarized from public information. The organizer does not run this page."
+/>
+<p class="correction">
+	<a
+		href="/submit?kind=correction&target_kind=opportunity&target_id={item.id}&title={encodeURIComponent(
+			item.title
+		)}">Suggest a correction</a
+	>
+</p>
 
 <style>
 	/* The navy header: the one brand block on this page. */
@@ -319,24 +313,6 @@
 	.ok {
 		color: var(--ok-fg);
 		font-weight: 600;
-	}
-
-	.provenance {
-		margin: 2rem 0 0.5rem;
-		padding-top: 0.75rem;
-		border-top: 1px solid var(--border);
-		color: var(--muted);
-		font-size: 0.9rem;
-	}
-
-	.provenance p {
-		margin: 0 0 0.5rem;
-	}
-
-	.provenance p:last-child a {
-		display: inline-flex;
-		align-items: center;
-		min-height: 44px;
 	}
 
 	.quote,

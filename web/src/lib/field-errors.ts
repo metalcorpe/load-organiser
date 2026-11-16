@@ -25,7 +25,7 @@ const FIELDS: Record<string, readonly string[]> = {
 	name_too_long: ['name'],
 	label_required: ['label', 'new_component_label'],
 	label_too_long: ['label', 'new_component_label'],
-	note_too_long: ['note', 'source_note', 'price_note'],
+	note_too_long: ['note', 'internal_note', 'price_note'],
 	notes_too_long: ['notes'],
 	message_required: ['message'],
 	message_too_long: ['message'],

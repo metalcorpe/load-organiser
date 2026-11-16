@@ -24,7 +24,7 @@ NAME_MAX = 120
 LOCALITY_MAX = 120
 ALIAS_MAX = 120
 SOURCE_URL_MAX = 2048
-SOURCE_NOTE_MAX = 280
+INTERNAL_NOTE_MAX = 280
 # Source-stated details (owner decision 2026-11-14): who runs the place, its season and
 # aircraft. They name the operator; they do not claim, endorse or verify anything.
 OPERATORS_MAX = 4

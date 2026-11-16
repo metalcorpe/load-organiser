@@ -72,7 +72,7 @@ class SqlDirectoryStore:
             status=VenueStatus(row.status),
             merged_into_id=row.merged_into_id,
             source_url=row.source_url,
-            source_note=row.source_note,
+            internal_note=row.internal_note,
             checked_on=row.checked_on,
             updated_at=row.updated_at,
             version=row.version,

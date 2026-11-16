@@ -58,7 +58,7 @@ test.describe('progress to the next licence', () => {
 		);
 		await expect(section).toContainText('in the jump total but not in the freefall time');
 		await expect(section).toContainText(
-			'checked by USPA and your instructors, not by this app (USPA SIM 3-1)'
+			'your instructors and USPA check the skills, proficiency card, landing accuracy and endorsements'
 		);
 	});
 
