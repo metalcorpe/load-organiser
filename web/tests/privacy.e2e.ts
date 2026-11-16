@@ -44,7 +44,7 @@ test.describe('privacy and feedback', () => {
 		await expect(page.getByLabel('Feedback about the beta')).toBeChecked();
 		await page.getByLabel('Details').fill(note);
 		await page.getByRole('button', { name: 'Send' }).click();
-		await expect(page.getByText('Sent. You can follow its status below.')).toBeVisible();
+		await expect(page.getByText("Received. We'll review it. You can follow it below.")).toBeVisible();
 		const mine = page
 			.getByRole('list', { name: 'Your submissions' })
 			.getByRole('listitem')

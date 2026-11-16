@@ -32,7 +32,6 @@ const LISTING = {
 	price_note: null,
 	registration_url: 'https://example.org/register',
 	source_url: 'https://example.org/events',
-	source_note: null,
 	checked_on: '2026-11-01'
 };
 

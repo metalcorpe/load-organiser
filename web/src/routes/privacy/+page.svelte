@@ -8,15 +8,15 @@
 
 <h1>Privacy and the beta</h1>
 <p class="lede">
-	What this beta keeps private, what you choose to share, what deleting your account removes, and
-	what does not work yet. It describes the current version and changes with it.
+	What stays private, what you can share, what deleting your account removes, and what does not
+	work yet. This page describes the current beta and changes with it.
 </p>
 
 <nav aria-label="On this page" class="toc">
 	<ul>
 		<li><a href="#private">Private by default</a></li>
 		<li><a href="#sharing">What you can share</a></li>
-		<li><a href="#reviewers">Reports and reviewers</a></li>
+		<li><a href="#reviewers">Reports and moderation</a></li>
 		<li><a href="#account">Your account and sign-in</a></li>
 		<li><a href="#map">The dropzone map</a></li>
 		<li><a href="#data">Export and restore</a></li>
@@ -32,7 +32,7 @@
 	<p>
 		Your jumps and their notes, gear and serial numbers, service entries, private places, prior jump
 		count, saved listings and visit plans are visible only to you. Following someone, or being
-		followed, gives nobody access to them. Reviewers do not get routine access to them either.
+		followed, gives nobody access to them. The people running the service do not get routine access to them either.
 	</p>
 	<p>
 		Nothing private is published automatically. Logging a jump never shares it, and a visit plan never
@@ -72,16 +72,16 @@
 </section>
 
 <section aria-labelledby="reviewers">
-	<h2 id="reviewers">Reports and reviewers</h2>
+	<h2 id="reviewers">Reports and moderation</h2>
 	<p>
-		Reviewers, at first the people running the beta, check reported profiles and posts and suggestions
-		about listings. When you report a profile or post, the reviewer sees your handle and display name
-		so that misuse of reporting can be judged; the person you reported never sees who reported them. Suggestions, corrections and
-		feedback reach reviewers without your name or email.
+		The people running the beta check reported profiles and posts, and suggestions about listings.
+		When you report a profile or post, they see your handle and display name so that misuse of
+		reporting can be judged; the person you reported never sees who reported them. Suggestions,
+		corrections and feedback reach them without your name or email.
 	</p>
 	<p>
-		A reviewer can hide a profile, stop it from publishing or remove a post, and must give a reason
-		that the owner sees.
+		They can hide a profile, stop it from publishing or remove a post, and must give a reason that
+		the owner sees.
 	</p>
 </section>
 
@@ -139,12 +139,14 @@
 	</p>
 	<p>
 		Kept without any link to you: suggestions, problem reports and feedback you sent, including what
-		you wrote, for 30 days and then deleted, whether or not a reviewer has read them. Copies stay in
-		backups until those expire, and after a restore from a backup the 30 days start again. That
-		deletion runs on a schedule which, like the backups, is not running yet. Also kept: reviewers' records of
-		decisions about public listings. If you are a reviewer, the
-		reports you decided stay, without your name.
-		Your email address can be used to register again; the new account starts empty.
+		you wrote. They are to be deleted after 30 days, whether or not anyone has read them, but that
+		scheduled deletion, like the backups, is not running yet. Copies stay in backups until those
+		expire, and after a restore from a backup the 30 days start again.
+	</p>
+	<p>
+		Also kept: records of decisions about public listings, and, if you reviewed reports, your
+		decisions on them, without your name. Your email address can be used to register again; the new
+		account starts empty.
 	</p>
 </section>
 
@@ -160,34 +162,38 @@
 		<li>
 			Deleted records, unpublished posts, blocks, removed follows, visibility changes, hidden or
 			restricted profiles and removed posts are applied again before the service reopens, so they do
-			not come back. This works for changes recorded in a copy kept apart from the backups; changes
-			made after the last such copy can still come back, and how often copies are made is not settled.
-			A deletion that would break a restored record, such as a private place a restored jump still
-			uses, is listed for a person to resolve.
-		</li>
-		<li>
-			To do this, the service keeps a record of the identifiers of deleted records and of the settings
-			that changed, never notes, names or other content, until it is cleared after the backups that
-			need it have expired.
+			not come back. The most recent of these changes can still come back.
 		</li>
 		<li>Everyone has to sign in again.</li>
 		<li>If you changed your password after the backup, you will need to reset it by email.</li>
 		<li>Other edits and records created after the backup may be lost.</li>
 	</ul>
+	<details>
+		<summary>How deletions are kept after a restore</summary>
+		<p>
+			The changes above are recorded in a copy kept apart from the backups. Changes made after the
+			last such copy can still come back, and how often copies are made is not settled. A deletion
+			that would break a restored record, such as a private place a restored jump still uses, is
+			listed for a person to resolve.
+		</p>
+		<p>
+			For this, the service keeps the identifiers of deleted records and the settings that changed,
+			never notes, names or other content, until the backups that need them have expired.
+		</p>
+	</details>
 </section>
 
 <section aria-labelledby="limits">
 	<h2 id="limits">Known limits</h2>
 	<ul>
 		<li>
-			Listings cover a limited set of dropzones and events, entered by hand from their own sources. An
-			external link or saved plan is not a registration.
+			Listings cover a limited set of dropzones and events. Registration is handled by the organizer:
+			saving a listing or planning a visit does not book a place.
 		</li>
 		<li>
 			No notifications, comments or reactions. No app to install and no offline use: this is a website
 			for phones and computers.
 		</li>
-		<li>No grace period or undo after deleting your account.</li>
 		<li>
 			Text limits: jump notes 2,000 characters, gear notes 1,000, bio and captions 280. Storage and
 			rate limits are set for a small beta and may change.
@@ -200,8 +206,8 @@
 	<p>
 		Signed in with a confirmed email address, you can
 		<a href="/submit?kind=feedback">send feedback about the beta</a>, suggest a listing or correct one,
-		and follow what happened to it on the same page. Sending can be paused; the page normally
-		says so before you write anything, and otherwise when you send. To report a profile or post, use "Report" on its page.
+		and follow what happened to it on the same page. To report a profile or post, use "Report" on
+		its page.
 	</p>
 </section>
 

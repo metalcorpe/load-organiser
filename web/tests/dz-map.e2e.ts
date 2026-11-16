@@ -163,7 +163,7 @@ test.describe('dropzone map', () => {
 		await expect(page.getByText('Map images come from the OpenStreetMap tile servers')).toBeVisible();
 		const button = page.getByRole('button', { name: 'Show map' });
 		await expect(button).toBeVisible();
-		await expect(page.getByRole('main').getByRole('link', { name: 'list', exact: true })).toHaveAttribute(
+		await expect(page.getByRole('main').getByRole('link', { name: 'View as list' })).toHaveAttribute(
 			'href',
 			`/dz?q=${base}`
 		);
@@ -385,7 +385,7 @@ test.describe('dropzone map', () => {
 		expect(plainSeen.stylesheets.length).toBeGreaterThan(0);
 		expect(await leafletCssAmong(page, plainSeen.stylesheets)).toBe(false);
 		await expect(page.getByRole('button', { name: 'Show map' })).toHaveCount(0);
-		await page.getByRole('link', { name: 'Use the list' }).click();
+		await page.getByRole('link', { name: 'View as list' }).click();
 		await expect(page).toHaveURL(`${ORIGIN}/dz?q=${shared.base}`);
 		await expect(page.getByRole('list', { name: 'Dropzones' }).getByRole('link')).toHaveCount(4);
 		expect(plainSeen.external).toEqual([]);

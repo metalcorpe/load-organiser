@@ -122,13 +122,14 @@
 	<h2 id="delete-heading">Delete account</h2>
 	<p>
 		Deletes this account now, with your logbook, gear, places, history, saved listings, plans,
-		public profile, follows, blocks, shared jumps and reports you made. Every session ends. This
-		cannot be undone; <a href="/profile/data">export your records</a> first if you want a copy.
+		public profile, follows, blocks, shared jumps and reports you made about profiles or posts.
+		Every session ends. This cannot be undone; <a href="/profile/data">export your records</a> first
+		if you want a copy.
 	</p>
 	<p class="hint">
-		People who already saw or copied something you shared publicly keep what they copied.
-		Suggestions and problem reports you sent about public listings stay with the reviewers,
-		unlinked from you; the text you wrote in them is kept.
+		Suggestions, corrections and feedback you sent are kept without your name, including what you
+		wrote. People who already saw or copied something you shared publicly keep their copy.
+		<a href="/privacy#deletion">More about what deletion removes and keeps</a>.
 	</p>
 	<form method="POST" action="?/deleteAccount" class="form" novalidate>
 		{#if errorFor('deleteAccount')}

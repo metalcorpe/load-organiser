@@ -1,6 +1,6 @@
 import { defineEnvVars } from '@sveltejs/kit/env';
 import { parseApiOrigin, parseAppOrigin } from './lib/server/api/origin.ts';
-import { parseCookieMode, parseProxyKey } from './lib/server/session-config.ts';
+import { parseCookieMode, parseDemoData, parseProxyKey } from './lib/server/session-config.ts';
 
 export const variables = defineEnvVars({
 	API_ORIGIN: {
@@ -17,6 +17,11 @@ export const variables = defineEnvVars({
 		description:
 			"'secure' (default): __Host- Secure HttpOnly cookie. 'localhost-dev': non-Secure cookie for a loopback APP_ORIGIN only.",
 		schema: parseCookieMode
+	},
+	DEMO_DATA: {
+		description:
+			"'true' on a local copy loaded with sample listings (scripts/dev.sh): every page says so once, instead of each listing carrying a development marker. Default 'false'.",
+		schema: parseDemoData
 	},
 	API_PROXY_KEY: {
 		description:

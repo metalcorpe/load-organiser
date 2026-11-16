@@ -24,7 +24,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					'Jumps and recorded freefall time toward the next USPA licence (USPA SIM 3-1), from the jumper’s own entries. Other requirements are checked by USPA and instructors, not by the app. Shown on History beside the currency status.'
+					'Jumps and recorded freefall time toward the next USPA licence (USPA SIM 3-1), from the jumper’s own entries. It ends by naming the other requirements, which instructors and USPA check. Shown on History beside the currency status.'
 			}
 		}
 	}

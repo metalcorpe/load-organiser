@@ -99,7 +99,6 @@ export function isVenueOut(value: unknown): value is VenueOut {
 		) &&
 		isString(value.source_url) &&
 		/^https?:\/\//i.test(value.source_url) &&
-		isNullableString(value.source_note) &&
 		isString(value.checked_on)
 	);
 }

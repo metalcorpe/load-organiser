@@ -31,7 +31,7 @@ test.describe('private gear', () => {
 		const id = await addReserve(page);
 		await expect(page.getByLabel('Serial number (optional, private)')).toHaveValue('0042-ab/7');
 		await expect(page.getByText('Stored as month only.')).toBeVisible();
-		await expect(page.getByText('entered by you, not verified')).toBeVisible();
+		await expect(page.locator('p.lede')).toContainText('Reserve canopy');
 
 		await page.goto('/gear');
 		await page.getByLabel('New rig name').fill('Main rig');
@@ -61,7 +61,7 @@ test.describe('private gear', () => {
 		const item = page.getByRole('list', { name: 'Components' }).getByRole('listitem');
 		await expect(item).toContainText('PD Optimum 176');
 		await expect(item).toContainText('In Main rig since 1 March 2026');
-		await expect(item).toContainText('Next due you entered: 1 April 2027');
+		await expect(item).toContainText('Next due: 1 April 2027');
 	});
 
 	test('gear is invisible to other accounts', async ({ page, browser }) => {

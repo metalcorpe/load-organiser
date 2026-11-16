@@ -30,7 +30,7 @@ export const load: PageServerLoad = async (event) => {
 	]);
 	if (venue && !venue.ok) {
 		if (venue.reason === 'not_found') error(404, 'Not found');
-		error(503, 'The maintenance service is unavailable right now.');
+		error(503, 'Reviewer tools are unavailable right now. Try again later.');
 	}
 	return {
 		venue: venue ? venue.value : null,
@@ -67,7 +67,7 @@ export const actions: Actions = {
 			latitude: number(data, 'latitude'),
 			longitude: number(data, 'longitude'),
 			source_url: text(data, 'source_url'),
-			source_note: text(data, 'source_note', 400),
+			internal_note: text(data, 'internal_note', 400),
 			checked_on: text(data, 'checked_on', 10),
 			operators: operators(data),
 			season: text(data, 'season', 240),

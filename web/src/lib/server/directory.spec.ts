@@ -9,6 +9,7 @@ import {
 	updatePlace
 } from './directory.ts';
 
+// The public shape: no internal note (reviewer-only), and the guard must not ask for one.
 const VENUE = {
 	id: '0b3e4f0c-1d2e-4f5a-8b6c-7d8e9f0a1b2c',
 	name: 'Skydive Example',
@@ -19,7 +20,6 @@ const VENUE = {
 	status: 'listed',
 	aliases: [{ name: 'Old name', kind: 'former' }],
 	source_url: 'https://example.org/dz',
-	source_note: null,
 	checked_on: '2026-11-01'
 };
 

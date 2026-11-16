@@ -36,7 +36,6 @@ export function listing(overrides: Partial<OpportunityOut> = {}): OpportunityOut
 		price_note: '€95 from 15 Nov',
 		registration_url: 'https://example.org/register',
 		source_url: 'https://example.org/boogie',
-		source_note: null,
 		checked_on: '2026-11-09',
 		...overrides
 	};

@@ -13,45 +13,45 @@
 
 <svelte:head>
 	<title>Service status · Load Organiser</title>
-	<meta name="description" content="Whether the Load Organiser API and database are reachable." />
+	<meta name="description" content="Whether Load Organiser is working right now." />
 </svelte:head>
 
 <h1>Service status</h1>
-<p class="lede">A live check of the Load Organiser API and its database, run when this page loads.</p>
+<p class="lede">Whether Load Organiser is working right now. Checked each time this page loads.</p>
 
 <div data-testid="health" data-state={health.kind}>
 	{#if health.kind === 'operational'}
 		<Notice title="Operational" tone="ok">
-			<p>The API and its database responded.</p>
+			<p>The service and its database responded.</p>
 			<p>Checked <time datetime={health.checkedAt}>{formatUtc(health.checkedAt)}</time>.</p>
 		</Notice>
 	{:else if health.kind === 'degraded'}
 		<Notice title="Degraded" tone="bad">
-			<p>The API responded, but it cannot reach its database. Saving or reading records would fail.</p>
+			<p>The service is up but cannot reach its database. Reading and saving records will fail.</p>
 			<p>Checked <time datetime={health.checkedAt}>{formatUtc(health.checkedAt)}</time>.</p>
 		</Notice>
 	{:else if health.kind === 'timeout'}
 		<Notice title="No response yet" tone="warn">
 			<p>
-				The API did not answer within {API_TIMEOUT_MS / 1000} seconds. That does not prove it is
-				down; it may be starting up.
+				The service did not answer within {API_TIMEOUT_MS / 1000} seconds. It may be starting up: check
+				again in a minute.
 			</p>
 		</Notice>
 	{:else if health.kind === 'unreachable'}
-		<Notice title="API unreachable" tone="bad">
-			<p>The web server could not connect to the API.</p>
+		<Notice title="Service unreachable" tone="bad">
+			<p>This site could not connect to the service. Signing in and your records are unavailable.</p>
 		</Notice>
 	{:else if health.kind === 'upstream_error'}
-		<Notice title="Unexpected API response" tone="bad">
-			<p>The API answered with HTTP {health.status}.</p>
+		<Notice title="Unexpected response" tone="bad">
+			<p>The service answered with an error (HTTP {health.status}).</p>
 		</Notice>
 	{:else if health.kind === 'invalid_response'}
-		<Notice title="Unexpected API response" tone="bad">
-			<p>The API answered, but not in the expected format.</p>
+		<Notice title="Unexpected response" tone="bad">
+			<p>The service answered, but not as expected.</p>
 		</Notice>
 	{:else}
 		<Notice title="Not configured" tone="warn">
-			<p>This deployment has no API origin configured.</p>
+			<p>This site is not connected to a service yet.</p>
 		</Notice>
 	{/if}
 </div>

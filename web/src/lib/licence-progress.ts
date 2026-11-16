@@ -14,7 +14,7 @@ export interface ProgressIn {
 }
 
 export const OTHER_REQUIREMENTS =
-	'Other requirements (skills, proficiency card, landing accuracy, endorsements) are checked by USPA and your instructors, not by this app (USPA SIM 3-1).';
+	'Jumps and freefall time are only part of it: your instructors and USPA check the skills, proficiency card, landing accuracy and endorsements.';
 
 const n = (value: number) => value.toLocaleString('en-GB');
 const plural = (count: number, one: string, many: string) => `${n(count)} ${count === 1 ? one : many}`;

@@ -44,7 +44,7 @@
 <p><a href="/records">Records</a> · <a href="/stats">Statistics</a></p>
 <h1>History</h1>
 <PrivacyLabel />
-<p class="lede">Totals from your own entries, private to you.</p>
+<p class="lede">Your totals, recent months, milestones and gear use, from the jumps you logged.</p>
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Prior jump count saved.</p>{/if}
 {#if page.url.searchParams.get('removed')}
 	<p role="status" class="ok">Prior jump count removed. Your recorded jumps are kept.</p>
@@ -131,7 +131,6 @@
 			valueHeader="Jumps"
 			rows={monthRows}
 		/>
-		<p class="hint">Recorded entries only; not evidence of currency or eligibility.</p>
 		<p><a href="/records/print">Print your logbook</a> (paper or PDF, with a signature column)</p>
 		</section>
 
@@ -161,12 +160,15 @@
 						canopy on your jumps{/if}
 				</p>
 			{/if}
-			<p class="hint">
-				Exit weight in pounds over the size of the main canopy recorded on the jump, in square feet,
-				from your own entries{h.exit_weight
-					? `; your usual exit weight is ${formatWeight(h.exit_weight.grams, h.exit_weight.unit)}`
-					: ''}. A record, not advice.
-			</p>
+			<details>
+				<summary>How this is calculated</summary>
+				<p class="hint">
+					Exit weight in pounds over the size of the main canopy recorded on the jump, in square
+					feet{h.exit_weight
+						? `; your usual exit weight is ${formatWeight(h.exit_weight.grams, h.exit_weight.unit)}`
+						: ''}. A record, not advice.
+				</p>
+			</details>
 		</section>
 
 		<section class="card" aria-labelledby="milestones-heading">
@@ -185,7 +187,7 @@
 					{/each}
 				</ul>
 				<p class="hint">
-					From your own entries, newest first; private to you.
+					Newest first.
 					{#if ms.counted === 'with_prior'}
 						Jump counts continue from your declared prior jump count; firsts and freefall hours
 						count only the jumps recorded here.

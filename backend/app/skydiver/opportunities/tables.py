@@ -15,6 +15,7 @@ from sqlalchemy import (
     Index,
     Integer,
     Numeric,
+    String,
     Text,
 )
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
@@ -78,7 +79,11 @@ class SkydiverProvider(SQLModel, table=True):
         sa_column=Column(ForeignKey("skydiver_provider.id"), nullable=True),
     )
     source_url: str | None = Field(default=None, max_length=2048)
-    source_note: str | None = Field(default=None, max_length=280)
+    # Reviewer-only working note (research status, import reference, editorial remarks).
+    # Stored in the original `source_note` column; never part of a public response.
+    internal_note: str | None = Field(
+        default=None, sa_column=Column("source_note", String(280), nullable=True)
+    )
     checked_on: date | None = Field(default=None, sa_column=Column(Date, nullable=True))
     created_at: datetime = Field(sa_column=_instant())
     updated_at: datetime = Field(sa_column=_instant())
@@ -165,7 +170,11 @@ class SkydiverOpportunity(SQLModel, table=True):
     price_note: str | None = Field(default=None, max_length=280)
     registration_url: str | None = Field(default=None, max_length=2048)
     source_url: str | None = Field(default=None, max_length=2048)
-    source_note: str | None = Field(default=None, max_length=280)
+    # Reviewer-only working note (research status, import reference, editorial remarks).
+    # Stored in the original `source_note` column; never part of a public response.
+    internal_note: str | None = Field(
+        default=None, sa_column=Column("source_note", String(280), nullable=True)
+    )
     checked_on: date | None = Field(default=None, sa_column=Column(Date, nullable=True))
     status: str = Field(max_length=16)
     # Compare-and-swap version: every write sets version = version + 1 WHERE version = read.

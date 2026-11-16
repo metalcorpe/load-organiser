@@ -32,8 +32,7 @@
 	</nav>
 </div>
 <p class="lede">
-	Jumps the people you follow chose to share with you. Your logbook stays private; you share a
-	jump only when you choose to.
+	Jumps the people you follow share with you. You share a jump only when you choose to.
 </p>
 
 <!-- Large screens: the shared jumps in the main column, the people you follow beside them. -->
@@ -92,8 +91,8 @@
 			<section class="empty-state" aria-labelledby="empty-heading">
 				<h2 id="empty-heading">Find people you jump with</h2>
 				<p>
-					Ask to follow them; each person approves you first. Following never opens their logbook
-					or gear, or yours.
+					Ask to follow them; each person approves you first. You then see the jumps they share
+					with followers.
 				</p>
 				<p class="actions"><a class="button" href="/people">Find people</a></p>
 			</section>

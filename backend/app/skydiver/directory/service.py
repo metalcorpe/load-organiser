@@ -68,7 +68,7 @@ class Venue:
     status: VenueStatus
     merged_into_id: uuid.UUID | None
     source_url: str | None
-    source_note: str | None
+    internal_note: str | None
     checked_on: date | None
     updated_at: datetime
     aliases: tuple[Alias, ...] = ()
@@ -135,7 +135,7 @@ class VenueInput:
     locality: str | None = None
     latitude: float | None = None
     longitude: float | None = None
-    source_note: str | None = None
+    internal_note: str | None = None
     listed: bool = True
     # [{"name": ..., "url": ...}] as the source states them; see policy.operators.
     operators: tuple[dict[str, Any], ...] | list[dict[str, Any]] = ()
@@ -383,7 +383,7 @@ class DirectoryService:
                 "latitude": data.latitude,
                 "longitude": data.longitude,
                 "source_url": data.source_url,
-                "source_note": data.source_note,
+                "internal_note": data.internal_note,
                 "checked_on": data.checked_on,
                 "operators": list(data.operators),
                 "season": data.season,
@@ -444,7 +444,7 @@ class DirectoryService:
                     actor,
                     now,
                 )
-            source = {"source_url", "source_note", "checked_on"} & set(changed)
+            source = {"source_url", "internal_note", "checked_on"} & set(changed)
             if source:
                 store.record_event(
                     venue_id,
@@ -682,9 +682,11 @@ class DirectoryService:
             values["source_url"] = (
                 policy.source_url(raw["source_url"]) if raw["source_url"] else None
             )
-        if "source_note" in raw:
-            values["source_note"] = policy.optional_text(
-                raw["source_note"], field="source_note", maximum=policy.SOURCE_NOTE_MAX
+        if "internal_note" in raw:
+            values["internal_note"] = policy.optional_text(
+                raw["internal_note"],
+                field="internal_note",
+                maximum=policy.INTERNAL_NOTE_MAX,
             )
         if "checked_on" in raw:
             values["checked_on"] = (
@@ -735,7 +737,7 @@ def _venue_values(venue: Venue) -> dict[str, Any]:
         "latitude": venue.latitude,
         "longitude": venue.longitude,
         "source_url": venue.source_url,
-        "source_note": venue.source_note,
+        "internal_note": venue.internal_note,
         "checked_on": venue.checked_on,
         "operators": [{"name": o.name, "url": o.url} for o in venue.operators],
         "season": venue.season,

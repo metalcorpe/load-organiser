@@ -25,15 +25,15 @@
 </script>
 
 <svelte:head>
-	<title>Submissions · Maintenance · Load Organiser</title>
+	<title>Submissions · Reviewer tools · Load Organiser</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/review">Maintenance</a></p>
+<p><a href="/review">Reviewer tools</a></p>
 <h1>Submissions</h1>
 <p class="lede">
 	Suggestions, corrections and reports from signed-in members. Who sent them is not shown. Check the
-	source, edit the record with the maintenance tools, then resolve; the note is shown to the sender.
+	source, edit the record with these tools, then resolve; the note is shown to the sender.
 </p>
 
 <nav class="tabs" aria-label="Status">

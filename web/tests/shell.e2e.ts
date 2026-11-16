@@ -28,7 +28,7 @@ test.describe('public shell', () => {
 		await expect(
 			page
 				.getByRole('region', { name: 'Listings' })
-				.or(page.getByRole('region', { name: 'No listings published yet' }))
+				.or(page.getByRole('region', { name: 'No events listed yet' }))
 		).toBeVisible();
 
 		// Guests browse the public area without the members' tab bar.
@@ -207,7 +207,7 @@ test.describe('upstream failure (API origin points at a closed port)', () => {
 		const response = await page.goto('/status');
 		expect(response?.status()).toBe(200);
 		await expect(page.getByTestId('health')).toHaveAttribute('data-state', 'unreachable');
-		await expect(page.getByRole('heading', { name: 'API unreachable' })).toBeVisible();
+		await expect(page.getByRole('heading', { name: 'Service unreachable' })).toBeVisible();
 	});
 
 	test('a session the API cannot confirm can still be signed out', async ({ request }) => {

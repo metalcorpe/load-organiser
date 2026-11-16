@@ -78,8 +78,8 @@ describe('progress toward the next licence', () => {
 		expect(progressSummary(d)).toBeNull();
 	});
 
-	it('cites USPA SIM 3-1 for what the app does not check', () => {
-		expect(OTHER_REQUIREMENTS).toContain('checked by USPA and your instructors, not by this app');
-		expect(OTHER_REQUIREMENTS).toContain('USPA SIM 3-1');
+	it('names the requirements that instructors and USPA check', () => {
+		expect(OTHER_REQUIREMENTS).toContain('your instructors and USPA check');
+		expect(OTHER_REQUIREMENTS).toContain('proficiency card');
 	});
 });

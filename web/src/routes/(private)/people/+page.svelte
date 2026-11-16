@@ -17,7 +17,7 @@
 
 <p><a href="/profile">Me</a></p>
 <h1>People</h1>
-<p class="lede">Follow people you know. Following never opens anyone's logbook or gear.</p>
+<p class="lede">Follow people you jump with, and choose who can follow you.</p>
 
 {#if page.url.searchParams.get('blocked')}
 	<p role="status" class="ok">Blocked. Follows between you were removed.</p>
@@ -28,8 +28,8 @@
 {:else if !data.profile}
 	<section class="card you">
 		<p>
-			You have no public profile, so no one can find you and you cannot ask to follow people.
-			Your logbook stays private either way.
+			Create a public profile so people can find you and you can ask to follow them. It shows
+			only what you enter.
 		</p>
 		<!-- After saving, back here to find people. -->
 		<a class="button" href="/profile/public?returnTo=%2Fpeople">Create a profile</a>
@@ -48,8 +48,8 @@
 			/>
 		{:else}
 			<p class="hint">
-				To invite people with a link, turn on "Let people find my profile": until you approve
-				them, others cannot open a private profile.
+				To invite people with a link, turn on "Let people find my profile". While it is off, only
+				followers you approved can open your profile.
 			</p>
 		{/if}
 		<a class="button secondary" href="/profile/public">Edit profile</a>
@@ -67,7 +67,7 @@
 	<p class="form-error" role="alert">{socialMessage(data.search.reason)}</p>
 {:else if data.search}
 	{#if data.search.items.length === 0}
-		<p class="hint">No discoverable profile matches. People who keep their profile private cannot be found.</p>
+		<p class="hint">No profile matches. Profiles that are not findable do not appear in search.</p>
 	{:else}
 		<ul class="results rows" aria-label="Search results">
 			{#each data.search.items as person (person.handle)}

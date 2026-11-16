@@ -29,7 +29,7 @@
 <p><a href="/history">History</a> · <a href="/jumps">Logbook</a></p>
 <h1>Statistics</h1>
 <PrivacyLabel />
-<p class="lede">Counts and measurements from your own entries, private to you.</p>
+<p class="lede">Your jumps by year, type, place and aircraft, with freefall, altitude and wing loading.</p>
 
 <!-- novalidate: the server checks the year and explains. -->
 <form method="GET" action="/stats" class="year-filter" novalidate>

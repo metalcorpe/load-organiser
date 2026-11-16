@@ -112,10 +112,25 @@
 				{ href: '/places', label: 'Private places' },
 				{ href: '/submit', label: 'Suggestions and reports' },
 				{ href: '/submit?kind=feedback', label: 'Send feedback' },
-				{ href: '/privacy', label: 'Privacy and the beta' },
-				...(data.viewer?.reviewer ? [{ href: '/review', label: 'Maintenance (reviewer tools)' }] : [])
+				{ href: '/privacy', label: 'Privacy and the beta' }
 			]
-		}
+		},
+		// Reviewers only, last and apart from everyone's own things and settings.
+		...(data.viewer?.reviewer
+			? [
+					{
+						id: 'reviewer',
+						heading: 'Reviewer tools',
+						items: [
+							{
+								href: '/review',
+								label: 'Open reviewer tools',
+								summary: 'Listings, dropzones, organizers, suggestions and reports'
+							}
+						]
+					}
+				]
+			: [])
 	]);
 
 	// Links from before the settings had their own page point at their anchors here: go on to

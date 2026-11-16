@@ -35,8 +35,8 @@
 <p><a href="/profile">Me</a> · <a href="/people">People</a></p>
 <h1>Public profile</h1>
 <p class="lede">
-	Optional. Only what you enter here is shown: never your email, registration name, logbook, gear,
-	totals or prior jump count.
+	Optional. Others see only what you enter here, never your email, the name on your account, your
+	logbook, gear or jump totals.
 </p>
 
 {#if page.url.searchParams.get('saved')}<p role="status" class="ok">Saved.</p>{/if}

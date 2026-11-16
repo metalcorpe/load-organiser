@@ -60,7 +60,7 @@
 	<p class="lede">
 		{KIND_LABEL[c.kind]}{c.canopy_size_sqft ? ` · ${c.canopy_size_sqft} sq ft` : ''} · {RELATION_LABEL[
 			c.relation
-		]}{c.archived ? ' · archived' : ''} · entered by you, not verified
+		]}{c.archived ? ' · archived' : ''}
 	</p>
 {/if}
 {#if page.url.searchParams.get('saved') || (form && form.form === 'save' && 'done' in form)}
@@ -245,10 +245,6 @@
 		<label for="notes">Notes (optional, private)</label>
 		<TextArea id="notes" name="notes" maxlength={1000} rows={3} initial={v('notes', c?.notes)} />
 	</div>
-	<p class="hint">
-		This is your own record. It is not proof of ownership and does not say whether the item is
-		airworthy.
-	</p>
 	<div class="form-actions"><button class="button" type="submit">{c ? 'Save changes' : 'Save component'}</button></div>
 </form>
 
@@ -299,8 +295,11 @@
 		</section>
 	{/if}
 
-	<h2>Service you recorded</h2>
-	<p class="hint">Dates you entered yourself. They do not certify servicing or airworthiness.</p>
+	<h2>Service history</h2>
+	<p class="hint">
+		Repacks, inspections and repairs, for your own planning. Your rigger and the manufacturer decide
+		whether the item is airworthy.
+	</p>
 	{#if errorFor('removeService')}<p class="form-error" role="alert">{errorFor('removeService')}</p>{/if}
 	{#if d.service.length === 0}
 		<p>No service entries.</p>
@@ -309,8 +308,8 @@
 			{#each d.service as entry (entry.id)}
 				<li>
 					<span class="title">{SERVICE_LABEL[entry.kind]} on {formatDay(entry.done_on)}</span>
-					{#if entry.due_on}<span class="meta">Next due you entered: {formatDay(entry.due_on)}</span>{/if}
-					{#if entry.performed_by}<span class="meta">By (as you entered): {entry.performed_by}</span>{/if}
+					{#if entry.due_on}<span class="meta">Next due: {formatDay(entry.due_on)}</span>{/if}
+					{#if entry.performed_by}<span class="meta">Done by: {entry.performed_by}</span>{/if}
 					{#if entry.notes}<span class="meta notes">{entry.notes}</span>{/if}
 					<form method="POST" action="?/removeService">
 						<input type="hidden" name="entry" value={entry.id} />

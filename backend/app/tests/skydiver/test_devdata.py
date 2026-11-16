@@ -12,7 +12,7 @@ from sqlalchemy import text
 from app.core.config import settings
 from app.core.db import engine
 from app.skydiver import devdata
-from app.skydiver.directory.policy import SOURCE_NOTE_MAX, DirectoryRuleError
+from app.skydiver.directory.policy import INTERNAL_NOTE_MAX, DirectoryRuleError
 from app.skydiver.directory.service import DirectoryService, Operator, VenueInput
 from app.skydiver.directory.store import sql_directory_store_factory
 from app.skydiver.opportunities.service import OpportunityService
@@ -172,8 +172,11 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
             # "Aeródromo Dev DZ" is the listings' "Dev DZ": the same place words.
             {"key": f"es-{tag}-listed-already", "matched": str(dev_dz.id), "by": "name"},
         ],
-        "located": 1, "detailed": 0, "aliases_dropped": 0,
+        # "detailed": the seasonal listed-already record gives Dev DZ the Season "Open
+        # part of the year" (seasonal, no stated dates).
+        "located": 1, "detailed": 1, "aliases_dropped": 0,
     }  # fmt: skip
+    assert dev_dz.season == "Open part of the year"
     # Bad records and a broken file are refused one by one; everything else loaded.
     refused = report["refused"]
     assert refused[-1]["file"] == "PT.json"  # files load in name order
@@ -195,7 +198,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
         v = page.items[0]
         return {
             "status": v.status.value, "lat": v.latitude, "lon": v.longitude,
-            "aliases": sorted(a.name for a in v.aliases), "note": v.source_note,
+            "aliases": sorted(a.name for a in v.aliases), "note": v.internal_note,
             "url": v.source_url, "checked_on": v.checked_on.isoformat() if v.checked_on else None,
         }  # fmt: skip
 
@@ -216,10 +219,10 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     # An uncertain lead is kept as a draft: not shown as a dropzone, here as on staging.
     assert directory.search(query=f"Unplaced Field {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
     with engine.connect() as conn:
-        unplaced = conn.execute(text("SELECT status, checked_on, source_note FROM skydiver_venue WHERE name = :n"), {"n": f"Unplaced Field {tag}"}).one()  # fmt: skip
+        unplaced = conn.execute(text("SELECT status, checked_on, source_note AS internal_note FROM skydiver_venue WHERE name = :n"), {"n": f"Unplaced Field {tag}"}).one()  # fmt: skip
     assert unplaced.status == "draft"
     assert unplaced.checked_on.isoformat() == "2026-11-14"  # the file's research day
-    assert unplaced.source_note.endswith("Research status: uncertain.")
+    assert unplaced.internal_note.endswith("Research status: uncertain.")
     # The listings' own venue, found by the dropzone's name, got the coordinates.
     known = venue(f"Dev DZ {tag}")
     assert (known["lat"], known["lon"]) == (41.5, 2.1)
@@ -459,7 +462,7 @@ def test_a_venue_loaded_before_details_existed_gets_them_on_the_next_run(
     old = directory.create_venue(actor, VenueInput(
         name=f"Old Field {tag}", country="ES", source_url="https://example.org/old",
         checked_on=datetime.now(UTC).date(), latitude=40.9, longitude=-4.1,
-        source_note=f"dev-data:es-{tag}-old Unreviewed candidate, local development only.",
+        internal_note=f"dev-data:es-{tag}-old Unreviewed candidate, local development only.",
     ))  # fmt: skip
     record = {
         "key": f"es-{tag}-old", "name": f"Old Field {tag}", "aliases": [], "country": "ES",
@@ -500,7 +503,7 @@ def test_details_of_a_merged_research_venue_go_to_the_surviving_one(
     ))  # fmt: skip
     copy = directory.create_venue(actor, VenueInput(
         name=f"Older Field {tag} (Copy)", country="GR", source_url="https://example.org/copy",
-        checked_on=today, source_note=f"dev-data:gr-{tag}-older Unreviewed candidate, local development only.",
+        checked_on=today, internal_note=f"dev-data:gr-{tag}-older Unreviewed candidate, local development only.",
     ))  # fmt: skip
     directory.merge(actor, copy.id, older.id)
     record = {
@@ -582,5 +585,15 @@ def test_the_dev_listings_file_matches_what_the_loader_reads() -> None:
     # Notes go through the source-note length rule (a 286-character note once broke seeding).
     for p in data["providers"]:
         note = devdata._note(p["key"], p.get("note"))
-        assert len(note) <= SOURCE_NOTE_MAX and note.endswith(p.get("note") or "."), p["key"]  # fmt: skip
-    assert len(devdata._note("k" * 60, "x" * 500)) == SOURCE_NOTE_MAX
+        assert len(note) <= INTERNAL_NOTE_MAX and note.endswith(p.get("note") or "."), p["key"]  # fmt: skip
+    assert len(devdata._note("k" * 60, "x" * 500)) == INTERNAL_NOTE_MAX
+
+
+def test_seasonal_without_dates_says_so_publicly_and_nothing_else() -> None:
+    """The research status stays in the reviewer-only note; a seasonal dropzone without
+    stated dates still gets a public Season, worded as what a visitor can rely on."""
+    assert devdata._details({"status": "seasonal"})["season"] == "Open part of the year"
+    stated = devdata._details({"status": "seasonal", "season": "April to October"})
+    assert stated["season"] == "April to October"
+    for status in ("active", "closed", "uncertain"):
+        assert devdata._details({"status": status})["season"] is None

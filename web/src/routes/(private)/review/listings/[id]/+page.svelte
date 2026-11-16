@@ -41,11 +41,11 @@
 </script>
 
 <svelte:head>
-	<title>{l ? l.title : 'New listing'} · Maintenance · Load Organiser</title>
+	<title>{l ? l.title : 'New listing'} · Reviewer tools · Load Organiser</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<p><a href="/review">Maintenance</a></p>
+<p><a href="/review">Reviewer tools</a></p>
 <h1>{l ? l.title : 'New listing'}</h1>
 {#if l}
 	<p class="lede">
@@ -215,8 +215,8 @@
 				<input id="source_url" name="source_url" type="url" defaultValue={v('source_url', l?.source_url)} />
 			</div>
 			<div class="field">
-				<label for="source_note">Source note</label>
-				<input id="source_note" name="source_note" maxlength="280" defaultValue={v('source_note', l?.source_note)} />
+				<label for="internal_note">Internal note (optional, reviewers only)</label>
+				<input id="internal_note" name="internal_note" maxlength="280" defaultValue={v('internal_note', l?.internal_note)} />
 			</div>
 			<div class="field">
 				<label for="checked_on">Source last checked</label>
