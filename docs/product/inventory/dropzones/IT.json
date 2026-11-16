@@ -61,6 +61,11 @@
       "icao": "LIDB",
       "operators": [
         {
+          "name": "Skydive Belluno",
+          "website": "https://www.skydivebelluno.it/",
+          "facebook": null
+        },
+        {
           "name": "Aero Club Paracadutismo Belluno ASD"
         }
       ],
@@ -91,6 +96,11 @@
           "url": "https://www.webaeci.it/cgi-bin/agp.bat?service=casp_list",
           "checked_on": "2026-11-14",
           "what": "Codex cross-check: Dated parachuting competition at this location: Dolomiti Cup 2–3 May 2026 and Belluno Trophy 7–9 August 2026."
+        },
+        {
+          "url": "https://www.skydivebelluno.it/skydive-world-cup-series-belluno-trophy/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Long-running precision-landing (accuracy) centre; hosts Trofeo Città di Belluno / Dolomiti Cup."
@@ -107,7 +117,9 @@
       "icao": "LILM",
       "operators": [
         {
-          "name": "Area Delta 47 - Accademia di Paracadutismo"
+          "name": "Area Delta 47 - Accademia di Paracadutismo",
+          "website": "https://accademiadiparacadutismo.it/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -501,7 +513,9 @@
       "icao": "LIQL",
       "operators": [
         {
-          "name": "Associazione Paracadutisti Toscani (Skydive Lucca)"
+          "name": "Associazione Paracadutisti Toscani (Skydive Lucca)",
+          "website": "https://www.paracadutismolucca.it/",
+          "facebook": "https://www.facebook.com/SkydiveLucca"
         }
       ],
       "status": "active",
@@ -531,6 +545,11 @@
           "url": "https://ourairports.com/airports/LIQL/",
           "checked_on": "2026-11-14",
           "what": "Codex cross-check: Opened airport reference coordinates match the named airfield; original OSM/operator point retained."
+        },
+        {
+          "url": "https://www.paracadutismolucca.it/contatti",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },
@@ -820,7 +839,9 @@
           "name": "Moli-DZone"
         },
         {
-          "name": "Skydive FlyGang"
+          "name": "Skydive FlyGang",
+          "website": "https://www.skydiveflygang.com/",
+          "facebook": "https://www.facebook.com/paracadutismoflygang"
         }
       ],
       "status": "active",
@@ -845,6 +866,11 @@
           "url": "https://www.ecodellapista.it/allaviosuperficie-di-molinella-il-flyinmoli-vintage-festival-40s-2026/",
           "checked_on": "2026-11-14",
           "what": "Codex cross-check: Report dated 5 October 2026 describes Flygang school jumps continuing during the 3–4 October event."
+        },
+        {
+          "url": "https://www.skydiveflygang.com/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },
@@ -1843,7 +1869,9 @@
       "icao": "LIMW",
       "operators": [
         {
-          "name": "Sky Dream Center"
+          "name": "Sky Dream Center",
+          "website": "https://skydreamcenter.it/lanci-tandem-aosta",
+          "facebook": "https://www.facebook.com/SkyDreamCenterScuoladiParacadutismoCumianaTorino"
         }
       ],
       "status": "seasonal",
@@ -1868,6 +1896,11 @@
           "url": "https://ourairports.com/airports/LIMW/",
           "checked_on": "2026-11-14",
           "what": "Airfield position"
+        },
+        {
+          "url": "https://skydreamcenter.it/lanci-tandem-aosta",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Selected event weekends; the operator also runs the separate Cumiana site."

@@ -67,7 +67,8 @@
       "operators": [
         {
           "name": "PARACHUTE CLUB D'AIX",
-          "website": null
+          "website": "https://www.paraclubaix.com/",
+          "facebook": "https://www.facebook.com/ParachuteClubDAixEnProvence"
         }
       ],
       "status": "active",
@@ -97,6 +98,11 @@
           "url": "https://www.ffp.asso.fr/ou-pratiquer/structures/?code=1301",
           "checked_on": "2026-11-14",
           "what": "Individual FFP school entry and operator website."
+        },
+        {
+          "url": "https://www.paraclubaix.com/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Airfield location, not the federation correspondence address. Active denotes listed operation, not a guarantee of daily or year-round jumping."
@@ -115,7 +121,9 @@
       "icao": "LFCI",
       "operators": [
         {
-          "name": "Albi Parachutisme"
+          "name": "Albi Parachutisme",
+          "website": "https://albi-parachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -135,6 +143,11 @@
           "url": "https://albi-parachutisme.fr/saut-en-parachute-toulouse/",
           "checked_on": "2026-11-14",
           "what": "Operator publishes its 2027 season calendar and describes winter closure; this is an advertised future season, not evidence that future jumps have occurred."
+        },
+        {
+          "url": "https://albi-parachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -154,7 +167,9 @@
       "icao": "LFHT",
       "operators": [
         {
-          "name": "Auvergne Parachutisme"
+          "name": "Auvergne Parachutisme",
+          "website": "https://www.auvergneparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -174,6 +189,11 @@
           "url": "https://www.auvergneparachutisme.fr/reserver-une-date/",
           "checked_on": "2026-11-14",
           "what": "Operator publishes its 2026 booking calendar and lists this airfield among its rotating jump locations; individual dates need booking confirmation."
+        },
+        {
+          "url": "https://www.auvergneparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Provider list from directory may include tandem intermediaries; aircraft-operating responsibility requires confirmation."
@@ -316,7 +336,9 @@
       "icao": "LFHO",
       "operators": [
         {
-          "name": "Dragon Fly Parachutisme"
+          "name": "Dragon Fly Parachutisme",
+          "website": "https://www.dragon-fly-parachutisme.com/aubenas",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -336,6 +358,11 @@
           "url": "https://www.inauvergnerhonealpes.com/en/files/dragon-fly/",
           "checked_on": "2026-11-14",
           "what": "Regional tourism entry updated 10 October 2025 gives opening from 25 April to 25 October 2026 at Lanas."
+        },
+        {
+          "url": "https://www.dragon-fly-parachutisme.com/aubenas",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -538,7 +565,9 @@
       "icao": "LFRF",
       "operators": [
         {
-          "name": "Abalone Parachutisme"
+          "name": "Abalone Parachutisme",
+          "website": "https://www.parachutisme.pro/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -577,6 +606,11 @@
       "icao": "LFFN",
       "operators": [
         {
+          "name": "Brienne Aube Parachutisme",
+          "website": "https://aubeparachutisme.fr/",
+          "facebook": null
+        },
+        {
           "name": "SAS AUBE PARACHUTISME",
           "website": null
         }
@@ -608,6 +642,11 @@
           "url": "https://www.ffp.asso.fr/ou-pratiquer/structures/?code=1020",
           "checked_on": "2026-11-14",
           "what": "Individual FFP school entry and operator website."
+        },
+        {
+          "url": "https://aubeparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Airfield location, not the federation correspondence address. Active denotes listed operation, not a guarantee of daily or year-round jumping."
@@ -626,7 +665,9 @@
       "icao": "LFHR",
       "operators": [
         {
-          "name": "Auvergne Parachutisme"
+          "name": "Auvergne Parachutisme",
+          "website": "https://www.auvergneparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -646,6 +687,11 @@
           "url": "https://www.auvergneparachutisme.fr/reserver-une-date/",
           "checked_on": "2026-11-14",
           "what": "Operator publishes its 2026 booking calendar and lists this airfield among its rotating jump locations; individual dates need booking confirmation."
+        },
+        {
+          "url": "https://www.auvergneparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Provider list from directory may include tandem intermediaries; aircraft-operating responsibility requires confirmation."
@@ -711,7 +757,9 @@
       "icao": "LFAC",
       "operators": [
         {
-          "name": "Para Groupe Jean Bart"
+          "name": "Para Groupe Jean Bart",
+          "website": "https://parachutismenord.wixsite.com/dunkerque",
+          "facebook": "https://www.facebook.com/paragroupejeanbart"
         }
       ],
       "status": "seasonal",
@@ -780,7 +828,9 @@
       "icao": "LFCX",
       "operators": [
         {
-          "name": "Parachutisme Occitan"
+          "name": "Parachutisme Occitan",
+          "website": "https://parachutismeoccitan.com/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -823,7 +873,9 @@
       "icao": "LFCK",
       "operators": [
         {
-          "name": "ChuteXtrem Parachutisme"
+          "name": "ChuteXtrem Parachutisme",
+          "website": "https://chutextrem.com/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -866,7 +918,9 @@
       "icao": "LFJH",
       "operators": [
         {
-          "name": "Parachutisme Occitan"
+          "name": "Parachutisme Occitan",
+          "website": "https://parachutismeoccitan.com/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -1005,7 +1059,9 @@
       "icao": "LFJY",
       "operators": [
         {
-          "name": "Tandemotion"
+          "name": "Tandemotion",
+          "website": "https://parachutismelorraine.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1030,6 +1086,11 @@
           "url": "https://parachutismelorraine.fr/28-juin-2026/",
           "checked_on": "2026-11-14",
           "what": "Operator describes voluntary suspension after the 28 June 2026 accident and subsequent resumption; site-specific availability needs confirmation."
+        },
+        {
+          "url": "https://parachutismelorraine.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Airfield reference point, not necessarily the precise parachute landing target."
@@ -1087,7 +1148,9 @@
       "icao": "LFGA",
       "operators": [
         {
-          "name": "Alsace Parachutisme"
+          "name": "Alsace Parachutisme",
+          "website": "https://saut-parachute-alsace.fr/",
+          "facebook": "https://www.facebook.com/AlsaceParachutisme"
         }
       ],
       "status": "seasonal",
@@ -1112,6 +1175,11 @@
           "url": "https://www.tourisme-colmar.com/fr/loisirs-fr/sports-et-nature/activites-sportives-et-loisirs/F235015320_alsace-parachutisme-colmar",
           "checked_on": "2026-11-14",
           "what": "Opened supplementary evidence for the location, calendar or dated booking information described in status_evidence."
+        },
+        {
+          "url": "https://saut-parachute-alsace.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -1178,7 +1246,9 @@
       "icao": "LFSD",
       "operators": [
         {
-          "name": "Dijon Parachutisme"
+          "name": "Dijon Parachutisme",
+          "website": "https://www.dijon-parachutisme.eu/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1198,6 +1268,11 @@
           "url": "https://www.yumping.com/fr/parachutisme/dijon-parachutisme--e19866233",
           "checked_on": "2026-11-14",
           "what": "Booking listing updated 30 July 2026 reports bookings since August 2025 for Dijon Parachutisme; operator calendar lists selected spring and summer weekends."
+        },
+        {
+          "url": "https://www.dijon-parachutisme.eu/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -1336,7 +1411,9 @@
       "icao": "LFSG",
       "operators": [
         {
-          "name": "Tandemotion"
+          "name": "Tandemotion",
+          "website": "https://parachutismelorraine.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1361,6 +1438,11 @@
           "url": "https://parachutismelorraine.fr/28-juin-2026/",
           "checked_on": "2026-11-14",
           "what": "Operator describes voluntary suspension after the 28 June 2026 accident and subsequent resumption; site-specific availability needs confirmation."
+        },
+        {
+          "url": "https://parachutismelorraine.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Airfield reference point, not necessarily the precise parachute landing target."
@@ -1377,7 +1459,9 @@
       "icao": "LFMF",
       "operators": [
         {
-          "name": "Air Play Parachutisme"
+          "name": "Air Play Parachutisme",
+          "website": "https://airplayparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1397,6 +1481,11 @@
           "url": "https://airplayparachutisme.fr/produit/saut-en-parachute-tandem-fayence/",
           "checked_on": "2026-11-14",
           "what": "Operator booking page advertises Fayence jump sessions on 15–17 May, 7–9 August and 20–22 August 2027."
+        },
+        {
+          "url": "https://airplayparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -1537,7 +1626,9 @@
       "icao": "LFKG",
       "operators": [
         {
-          "name": "Corse Parachutisme Tandem"
+          "name": "Corse Parachutisme Tandem",
+          "website": "https://corse-parachutisme-tandem.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1557,6 +1648,11 @@
           "url": "https://www.corseorientale.com/A-voir-A-faire/Le-plein-d-activites/SPORT-AERIEN/CORSE-PARACHUTISME-TANDEM",
           "checked_on": "2026-11-14",
           "what": "Local tourism operator listing gives 2026 tariffs and 11 April–31 October season."
+        },
+        {
+          "url": "https://corse-parachutisme-tandem.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Provider list from directory may include tandem intermediaries; aircraft-operating responsibility requires confirmation."
@@ -1690,7 +1786,9 @@
       "icao": "LFID",
       "operators": [
         {
-          "name": "Parachutisme Occitan"
+          "name": "Parachutisme Occitan",
+          "website": "https://parachutismeoccitan.com/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -1731,7 +1829,9 @@
       "icao": "LFRE",
       "operators": [
         {
-          "name": "Entre Ciel et Terre"
+          "name": "Entre Ciel et Terre",
+          "website": "https://www.entrecieletterre.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1751,6 +1851,11 @@
           "url": "https://www.entrecieletterre.com/planning/",
           "checked_on": "2026-11-14",
           "what": "Operator publishes a 2026–2027 flight calendar explicitly covering La Baule and Quiberon, with separate site and closure legends."
+        },
+        {
+          "url": "https://www.entrecieletterre.com/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -1795,7 +1900,9 @@
       "icao": "LFAL",
       "operators": [
         {
-          "name": "2Dive"
+          "name": "2Dive",
+          "website": "https://www.2dive.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1920,7 +2027,9 @@
       "icao": "LFRI",
       "operators": [
         {
-          "name": "Mike Air Parachutisme"
+          "name": "Mike Air Parachutisme",
+          "website": "https://mike-air-parachutisme.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -1995,7 +2104,9 @@
       "icao": "LFTA",
       "operators": [
         {
-          "name": "Mike Air Parachutisme"
+          "name": "Mike Air Parachutisme",
+          "website": "https://mike-air-parachutisme.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2287,7 +2398,9 @@
       "icao": "LFOH",
       "operators": [
         {
-          "name": "Abeille Parachutisme"
+          "name": "Abeille Parachutisme",
+          "website": "https://www.abeilleparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2307,6 +2420,11 @@
           "url": "https://www.abeilleparachutisme.fr/zones-de-saut",
           "checked_on": "2026-11-14",
           "what": "Operator explicitly publishes the Le Havre season from 13 March to 31 October 2026, with selected operating weekdays and exclusions during Avranches sessions."
+        },
+        {
+          "url": "https://www.abeilleparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -2373,7 +2491,9 @@
       "icao": "LFRM",
       "operators": [
         {
-          "name": "2Dive"
+          "name": "2Dive",
+          "website": "https://www.2dive.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2460,7 +2580,9 @@
       "icao": "LFRW",
       "operators": [
         {
-          "name": "Abeille Parachutisme"
+          "name": "Abeille Parachutisme",
+          "website": "https://www.abeilleparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2480,6 +2602,11 @@
           "url": "https://www.abeilleparachutisme.fr/zones-de-saut",
           "checked_on": "2026-11-14",
           "what": "Operator lists Avranches jump sessions on 22–25 May, 26–29 June, 24–27 July, 28–31 August and 25–29 September 2026, departing and landing at Le Val-Saint-Père."
+        },
+        {
+          "url": "https://www.abeilleparachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -2548,7 +2675,9 @@
       "icao": "LFOO",
       "operators": [
         {
-          "name": "Vendée Évasion Parachutisme"
+          "name": "Vendée Évasion Parachutisme",
+          "website": "https://www.vendee-evasion.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2568,6 +2697,11 @@
           "url": "https://www.vendee-evasion.fr/calendrier-2026-quand-sauter-en-parachute/",
           "checked_on": "2026-11-14",
           "what": "Operator article published 16 October 2025 and updated 28 October 2025 presents its 2026 jump calendar."
+        },
+        {
+          "url": "https://www.vendee-evasion.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -2587,7 +2721,9 @@
       "icao": "LFOM",
       "operators": [
         {
-          "name": "Aair Parachutisme"
+          "name": "Aair Parachutisme",
+          "website": "https://aair-parachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2607,6 +2743,11 @@
           "url": "https://www.encotentin.fr/loisirs/aair-parachutisme/",
           "checked_on": "2026-11-14",
           "what": "Local tourism listing gives 21 March–21 November 2026 season at Lessay."
+        },
+        {
+          "url": "https://aair-parachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Provider list from directory may include tandem intermediaries; aircraft-operating responsibility requires confirmation."
@@ -2723,7 +2864,9 @@
       "icao": "LFGL",
       "operators": [
         {
-          "name": "Airextrem Parachutisme"
+          "name": "Airextrem Parachutisme",
+          "website": "https://www.airextrem-parachutisme.fr/",
+          "facebook": "https://www.facebook.com/airextrem/"
         }
       ],
       "status": "seasonal",
@@ -2743,6 +2886,11 @@
           "url": "https://www.airextrem-parachutisme.fr/medias/le%2029%20avril%202026%20-%20Planning%202026%20.pdf",
           "checked_on": "2026-11-14",
           "what": "Operator 2026 calendar, revision 29 April 2026, explicitly allocates jump dates to both Lons-le-Saunier and Tournus-Cuisery."
+        },
+        {
+          "url": "https://www.airextrem-parachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -2950,7 +3098,9 @@
       "icao": "LFCM",
       "operators": [
         {
-          "name": "Accel'Air"
+          "name": "Accel'Air",
+          "website": "https://www.accel-air.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -2989,7 +3139,8 @@
       "operators": [
         {
           "name": "SKYDIVE MIMIZAN",
-          "website": null
+          "website": "https://skydive-mimizan.fr/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -3019,6 +3170,11 @@
           "url": "https://www.ffp.asso.fr/ou-pratiquer/structures/?code=4002",
           "checked_on": "2026-11-14",
           "what": "Individual FFP school entry and operator website."
+        },
+        {
+          "url": "https://skydive-mimizan.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Airfield location, not the federation correspondence address. Active denotes listed operation, not a guarantee of daily or year-round jumping."
@@ -3035,7 +3191,9 @@
       "icao": "LFEM",
       "operators": [
         {
-          "name": "Fly Attitude"
+          "name": "Fly Attitude",
+          "website": "https://flyattitude.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3190,7 +3348,9 @@
       "icao": "LFHY",
       "operators": [
         {
-          "name": "Auvergne Parachutisme"
+          "name": "Auvergne Parachutisme",
+          "website": "https://www.auvergneparachutisme.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3367,7 +3527,9 @@
       "icao": "LFME",
       "operators": [
         {
-          "name": "Accel'Air"
+          "name": "Accel'Air",
+          "website": "https://www.accel-air.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3501,7 +3663,9 @@
       "icao": "LFEC",
       "operators": [
         {
-          "name": "Aero Tandem Celtic"
+          "name": "Aero Tandem Celtic",
+          "website": "https://www.saut-parachute-bretagne.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3684,7 +3848,9 @@
       "icao": "LFEQ",
       "operators": [
         {
-          "name": "Entre Ciel et Terre"
+          "name": "Entre Ciel et Terre",
+          "website": "https://www.entrecieletterre.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3704,6 +3870,11 @@
           "url": "https://www.baiedequiberon.bzh/a-voir-a-faire/sports-et-loisirs-en-bretagne-sud/entre-ciel-et-terre",
           "checked_on": "2026-11-14",
           "what": "Bay of Quiberon tourism page gives 4 April–1 November 2026 opening for Entre Ciel et Terre at Quiberon."
+        },
+        {
+          "url": "https://www.entrecieletterre.com/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -3723,7 +3894,9 @@
       "icao": "LFRQ",
       "operators": [
         {
-          "name": "Kemp-Air Parachutisme"
+          "name": "Kemp-Air Parachutisme",
+          "website": "https://www.kemp-airparachutisme.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -3820,7 +3993,9 @@
       "icao": "LFIR",
       "operators": [
         {
-          "name": "ChuteXtrem Parachutisme"
+          "name": "ChuteXtrem Parachutisme",
+          "website": "https://chutextrem.com/",
+          "facebook": "https://www.facebook.com/Chutextrem"
         }
       ],
       "status": "active",
@@ -3949,7 +4124,9 @@
       "icao": "LFCR",
       "operators": [
         {
-          "name": "Chute Libre Dordogne"
+          "name": "Chute Libre Dordogne",
+          "website": "https://www.chutelibre.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -4135,7 +4312,9 @@
       "icao": "LFCG",
       "operators": [
         {
-          "name": "Azimut Tandem"
+          "name": "Azimut Tandem",
+          "website": "https://www.azimut-tandem.fr/",
+          "facebook": null
         },
         {
           "name": "Parachutisme Occitan"
@@ -4163,6 +4342,11 @@
           "url": "https://parachutismeoccitan.com/qui-sommes-nous/",
           "checked_on": "2026-11-14",
           "what": "Operator presentation explicitly describes its management in 2026, names this airfield among its five operating bases and states ownership of its Cessna 182; individual session dates are not established."
+        },
+        {
+          "url": "https://www.azimut-tandem.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator."
@@ -4215,7 +4399,9 @@
       "icao": "LFDS",
       "operators": [
         {
-          "name": "Chute Libre Dordogne"
+          "name": "Chute Libre Dordogne",
+          "website": "https://www.chutelibre.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -4337,7 +4523,9 @@
       "icao": "LFDK",
       "operators": [
         {
-          "name": "XLR Parachutisme"
+          "name": "XLR Parachutisme",
+          "website": "https://www.xlrparachutisme.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -4468,7 +4656,9 @@
       "icao": "LFFX",
       "operators": [
         {
-          "name": "Airextrem Parachutisme"
+          "name": "Airextrem Parachutisme",
+          "website": "https://www.airextrem-parachutisme.fr/",
+          "facebook": "https://www.facebook.com/airextrem/"
         }
       ],
       "status": "seasonal",
@@ -4488,6 +4678,11 @@
           "url": "https://www.airextrem-parachutisme.fr/medias/le%2029%20avril%202026%20-%20Planning%202026%20.pdf",
           "checked_on": "2026-11-14",
           "what": "Operator 2026 calendar, revision 29 April 2026, explicitly allocates jump dates to both Lons-le-Saunier and Tournus-Cuisery."
+        },
+        {
+          "url": "https://www.airextrem-parachutisme.fr/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator.",
@@ -4505,7 +4700,9 @@
       "icao": "LFEN",
       "operators": [
         {
-          "name": "Tours’N Jump"
+          "name": "Tours’N Jump",
+          "website": "https://toursnjump.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -4623,7 +4820,9 @@
       "icao": "LFLV",
       "operators": [
         {
-          "name": "Auvergne Chute Libre"
+          "name": "Auvergne Chute Libre",
+          "website": "https://auvergne-chutelibre.fr/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -4667,7 +4866,9 @@
       "icao": "LFCV",
       "operators": [
         {
-          "name": "Parachutisme Occitan"
+          "name": "Parachutisme Occitan",
+          "website": "https://parachutismeoccitan.com/",
+          "facebook": null
         }
       ],
       "status": "active",
@@ -4697,6 +4898,11 @@
           "url": "https://www.bastides-gorges-aveyron.fr/activites/les-choses-de-lair-saut-en-parachute-tandem/",
           "checked_on": "2026-11-14",
           "what": "Opened supplementary evidence for the location, calendar or dated booking information described in status_evidence."
+        },
+        {
+          "url": "https://parachutismeoccitan.com/saut-en-parachute-a-villefranche-de-rouergue-12/",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Status describes the evidenced advertised operation; confirm individual jump dates with the operator."

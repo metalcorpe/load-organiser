@@ -82,6 +82,15 @@ The public API models (`VenueOut`, `OpportunityOut`, `ProviderOut`) have no note
 
 Publication rules are unchanged: drafts and `uncertain` research leads stay unpublished. A local copy loaded with unreviewed sample data says so once on every page ("Local demo copy…") through the web setting `DEMO_DATA=true`, which only `scripts/dev.sh` sets, instead of each listing carrying a `dev-data:` marker.
 
+## Only dropzones a jumper can reach (owner decision 2026-11-16)
+
+An open (active or seasonal) researched dropzone is published only with a website or Facebook page of its own operator: a listing with nothing to follow lowers the directory's value for a fun jumper. Closed dropzones stay listed without one, so jumps logged there keep their place.
+
+- The loader (`devdata._has_link`) leaves an open dropzone without an operator link as a draft, locally and on staging.
+- A research pass on 2026-11-16 found the operator's own page for 61 of the 68 open dropzones that had none (often it was already among the record's sources but not on the operator). Each was opened and ties the operator to that airfield with 2025–2026 activity. The 7 not found stay drafts: `gb-weston-on-the-green`, `it-arezzo`, `it-udine-campoformido`, `it-san-vincenzo`, `it-terni`, `pt-rio-maior`, `pt-braganca`.
+- A rerun of `scripts/staging.sh load-dropzones` adds the new links to venues already on staging (`_operator_links`: a same-named operator without a link gets it; existing names and links are kept).
+- A public venue is never unlisted (jumps refer to it). If one already on staging has no operator link, the load report names it under `unlinked` for the owner to review in `/review`.
+
 ## Map view
 
 Requested by the owner 2026-11-14: `/dz?view=map` shows the same search as the list on a map. No paid

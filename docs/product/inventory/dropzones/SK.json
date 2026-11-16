@@ -396,6 +396,11 @@
       "icao": "LZLU",
       "operators": [
         {
+          "name": "Tandemzoskok.com",
+          "website": "https://www.tandemzoskok.com/",
+          "facebook": null
+        },
+        {
           "name": "Aeroklub Lučenec"
         },
         {
@@ -414,6 +419,11 @@
           "url": "https://www.leteckezazitky.sk/kategorie/tandemovy-zoskok-s-padakom",
           "checked_on": "2026-11-14",
           "what": "voucher seller listing 12 Slovak tandem airfields (2026 site)"
+        },
+        {
+          "url": "https://www.tandemzoskok.com/o-nas",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ]
     },

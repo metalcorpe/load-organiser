@@ -18,6 +18,11 @@
       "icao": "LQPD",
       "operators": [
         {
+          "name": "Aero Club Prijedor, Parachuting Section",
+          "website": null,
+          "facebook": "https://www.facebook.com/prijedoropen"
+        },
+        {
           "name": "Aero-klub Prijedor"
         },
         {
@@ -53,6 +58,11 @@
           "url": "https://kozarski.com/otvoren-medjunarodni-padobranski-kup-prijedor-open-2026",
           "checked_on": "2026-11-14",
           "what": "News: Prijedor Open 2026 international parachuting cup opened"
+        },
+        {
+          "url": "https://www.facebook.com/prijedoropen",
+          "checked_on": "2026-11-16",
+          "what": "Operator's own page naming this airfield, current in 2025-2026; source of the operator link."
         }
       ],
       "note": "Jumping is confirmed for the annual boogie and competition week in 2025 and 2026; regular jumping outside that week is not confirmed."

@@ -29,8 +29,10 @@ Aliases several records share never match: they are often operator brands of
 several airfields. Each venue is created as a
 draft and made public (listed, or closed for researched `closed` dropzones) in one
 step at the end; `uncertain` ones stay drafts, as on staging: an unconfirmed lead is
-not shown as a dropzone. The research status is in the internal note; a seasonal
-dropzone without stated dates gets the Season "Open part of the year". Invalid records
+not shown as a dropzone. So does an open dropzone without a website or Facebook page
+of its operator (owner decision 2026-11-16): a jumper could not reach it. The research
+status is in the internal note; a seasonal dropzone without stated dates gets the
+Season "Open part of the year". Invalid records
 are refused and reported; the rest still load.
 """
 
@@ -70,6 +72,7 @@ from app.skydiver.directory.service import (
     MAX_MERGE_HOPS,
     DirectoryService,
     EditConflict,
+    Operator,
     VenueChanges,
     VenueInput,
 )
@@ -345,6 +348,13 @@ def _surviving(engine: Engine, venue_id: uuid.UUID) -> uuid.UUID | None:
 DROPZONE_STATUSES = frozenset({"active", "seasonal", "uncertain", "closed"})
 # The local load shows what the research confirmed; `uncertain` leads stay drafts.
 LOCAL_PUBLISH = DROPZONE_STATUSES - {"uncertain"}
+
+
+def _has_link(dropzone: Mapping[str, Any]) -> bool:
+    """A usable website or Facebook page of the operator, as `_details` keeps it."""
+    return any(op.get("url") for op in _details(dropzone)["operators"])
+
+
 DROPZONE_KEY = re.compile(r"^[a-z0-9-]+$")
 
 
@@ -451,20 +461,48 @@ def _details(dropzone: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _operator_links(
+    stored: Sequence[Operator], researched: Sequence[Mapping[str, Any]]
+) -> list[dict[str, Any]] | None:
+    """The stored operators with researched links added where a same-named operator
+    has none (or, when none of them gets one, the researched operators that have a
+    link, up to the limit); None when nothing would change. Existing names and links
+    stay. The inventory is the source of researched links: a link removed in /review
+    comes back on the next run unless it is removed from the inventory too."""
+    links = {search_key(o["name"]): o["url"] for o in researched if o.get("url")}
+    merged = [
+        {"name": o.name, "url": o.url or links.get(search_key(o.name))} for o in stored
+    ]
+    if not any(o["url"] for o in merged):
+        # The research names the operator differently: add it, link and all.
+        names = {search_key(str(o["name"])) for o in merged}
+        merged += [
+            {"name": o["name"], "url": o["url"]}
+            for o in researched
+            if o.get("url") and search_key(o["name"]) not in names
+        ][: OPERATORS_MAX - len(merged)]
+    unchanged = [{"name": o.name, "url": o.url} for o in stored]
+    return merged if merged != unchanged else None
+
+
 def _fill_details(
     directory: DirectoryService,
     actor: Actor,
     venue_id: uuid.UUID,
     dropzone: Mapping[str, Any],
 ) -> bool:
-    """Give a venue the researched details if it has none of them (compare-and-swap)."""
+    """Give a venue the researched details if it has none of them, or the researched
+    link of a stored operator that has none (compare-and-swap)."""
     details = _details(dropzone)
     if not any(details.values()):
         return False
     try:
         venue, _ = directory.reviewer_venue(actor, venue_id)
         if venue.operators or venue.season or venue.aircraft:
-            return False
+            changes = _operator_links(venue.operators, details["operators"])
+            if changes is None:
+                return False
+            details = {"operators": changes}
         directory.update_venue(
             actor, venue_id, VenueChanges(details), expected_version=venue.version
         )
@@ -534,13 +572,20 @@ def load_dropzones(
         "located": 0,
         "detailed": 0,
         "aliases_dropped": 0,
+        "unlinked": [],
         "refused": [],
     }
 
-    def publishes(dz: Mapping[str, Any]) -> bool:
+    def trusted(dz: Mapping[str, Any]) -> bool:
+        """Its researched coordinates and details may fill in a stored venue."""
         if publish is None:
             return dz["status"] in LOCAL_PUBLISH
         return dz["status"] in publish and _point(dz) is not None
+
+    def publishes(dz: Mapping[str, Any]) -> bool:
+        # An open dropzone a jumper cannot reach (no website or Facebook page of its
+        # own) stays a draft until research finds one (owner decision 2026-11-16).
+        return trusted(dz) and (dz["status"] == "closed" or _has_link(dz))
 
     loaded = _loaded(engine, "skydiver_venue")
     names = _venue_names(engine)
@@ -572,11 +617,20 @@ def load_dropzones(
             aliases = [a for a in dz.get("aliases") or [] if a.strip()]
             resumed = key in loaded
             if resumed:
-                if _venue_status(engine, loaded[key]) != "draft":
+                current = _venue_status(engine, loaded[key])
+                if current != "draft":
                     report["skipped"] += 1
+                    if (
+                        current == "listed"
+                        and dz["status"] != "closed"
+                        and not _has_link(dz)
+                    ):
+                        # Public already, and a public venue is never unlisted (jumps
+                        # refer to it): named for the owner to review instead.
+                        report["unlinked"].append(key)
                     # Loaded before the details existed: add them where it may publish,
                     # to the surviving venue when this one was merged into another.
-                    target = _surviving(engine, loaded[key]) if publishes(dz) else None
+                    target = _surviving(engine, loaded[key]) if trusted(dz) else None
                     if target is not None:
                         report["detailed"] += _fill_details(
                             directory, actor, target, dz
@@ -601,7 +655,7 @@ def load_dropzones(
                     report["duplicates"].append(
                         {"key": key, "matched": str(match[0]), "by": match[1]}
                     )
-                    if publishes(dz):
+                    if trusted(dz):
                         report["located"] += _locate(directory, actor, match[0], dz)
                         report["detailed"] += _fill_details(
                             directory, actor, match[0], dz

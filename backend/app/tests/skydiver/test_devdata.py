@@ -164,17 +164,19 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     report = first["dropzones"]
     dev_dz = directory.search(query=f"Dev DZ {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
     active_dz = directory.search(query=f"Active Field {tag}", country="ES", cursor=None, limit=None).items[0]  # fmt: skip
+    # An open dropzone with no website or Facebook page of its own is not shown.
+    assert directory.search(query=f"Unlinked Field {tag}", country="ES", cursor=None, limit=None).items == []  # fmt: skip
     assert {k: v for k, v in report.items() if k != "refused"} == {
-        "files": 1, "added": 4, "closed": 1, "skipped": 0, "resumed": 0, "drafted": 1,
+        "files": 1, "added": 4, "closed": 1, "skipped": 0, "resumed": 0, "drafted": 2,
         "duplicates": [
             # ~500 m from a dropzone this run added, under another name.
             {"key": f"es-{tag}-near-active", "matched": str(active_dz.id), "by": "distance"},
             # "Aeródromo Dev DZ" is the listings' "Dev DZ": the same place words.
             {"key": f"es-{tag}-listed-already", "matched": str(dev_dz.id), "by": "name"},
         ],
-        # "detailed": the seasonal listed-already record gives Dev DZ the Season "Open
-        # part of the year" (seasonal, no stated dates).
-        "located": 1, "detailed": 1, "aliases_dropped": 0,
+        # "detailed": the seasonal listed-already record gives Dev DZ its operator and
+        # link, and the Season "Open part of the year" (seasonal, no stated dates).
+        "located": 1, "detailed": 1, "aliases_dropped": 0, "unlinked": [],
     }  # fmt: skip
     assert dev_dz.season == "Open part of the year"
     # Bad records and a broken file are refused one by one; everything else loaded.
@@ -242,7 +244,7 @@ def test_loads_the_dropzone_inventory_with_coordinates_once(
     )
 
     again = devdata.load(engine, path, actor, directory, listings)["dropzones"]
-    assert (again["added"], again["skipped"], again["drafted"], again["located"]) == (0, 4, 1, 0)  # fmt: skip
+    assert (again["added"], again["skipped"], again["drafted"], again["located"]) == (0, 4, 2, 0)  # fmt: skip
     assert [d["key"] for d in again["duplicates"]] == [f"es-{tag}-near-active", f"es-{tag}-listed-already"]  # fmt: skip
 
 
@@ -303,6 +305,7 @@ def test_an_alias_only_one_record_carries_finds_the_venue_it_names(
         return {
             "key": f"es-{tag}-{key}", "name": f"{name} {tag}", "aliases": aliases,
             "country": "ES", "latitude": lat, "longitude": -15.5, "status": "active",
+            "operators": [{"name": f"{name} Club", "website": "https://example.org/club"}],
             "sources": [{"url": "https://example.org/airfield", "checked_on": "2026-11-14"}],
         }  # fmt: skip
 
@@ -433,7 +436,7 @@ def test_the_hosted_load_drafts_first_and_publishes_only_the_chosen_statuses(
     first = devdata.load_dropzones(
         engine, folder, actor, directory, publish=frozenset()
     )
-    assert counts(first) == (0, 0, 6, 0, 0)
+    assert counts(first) == (0, 0, 7, 0, 0)
     assert [d["key"] for d in first["duplicates"]] == [f"es-{tag}-near-active"]
     assert public() == []
     with engine.connect() as conn:
@@ -443,11 +446,13 @@ def test_the_hosted_load_drafts_first_and_publishes_only_the_chosen_statuses(
 
     # Step 2: the owner publishes active dropzones with coordinates; the rest wait.
     second = devdata.load_dropzones(engine, folder, actor, directory, publish=frozenset({"active"}))  # fmt: skip
-    assert counts(second) == (3, 3, 3, 0, 0)
+    # "Unlinked Field" is active with coordinates, but has no website or Facebook page of
+    # its own: it stays a draft (owner decision 2026-11-16).
+    assert counts(second) == (3, 3, 4, 0, 0)
     assert public() == sorted([f"Active Field {tag}", f"Second Field {tag}", f"Active {tag} West Field"])  # fmt: skip
 
     again = devdata.load_dropzones(engine, folder, actor, directory, publish=frozenset({"active"}))  # fmt: skip
-    assert counts(again) == (0, 0, 3, 3, 0)
+    assert counts(again) == (0, 0, 4, 3, 0)
 
 
 def test_a_venue_loaded_before_details_existed_gets_them_on_the_next_run(
@@ -587,6 +592,52 @@ def test_the_dev_listings_file_matches_what_the_loader_reads() -> None:
         note = devdata._note(p["key"], p.get("note"))
         assert len(note) <= INTERNAL_NOTE_MAX and note.endswith(p.get("note") or "."), p["key"]  # fmt: skip
     assert len(devdata._note("k" * 60, "x" * 500)) == INTERNAL_NOTE_MAX
+
+
+def test_researched_links_reach_stored_operators_that_have_none() -> None:
+    def ops(*pairs: tuple[str, str | None]) -> tuple[Operator, ...]:
+        return tuple(Operator(name=n, url=u) for n, u in pairs)
+
+    researched = [{"name": "Auvergne Parachutisme", "url": "https://example.org/ap"}]
+    # Same name, no link yet: the link is added; the name stays as stored.
+    assert devdata._operator_links(
+        ops(("AUVERGNE PARACHUTISME", None)), researched
+    ) == [{"name": "AUVERGNE PARACHUTISME", "url": "https://example.org/ap"}]
+    # Named differently by the research: added beside the stored one.
+    assert devdata._operator_links(ops(("Club local", None)), researched) == [
+        {"name": "Club local", "url": None},
+        {"name": "Auvergne Parachutisme", "url": "https://example.org/ap"},
+    ]
+    # A stored link is never replaced, and nothing to add means no change.
+    assert devdata._operator_links(ops(("Auvergne Parachutisme", "https://example.org/own")), researched) is None  # fmt: skip
+    assert devdata._operator_links(ops(("Club local", None)), []) is None
+
+
+def test_a_public_dropzone_that_lost_its_link_is_named_not_unlisted(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A listed venue is never unlisted (jumps refer to it): the report names it."""
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=lambda: datetime.now(UTC))  # fmt: skip
+    tag = uuid.uuid4().hex[:8]
+    _only_this_run(monkeypatch, tag)
+    folder = tmp_path / "dropzones"
+    folder.mkdir()
+    es = json.loads(
+        (FIXTURES / "ES.json").read_text(encoding="utf-8").replace("TAG", tag)
+    )
+    (folder / "ES.json").write_text(json.dumps(es), encoding="utf-8")
+    devdata.load_dropzones(engine, folder, actor, directory)
+    for dz in es["dropzones"]:
+        if dz["key"] == f"es-{tag}-active-west":
+            dz["operators"] = []
+    (folder / "ES.json").write_text(json.dumps(es), encoding="utf-8")
+
+    again = devdata.load_dropzones(engine, folder, actor, directory)
+    assert again["unlinked"] == [f"es-{tag}-active-west"]
+    public = directory.search(query=f"{tag} West Field", country="ES", cursor=None, limit=None)  # fmt: skip
+    assert [v.name for v in public.items] == [f"Active {tag} West Field"]
 
 
 def test_seasonal_without_dates_says_so_publicly_and_nothing_else() -> None:

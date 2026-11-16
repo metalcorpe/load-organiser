@@ -164,7 +164,9 @@
       "icao": "LJBL",
       "operators": [
         {
-          "name": "Alpski letalski center Lesce (ALC Lesce)"
+          "name": "Alpski letalski center Lesce (ALC Lesce)",
+          "website": "https://www.alc.si/category/padalska-sekcija",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -317,7 +319,9 @@
       "icao": "LJPT",
       "operators": [
         {
-          "name": "Aeroklub Ptuj"
+          "name": "Aeroklub Ptuj",
+          "website": "https://www.ak-ptuj.com/",
+          "facebook": null
         }
       ],
       "status": "seasonal",
@@ -372,7 +376,9 @@
       "icao": "LJMS",
       "operators": [
         {
-          "name": "Aeroklub Murska Sobota"
+          "name": "Aeroklub Murska Sobota",
+          "website": "https://www.aeroklub-ms.si/",
+          "facebook": "https://www.facebook.com/aeroklub.murska.sobota/"
         }
       ],
       "status": "seasonal",
