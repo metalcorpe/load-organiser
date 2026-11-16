@@ -58,6 +58,25 @@ describe('listing client', () => {
 		expect(isOpportunityOut({ ...LISTING, starts_on: '4 Dec' })).toBe(false);
 	});
 
+	it('accepts price tiers, or their absence from an older API, and refuses malformed ones', () => {
+		const tier = {
+			label: 'Registration',
+			amount: '95.00',
+			currency: 'EUR',
+			basis: 'per_person',
+			from_on: '2026-11-15',
+			until_on: null,
+			optional: false
+		};
+		const withTiers = (tiers: unknown) => isOpportunityOut({ ...LISTING, price_tiers: tiers });
+		expect(withTiers([])).toBe(true);
+		expect(withTiers([tier])).toBe(true);
+		expect(withTiers([{ ...tier, basis: 'per_load' }])).toBe(false);
+		expect(withTiers([{ ...tier, from_on: '15 Nov' }])).toBe(false);
+		expect(withTiers([{ ...tier, optional: 'no' }])).toBe(false);
+		expect(withTiers(null)).toBe(false);
+	});
+
 	it('passes only allowlisted filters and rejects malformed pages', async () => {
 		const api = fake(ok({ items: [LISTING], next_cursor: null }));
 		const page = await searchOpportunities(api, { country: 'ES', limit: 20 });

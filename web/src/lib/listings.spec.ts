@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+	cardPrice,
+	dateIn,
+	priceRows,
+	tierState,
 	dateStub,
 	featuredLabel,
 	formatPrice,
@@ -112,5 +116,101 @@ describe('groupByMonth', () => {
 	it('has no undated group when every listing has dates', () => {
 		expect(groupByMonth([at('a', '2027-03-01')]).map((g) => g.key)).toEqual(['2027-03']);
 		expect(groupByMonth([])).toEqual([]);
+	});
+});
+
+describe('date-aware pricing', () => {
+	// The Christmas Boogie shape: a registration fee that rises after 14 November, in Madrid,
+	// plus an optional per-jump extra.
+	const registration = { label: 'Registration', currency: 'EUR', basis: 'per_person', optional: false };
+	const boogie = {
+		price_amount: null,
+		price_currency: null,
+		price_basis: null,
+		time_zone: 'Europe/Madrid',
+		price_tiers: [
+			{ ...registration, amount: '80.00', from_on: null, until_on: '2026-11-14' },
+			{ ...registration, amount: '95.00', from_on: '2026-11-15', until_on: null },
+			{
+				label: 'Load organising',
+				amount: '4.80',
+				currency: 'EUR',
+				basis: 'per_jump',
+				from_on: null,
+				until_on: null,
+				optional: true
+			}
+		]
+	};
+	const at = (iso: string) => new Date(iso);
+
+	it("reads today's date in the listing's zone, not UTC", () => {
+		// 23:30 UTC on the 14th is already the 15th in Madrid (UTC+1 in November).
+		expect(dateIn('Europe/Madrid', at('2026-11-14T23:30:00Z'))).toBe('2026-11-15');
+		expect(dateIn(null, at('2026-11-14T23:30:00Z'))).toBe('2026-11-14');
+		expect(dateIn('Not/AZone', at('2026-11-14T23:30:00Z'))).toBe('2026-11-14');
+	});
+
+	it('treats both tier dates as inclusive', () => {
+		const tier = { from_on: '2026-11-15', until_on: '2026-11-20' };
+		expect(tierState(tier, '2026-11-14')).toBe('upcoming');
+		expect(tierState(tier, '2026-11-15')).toBe('current');
+		expect(tierState(tier, '2026-11-20')).toBe('current');
+		expect(tierState(tier, '2026-11-21')).toBe('past');
+	});
+
+	it('shows the tier in effect before, on and after the boundary, never an expired one', () => {
+		expect(cardPrice(boogie, at('2026-11-13T12:00:00Z'))).toBe('Registration: €80.00 per person');
+		expect(cardPrice(boogie, at('2026-11-14T12:00:00Z'))).toBe('Registration: €80.00 per person');
+		expect(cardPrice(boogie, at('2026-11-14T23:30:00Z'))).toBe('Registration: €95.00 per person');
+		expect(cardPrice(boogie, at('2026-11-16T12:00:00Z'))).toBe('Registration: €95.00 per person');
+	});
+
+	it('says "See pricing" when no single required tier applies', () => {
+		const undated = boogie.price_tiers.map((t) => ({ ...t, from_on: null, until_on: null }));
+		expect(cardPrice({ ...boogie, price_tiers: undated }, at('2026-11-16T12:00:00Z'))).toBe(
+			'See pricing'
+		);
+		const lapsed = { ...boogie, price_tiers: [boogie.price_tiers[0]] };
+		expect(cardPrice(lapsed, at('2026-11-16T12:00:00Z'))).toBe('See pricing');
+	});
+
+	it('keeps fixed and unknown prices as they were', () => {
+		const fixed = {
+			price_amount: '1225.00',
+			price_currency: 'EUR',
+			price_basis: 'per_person',
+			time_zone: null
+		};
+		expect(cardPrice(fixed)).toBe('€1,225.00 per person');
+		expect(cardPrice({ ...fixed, price_tiers: [] })).toBe('€1,225.00 per person');
+		const unknown = { price_amount: null, price_currency: null, price_basis: null, time_zone: null };
+		expect(cardPrice(unknown)).toBeNull();
+		expect(priceRows(fixed)).toEqual([]);
+	});
+
+	it('lists every tier for the event page with its dates, state and kind', () => {
+		expect(priceRows(boogie, at('2026-11-16T12:00:00Z'))).toEqual([
+			{
+				label: 'Registration',
+				price: '€80.00 per person',
+				when: 'Until 14 November 2026',
+				state: 'past',
+				optional: false
+			},
+			{
+				label: 'Registration',
+				price: '€95.00 per person',
+				when: 'From 15 November 2026',
+				state: 'current',
+				optional: false
+			},
+			{ label: 'Load organising', price: '€4.80 per jump', when: null, state: 'current', optional: true }
+		]);
+		const windowed = { ...boogie, price_tiers: [{ ...boogie.price_tiers[0], from_on: '2026-11-01' }] };
+		expect(priceRows(windowed, at('2026-10-20T12:00:00Z'))[0]).toMatchObject({
+			when: '1–14 November 2026',
+			state: 'upcoming'
+		});
 	});
 });

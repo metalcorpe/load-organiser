@@ -120,6 +120,21 @@ function isVenueRef(v: unknown): boolean {
 	);
 }
 
+const isPriceBasis = oneOf('per_person', 'per_jump', 'per_day');
+
+function isPriceTier(v: unknown): boolean {
+	return (
+		isRecord(v) &&
+		isString(v.label) &&
+		isString(v.amount) &&
+		isString(v.currency) &&
+		isPriceBasis(v.basis) &&
+		isNullableDate(v.from_on) &&
+		isNullableDate(v.until_on) &&
+		typeof v.optional === 'boolean'
+	);
+}
+
 export function isOpportunityOut(v: unknown): v is OpportunityOut {
 	return (
 		isRecord(v) &&
@@ -142,7 +157,9 @@ export function isOpportunityOut(v: unknown): v is OpportunityOut {
 		isNullableString(v.prerequisites) &&
 		isNullableString(v.price_amount) &&
 		isNullableString(v.price_currency) &&
-		(v.price_basis === null || oneOf('per_person', 'per_jump', 'per_day')(v.price_basis)) &&
+		(v.price_basis === null || isPriceBasis(v.price_basis)) &&
+		// Absent is accepted: the web may deploy before an API that sends tiers.
+		(v.price_tiers === undefined || listOf(isPriceTier)(v.price_tiers)) &&
 		isNullableString(v.price_note) &&
 		isHttpUrl(v.registration_url) &&
 		isHttpUrl(v.source_url) &&

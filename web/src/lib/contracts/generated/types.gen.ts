@@ -2430,6 +2430,12 @@ export type OpportunityCreateIn = {
      */
     price_note?: string | null;
     /**
+     * Price Tiers
+     *
+     * Replaces the single price. Null or omitted: unchanged on update (none on create); empty list: clear.
+     */
+    price_tiers?: Array<PriceTierIn> | null;
+    /**
      * Provider Id
      */
     provider_id: string;
@@ -2556,6 +2562,12 @@ export type OpportunityOut = {
      * Price Note
      */
     price_note: string | null;
+    /**
+     * Price Tiers
+     *
+     * Dated or separate charges; when set, `price_amount` is null.
+     */
+    price_tiers: Array<PriceTierOut>;
     /**
      * Null when the organizer is no longer published (ended listings).
      */
@@ -2687,6 +2699,12 @@ export type OpportunityUpdateIn = {
      * Price Note
      */
     price_note?: string | null;
+    /**
+     * Price Tiers
+     *
+     * Replaces the single price. Null or omitted: unchanged on update (none on create); empty list: clear.
+     */
+    price_tiers?: Array<PriceTierIn> | null;
     /**
      * Provider Id
      */
@@ -3213,6 +3231,86 @@ export type PostVenueOut = {
      * Name
      */
     name: string;
+};
+
+/**
+ * PriceTierIn
+ */
+export type PriceTierIn = {
+    /**
+     * Amount
+     */
+    amount: number | string;
+    /**
+     * Basis
+     */
+    basis: 'per_person' | 'per_jump' | 'per_day';
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * From On
+     */
+    from_on?: string | null;
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Optional
+     */
+    optional?: boolean;
+    /**
+     * Until On
+     */
+    until_on?: string | null;
+};
+
+/**
+ * PriceTierOut
+ *
+ * One stated charge. Dates are inclusive, in the opportunity's `time_zone`.
+ */
+export type PriceTierOut = {
+    /**
+     * Amount
+     *
+     * Decimal string with two places.
+     */
+    amount: string;
+    /**
+     * Basis
+     */
+    basis: 'per_person' | 'per_jump' | 'per_day';
+    /**
+     * Currency
+     */
+    currency: string;
+    /**
+     * From On
+     *
+     * First day it applies; null: open.
+     */
+    from_on: string | null;
+    /**
+     * Label
+     *
+     * What the charge pays for, e.g. Registration.
+     */
+    label: string;
+    /**
+     * Optional
+     *
+     * An extra the jumper may skip.
+     */
+    optional: boolean;
+    /**
+     * Until On
+     *
+     * Last day it applies; null: open.
+     */
+    until_on: string | null;
 };
 
 /**
@@ -4094,6 +4192,10 @@ export type ReviewerOpportunityOut = {
      * Price Note
      */
     price_note: string | null;
+    /**
+     * Price Tiers
+     */
+    price_tiers: Array<PriceTierOut>;
     /**
      * Provider Id
      */

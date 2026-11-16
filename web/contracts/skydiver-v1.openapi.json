@@ -4769,6 +4769,22 @@
             ],
             "title": "Price Note"
           },
+          "price_tiers": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PriceTierIn"
+                },
+                "maxItems": 16,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Replaces the single price. Null or omitted: unchanged on update (none on create); empty list: clear.",
+            "title": "Price Tiers"
+          },
           "provider_id": {
             "format": "uuid",
             "title": "Provider Id",
@@ -5044,6 +5060,14 @@
             ],
             "title": "Price Note"
           },
+          "price_tiers": {
+            "description": "Dated or separate charges; when set, `price_amount` is null.",
+            "items": {
+              "$ref": "#/components/schemas/PriceTierOut"
+            },
+            "title": "Price Tiers",
+            "type": "array"
+          },
           "provider": {
             "anyOf": [
               {
@@ -5146,6 +5170,7 @@
           "price_currency",
           "price_basis",
           "price_note",
+          "price_tiers",
           "registration_url",
           "source_url",
           "checked_on"
@@ -5408,6 +5433,22 @@
               }
             ],
             "title": "Price Note"
+          },
+          "price_tiers": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/PriceTierIn"
+                },
+                "maxItems": 16,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Replaces the single price. Null or omitted: unchanged on update (none on create); empty list: clear.",
+            "title": "Price Tiers"
           },
           "provider_id": {
             "anyOf": [
@@ -6503,6 +6544,148 @@
           "country"
         ],
         "title": "PostVenueOut",
+        "type": "object"
+      },
+      "PriceTierIn": {
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "basis": {
+            "enum": [
+              "per_person",
+              "per_jump",
+              "per_day"
+            ],
+            "title": "Basis",
+            "type": "string"
+          },
+          "currency": {
+            "maxLength": 3,
+            "title": "Currency",
+            "type": "string"
+          },
+          "from_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From On"
+          },
+          "label": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "optional": {
+            "default": false,
+            "title": "Optional",
+            "type": "boolean"
+          },
+          "until_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Until On"
+          }
+        },
+        "required": [
+          "label",
+          "amount",
+          "currency",
+          "basis"
+        ],
+        "title": "PriceTierIn",
+        "type": "object"
+      },
+      "PriceTierOut": {
+        "description": "One stated charge. Dates are inclusive, in the opportunity's `time_zone`.",
+        "properties": {
+          "amount": {
+            "description": "Decimal string with two places.",
+            "title": "Amount",
+            "type": "string"
+          },
+          "basis": {
+            "enum": [
+              "per_person",
+              "per_jump",
+              "per_day"
+            ],
+            "title": "Basis",
+            "type": "string"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "from_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "First day it applies; null: open.",
+            "title": "From On"
+          },
+          "label": {
+            "description": "What the charge pays for, e.g. Registration.",
+            "title": "Label",
+            "type": "string"
+          },
+          "optional": {
+            "description": "An extra the jumper may skip.",
+            "title": "Optional",
+            "type": "boolean"
+          },
+          "until_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Last day it applies; null: open.",
+            "title": "Until On"
+          }
+        },
+        "required": [
+          "label",
+          "amount",
+          "currency",
+          "basis",
+          "from_on",
+          "until_on",
+          "optional"
+        ],
+        "title": "PriceTierOut",
         "type": "object"
       },
       "PrintPageOut": {
@@ -8272,6 +8455,13 @@
             ],
             "title": "Price Note"
           },
+          "price_tiers": {
+            "items": {
+              "$ref": "#/components/schemas/PriceTierOut"
+            },
+            "title": "Price Tiers",
+            "type": "array"
+          },
           "provider_id": {
             "format": "uuid",
             "title": "Provider Id",
@@ -8395,6 +8585,7 @@
           "price_currency",
           "price_basis",
           "price_note",
+          "price_tiers",
           "registration_url",
           "source_url",
           "internal_note",

@@ -37,7 +37,19 @@ export const REVIEW_MESSAGES: Record<string, string> = {
 	operator_url_invalid: "Use a full http(s) link for the operator's website, or leave it empty.",
 	operator_name_too_long: 'Use at most 120 characters for an operator name.',
 	season_too_long: 'Use at most 160 characters for the season.',
-	aircraft_too_long: 'Use at most 160 characters for the aircraft.'
+	aircraft_too_long: 'Use at most 160 characters for the aircraft.',
+	price_incomplete: 'A price needs its amount, currency and basis together.',
+	price_invalid: 'Use an amount such as 80 or 4.80.',
+	currency_invalid: 'Use a supported currency code such as EUR or GBP.',
+	price_basis_invalid: 'Choose what the price is per.',
+	price_tiers_with_amount:
+		'Use either the single price or the price list, not both. Clear the single amount.',
+	price_tiers_too_many: 'List at most 6 prices.',
+	price_tiers_invalid: 'Check the price list: each row needs a name, amount, currency and basis.',
+	price_tier_label_required: 'Name what each listed price pays for, such as "Registration".',
+	price_tier_label_too_long: 'Use at most 60 characters for a price name.',
+	price_tier_dates_out_of_order: 'A price cannot end before it starts.',
+	price_tier_zone_required: "Dated prices need the listing's time zone."
 };
 
 export function reviewMessage(code: string | undefined): string | undefined {

@@ -230,7 +230,10 @@ test.describe('dropzone map', () => {
 		await expect(page.getByRole('list', { name: 'Dropzones' }).getByRole('link')).toHaveText([alpha.name]);
 	});
 
-	test('a popup links to the dropzone page, which links out to OpenStreetMap', async ({ page }) => {
+	test('a popup links to the dropzone page, which links out to OpenStreetMap', async ({
+		page,
+		browserName
+	}) => {
 		const { base, alpha, closed } = shared;
 		await page.goto(`/dz?view=map&q=${base}`);
 		await showMap(page);
@@ -261,11 +264,24 @@ test.describe('dropzone map', () => {
 
 		await expect(page).toHaveURL(`${ORIGIN}/dz/${alpha.id}`);
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(alpha.name);
-		await expect(page.getByText('64.13000° N, 21.94000° W')).toBeVisible();
-		await expect(page.getByRole('link', { name: 'Open in OpenStreetMap' })).toHaveAttribute(
+		// The map link leads; the raw coordinates wait, folded, for whoever needs them.
+		await expect(page.getByRole('link', { name: 'View on map' })).toHaveAttribute(
 			'href',
 			'https://www.openstreetmap.org/?mlat=64.13&mlon=-21.94#map=13/64.13/-21.94'
 		);
+		const coordinates = page.getByText('64.13000° N, 21.94000° W');
+		await expect(coordinates).toBeHidden();
+		await page.getByText('Coordinates', { exact: true }).click();
+		await expect(coordinates).toBeVisible();
+		// Copy says what happened, and puts plain decimals on the clipboard. Only Chromium lets
+		// Playwright grant clipboard access; elsewhere the button is still there to press.
+		await expect(page.getByRole('button', { name: 'Copy coordinates' })).toBeVisible();
+		if (browserName === 'chromium') {
+			await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+			await page.getByRole('button', { name: 'Copy coordinates' }).click();
+			await expect(page.getByRole('status').filter({ hasText: 'Coordinates copied.' })).toBeVisible();
+			expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('64.13000, -21.94000');
+		}
 	});
 
 	test('the tab bar stays above the map: painted on top, and every tab takes its tap', async ({

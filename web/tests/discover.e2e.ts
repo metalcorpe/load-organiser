@@ -125,7 +125,9 @@ test.describe('discover board', () => {
 		await page.goto(`/?q=${base}`);
 		await page.getByRole('link', { name: listing.title }).click();
 		await expect(page.getByRole('heading', { level: 1 })).toHaveText(listing.title);
-		await expect(page.getByText('10–14 July 2027 (Europe/Lisbon local dates)')).toBeVisible();
+		// Calendar dates only: the zone that interprets them is data, not heading text.
+		await expect(page.getByText('10–14 July 2027', { exact: true })).toBeVisible();
+		await expect(page.getByText('Europe/Lisbon')).toHaveCount(0);
 		await expect(page.getByText('C licence or 200 jumps')).toBeVisible();
 		await expect(page.getByText('The organizer decides who can take part.')).toBeVisible();
 		await expect(page.getByText('Registration is handled by the organizer on')).toBeVisible();
@@ -645,7 +647,7 @@ test.describe('search context and the filter panel', () => {
 		] as const) {
 			await page.goto(`/events/${listing.id}`);
 			await expect(page.getByRole('region', { name: listing.title }).getByText(text)).toBeVisible();
-			await expect(page.getByText(`${text} (Europe/Lisbon local dates)`)).toBeVisible();
+			await expect(page.getByText(text, { exact: true })).toBeVisible();
 		}
 	});
 });

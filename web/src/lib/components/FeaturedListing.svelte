@@ -3,7 +3,7 @@
 	import TypeIcon from '#lib/components/TypeIcon.svelte';
 	import { countryName } from '#lib/countries.ts';
 	import { eventHref } from '#lib/listing-filters.ts';
-	import { featuredLabel, formatPrice, formatRange } from '#lib/listings.ts';
+	import { cardPrice, featuredLabel, formatRange } from '#lib/listings.ts';
 
 	/**
 	 * The board's navy card: the next multi-day boogie or camp (pickFeatured), shown once above
@@ -12,7 +12,8 @@
 	 */
 	let { item }: { item: OpportunityOut } = $props();
 	const place = $derived(item.venue ? item.venue.name : (item.location_note ?? ''));
-	const price = $derived(formatPrice(item.price_amount, item.price_currency, item.price_basis));
+	// Today's price only: never a tier that has already ended (cardPrice).
+	const price = $derived(cardPrice(item));
 	const label = $derived(featuredLabel(item.category));
 </script>
 

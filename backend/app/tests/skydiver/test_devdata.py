@@ -648,3 +648,48 @@ def test_seasonal_without_dates_says_so_publicly_and_nothing_else() -> None:
     assert stated["season"] == "April to October"
     for status in ("active", "closed", "uncertain"):
         assert devdata._details({"status": status})["season"] is None
+
+
+def test_the_christmas_boogie_loads_with_its_three_price_tiers(tmp_path: Path) -> None:
+    """The dated registration fees and the optional load organising are structured."""
+    data = json.loads((REPO / "docs/product/inventory/dev-listings.json").read_text())
+    [record] = [o for o in data["opportunities"] if o["title"] == "CHRISTMAS BOOGIE 2026"]  # fmt: skip
+    assert record["price_amount"] is None and len(record["price_tiers"]) == 3
+    # This record with its organiser and venue, renamed so runs sharing the database
+    # stay independent.
+    tag = uuid.uuid4().hex[:8]
+    [provider] = [p for p in data["providers"] if p["key"] == record["provider"]]
+    [venue] = [v for v in data["venues"] if v["key"] == record["venue"]]
+    subset = {
+        "venues": [{**venue, "key": f"t-{tag}-dz", "name": f"Dev DZ {tag}"}],
+        "providers": [{**provider, "key": f"t-{tag}-org", "name": f"Dev Org {tag}"}],
+        "opportunities": [
+            {**record, "title": f"CHRISTMAS BOOGIE {tag}",
+             "provider": f"t-{tag}-org", "venue": f"t-{tag}-dz"}
+        ],
+    }  # fmt: skip
+    path = tmp_path / "dev.json"
+    path.write_text(json.dumps(subset))
+    accounts = Accounts.create()
+    actor = devdata.reviewer_actor(engine, _email(accounts, accounts.session(reviewer=True)))  # fmt: skip
+    clock = lambda: datetime.now(UTC)  # noqa: E731
+    directory = DirectoryService(stores=sql_directory_store_factory(engine), clock=clock)  # fmt: skip
+    listings = OpportunityService(stores=sql_listing_store_factory(engine), clock=clock)  # fmt: skip
+
+    report = devdata.load(engine, path, actor, directory, listings)
+    assert report["drafts"] == []
+    assert report["added"]["published"] == 1
+    with engine.connect() as conn:
+        tiers, amount, note = conn.execute(text("SELECT price_tiers, price_amount, price_note FROM skydiver_opportunity WHERE title = :t"), {"t": f"CHRISTMAS BOOGIE {tag}"}).one()  # fmt: skip
+    assert amount is None
+    assert note == "Jump tickets are paid separately. Up to 250 participants."
+    assert tiers == [
+        {"label": "Registration", "amount": "80.00", "currency": "EUR",
+         "basis": "per_person", "from_on": None, "until_on": "2026-11-14",
+         "optional": False},
+        {"label": "Registration", "amount": "95.00", "currency": "EUR",
+         "basis": "per_person", "from_on": "2026-11-15", "until_on": None,
+         "optional": False},
+        {"label": "Load organising", "amount": "4.80", "currency": "EUR",
+         "basis": "per_jump", "from_on": None, "until_on": None, "optional": True},
+    ]  # fmt: skip

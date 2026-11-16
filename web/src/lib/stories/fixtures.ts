@@ -33,10 +33,27 @@ export function listing(overrides: Partial<OpportunityOut> = {}): OpportunityOut
 		price_amount: '80',
 		price_currency: 'EUR',
 		price_basis: 'per_person',
-		price_note: '€95 from 15 Nov',
+		price_tiers: [],
+		price_note: null,
 		registration_url: 'https://example.org/register',
 		source_url: 'https://example.org/boogie',
 		checked_on: '2026-11-09',
 		...overrides
 	};
 }
+
+/** The Christmas Boogie's price as dated tiers: €80 registration until 14 November, €95 after. */
+const REGISTRATION = { label: 'Registration', currency: 'EUR', basis: 'per_person', optional: false } as const;
+export const RISING_REGISTRATION: OpportunityOut['price_tiers'] = [
+	{ ...REGISTRATION, amount: '80.00', from_on: null, until_on: '2026-11-14' },
+	{ ...REGISTRATION, amount: '95.00', from_on: '2026-11-15', until_on: null },
+	{
+		label: 'Load organising',
+		amount: '4.80',
+		currency: 'EUR',
+		basis: 'per_jump',
+		from_on: null,
+		until_on: null,
+		optional: true
+	}
+];

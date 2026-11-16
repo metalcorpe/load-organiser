@@ -12,7 +12,8 @@
 		AUDIENCE_LABEL,
 		CATEGORY_LABEL,
 		DISCIPLINE_LABEL,
-		PRICE_BASIS_LABEL
+		PRICE_BASIS_LABEL,
+		PRICE_TIER_ROWS
 	} from '#lib/listings.ts';
 	import { reviewMessage } from '#lib/review-messages.ts';
 	import type { PageProps } from './$types';
@@ -36,6 +37,12 @@
 		duplicate: []
 	};
 	const PUBLIC = ['published', 'postponed', 'cancelled'];
+	// The saved price list plus two empty rows (all six after a refused save, so nothing typed
+	// is lost), never more than the API accepts.
+	const tierRows = $derived(
+		echoed ? PRICE_TIER_ROWS : Math.min(PRICE_TIER_ROWS, (l?.price_tiers.length ?? 0) + 2)
+	);
+	const tier = (i: number) => l?.price_tiers[i];
 	const providerKnown = $derived(!l || data.providers.some((p) => p.id === l.provider_id));
 	const venueKnown = $derived(!l?.venue_id || data.venues.some((x) => x.id === l.venue_id));
 </script>
@@ -198,6 +205,58 @@
 					{/each}
 				</select>
 			</div>
+			<fieldset class="tiers">
+				<legend>Or a price list</legend>
+				<p class="hint">
+					Use instead of the single price when the price changes by date or has separate parts
+					(registration, jump tickets, extras). Dates are inclusive, in the listing's time zone. Leave a
+					row's name and amount empty to remove it.
+				</p>
+				{#each { length: tierRows } as _, i (i)}
+					<fieldset class="tier">
+						<legend>Price {i + 1}</legend>
+						<div class="pair">
+							<div class="field">
+								<label for="tier_label_{i}">Pays for</label>
+								<input id="tier_label_{i}" name="tier_label_{i}" maxlength="60" placeholder="Registration" defaultValue={v(`tier_label_${i}`, tier(i)?.label)} />
+							</div>
+							<div class="field">
+								<label for="tier_amount_{i}">Amount</label>
+								<input id="tier_amount_{i}" name="tier_amount_{i}" inputmode="decimal" defaultValue={v(`tier_amount_${i}`, tier(i)?.amount)} />
+							</div>
+						</div>
+						<div class="pair">
+							<div class="field">
+								<label for="tier_currency_{i}">Currency</label>
+								<input id="tier_currency_{i}" name="tier_currency_{i}" maxlength="3" placeholder="EUR" defaultValue={v(`tier_currency_${i}`, tier(i)?.currency)} />
+							</div>
+							<div class="field">
+								<label for="tier_basis_{i}">Basis</label>
+								<select id="tier_basis_{i}" name="tier_basis_{i}">
+									<option value="">Not stated</option>
+									{#each Object.entries(PRICE_BASIS_LABEL) as [value, label] (value)}
+										<option {value} selected={v(`tier_basis_${i}`, tier(i)?.basis) === value}>{label}</option>
+									{/each}
+								</select>
+							</div>
+						</div>
+						<div class="pair">
+							<div class="field">
+								<label for="tier_from_{i}">From (optional)</label>
+								<input id="tier_from_{i}" name="tier_from_{i}" type="date" defaultValue={v(`tier_from_${i}`, tier(i)?.from_on)} />
+							</div>
+							<div class="field">
+								<label for="tier_until_{i}">Until (optional)</label>
+								<input id="tier_until_{i}" name="tier_until_{i}" type="date" defaultValue={v(`tier_until_${i}`, tier(i)?.until_on)} />
+							</div>
+						</div>
+						<label class="choice">
+							<input type="checkbox" name="tier_optional_{i}" checked={echoed ? echoed[`tier_optional_${i}`] === 'on' : Boolean(tier(i)?.optional)} />
+							An optional extra
+						</label>
+					</fieldset>
+				{/each}
+			</fieldset>
 			<div class="field">
 				<label for="price_note">Price note</label>
 				<input id="price_note" name="price_note" maxlength="280" defaultValue={v('price_note', l?.price_note)} />

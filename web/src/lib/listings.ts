@@ -187,6 +187,110 @@ export function formatPrice(
 	return basis ? `${money} ${PRICE_BASIS_LABEL[basis] ?? ''}`.trim() : money;
 }
 
+/**
+ * One dated or undated charge, as the organizer states it (see the API's PriceTierOut).
+ * `from_on`/`until_on` are inclusive calendar dates in the listing's own time zone.
+ */
+export interface PriceTier {
+	label: string;
+	amount: string;
+	currency: string;
+	basis: string;
+	from_on: string | null;
+	until_on: string | null;
+	optional: boolean;
+}
+
+/** Rows the reviewer form offers for a price list; the API accepts at most this many. */
+export const PRICE_TIER_ROWS = 6;
+
+/** What pricing is read from: a single stated price, or tiers that replace it. */
+export interface Priced {
+	price_amount: string | null;
+	price_currency: string | null;
+	price_basis: string | null;
+	price_tiers?: readonly PriceTier[];
+	time_zone: string | null;
+}
+
+/** Today's calendar date (YYYY-MM-DD) in `zone`, the listing's place; UTC without one. */
+export function dateIn(zone: string | null, now: Date = new Date()): string {
+	const parts = (timeZone: string) => {
+		const found = Object.fromEntries(
+			new Intl.DateTimeFormat('en-GB', {
+				timeZone,
+				year: 'numeric',
+				month: '2-digit',
+				day: '2-digit'
+			})
+				.formatToParts(now)
+				.map((p) => [p.type, p.value])
+		);
+		return `${found.year}-${found.month}-${found.day}`;
+	};
+	try {
+		return parts(zone ?? 'UTC');
+	} catch {
+		return parts('UTC');
+	}
+}
+
+export type TierState = 'past' | 'current' | 'upcoming';
+
+/** Whether a tier applies on `today`: both of its dates are inclusive. */
+export function tierState(tier: Pick<PriceTier, 'from_on' | 'until_on'>, today: string): TierState {
+	if (tier.until_on && today > tier.until_on) return 'past';
+	if (tier.from_on && today < tier.from_on) return 'upcoming';
+	return 'current';
+}
+
+/**
+ * A card's one price line, or null when no price is stated.
+ *
+ * - A single stated price is shown as it is ("€80.00 per person").
+ * - With tiers, only a required tier in effect today in the listing's zone is shown, with its
+ *   label ("Registration: €95.00 per person"). An expired tier is never shown as current.
+ * - When no single required tier applies today (none, or several at once), the card says
+ *   "See pricing" and the event page lists the tiers.
+ */
+export function cardPrice(item: Priced, now: Date = new Date()): string | null {
+	const tiers = item.price_tiers ?? [];
+	if (!tiers.length) return formatPrice(item.price_amount, item.price_currency, item.price_basis);
+	const today = dateIn(item.time_zone, now);
+	const current = tiers.filter((t) => !t.optional && tierState(t, today) === 'current');
+	if (current.length !== 1) return 'See pricing';
+	const [tier] = current;
+	return `${tier.label}: ${formatPrice(tier.amount, tier.currency, tier.basis)}`;
+}
+
+export interface PriceRow {
+	label: string;
+	price: string;
+	/** "Until 14 November 2026", "From 15 November 2026", "1–14 November 2026" or null. */
+	when: string | null;
+	state: TierState;
+	optional: boolean;
+}
+
+/** Every tier for the event page, in the organizer's order, each with its own state. */
+export function priceRows(item: Priced, now: Date = new Date()): PriceRow[] {
+	const today = dateIn(item.time_zone, now);
+	return (item.price_tiers ?? []).map((t) => ({
+		label: t.label,
+		price: formatPrice(t.amount, t.currency, t.basis) ?? `${t.amount} ${t.currency}`,
+		when:
+			t.from_on && t.until_on
+				? formatRange(t.from_on, t.until_on)
+				: t.until_on
+					? `Until ${formatDay(t.until_on)}`
+					: t.from_on
+						? `From ${formatDay(t.from_on)}`
+						: null,
+		state: tierState(t, today),
+		optional: t.optional
+	}));
+}
+
 /** Plain status wording; nothing here implies availability or registration. */
 export function statusLabel(status: string, ended: boolean): string | null {
 	if (status === 'cancelled') return 'Cancelled';

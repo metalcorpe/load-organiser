@@ -74,6 +74,11 @@ export function osmLink(latitude: number, longitude: number): string {
 	return `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=13/${lat}/${lon}`;
 }
 
+/** "42.25857, -3.137": plain signed decimals, the form map apps and GPS units accept. */
+export function coordinatesText(latitude: number, longitude: number): string {
+	return `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+}
+
 /**
  * "42.25857° N, 3.13700° W": hemispheres in words rather than signs. A value that rounds to
  * zero is the equator or the prime meridian, "0.00000°", with no hemisphere.

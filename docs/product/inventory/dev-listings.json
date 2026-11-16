@@ -819,10 +819,39 @@
    "languages": [],
    "summary": "Multi-discipline Christmas boogie with FS, freefly and wingsuit load organisers, beach and balloon jumps, two Twin Otters and a Pilatus Porter.",
    "prerequisites": null,
-   "price_amount": "80",
-   "price_currency": "EUR",
-   "price_basis": "per_person",
-   "price_note": "Registration fee (load organising not included): 80 EUR up to 14/11/2026, 95 EUR from 15/11/2026; load organising 4.80 EUR per jump; jump tickets separate. Max 250 participants.",
+   "price_amount": null,
+   "price_currency": null,
+   "price_basis": null,
+   "price_tiers": [
+    {
+     "label": "Registration",
+     "amount": "80.00",
+     "currency": "EUR",
+     "basis": "per_person",
+     "from_on": null,
+     "until_on": "2026-11-14",
+     "optional": false
+    },
+    {
+     "label": "Registration",
+     "amount": "95.00",
+     "currency": "EUR",
+     "basis": "per_person",
+     "from_on": "2026-11-15",
+     "until_on": null,
+     "optional": false
+    },
+    {
+     "label": "Load organising",
+     "amount": "4.80",
+     "currency": "EUR",
+     "basis": "per_jump",
+     "from_on": null,
+     "until_on": null,
+     "optional": true
+    }
+   ],
+   "price_note": "Jump tickets are paid separately. Up to 250 participants.",
    "registration_url": "https://skydiveempuriabrava.com/es/christmas-boogie-2026/",
    "source_url": "https://skydiveempuriabrava.com/es/event/christmas-boogie-2026/"
   },

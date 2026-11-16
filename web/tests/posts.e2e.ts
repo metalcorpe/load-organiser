@@ -225,7 +225,9 @@ test.describe('shared jump summaries', () => {
 		await alex.page.getByRole('button', { name: 'Change audience' }).click();
 		await expect(alex.page.getByText('Audience changed.')).toBeVisible();
 		await visitor.goto(`/dz/${venueId}`);
-		await expect(visitor.getByText('No shared jumps here that you can see.')).toBeVisible();
+		// A guest with nothing public to see gets no empty section at all.
+		await expect(visitor.getByRole('heading', { name: 'Shared jumps here' })).toHaveCount(0);
+		await expect(visitor.getByText('No shared jumps here')).toHaveCount(0);
 		await sam.page.goto(`/dz/${venueId}`);
 		await expect(sam.page.getByRole('list', { name: 'Shared jumps here' })).toContainText(
 			`Big way ${tag}`

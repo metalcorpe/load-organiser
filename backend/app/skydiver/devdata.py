@@ -96,6 +96,7 @@ OPPORTUNITY_FIELDS = (
     "price_currency",
     "price_basis",
     "price_note",
+    "price_tiers",
     "registration_url",
     "source_url",
 )
@@ -799,6 +800,8 @@ def load(
                 fields[name] = date.fromisoformat(fields[name])
         if fields["price_amount"] is not None:
             fields["price_amount"] = Decimal(str(fields["price_amount"]))
+        # Tiers stay JSON (decimal strings, ISO dates); the service validates them.
+        fields["price_tiers"] = fields["price_tiers"] or []
         try:
             row = opportunities.create_opportunity(actor, fields)
         except DirectoryRuleError as error:
