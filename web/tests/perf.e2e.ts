@@ -73,6 +73,23 @@ test.describe('tab switching (perf)', () => {
 		await expect(page.getByRole('heading', { level: 1, name: 'Logbook' })).toBeVisible();
 	});
 
+	test('a quick switch never flashes the Loading… pill', async ({ page }) => {
+		await signInTo(page, '/', 'noflash');
+		// Watch for the pill from before the tap until the new page is shown.
+		await page.evaluate(() => {
+			const seen = { pill: false };
+			(window as unknown as { __seen: typeof seen }).__seen = seen;
+			new MutationObserver(() => {
+				if (document.querySelector('[data-testid="navigation-loading"]')) seen.pill = true;
+			}).observe(document.body, { childList: true, subtree: true });
+		});
+		await tabs(page).getByRole('link', { name: 'Me' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/profile`);
+		await tabs(page).getByRole('link', { name: 'Friends' }).click();
+		await expect(page).toHaveURL(`${ORIGIN}/activity`);
+		expect(await page.evaluate(() => (window as unknown as { __seen: { pill: boolean } }).__seen.pill)).toBe(false);
+	});
+
 	test('the tab bar loads every tab’s code ahead of a tap', async ({ page }) => {
 		await signInTo(page, '/', 'precode');
 		for (const link of await tabs(page).getByRole('link').all()) {
