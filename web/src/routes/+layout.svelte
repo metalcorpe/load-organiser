@@ -19,8 +19,9 @@
 	import NavigationStatus from '#lib/components/NavigationStatus.svelte';
 	import FormGuard from '#lib/components/FormGuard.svelte';
 	import SignInSheet from '#lib/components/SignInSheet.svelte';
-	import { page } from '$app/state';
-	import { pageLayout } from '#lib/navigation.ts';
+	import { navigating, page } from '$app/state';
+	import { pageLayout, tabSwitch } from '#lib/navigation.ts';
+	import TabSkeleton from '#lib/components/TabSkeleton.svelte';
 	import type { LayoutProps } from './$types';
 
 	let { data, children }: LayoutProps = $props();
@@ -43,6 +44,11 @@
 	// The primary pages share the header's frame on large screens; every other page is one
 	// narrow, centred column (navigation.ts, pageLayout).
 	const layout = $derived(pageLayout(page.url.pathname, Boolean(page.error)));
+	// A member switching tabs: main is busy and, after a short grace period, a skeleton stands
+	// in for the page being left (instant tab feedback; AppNav moves the pill at once).
+	const opening = $derived(
+		data.viewer ? tabSwitch(page.url.pathname, navigating.to?.url.pathname) : undefined
+	);
 	// On the registration page itself, Join would only point back at the form.
 	const onRegister = $derived(page.url.pathname.startsWith('/register'));
 	// Two initials from a display name; from an email address only its first letter
@@ -94,7 +100,8 @@
 <!-- The tab bar is the members' app; guests browse the public area (Explore) without it. -->
 {#if data.viewer}<AppNav />{:else if !onAccountPage}<SignInSheet />{/if}
 
-<main id="main" tabindex="-1" class={layout}>
+<main id="main" tabindex="-1" class={layout} class:opening={opening !== undefined} aria-busy={opening ? 'true' : undefined}>
+	{#if opening}<div class="skeleton-slot"><TabSkeleton label={opening.label} /></div>{/if}
 	<!-- A different account (or none) remounts the page: no component state carries over. -->
 	{#key data.viewer?.accountId ?? 'anonymous'}
 		{@render children()}
@@ -297,6 +304,42 @@
 	@media (min-width: 48rem) {
 		footer.with-nav {
 			padding-bottom: 2rem;
+		}
+	}
+
+	/* Instant tab feedback: the skeleton lies over the page being left, both invisible for the
+	   first 150ms so a quick switch shows only the moving pill. The old page keeps its space
+	   (visibility, not display), so nothing jumps when the new one arrives. */
+	main {
+		position: relative;
+	}
+
+	/* Room for the skeleton when the page being left is short. */
+	main.opening {
+		min-height: 26rem;
+	}
+
+	.skeleton-slot {
+		position: absolute;
+		inset: 0 0 auto;
+		padding: inherit;
+		opacity: 0;
+		animation: tab-show 0s 150ms forwards;
+	}
+
+	main.opening > :global(:not(.skeleton-slot)) {
+		animation: tab-hide 0s 150ms forwards;
+	}
+
+	@keyframes tab-show {
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes tab-hide {
+		to {
+			visibility: hidden;
 		}
 	}
 </style>

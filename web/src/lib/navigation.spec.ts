@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PRIMARY_NAV, isCurrent, isCurrentTab, pageLayout } from './navigation.ts';
+import { PRIMARY_NAV, isCurrent, isCurrentTab, pageLayout, tabSwitch } from './navigation.ts';
 
 const tab = (label: string) => PRIMARY_NAV.find((item) => item.label === label)!;
 const current = (pathname: string) =>
@@ -58,5 +58,22 @@ describe('primary navigation', () => {
 		// An error page is narrow whatever its address.
 		expect(pageLayout('/', true)).toBe('narrow');
 		expect(pageLayout('/jumps', true)).toBe('narrow');
+	});
+});
+
+describe('tabSwitch (instant tab feedback)', () => {
+	it('names the tab being opened when a navigation leaves the current tab', () => {
+		expect(tabSwitch('/', '/jumps')?.label).toBe('Logbook');
+		expect(tabSwitch('/jumps', '/activity')?.label).toBe('Friends');
+		expect(tabSwitch('/history', '/profile')?.label).toBe('Me');
+		expect(tabSwitch('/gear', '/dz')?.label).toBe('Explore');
+	});
+
+	it('is nothing within one tab, with no navigation, or to a page outside the tabs', () => {
+		expect(tabSwitch('/jumps', '/jumps/new')).toBeUndefined();
+		expect(tabSwitch('/jumps', '/stats')).toBeUndefined();
+		expect(tabSwitch('/', '/dz')).toBeUndefined();
+		expect(tabSwitch('/jumps', undefined)).toBeUndefined();
+		expect(tabSwitch('/jumps', '/sign-in')).toBeUndefined();
 	});
 });
