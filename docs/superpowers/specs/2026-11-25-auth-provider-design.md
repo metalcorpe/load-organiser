@@ -103,7 +103,46 @@ behind the same Access bypass consideration as back-channel logout.
 - No paid services, no new infrastructure beyond Neon Auth itself (owner: free stack).
 - Social sign-in apps (Google, Apple) are registered under the owner's own developer accounts.
 
-## Exit strategy (settled before starting)
+## Phase 0 findings (2026-11-25, read-only via the Neon CLI; nothing changed in Neon)
+
+Owner decisions recorded: **our own sign-in pages**; **Google** as the first social sign-in.
+
+- Project `rough-paper-15304455`, region **aws-eu-central-1** (Frankfurt). Neon Auth runs in the same
+  region (`base_url` `https://ep-winter-math-b9muy5c8.neonauth.c-7.eu-central-1.aws.neon.tech/neondb/auth`).
+  Side finding: the API runs in **us-east-1**, so every API database query crosses the Atlantic (the
+  ~180–210 ms per call measured earlier).
+- JWKS published at `<base_url>/.well-known/jwks.json`, one EdDSA/Ed25519 key.
+- **No OIDC discovery, no introspection, no back-channel logout yet:** `/.well-known/openid-configuration`
+  and `/.well-known/oauth-authorization-server` return 404. They belong to the OAuth-server plugin
+  (`oauth_provider`), which is disabled; enabling it needs a login page URL, a consent page URL and at
+  least one protected resource (`neon neon-auth config oauth-server update`). Whether it then offers
+  RFC 7662 introspection and back-channel logout is still to be checked after enabling.
+- Email and password: enabled; verification **required**, by **code** (`otp`), auto sign-in after
+  verification; **sessions revoked on password reset**. **No password-length setting** in Neon's
+  configuration: Better Auth's default minimum applies (8), below today's 15.
+- Email sender: Neon's **shared** sender (development only). Webhooks off; available events
+  `user.before_create`, `user.created`, `send.otp`, `send.magic_link` — **no event for a sign-up with an
+  existing address**, so the "sign-in help" email cannot be kept.
+- Google sign-in already enabled with Neon's **shared** credentials; must be replaced by the owner's own
+  Google OAuth client (exit strategy) before anyone uses it.
+- Not visible in the configuration: rate limits and the active-session cap.
+- Exit export: not run yet (no users in `neon_auth`); run after the owner's account exists.
+
+### Decisions these findings raise
+
+1. **Password minimum 15 vs Neon's 8.** Our own pages can refuse under 15, but Neon's sign-up endpoint is
+   public, so someone calling it directly could still create an account with 8–14 characters
+   (`user.before_create` does not receive the password). Options: accept Neon's minimum; or keep the
+   15-character rule only in our pages (best effort); or self-host Better Auth (full control, loses
+   "managed").
+2. **How the API validates sessions without introspection:**
+   - (i) enable Neon's OAuth server (beta) for standard OIDC + introspection, with our own login page; or
+   - (ii) no OAuth server: our pages call Neon Auth's API; the web server checks the session with Better
+     Auth's session endpoint (30-second cache, immediate revocation within 30 s) and passes the API a
+     15-minute EdDSA JWT verified against JWKS. Provider-specific code stays inside the web server's auth
+     adapter.
+
+
 
 Neon keeps all auth data in **our own database** (schema `neon_auth`), so leaving is an export, not a
 negotiation.
