@@ -2,7 +2,8 @@
 
 Owner request, 2026-11-25: hand sign-in and sessions to a maintained provider, keeping the web app (FE)
 and API (BE) as provider-agnostic as possible. Owner decisions so far: **managed Neon Auth**, the
-**latest version Neon offers**. Nothing is built until this note is approved. Facts about Neon and Better
+**latest version Neon offers**, a **clean break** (no feature flag, no parallel old/new auth, no separate
+Neon branch), and an **exit strategy settled before starting** (below). Nothing is built until this note is approved. Facts about Neon and Better
 Auth below were checked in their documentation on 2026-11-25 (sources at the end); items marked
 **verify** could not be confirmed from the docs and are checked in phase 0 against a real instance.
 
@@ -100,28 +101,71 @@ behind the same Access bypass consideration as back-channel logout.
   within 30 s; at most a fixed number of active sessions per account (today 5, **verify**).
 - Account deletion and erasure reach `neon_auth` (via `AccountAdmin`) and keep the erasure ledger.
 - No paid services, no new infrastructure beyond Neon Auth itself (owner: free stack).
+- Social sign-in apps (Google, Apple) are registered under the owner's own developer accounts.
+
+## Exit strategy (settled before starting)
+
+Neon keeps all auth data in **our own database** (schema `neon_auth`), so leaving is an export, not a
+negotiation.
+
+| Table (Better Auth standard) | Contents | On exit |
+|---|---|---|
+| `user` | id, email, name, `emailVerified`, timestamps | Exported: every account with its verified status |
+| `account` | one row per sign-in method: `providerId` (`credential`, `google`, `apple`…), provider account id; for `credential` the **password hash** | Exported: passwords and social links can move |
+| `session` | active sessions | Not moved: everyone signs in once more |
+| `verification` | pending verification/reset tokens | Not moved: they expire within minutes |
+
+Ways out, in order of preference:
+
+1. **Self-hosted Better Auth** (same version line): same tables and hash format; point it at the
+   `neon_auth` tables (or a copy), change the issuer URL in configuration. Users keep their passwords; the
+   app is unchanged because it speaks only OIDC/OAuth to the issuer.
+2. **Another provider:** plain SQL export of `user` and `account`. If it imports Better Auth's hash format
+   (scrypt by default, **verify** Neon's parameters), passwords move as they are; otherwise a **lazy
+   migration** (on first sign-in, check against the old hash, then store in the new system) and a reset
+   link for anyone who never returns.
+3. **Social sign-in** keeps working only if the new system uses the **same** Google/Apple developer apps:
+   Google's user id is stable per account, Apple's is tied to the developer team. So these apps are
+   registered under the owner's own accounts from the start, never Neon's shared credentials.
+4. **Our data** (jumps, gear, profile, follows, listings) never leaves our tables. `person` keeps the auth
+   user id (`sub`); on exit a one-off mapping (old id → new id) relinks everyone.
+
+Kept true while on Neon:
+
+- Nothing the app needs is stored only in Neon's settings or custom fields; app data stays in our tables.
+- The export works: phase 0 runs the export queries on staging (read-only) and records the hash format.
+- `docs/product/auth-exit-runbook.md`: the export queries, the hash format, the social app ownership and
+  the relink step, kept next to the deploy runbook.
 
 ## Phases
 
-0. **Spike (no app change):** enable Neon Auth on a **non-staging branch** of the Neon project; read its
-   discovery document; confirm introspection, back-channel logout, rate limits, password minimum,
-   throttling, session caps, webhook events; send a test email through our SMTP. Write the findings into
-   this note; owner decides A or B and the "sign-in help" question.
-1. **Adapters, no behaviour change:** API token validation behind an interface with today's sessions as
-   the first implementation; `person.sub` column; `AccountAdmin` port. Existing tests unchanged.
-2. **Neon Auth behind the interface:** OIDC client in the web server, introspection (or JWT) validator in
-   the API, webhook email handler, back-channel logout endpoint; feature-flagged, off on staging.
-3. **Switch-over:** owner's account re-created or linked (beta cohort is only the owner); auth e2e suite
-   rewritten around the new flow, with the same revocation, enumeration, password-rule and throttling
-   assertions; flag on in staging; old session code removed after a week.
-4. **Optional later:** Sign in with Google / Apple (configuration in Neon + a button), passkeys when Neon
-   offers them.
+Clean break: no feature flag, no old and new auth side by side, no separate Neon branch. Code work on a
+git feature branch as always.
+
+0. **Verify on staging (no app change):** the owner enables Neon Auth on the **staging project** (this
+   creates the `neon_auth` schema in the staging database: a write to the hosted database, so the owner
+   does it or explicitly asks for it). Then read the instance's discovery document; confirm introspection,
+   back-channel logout, rate limits, password minimum, throttling, session caps, webhook events; send a
+   test email through our SMTP; run the exit export queries read-only and record the hash format. Write
+   the findings into this note; the owner decides A or B and the "sign-in help" question.
+1. **Build the switch on one branch:** OIDC client in the web server, introspection (or JWT) validator in
+   the API, `person.sub`, `AccountAdmin` adapter (deletion and erasure), webhook email handler,
+   back-channel logout endpoint, the exit runbook; the old session code and its tables removed in the same
+   change. The auth e2e suite rewritten around the new flow with the same revocation, enumeration,
+   password-rule and throttling assertions; full gate green.
+2. **Switch-over (one deploy):** merge; the owner's account is re-created in Neon Auth and relinked to
+   their existing person (the beta cohort is only the owner); Cloudflare Access bypass rules for the two
+   provider-facing endpoints set before the merge.
+3. **Optional later:** Sign in with Google / Apple (developer apps under the owner's accounts, then
+   configuration in Neon + a button), passkeys when Neon offers them.
 
 ## Risks
 
 - **Beta features:** Neon's OAuth Provider plugin is labelled beta in one place; behaviour may change.
 - **Lock-in where the managed service limits us:** no custom hooks or plugins; anything Neon does not
   expose cannot be added (mitigated by keeping all non-auth data ours and the adapters small).
+- **Clean break:** no fallback to the old auth after the switch; a problem found after merging is fixed
+  forward (or the merge reverted as a whole). The full gate and the rewritten auth suite are the safety net.
 - **A new trust path:** a bug in token validation is a bug in authorisation; covered by the existing
   boundary and privacy suites, run unchanged against the new flow.
 - **Cloudflare Access:** two public endpoints (back-channel logout, email webhook) need bypass rules on
