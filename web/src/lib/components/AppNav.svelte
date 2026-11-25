@@ -44,7 +44,6 @@
 	ul {
 		display: grid;
 		grid-template-columns: repeat(4, minmax(0, 1fr));
-		gap: 2px;
 		max-width: 40rem;
 		margin: 0 auto;
 		padding: 4px;
@@ -123,7 +122,8 @@
 		   their width, never moves or resizes the tabs. */
 		ul {
 			max-width: none;
-			padding: 0 1rem;
+			/* Room above and below so the current tab reads as a pill, not a full-height tab. */
+			padding: 4px 1rem;
 			grid-template-columns: repeat(4, 9rem);
 			justify-content: center;
 		}
