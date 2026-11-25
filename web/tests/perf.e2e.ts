@@ -22,10 +22,26 @@ test.describe('tab switching (perf)', () => {
 		const data = page.waitForResponse((response) => response.url().includes('/jumps/__data.json'));
 		await tabs(page).getByRole('link', { name: 'Logbook' }).click();
 		const timing = (await data).headers()['server-timing'];
-		expect(timing).toMatch(/api-getSession;dur=\d+\.\d/);
+		// The session check itself may come from the 30-second reuse (viewer-cache.ts).
 		expect(timing).toMatch(/api-listJumps;dur=\d+\.\d/);
 		expect(timing).toMatch(/viewer;dur=\d+\.\d/);
 		expect(timing).toMatch(/total;dur=\d+\.\d/);
+	});
+
+	test('a confirmed session is reused for 30 seconds of page loads, never by a form post', async ({ page }) => {
+		await signInTo(page, '/', 'reuse');
+		const timingOf = async (path: string) =>
+			(await page.request.get(`${path}/__data.json?x-sveltekit-invalidated=111`)).headers()['server-timing'];
+		// The sign-in landed on /, so the session was just confirmed: these reuse it.
+		expect(await timingOf('/jumps')).not.toContain('api-getSession');
+		expect(await timingOf('/activity')).not.toContain('api-getSession');
+		// A form post asks the API again (and forgets the remembered confirmation).
+		const signOut = page.waitForResponse((r) => r.url().endsWith('/sign-out') && r.request().method() === 'POST');
+		await page.goto('/sign-out');
+		await page.getByRole('button', { name: /Sign out/ }).first().click();
+		await signOut;
+		await page.goto('/jumps');
+		await expect(page).toHaveURL(/\/sign-in/);
 	});
 
 	test('the tapped tab answers at once; a slow page shows a skeleton until its data arrives', async ({

@@ -40,6 +40,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const viewerMs = performance.now() - started;
 	event.locals.viewer = resolution.viewer;
 	event.locals.sessionUnconfirmed = resolution.unconfirmed;
+	event.locals.reusedSessionKey = resolution.reusedKey;
 
 	// Deny anonymous private requests before any load runs. Page server loads run in
 	// parallel with layout loads, so the (private) layout guard alone cannot stop a
