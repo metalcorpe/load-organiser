@@ -95,3 +95,50 @@ test.describe('graphite surfaces (design H)', () => {
 		expect(edge.color).not.toBe(TRANSPARENT);
 	});
 });
+
+test.describe('floating tab bar (design H, phones)', () => {
+	const primary = (page: Page) => page.getByRole('navigation', { name: 'Primary' });
+
+	test('the tab bar floats inside the screen edges', async ({ page }) => {
+		await signInTo(page, '/jumps', 'float');
+		const nav = (await primary(page).boundingBox())!;
+		const viewport = page.viewportSize()!;
+		expect(nav.x).toBeGreaterThanOrEqual(12);
+		expect(viewport.width - (nav.x + nav.width)).toBeGreaterThanOrEqual(12);
+		expect(viewport.height - (nav.y + nav.height)).toBeGreaterThanOrEqual(12);
+	});
+
+	test('the active tab is a filled pill, marked in forced colours too', async ({ page, browserName }) => {
+		await signInTo(page, '/jumps', 'pill');
+		const current = primary(page).locator('a[aria-current="page"]');
+		const fill = () => current.evaluate((el) => getComputedStyle(el).backgroundColor);
+		expect(await fill()).not.toBe(TRANSPARENT);
+		if (browserName === 'chromium') {
+			await page.emulateMedia({ forcedColors: 'active' });
+			expect(await fill()).not.toBe(TRANSPARENT);
+		}
+	});
+
+	test('the footer scrolls fully clear of the tab bar', async ({ page }) => {
+		await signInTo(page, '/jumps', 'clear');
+		await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+		const last = (await page.locator('footer a').last().boundingBox())!;
+		const nav = (await primary(page).boundingBox())!;
+		expect(last.y + last.height).toBeLessThanOrEqual(nav.y);
+	});
+
+	test('at 320px and 200% text every tab label stays whole and 44px tall', async ({ page }) => {
+		await page.setViewportSize({ width: 320, height: 640 });
+		await signInTo(page, '/jumps', 'zoom');
+		// Text-only zoom as in reflow.e2e.ts: rem sizes and the body's 16px base doubled (the CSP
+		// blocks an injected stylesheet; inline style set by script is allowed).
+		await page.evaluate(() => {
+			document.documentElement.style.fontSize = '200%';
+			document.body.style.fontSize = '32px';
+		});
+		for (const tab of await primary(page).locator('a').all()) {
+			expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+			expect(await tab.locator('span').evaluate((el) => el.getClientRects().length)).toBe(1);
+		}
+	});
+});

@@ -17,10 +17,24 @@
 	box-sizing: border-box;
 }
 
+/* Room the members' floating tab bar takes at the bottom of a phone screen: its tabs, its
+   4px padding and 1px edge on each side, and its 12px lift above the home indicator. Every
+   rule that keeps content clear of the bar uses this one value; large screens have no
+   bottom bar. */
+:root {
+	--nav-clearance: calc(var(--nav-height) + 22px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 48rem) {
+	:root {
+		--nav-clearance: 0px;
+	}
+}
+
 html {
 	-webkit-text-size-adjust: 100%;
 	/* Keep focused or scrolled-to fields clear of the fixed bottom navigation. */
-	scroll-padding-bottom: calc(var(--nav-height) + 1rem + env(safe-area-inset-bottom));
+	scroll-padding-bottom: calc(var(--nav-clearance) + 1rem);
 	/* Short and long pages reserve the same scrollbar space, so the centred frame (header,
 	   tabs, content) does not shift sideways when switching pages. */
 	scrollbar-gutter: stable;
@@ -28,6 +42,9 @@ html {
 
 body {
 	margin: 0;
+	/* viewport-fit=cover (app.html) lets the page run under a landscape iPhone's notch; the
+	   insets are 0 everywhere else. */
+	padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
 	background: var(--bg);
 	color: var(--fg);
 	font: 16px/1.5 var(--font-body);

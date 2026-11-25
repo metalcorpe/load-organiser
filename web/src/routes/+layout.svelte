@@ -276,7 +276,7 @@
 
 	/* Room for the members' fixed tab bar on phones. */
 	footer.with-nav {
-		padding-bottom: calc(var(--nav-height) + 1.5rem + env(safe-area-inset-bottom));
+		padding-bottom: calc(var(--nav-clearance) + 1.5rem);
 	}
 
 	footer a {

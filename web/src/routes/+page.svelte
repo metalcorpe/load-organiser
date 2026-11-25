@@ -422,13 +422,13 @@
 	/* Members' tab bar is fixed at the bottom on phones: sit just above it. */
 	@media (max-width: 47.99rem) {
 		.apply.with-nav {
-			bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
+			bottom: var(--nav-clearance);
 		}
 	}
 
 	/* A field focused under the sticky button scrolls clear of it (and of the tab bar). */
 	:global(html:has(.board-search details[open])) {
-		scroll-padding-bottom: calc(var(--nav-height) + 5rem + env(safe-area-inset-bottom));
+		scroll-padding-bottom: calc(var(--nav-clearance) + 5rem);
 	}
 
 	.chips {
