@@ -317,6 +317,6 @@
 	}
 
 	.danger {
-		box-shadow: 0 0 0 1px var(--bad-fg);
+		border-color: var(--bad-fg);
 	}
 </style>

@@ -780,7 +780,8 @@
 		padding: 0.6rem 0.75rem;
 		border-radius: var(--radius);
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	.num {
@@ -838,7 +839,8 @@
 	.confirm {
 		margin: 0 0 1.25rem;
 		padding: 0.75rem 0.9rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}
@@ -930,7 +932,8 @@
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 		margin: 0.25rem 0 0;
 		padding: 0.85rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}
@@ -946,7 +949,8 @@
 		border-radius: var(--radius);
 		/* The plain surface: accent links on --surface-soft fail WCAG contrast. */
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	.matched p {
@@ -960,7 +964,8 @@
 	.ahead {
 		margin: 0 0 1.25rem;
 		padding: 0.75rem 0.9rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 		font-size: 0.95rem;

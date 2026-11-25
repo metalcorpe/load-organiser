@@ -190,7 +190,8 @@
 	.people {
 		margin: 1.5rem 0 1rem;
 		padding: 0.75rem 0.9rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 		font-size: 0.95rem;

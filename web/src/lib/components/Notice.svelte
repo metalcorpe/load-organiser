@@ -16,7 +16,7 @@
 
 <style>
 	.notice {
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
 		border-radius: var(--radius);
 		background: var(--surface-soft);
 		padding: 1rem;

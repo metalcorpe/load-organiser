@@ -51,3 +51,47 @@ test.describe('layout rule (navigation.ts, pageLayout)', () => {
 		expect(main.width).toBeLessThanOrEqual(640);
 	});
 });
+
+/** A fresh member, signed in and landed on `path`. */
+async function signInTo(page: Page, path: string, label: string) {
+	await page.goto(`/sign-in?returnTo=${encodeURIComponent(path)}`);
+	await page.getByLabel('Email', { exact: true }).fill(await createAccount({ label }));
+	await page.getByLabel('Password', { exact: true }).fill(PASSWORD);
+	await page.getByRole('button', { name: 'Sign in' }).click();
+	await expect(page).toHaveURL(`${ORIGIN}${path}`);
+}
+
+const TRANSPARENT = 'rgba(0, 0, 0, 0)';
+
+test.describe('graphite surfaces (design H)', () => {
+	test('a card has no visible outline but a shadow, in light', async ({ page }) => {
+		await page.emulateMedia({ colorScheme: 'light' });
+		await signInTo(page, '/gear', 'surface');
+		const style = await page
+			.locator('section.card')
+			.first()
+			.evaluate((el) => {
+				const s = getComputedStyle(el);
+				return { color: s.borderTopColor, width: s.borderTopWidth, shadow: s.boxShadow };
+			});
+		expect(style.color).toBe(TRANSPARENT);
+		expect(style.width).toBe('1px');
+		expect(style.shadow).not.toBe('none');
+	});
+
+	test('in forced colours the card keeps a drawn edge', async ({ page, browserName }) => {
+		test.skip(browserName !== 'chromium', 'forced-colours emulation is Chromium-only');
+		await signInTo(page, '/gear', 'forced');
+		await page.emulateMedia({ forcedColors: 'active' });
+		const edge = await page
+			.locator('section.card')
+			.first()
+			.evaluate((el) => {
+				const s = getComputedStyle(el);
+				return { color: s.borderTopColor, width: s.borderTopWidth, style: s.borderTopStyle };
+			});
+		expect(edge.style).toBe('solid');
+		expect(edge.width).toBe('1px');
+		expect(edge.color).not.toBe(TRANSPARENT);
+	});
+});

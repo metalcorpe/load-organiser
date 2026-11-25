@@ -121,7 +121,8 @@
 		margin: 0;
 		padding: 0.4rem 1rem;
 		background: var(--surface);
-		border-bottom: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		color: var(--muted);
 		font-size: 0.9rem;
 		text-align: center;

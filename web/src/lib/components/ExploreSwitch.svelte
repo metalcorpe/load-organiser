@@ -31,7 +31,7 @@
 		padding: 0.25rem;
 		border-radius: 24px;
 		background: var(--surface-soft);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
 	}
 
 	a {

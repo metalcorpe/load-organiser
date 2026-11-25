@@ -208,7 +208,8 @@
 		gap: 0.1rem;
 		min-height: 44px;
 		padding: 0.65rem 0.85rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 		color: var(--fg);

@@ -155,7 +155,8 @@
 
 <style>
 	.card {
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 		padding: 1rem;

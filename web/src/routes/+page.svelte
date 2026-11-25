@@ -362,7 +362,8 @@
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
 		margin: 0.25rem 0 0;
 		padding: 0.85rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}

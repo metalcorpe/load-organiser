@@ -165,7 +165,8 @@ h1 {
 .empty-state {
 	margin: 1rem 0;
 	padding: 1rem 1.15rem 1.15rem;
-	border: 1px solid var(--border);
+	border: 1px solid transparent;
+	box-shadow: var(--shadow-card);
 	border-radius: var(--radius);
 	background: var(--surface);
 }
@@ -398,7 +399,8 @@ h1 {
 }
 
 .tag {
-	border: 1px solid var(--border);
+	border: 1px solid transparent;
+	background: var(--surface-soft);
 	border-radius: 999px;
 	padding: 0 0.5rem;
 	font-size: 0.85rem;
@@ -411,7 +413,7 @@ h1 {
 	padding: 0.05rem 0.5rem;
 	border-radius: 6px;
 	background: var(--surface-soft);
-	border: 1px solid var(--border);
+	border: 1px solid transparent;
 	color: var(--fg);
 	font-size: 0.8rem;
 	font-weight: 600;
@@ -525,7 +527,8 @@ h2 {
 	padding: 1rem;
 	border-radius: var(--radius);
 	background: var(--surface);
-	box-shadow: 0 0 0 1px var(--border);
+	border: 1px solid transparent;
+	box-shadow: var(--shadow-card);
 }
 
 .card > h2:first-child,
@@ -590,7 +593,8 @@ legend {
 	border-bottom: 0;
 	border-radius: var(--radius);
 	background: var(--surface);
-	box-shadow: 0 0 0 1px var(--border);
+	border: 1px solid transparent;
+	box-shadow: var(--shadow-card);
 }
 
 .results.rows > li > a.title {
@@ -615,7 +619,7 @@ legend {
 }
 
 .results.rows > li:has(> a.title):hover {
-	box-shadow: 0 0 0 1px var(--accent);
+	border-color: var(--accent);
 }
 
 .results.rows > li:has(> a.title:focus-visible) {
