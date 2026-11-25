@@ -19,13 +19,27 @@
 </nav>
 
 <style>
+	/* Phones: a bar floating inside the screen edges and above the home indicator (design H).
+	   The transparent border is drawn in forced colours, so the bar keeps an edge there. Room
+	   for it elsewhere comes from --nav-clearance (app.css). */
 	nav {
 		position: fixed;
-		inset: auto 0 0 0;
+		inset: auto max(12px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))
+			max(12px, env(safe-area-inset-left));
 		z-index: 10;
-		background: var(--surface);
-		border-top: 1px solid var(--border);
-		padding-bottom: env(safe-area-inset-bottom);
+		border: 1px solid transparent;
+		border-radius: 20px;
+		background: var(--nav-bg);
+		box-shadow: var(--shadow-card), 0 8px 24px rgb(0 0 0 / 12%);
+	}
+
+	/* See-through only where the blur works (and color-mix, or the bar would be clear);
+	   tokens.spec.ts checks the labels at this share over white and black. */
+	@supports (backdrop-filter: blur(12px)) and (background: color-mix(in srgb, red 50%, transparent)) {
+		nav {
+			background: color-mix(in srgb, var(--nav-bg) 94%, transparent);
+			backdrop-filter: blur(12px);
+		}
 	}
 
 	ul {
@@ -33,7 +47,7 @@
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		max-width: 40rem;
 		margin: 0 auto;
-		padding: 0;
+		padding: 4px;
 		list-style: none;
 	}
 
@@ -62,21 +76,49 @@
 		font-size: clamp(0.55rem, 3.4vw, 1em);
 	}
 
+	/* The current tab is a filled pill: light on graphite, dark on light (design H). */
 	a[aria-current='page'] {
-		color: var(--accent);
+		border-radius: 16px;
+		background: var(--nav-pill);
+		color: var(--nav-pill-fg);
 		font-weight: 750;
-		/* The bar across the top of the tab (phones) or the bottom (large screens), drawn as a
-		   background: an inset shadow on a tab whose edge falls on a half pixel left a thin
-		   accent line down its side. */
-		background: linear-gradient(var(--accent), var(--accent)) top / 100% 3px no-repeat;
+	}
+
+	/* Forced colours drop background colours: mark the current tab with the system highlight. */
+	@media (forced-colors: active) {
+		a[aria-current='page'] {
+			forced-color-adjust: none;
+			background: Highlight;
+			color: HighlightText;
+		}
+	}
+
+	/* Under 360px the four tabs share less room: the labels at 200% text need every pixel of
+	   each tab, so the bar sits 8px from the edges and the pill gives up its side padding. */
+	@media (max-width: 22.49rem) {
+		nav {
+			inset: auto max(8px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))
+				max(8px, env(safe-area-inset-left));
+		}
+
+		ul {
+			padding-inline: 2px;
+		}
+
+		a {
+			padding-inline: 0;
+		}
 	}
 
 	@media (min-width: 48rem) {
+		/* Large screens: a static bar under the header, not floating. */
 		nav {
 			position: static;
-			border-top: 0;
-			border-bottom: 1px solid var(--border);
-			padding-bottom: 0;
+			border-width: 0 0 1px;
+			border-radius: 0;
+			background: var(--nav-bg);
+			box-shadow: none;
+			backdrop-filter: none;
 		}
 
 		a span {
@@ -91,14 +133,15 @@
 		}
 
 		a[aria-current='page'] {
-			background-position: bottom;
+			border-radius: 12px;
 		}
 
 		/* Same size and place on every page: centred in the bar, so switching pages, whatever
 		   their width, never moves or resizes the tabs. */
 		ul {
 			max-width: none;
-			padding: 0 1rem;
+			/* Room above and below so the current tab reads as a pill, not a full-height tab. */
+			padding: 4px 1rem;
 			grid-template-columns: repeat(4, 9rem);
 			justify-content: center;
 		}

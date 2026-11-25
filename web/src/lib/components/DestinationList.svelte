@@ -90,7 +90,8 @@
 		list-style: none;
 		border-radius: var(--radius);
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	li + li {

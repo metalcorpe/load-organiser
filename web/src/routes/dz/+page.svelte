@@ -117,7 +117,7 @@
 		padding: 0.25rem;
 		border-radius: 12px;
 		background: var(--surface-soft);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
 	}
 
 	.views a {
@@ -156,7 +156,8 @@
 		gap: 0;
 		border-radius: var(--radius);
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	.results.rows.grouped > li {
@@ -216,7 +217,8 @@
 
 	.tag {
 		justify-self: start;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		background: var(--surface-soft);
 		border-radius: 999px;
 		padding: 0 0.5rem;
 		font-size: 0.85rem;

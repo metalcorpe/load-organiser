@@ -13,20 +13,23 @@ export const flat = (tokens, prefix = '') =>
         : flat(token, `${prefix}${key}-`)
   );
 
-export const lightTokens = flat(light);
+export const lightTokens = flat(light).filter(([name]) => name !== 'shadow-card');
 export const darkTokens = Object.fromEntries(flat(dark).map(([name, value]) => [name, value]));
 
 # Foundations
 
-Design **E** (light) and **G** (dark), chosen by the owner on 2026-11-11. Every swatch below is read
+Design **H** (graphite, light and dark), chosen by the owner on 2026-11-25; it replaced E/G. Every swatch below is read
 from `src/lib/design/tokens/*.json`, the same files Style Dictionary builds the app's CSS from
 (`npm run tokens:build`). Use the toolbar's theme switch to see components in each theme.
 
 ## Rules
 
-- **Navy (`brand`)** is structure: one pop card or header per screen.
-- **Orange (`accent`)** is for actions: main buttons, the active tab, links. **`highlight`** is for
-  key numbers on navy.
+- **Surfaces lift by shade, not outline.** Cards use `surface` with `--shadow-card` (a soft shadow in
+  light, a top highlight in dark) and a transparent 1px border, which forced colours still draw.
+  Visible lines are for meaning: field edges, warnings, row dividers inside a card.
+- **Graphite (`brand`)** is structure: one pop card or header per screen.
+- **Orange (`accent`)** is for actions: main buttons, links, prices. **`highlight`** is for key
+  numbers on `brand`. The current tab is a neutral pill (`nav-pill` on `nav-bg`), not orange.
 - **Listing types** each have a tint (`*-bg`, the date tile) and a text colour (`*-fg`, the tag),
   always with the type's icon. Colour is never the only cue.
 - Tap targets are at least 44px. Text meets WCAG 2.1 contrast; `tokens.spec.ts` checks every pair.
@@ -72,7 +75,13 @@ and the way to clear the filter.
 A failure is never an empty state: it uses the error tone (`Notice` with `tone="bad"`, or
 `.form-error`) and says that nothing was lost.
 
-## Colour: light (E) and dark (G)
+## Elevation
+
+<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+  <div className="card" style={{ width: '14rem' }}>A card: <code>surface</code> and <code>--shadow-card</code></div>
+</div>
+
+## Colour: light and dark (H)
 
 Each row shows the light value, then the dark value.
 

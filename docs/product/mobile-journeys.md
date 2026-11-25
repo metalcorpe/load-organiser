@@ -8,7 +8,7 @@ The [two-pass product review](product-review.md) records scope/value risks and c
 
 ## Navigation as built (2026-11-14)
 
-Four tabs, each with one job; the labels, palette and type are design E/G. The earlier five-tab recommendation below is superseded and kept for its reasoning.
+Four tabs, each with one job; the labels and type are design E/G; the palette and surfaces are design H (graphite, 2026-11-25), with a floating tab bar on phones. The earlier five-tab recommendation below is superseded and kept for its reasoning.
 
 | Tab | Job | Destinations |
 | --- | --- | --- |

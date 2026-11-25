@@ -121,7 +121,8 @@
 		margin: 0;
 		padding: 0.4rem 1rem;
 		background: var(--surface);
-		border-bottom: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		color: var(--muted);
 		font-size: 0.9rem;
 		text-align: center;
@@ -275,7 +276,7 @@
 
 	/* Room for the members' fixed tab bar on phones. */
 	footer.with-nav {
-		padding-bottom: calc(var(--nav-height) + 1.5rem + env(safe-area-inset-bottom));
+		padding-bottom: calc(var(--nav-clearance) + 1.5rem);
 	}
 
 	footer a {

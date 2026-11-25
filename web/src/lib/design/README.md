@@ -1,6 +1,7 @@
 # Design tokens
 
-Colours, fonts and sizes for design **E** (light) and **G** (dark), chosen by the owner on 2026-11-11.
+Colours, fonts and sizes for design **H** (graphite, light and dark), chosen by the owner on 2026-11-25
+(it replaced E/G of 2026-11-11; the approved mockup is `docs/product/mockups/graphite-look.html`).
 
 - Source: `tokens/shared.json`, `tokens/light.json`, `tokens/dark.json`, in the W3C Design Tokens
   Community Group format (`$value`, `$type`, `$description`).
@@ -15,10 +16,14 @@ Colours, fonts and sizes for design **E** (light) and **G** (dark), chosen by th
 
 Rules the tokens carry:
 
-- `brand` (navy): one pop card or header per screen.
-- `accent` (orange): actions (main buttons, active tab, links). `highlight`: key numbers on `brand`.
+- `brand` (graphite): one pop card or header per screen.
+- `accent` (orange): actions (main buttons, links). `highlight`: key numbers on `brand`.
+- `nav-bg`, `nav-pill`, `nav-pill-fg`: the tab bar and its current-tab pill (opaque values; the
+  bar is see-through only where `backdrop-filter` works).
+- `shadow-card`: card elevation. Cards and chips keep a transparent 1px border instead of a
+  visible one, so forced colours still draw their edge.
 - Form fields use `field` and `field-border`; the border keeps 3:1 against the field, cards and
-  page in both themes (WCAG 1.4.11). Plain card edges use `border`.
+  page in both themes (WCAG 1.4.11). `border` is for row dividers, table rules and form groups, not card edges.
 - Listing types (`boogie`, `camp`, `course`, `event`): a `bg` tint for the date tile and an `fg`
   colour for the tag, always with the type's icon (`TypeIcon`), never colour alone.
 

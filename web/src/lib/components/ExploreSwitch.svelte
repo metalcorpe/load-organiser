@@ -31,7 +31,7 @@
 		padding: 0.25rem;
 		border-radius: 24px;
 		background: var(--surface-soft);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
 	}
 
 	a {
@@ -48,9 +48,10 @@
 		text-decoration: none;
 	}
 
+	/* The same neutral pill as the current tab in the tab bar (design H). */
 	a[aria-current='page'] {
-		background: var(--brand);
-		color: var(--brand-fg);
+		background: var(--nav-pill);
+		color: var(--nav-pill-fg);
 	}
 
 	a:focus-visible {

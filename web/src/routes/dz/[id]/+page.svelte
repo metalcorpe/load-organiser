@@ -155,7 +155,8 @@
 	.mine {
 		margin: 0.75rem 0 1rem;
 		padding: 0.9rem 1rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}
@@ -163,7 +164,8 @@
 	.visit {
 		margin: 1.25rem 0;
 		padding: 0.9rem 1rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 	}

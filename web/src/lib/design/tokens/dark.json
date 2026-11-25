@@ -1,56 +1,56 @@
 {
-	"$description": "Design G (dark), chosen by the owner on 2026-11-11.",
+	"$description": "Design H (graphite), chosen by the owner on 2026-11-25.",
 	"bg": {
 		"$type": "color",
-		"$value": "#0b1624"
+		"$value": "#111214"
 	},
 	"surface": {
 		"$type": "color",
-		"$value": "#13233a"
+		"$value": "#1c1d21"
 	},
 	"surface-soft": {
 		"$type": "color",
-		"$value": "#1a2d47"
+		"$value": "#26272c"
 	},
 	"fg": {
 		"$type": "color",
-		"$value": "#e8eef5"
+		"$value": "#ececee"
 	},
 	"muted": {
 		"$type": "color",
-		"$value": "#9fb0c3"
+		"$value": "#a0a2ab"
 	},
 	"border": {
 		"$type": "color",
-		"$value": "#3a5780"
+		"$value": "#2c2e33"
 	},
 	"accent": {
 		"$type": "color",
-		"$value": "#ff8a5c"
+		"$value": "#ff7a45"
 	},
 	"accent-fg": {
 		"$type": "color",
-		"$value": "#1a0e08"
+		"$value": "#140a05"
 	},
 	"accent-soft": {
 		"$type": "color",
-		"$value": "#3a2318"
+		"$value": "#35231b"
 	},
 	"focus": {
 		"$type": "color",
-		"$value": "#7faef5"
+		"$value": "#3f7fe0"
 	},
 	"brand": {
 		"$type": "color",
-		"$value": "#1d3b63"
+		"$value": "#24262c"
 	},
 	"brand-fg": {
 		"$type": "color",
-		"$value": "#f3f6fa"
+		"$value": "#f3f4f6"
 	},
 	"brand-muted": {
 		"$type": "color",
-		"$value": "#c9d6e4"
+		"$value": "#c6c7cd"
 	},
 	"highlight": {
 		"$type": "color",
@@ -132,12 +132,31 @@
 	},
 	"field": {
 		"$type": "color",
-		"$value": "#0b1624",
+		"$value": "#111214",
 		"$description": "Form field background"
 	},
 	"field-border": {
 		"$type": "color",
-		"$value": "#5e7a9e",
+		"$value": "#74777f",
 		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
+	},
+	"nav-bg": {
+		"$type": "color",
+		"$value": "#24252a",
+		"$description": "Tab bar surface (opaque; translucency only where backdrop-filter works)"
+	},
+	"nav-pill": {
+		"$type": "color",
+		"$value": "#ececee",
+		"$description": "Active tab pill"
+	},
+	"nav-pill-fg": {
+		"$type": "color",
+		"$value": "#111214",
+		"$description": "Text and icon on the active tab pill"
+	},
+	"shadow-card": {
+		"$value": "inset 0 1px 0 rgb(255 255 255 / 5%)",
+		"$description": "Card elevation: a soft shadow in light, a top highlight in dark"
 	}
 }

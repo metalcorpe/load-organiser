@@ -244,7 +244,8 @@
 		border-radius: 22px 22px 0 0;
 		background: var(--surface);
 		color: var(--fg);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		overflow: auto;
 	}
 

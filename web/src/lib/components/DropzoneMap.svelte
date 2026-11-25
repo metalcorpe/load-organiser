@@ -204,7 +204,8 @@
 		padding: 1rem;
 		border-radius: var(--radius);
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	.consent p {
@@ -220,7 +221,7 @@
 		height: min(70vh, 40rem);
 		min-height: 20rem;
 		border-radius: var(--radius);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
 		/* Leaflet sets its own background and font; keep the page's. */
 		background: var(--surface-soft);
 		font-family: var(--font-body);

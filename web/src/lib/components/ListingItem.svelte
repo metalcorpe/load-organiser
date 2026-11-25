@@ -69,11 +69,12 @@
 		padding: 0.65rem;
 		border-radius: var(--radius);
 		background: var(--surface);
-		box-shadow: 0 0 0 1px var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 	}
 
 	.listing:hover {
-		box-shadow: 0 0 0 1px var(--accent);
+		border-color: var(--accent);
 	}
 
 	.listing:focus-within {

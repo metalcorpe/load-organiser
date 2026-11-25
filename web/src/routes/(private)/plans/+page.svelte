@@ -293,7 +293,8 @@
 
 	.tag {
 		justify-self: start;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		background: var(--surface-soft);
 		border-radius: 999px;
 		padding: 0 0.5rem;
 		font-size: 0.85rem;

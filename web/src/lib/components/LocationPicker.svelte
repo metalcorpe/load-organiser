@@ -208,11 +208,17 @@
 		gap: 0.1rem;
 		min-height: 44px;
 		padding: 0.65rem 0.85rem;
-		border: 1px solid var(--border);
+		border: 1px solid transparent;
+		box-shadow: var(--shadow-card);
 		border-radius: var(--radius);
 		background: var(--surface);
 		color: var(--fg);
 		text-decoration: none;
+	}
+
+	/* Inside a card (the jump page's Edit section) a surface-coloured choice would vanish. */
+	:global(.card) .pick {
+		background: var(--surface-soft);
 	}
 
 	.pick:hover {
