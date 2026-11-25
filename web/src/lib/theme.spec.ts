@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { THEMES, htmlTheme, parseTheme } from './theme.ts';
+import { THEMES, htmlTheme, nextTheme, parseTheme } from './theme.ts';
 
 describe('parseTheme', () => {
 	it('keeps light and dark', () => {
@@ -34,5 +34,13 @@ describe('htmlTheme', () => {
 		expect(htmlTheme(page, 'light')).toBe(
 			'<html lang="en-GB" data-theme="light"><meta name="color-scheme" content="light" />'
 		);
+	});
+});
+
+describe('nextTheme', () => {
+	it('cycles device setting, light, dark, then back', () => {
+		expect(nextTheme('system')).toBe('light');
+		expect(nextTheme('light')).toBe('dark');
+		expect(nextTheme('dark')).toBe('system');
 	});
 });

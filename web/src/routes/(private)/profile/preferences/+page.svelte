@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { LICENCES, LICENCE_LABEL, licenceMessage } from '#lib/currency.ts';
-	import { THEMES } from '#lib/theme.ts';
 	import { UNIT_NAME, inUnit, weightMessage } from '#lib/wing-loading.ts';
 	import type { PageProps } from './$types';
 
@@ -115,29 +114,6 @@
 		</div>
 		<div class="form-actions">
 			<button class="button" type="submit">Save exit weight</button>
-		</div>
-	</form>
-</section>
-
-<section class="setting" aria-labelledby="appearance-heading">
-	<h2 id="appearance-heading">Appearance</h2>
-	<p>Light or dark pages. Saved on this device only.</p>
-	<!-- No enhance: a full page load renders the new theme from the server, without a flash. -->
-	<form method="POST" action="?/appearance" class="form">
-		{#if doneFor('appearance')}
-			<p role="status" class="ok">Appearance saved.</p>
-		{/if}
-		<fieldset class="field">
-			<legend>Theme</legend>
-			{#each THEMES as theme (theme.value)}
-				<label class="choice"
-					><input type="radio" name="theme" value={theme.value} defaultChecked={data.theme === theme.value} />
-					{theme.label}</label
-				>
-			{/each}
-		</fieldset>
-		<div class="form-actions">
-			<button class="button" type="submit">Save appearance</button>
 		</div>
 	</form>
 </section>

@@ -5,8 +5,7 @@ import { parseWeight, type WeightUnit } from '#lib/wing-loading.ts';
 import { createRequestApi } from '#lib/server/api/client.ts';
 import { field } from '#lib/server/forms.ts';
 import { call, failStatus, isRecord } from '#lib/server/maintenance.ts';
-import { cookieSecure, readSessionSecret } from '#lib/server/session.ts';
-import { THEME_COOKIE, THEME_MAX_AGE_SECONDS, parseTheme } from '#lib/theme.ts';
+import { readSessionSecret } from '#lib/server/session.ts';
 import { requireViewer } from '#lib/server/viewer.ts';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -27,7 +26,6 @@ export const load: PageServerLoad = async ({ locals, url, cookies }) => {
 			])
 		: [null, null];
 	return {
-		theme: parseTheme(cookies.get(THEME_COOKIE)),
 		licence: licence?.ok ? licence.value.licence : null,
 		exitWeight: weight?.ok ? weight.value : null
 	};
@@ -42,16 +40,6 @@ function secretOrSignIn(locals: App.Locals, url: URL, cookies: Parameters<typeof
 
 // The licence and the exit weight, edited here; Me shows them as a summary.
 export const actions: Actions = {
-	// A cookie on this device (theme.ts), so no API call; "Use device setting" removes it.
-	appearance: async ({ locals, url, cookies, request }) => {
-		requireViewer(locals.viewer, url);
-		const theme = parseTheme(field(await request.formData(), 'theme', { max: 8 }));
-		const options = { path: '/', httpOnly: true, secure: cookieSecure(), sameSite: 'lax' } as const;
-		if (theme === 'system') cookies.delete(THEME_COOKIE, options);
-		else cookies.set(THEME_COOKIE, theme, { ...options, maxAge: THEME_MAX_AGE_SECONDS });
-		return { form: 'appearance', done: true };
-	},
-
 	licence: async ({ locals, url, cookies, request }) => {
 		const secret = secretOrSignIn(locals, url, cookies);
 		const value = field(await request.formData(), 'licence', { max: 8 });

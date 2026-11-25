@@ -4,6 +4,8 @@
  * The choice is a cookie on this device, not an account setting, so the server can render the
  * page in the chosen theme before anything else loads (no flash) and it works signed out too.
  * hooks.server.ts writes it into app.html; tokens-*-forced.css then outrank the system theme.
+ * One control sets it for everyone, guests and members: the header button (ThemeToggle), which
+ * posts to /appearance.
  */
 export type Theme = 'system' | 'light' | 'dark';
 
@@ -28,4 +30,14 @@ export function htmlTheme(html: string, theme: Theme): string {
 	return html
 		.replace('%lo.theme%', theme === 'system' ? '' : `data-theme="${theme}"`)
 		.replace('%lo.color-scheme%', theme === 'system' ? 'light dark' : theme);
+}
+
+/** The button's next step: device setting, light, dark, then back. */
+export function nextTheme(theme: Theme): Theme {
+	const at = THEMES.findIndex((option) => option.value === theme);
+	return THEMES[(at + 1) % THEMES.length].value;
+}
+
+export function themeLabel(theme: Theme): string {
+	return THEMES.find((option) => option.value === theme)!.label;
 }

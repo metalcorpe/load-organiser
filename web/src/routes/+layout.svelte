@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ThemeToggle from '#lib/components/ThemeToggle.svelte';
 	import '@fontsource/figtree/latin-400.css';
 	import '@fontsource/figtree/latin-ext-400.css';
 	import '@fontsource/figtree/latin-600.css';
@@ -76,6 +77,7 @@
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
 	<span class="account">
+		<ThemeToggle theme={data.theme} />
 		{#if data.viewer}
 			<a class="me" href="/profile">
 				<span class="avatar" aria-hidden="true">{initials}</span>
