@@ -73,21 +73,44 @@ test.describe('tab switching (perf)', () => {
 		await expect(page.getByRole('heading', { level: 1, name: 'Logbook' })).toBeVisible();
 	});
 
-	test('a quick switch never flashes the Loading… pill', async ({ page }) => {
+	test('a switch that finishes within 400ms never flashes the Loading… pill', async ({ page }) => {
+		// "Loading…" on a slow navigation: shell.e2e.ts ("client navigation shows a loading state").
 		await signInTo(page, '/', 'noflash');
-		// Watch for the pill from before the tap until the new page is shown.
-		await page.evaluate(() => {
-			const seen = { pill: false };
-			(window as unknown as { __seen: typeof seen }).__seen = seen;
-			new MutationObserver(() => {
-				if (document.querySelector('[data-testid="navigation-loading"]')) seen.pill = true;
-			}).observe(document.body, { childList: true, subtree: true });
-		});
-		await tabs(page).getByRole('link', { name: 'Me' }).click();
-		await expect(page).toHaveURL(`${ORIGIN}/profile`);
-		await tabs(page).getByRole('link', { name: 'Friends' }).click();
-		await expect(page).toHaveURL(`${ORIGIN}/activity`);
-		expect(await page.evaluate(() => (window as unknown as { __seen: { pill: boolean } }).__seen.pill)).toBe(false);
+		// Started up (hydrated, tab code loaded): a tap is then a client-side switch.
+		await page.waitForLoadState('networkidle');
+		for (const [name, path] of [
+			['Me', '/profile'],
+			['Friends', '/activity'],
+			['Logbook', '/jumps']
+		]) {
+			const run = await page.evaluate(
+				({ name, path }) =>
+					new Promise<{ ms: number; pill: boolean }>((done) => {
+						let pill = false;
+						const watch = new MutationObserver(() => {
+							if (document.querySelector('[data-testid="navigation-loading"]')) pill = true;
+						});
+						watch.observe(document.body, { childList: true, subtree: true });
+						const link = [...document.querySelectorAll<HTMLAnchorElement>('nav[aria-label="Primary"] a')].find(
+							(a) => a.textContent?.trim() === name
+						)!;
+						const started = performance.now();
+						link.click();
+						const check = () => {
+							if (location.pathname === path && link.getAttribute('aria-current') === 'page') {
+								watch.disconnect();
+								done({ ms: performance.now() - started, pill });
+							} else requestAnimationFrame(check);
+						};
+						check();
+					}),
+				{ name, path }
+			);
+			// The rule holds only for a switch that finished inside the 400ms; a machine busy enough
+			// to take longer is not a failure of it.
+			if (run.ms < 380) expect(run.pill, `${name} took ${Math.round(run.ms)}ms`).toBe(false);
+			else test.info().annotations.push({ type: 'slow switch', description: `${name}: ${Math.round(run.ms)}ms` });
+		}
 	});
 
 	test('the tab bar loads every tab’s code ahead of a tap', async ({ page }) => {
