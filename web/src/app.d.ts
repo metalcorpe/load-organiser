@@ -10,6 +10,11 @@ declare global {
 			sessionUnconfirmed: boolean;
 			/** Set by account-changing actions; the hook adds `Clear-Site-Data: "cache"`. */
 			clearSiteCache?: boolean;
+			/** Set when this request reused a remembered confirmation (viewer-cache.ts): the
+			 *  digest to forget if the API now says the session has ended. */
+			reusedSessionKey?: string;
+			/** API calls made for this request, for its Server-Timing header. */
+			timings?: import('#lib/server/server-timing.ts').UpstreamTiming[];
 		}
 		interface PageState {
 			/** Return path while the sign-in sheet is open (shallow routing; Back closes it). */

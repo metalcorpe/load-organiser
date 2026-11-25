@@ -11,6 +11,23 @@ function json(status: number, body: unknown, headers: Record<string, string> = {
 }
 
 describe('createApiTransport', () => {
+	it('reports how long each call took, answered or not', async () => {
+		const timings: [string, number][] = [];
+		const onTiming = (operation: string, ms: number) => timings.push([operation, ms]);
+		await createApiTransport({ fetch: async () => json(200, { ok: true }), origin: ORIGIN, onTiming }).request(
+			'getHealth'
+		);
+		await createApiTransport({
+			fetch: async () => {
+				throw new TypeError('network down');
+			},
+			origin: ORIGIN,
+			onTiming
+		}).request('getHealth');
+		expect(timings.map(([operation]) => operation)).toEqual(['getHealth', 'getHealth']);
+		for (const [, ms] of timings) expect(ms).toBeGreaterThanOrEqual(0);
+	});
+
 	it('fails closed without an origin and never calls fetch', async () => {
 		const fetch = vi.fn<FetchLike>();
 		const result = await createApiTransport({ fetch, origin: undefined }).request('getHealth');

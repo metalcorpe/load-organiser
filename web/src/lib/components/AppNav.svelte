@@ -1,15 +1,26 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { PRIMARY_NAV, isCurrentTab } from '#lib/navigation.ts';
+	import { navigating, page } from '$app/state';
+	import { PRIMARY_NAV, isCurrentTab, tabSwitch } from '#lib/navigation.ts';
 	import NavIcon from './NavIcon.svelte';
+
+	// The tab being opened takes the pill at once; aria-current stays on the page still shown
+	// until the new one arrives (the layout marks main busy meanwhile).
+	const opening = $derived(tabSwitch(page.url.pathname, navigating.to?.url.pathname));
 </script>
 
 <nav aria-label="Primary">
-	<ul>
+	<ul class:moving={opening !== undefined}>
 		{#each PRIMARY_NAV as item (item.href)}
 			{@const current = isCurrentTab(item, page.url.pathname)}
 			<li>
-				<a href={item.href} aria-current={current ? 'page' : undefined}>
+				<!-- Each tab's code loads while the bar is on screen; its data only on a tap
+				     (private data is never fetched speculatively: architecture.md). -->
+				<a
+					href={item.href}
+					aria-current={current ? 'page' : undefined}
+					data-pending={opening === item ? 'true' : undefined}
+					data-sveltekit-preload-code="viewport"
+				>
 					<NavIcon name={item.icon} />
 					<span>{item.label}</span>
 				</a>
@@ -84,12 +95,32 @@
 		font-weight: 750;
 	}
 
+	/* While another tab opens, the pill moves to it at once. */
+	.moving a[aria-current='page'] {
+		background: transparent;
+		color: var(--muted);
+		font-weight: inherit;
+	}
+
+	.moving a[data-pending='true'] {
+		border-radius: 16px;
+		background: var(--nav-pill);
+		color: var(--nav-pill-fg);
+		font-weight: 750;
+	}
+
 	/* Forced colours drop background colours: mark the current tab with the system highlight. */
 	@media (forced-colors: active) {
-		a[aria-current='page'] {
+		a[aria-current='page'],
+		.moving a[data-pending='true'] {
 			forced-color-adjust: none;
 			background: Highlight;
 			color: HighlightText;
+		}
+
+		.moving a[aria-current='page'] {
+			background: Canvas;
+			color: LinkText;
 		}
 	}
 
@@ -132,7 +163,8 @@
 			font-size: 0.9rem;
 		}
 
-		a[aria-current='page'] {
+		a[aria-current='page'],
+		.moving a[data-pending='true'] {
 			border-radius: 12px;
 		}
 

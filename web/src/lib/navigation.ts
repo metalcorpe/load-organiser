@@ -50,6 +50,17 @@ export function isCurrentTab(item: NavItem, pathname: string): boolean {
 	return [item.href, ...item.also].some((s) => under(s, pathname));
 }
 
+/**
+ * The tab a navigation is opening, when it leaves the current tab (instant tab feedback:
+ * AppNav's pending pill and the layout's skeleton). Nothing for a move within one tab.
+ */
+export function tabSwitch(from: string, to: string | undefined): NavItem | undefined {
+	if (to === undefined) return undefined;
+	const target = PRIMARY_NAV.find((item) => isCurrentTab(item, to));
+	if (!target || isCurrentTab(target, from)) return undefined;
+	return target;
+}
+
 export function isCurrent(href: string, pathname: string): boolean {
 	if (href === '/') return pathname === '/';
 	return pathname === href || pathname.startsWith(`${href}/`);
