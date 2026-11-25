@@ -292,7 +292,7 @@
 		<p class="hint">Import reads a spreadsheet (CSV) and checks it before anything is saved.</p>
 	</section>
 {:else if !data.older && !data.filtered && !data.select}
-	<!-- The screen's one navy card: totals and the main action. -->
+	<!-- The screen's one brand card: totals and the main action. -->
 	<section class="card" aria-label="Totals and log a jump">
 		<div class="totals">
 			<p class="big">

@@ -10,7 +10,7 @@ const meta = {
 		docs: {
 			description: {
 				component:
-					'The navy card: the next multi-day boogie or camp on the plain first page of the board, labelled only with what that selection knows ("Upcoming boogie"). It shows the full date range with the year and is not repeated in the dated list below it. On a phone the title leads and the dates and place follow as text; from 60rem the name sits on the left and the dates, place and price in a column on the right. There is no large start-day figure. One brand card per screen.'
+					'The brand card: the next multi-day boogie or camp on the plain first page of the board, labelled only with what that selection knows ("Upcoming boogie"). It shows the full date range with the year and is not repeated in the dated list below it. On a phone the title leads and the dates and place follow as text; from 60rem the name sits on the left and the dates, place and price in a column on the right. There is no large start-day figure. One brand card per screen.'
 			}
 		}
 	},

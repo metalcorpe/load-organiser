@@ -50,7 +50,7 @@
 	"brand": {
 		"$type": "color",
 		"$value": "#16171a",
-		"$description": "Navy pop cards and headers: one per screen"
+		"$description": "Brand pop cards and headers: one per screen"
 	},
 	"brand-fg": {
 		"$type": "color",

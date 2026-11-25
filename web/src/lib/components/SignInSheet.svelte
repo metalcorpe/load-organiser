@@ -240,7 +240,6 @@
 		max-height: min(90dvh, 40rem);
 		margin: auto auto 0;
 		padding: 0;
-		border: 0;
 		border-radius: 22px 22px 0 0;
 		background: var(--surface);
 		color: var(--fg);
@@ -255,7 +254,7 @@
 	}
 
 	dialog::backdrop {
-		background: rgb(5 12 22 / 0.55);
+		background: rgb(0 0 0 / 0.55);
 	}
 
 	.sheet {

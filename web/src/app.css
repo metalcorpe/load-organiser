@@ -184,7 +184,7 @@ h1 {
 
 /* Empty states: one pattern for "nothing here yet". A heading, a sentence or two specific to
    the task, the main action (filled) and at most one other (outlined), on the plain card
-   surface. No illustration and no navy.
+   surface. No illustration and no brand colour.
    - .empty-state.quiet: a search or filter that found nothing. No card, a rule above, and a
      way to clear the filter, so it reads as a result, not as a page.
    - A failure is never an empty state: it uses the error tone (Notice tone="bad" or
