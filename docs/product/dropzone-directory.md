@@ -91,6 +91,17 @@ An open (active or seasonal) researched dropzone is published only with a websit
 - A rerun of `scripts/staging.sh load-dropzones` adds the new links to venues already on staging (`_operator_links`: a same-named operator without a link gets it; existing names and links are kept).
 - A public venue is never unlisted (jumps refer to it). If one already on staging has no operator link, the load report names it under `unlinked` for the owner to review in `/review`.
 
+## Event prices and detail pages (UI review, 2026-11-16)
+
+An event has either one stated price (`price_amount`, `price_currency`, `price_basis`), a price list (`price_tiers`), or neither; never both (API rule `price_tiers_with_amount`, database check `skydiver_opportunity_price_tiers`). Each tier has a label saying what it pays for ("Registration", "Load organising"), amount, currency, basis, optional `from_on`/`until_on` (inclusive calendar dates in the event's `time_zone`) and `optional` for extras. At most 6. `price_note` stays a free-text note and is never parsed.
+
+- Cards (board, dropzone and organizer pages, the highlighted card) show a fixed price as before. With tiers they show the one required tier in effect today in the event's time zone, with its label ("Registration: €95.00 per person"), or "See pricing" when there is not exactly one. An expired tier is never shown as the price.
+- The event page lists every tier with its dates; an ended one is struck through and says "no longer offered"; extras say "(optional)".
+- The web computes "today" when the page renders. A card rendered just before midnight in the event's zone can show the earlier tier until the next load.
+- Reviewers edit the list as up to six rows in `/review/listings/{id}`; a row with neither name nor amount is dropped.
+
+Date-only event headers show the calendar dates alone ("24–31 December 2026"); the time zone stays in the data and is not printed. A dropzone page shows "Shared jumps here" to a guest only when there are public posts; a signed-in reader also sees an empty or failed state. "Listing details" stacks labels above values when the disclosure is narrower than 30rem (a container query).
+
 ## Map view
 
 Requested by the owner 2026-11-14: `/dz?view=map` shows the same search as the list on a map. No paid
@@ -103,7 +114,7 @@ service and no new infrastructure.
 | Privacy | Nothing third-party loads before the visitor presses "Show map"; the choice is kept in `sessionStorage` for that tab. Tiles then send the visitor's IP address, the site's origin (`Referrer-Policy: strict-origin` on tiles only, which the tile usage policy requires) and, by which tiles are fetched, the map area viewed, which follows the search, to `tile.openstreetmap.org`, the only image host the CSP allows besides the site. The privacy page says so |
 | Without JavaScript | The Map view says the map needs JavaScript and links to the list, which stays complete |
 | Accessibility | The list is the equivalent and the map says so. The map region is labelled and focusable (arrow keys pan, +/- zoom); markers and clusters are named buttons; Enter on a marker opens its popup and moves focus to its link, Escape closes it and returns focus to the marker; a click leaves focus alone. With reduced motion, zoom, fade, inertia, panning and cluster animations are off |
-| Detail page | Coordinates as text and a plain "Open in OpenStreetMap" link; no map is embedded |
+| Detail page | The place name leads, then a plain "View on map" link to OpenStreetMap at the listed point; no map is embedded. Raw coordinates are folded under "Coordinates" with a "Copy coordinates" button (plain decimals; shown only where a clipboard is available, with a "Coordinates copied." status). The point is never called an entrance or landing area. Without coordinates the page says "No map location listed." |
 
 The tile servers are run by volunteers under a [usage policy](https://operations.osmfoundation.org/policies/tiles/) meant for moderate use. If the map ever needs more than that, the policy asks for another tile provider or self-hosting; that would be a new decision.
 

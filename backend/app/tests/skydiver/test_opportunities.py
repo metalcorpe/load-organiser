@@ -27,7 +27,7 @@ PUBLIC_FIELDS = {
     "id", "title", "category", "status", "ended", "provider", "venue", "country",
     "location_note", "starts_on", "ends_on", "time_zone", "disciplines", "audience",
     "languages", "summary", "prerequisites", "price_amount", "price_currency",
-    "price_basis", "price_note", "registration_url", "source_url",
+    "price_basis", "price_note", "price_tiers", "registration_url", "source_url",
     "checked_on",
 }  # fmt: skip
 PROVIDER_FIELDS = {
@@ -728,3 +728,115 @@ def test_internal_notes_stay_with_reviewers(api: Api) -> None:
         assert response.status_code == 200, response.text
         assert "internal_note" not in response.text and "dev-data" not in response.text
     assert [i["id"] for i in public[0].json()["items"]] == [item["id"]]
+
+
+TIERS: list[dict[str, Any]] = [
+    {"label": "  Registration ", "amount": "80", "currency": "eur",
+     "basis": "per_person", "until_on": "2026-11-14"},
+    {"label": "Registration", "amount": "95.00", "currency": "EUR",
+     "basis": "per_person", "from_on": "2026-11-15"},
+    {"label": "Load organising", "amount": "4.8", "currency": "EUR",
+     "basis": "per_jump", "optional": True},
+]  # fmt: skip
+STORED_TIERS = [
+    {"label": "Registration", "amount": "80.00", "currency": "EUR",
+     "basis": "per_person", "from_on": None, "until_on": "2026-11-14",
+     "optional": False},
+    {"label": "Registration", "amount": "95.00", "currency": "EUR",
+     "basis": "per_person", "from_on": "2026-11-15", "until_on": None,
+     "optional": False},
+    {"label": "Load organising", "amount": "4.80", "currency": "EUR",
+     "basis": "per_jump", "from_on": None, "until_on": None, "optional": True},
+]  # fmt: skip
+
+
+def test_price_tiers_round_trip_and_replace_the_single_price(api: Api) -> None:
+    base = token()
+    provider = api.provider(f"{base} Org")
+    item = api.listed(
+        f"{base} Tiered boogie", provider["id"], price_tiers=TIERS,
+        price_note="Jump tickets are paid separately.",
+    )  # fmt: skip
+    path = f"/directory/opportunities/{item['id']}"
+
+    public = api.call("GET", f"/opportunities/{item['id']}").json()["opportunity"]
+    assert public["price_tiers"] == STORED_TIERS
+    assert public["price_amount"] is None
+    assert public["price_note"] == "Jump tickets are paid separately."
+    assert api.search(q=base)[0]["price_tiers"] == STORED_TIERS
+    review = api.ok("GET", path)
+    assert review["price_tiers"] == STORED_TIERS
+
+    # A single price beside stored tiers is refused.
+    single = {
+        "price_amount": "80",
+        "price_currency": "EUR",
+        "price_basis": "per_person",
+    }
+    response = api.call("PATCH", path, api.reviewer, single)
+    assert response.json() == {"detail": "price_tiers_with_amount"}
+    # Dated tiers need the listing's zone, even while the listing has no dates.
+    undated = api.draft(
+        token(), provider["id"], starts_on=None, ends_on=None, price_tiers=TIERS
+    )
+    response = api.call(
+        "PATCH", f"/directory/opportunities/{undated['id']}", api.reviewer,
+        {"time_zone": None},
+    )  # fmt: skip
+    assert response.json() == {"detail": "price_tier_zone_required"}
+
+    # Null leaves them as they are; an unrelated edit keeps them.
+    kept = api.ok("PATCH", path, {"price_tiers": None, "summary": "Updated"})
+    assert kept["price_tiers"] == STORED_TIERS
+    # An identical list is no change.
+    same = api.ok("PATCH", path, {"price_tiers": STORED_TIERS})
+    assert same["version"] == kept["version"]
+
+    # [] clears, and the change is recorded for reviewers.
+    cleared = api.ok("PATCH", path, {"price_tiers": []})
+    assert cleared["price_tiers"] == []
+    updated = [e for e in cleared["events"] if "price_tiers" in e["detail"]]
+    assert updated[-1]["detail"]["price_tiers"] == {"from": STORED_TIERS, "to": []}
+    public = api.call("GET", f"/opportunities/{item['id']}").json()["opportunity"]
+    assert public["price_tiers"] == []
+
+    # With no tiers the single price is accepted again.
+    priced = api.ok("PATCH", path, single)
+    assert priced["price_amount"] == "80.00" and priced["price_tiers"] == []
+
+
+def test_tiers_and_a_single_price_together_are_refused_on_create(api: Api) -> None:
+    provider = api.provider(f"{token()} Org")
+    body = {
+        "title": token(), "category": "boogie", "provider_id": provider["id"],
+        "country": "ES", "time_zone": "Europe/Madrid", "price_tiers": TIERS,
+        "price_amount": "80", "price_currency": "EUR", "price_basis": "per_person",
+    }  # fmt: skip
+    response = api.call("POST", "/directory/opportunities", api.reviewer, body)
+    assert response.status_code == 422
+    assert response.json() == {"detail": "price_tiers_with_amount"}
+
+
+@pytest.mark.parametrize(
+    ("tiers", "expected"),
+    [
+        ([TIERS[2]] * 7, "price_tiers_too_many"),
+        ([{**TIERS[2], "label": "x" * 61}], "price_tier_label_too_long"),
+        ([{**TIERS[2], "label": "   "}], "price_tier_label_required"),
+        ([{**TIERS[2], "currency": "XXX"}], "currency_invalid"),
+        ([{**TIERS[2], "amount": "-1"}], "price_invalid"),
+        ([{**TIERS[2], "from_on": "2026-12-02", "until_on": "2026-12-01"}],
+         "price_tier_dates_out_of_order"),
+    ],
+)  # fmt: skip
+def test_price_tiers_are_validated(
+    api: Api, tiers: list[dict[str, Any]], expected: str
+) -> None:
+    provider = api.provider(f"{token()} Org")
+    draft = api.draft(token(), provider["id"])
+    response = api.call(
+        "PATCH", f"/directory/opportunities/{draft['id']}", api.reviewer,
+        {"price_tiers": tiers},
+    )  # fmt: skip
+    assert response.status_code == 422
+    assert response.json() == {"detail": expected}

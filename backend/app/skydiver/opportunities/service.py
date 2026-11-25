@@ -96,6 +96,8 @@ class OpportunityRow:
     duplicate_of_id: uuid.UUID | None
     updated_at: datetime
     version: int = 1
+    # JSON-safe dicts as stored (policy.PriceTier.as_json); empty: none stated.
+    price_tiers: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -182,6 +184,7 @@ OPPORTUNITY_FIELDS = (
     "price_currency",
     "price_basis",
     "price_note",
+    "price_tiers",
     "registration_url",
     "source_url",
     "internal_note",
@@ -929,6 +932,8 @@ class OpportunityService:
         for name in ("price_amount", "price_currency", "price_basis"):
             if name in raw:
                 values[name] = raw[name] if raw[name] not in ("", None) else None
+        if raw.get("price_tiers") is not None:  # None: unchanged; []: clear
+            values["price_tiers"] = list(raw["price_tiers"])
         for name in ("registration_url", "source_url"):
             if name in raw:
                 values[name] = (
@@ -989,6 +994,7 @@ _EMPTY_OPPORTUNITY: dict[str, Any] = dict.fromkeys(OPPORTUNITY_FIELDS) | {
     "disciplines": [],
     "audience": [],
     "languages": [],
+    "price_tiers": [],
 }
 
 
@@ -1011,6 +1017,12 @@ def _check_shape(full: dict[str, Any]) -> None:
     full["price_amount"] = stated.amount
     full["price_currency"] = stated.currency
     full["price_basis"] = stated.basis.value if stated.basis else None
+    tiers = policy.price_tiers(
+        full["price_tiers"],
+        time_zone=full["time_zone"],
+        price_amount=full["price_amount"],
+    )
+    full["price_tiers"] = [tier.as_json() for tier in tiers]
 
 
 def _derived(full: dict[str, Any]) -> dict[str, Any]:
@@ -1075,6 +1087,7 @@ def _opportunity_dict(row: OpportunityRow) -> dict[str, Any]:
     values["category"] = row.category.value
     for name in ("disciplines", "audience", "languages"):
         values[name] = list(values[name])
+    values["price_tiers"] = [dict(tier) for tier in row.price_tiers]
     return values
 
 

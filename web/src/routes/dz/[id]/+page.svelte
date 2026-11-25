@@ -1,4 +1,5 @@
 <script lang="ts">
+	import DropzoneLocation from '#lib/components/DropzoneLocation.svelte';
 	import JumpCard from '#lib/components/JumpCard.svelte';
 	import ListingDetails from '#lib/components/ListingDetails.svelte';
 	import ListingItem from '#lib/components/ListingItem.svelte';
@@ -6,7 +7,6 @@
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
 	import { formatDay, listingMessage } from '#lib/listings.ts';
 	import { countryName } from '#lib/countries.ts';
-	import { formatCoordinates, osmLink } from '#lib/dz-map.ts';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
@@ -21,6 +21,11 @@
 		venue.status !== 'closed' && websites.length === 1 ? websites[0].url : null
 	);
 	const place = $derived([venue.locality, countryName(venue.country)].filter(Boolean).join(', '));
+	// A guest with nothing public to see gets no section at all; an empty list is still said
+	// to signed-in readers (and on an older page someone asked for), since it answers them.
+	const showPosts = $derived(
+		Boolean(data.viewer) || data.olderPosts || data.posts === null || data.posts.items.length > 0
+	);
 	const correctionHref = $derived(
 		`/submit?kind=correction&target_kind=venue&target_id=${venue.id}&title=${encodeURIComponent(venue.name)}`
 	);
@@ -33,7 +38,7 @@
 
 <p><a href="/dz">All dropzones</a></p>
 <h1>{venue.name}</h1>
-<p class="lede">{place}</p>
+<DropzoneLocation {place} latitude={venue.latitude} longitude={venue.longitude} />
 
 {#if venue.status === 'closed'}
 	<Notice title="Closed" tone="warn">
@@ -77,16 +82,6 @@
 		<dt>Aircraft</dt>
 		<dd>{venue.aircraft}</dd>
 	{/if}
-	{#if venue.latitude !== null && venue.longitude !== null}
-		<dt>Coordinates</dt>
-		<dd>
-			{formatCoordinates(venue.latitude, venue.longitude)}
-			<!-- A plain link: nothing from OpenStreetMap loads on this page. -->
-			<br /><a href={osmLink(venue.latitude, venue.longitude)} rel="external noopener noreferrer"
-				>Open in OpenStreetMap</a
-			>
-		</dd>
-	{/if}
 	{#each venue.aliases as alias (alias.kind + alias.name)}
 		<dt>{KIND_LABEL[alias.kind]}</dt>
 		<dd>{alias.name}</dd>
@@ -122,25 +117,29 @@
 	</ul>
 	{#if data.listings.more}<p class="hint">Showing the first 20.</p>{/if}
 {/if}
-<h2 id="shared-jumps">Shared jumps here</h2>
-<p class="hint">
-	Jumps people shared with this dropzone named, newest first.{data.viewer
-		? ''
-		: ' Sign in to see jumps shared with you.'}
-</p>
-{#if data.posts === null}
-	<p class="hint">Shared jumps are unavailable right now.</p>
-{:else if data.posts.items.length === 0}
-	<p>{data.olderPosts ? 'No older shared jumps here.' : 'No shared jumps here that you can see.'}</p>
-{:else}
-	<ul class="results" aria-label="Shared jumps here">
-		{#each data.posts.items as post (post.id)}
-			<li><JumpCard {post} /></li>
-		{/each}
-	</ul>
-{/if}
-{#if data.posts?.next_before}
-	<p><a href="/dz/{venue.id}?before={data.posts.next_before}#shared-jumps">Older shared jumps</a></p>
+{#if showPosts}
+	<h2 id="shared-jumps">Shared jumps here</h2>
+	{#if data.posts === null}
+		<!-- A failure, not an empty list: nothing is claimed about what exists. -->
+		<p class="hint">Shared jumps could not be loaded. Try again later.</p>
+	{:else if data.posts.items.length === 0}
+		<!-- Empty for this reader: audiences and blocks may hide jumps others can see. -->
+		<p>{data.olderPosts ? 'No older shared jumps here.' : 'No shared jumps here that you can see.'}</p>
+	{:else}
+		<p class="hint">
+			{data.viewer
+				? 'Jumps shared with you or in public that name this dropzone, newest first.'
+				: 'Public jumps that name this dropzone, newest first. Sign in to see jumps shared with you.'}
+		</p>
+		<ul class="results" aria-label="Shared jumps here">
+			{#each data.posts.items as post (post.id)}
+				<li><JumpCard {post} /></li>
+			{/each}
+		</ul>
+	{/if}
+	{#if data.posts?.next_before}
+		<p><a href="/dz/{venue.id}?before={data.posts.next_before}#shared-jumps">Older shared jumps</a></p>
+	{/if}
 {/if}
 
 <ListingDetails
@@ -159,11 +158,6 @@
 		border: 1px solid var(--border);
 		border-radius: var(--radius);
 		background: var(--surface);
-	}
-
-	.lede {
-		margin: -0.25rem 0 0.75rem;
-		color: var(--muted);
 	}
 
 	.visit {

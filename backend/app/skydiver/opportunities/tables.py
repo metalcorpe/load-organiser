@@ -17,6 +17,7 @@ from sqlalchemy import (
     Numeric,
     String,
     Text,
+    text,
 )
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB
 from sqlmodel import Field, SQLModel
@@ -125,6 +126,9 @@ class SkydiverOpportunity(SQLModel, table=True):
             " AND (price_amount IS NULL) = (price_basis IS NULL)",
             name="skydiver_opportunity_price",
         ),
+        # skydiver_opportunity_price_tiers (an array of at most 6, never alongside
+        # price_amount) is created by migration b7d2f9e4c1a6 only: its JSONB
+        # functions are PostgreSQL-specific.
         CheckConstraint(
             "status NOT IN ('published', 'postponed', 'cancelled') OR"
             " (source_url IS NOT NULL AND checked_on IS NOT NULL"
@@ -168,6 +172,16 @@ class SkydiverOpportunity(SQLModel, table=True):
     price_currency: str | None = Field(default=None, max_length=3)
     price_basis: str | None = Field(default=None, max_length=16)
     price_note: str | None = Field(default=None, max_length=280)
+    # [{"label", "amount", "currency", "basis", "from_on", "until_on", "optional"}],
+    # at most 6 (policy.price_tiers); empty when the single price above is used.
+    price_tiers: list[dict[str, Any]] = Field(
+        default_factory=list,
+        sa_column=Column(
+            JSONB().with_variant(JSON(), "sqlite"),
+            nullable=False,
+            server_default=text("'[]'"),
+        ),
+    )
     registration_url: str | None = Field(default=None, max_length=2048)
     source_url: str | None = Field(default=None, max_length=2048)
     # Reviewer-only working note (research status, import reference, editorial remarks).
