@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
 	import CurrencyStatus from '#lib/components/CurrencyStatus.svelte';
+	import Disclosure from '#lib/components/Disclosure.svelte';
 	import DueList from '#lib/components/DueList.svelte';
 	import Notice from '#lib/components/Notice.svelte';
 	import PrivacyLabel from '#lib/components/PrivacyLabel.svelte';
@@ -175,8 +176,11 @@
 			/>
 			<button class="button secondary" type="submit">Search</button>
 		</div>
-		<details class="more" open={moreFilters || Boolean(filterError)}>
-			<summary class="disclosure">Filters</summary>
+		<!-- Disclosure keeps a Filters tap made before the page became interactive (a slow
+		     phone); the key opens or folds it again when applied filters change. -->
+		{#key moreFilters || Boolean(filterError)}
+		<Disclosure class="more" summaryClass="disclosure" open={moreFilters || Boolean(filterError)}>
+			{#snippet summary()}Filters{/snippet}
 			<div class="form filters">
 				<div class="field">
 					<label for="type">Type</label>
@@ -232,7 +236,8 @@
 					{#if data.filtered}<a href="/jumps">Clear filters</a>{/if}
 				</div>
 			</div>
-		</details>
+		</Disclosure>
+		{/key}
 	</form>
 {/key}
 {/if}
@@ -287,7 +292,7 @@
 		<p class="hint">Import reads a spreadsheet (CSV) and checks it before anything is saved.</p>
 	</section>
 {:else if !data.older && !data.filtered && !data.select}
-	<!-- The screen's one navy card: totals and the main action. -->
+	<!-- The screen's one brand card: totals and the main action. -->
 	<section class="card" aria-label="Totals and log a jump">
 		<div class="totals">
 			<p class="big">
@@ -924,7 +929,8 @@
 		font: inherit;
 	}
 
-	.more {
+	/* The Filters panel's <details> is rendered by Disclosure. */
+	.jump-search :global(details.more) {
 		margin-top: 0.25rem;
 	}
 

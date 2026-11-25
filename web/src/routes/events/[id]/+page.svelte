@@ -220,7 +220,7 @@
 </p>
 
 <style>
-	/* The navy header: the one brand block on this page. */
+	/* The brand header: the one brand block on this page. */
 	.hero {
 		display: grid;
 		/* One column no wider than the card: a title word too long for it breaks instead of

@@ -272,7 +272,7 @@
 
 
 <style>
-	/* The jump itself: the screen's one navy card. */
+	/* The jump itself: the screen's one brand card. */
 	.hero {
 		position: relative;
 		margin: 0.5rem 0 1rem;
@@ -316,7 +316,7 @@
 		color: var(--highlight);
 	}
 
-	.danger {
+	.card.danger {
 		border-color: var(--bad-fg);
 	}
 </style>

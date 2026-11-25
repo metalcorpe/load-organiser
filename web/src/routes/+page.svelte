@@ -54,7 +54,7 @@
 	});
 	// This search (filters and page), carried into each event for "Back to results".
 	const here = $derived(boardHref(data.filters, data.cursor || undefined));
-	// On the plain first page, the next multi-day boogie or camp gets the navy card. It is taken
+	// On the plain first page, the next multi-day boogie or camp gets the brand card. It is taken
 	// out of the dated list below rather than shown twice; the list's heading says so.
 	// "Next" by UTC date: good enough for a label.
 	const featured = $derived(
@@ -422,7 +422,8 @@
 	/* Members' tab bar is fixed at the bottom on phones: sit just above it. */
 	@media (max-width: 47.99rem) {
 		.apply.with-nav {
-			bottom: var(--nav-clearance);
+			/* 8px above the floating tab bar, so the bar's shadow does not fall on it. */
+			bottom: calc(var(--nav-clearance) + 8px);
 		}
 	}
 

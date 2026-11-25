@@ -262,7 +262,7 @@
 {/if}
 
 <style>
-	/* Totals: the screen's one navy card. Its width sizes the total (below). */
+	/* Totals: the screen's one brand card. Its width sizes the total (below). */
 	.hero {
 		container-type: inline-size;
 		margin: 0.5rem 0 1rem;

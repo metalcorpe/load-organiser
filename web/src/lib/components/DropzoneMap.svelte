@@ -259,7 +259,7 @@
 		border-radius: 50%;
 		border: 2px solid #ffffff;
 		background: #c4461c;
-		box-shadow: 0 0 0 1px rgb(14 34 56 / 0.6);
+		box-shadow: 0 0 0 1px rgb(22 23 26 / 0.6);
 	}
 
 	.swatch.closed,
@@ -274,11 +274,11 @@
 		place-items: center;
 		border-radius: 50%;
 		border: 2px solid #ffffff;
-		background: #0e2238;
+		background: #16171a;
 		color: #ffffff;
 		font-weight: 700;
 		font-size: 0.85rem;
-		box-shadow: 0 0 0 1px rgb(14 34 56 / 0.6);
+		box-shadow: 0 0 0 1px rgb(22 23 26 / 0.6);
 	}
 
 	.swatch.cluster {

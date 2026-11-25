@@ -6,7 +6,7 @@
 	import { cardPrice, featuredLabel, formatRange } from '#lib/listings.ts';
 
 	/**
-	 * The board's navy card: the next multi-day boogie or camp (pickFeatured), shown once above
+	 * The board's brand card: the next multi-day boogie or camp (pickFeatured), shown once above
 	 * the dated list and not repeated in it. The title leads; the dates follow in full, with the
 	 * year, as one line of text.
 	 */
@@ -105,7 +105,7 @@
 
 	/* Large screens: the card takes the two columns of the event list under it. The name fills
 	   the left one; when and where start behind a thin rule exactly over the right-hand cards
-	   (the same 0.6rem gap as the list), so a short title does not leave a band of empty navy
+	   (the same 0.6rem gap as the list), so a short title does not leave a band of empty brand colour
 	   between the two, and a long one wraps within its half. */
 	@media (min-width: 60rem) {
 		.featured {
