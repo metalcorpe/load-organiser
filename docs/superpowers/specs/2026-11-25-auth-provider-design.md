@@ -144,6 +144,39 @@ Owner decisions recorded: **our own sign-in pages**; **Google** as the first soc
 
 
 
+### Codex review of the findings (read-only, 2026-11-25)
+
+- **Option (i) preferred**, if phase 0 proves introspection is session-aware. Today the API itself
+  checks the session and role on every call (`backend/app/skydiver/access/http.py:44`); the web server's
+  30 s cache only affects rendering. A cached introspection, or a JWT verified locally (option ii), moves
+  revocation from "immediate at the API" to "within the cache/token lifetime"; the e2e suite asserts
+  immediate rejection after logout (`web/tests/auth.e2e.ts:264`). Option (ii) also makes the proxy key
+  (`backend/app/skydiver/web_only.py:23`) part of the session boundary and uses Neon's fixed 15-minute JWT
+  with no API-specific audience.
+- **Password rule:** "best effort in our pages" breaks the 15–128 rule (`identity/policy.py:43`), which
+  applies to sign-up, reset and change. Real options: Neon enforcing it (not available), an explicit
+  owner exception, **no passwords at all** (Google + email code / magic link), or self-hosting.
+- **Deletion and recovery are bigger than `AccountAdmin`:** transactional deletion with retained history
+  (`identity/service.py:510`), person and reviewer grants keyed to today's `user.id` with cascades
+  (`identity/tables.py:22,49,133`), and the erasure ledger replay that understands today's users and
+  sessions (`recovery/ledger.py:56,371`; `identity/store.py:155`). Needs durable deletion intent, retries,
+  and a restore rehearsal across both schemas.
+- **Guarantees to carry or consciously drop:** 5-session cap with oldest eviction and 7-day absolute
+  expiry (`policy.py:18,102`, `service.py:666`); throttles incl. reset-confirm, verification resend and
+  IPv6 `/64` buckets (`policy.py:39,80`), bypassable through Neon's public endpoints; the registration
+  open/closed switch and account ceiling (`service.py:320`); reviewer stays an app grant checked per
+  request (`store.py:165`, `access/http.py:85`); email change invalidating verification and recovery
+  links (`store.py:128`, `service.py:391,609`); required verification changing today's unverified-login
+  flow (`auth.e2e.ts:45,234`); `sessionUnconfirmed`, `Clear-Site-Data`, `no-store`, origin checks and
+  account-switch isolation (`viewer.ts:47`, `hooks.server.ts:9,25,71`).
+- **Phase 0 must also prove:** cookie/token handling through the SvelteKit Worker; JWKS rotation and claim
+  rejection; Google linking and fresh re-authentication for deletion/export/restore (Neon notes a
+  `prompt=login`/`max_age=0` limitation); direct-endpoint policy enforcement; webhook authentication and
+  retries; a deletion/restore rehearsal; export/relink keeping person ids and reviewer grants. New tests
+  for revoked tokens and provider outages.
+
+## Exit strategy (settled before starting)
+
 Neon keeps all auth data in **our own database** (schema `neon_auth`), so leaving is an export, not a
 negotiation.
 
