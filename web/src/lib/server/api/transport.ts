@@ -431,6 +431,8 @@ export interface TransportOptions {
 	maxBodyBytes?: number;
 	/** Shared key that lets the API trust the forwarded client address. */
 	proxyKey?: string;
+	/** Told how long each call took, answered or not (Server-Timing, server-timing.ts). */
+	onTiming?: (operation: OperationId, ms: number) => void;
 }
 
 const DEFAULT_MAX_BODY_BYTES = 64 * 1024;
@@ -469,6 +471,7 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 			}
 
 			let response: Response;
+			const started = performance.now();
 			try {
 				response = await options.fetch(`${options.origin}${url}`, {
 					method,
@@ -478,8 +481,11 @@ export function createApiTransport(options: TransportOptions): ApiTransport {
 					signal: AbortSignal.timeout(spec.timeoutMs ?? timeoutMs)
 				});
 			} catch (error) {
+				options.onTiming?.(operation, performance.now() - started);
 				return isTimeout(error) ? { kind: 'timeout' } : { kind: 'unreachable' };
 			}
+			// Until the response headers: the API's own time plus the trip, not the body read.
+			options.onTiming?.(operation, performance.now() - started);
 
 			if (response.status >= 300 && response.status < 400) {
 				return { kind: 'upstream_error', status: response.status };

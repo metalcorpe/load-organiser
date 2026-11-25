@@ -1,4 +1,5 @@
 import { API_ORIGIN, API_PROXY_KEY } from '$app/env/private';
+import { getRequestEvent } from '$app/server';
 import { createApiTransport, type ApiTransport } from './transport.ts';
 
 /**
@@ -11,6 +12,14 @@ export function createRequestApi(): ApiTransport {
 	return createApiTransport({
 		fetch: (input, init) => fetch(input, init),
 		origin: API_ORIGIN,
-		proxyKey: API_PROXY_KEY
+		proxyKey: API_PROXY_KEY,
+		// Collected for this request's Server-Timing header (hooks.server.ts).
+		onTiming: (operation, ms) => {
+			try {
+				getRequestEvent().locals.timings?.push({ name: operation, ms });
+			} catch {
+				// Outside a request (tests, scripts): nothing to report to.
+			}
+		}
 	});
 }

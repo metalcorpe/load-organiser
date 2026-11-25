@@ -4,6 +4,7 @@ import { isUnsafeMethod, originAllowed } from '#lib/server/origin-check.ts';
 import { isPrivateRoute, resolveViewer } from '#lib/server/viewer.ts';
 import { signInPath } from '#lib/safe-return.ts';
 import { THEME_COOKIE, htmlTheme, parseTheme } from '#lib/theme.ts';
+import { serverTimingHeader } from '#lib/server/server-timing.ts';
 
 const SECURITY_HEADERS: Record<string, string> = {
 	// Dynamic HTML/data/errors are never shared-cached (architecture A3).
@@ -33,7 +34,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		);
 	}
 
+	const started = performance.now();
+	event.locals.timings = [];
 	const resolution = await resolveViewer(event);
+	const viewerMs = performance.now() - started;
 	event.locals.viewer = resolution.viewer;
 	event.locals.sessionUnconfirmed = resolution.unconfirmed;
 
@@ -56,6 +60,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		await resolve(event, {
 			transformPageChunk: ({ html }) => htmlTheme(html, parseTheme(event.cookies.get(THEME_COOKIE)))
 		})
+	);
+	// Where the time went, for the browser's developer tools (server-timing.ts).
+	response.headers.set(
+		'server-timing',
+		serverTimingHeader(event.locals.timings, { viewer: viewerMs, total: performance.now() - started })
 	);
 	// Set centrally so every account-changing response, including action redirects, carries it.
 	if (event.locals.clearSiteCache) response.headers.set('clear-site-data', '"cache"');
