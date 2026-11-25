@@ -1,8 +1,8 @@
 {
-	"$description": "Design E (light), chosen by the owner on 2026-11-11.",
+	"$description": "Design H (graphite), chosen by the owner on 2026-11-25.",
 	"bg": {
 		"$type": "color",
-		"$value": "#f4f7fa",
+		"$value": "#f5f5f7",
 		"$description": "Page background"
 	},
 	"surface": {
@@ -12,21 +12,21 @@
 	},
 	"surface-soft": {
 		"$type": "color",
-		"$value": "#eaf0f6"
+		"$value": "#ececf0"
 	},
 	"fg": {
 		"$type": "color",
-		"$value": "#0e2238",
+		"$value": "#16171a",
 		"$description": "Body text"
 	},
 	"muted": {
 		"$type": "color",
-		"$value": "#55667a",
+		"$value": "#5c5f68",
 		"$description": "Secondary text"
 	},
 	"border": {
 		"$type": "color",
-		"$value": "#dce4ec"
+		"$value": "#e3e4e8"
 	},
 	"accent": {
 		"$type": "color",
@@ -49,7 +49,7 @@
 	},
 	"brand": {
 		"$type": "color",
-		"$value": "#0e2238",
+		"$value": "#16171a",
 		"$description": "Navy pop cards and headers: one per screen"
 	},
 	"brand-fg": {
@@ -58,7 +58,7 @@
 	},
 	"brand-muted": {
 		"$type": "color",
-		"$value": "#c9d6e4"
+		"$value": "#c6c7cd"
 	},
 	"highlight": {
 		"$type": "color",
@@ -146,7 +146,26 @@
 	},
 	"field-border": {
 		"$type": "color",
-		"$value": "#788aa1",
+		"$value": "#7b7e88",
 		"$description": "Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11)"
+	},
+	"nav-bg": {
+		"$type": "color",
+		"$value": "#ffffff",
+		"$description": "Tab bar surface (opaque; translucency only where backdrop-filter works)"
+	},
+	"nav-pill": {
+		"$type": "color",
+		"$value": "#16171a",
+		"$description": "Active tab pill"
+	},
+	"nav-pill-fg": {
+		"$type": "color",
+		"$value": "#ffffff",
+		"$description": "Text and icon on the active tab pill"
+	},
+	"shadow-card": {
+		"$value": "0 1px 2px rgb(0 0 0 / 4%), 0 6px 20px rgb(0 0 0 / 6%)",
+		"$description": "Card elevation: a soft shadow in light, a top highlight in dark"
 	}
 }

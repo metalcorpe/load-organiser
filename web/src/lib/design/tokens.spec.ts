@@ -62,7 +62,14 @@ const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['event.fg', 'surface', 4.5],
 	['warn.fg', 'warn.bg', 4.5],
 	['ok.fg', 'ok.bg', 4.5],
-	['bad.fg', 'bad.bg', 4.5]
+	['bad.fg', 'bad.bg', 4.5],
+	// Design H tab bar: labels on the bar, the active pill as an indicator, focus on both.
+	['fg', 'nav-bg', 4.5],
+	['muted', 'nav-bg', 4.5],
+	['nav-pill-fg', 'nav-pill', 4.5],
+	['nav-pill', 'nav-bg', 3],
+	['focus', 'nav-bg', 3],
+	['focus', 'nav-pill', 3]
 ];
 
 describe('token contrast', () => {
@@ -71,6 +78,15 @@ describe('token contrast', () => {
 		it.each(PAIRS)(`${theme}: %s on %s ≥ %d`, (fg, bg, minimum) => {
 			const ratio = new Color(value(tokens, fg)).contrast(new Color(value(tokens, bg)), 'WCAG21');
 			expect(ratio).toBeGreaterThanOrEqual(minimum);
+		});
+	}
+});
+
+// Cards lift by a shadow (light) or an inset highlight (dark) instead of an outline.
+describe('elevation', () => {
+	for (const theme of ['light', 'dark']) {
+		it(`${theme}: --shadow-card is generated`, () => {
+			expect(readFileSync(`src/lib/design/tokens-${theme}.css`, 'utf8')).toMatch(/--shadow-card: [^;]+;/);
 		});
 	}
 });

@@ -1,18 +1,18 @@
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1624;
-    --surface: #13233a;
-    --surface-soft: #1a2d47;
-    --fg: #e8eef5;
-    --muted: #9fb0c3;
-    --border: #3a5780;
-    --accent: #ff8a5c;
-    --accent-fg: #1a0e08;
-    --accent-soft: #3a2318;
-    --focus: #7faef5;
-    --brand: #1d3b63;
-    --brand-fg: #f3f6fa;
-    --brand-muted: #c9d6e4;
+    --bg: #111214;
+    --surface: #1c1d21;
+    --surface-soft: #26272c;
+    --fg: #ececee;
+    --muted: #a0a2ab;
+    --border: #2c2e33;
+    --accent: #ff7a45;
+    --accent-fg: #140a05;
+    --accent-soft: #35231b;
+    --focus: #3f7fe0;
+    --brand: #24262c;
+    --brand-fg: #f3f4f6;
+    --brand-muted: #c6c7cd;
     --highlight: #ff8a5c;
     --boogie-bg: #3a2c12;
     --boogie-fg: #f2c46b;
@@ -29,7 +29,11 @@
     --ok-bg: #173022;
     --bad-fg: #f4aca8;
     --bad-bg: #3a1b1a;
-    --field: #0b1624; /** Form field background */
-    --field-border: #5e7a9e; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
+    --field: #111214; /** Form field background */
+    --field-border: #74777f; /** Form field edge: 3:1 against the field and its surroundings (WCAG 1.4.11) */
+    --nav-bg: #24252a; /** Tab bar surface (opaque; translucency only where backdrop-filter works) */
+    --nav-pill: #ececee; /** Active tab pill */
+    --nav-pill-fg: #111214; /** Text and icon on the active tab pill */
+    --shadow-card: inset 0 1px 0 rgb(255 255 255 / 5%); /** Card elevation: a soft shadow in light, a top highlight in dark */
   }
 }
