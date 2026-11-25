@@ -144,6 +144,29 @@ Owner decisions recorded: **our own sign-in pages**; **Google** as the first soc
 
 
 
+### Owner decisions on the findings (2026-11-25)
+
+- **Passwordless:** sign-in with **Google** or a **code by email** (Neon's Email OTP); no passwords. This
+  removes the 15-character conflict, the reset flow and password storage, and the "sign-in help" email
+  is no longer needed (there is no separate registration that could hit an existing address).
+- **Neon's OAuth server enabled** (option i, standard OIDC + introspection), on the staging project.
+
+Changes made in Neon for this (by Claude, owner-approved, 2026-11-25):
+
+- Trusted domain added: `https://load-organiser.metalcorpe.workers.dev`.
+- OAuth server enabled: login page `https://load-organiser.metalcorpe.workers.dev/sign-in`, consent page
+  `https://load-organiser.metalcorpe.workers.dev/oauth/consent` (to be built), protected resource
+  `https://load-organiser.fastapicloud.dev`.
+
+Discovery document after enabling (`<base_url>/.well-known/openid-configuration`, 200): issuer =
+`base_url`; authorization, token, **introspection** (`/oauth2/introspect`), revocation, **end-session**,
+userinfo and JWKS endpoints; **`backchannel_logout_supported` and `backchannel_logout_session_supported`
+true**; PKCE; DPoP.
+
+Still to prove by test once a client and a user exist: introspection reports a token inactive right after
+sign-out and after a provider-side session revoke; the introspection rate limit; Google re-authentication
+(`prompt=login`/`max_age`); back-channel logout delivery through Cloudflare Access.
+
 ### Codex review of the findings (read-only, 2026-11-25)
 
 - **Option (i) preferred**, if phase 0 proves introspection is session-aware. Today the API itself
