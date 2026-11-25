@@ -36,5 +36,8 @@ Rules the tokens carry:
   fixtures in `src/lib/stories/fixtures.ts`. `Design/Foundations` (`Foundations.mdx`) shows every
   token from the JSON files with the rules above.
 - The toolbar's theme switch sets `data-theme` on the page; Style Dictionary also builds
-  `tokens-*-forced.css` for that, which only Storybook loads. The app follows the system setting.
+  `tokens-*-forced.css` for that. The app loads them too: it follows the system setting unless someone
+  picks Light or Dark with the header's theme button (`ThemeToggle`, guests and members alike;
+  `src/lib/theme.ts`), a cookie on that device that `hooks.server.ts` renders into
+  `<html data-theme>`.
 - Add a story with every new or restyled component.

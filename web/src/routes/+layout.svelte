@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ThemeToggle from '#lib/components/ThemeToggle.svelte';
 	import '@fontsource/figtree/latin-400.css';
 	import '@fontsource/figtree/latin-ext-400.css';
 	import '@fontsource/figtree/latin-600.css';
@@ -9,6 +10,9 @@
 	import '@fontsource/outfit/latin-ext-700.css';
 	import '#lib/design/tokens-light.css';
 	import '#lib/design/tokens-dark.css';
+	// A theme chosen in Preferences (data-theme on <html>) outranks the system one.
+	import '#lib/design/tokens-light-forced.css';
+	import '#lib/design/tokens-dark-forced.css';
 	import '../app.css';
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';
@@ -73,6 +77,7 @@
 	<a class="brand" href="/">Load Organiser</a>
 	<span class="badge">Preview</span>
 	<span class="account">
+		<ThemeToggle theme={data.theme} />
 		{#if data.viewer}
 			<a class="me" href="/profile">
 				<span class="avatar" aria-hidden="true">{initials}</span>
@@ -164,8 +169,12 @@
 
 	.account {
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
 		align-items: center;
-		gap: 0.75rem;
+		/* With enlarged text on a narrow phone, Join wraps under the theme button and Sign in
+		   rather than running past the screen edge. */
+		gap: 0 0.75rem;
 		margin-left: auto;
 		min-width: 0;
 	}

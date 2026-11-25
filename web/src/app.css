@@ -31,6 +31,16 @@
 	}
 }
 
+/* A theme chosen in Preferences (theme.ts) also sets the scheme for form controls and
+   scrollbars. */
+:root[data-theme='light'] {
+	color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+	color-scheme: dark;
+}
+
 html {
 	-webkit-text-size-adjust: 100%;
 	/* Keep focused or scrolled-to fields clear of the fixed bottom navigation. */
@@ -669,7 +679,8 @@ legend {
    anything marked .no-print stay on screen. A page that prints a document (the printable
    logbook) sets its own sheet layout with `page: logbook`. */
 @media print {
-	:root {
+	:root,
+	:root[data-theme] {
 		color-scheme: light;
 	}
 
