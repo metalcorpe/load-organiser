@@ -41,6 +41,23 @@ async function jumper(label: string): Promise<string> {
 const rows = (page: Page) => page.getByRole('list', { name: 'Jumps' }).getByRole('listitem');
 
 test.describe('logbook search and filters', () => {
+	test('Filters opened before the page is interactive stays open', async ({ page }) => {
+		await signIn(page, await jumper('early'));
+		// A slow phone: the page is shown, but its JavaScript has not arrived yet.
+		let release: () => void = () => {};
+		const held = new Promise<void>((resolve) => (release = resolve));
+		await page.route('**/_app/immutable/**/*.js', async (route) => {
+			await held;
+			await route.continue();
+		});
+		await page.goto('/jumps', { waitUntil: 'commit' });
+		await page.getByText('Filters', { exact: true }).click();
+		await expect(page.getByLabel('Type', { exact: true })).toBeVisible();
+		release();
+		await page.waitForLoadState('networkidle');
+		await expect(page.getByLabel('Type', { exact: true })).toBeVisible();
+	});
+
 	test('filter by type and date range, page through, then clear', async ({ page }) => {
 		await signIn(page, await jumper('filters'));
 		await expect(rows(page)).toHaveCount(4);
