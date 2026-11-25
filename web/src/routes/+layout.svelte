@@ -9,6 +9,9 @@
 	import '@fontsource/outfit/latin-ext-700.css';
 	import '#lib/design/tokens-light.css';
 	import '#lib/design/tokens-dark.css';
+	// A theme chosen in Preferences (data-theme on <html>) outranks the system one.
+	import '#lib/design/tokens-light-forced.css';
+	import '#lib/design/tokens-dark-forced.css';
 	import '../app.css';
 	import favicon from '#lib/assets/favicon.svg';
 	import AppNav from '#lib/components/AppNav.svelte';

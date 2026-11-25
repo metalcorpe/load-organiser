@@ -3,6 +3,7 @@ import { APP_ORIGIN } from '$app/env/private';
 import { isUnsafeMethod, originAllowed } from '#lib/server/origin-check.ts';
 import { isPrivateRoute, resolveViewer } from '#lib/server/viewer.ts';
 import { signInPath } from '#lib/safe-return.ts';
+import { THEME_COOKIE, htmlTheme, parseTheme } from '#lib/theme.ts';
 
 const SECURITY_HEADERS: Record<string, string> = {
 	// Dynamic HTML/data/errors are never shared-cached (architecture A3).
@@ -49,7 +50,13 @@ export const handle: Handle = async ({ event, resolve }) => {
 		);
 	}
 
-	const response = withSecurityHeaders(await resolve(event));
+	// The appearance chosen on this device (theme.ts), rendered into the page itself. Read at
+	// render time, so the page answering a Preferences save already shows the new theme.
+	const response = withSecurityHeaders(
+		await resolve(event, {
+			transformPageChunk: ({ html }) => htmlTheme(html, parseTheme(event.cookies.get(THEME_COOKIE)))
+		})
+	);
 	// Set centrally so every account-changing response, including action redirects, carries it.
 	if (event.locals.clearSiteCache) response.headers.set('clear-site-data', '"cache"');
 	return response;
