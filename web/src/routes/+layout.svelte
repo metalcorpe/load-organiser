@@ -169,8 +169,12 @@
 
 	.account {
 		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-end;
 		align-items: center;
-		gap: 0.75rem;
+		/* With enlarged text on a narrow phone, Join wraps under the theme button and Sign in
+		   rather than running past the screen edge. */
+		gap: 0 0.75rem;
 		margin-left: auto;
 		min-width: 0;
 	}
