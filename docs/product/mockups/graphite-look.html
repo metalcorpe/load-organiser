@@ -1,0 +1,97 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+.phones{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:28px;margin-top:16px}
+.ph{width:100%;max-width:320px;margin:0 auto;height:600px;border-radius:30px;overflow:hidden;position:relative;font-family:Figtree,system-ui,sans-serif;font-size:14px;box-shadow:0 0 0 8px #2a2a2c,0 20px 40px rgba(0,0,0,.3)}
+.ph .top{padding:22px 16px 14px}
+.ph .hello{font-family:Outfit,sans-serif;font-weight:700;font-size:24px;margin-bottom:12px;letter-spacing:-.02em}
+.ph .search{padding:11px 14px;border-radius:12px;font-size:13px}
+.ph .chips{display:flex;gap:6px;margin-top:12px}
+.ph .chip{padding:6px 11px;border-radius:999px;font-size:12px;font-weight:600}
+.ph .month{padding:6px 16px 8px;font-family:Outfit,sans-serif;font-weight:600;font-size:13px}
+.ph .card{margin:0 14px 12px;padding:14px;border-radius:20px}
+.ph .tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;margin-bottom:6px}
+.ph .t{font-family:Outfit,sans-serif;font-weight:700;font-size:17px}
+.ph .w{font-size:13px;margin-top:2px}
+.ph .row{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px;font-size:13px}
+.ph .p{font-weight:700}
+.ph .nav{position:absolute;left:12px;right:12px;bottom:12px;height:58px;border-radius:20px;display:flex;justify-content:space-around;align-items:center;font-size:11px;font-weight:600;backdrop-filter:blur(12px)}
+.ph .nav span{padding:6px 10px;border-radius:12px}
+.ph .back{padding:18px 16px 0;font-size:13px;font-weight:600}
+.ph h1{font-family:Outfit,sans-serif;font-size:26px;font-weight:800;letter-spacing:-.02em;margin:10px 16px 4px;line-height:1.1}
+.ph .sub{margin:0 16px 14px;font-size:13px}
+.ph .sec{margin:0 14px 12px;padding:14px;border-radius:20px}
+.ph .sec h3{margin:0 0 8px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700}
+.ph .pr{display:flex;justify-content:space-between;font-size:13px;padding:5px 0}
+.ph .old{text-decoration:line-through}
+.ph .btn{margin:4px 14px;padding:13px;border-radius:14px;text-align:center;font-weight:700}
+.cap{text-align:center;margin-top:12px}
+.cap b{display:block;font-size:15px}
+.cap span{font-size:13px;opacity:.75}
+
+.dk{background:#111214;color:#ececee}
+.dk .search,.dk .chip{background:#1c1d21;color:#8d8f98}.dk .chip{color:#c6c7cd}
+.dk .chip.on{background:#ff7a45;color:#140a05}
+.dk .month,.dk .w,.dk .d,.dk .sub,.dk .back,.dk .old{color:#8d8f98}
+.dk .card,.dk .sec{background:#1c1d21;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.dk .tag.boogie{background:rgba(242,196,107,.12);color:#f2c46b}.dk .tag.camp{background:rgba(110,211,186,.12);color:#6ed3ba}
+.dk .p{color:#ff9a6c}
+.dk .nav{background:rgba(36,37,42,.9);color:#8d8f98}.dk .nav .on{color:#111214;background:#ececee}
+.dk .btn{background:#ff7a45;color:#140a05}
+
+.lt{background:#f5f5f7;color:#16171a}
+.lt .search,.lt .chip{background:#fff;color:#7b7d86;box-shadow:0 1px 2px rgba(0,0,0,.05)}.lt .chip{color:#3d3f46}
+.lt .chip.on{background:#c4461c;color:#fff}
+.lt .month,.lt .w,.lt .d,.lt .sub,.lt .back,.lt .old{color:#7b7d86}
+.lt .card,.lt .sec{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04),0 6px 20px rgba(0,0,0,.06)}
+.lt .tag.boogie{background:#fbf0dc;color:#7a4a00}.lt .tag.camp{background:#ddf2ec;color:#0d5c45}
+.lt .p{color:#c4461c}
+.lt .nav{background:rgba(255,255,255,.88);color:#7b7d86;box-shadow:0 8px 24px rgba(0,0,0,.10)}.lt .nav .on{color:#fff;background:#16171a}
+.lt .btn{background:#c4461c;color:#fff}
+</style>
+
+<h2>Graphite, on two screens, in dark and light</h2>
+<p class="subtitle">If dark becomes graphite, light should follow the same rules (no outlines, shading instead, floating tab bar) so the two feel like one app. Does this pair work?</p>
+
+<div class="phones">
+ <div><div class="ph dk">
+  <div class="top"><div class="hello">Find a jump</div><div class="search">Search events and dropzones</div>
+   <div class="chips"><span class="chip on">All</span><span class="chip">Boogies</span><span class="chip">Camps</span><span class="chip">Courses</span></div></div>
+  <div class="month">December 2026</div>
+  <div class="card"><div class="tag boogie">Boogie</div><div class="t">Christmas Boogie</div><div class="w">Skydive Empuriabrava, Spain</div><div class="row"><span class="d">20 – 28 Dec</span><span class="p">Registration €95</span></div></div>
+  <div class="card"><div class="tag camp">Camp</div><div class="t">Winter Freefly Camp</div><div class="w">Skydive Lillo, Spain</div><div class="row"><span class="d">5 – 9 Jan</span><span class="p">€420</span></div></div>
+  <div class="nav"><span class="on">Discover</span><span>Logbook</span><span>Jumps</span><span>Me</span></div>
+ </div><div class="cap"><b>Dark: Discover</b></div></div>
+
+ <div><div class="ph dk">
+  <div class="back">‹ Back to results</div>
+  <h1>Christmas Boogie</h1><div class="sub">Skydive Empuriabrava, Spain. 20 – 28 December 2026</div>
+  <div class="sec"><h3>Prices</h3>
+   <div class="pr"><span class="old">Registration until 14 Nov</span><span class="old">€80</span></div>
+   <div class="pr"><span>Registration from 15 Nov</span><b>€95</b></div>
+   <div class="pr"><span>Load organising (optional)</span><span>€4.80 per jump</span></div></div>
+  <div class="sec"><h3>About</h3><div class="sub" style="margin:0">Jump tickets are paid separately. Up to 250 participants.</div></div>
+  <div class="btn">Save event</div>
+  <div class="nav"><span class="on">Discover</span><span>Logbook</span><span>Jumps</span><span>Me</span></div>
+ </div><div class="cap"><b>Dark: event page</b></div></div>
+
+ <div><div class="ph lt">
+  <div class="top"><div class="hello">Find a jump</div><div class="search">Search events and dropzones</div>
+   <div class="chips"><span class="chip on">All</span><span class="chip">Boogies</span><span class="chip">Camps</span><span class="chip">Courses</span></div></div>
+  <div class="month">December 2026</div>
+  <div class="card"><div class="tag boogie">Boogie</div><div class="t">Christmas Boogie</div><div class="w">Skydive Empuriabrava, Spain</div><div class="row"><span class="d">20 – 28 Dec</span><span class="p">Registration €95</span></div></div>
+  <div class="card"><div class="tag camp">Camp</div><div class="t">Winter Freefly Camp</div><div class="w">Skydive Lillo, Spain</div><div class="row"><span class="d">5 – 9 Jan</span><span class="p">€420</span></div></div>
+  <div class="nav"><span class="on">Discover</span><span>Logbook</span><span>Jumps</span><span>Me</span></div>
+ </div><div class="cap"><b>Light: Discover</b><span>Neutral light grey instead of blue-grey, shadows instead of borders</span></div></div>
+
+ <div><div class="ph lt">
+  <div class="back">‹ Back to results</div>
+  <h1>Christmas Boogie</h1><div class="sub">Skydive Empuriabrava, Spain. 20 – 28 December 2026</div>
+  <div class="sec"><h3>Prices</h3>
+   <div class="pr"><span class="old">Registration until 14 Nov</span><span class="old">€80</span></div>
+   <div class="pr"><span>Registration from 15 Nov</span><b>€95</b></div>
+   <div class="pr"><span>Load organising (optional)</span><span>€4.80 per jump</span></div></div>
+  <div class="sec"><h3>About</h3><div class="sub" style="margin:0">Jump tickets are paid separately. Up to 250 participants.</div></div>
+  <div class="btn">Save event</div>
+  <div class="nav"><span class="on">Discover</span><span>Logbook</span><span>Jumps</span><span>Me</span></div>
+ </div><div class="cap"><b>Light: event page</b></div></div>
+</div>
