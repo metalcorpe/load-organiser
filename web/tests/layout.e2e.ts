@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
-import { PASSWORD, createAccount } from './support/accounts.ts';
+import Color from 'colorjs.io';
+import { PASSWORD, apiCall, createAccount, reviewerSession } from './support/accounts.ts';
 import { SECURE_ORIGIN } from './support/origins.ts';
 
 // Same production-cookie preview as the account tests.
@@ -103,8 +104,10 @@ test.describe('floating tab bar (design H, phones)', () => {
 		await signInTo(page, '/jumps', 'float');
 		const nav = (await primary(page).boundingBox())!;
 		const viewport = page.viewportSize()!;
-		expect(nav.x).toBeGreaterThanOrEqual(12);
-		expect(viewport.width - (nav.x + nav.width)).toBeGreaterThanOrEqual(12);
+		// 12px from the sides; 8px under 360px, where the tabs need the room (AppNav.svelte).
+		const side = viewport.width < 360 ? 8 : 12;
+		expect(nav.x).toBeGreaterThanOrEqual(side);
+		expect(viewport.width - (nav.x + nav.width)).toBeGreaterThanOrEqual(side);
 		expect(viewport.height - (nav.y + nav.height)).toBeGreaterThanOrEqual(12);
 	});
 
@@ -115,7 +118,17 @@ test.describe('floating tab bar (design H, phones)', () => {
 		expect(await fill()).not.toBe(TRANSPARENT);
 		if (browserName === 'chromium') {
 			await page.emulateMedia({ forcedColors: 'active' });
-			expect(await fill()).not.toBe(TRANSPARENT);
+			// Forced colours keep a background's alpha, so "not transparent" alone would pass with
+			// the bar's own colour: the current tab must show the system Highlight.
+			const highlight = await page.evaluate(() => {
+				const probe = document.createElement('div');
+				probe.style.background = 'Highlight';
+				document.body.append(probe);
+				const colour = getComputedStyle(probe).backgroundColor;
+				probe.remove();
+				return colour;
+			});
+			expect(await fill()).toBe(highlight);
 		}
 	});
 
@@ -138,7 +151,63 @@ test.describe('floating tab bar (design H, phones)', () => {
 		});
 		for (const tab of await primary(page).locator('a').all()) {
 			expect((await tab.boundingBox())!.height).toBeGreaterThanOrEqual(44);
-			expect(await tab.locator('span').evaluate((el) => el.getClientRects().length)).toBe(1);
+			// The label (nowrap) stays inside the tab's padding, so it never touches the pill's edge.
+			const fit = await tab.evaluate((a) => {
+				const box = a.getBoundingClientRect();
+				const style = getComputedStyle(a);
+				const label = a.querySelector('span')!.getBoundingClientRect();
+				return {
+					left: label.left - (box.left + parseFloat(style.paddingLeft)),
+					right: box.right - parseFloat(style.paddingRight) - label.right
+				};
+			});
+			expect(fit.left, 'label start inside the tab').toBeGreaterThanOrEqual(-0.5);
+			expect(fit.right, 'label end inside the tab').toBeGreaterThanOrEqual(-0.5);
 		}
+	});
+});
+
+/** WCAG contrast of two computed CSS colours. */
+const contrast = (a: string, b: string) => new Color(a).contrast(new Color(b), 'WCAG21');
+
+test.describe('graphite: controls that must stand out (review follow-ups)', () => {
+	test('the current Explore view is a visible segment in dark', async ({ page }) => {
+		await page.emulateMedia({ colorScheme: 'dark' });
+		await page.goto('/');
+		const track = await page
+			.getByRole('navigation', { name: 'Explore' })
+			.evaluate((el) => getComputedStyle(el).backgroundColor);
+		const current = await page
+			.getByRole('navigation', { name: 'Explore' })
+			.locator('a[aria-current="page"]')
+			.evaluate((el) => getComputedStyle(el).backgroundColor);
+		expect(contrast(current, track)).toBeGreaterThanOrEqual(3);
+	});
+
+	test('a place choice inside a card is not the card colour, in dark', async ({ page }) => {
+		const name = `Gr${Date.now().toString(36)} Skydive`;
+		const created = await apiCall('POST', '/directory/venues', {
+			bearer: await reviewerSession(),
+			body: { name, country: 'ES', source_url: 'https://example.org/dz', checked_on: '2026-11-01' }
+		});
+		expect(created.status).toBe(201);
+		await page.emulateMedia({ colorScheme: 'dark' });
+		await signInTo(page, '/jumps/new', 'pick');
+		await page.getByLabel('Search listed dropzones').fill(name.slice(0, 12));
+		await page.getByRole('button', { name: 'Search' }).click();
+		await page.getByRole('link', { name }).click();
+		await page.getByLabel('Date', { exact: true }).fill('2026-09-01');
+		await page.getByRole('button', { name: 'Save private jump' }).first().click();
+		await expect(page.getByText('Saved privately.')).toBeVisible();
+		await page.goto(`${page.url().split('?')[0]}?change=1`);
+		await page.getByLabel('Search listed dropzones').fill(name.slice(0, 12));
+		await page.getByRole('button', { name: 'Search' }).click();
+		const pick = page.getByRole('list', { name: 'Matching dropzones' }).locator('a.pick').first();
+		const [own, behind] = await pick.evaluate((el) => {
+			let at = el.parentElement;
+			while (at && getComputedStyle(at).backgroundColor === 'rgba(0, 0, 0, 0)') at = at.parentElement;
+			return [getComputedStyle(el).backgroundColor, getComputedStyle(at ?? document.body).backgroundColor];
+		});
+		expect(own).not.toBe(behind);
 	});
 });

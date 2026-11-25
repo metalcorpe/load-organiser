@@ -69,7 +69,9 @@ const PAIRS: [fg: string, bg: string, minimum: number][] = [
 	['nav-pill-fg', 'nav-pill', 4.5],
 	['nav-pill', 'nav-bg', 3],
 	['focus', 'nav-bg', 3],
-	['focus', 'nav-pill', 3]
+	['focus', 'nav-pill', 3],
+	// The current Explore view (ExploreSwitch) is the same pill on its soft track.
+	['nav-pill', 'surface-soft', 3]
 ];
 
 describe('token contrast', () => {
@@ -88,5 +90,27 @@ describe('elevation', () => {
 		it(`${theme}: --shadow-card is generated`, () => {
 			expect(readFileSync(`src/lib/design/tokens-${theme}.css`, 'utf8')).toMatch(/--shadow-card: [^;]+;/);
 		});
+	}
+});
+
+// The phone tab bar is see-through where backdrop-filter works (AppNav.svelte): its labels must
+// still pass over the worst case behind it, white (map tiles, photos) or black.
+describe('tab bar over content', () => {
+	const share = Number(
+		/color-mix\(in srgb, var\(--nav-bg\) (\d+)%, transparent\)/.exec(
+			readFileSync('src/lib/components/AppNav.svelte', 'utf8')
+		)![1]
+	);
+	for (const theme of ['light', 'dark']) {
+		const tokens = load(theme);
+		for (const behind of ['#ffffff', '#000000']) {
+			for (const text of ['fg', 'muted']) {
+				it(`${theme}: ${text} on nav-bg at ${share}% over ${behind} ≥ 4.5`, () => {
+					const bar = new Color(behind).mix(value(tokens, 'nav-bg'), share / 100, { space: 'srgb', outputSpace: 'srgb' });
+					const ratio = new Color(value(tokens, text)).contrast(bar, 'WCAG21');
+					expect(ratio).toBeGreaterThanOrEqual(4.5);
+				});
+			}
+		}
 	}
 });

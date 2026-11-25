@@ -33,10 +33,11 @@
 		box-shadow: var(--shadow-card), 0 8px 24px rgb(0 0 0 / 12%);
 	}
 
-	/* See-through only where the blur works; contrast is checked on the opaque --nav-bg. */
-	@supports (backdrop-filter: blur(12px)) {
+	/* See-through only where the blur works (and color-mix, or the bar would be clear);
+	   tokens.spec.ts checks the labels at this share over white and black. */
+	@supports (backdrop-filter: blur(12px)) and (background: color-mix(in srgb, red 50%, transparent)) {
 		nav {
-			background: color-mix(in srgb, var(--nav-bg) 90%, transparent);
+			background: color-mix(in srgb, var(--nav-bg) 94%, transparent);
 			backdrop-filter: blur(12px);
 		}
 	}
@@ -89,6 +90,23 @@
 			forced-color-adjust: none;
 			background: Highlight;
 			color: HighlightText;
+		}
+	}
+
+	/* Under 360px the four tabs share less room: the labels at 200% text need every pixel of
+	   each tab, so the bar sits 8px from the edges and the pill gives up its side padding. */
+	@media (max-width: 22.49rem) {
+		nav {
+			inset: auto max(8px, env(safe-area-inset-right)) calc(12px + env(safe-area-inset-bottom))
+				max(8px, env(safe-area-inset-left));
+		}
+
+		ul {
+			padding-inline: 2px;
+		}
+
+		a {
+			padding-inline: 0;
 		}
 	}
 

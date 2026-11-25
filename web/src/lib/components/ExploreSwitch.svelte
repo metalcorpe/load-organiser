@@ -48,9 +48,10 @@
 		text-decoration: none;
 	}
 
+	/* The same neutral pill as the current tab in the tab bar (design H). */
 	a[aria-current='page'] {
-		background: var(--brand);
-		color: var(--brand-fg);
+		background: var(--nav-pill);
+		color: var(--nav-pill-fg);
 	}
 
 	a:focus-visible {

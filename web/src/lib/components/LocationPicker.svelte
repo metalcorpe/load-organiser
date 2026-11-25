@@ -216,6 +216,11 @@
 		text-decoration: none;
 	}
 
+	/* Inside a card (the jump page's Edit section) a surface-coloured choice would vanish. */
+	:global(.card) .pick {
+		background: var(--surface-soft);
+	}
+
 	.pick:hover {
 		border-color: var(--accent);
 	}
