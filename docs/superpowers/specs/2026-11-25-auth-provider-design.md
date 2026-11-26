@@ -207,6 +207,10 @@ creates, stores, checks and expires the codes in every case; the only question i
 - **While developing (now):** Neon emails the code itself from its shared sender (`auth@mail.myneon.app`) with
   its own template. Neon documents this sender as rate-limited and meant for development; codes work with it.
   Our app sends no auth email; the API's SMTP account is not used for sign-in.
+- **Kept for future notifications:** the API's mailer (`backend/app/skydiver/identity/mail.py`, SMTP and the
+  local file outbox) and its SMTP settings stay configured; the switch removes only the three identity emails
+  that use them today (verification, sign-in help, password reset). The legacy prototype's mail code
+  (`backend/app/utils.py`, local-only routes) is unrelated and left as is.
 - **Production step P4:** Neon's `send.otp` webhook calls **the API directly**
   (`/api/skydiver/v1/auth-hooks/send-otp`, not behind Cloudflare Access), and the API sends the code through
   our existing SMTP account with our plain wording. That one path is exempt from the proxy-key check
