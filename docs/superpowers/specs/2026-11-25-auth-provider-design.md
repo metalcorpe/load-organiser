@@ -301,6 +301,19 @@ Set on staging's Neon Auth on 2026-11-26 (the deployed app does not use it yet):
   `http://localhost:5181/auth/callback`, resource `http://localhost:8151`; its secret is in the gitignored
   `.dev/neon-auth.env` of the owner's checkout.
 
+**Measured 2026-11-26 (preview on `feat/neon-auth`, owner's browsers):**
+- Email code: works server-side in Chrome and Safari; `/sign-in/email-otp` with `oauth_query` answers with
+  our callback directly.
+- Google: works server-side in Chrome. `/sign-in/social` returns Neon's `/sign-in/social/init` page plus a
+  `session_challenge` cookie we keep; Neon returns to our page with `neon_auth_session_verifier`; our server
+  trades it (`/get-session` + challenge) for a session and calls `/oauth2/continue`. Safari with Google:
+  **untested** (no Neon cookie is needed in the browser, so no difference is expected).
+- Google and the email code for the same address arrive as **one Neon user** (same subject).
+- Tokens: access 3,600 s, refresh token issued, audience = `[API, <issuer>/oauth2/userinfo]`; the ID token
+  carries only `sub` (email and name come from userinfo); introspection with the client's own credentials
+  answers `active`, same subject, our client.
+- So G1 is answered: the email path needs no third-party cookie.
+
 **Undo at the switch:** pages back to the staging origin; create a staging-only client (staging callback and
 API only); delete the development client; remove the `http://localhost:8151` resource. After the switch,
 local dev and e2e use the local test identity provider. Allow Localhost off is P2.
