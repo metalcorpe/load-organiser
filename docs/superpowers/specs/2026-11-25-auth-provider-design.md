@@ -18,7 +18,7 @@ stated there is a **gate** (section 9) that must pass before the switch. Reviewe
 | Email change | **Not supported in the beta** (the account's email is its identity at Neon). |
 | Lost inbox | Recovery through a **linked Google identity**, plus a documented **operator recovery** (section 7). |
 | Accounts | The owner's person, profile, data and reviewer role are **kept** and re-linked; test accounts are **recreated**. |
-| First social provider | **Google**, with the owner's **own** Google OAuth client (never Neon's shared credentials). |
+| First social provider | **Google**, with **Neon's shared development credentials** while we are developing (owner, 2026-11-26): Google's screen shows Neon's name and logo. The owner's own Google OAuth client is a **production step** (section 12, P1). |
 | Exit | Settled before starting (section 10). |
 
 ## 2. What Neon provides (verified 2026-11-25)
@@ -238,7 +238,8 @@ address).
 **Where they run:** not on staging. A throwaway **gate instance** with its own Auth, and the spike web app on
 the owner's machine at `http://localhost:5181`, so staging, its Cloudflare Access and today's password
 sign-in are untouched until the switch (preview URLs are off, `web/wrangler.jsonc:14`, and stay off).
-Rollback is deleting the gate instance. G0 decides which instance.
+Rollback is deleting the gate instance. G0 decides which instance; Neon's docs say each branch has its own
+Auth base URL and its own OAuth settings, so a child branch is expected to suffice.
 
 | Gate | Proves (pass condition) |
 |---|---|
@@ -256,7 +257,7 @@ Rollback is deleting the gate instance. G0 decides which instance.
 | G11 | Password sign-in and sign-up are off at Neon (direct calls to the password endpoints fail). |
 | G12 | Whether the first email-code sign-in creates a Neon user, and that identity linking applies the registration switch and ceiling. |
 | G13 | Exit export: the `neon_auth` tables read back (users, accounts) with a test account present; re-run on staging after the switch with the owner's account. |
-| G14 | (Phase 4) Google sign-in with the owner's Google client, in Chromium and WebKit, returning through our `/sign-in` and `/oauth2/continue`; Google linked to an existing person for recovery; fresh Google re-authentication for deletion despite Neon's `prompt=login` loop, or deletion stays code-only. |
+| G14 | Google sign-in with Neon's shared credentials (phase 1), re-run with the owner's client at production step P1, in Chromium and WebKit, returning through our `/sign-in` and `/oauth2/continue`; Google linked to an existing person for recovery; fresh Google re-authentication for deletion despite Neon's `prompt=login` loop, or deletion stays code-only. |
 
 ## 10. Exit strategy
 
@@ -267,7 +268,9 @@ All auth data is in our database (`neon_auth`): `user` (id, email, verified), `a
    before.
 2. **Any other OIDC provider:** export users and Google links with SQL; import or let users sign in again by
    email code or Google; re-link `identity_link` by verified email (operator-run, logged).
-3. **Google** keeps working because the Google OAuth client is the owner's own.
+3. **Google** keeps working on another provider only with the owner's own Google OAuth client (production step
+   P1); while Neon's shared credentials are in use, Google sign-ins belong to Neon's app. Whether Google
+   identities keep the same subject when the client changes from Neon's to ours is **untested** (checked at P1).
 4. Our data never leaves our tables; `identity_link` is the only thing re-pointed.
 
 `docs/product/auth-exit-runbook.md` (written with the switch): export queries, Google client ownership, relink
@@ -307,8 +310,16 @@ procedure. G13 proves the export.
    sign-in on staging. Merge and deploy; owner signs in by code and runs `link-owner`; adapter contract tests
    against staging; restore drill; G13 re-run with the owner's account. If the deploy fails: revert the merge
    and switch password sign-in back on (both are one command); no data has moved until `link-owner`.
-4. **Google (G14):** owner creates the Google OAuth client; configured in Neon; *Continue with Google* enabled
-   after G14 passes.
+4. **Google (G14):** *Continue with Google* enabled with Neon's shared credentials after G14 passes.
+
+**Production steps** (before the beta opens beyond test users; recorded here so they are not forgotten):
+
+- **P1 — own Google client:** the owner creates a Google Cloud project, an External consent screen (app name,
+  support email, scopes `openid email profile` only, so no Google review), and a *Web application* OAuth
+  client with redirect URI `<issuer>/callback/google`; the owner enters the ID and secret in Neon (never
+  pasted into chat or the repository). Re-run G14; check existing Google-linked people still sign in.
+- **P2 — Allow Localhost off** on the staging/production Auth instance (Neon's production checklist).
+- **P3 — application name** set to *Load Organiser* (Neon's default is the project name).
 
 ## 13. Risks
 
