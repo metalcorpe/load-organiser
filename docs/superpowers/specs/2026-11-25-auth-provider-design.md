@@ -299,8 +299,9 @@ signed in; (2) only test addresses the owner controls, since Neon's shared sende
 address not in a `GATE_ALLOWED_EMAILS` list (Neon's own endpoints could still be called directly for the gate
 instance; acceptable for a throwaway instance whose address is not published); (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
 `API_ORIGIN` the local API, `SESSION_COOKIE_MODE=localhost-dev` (`web/src/lib/server/session-config.ts:40`),
-resource/audience the local API URL, Neon issuer and client from the gate instance; the same values with the
-tunnel's origin if a tunnel is used.
+resource/audience the local API URL, Neon issuer and client from the gate instance; if a tunnel is used
+(G0 fallback), `APP_ORIGIN` is the tunnel's HTTPS origin and `SESSION_COOKIE_MODE=secure`, because
+`localhost-dev` refuses non-loopback origins (`session-config.ts:44-48`).
 Rollback is deleting the gate instance. G0 decides which instance; Neon's docs say each branch has its own
 Auth base URL and its own OAuth settings, so a child branch is expected to suffice.
 
