@@ -19,6 +19,7 @@ stated there is a **gate** (section 9) that must pass before the switch. Reviewe
 | Lost inbox | Recovery through a **linked Google identity**, plus a documented **operator recovery** (section 7). |
 | Accounts | The owner's person, profile, data and reviewer role are **kept** and re-linked; test accounts are **recreated**. |
 | First social provider | **Google**, with **Neon's shared development credentials** while we are developing (owner, 2026-11-26): Google's screen shows Neon's name and logo. The owner's own Google OAuth client is a **production step** (section 12, P1). |
+| Code emails | **Neon sends them** from its shared sender (`auth@mail.myneon.app`, Neon's template) while we are developing (owner, 2026-11-26). Sending them ourselves through the `send.otp` hook is a **production step** (P4). |
 | Exit | Settled before starting (section 10). |
 
 ## 2. What Neon provides (verified 2026-11-25)
@@ -191,14 +192,21 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
 
 ## 5. Emails
 
-Only one kind of email remains: the **sign-in code** (also used for the fresh-code confirmations). Neon's
-`send.otp` webhook calls **the API directly** (`/api/skydiver/v1/auth-hooks/send-otp`), which is not behind
-Cloudflare Access; the API sends the code through our existing SMTP account with our plain wording. That one
-path is exempt from the proxy-key check (`backend/app/skydiver/web_only.py`), like `/health`, and instead
-requires a valid Neon signature with a timestamp no older than 5 minutes; replays of a seen delivery id are
-ignored (gate G6 confirms Neon's signing and retry behaviour). The web server is not involved. Removed:
-verification links, password reset, "sign-in help" (no separate registration exists that could hit an existing
-address).
+Only one kind of email remains: the **sign-in code** (also used for the fresh-code confirmations). Neon
+creates, stores, checks and expires the codes in every case; the only question is who delivers the email.
+
+- **While developing (now):** Neon emails the code itself from its shared sender (`auth@mail.myneon.app`) with
+  its own template. Neon documents this sender as rate-limited and meant for development; codes work with it.
+  Our app sends no auth email; the API's SMTP account is not used for sign-in.
+- **Production step P4:** Neon's `send.otp` webhook calls **the API directly**
+  (`/api/skydiver/v1/auth-hooks/send-otp`, not behind Cloudflare Access), and the API sends the code through
+  our existing SMTP account with our plain wording. That one path is exempt from the proxy-key check
+  (`backend/app/skydiver/web_only.py`), like `/health`, and instead requires a valid Neon signature with a
+  timestamp no older than 5 minutes; replays of a seen delivery id are ignored. Gate G6 runs then, against the
+  hosted API (no tunnel needed). The API only delivers codes; it never checks them.
+
+Removed: verification links, password reset, "sign-in help" (no separate registration exists that could hit
+an existing address).
 
 ## 6. Security properties to keep
 
@@ -270,12 +278,11 @@ the owner's machine at `http://localhost:5181`, so staging, its Cloudflare Acces
 sign-in are untouched until the switch (preview URLs are off, `web/wrangler.jsonc:14`, and stay off).
 Isolation checklist for the gate branch: (1) a **schema-only** child branch, or a data branch whose
 inherited people, emails and `neon_auth` rows are deleted before any test, so no real person can be emailed or
-signed in; (2) only test addresses the owner controls; (3) SMTP for codes points at the local mail outbox, not
-the real SMTP account, unless the owner approves otherwise; (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
+signed in; (2) only test addresses the owner controls, since Neon's shared sender emails the codes for real;
+(3) no webhook is configured on the gate instance (G6 runs at P4); (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
 `API_ORIGIN` the local API, `SESSION_COOKIE_MODE=localhost-dev` (`web/src/lib/server/session-config.ts:40`),
 resource/audience the local API URL, Neon issuer and client from the gate instance; the same values with the
-tunnel's origin if a tunnel is used; (5) the local API exposed through a Cloudflare quick tunnel so Neon's
-**live** webhook delivery reaches it (G6 is not provable with a recorded payload).
+tunnel's origin if a tunnel is used.
 Rollback is deleting the gate instance. G0 decides which instance; Neon's docs say each branch has its own
 Auth base URL and its own OAuth settings, so a child branch is expected to suffice.
 
@@ -287,7 +294,7 @@ Auth base URL and its own OAuth settings, so a child branch is expected to suffi
 | G3 | Refresh rotation and reuse: two tabs, two isolates, reversed response order; pass = the session survives every ordering, or the Durable Object fallback (3.2) is approved. |
 | G4 | Fresh re-authentication by email code for sign-out-everywhere, deletion and records restore. |
 | G5 | After sign-out, token revocation, sign-out-everywhere and user deletion: introspection returns `active: false` at once, **and refresh with the old refresh token fails** (no new tokens issued). |
-| G6 | Webhook signature and timestamp verified at the API path; Neon's retry behaviour on a failed delivery; a replayed delivery is ignored. |
+| G6 | (At production step P4, against the hosted API.) Webhook signature and timestamp verified at the API path; Neon's retry behaviour on a failed delivery; a replayed delivery is ignored. |
 | G7 | Code requests do not reveal account existence (same answer and timing class for known and unknown addresses), including when calling Neon directly. |
 | G8 | Neon's limits for code sends, code checks and `/oauth2/introspect` (rate, scope, 429 behaviour); from the API's region, introspection adds at most 150 ms at p95 over 200 calls; the owner accepts the direct-call limits. |
 | G9 | Token lifetimes and session caps achievable (7 days absolute, 5 sessions) or a documented deviation approved by the owner. |
@@ -337,14 +344,13 @@ procedure. G13 proves the export.
 ## 12. Phases
 
 1. **Gates on the gate instance (G0–G14, G14 with Neon's shared Google credentials):** create the gate instance (G0); on it, register a confidential
-   client for `http://localhost:5181`, switch password sign-in off (G11), set the webhook to the local API
-   through a quick tunnel (live delivery required), apply the isolation checklist (section 9); run the gates
+   client for `http://localhost:5181`, switch password sign-in off (G11), leave code emails to Neon's shared sender,
+   apply the isolation checklist (section 9); run the gates (all but G6)
    with a throwaway spike branch of the web app on the owner's machine (never merged); record results here;
    delete the gate instance. The owner approves the results. Staging is not changed.
 2. **Build the switch** on one git branch: sections 3–8 and 11, old auth removed in the same change, full
    verify gate green, Codex review.
-3. **Switch-over (one deploy):** on the staging instance: register the staging client, set the webhook to the
-   API path, switch password sign-in off — immediately before merging, since that ends today's password
+3. **Switch-over (one deploy):** on the staging instance: register the staging client, switch password sign-in off — immediately before merging, since that ends today's password
    sign-in on staging. Merge and deploy; owner signs in by code and runs `link-owner`; adapter contract tests
    against staging; restore drill; G13 re-run with the owner's account. Rollback: migrations run before the deploy
    (`scripts/staging.sh migrate`) and remove legacy credentials, so the old code cannot simply return. The
@@ -363,6 +369,8 @@ procedure. G13 proves the export.
   pasted into chat or the repository). Re-run G14; check existing Google-linked people still sign in.
 - **P2 — Allow Localhost off** on the staging/production Auth instance (Neon's production checklist).
 - **P3 — application name** set to *Load Organiser* (Neon's default is the project name).
+- **P4 — our own code emails:** build the `send.otp` hook endpoint (section 5), set the webhook on the
+  staging/production Auth instance to the hosted API, run G6, then Neon's shared sender is no longer used.
 
 ## 13. Risks
 
