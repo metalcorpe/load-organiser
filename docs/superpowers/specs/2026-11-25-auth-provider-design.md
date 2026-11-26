@@ -287,6 +287,24 @@ an existing address).
   `link-owner`, `relink` and `grant-reviewer <person>`. `scripts/dev.sh` and `scripts/verify.sh` run a local
   **test identity provider** (section 11) so dev and e2e never touch Neon.
 
+## 8a. Development setup (owner decision 2026-11-26: no separate gate phase)
+
+We are still developing and staging has one real user, so the separate gate instance is dropped: the gates
+below are checks made **while building**, against staging's Neon Auth instance, before the switch deploys.
+(A child-branch gate instance was tried and abandoned: `neon neon-auth config … update --branch <child>`
+wrote to the staging branch, and all branches share signing keys.)
+
+Set on staging's Neon Auth on 2026-11-26 (the deployed app does not use it yet):
+- login and consent pages: `http://localhost:5181/sign-in`, `/oauth/consent`;
+- resources: `https://load-organiser.fastapicloud.dev` and `http://localhost:8151`;
+- client *Load Organiser web (localhost dev)*, confidential, skip-consent, redirect
+  `http://localhost:5181/auth/callback`, resource `http://localhost:8151`; its secret is in the gitignored
+  `.dev/neon-auth.env` of the owner's checkout.
+
+**Undo at the switch:** pages back to the staging origin; create a staging-only client (staging callback and
+API only); delete the development client; remove the `http://localhost:8151` resource. After the switch,
+local dev and e2e use the local test identity provider. Allow Localhost off is P2.
+
 ## 9. Gates (must pass before the switch merges)
 
 **Where they run:** not on staging. A throwaway **gate instance** with its own Auth, and the spike web app on
