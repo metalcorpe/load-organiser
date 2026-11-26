@@ -157,13 +157,22 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
 - **Sign out everywhere:** confirmed with a **fresh email code** (or Google re-authentication, gate G4); the
   API's account adapter revokes all of the user's Neon sessions through Neon's management API (key held by the
   API only), then this device signs out as above. Introspection then reports every token inactive (gate G5).
-- **Fresh confirmation contract** (sign-out everywhere, deletion, records restore): the web server asks the
-  API to send a code to the signed-in person's address; the API stores a hash of the code bound to the
-  **person and the current token's `sid`**, with the operation name, valid for **10 minutes**, at most 5 checks.
-  The operation's API call carries the code; the API checks binding, age and operation, and **consumes** it in
-  the same transaction as the operation (one use; a replay fails). Wrong codes count against the code-check
-  throttle (section 6). This replaces today's password re-check (`records/api.py:320`), which also happens in
-  the API immediately before the operation.
+- **Fresh confirmation contract** (sign-out everywhere, deletion, records restore). Neon creates, emails,
+  checks and consumes the code; we store none:
+  1. the web server asks the API for a confirmation; the API (throttled, section 6) calls Neon's
+     `sendVerificationOtp(type: sign-in)` for **the signed-in person's own linked address** (never an address
+     from the request);
+  2. the person types the code; the operation's API call carries it;
+  3. in that same request the API calls Neon's `signIn.emailOtp` with the person's address and the code.
+     Success proves a fresh code for **this person** (the returned subject must equal the token's subject);
+     Neon consumes the code, so a replay fails. The API immediately revokes the Neon session that call
+     created, then performs the operation. The binding to the person, the current token (`sid`) and the
+     operation is the request itself; nothing is stored between steps;
+  4. a wrong code counts against the code-check throttle; Neon's expiry and attempt limits apply (G4 records
+     them).
+  This replaces today's password re-check (`records/api.py:320`), which also happens in the API immediately
+  before the operation. **G4** proves this exact flow: code accepted once, replay rejected, a code sent to
+  another address rejected, the extra Neon session revoked.
 - **Account deletion:** fresh email code, then:
   1. **one transaction:** insert `deletion_intent(issuer, subject, created_at, attempts, last_error,
      provider_deleted_at)` (no foreign key to `person`, so it outlives it), write the erasure-ledger entry,
@@ -250,7 +259,10 @@ an existing address).
 - New tables `identity_link(issuer, subject, person_id, email_at_link, linked_at)`, unique on `(issuer,
   subject)`; `deletion_intent` (3.4); `unlinked_subject(issuer, subject, unlinked_at)` (section 7).
 - **Re-rooting:** today `person` and reviewer grants hang off `user.id` with cascading deletes
-  (`identity/tables.py:25,49,133`) and deletion starts at `user` (`identity/store.py:310`). The migration makes
+  (`identity/tables.py:25,49,133`) and deletion starts at `user` (`identity/store.py:310`). Migration (a)
+  (section 12, phase 3) only **adds**: new tables and new nullable `person.id` reference columns, backfilled;
+  existing `user.id` foreign keys and cascades stay, so the old code keeps working. **Rollback check:** the
+  previous release's full backend suite runs green against the schema after (a). Migration (b) then makes
   `person` the root: grants reference `person.id`, deletion deletes the person and its owned data explicitly in
   the 3.4 transaction. Migration check: person count, grant count and each grant's person are identical before
   and after; a migration test asserts it on a seeded database.
@@ -279,7 +291,9 @@ sign-in are untouched until the switch (preview URLs are off, `web/wrangler.json
 Isolation checklist for the gate branch: (1) a **schema-only** child branch, or a data branch whose
 inherited people, emails and `neon_auth` rows are deleted before any test, so no real person can be emailed or
 signed in; (2) only test addresses the owner controls, since Neon's shared sender emails the codes for real;
-(3) no webhook is configured on the gate instance (G6 runs at P4); (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
+(3) no webhook is configured on the gate instance (G6 runs at P4); the spike's server actions refuse any
+address not in a `GATE_ALLOWED_EMAILS` list (Neon's own endpoints could still be called directly for the gate
+instance; acceptable for a throwaway instance whose address is not published); (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
 `API_ORIGIN` the local API, `SESSION_COOKIE_MODE=localhost-dev` (`web/src/lib/server/session-config.ts:40`),
 resource/audience the local API URL, Neon issuer and client from the gate instance; the same values with the
 tunnel's origin if a tunnel is used.
@@ -296,7 +310,7 @@ Auth base URL and its own OAuth settings, so a child branch is expected to suffi
 | G5 | After sign-out, token revocation, sign-out-everywhere and user deletion: introspection returns `active: false` at once, **and refresh with the old refresh token fails** (no new tokens issued). |
 | G6 | (At production step P4, against the hosted API.) Webhook signature and timestamp verified at the API path; Neon's retry behaviour on a failed delivery; a replayed delivery is ignored. |
 | G7 | Code requests do not reveal account existence (same answer and timing class for known and unknown addresses), including when calling Neon directly. |
-| G8 | Neon's limits for code sends, code checks and `/oauth2/introspect` (rate, scope, 429 behaviour); from the API's region, introspection adds at most 150 ms at p95 over 200 calls; the owner accepts the direct-call limits. |
+| G8 | **Email budget for phase 1:** at most 40 code emails in total, at least 1 minute apart per address, logged with time and Neon's response; a send refused with `429`/`TOO_MANY_ATTEMPTS` is recorded as a limit (pause until it resets, note the reset time), any other error as a failure. Then: Neon's limits for code sends, code checks and `/oauth2/introspect` (rate, scope, 429 behaviour); from the API's region, introspection adds at most 150 ms at p95 over 200 calls; the owner accepts the direct-call limits. |
 | G9 | Token lifetimes and session caps achievable (7 days absolute, 5 sessions) or a documented deviation approved by the owner. |
 | G10 | state/nonce/PKCE enforced; redirect URI exact; replayed callback rejected; wrong issuer/audience/client rejected; JWKS rotation handled. |
 | G11 | Password sign-in and sign-up are off at Neon (direct calls to the password endpoints fail). |
@@ -329,8 +343,9 @@ procedure. G13 proves the export.
 - **Adapter doubles:** the Neon-specific code sits behind three small interfaces — sign-in page calls
   (send code, check code with `oauth_query`, `/oauth2/continue`, end Neon session), account admin (revoke
   sessions, delete user) and the `send.otp` webhook payload. Dev and e2e use in-process doubles served by the
-  test provider; the real adapters get contract tests that run against the gate instance (phase 1) and are
-  re-run against staging at the switch.
+  test provider; the real sign-in and account-admin adapters get contract tests that run against the gate
+  instance (phase 1) and are re-run against staging at the switch. The webhook adapter is built and
+  contract-tested at production step P4 (G6).
 - Rewritten: auth, account, privacy, boundaries and social suites' sign-in helpers (`web/tests/support/accounts.ts`)
   sign in through the test provider; the privacy and boundary assertions themselves stay unchanged.
 - New: callback replay, wrong issuer/audience, expired and revoked tokens rejected at the API, introspection
@@ -354,8 +369,8 @@ procedure. G13 proves the export.
    sign-in on staging. Merge and deploy; owner signs in by code and runs `link-owner`; adapter contract tests
    against staging; restore drill; G13 re-run with the owner's account. Rollback: migrations run before the deploy
    (`scripts/staging.sh migrate`) and remove legacy credentials, so the old code cannot simply return. The
-   migration therefore runs in two parts: **(a)** before the deploy, additive only (new tables, person re-rooted,
-   legacy tables untouched), so reverting the merge and switching password sign-in back on restores today's
+   migration therefore runs in two parts: **(a)** before the deploy, additive only (new tables and columns,
+   legacy keys and tables untouched, section 8's rollback check), so reverting the merge and switching password sign-in back on restores today's
    sign-in; **(b)** dropping legacy credentials, sessions and tokens, run only after the owner has signed in and
    linked, in a later migration. A Neon branch snapshot is taken before (a).
 4. **Google:** *Continue with Google* enabled with Neon's shared credentials; G14 already passed in phase 1
