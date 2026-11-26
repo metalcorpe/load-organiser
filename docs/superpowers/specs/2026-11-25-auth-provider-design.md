@@ -1,8 +1,8 @@
 # Passwordless sign-in through Neon's Managed Better Auth — design
 
-Status: **draft v3 for owner approval** (2026-11-26). Supersedes v1 and v2 (same file, git history). Facts
+Status: **draft v4 for owner approval** (2026-11-26). Supersedes v1–v3 (same file, git history). Facts
 about Neon were read from its documentation, its CLI and the staging instance on 2026-11-25; anything not
-stated there is a **gate** (section 9) that must pass before the switch. Reviewed by Codex three times
+stated there is a **gate** (section 9) that must pass before the switch. Reviewed by Codex four times
 (read-only); its findings are folded in.
 
 ## 1. Decisions (all settled by the owner)
@@ -100,17 +100,22 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
   **7 days from sign-in** (absolute, whatever the tokens say). A copied old cookie is only as good as the tokens
   inside it, which revocation ends (introspection). G2 measures the full encoded size.
 - **Refresh protocol** (a per-isolate lock cannot coordinate other isolates or tabs):
-  - only **document navigations** (GET with `Sec-Fetch-Dest: document`) refresh, and only when the access token
-    has less than 5 minutes left; data requests and form posts use the current access token while it is valid;
-  - a form post or data request with an expired access token gets a redirect to the same page (GET), which
-    refreshes; the form's input is not kept (rare: needs 5+ idle minutes past the margin);
-  - a refresh that fails as already used (another tab or isolate won the race) keeps the browser's cookie
-    unchanged and retries the page once, which picks up the winner's cookie if the browser has it, else shows
-    signed-out;
-  - **G3** decides whether this holds: Neon's rotation, reuse detection (does reuse revoke the whole session?)
-    and any grace window, tested with two tabs, two isolates and reversed response order. If reuse ends the
-    session, the fallback is a single-writer refresh per session in a Durable Object (free plan), which adds
-    infrastructure and needs the owner's approval.
+  - **any** request the web server handles (document, SvelteKit data request `isDataRequest`, form action)
+    refreshes when the access token has less than **5 minutes** left. Client-side navigations are data
+    requests, so they refresh too;
+  - because refresh starts 5 minutes early, a request that **loses** a refresh race (its refresh token was
+    already used by another tab or isolate) still holds a **valid** access token: it carries on with it and does
+    not touch the cookie. The browser keeps the winner's cookie;
+  - only when the access token has **fully expired** and the refresh fails does the request end: a page or data
+    request shows signed-out (`/sign-in?returnTo=…`, data requests through SvelteKit's redirect payload as in
+    `hooks.server.ts:51`); a **form action** returns `fail(401)` with the submitted values kept in the form and
+    the notice "Your session ended. Sign in again, then send the form again." — input is never silently lost;
+  - **G3 pass criteria** (executable, against Neon): (a) two concurrent refreshes with the same refresh token
+    leave the winner's new tokens valid (introspection `active`); (b) a loser with a still-valid access token
+    completes its request; (c) a client navigation, a form post and a document load each refresh near expiry;
+    (d) an expired session's form post keeps its values. If (a) fails because Neon revokes the whole session on
+    reuse, the fallback is a single-writer refresh per session in a Durable Object (free plan, owner approval
+    for the extra infrastructure), and **the same four criteria are re-run against the fallback** before phase 2.
 - Kept, with the same tests: `Cache-Control: no-store`; `Clear-Site-Data` on sign-out and deletion **and on
   account switch** (a callback that replaces a different person's cookie, as `sign-in/+page.server.ts:54` does
   today); exact unsafe-origin rejection (`hooks.server.ts:25,71`) for every POST including the code step;
@@ -134,8 +139,15 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
   person**, checked per request (`backend/app/skydiver/access/http.py:85`); provider roles are never trusted.
 - A subject with a pending or completed deletion intent, or an unlinked (relinked away) subject, gets `401`
   even with an active token.
-- `503` from the API keeps today's behaviour: the web server keeps the cookie but renders signed-out with the
-  "service unavailable" notice (`sessionUnconfirmed`, `web/src/lib/server/viewer.ts:47`).
+- Every request, **including introspection cache hits**, reads from our database: person status,
+  `deletion_intent`, `unlinked_subject` and reviewer grants.
+- The 2 s budget includes any wait for one of the 8 concurrent slots. Introspection `503` is **never** turned
+  into anonymous: the optional-viewer dependency today swallows every `HTTPException`
+  (`backend/app/skydiver/access/http.py:67`); it will swallow only "no or invalid token" and re-raise `503`.
+- In the web server: a `503` while resolving the viewer keeps today's behaviour (cookie kept, rendered
+  signed-out with the "service unavailable" notice, `sessionUnconfirmed`, `web/src/lib/server/viewer.ts:42-47`);
+  a `503` on any later API call of the same request is shown as that page's or form's "service unavailable"
+  error, as API timeouts are today. Neither clears the cookie.
 
 ### 3.4 Sign-out, sign out everywhere, deletion
 
@@ -144,6 +156,13 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
 - **Sign out everywhere:** confirmed with a **fresh email code** (or Google re-authentication, gate G4); the
   API's account adapter revokes all of the user's Neon sessions through Neon's management API (key held by the
   API only), then this device signs out as above. Introspection then reports every token inactive (gate G5).
+- **Fresh confirmation contract** (sign-out everywhere, deletion, records restore): the web server asks the
+  API to send a code to the signed-in person's address; the API stores a hash of the code bound to the
+  **person and the current token's `sid`**, with the operation name, valid for **10 minutes**, at most 5 checks.
+  The operation's API call carries the code; the API checks binding, age and operation, and **consumes** it in
+  the same transaction as the operation (one use; a replay fails). Wrong codes count against the code-check
+  throttle (section 6). This replaces today's password re-check (`records/api.py:320`), which also happens in
+  the API immediately before the operation.
 - **Account deletion:** fresh email code, then:
   1. **one transaction:** insert `deletion_intent(issuer, subject, created_at, attempts, last_error,
      provider_deleted_at)` (no foreign key to `person`, so it outlives it), write the erasure-ledger entry,
@@ -162,7 +181,7 @@ Browser ── HttpOnly cookie: encrypted token set ──► Web server (Svelte
 | Today | After |
 |---|---|
 | `/sign-in` (email + password) | Google + email code (3.1); continues pending authorizations. |
-| `/register` | Removed: the first sign-in by code or Google is the sign-up. **Identity linking** for an unknown subject keeps today's compare-and-swap (`identity/service.py:325`): read the registration version, check open and under the ceiling, insert person and `identity_link` in one transaction that commits only if the version is unchanged, else re-read and retry. Duplicate callbacks: the insert is `ON CONFLICT (issuer, subject) DO NOTHING` followed by a re-read, so both get the same person. Denied (closed or full): the API answers "registration closed", no person is created, and the adapter deletes the Neon user it just made (retried like deletion). The owner's link (`link-owner`, section 8) is an operator action and works while registration is closed. |
+| `/register` | Removed: the first sign-in by code or Google is the sign-up. **Identity linking** for an unknown subject keeps today's compare-and-swap (`identity/service.py:325`): read the registration version, check open and under the ceiling, insert person and `identity_link` in one transaction that commits only if the version is unchanged, else re-read and retry. Duplicate callbacks: person and link are inserted in one transaction; if the link insert hits the unique `(issuer, subject)` key, the **whole transaction rolls back** (the losing person row with it) and the request re-reads the winner's link, so both get the same person. Denied (closed or full): the API answers "registration closed", no person is created, and the adapter deletes the Neon user it just made (retried like deletion). The owner's link (`link-owner`, section 8) is an operator action and works while registration is closed. |
 | `/verify-email` | Removed: an email code proves the address. |
 | `/forgot-password`, `/reset-password` | Removed (no passwords); old links redirect to `/sign-in`. |
 | Account page: change password, sign out everywhere (password), delete (password) | No password section; sign out everywhere and delete confirm with a fresh email code. Linked Google shown, with *Link Google* for recovery. |
@@ -187,8 +206,14 @@ address).
   G7 also confirms Neon does not reveal it).
 - **Throttling** in our server actions, in the existing database buckets (atomic, shared by all isolates and
   API processes; IPv6 by /64 as today, `identity/policy.py:80`):
-  - code send: 3 per address per hour, 10 per IP per hour (today's reset limits, `policy.py:35-36`);
-  - code check: 10 per address per 15 minutes, 50 per IP per 15 minutes (today's login limits, `policy.py:33-34`);
+  - code send: 3 per address per hour, 10 per IP per hour (today's reset limits, `policy.py:35-36`); an address
+    over its limit gets the **same neutral answer** as a sent code (no existence or limit signal);
+  - code check: 10 per **IP and address pair** per 15 minutes, 50 per IP per 15 minutes (today's login limits,
+    `policy.py:33-34`, keyed as `identity/service.py:692`); each wrong code is one hit, a correct one none;
+  - addresses normalised with `policy.normalize_email` before counting;
+  - the Worker's server actions **reserve** a slot through one new API endpoint
+    (`POST /api/skydiver/v1/auth/throttle`, proxy key required) before calling Neon, because the buckets live
+    in the database the API owns;
   - new person (identity linking): 10 per IP per hour (today's registration limit, `policy.py:37`).
   These do not stop someone calling Neon's endpoints directly, bypassing our pages; against that, only Neon's own
   limits apply. **G8** measures them, and the owner accepts them or the switch waits.
@@ -205,7 +230,10 @@ address).
   then runs `scripts/staging.sh relink <person> <new-email>`. In one transaction it removes the old
   `identity_link` and records the old subject as **unlinked** (refused at the API and at linking, 3.3), then
   links the new identity; after commit the adapter revokes the old subject's Neon sessions and deletes or
-  disables that Neon user (retried like deletion). Never automatic: a new address never silently takes over a
+  disables that Neon user (retried like deletion). Refused if the new identity is already linked to another
+  person (the operator must resolve that person first) or if either person has a pending deletion intent; the
+  transaction locks both persons' rows (`SELECT … FOR UPDATE`, the documented fallback to compare-and-swap for
+  this rare operator command) so a concurrent sign-in or deletion waits. Never automatic: a new address never silently takes over a
   person.
 - Email change itself is out of scope for the beta.
 
@@ -218,15 +246,17 @@ address).
   `person` the root: grants reference `person.id`, deletion deletes the person and its owned data explicitly in
   the 3.4 transaction. Migration check: person count, grant count and each grant's person are identical before
   and after; a migration test asserts it on a seeded database.
-- Removed after the switch, in the same change: legacy `user` credentials, sessions, verification and reset
-  tokens, password-only throttle buckets.
+- Removed after the switch, by the second migration (b) once the owner is linked (section 12, phase 3): legacy
+  `user` credentials, sessions, verification and reset tokens, password-only throttle buckets. The code that
+  used them is removed in the switch itself.
 - **Owner:** signs in once with an email code on staging; `scripts/staging.sh link-owner <email>` links that
   subject to the existing person (profile, jumps, reviewer grant kept). **Test accounts:** recreated by the
   owner signing in with test addresses, or discarded.
 - **Erasure ledger:** entries record the person and `(issuer, subject)`. Replay after a restore
   (`recovery/ledger.py:57,371,378` today targets `user`, sessions and tokens) instead deletes the person's data,
   removes the `identity_link`, and re-creates the `deletion_intent` so the Neon user is deleted again if the
-  restore brought it back. Legacy-schema entries written before the switch are replayed by the old rules, so a
+  restore brought it back. As today (`recovery/ledger.py:368`), every restore also ends **all** sessions:
+  replay revokes every Neon session through the adapter, so everyone signs in again. Legacy-schema entries written before the switch are replayed by the old rules, so a
   restore from before the switch still works. A restore drill (deletion, restore, replay) is part of the
   switch's checks.
 - **Tooling:** `scripts/staging.sh create-account` and `identity/operator.py` (passwords) replaced by
@@ -238,6 +268,14 @@ address).
 **Where they run:** not on staging. A throwaway **gate instance** with its own Auth, and the spike web app on
 the owner's machine at `http://localhost:5181`, so staging, its Cloudflare Access and today's password
 sign-in are untouched until the switch (preview URLs are off, `web/wrangler.jsonc:14`, and stay off).
+Isolation checklist for the gate branch: (1) a **schema-only** child branch, or a data branch whose
+inherited people, emails and `neon_auth` rows are deleted before any test, so no real person can be emailed or
+signed in; (2) only test addresses the owner controls; (3) SMTP for codes points at the local mail outbox, not
+the real SMTP account, unless the owner approves otherwise; (4) local configuration: `APP_ORIGIN=http://localhost:5181`,
+`API_ORIGIN` the local API, `SESSION_COOKIE_MODE=localhost-dev` (`web/src/lib/server/session-config.ts:40`),
+resource/audience the local API URL, Neon issuer and client from the gate instance; the same values with the
+tunnel's origin if a tunnel is used; (5) the local API exposed through a Cloudflare quick tunnel so Neon's
+**live** webhook delivery reaches it (G6 is not provable with a recorded payload).
 Rollback is deleting the gate instance. G0 decides which instance; Neon's docs say each branch has its own
 Auth base URL and its own OAuth settings, so a child branch is expected to suffice.
 
@@ -298,9 +336,9 @@ procedure. G13 proves the export.
 
 ## 12. Phases
 
-1. **Gates on the gate instance (G0–G13):** create the gate instance (G0); on it, register a confidential
-   client for `http://localhost:5181`, switch password sign-in off (G11), set the webhook (to a local API
-   reachable by Neon through a quick tunnel, or a recorded payload if not) and our SMTP for codes; run the gates
+1. **Gates on the gate instance (G0–G14, G14 with Neon's shared Google credentials):** create the gate instance (G0); on it, register a confidential
+   client for `http://localhost:5181`, switch password sign-in off (G11), set the webhook to the local API
+   through a quick tunnel (live delivery required), apply the isolation checklist (section 9); run the gates
    with a throwaway spike branch of the web app on the owner's machine (never merged); record results here;
    delete the gate instance. The owner approves the results. Staging is not changed.
 2. **Build the switch** on one git branch: sections 3–8 and 11, old auth removed in the same change, full
@@ -308,9 +346,14 @@ procedure. G13 proves the export.
 3. **Switch-over (one deploy):** on the staging instance: register the staging client, set the webhook to the
    API path, switch password sign-in off — immediately before merging, since that ends today's password
    sign-in on staging. Merge and deploy; owner signs in by code and runs `link-owner`; adapter contract tests
-   against staging; restore drill; G13 re-run with the owner's account. If the deploy fails: revert the merge
-   and switch password sign-in back on (both are one command); no data has moved until `link-owner`.
-4. **Google (G14):** *Continue with Google* enabled with Neon's shared credentials after G14 passes.
+   against staging; restore drill; G13 re-run with the owner's account. Rollback: migrations run before the deploy
+   (`scripts/staging.sh migrate`) and remove legacy credentials, so the old code cannot simply return. The
+   migration therefore runs in two parts: **(a)** before the deploy, additive only (new tables, person re-rooted,
+   legacy tables untouched), so reverting the merge and switching password sign-in back on restores today's
+   sign-in; **(b)** dropping legacy credentials, sessions and tokens, run only after the owner has signed in and
+   linked, in a later migration. A Neon branch snapshot is taken before (a).
+4. **Google:** *Continue with Google* enabled with Neon's shared credentials; G14 already passed in phase 1
+   on the gate instance and is re-run on staging after the switch.
 
 **Production steps** (before the beta opens beyond test users; recorded here so they are not forgotten):
 
